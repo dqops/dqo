@@ -49,7 +49,7 @@ Documentation
 -------------
 Our documentation for the most recent release of DQO.ai is hosted here:
 
-  https://doc.dqo.ai/latest
+  https://docs.dqo.ai/
   
 
 Get more from DQO.ai
