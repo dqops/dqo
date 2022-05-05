@@ -1,0 +1,16 @@
+logging:
+  level:
+    org:
+      springframework: OFF
+    root: WARN
+com:
+  google:
+    auth: OFF
+spring:
+  main:
+    banner-mode: off
+
+dqo:
+  secrets:
+    enable-gcp-secret-manager: true
+    gcp-project-id: dqo-ai-testing

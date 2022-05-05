@@ -1,0 +1,181 @@
+site_name: DQO AI
+site_url: https://docs.dqo.ai/
+
+# Docs navigation
+nav:
+  - Home: 'index.md'
+  - What is DQO: 'what_is_dqo/what_is_dqo.md'
+  - DQO concept:
+    - Sensors: 'dqo_concept/sensors/sensors.md'
+    - Rules: 'dqo_concept/rules/rules.md'
+#    - How data is stored: 'dqo_concept/how_data_is_stored.md'
+    - Dimensions: 'dqo_concept/dimensions.md'
+    - Time series: 'dqo_concept/time_series/time_series.md'
+#  - Folder structures:
+#    - DQO_USER_HOME: 'dqo_concept/user_home_folder_structure.md'
+#    - DQO_HOME: 'dqo_concept/dqo_home_folder_structure.md'
+  - Examples:
+      - Running examples: 'examples/running_examples.md'
+      - Timeliness:
+          - Current delay: 'examples/timeliness/current_delay/current_delay.md'
+          - Average delay: 'examples/timeliness/average_delay/average_delay.md'
+          - Column datetime difference percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+      - Uniqueness:
+          - Distinct count: 'examples/uniqueness/distinct_count/distinct_count.md'
+          - Distinct count percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
+      - Validity:
+          - Date type percent: 'examples/validity/date_type_percent/value_in_range_date_percent.md'
+          - Values in set percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
+          - Value in range date percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+          - Value in range numerical percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+          - String length in range percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+          - Regex match percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
+          - Non negative percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
+          - Not null count: 'examples/validity/not_null_count/not_null_count.md'
+          - Non negative count: 'examples/validity/non_negative_count/non_negative_count.md'
+          - Numerical type percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
+  - Set up: 'set_up/set_up.md'
+  - Getting started: 'getting_started/getting_started.md'
+  - Working with DQO:
+#    - Quickstart: 'working_with_dqo/quickstart.md'
+    - Adding connections: 'working_with_dqo/add_connection.md'
+  - Commands:
+      - check: 'commands/check/check.md'
+#          - run: 'commands/check/run/check_run.md'
+      - column: 'commands/column/column.md'
+      - table: 'commands/table/table.md'
+#          - add: 'commands/table/add/table_add.md'
+#          - edit: 'commands/table/edit/table_edit.md'
+#          - import: 'commands/table/import/table_import.md'
+#          - list: 'commands/table/list/table_list.md'
+#          - remove: 'commands/table/remove/table_remove.md'
+#          - update: 'commands/table/update/table_update.md'
+      - connection: 'commands/connection/connection.md'
+#      - connection:
+#          - connection: 'commands/connection/connection.md'
+#          - add: 'commands/connection/add/connection_add.md'
+#          - list: 'commands/connection/list/connection_list.md'
+#          - remove: 'commands/connection/remove/connection_remove.md'
+#          - update: 'commands/connection/update/connection_update.md'
+      - cloud: 'commands/cloud/cloud.md'
+  - Check reference:
+    - Timeliness:
+        - Average delay: 'check_reference/timeliness/average_delay/average_delay.md'
+        - Current delay: 'check_reference/timeliness/current_delay/current_delay.md'
+        - Column datetime difference percent: 'check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+    - Uniqueness:
+        - Distinct count: 'check_reference/uniqueness/distinct_count/distinct_count.md'
+        - Distinct count percent: 'check_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
+    - Validity:
+      - Date type percent: 'check_reference/validity/date_type_percent/date_type_percent.md'
+      - Regex match percent: 'check_reference/validity/regex_match_percent/regex_match_percent.md'
+      - Values in set percent: 'check_reference/validity/values_in_set_percent/values_in_set_percent.md'
+      - Non negative percent: 'check_reference/validity/non_negative_percent/non_negative_percent.md'
+      - Value in range numerical percent: 'check_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+      - Value in range date percent: 'check_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+      - String length in range percent: 'check_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+      - Not null count: 'check_reference/validity/not_null_count/not_null_count.md'
+      - Non negative count: 'check_reference/validity/non_negative_count/non_negative_count.md'
+      - Numerical type percent: 'check_reference/validity/numerical_type_percent/numerical_type_percent.md'
+    - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
+  - Sensor reference:
+      - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
+      - Timeliness:
+          - Average delay: 'sensor_reference/timeliness/average_delay/average_delay.md'
+          - Current delay: 'sensor_reference/timeliness/current_delay/current_delay.md'
+          - Column datetime difference percent: 'sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+      - Uniqueness:
+          - Distinct count: 'sensor_reference/uniqueness/distinct_count/distinct_count.md'
+          - Distinct count percent: 'sensor_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
+      - Validity:
+        - Date type percent: 'sensor_reference/validity/date_type_percent/date_type_percent.md'
+        - Regex match percent: 'sensor_reference/validity/regex_match_percent/regex_match_percent.md'
+        - Values in set percent: 'sensor_reference/validity/values_in_set_percent/values_in_set_percent.md'
+        - Non negative percent: 'sensor_reference/validity/non_negative_percent/non_negative_percent.md'
+        - Value in range numerical percent: 'sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+        - Value in range date percent: 'sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+        - String length in range percent: 'sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+        - Not null count: 'sensor_reference/validity/not_null_count/not_null_count.md'
+        - Non negative count: 'sensor_reference/validity/non_negative_count/non_negative_count.md'
+        - Numerical type percent: 'sensor_reference/validity/numerical_type_percent/numerical_type_percent.md'
+  - Rule reference:
+    - What are rules: 'rule_reference/what_are_rules.md'
+    - How to configure a rule: 'rule_reference/how_to_configure_rules.md'
+    - Standard deviation:
+      - Moving stdev: 'rule_reference/stdev/moving_stdev.md'
+    - Averages:
+      - Moving average: 'rule_reference/averages/moving_average.md'
+    - Comparison:
+      - Min count: 'rule_reference/comparison/min_count.md'
+      - Max count: 'rule_reference/comparison/max_count.md'
+      - Count equals: 'rule_reference/comparison/count_equals.md'
+
+# Visual settings
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.tabs.link
+    - content.code.annotate
+  logo: assets/logo.svg
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+# Markdown extensions
+markdown_extensions:
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# Plugins
+plugins:
+  - search
+  - macros:
+#      include_dir: home/sensors/dialects/
+      include_dir: docs/dialects/
+      module_name: docs/render_macros
+#  - with-pdf
+
+extra:
+  analytics:
+    provider: google
+    property: G-NEE8HWT90Y
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+
+
+
+# TODO change theme
+# TODO Cookie consent https://squidfunk.github.io/mkdocs-material/setup/ensuring-data-privacy/
+# TODO Navigation
+# TODO Tags
+# TODO Versioning
+# TODO Footer

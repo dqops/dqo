@@ -1,0 +1,72 @@
+{
+  "user_home_path": "C:/dqoai/userhome",
+  "home_type": "DQO_HOME",
+  "template_home_path": "column/validity/value_in_range_date_percent/bigquery.sql.jinja2",
+  "parameters": {
+    "connection": {
+      "provider_type": "bigquery",
+      "bigquery": {
+        "source_project_id": "dqo-ai-testing",
+        "billing_project_id": "dqo-ai-testing",
+        "authentication_mode": "google_application_credentials",
+        "quota_project_id": "dqo-ai-testing"
+      },
+      "time_zone": "UTC"
+    },
+    "table": {
+      "target": {
+        "schema_name": "dqo_ai_test_data",
+        "table_name": "continuous_days_one_row_per_day_7839946914895804974"
+      },
+      "time_series": {
+        "mode": "current_time",
+        "time_gradient": "day"
+      },
+      "columns": {
+        "id": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "date": {
+          "type_snapshot": {
+            "column_type": "DATE",
+            "nullable": true
+          }
+        },
+        "value": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "column": {
+      "type_snapshot": {
+        "column_type": "DATE",
+        "nullable": true
+      }
+    },
+    "column_name": "date",
+    "parameters": {
+      "enabled": true,
+      "min_value": "2022-01-01",
+      "max_value": "2022-02-13",
+      "include_min_value": true,
+      "include_max_value": false
+    },
+    "sensor_definition": {},
+    "provider_sensor_definition": {
+      "type": "sql_template",
+      "java_class_name": "ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner"
+    },
+    "dialect_settings": {
+      "quote_begin": "`",
+      "quote_end": "`",
+      "quote_escape": "``",
+      "table_name_includes_database_name": false
+    }
+  }
+}

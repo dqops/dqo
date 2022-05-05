@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: dqo_ai_test_data
+    table_name: test_data_timeliness_sensors_1287831065858823464
+  time_series:
+    mode: current_time
+    time_gradient: day
+  checks:
+    timeliness:
+      column_datetime_difference_percent:
+        parameters:
+          column1: "reference_datetime"
+          column2: "real_datetime"
+          max_difference: 10
+        rules:
+          min_count:
+            low:
+              min_value: 90.0
+            medium:
+              min_value: 80.0
+            high:
+              min_value: 70.0
+  columns:
+    id:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    reference_datetime:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true
+    real_datetime:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true

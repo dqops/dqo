@@ -1,0 +1,167 @@
+{
+  "user_home_path": "C:/dev/documati.io/userhome",
+  "home_type": "DQO_HOME",
+  "template_home_path": "column/validity/values_in_set_percent/bigquery.sql.jinja2",
+  "parameters": {
+    "connection": {
+      "provider_type": "bigquery",
+      "bigquery": {
+        "source_project_id": "bigquery-public-data",
+        "billing_project_id": "dqo-ai-testing",
+        "authentication_mode": "google_application_credentials",
+        "quota_project_id": "dqo-ai-testing"
+      },
+      "time_zone": "UTC"
+    },
+    "table": {
+      "target": {
+        "schema_name": "austin_crime",
+        "table_name": "crime"
+      },
+      "columns": {
+        "unique_key": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "address": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "census_tract": {
+          "type_snapshot": {
+            "column_type": "FLOAT64",
+            "nullable": true
+          }
+        },
+        "clearance_date": {
+          "type_snapshot": {
+            "column_type": "TIMESTAMP",
+            "nullable": true
+          }
+        },
+        "clearance_status": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "council_district_code": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "description": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "district": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "latitude": {
+          "type_snapshot": {
+            "column_type": "FLOAT64",
+            "nullable": true
+          }
+        },
+        "longitude": {
+          "type_snapshot": {
+            "column_type": "FLOAT64",
+            "nullable": true
+          }
+        },
+        "location": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "location_description": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "primary_type": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "timestamp": {
+          "type_snapshot": {
+            "column_type": "TIMESTAMP",
+            "nullable": true
+          }
+        },
+        "x_coordinate": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "y_coordinate": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "year": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "zipcode": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "column": {
+      "type_snapshot": {
+        "column_type": "STRING",
+        "nullable": true
+      }
+    },
+    "column_name": "district",
+    "parameters": {
+      "disabled": false,
+      "values_type": "STRING",
+      "values_list": [
+        "UK",
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    "effective_time_series": {
+      "mode": "current_time",
+      "time_gradient": "day"
+    },
+    "effective_dimensions": {},
+    "sensor_definition": {},
+    "provider_sensor_definition": {
+      "type": "sql_template",
+      "java_class_name": "ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner"
+    },
+    "dialect_settings": {
+      "quote_begin": "`",
+      "quote_end": "`",
+      "quote_escape": "``",
+      "table_name_includes_database_name": false
+    }
+  }
+}

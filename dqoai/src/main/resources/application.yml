@@ -1,0 +1,57 @@
+spring:
+  main:
+    web-application-type: NONE
+    allow-circular-references: true
+    lazy-initialization: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  shell:
+    interactive:
+      enabled: false
+
+logging:
+  level:
+    root: WARN
+    org:
+      jline: ERROR
+      springframework: OFF
+      apache:
+        hadoop:
+          util: ERROR
+    com:
+      google: OFF
+
+picocli:
+  ansi: true
+
+https:
+  # SSLv3,TLSv1.1,TLSv1.2
+  protocols: TLSv1.2
+
+dqo:
+  python:
+    interpreter: python
+    evaluate-templates-module: lib/evaluate_templates.py
+    evaluate-rules-module: lib/evaluate_rules.py
+    python-script-timeout-seconds: 120
+  user:
+    home: .
+    has-local-home: true
+  storage:
+    sensor-readings-storage-path: .data/readings
+    alerts-storage-path: .data/alerts
+    gcp:
+      upload-buffer-size: 5000000
+  yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
+  cloud:
+    ui-base-url: https://cloud.dqo.ai
+    rest-api-base-url: https://api.dqo.ai
+    #ui-base-url: http://localhost:3000
+    #rest-api-base-url: http://localhost:8080
+    api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
+  secrets:
+    enable-gcp-secret-manager: true
+    gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
+  core:
+    print-stack-trace: true
+

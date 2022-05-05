@@ -1,0 +1,37 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: dqo_ai_test_data
+    table_name: test_average_delay_5877745271850405297
+  time_series:
+    mode: current_time
+    time_gradient: day
+  checks:
+    timeliness:
+      current_delay:
+        parameters:
+          column: "dates"
+          time_scale: "HOUR"
+        rules:
+          max_count:
+            low:
+              max_value: 0.0
+            medium:
+              max_value: 1.0
+            high:
+              max_value: 2.0
+  columns:
+    id:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    dates:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true
+    timestamp_column:
+      type_snapshot:
+        column_type: DATETIME
+        nullable: true

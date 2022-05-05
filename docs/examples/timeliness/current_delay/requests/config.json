@@ -1,0 +1,130 @@
+{
+  "user_home_path": "C:/dqoai/userhome",
+  "home_type": "DQO_HOME",
+  "template_home_path": "table/timeliness/current_delay/bigquery.sql.jinja2",
+  "parameters": {
+    "connection": {
+      "provider_type": "bigquery",
+      "bigquery": {
+        "source_project_id": "bigquery-public-data",
+        "billing_project_id": "dqo-ai-testing",
+        "authentication_mode": "google_application_credentials",
+        "quota_project_id": "dqo-ai-testing"
+      },
+      "time_zone": "UTC"
+    },
+    "table": {
+      "target": {
+        "schema_name": "covid19_italy",
+        "table_name": "national_trends"
+      },
+      "columns": {
+        "date": {
+          "type_snapshot": {
+            "column_type": "TIMESTAMP",
+            "nullable": true
+          }
+        },
+        "country": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        },
+        "hospitalized_patients_symptoms": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "hospitalized_patients_intensive_care": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "total_hospitalized_patients": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "home_confinement_cases": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "total_current_confirmed_cases": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "new_current_confirmed_cases": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "new_total_confirmed_cases": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "recovered": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "deaths": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "total_confirmed_cases": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "tests_performed": {
+          "type_snapshot": {
+            "column_type": "INT64",
+            "nullable": true
+          }
+        },
+        "note": {
+          "type_snapshot": {
+            "column_type": "STRING",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "parameters": {
+      "disabled": false,
+      "column": "date",
+      "time_scale": "HOUR"
+    },
+    "effective_time_series": {
+      "mode": "current_time",
+      "time_gradient": "day"
+    },
+    "effective_dimensions": {},
+    "sensor_definition": {},
+    "provider_sensor_definition": {
+      "type": "sql_template",
+      "java_class_name": "ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner"
+    },
+    "dialect_settings": {
+      "quote_begin": "`",
+      "quote_end": "`",
+      "quote_escape": "``",
+      "table_name_includes_database_name": false
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: dqo_ai_test_data
+    table_name: continuous_days_one_row_per_day_7839946914895804974
+  time_series:
+    mode: current_time
+    time_gradient: day
+  columns:
+    id:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+      checks:
+        validity:
+          value_in_range_date_percent:
+            parameters:
+              min_value: "2022-01-01"
+              max_value: "2022-02-13"
+              include_max_value: false
+            rules:
+              count_equals:
+                low:
+                  expected_value: 90.0
+                  error_margin: 5.0
+                medium:
+                  expected_value: 80.0
+                  error_margin: 5.0
+                high:
+                  expected_value: 70.0
+                  error_margin: 5.0
+    value:
+      type_snapshot:
+        column_type: STRING
+        nullable: true

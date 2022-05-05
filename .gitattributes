@@ -1,0 +1,5 @@
+mvnw text eol=cr
+mvnw.sh text eol=cr
+dqo.sh text eol=cr
+find-dqo-home.sh text eol=cr
+set-dqo-envs.sh text eol=cr

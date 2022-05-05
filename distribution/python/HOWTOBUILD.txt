@@ -1,0 +1,26 @@
+How to build on Windows:
+
+First, delete a local folder distribution\python\dqoai.egg-info
+this folder may contain a cached list of files to go into the distribution.
+Edit the dqoai\version.py file and update the version. The PIP_VERSION must be unique.
+
+>>> Execute in the repository root:
+mvnw -DskipTests clean package
+
+
+>>> execute in a command line in distribution\python folder
+python -m venv venv
+venv\Scripts\activate.bat
+python -m pip install -r requirements.txt
+py -m build
+
+
+>>> Publishing to text pypi:
+py -m twine upload --repository testpypi dist/*
+
+Testing with a test instance of pypi:
+Run: pip install -i https://test.pypi.org/simple/ dqoai==0.1.0.1 --upgrade
+where 0.1.0.1 is the version that was just published.
+
+
+

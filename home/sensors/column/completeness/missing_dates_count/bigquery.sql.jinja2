@@ -1,0 +1,33 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+WITH generatedDays AS (
+    SELECT date_array
+    FROM UNNEST(
+            GENERATE_DATE_ARRAY(
+                (
+                    SELECT MIN(CAST({{ lib.render_target_column('analyzed_table') }} AS DATE))
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                ),
+                (
+                    SELECT MAX(CAST({{ lib.render_target_column('analyzed_table') }} AS DATE))
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                )
+            )
+        ) AS date_array
+),
+rawData AS (
+    SELECT CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) AS dates,
+        COUNT(*) AS cnt
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    GROUP BY dates
+    ORDER BY dates
+),
+missingDays AS (
+    SELECT date_array,
+        DATE_TRUNC(CAST(generatedDays.`date_array` AS date), month) AS time_gradient,
+        SUM(CASE WHEN cnt = 1 THEN 0 ELSE 1 END) AS missingdates
+    FROM generatedDays
+        LEFT JOIN rawData r ON r.dates = generatedDays.date_array
+    GROUP BY generatedDays.date_array, cnt
+    ORDER BY generatedDays.date_array)
+SELECT sum(missingdates) AS actual_value
+FROM missingDays
