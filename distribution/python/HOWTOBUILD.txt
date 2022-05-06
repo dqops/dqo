@@ -15,8 +15,11 @@ python -m pip install -r requirements.txt
 py -m build
 
 
->>> Publishing to text pypi:
+>>> Publishing to test pypi:
 py -m twine upload --repository testpypi dist/*
+
+>>> Publishing to the main pypi:
+py -m twine upload dist/*
 
 Testing with a test instance of pypi:
 Run: pip install -i https://test.pypi.org/simple/ dqoai==0.1.0.1 --upgrade

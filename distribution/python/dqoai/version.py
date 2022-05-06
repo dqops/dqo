@@ -15,8 +15,8 @@
 # limit
 
 VERSION = "0.1.0"
-PIP_VERSION = VERSION + ".6"
-GITHUB_RELEASE = "v" + VERSION + ".beta1"
+PIP_VERSION = VERSION + ".0"
+GITHUB_RELEASE = "v" + VERSION + ""
 JAVA_VERSION = "17"
 
 
