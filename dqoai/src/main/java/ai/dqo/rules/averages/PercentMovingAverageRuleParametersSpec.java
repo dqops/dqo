@@ -40,9 +40,11 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
 
 
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Default constructor.
      */
     public PercentMovingAverageRuleParametersSpec() {
+        this.maxPercentAbove = -123456.0;
+        this.maxPercentBelow = -123456.0;
     }
 
 

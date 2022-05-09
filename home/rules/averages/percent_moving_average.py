@@ -66,17 +66,24 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readings.sensor_reading for readings in rule_parameters.previous_readings if readings is not None]
     filtered_mean = float(scipy.mean(filtered))
 
-    if rule_parameters.parameters.max_percent_above != None:
+    if rule_parameters.parameters.max_percent_above != -123456.0:
         threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
     else:
         threshold_upper = None
 
-    if rule_parameters.parameters.max_percent_below != None:
+    if rule_parameters.parameters.max_percent_below != -123456.0:
         threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
     else:
         threshold_lower = None
 
-    passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    if threshold_lower != None and threshold_upper != None:
+        passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    elif threshold_lower != None and threshold_upper == None:
+        passed = (threshold_lower <= rule_parameters.actual_value)
+    elif threshold_lower == None and threshold_upper != None:
+        passed = (rule_parameters.actual_value <= threshold_upper)
+
+
 
     expected_value = filtered_mean
     lower_bound = threshold_lower

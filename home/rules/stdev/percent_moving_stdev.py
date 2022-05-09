@@ -67,17 +67,24 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = float(scipy.stats.tstd(filtered))
     filtered_mean = float(scipy.mean(filtered))
 
-    if rule_parameters.parameters.multiple_stdev_above != None:
+    if rule_parameters.parameters.multiple_stdev_above != -123456.0:
         threshold_upper = filtered_mean + rule_parameters.parameters.multiple_stdev_above * filtered_std
     else:
         threshold_upper = None
 
-    if rule_parameters.parameters.multiple_stdev_below != None:
+    if rule_parameters.parameters.multiple_stdev_below != -123456.0:
         threshold_lower = filtered_mean - rule_parameters.parameters.multiple_stdev_below * filtered_std
     else:
         threshold_lower = None
 
-    passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    if rule_parameters.parameters.multiple_stdev_above != -123456.0 and rule_parameters.parameters.multiple_stdev_below != -123456.0:
+        passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    elif rule_parameters.parameters.multiple_stdev_above != -123456.0 and threshold_lower == None:
+        passed = (rule_parameters.actual_value <= threshold_upper)
+    elif threshold_upper == None and rule_parameters.parameters.multiple_stdev_below != -123456.0:
+        passed = (threshold_lower <= rule_parameters.actual_value)
+
+
 
     expected_value = filtered_mean
     lower_bound = threshold_lower
