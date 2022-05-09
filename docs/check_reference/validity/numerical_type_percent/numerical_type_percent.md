@@ -7,12 +7,12 @@ This sensor can be used when we receive a `STRING` column containing numerical v
 number of values that can be cast as `NUMERICAL`
 ___
 ## Used sensor
-[__Numerical type percent__](/sensor_reference/validity/numerical_type_percent/numerical_type_percent/)
+[__Numerical type percent__](../../../sensor_reference/validity/numerical_type_percent/numerical_type_percent.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 ## Parameters
 The sensor does not accept any parameters

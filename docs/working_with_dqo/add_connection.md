@@ -1,7 +1,7 @@
 # Adding connections
 
 Working connection is a fundamental aspect of running data quality checks. Here you can find the documentation for 
-[managing connections](/commands/connection/connection/).
+[managing connections](../commands/connection/connection.md).
 
 All the connections require two things specified:
 

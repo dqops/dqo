@@ -1,7 +1,7 @@
 # Non negative percent
 
 In this example we will check the data of `bigquery-public-data.covid19_italy.data_by_region` using
-[`non_negative_percent`](/check_reference/validity/non_negative_percent/non_negative_percent/) check.
+[`non_negative_percent`](../../../check_reference/validity/non_negative_percent/non_negative_percent.md) check.
 Our goal is to set up a validity check on `new_current_confirmed_cases` column in order to check how many percent of data are non negative in region named Sicilia.
 
 ## Adding connection

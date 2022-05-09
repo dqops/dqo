@@ -1,7 +1,7 @@
 # Value in range date percent 
 
 In this example we will check the data of `bigquery-public-data.covid_italy.national_trends` using
-[`current_delay`](/check_reference/timeliness/current_delay/current_delay/) check.
+[`current_delay`](../../../check_reference/timeliness/current_delay/current_delay.md) check.
 The data is updated daily. Our goal is to set up a timeliness check and verify that the last update was performed
 less than 24 hours ago.
 

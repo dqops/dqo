@@ -116,8 +116,7 @@ Namely:
 5. Information about query execution success
 6. Query result
 7. Rule evaluation result
-8. Check evaluation summary (the same one as in [summary mode](/commands/check/check/#-modesummary))
-
+8. Check evaluation summary (the same one as in [summary mode](check.md#-modesummary))
 
 ```
 dqo.ai> check run -c=covid_italy -t=covid19_italy.national_trends -m=debug

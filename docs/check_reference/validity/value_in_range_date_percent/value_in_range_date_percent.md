@@ -17,13 +17,13 @@ This sensor is used when you need to confirm that the event took place in a cert
 
 ## Used sensor
 
-[__Value in range date percent__](/sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent/)
+[__Value in range date percent__](../../../sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md)
 
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 
 ___
 ## Parameters

@@ -1,5 +1,5 @@
 site_name: DQO AI
-site_url: https://docs.dqo.ai/
+site_url: https://docs.dqo.ai/latest/
 
 # Docs navigation
 nav:
@@ -157,7 +157,6 @@ plugins:
 #      include_dir: home/sensors/dialects/
       include_dir: docs/dialects/
       module_name: docs/render_macros
-#  - with-pdf
 
 extra:
   analytics:

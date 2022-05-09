@@ -1,7 +1,7 @@
 # Values in set percent
 
 In this example we will check the data of `bigquery-public-data.austin_crime.crime` using
-[`values_in_set_percent`](/check_reference/validity/values_in_set_percent/values_in_set_percent/) check.
+[`values_in_set_percent`](../../../check_reference/validity/values_in_set_percent/values_in_set_percent.md) check.
 Our goal is to set up a validity check on `district` column in order to check how many percent of given values are in set.
 In our case, we check how many percent of data are in `['UK','A','B','C', D']` districts.
 

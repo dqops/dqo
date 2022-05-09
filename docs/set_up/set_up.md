@@ -5,12 +5,16 @@ Firstly, you should download app. You can do it by pip or by control version sys
 # Download
 
 ## With pip
-Dqo.ai is currently available in [PyPi test repository](https://test.pypi.org/) as `dqoai`.
-The only what you have to do is open your terminal and type pip dqoai. The application should download within a few minutes. 
+Dqo.ai is available on [PyPi repository](https://pypi.org/project/dqoai/)
+```
+pip install dqoai
+```
 
 ## With git
-Application is available on [GitHub](https://github.com/dqoai).
-Copy https link to the project and in terminal type: git clone (link to project).
+Application is available on [GitHub](https://github.com/dqoai/dqo). You can get it by running 
+```
+git clone https://github.com/dqoai/dqo.git
+```
 
 ## Install Java JDK
 

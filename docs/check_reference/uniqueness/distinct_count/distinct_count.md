@@ -8,12 +8,12 @@ values.
 
 ## Used template
 
-[__Distinct count__](/sensor_reference/uniqueness/distinct_count/distinct_count/)
+[__Distinct count__](../../../sensor_reference/uniqueness/distinct_count/distinct_count.md)
 
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 ## Parameters
 This check takes no parameters.

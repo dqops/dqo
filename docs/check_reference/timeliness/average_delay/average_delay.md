@@ -18,11 +18,11 @@ This check can be used when you need to keep track of the overall timeliness in 
 
 ## Used sensor
 
-[__Average delay__](/sensor_reference/timeliness/average_delay/average_delay/)
+[__Average delay__](../../../sensor_reference/timeliness/average_delay/average_delay.md)
 
 ## Accepted rules
 
-[__Moving average__](/rule_reference/averages/moving_average/)
+[__Moving average__](../../../rule_reference/averages/moving_average.md)
 
 ## Parameters
 

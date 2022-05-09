@@ -1,7 +1,7 @@
 # String length in range percent
 
 In this example we will check the data of `bigquery-public-data.austin_311.311_service_requests` using
-[`string_length_in_range_percent`](/check_reference/validity/string_length_in_range_percent/string_length_in_range_percent/) check.
+[`string_length_in_range_percent`](../../../check_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md) check.
 Our goal is to set up a validity check on `unique_key` column in order to check how many percent of data are in range.
 In our case, we check how many unique_key from dataset have correct length.
 

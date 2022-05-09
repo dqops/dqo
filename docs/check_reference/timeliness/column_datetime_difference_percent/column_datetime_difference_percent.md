@@ -18,11 +18,11 @@ This check aims at informing the user about the amount of data that is considere
 
 ## Used template
 
-[__Column datetime difference percent__](/sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent/)
+[__Column datetime difference percent__](../../../sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md)
 
 ## Accepted rules
 
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
 ## Parameters
 

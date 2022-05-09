@@ -1,7 +1,7 @@
 # Current delay
 
 In this example we will check the data timeliness of `bigquery-public-data.austin_crime.crime` using
-[`average_delay`](/check_reference/timeliness/average_delay/average_delay/) check.
+[`average_delay`](../../../check_reference/timeliness/average_delay/average_delay.md) check.
 Our goal is to set up a timeliness check and verify average timestamp difference between two columns.
 
 ## Adding connection

@@ -1,7 +1,7 @@
 # Non negative count
 
 In this example we will check the data of `bigquery-public-data.austin_crime.crime` using
-[`not_null_count`](/check_reference/validity/not_null_count/not_null_count/) check.
+[`not_null_count`](../../../check_reference/validity/not_null_count/not_null_count.md) check.
 Our goal is to set up a validity check on `clearance_status` column in order to check how many records of data are not null values.
 
 ## Adding connection

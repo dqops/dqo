@@ -3,7 +3,7 @@
 Data observability splits into dimensions, depending on the business needs.
 Here, we describe each dimension.
 
-A list of available checks categorized into types and dimensions is available [here](/check_reference/list_of_checks/list_of_checks/).
+A list of available checks categorized into types and dimensions is available [here](../check_reference/list_of_checks/list_of_checks.md).
 
 ## Validity
 

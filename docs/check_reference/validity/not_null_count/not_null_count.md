@@ -7,12 +7,12 @@ This is a standard quality check, mostly used when we would like to simply ensur
 values
 ___
 ## Used sensor
-[__Not null count__](/sensor_reference/validity/not_null_count/not_null_count/)
+[__Not null count__](../../../sensor_reference/validity/not_null_count/not_null_count.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 ## Parameters
 The sensor does not accept any parameters

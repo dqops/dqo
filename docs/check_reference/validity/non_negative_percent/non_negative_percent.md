@@ -7,12 +7,12 @@ The usability of this check is obvious. It is useful for validation of numerical
 non-negative.
 ___
 ## Used sensor
-[__Non negative percent__](/sensor_reference/validity/non_negative_percent/non_negative_percent/)
+[__Non negative percent__](../../../sensor_reference/validity/non_negative_percent/non_negative_percent.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 ## Parameters
 This check takes no parameters.

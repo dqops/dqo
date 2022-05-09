@@ -18,7 +18,7 @@ You can modify existing checks and rules, or create the new ones, based on your 
 
 All you need to do is set a configuration in YAML file.
 
-See how to use DQO.ai on end to end [examples on bigquery public data]().
+See how to use DQO.ai on end to end [examples on bigquery public data](examples/running_examples.md).
 ## Supported providers
 
 | Provider                                                                                                                 | Description                                                                                                     | Link                                          |
