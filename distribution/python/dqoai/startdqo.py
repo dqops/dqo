@@ -41,18 +41,16 @@ def main():
         dqo_home = os.path.join(os.path.join(module_dir, 'home'), VERSION)
         install.install_dqo_home_if_missing(dqo_home)
 
-    java_home = os.environ.get("JAVA_HOME")
-    if java_home is None:
-        java_install_dir = os.path.join(module_dir, 'jre' + JAVA_VERSION)
-        install.install_jre_if_missing(java_install_dir)
-        java_home = os.path.join(java_install_dir, os.listdir(java_install_dir)[0])
+    # TODO: detect if the user has Java 17 or newer on the JAVA_HOME, we can use it
+    java_install_dir = os.path.join(module_dir, 'jre' + JAVA_VERSION)
+    install.install_jre_if_missing(java_install_dir)
+    java_home = os.path.join(java_install_dir, os.listdir(java_install_dir)[0])
 
     os_platform = sys.platform.lower()[0:3]
-    dqo_envs = {
-        'DQO_HOME': dqo_home,
-        'JAVA_HOME': java_home,
-        'DQO_PYTHON_INTERPRETER': sys.executable,
-    }
+    dqo_envs = os.environ.copy()
+    dqo_envs['DQO_HOME'] = dqo_home
+    dqo_envs['JAVA_HOME'] = java_home
+    dqo_envs['DQO_PYTHON_INTERPRETER'] = sys.executable
 
     if os_platform == 'win':
         # Windows
