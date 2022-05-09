@@ -3,7 +3,7 @@
 ## Description
 The `regex_match_percent` check calculates the percentage of matching records with a specified regex.
 User has to specify the regex for the query. It is done with parameters, `named_regex` 
-- [predefined regexes](/check_reference/validity/regex_match_percent/regex_match_percent/#list-of-built-in-regexes)
+- [predefined regexes](regex_match_percent.md#list-of-built-in-regexes)
 and `custom_regex` - user defined regex passed as string.
 
 !!! Info
@@ -19,13 +19,13 @@ ___
 
 ## Used sensor
 
-[__Regex match percent__](/sensor_reference/validity/regex_match_percent/regex_match_percent/)
+[__Regex match percent__](../../../sensor_reference/validity/regex_match_percent/regex_match_percent.md)
 ___
 
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 
 ## Parameters

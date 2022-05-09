@@ -1,7 +1,7 @@
 # Distinct count percent
 
 In this example we will check the data of `bigquery-public-data.covid_italy.national_trends` using
-[`distinct_count_percent`](/check_reference/uniqueness/distinct_count_percent/distinct_count_percent/) check.
+[`distinct_count_percent`](../../../check_reference/uniqueness/distinct_count_percent/distinct_count_percent.md) check.
 The data is updated daily. Our goal is to set up a uniqueness check and verify how many percent distinct values are in data. 
 
 ## Adding connection

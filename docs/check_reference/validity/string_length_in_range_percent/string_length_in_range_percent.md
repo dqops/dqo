@@ -19,12 +19,12 @@ ___
 
 ## Used sensor
 
-[__String length in range percent__](/sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent/)
+[__String length in range percent__](../../../sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 
 ___
 

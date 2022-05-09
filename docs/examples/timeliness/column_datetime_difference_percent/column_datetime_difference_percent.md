@@ -1,7 +1,7 @@
 # Current delay
 
 In this example we will check the data timeliness of `bigquery-public-data.austin_crime.crime` using
-[`column_datetime_difference_percent`](/check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent/) check.
+[`column_datetime_difference_percent`](../../../check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md) check.
 Our goal is to set up a timeliness check and verify percent timestamp difference between two columns.
 
 ## Adding connection

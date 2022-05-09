@@ -32,6 +32,14 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
     private Double multipleStdevBelow;
 
     /**
+     * Default constructor.
+     */
+    public PercentMovingStdevRuleParametersSpec() {
+        this.multipleStdevBelow = -123456.0;
+        this.multipleStdevAbove = -123456.0;
+    }
+
+    /**
      *
      * @return Multiple factor to calculate multipled stdev.
      */
@@ -65,11 +73,6 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
         this.multipleStdevBelow = multipleStdevBelow;
     }
 
-    /**
-     * Default constructor.
-     */
-    public PercentMovingStdevRuleParametersSpec() {
-    }
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -11,7 +11,7 @@ you can use to (as the name suggests) include min and\or max value. By default, 
 ## When to use
 This can be used on numerical columns, where you want to validate values to be in a certain range. For example a 
 customer's age should be greater or equal to 18, and lesser than e.g. 100 (see the 
-[example](/check_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent/#using-only-one-optional-parameter)).
+[example](value_in_range_numerical_percent.md#using-only-one-optional-parameter)).
 
 !!! Warning
     Running this check on a non-numeric column may result with an error.
@@ -19,12 +19,12 @@ ___
 
 ## Used sensor
 
-[__Value in range numerical percent__](/sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent/)
+[__Value in range numerical percent__](../../../sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 
 ___
 

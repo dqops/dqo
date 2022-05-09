@@ -5,9 +5,9 @@ SQL dialect.
 Dialects (Jinja2 macros) are variables obtained from the table metadata and macros performing various functions, written
 in Jinja2.
 
-User can configure basic statements as `where`, `group by`, `order by`, [time series](/dqo_concept/time_series/time_series/) mode,
+User can configure basic statements as `where`, `group by`, `order by`, [time series](../../dqo_concept/time_series/time_series.md) mode,
 and different parameters
-characteristic for the individual sensors (see the [examples](/dqo_concept/sensors/sensors/#examples)).
+characteristic for the individual sensors (see the [examples](sensors.md#examples)).
 
 !!! tip
     When changing configuration in YAML file in your editor, you can use code completion and check possible fields.
@@ -22,7 +22,7 @@ Sensors are divided into types:
 - column,
 - table,
 
-and [dimensions](/dqo_concept/dimensions/):
+and [dimensions](../../dqo_concept/dimensions.md):
 
 - validity,
 - timeliness,

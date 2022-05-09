@@ -12,11 +12,11 @@ Current delay check is mostly used, when we deal with a dataset that is updated 
 
 ## Used sensor
 
-[Current delay](/sensor_reference/timeliness/current_delay/current_delay/)
+[Current delay](../../../sensor_reference/timeliness/current_delay/current_delay.md)
 
 ## Accepted rules
 
-[__Max count__](/rule_reference/comparison/max_count/)
+[__Max count__](../../../rule_reference/comparison/max_count.md)
 
 
 Although there are several options for the rule choice, the most logical one to use is `max_count`...

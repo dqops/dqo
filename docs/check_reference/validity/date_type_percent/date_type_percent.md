@@ -12,8 +12,8 @@ The three mentioned forms of safe casts are:
 - built-in safe cast function that casts value as `FLOAT` (for UNIX time),
 - safe parse date for a given date format.
 
-The last one comes in handy when we have to deal with non-standard date formats, e.g. `Jan 1, 2022`. For such situations there are [built in date formats](/check_reference/validity/date_type_percent/#using-named-date-formats). In other cases, you can provide your own date format
-with [custom date format](/check_reference/validity/date_type_percent/#using-custom-date-formats) parameter.
+The last one comes in handy when we have to deal with non-standard date formats, e.g. `Jan 1, 2022`. For such situations there are [built in date formats](date_type_percent.md#using-named-date-formats). In other cases, you can provide your own date format
+with [custom date format](date_type_percent.md#using-custom-date-formats) parameter.
 
 !!! Info
     `custom_date_format` is prioritized, meaning that 
@@ -35,25 +35,25 @@ ___
 
 ## Used sensor
 
-[__Date type percent__](/sensor_reference/validity/date_type_percent/date_type_percent)
+[__Date type percent__](../../../sensor_reference/validity/date_type_percent/date_type_percent.md)
 ___
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 
 ___
 
 ## Parameters
 This checks has two optional parameters that configure date format to parse:
 
-- `named_date_format`: _java.lang.Enum_
-    <br/>predefined date format used for parsing string, formats are listed in enum [_BuiltInDateFormats_](/check_reference/validity/date_type_percent/date_type_percent/#list-of-built-in-date-formats)
-- `custom_date_format`: _System.String_
+- `named_date_format`: _str_
+    <br/>predefined date format used for parsing string, formats are listed in [_BuiltInDateFormats_](date_type_percent.md#list-of-built-in-date-formats)
+- `custom_date_format`: _str_
     <br/>custom date format used for parsing string
 
 The default format is `ISO8601`, which is one of the values of `named_date_format`.
-In case of `custom_date_format` user has to provide a string with desired date format (see the [examples](/check_reference/validity/date_type_percent/date_type_percent/#how-to-use)).
+In case of `custom_date_format` user has to provide a string with desired date format (see the [examples](date_type_percent.md#how-to-use)).
 
 If `custom_date_format` is provided with a non-empty string, `named_date_format` is neglected, even if configured.
 
@@ -84,7 +84,18 @@ ___
 
 ## How to use
 
+The following examples picture when and how to use the `date_type_percent` check. Here we provide a description
+of the usage, the whole example is ready to run [here](../../examples/validity/date_type_percent.md).
+
+Let's have a look at the first ten rows from the table used in the example -
+`bigquery-public-data.labeled_patents.extracted_data`
+
+
+
+
 ### Default configuration
+
+
 The default configuration of column validity check `date_type_percent` with `min_count` rule.
 If the parameter `named_date_format` is not chosen or `custom_date_format` is not specified, the
 default parsing date format is `ISO8601`.
@@ -128,4 +139,8 @@ The rendered query is
 
 ``` SQL hl_lines="6" linenums="1"
 {{ process_template_request(get_request("docs/check_reference/validity/date_type_percent/requests/custom_date_format.json")) }}
+```
+
+``` hl_lines="5"
+--8<-- "docs/check_reference/validity/date_type_percent/tables/extracted_data.txt"
 ```

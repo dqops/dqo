@@ -69,7 +69,7 @@ public class PercentMovingAverageRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
         this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
+        //this.sut.setMaxPercentBelow(5.0);
 
         for (int i = 0; i < this.sensorReadings.length; i++) {
                 this.sensorReadings[i] = 20.0;
@@ -81,7 +81,7 @@ public class PercentMovingAverageRuleParametersSpecTests extends BaseTest {
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
     }
 

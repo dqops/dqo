@@ -1,7 +1,7 @@
 # Regex match percent
 
 In this example we will check the data of `bigquery-public-data.austin_311.311_service_requests` using
-[`regex_match_percent`](/check_reference/validity/regex_match_percent/regex_match_percent/) check.
+[`regex_match_percent`](../../../check_reference/validity/regex_match_percent/regex_match_percent.md) check.
 Our goal is to set up a validity check on `unique_key` column in order to check how many percent of data are correct.
 In our case, we check how many unique_key from dataset have correct regex.
 

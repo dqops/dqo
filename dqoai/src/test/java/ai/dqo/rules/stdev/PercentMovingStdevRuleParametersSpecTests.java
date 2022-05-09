@@ -59,16 +59,10 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
-        System.out.println(this.sensorReadings);
-        System.out.println(ruleExecutionResult.getExpectedValue());
-
-        System.out.println("Lower bound " + ruleExecutionResult.getLowerBound());
-        System.out.println("Upper bound " + ruleExecutionResult.getUpperBound());
-        System.out.println(ruleExecutionResult.isPassed());
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(14.811254783372291, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(25.18874521662771, ruleExecutionResult.getUpperBound());
     }
 }

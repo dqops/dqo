@@ -1,7 +1,7 @@
 # Date type percent
 
 In this example we will check the data of `bigquery-public-data.labeled_patents.extracted_data` using
-[`date_type_percent`](/check_reference/validity/date_type_percent/date_type_percent/) check.
+[`date_type_percent`](../../../check_reference/validity/date_type_percent/date_type_percent.md) check.
 A column `publication_date` is `STRING` type and is formatted: `day.month.year`. We would like to test this column
 and see the amount of records that satisfy this format.
 

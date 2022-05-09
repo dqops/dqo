@@ -19,7 +19,7 @@ ___
 ## When to use
 We recommend using this check when you would like to validate the data for certain values. For example when you expect
 `country` column to contain records from few countries, e.g. Poland, United States, Germany (see the 
-[example](/check_reference/validity/values_in_set_percent/values_in_set_percent/#string-numeric)).
+[example](values_in_set_percent.md#string-to-numeric)).
 
 !!! Warning
     Running this check defining the wrong data type for the column might result with an error.
@@ -29,13 +29,13 @@ ___
 
 ## Used sensor
 
-[__Values in set percent__](/sensor_reference/validity/values_in_set_percent/values_in_set_percent/)
+[__Values in set percent__](../../../sensor_reference/validity/values_in_set_percent/values_in_set_percent.md)
 ___
 
 ## Accepted rules
-[__Min count__](/rule_reference/comparison/min_count/)
+[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](/rule_reference/comparison/count_equals/)
+[__Count equals__](../../../rule_reference/comparison/count_equals.md)
 ___
 
 ## Parameters
@@ -43,12 +43,12 @@ This checks has two parameters that configure sensor:
 
 - `values_type`: _str_ (Optional)
   <br/>predefined values type provided from user, types are listed in enum (default: `STRING`)
-  [_BuiltInListFormats_](/check_reference/validity/values_in_set_percent/values_in_set_percent/#list-of-built-in-list-formats)
+  [_BuiltInListFormats_](values_in_set_percent.md#list-of-built-in-list-formats)
 - `values_list`: _list_
   <br/>list of values provided by the user
 
 The default type is `STRING`, which is one of the types of `values_type`.
-In case of `values_list` user has to provide a list of values compatible with `values_type`(see the [examples](/check_reference/validity/values_in_set_percent/values_in_set_percent/#how-to-use)).
+In case of `values_list` user has to provide a list of values compatible with `values_type`(see the [examples](values_in_set_percent.md#how-to-use)).
 ___
 
 ### List of built in list formats

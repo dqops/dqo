@@ -1,7 +1,7 @@
 # Numerical type percent
 
 In this example we will check the data of `bigquery-public-data.austin_311.311_service_requests` using
-[`numerical_type_percent`](/check_reference/validity/numerical_type_percent/numerical_type_percent/) check.
+[`numerical_type_percent`](../../../check_reference/validity/numerical_type_percent/numerical_type_percent.md) check.
 Our goal is to set up a validity check on `street_number` column in order to check how many records of data have numerical type.
 
 ## Adding connection

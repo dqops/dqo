@@ -13,12 +13,12 @@ information that the result is valid.
 Rules are split into the following categories:
 
 - comparison:
-    - [min count](/rule_reference/comparison/min_count/)
-    - [count equals](/rule_reference/comparison/count_equals/)
+    - [min count](../../rule_reference/comparison/min_count.md)
+    - [count equals](../../rule_reference/comparison/count_equals.md)
 - averages:
-    - [moving average](/rule_reference/averages/percent_moving_average/)
+    - [moving average](../../rule_reference/averages/moving_average.md)
 - stdev:
-    - [moving_stdev](/rule_reference/stdev/moving_stdev/)
+    - [moving_stdev](../../rule_reference/stdev/moving_stdev.md)
 
 Basic rules compare sensor results to the thresholds (numerical values) configured directly by the user.
 Configuration for such sensors is done by providing `mode: current_value` in rule configuration.
