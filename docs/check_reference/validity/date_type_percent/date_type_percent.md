@@ -85,7 +85,7 @@ ___
 ## How to use
 
 The following examples picture when and how to use the `date_type_percent` check. Here we provide a description
-of the usage, the whole example is ready to run [here](../../examples/validity/date_type_percent.md).
+of the usage, the whole example is ready to run [here](../../../examples/validity/date_type_percent.md).
 
 Let's have a look at the first ten rows from the table used in the example -
 `bigquery-public-data.labeled_patents.extracted_data`

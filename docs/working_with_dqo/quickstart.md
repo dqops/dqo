@@ -22,7 +22,6 @@ Log in to DQO Cloud? [Y,n]:
 ```
 If you want to log in to DQO cloud type `Y`. A new window will appear
 
-![home_screen](dqo_cloud_signin_screen.png)
 
 After signing up you ...
 
