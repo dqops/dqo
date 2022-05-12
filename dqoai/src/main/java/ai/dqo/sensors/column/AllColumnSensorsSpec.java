@@ -20,6 +20,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.sensors.column.completeness.ColumnCompletenessMissingDatesCountSensorParametersSpec;
+import ai.dqo.sensors.column.consistency.ColumnConsistencyNotNullPercentSensorParametersSpec;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import ai.dqo.sensors.column.validity.*;
@@ -55,6 +56,7 @@ public class AllColumnSensorsSpec extends AbstractSpec {
 			put("uniqueness_distinct_count", o -> o.uniquenessDistinctCount);
 			put("uniqueness_distinct_count_percent", o -> o.uniquenessDistinctCountPercent);
             put("completeness_missing_dates_count", o -> o.completenessMissingDatesCount);
+            put("consistency_not_null_percent", o -> o.consistencyNotNullPercent);
         }
     };
 
@@ -124,6 +126,11 @@ public class AllColumnSensorsSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnCompletenessMissingDatesCountSensorParametersSpec completenessMissingDatesCount;
+
+    @JsonPropertyDescription("Consistency - calculates percentage of not null values in column ")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyNotNullPercentSensorParametersSpec consistencyNotNullPercent;
 
     // TODO: add remaining test, the names are "category" + "_" + sensor name
 
@@ -230,6 +237,14 @@ public class AllColumnSensorsSpec extends AbstractSpec {
      */
     public ColumnCompletenessMissingDatesCountSensorParametersSpec getCompletenessMissingDatesCount() {
         return completenessMissingDatesCount;
+    }
+
+    /**
+     * Returns a consistency not null percent sensor parameters.
+     * @return Consistency not null percent.
+     */
+    public ColumnConsistencyNotNullPercentSensorParametersSpec getConsistencyNotNullPercent() {
+        return consistencyNotNullPercent;
     }
 
     /**
@@ -356,6 +371,16 @@ public class AllColumnSensorsSpec extends AbstractSpec {
         this.setDirtyIf(!Objects.equals(this.completenessMissingDatesCount, completenessMissingDatesCount));
         this.completenessMissingDatesCount = completenessMissingDatesCount;
         propagateHierarchyIdToField(completenessMissingDatesCount, "completeness_missing_dates_count");
+    }
+
+    /**
+     * Sets the consistency not null percent sensor parameters.
+     * @param consistencyNotNullPercent Not null sensor parameters.
+     */
+    public void setConsistencyNotNullPercent(ColumnConsistencyNotNullPercentSensorParametersSpec consistencyNotNullPercent) {
+        this.setDirtyIf(!Objects.equals(this.consistencyNotNullPercent, consistencyNotNullPercent));
+        this.consistencyNotNullPercent = consistencyNotNullPercent;
+        propagateHierarchyIdToField(consistencyNotNullPercent, "consistency_not_null_percent");
     }
 
     /**

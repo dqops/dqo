@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
 import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
+import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
 import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
@@ -273,6 +274,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(BuiltInTableTimelinessChecksSpec builtInTableTimelinessChecksSpec, P parameter);
+
     /*
      * Accepts a configuration of built-in uniqueness sensors on a column level.
      * @param builtInColumnUniquenessChecksSpec Built-in uniqueness sensors on a column level.
@@ -288,6 +290,14 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(BuiltInColumnCompletenessChecksSpec builtInColumnCompletenessChecksSpec, P parameter);
+
+    /**
+     * Accepts a configuration of built-in consistency sensors on a column level.
+     * @param builtInColumnConsistencyChecksSpec Built-in consistency sensors on a column level.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(BuiltInColumnConsistencyChecksSpec builtInColumnConsistencyChecksSpec, P parameter);
 
     /**
      * Accepts a list of sensor definitions.

@@ -16,6 +16,7 @@
 package ai.dqo.checks.column;
 
 import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
+import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
 import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
@@ -46,6 +47,7 @@ public class ColumnCheckCategoriesSpec extends AbstractSpec {
 			put("uniqueness", o -> o.uniqueness);
             put("completeness", o -> o.completeness);
 			put("custom", o -> o.custom);
+            put("consistency", o -> o.consistency);
         }
     };
 
@@ -69,6 +71,12 @@ public class ColumnCheckCategoriesSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CustomColumnCheckSpecMap custom;
+
+    //TODO add description
+    @JsonPropertyDescription("Configuration of consistency checks on a column level. Consistency checks verify...")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private BuiltInColumnConsistencyChecksSpec consistency;
 
 
     /**
@@ -123,6 +131,24 @@ public class ColumnCheckCategoriesSpec extends AbstractSpec {
 		this.setDirtyIf(!Objects.equals(this.custom, custom));
         this.custom = custom;
 		this.propagateHierarchyIdToField(custom, "custom");
+    }
+
+    /**
+     * Column consistency checks.
+     * @return Column consistency checks.
+     */
+    public BuiltInColumnConsistencyChecksSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets the set of column consistency checks.
+     * @param consistency Column consistency checks.
+     */
+    public void setUniqueness(BuiltInColumnConsistencyChecksSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        this.propagateHierarchyIdToField(consistency, "consistency");
     }
 
     /**

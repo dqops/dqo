@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
 import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
+import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
 import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
@@ -394,6 +395,18 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(BuiltInColumnValidityChecksSpec builtInColumnValidityChecksSpec, List<HierarchyNode> parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of column level consistency data quality checks.
+     *
+     * @param builtInColumnConsistencyChecksSpec Consistency checks.
+     * @param parameter Target list where found hierarchy nodes should be added.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(BuiltInColumnConsistencyChecksSpec builtInColumnConsistencyChecksSpec, List<HierarchyNode> parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
