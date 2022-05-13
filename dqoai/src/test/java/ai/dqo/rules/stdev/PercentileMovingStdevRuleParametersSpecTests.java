@@ -21,8 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
-    private PercentMovingStdevRuleParametersSpec sut;
+public class PercentileMovingStdevRuleParametersSpecTests extends BaseTest {
+    private PercentileMovingStdevRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readingTimestamp;
     private Double[] sensorReadings;
@@ -34,7 +34,7 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
     @BeforeEach
     protected void  setUp() throws Throwable {
         super.setUp();
-        this.sut = new PercentMovingStdevRuleParametersSpec();
+        this.sut = new PercentileMovingStdevRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
@@ -45,7 +45,8 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMultipleStdevAbove(1.0);
+        this.sut.setPercentileStdevAbove(60.0);
+        this.sut.setPercentileStdevBelow(10.0);
 
         for (int i = 0; i < this.sensorReadings.length; i++) {
             if(i % 2 == 0) {
@@ -61,7 +62,7 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(25.18874521662771, ruleExecutionResult.getUpperBound());
+        Assertions.assertEquals(11.465273611102807, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(22.720980651910963, ruleExecutionResult.getUpperBound());
     }
 }
