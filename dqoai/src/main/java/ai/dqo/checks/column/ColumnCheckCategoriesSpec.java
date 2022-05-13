@@ -145,7 +145,7 @@ public class ColumnCheckCategoriesSpec extends AbstractSpec {
      * Sets the set of column consistency checks.
      * @param consistency Column consistency checks.
      */
-    public void setUniqueness(BuiltInColumnConsistencyChecksSpec consistency) {
+    public void setConsistency(BuiltInColumnConsistencyChecksSpec consistency) {
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
