@@ -208,7 +208,7 @@ public class TableServiceImpl implements TableService {
      * @param sourceTableWrappers List of source tables to be imported.
      * @return Dataset with a summary of the import.
      */
-    public Table createTablesTableFromTableSpecList(Collection<TableWrapper> sourceTableWrappers, String connectionName) {
+    public Table createTablesTableFromTableSpecList(Collection<TableWrapper> sourceTableWrappers, UserHome userHome) {
         Table resultTable = Table.create().addColumns(
                 LongColumn.create("Id"),
                 StringColumn.create("Connection name"),
@@ -218,9 +218,10 @@ public class TableServiceImpl implements TableService {
 
         for( TableWrapper sourceTableWrapper : sourceTableWrappers) {
             Row row = resultTable.appendRow();
+            ConnectionWrapper connectionWrapper = userHome.findConnectionFor(sourceTableWrapper.getHierarchyId());
             TableSpec sourceTableSpec = sourceTableWrapper.getSpec();
             row.setLong(0, sourceTableSpec.getHierarchyId().hashCode64());
-            row.setString(1, connectionName);
+            row.setString(1, connectionWrapper.getName());
             row.setString(2, sourceTableSpec.getTarget().getSchemaName());
             row.setString(3, sourceTableSpec.getTarget().getTableName());
             row.setInt(4, sourceTableSpec.getColumns().size());
@@ -254,7 +255,7 @@ public class TableServiceImpl implements TableService {
             return cliOperationStatus;
         }
 
-        Table resultTable = createTablesTableFromTableSpecList(tableWrappers, connectionName);
+        Table resultTable = createTablesTableFromTableSpecList(tableWrappers, userHome);
         cliOperationStatus.setSuccess(true);
         cliOperationStatus.setTable(resultTable);
         return cliOperationStatus;
