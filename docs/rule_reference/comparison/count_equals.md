@@ -4,7 +4,7 @@ Data quality rule that verifies that a data quality check reading equals a given
 
 
 ## Parameters
-This checks has two parameters that should be confogured for each alert:
+This check has two parameters that should be configured for each alert:
 
 - `low`: 
   <br/>rule threshold for a low severity (1) alert
