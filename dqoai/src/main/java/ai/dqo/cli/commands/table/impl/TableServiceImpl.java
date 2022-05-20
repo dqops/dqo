@@ -18,6 +18,7 @@ package ai.dqo.cli.commands.table.impl;
 
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
@@ -51,18 +52,21 @@ public class TableServiceImpl implements TableService {
     private final TerminalWriter terminalWriter;
     private SecretValueProvider secretValueProvider;
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private final TerminalTableWritter terminalTableWritter;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
                             ConnectionProviderRegistry connectionProviderRegistry,
                             TerminalReader terminalReader,
                             TerminalWriter terminalWriter,
-                            SecretValueProvider secretValueProvider) {
+                            SecretValueProvider secretValueProvider,
+                            TerminalTableWritter terminalTableWritter) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.secretValueProvider = secretValueProvider;
+        this.terminalTableWritter = terminalTableWritter;
     }
 
     /**
@@ -338,7 +342,7 @@ public class TableServiceImpl implements TableService {
         }
 
         CliOperationStatus listingStatus = listTables(connectionName, fullTableName);
-        this.terminalWriter.writeTable(listingStatus.getTable(), true);
+        this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
         this.terminalWriter.writeLine("Do You want to remove these " + tableWrappers.size() + " tables?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
         if (!response) {

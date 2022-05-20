@@ -25,6 +25,7 @@ import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -41,14 +42,17 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	private final ColumnService columnService;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
+	private final TerminalTableWritter terminalTableWritter;
 
 	@Autowired
 	public ColumnListCliCommand(TerminalReader terminalReader,
 							   TerminalWriter terminalWriter,
-							   ColumnService columnService) {
+							   ColumnService columnService,
+								TerminalTableWritter terminalTableWritter) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.columnService = columnService;
+		this.terminalTableWritter = terminalTableWritter;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name filter", required = false,
@@ -108,7 +112,7 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName);
 
 		if (cliOperationStatus.isSuccess()) {
-			this.terminalWriter.writeTable(cliOperationStatus.getTable(), true);
+			this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 			return 0;
 		} else {
 			this.terminalWriter.writeLine(cliOperationStatus.getMessage());

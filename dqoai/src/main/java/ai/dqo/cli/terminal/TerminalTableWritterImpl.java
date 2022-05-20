@@ -1,0 +1,302 @@
+package ai.dqo.cli.terminal;
+
+import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.shell.table.BeanListTableModel;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
+import org.springframework.shell.table.TableModel;
+import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+
+/**
+ * File wrapper. Provides access to the file services.
+ */
+@Component
+public class TerminalTableWritterImpl implements TerminalTableWritter {
+	private final TerminalReader terminalReader;
+	private final TerminalWriter terminalWriter;
+	private UserHomeContextFactory userHomeContextFactory;
+
+	@Autowired
+	TerminalTableWritterImpl(TerminalReader terminalReader,
+							 TerminalWriter terminalWriter,
+							 UserHomeContextFactory userHomeContextFactory) {
+		this.terminalReader = terminalReader;
+		this.terminalWriter = terminalWriter;
+		this.userHomeContextFactory = userHomeContextFactory;
+	}
+
+	/**
+	 * Return an ISO 8601 combined date and time string for specified date/time
+	 *
+	 * @param date
+	 *            Date
+	 * @return String with format "yyyy-MM-dd'T'HH:mm:ss'Z'"
+	 */
+	private static String getISO8601StringForCurrentDate(Date date) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		return dateFormat.format(date);
+	}
+
+	private CliOperationStatus writeStringToFile(String table) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+		Path userHomeFolderPath = this.userHomeContextFactory.openLocalUserHome().getHomeRoot().getPhysicalAbsolutePath();
+
+		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true, false);
+		try {
+
+			if (response) {
+				String newTableFileName = getISO8601StringForCurrentDate(new Date()).replaceAll("\\s+","")
+						.replaceAll(":", "").replaceAll("-", "") + ".txt";
+				File exportDirectory = new File(userHomeFolderPath + "/export/");
+				exportDirectory.mkdir();
+				File newTableFile = new File(exportDirectory.getAbsolutePath() + "/" + newTableFileName);
+				newTableFile.createNewFile();
+				FileWriter myWriter = new FileWriter(newTableFile.getAbsolutePath());
+				myWriter.write(table);
+				myWriter.close();
+
+				cliOperationStatus.setSuccesMessage("Table saved to " + newTableFileName);
+
+				return cliOperationStatus;
+			}
+			String filePath = this.terminalReader.prompt("Write full file path:\n", "", false);
+			File newTableFile = new File(filePath);
+			FileWriter myWriter = new FileWriter(newTableFile);
+			myWriter.write(table);
+			myWriter.close();
+
+			cliOperationStatus.setSuccesMessage("Table saved to " + newTableFile);
+		} catch (Exception e) {
+			cliOperationStatus.setFailedMessage("Cannot save table to file:\n" + e);
+		}
+		return cliOperationStatus;
+	}
+
+	@Override
+	public CliOperationStatus writeTableToFile(FormattedTableDto<?> tableData) {
+		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
+
+		TableBuilder tableBuilder = new TableBuilder(model);
+		tableBuilder.addInnerBorder(BorderStyle.oldschool);
+		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+
+		String renderedTable = tableBuilder.build().render(180);
+
+		return writeStringToFile(renderedTable);
+	}
+
+	@Override
+	public CliOperationStatus writeTableToFile(Table table) {
+		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
+
+		TableBuilder tableBuilder = new TableBuilder(tableModel);
+		tableBuilder.addInnerBorder(BorderStyle.oldschool);
+		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+
+		String renderedTable = tableBuilder.build().render(180);
+
+		return writeStringToFile(renderedTable);
+	}
+
+	@Override
+	public CliOperationStatus writeTableToFile(TableModel tableModel) {
+		TableBuilder tableBuilder = new TableBuilder(tableModel);
+
+		tableBuilder.addInnerBorder(BorderStyle.oldschool);
+		tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+
+		String renderedTable = tableBuilder.build().render(180);
+
+		return writeStringToFile(renderedTable);
+	}
+
+	/**
+	 * Renders a table model with paging.
+	 * @param tableData Table data.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
+		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		int rowsLeft = tableData.getRows().size();
+		int index = 0;
+
+		while (rowsLeft > 0) {
+			int start = index * height;
+			int maxEnd = tableData.getRows().size();
+			if (start >= maxEnd) {
+				break;
+			}
+			int end = Math.min(start + height, maxEnd);
+			TableModel model = new BeanListTableModel<>(tableData.getRows().subList(start, end), tableData.getHeaders());
+
+			TableBuilder tableBuilder = new TableBuilder(model);
+			if (addBorder) {
+				tableBuilder.addInnerBorder(BorderStyle.oldschool);
+				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+			}
+			String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+
+			this.terminalWriter.write(renderedTable);
+
+			if (rowsLeft >= height) {
+				try {
+					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", ' ', false);
+					if (response == 'N' || response == 'n') {
+						return;
+					}
+					else if (response == 'a' || response == 'A') {
+						writeWholeTable(tableData, addBorder);
+						return;
+					}
+					else if (response == 's' || response == 'S') {
+						CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
+						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+						return;
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+
+			rowsLeft -= height;
+			index++;
+		}
+	}
+
+	/**
+	 * Writes a table dataset with paging with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeTable(Table table, boolean addBorder) {
+		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		int rowsLeft = table.rowCount();
+		int index = 0;
+
+		while (rowsLeft > 0) {
+			int start = index * height;
+			int maxEnd = table.rowCount();
+			if (start >= maxEnd) {
+				break;
+			}
+			int end = Math.min(start + height, maxEnd);
+			TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(start, end));
+
+			TableBuilder tableBuilder = new TableBuilder(tableModel);
+			if (addBorder) {
+				tableBuilder.addInnerBorder(BorderStyle.oldschool);
+				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+			}
+			String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+
+			this.terminalWriter.write(renderedTable);
+
+			if (rowsLeft >= height) {
+				try {
+					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", ' ', false);
+					if (response == 'N' || response == 'n') {
+						return;
+					}
+					else if (response == 'a' || response == 'A') {
+						writeWholeTable(table, addBorder);
+						return;
+					}
+					else if (response == 's' || response == 'S') {
+						CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
+						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+						return;
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+
+			rowsLeft -= height;
+			index++;
+		}
+	}
+
+	/**
+	 * Renders a table with paging using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeTable(TableModel tableModel, boolean addBorder) {
+		TableBuilder tableBuilder = new TableBuilder(tableModel);
+		if (addBorder) {
+			tableBuilder.addInnerBorder(BorderStyle.oldschool);
+			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+		}
+		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+		// TODO: support interactive paging for long lists
+		this.terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Renders a table model.
+	 * @param tableData Table data.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
+		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
+
+		TableBuilder tableBuilder = new TableBuilder(model);
+		if (addBorder) {
+			tableBuilder.addInnerBorder(BorderStyle.oldschool);
+			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+		}
+		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+		this.terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Writes a table dataset with a header that is extracted from the column names.
+	 * @param table Table (dataset).
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(Table table, boolean addBorder) {
+		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
+		TableBuilder tableBuilder = new TableBuilder(tableModel);
+		if (addBorder) {
+			tableBuilder.addInnerBorder(BorderStyle.oldschool);
+			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+		}
+		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+		this.terminalWriter.write(renderedTable);
+	}
+
+	/**
+	 * Renders a table using a given table model.
+	 * @param tableModel Table model for the spring shell table.
+	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 */
+	@Override
+	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
+		TableBuilder tableBuilder = new TableBuilder(tableModel);
+		if (addBorder) {
+			tableBuilder.addInnerBorder(BorderStyle.oldschool);
+			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+		}
+		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+		this.terminalWriter.write(renderedTable);
+	}
+}

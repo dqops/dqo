@@ -48,11 +48,6 @@ public interface TerminalWriter {
     void writeCommandSynopsis(CommandLine command);
 
     /**
-     * Clears the screen.
-     */
-    void clearScreen();
-
-    /**
      * Renders a table model.
      * @param tableData Table data.
      * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
@@ -72,4 +67,21 @@ public interface TerminalWriter {
      * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
      */
     void writeTable(TableModel tableModel, boolean addBorder);
+
+    /**
+     * Clears the screen.
+     */
+    void clearScreen();
+
+    /**
+     * Gets terminal width.
+     * @return Terminal width.
+     */
+    Integer getTerminalWidth();
+
+    /**
+     * Gets terminal height.
+     * @return Terminal height.
+     */
+    Integer getTerminalHeight();
 }

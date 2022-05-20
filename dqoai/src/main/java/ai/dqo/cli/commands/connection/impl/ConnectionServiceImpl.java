@@ -20,6 +20,7 @@ import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
@@ -59,6 +60,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
+    private final TerminalTableWritter terminalTableWritter;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private SecretValueProvider secretValueProvider;
 
@@ -67,11 +69,13 @@ public class ConnectionServiceImpl implements ConnectionService {
 								 ConnectionProviderRegistry connectionProviderRegistry,
                                  TerminalReader terminalReader,
                                  TerminalWriter terminalWriter,
+                                 TerminalTableWritter terminalTableWritter,
                                  SecretValueProvider secretValueProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
         this.secretValueProvider = secretValueProvider;
     }
 
@@ -371,7 +375,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
 
         FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName);
-        this.terminalWriter.writeTable(connectionTables, true);
+        this.terminalTableWritter.writeTable(connectionTables, true);
         this.terminalWriter.writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
         if (!response) {

@@ -5,6 +5,7 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,18 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 	private final ConnectionService connectionService;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
+	private final TerminalTableWritter terminalTableWritter;
+
 
 	@Autowired
 	public ConnectionTableShowCliCommand(ConnectionService connectionService,
 										 TerminalReader terminalReader,
-										 TerminalWriter terminalWriter) {
+										 TerminalWriter terminalWriter,
+										 TerminalTableWritter terminalTableWritter) {
 		this.connectionService = connectionService;
 		this.terminalWriter = terminalWriter;
 		this.terminalReader = terminalReader;
+		this.terminalTableWritter = terminalTableWritter;
 	}
 
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false)
@@ -58,7 +63,7 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 
 		CliOperationStatus cliOperationStatus = this.connectionService.showTableForConnection(connection, table);
 		if (cliOperationStatus.isSuccess()) {
-			this.terminalWriter.writeTable(cliOperationStatus.getTable(), true);
+			this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 			return 0;
 		} else {
 			this.terminalWriter.writeLine(cliOperationStatus.getMessage());

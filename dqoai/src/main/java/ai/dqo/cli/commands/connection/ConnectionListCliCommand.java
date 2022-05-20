@@ -20,6 +20,7 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.terminal.FormattedTableDto;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.api.client.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,15 @@ import java.util.List;
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private final ConnectionService connectionService;
     private final TerminalWriter terminalWriter;
+    private final TerminalTableWritter terminalTableWritter;
 
     @Autowired
     public ConnectionListCliCommand(ConnectionService connectionService,
-									TerminalWriter terminalWriter) {
+									TerminalWriter terminalWriter,
+                                    TerminalTableWritter terminalTableWritter) {
         this.connectionService = connectionService;
         this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
     }
 
     @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -61,7 +65,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
             name = "*";
         }
         FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
-		this.terminalWriter.writeTable(formattedTable, true);
+		this.terminalTableWritter.writeTable(formattedTable, true);
 
         return 0;
     }

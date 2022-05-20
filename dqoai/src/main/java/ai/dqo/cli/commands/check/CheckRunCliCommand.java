@@ -23,6 +23,7 @@ import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.execution.checks.CheckExecutionSummary;
@@ -41,6 +42,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "run", description = "Run checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private final TerminalWriter terminalWriter;
+    private final TerminalTableWritter terminalTableWritter;
     private final CheckService checkService;
     private JsonSerializer jsonSerializer;
 
@@ -51,8 +53,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalWriter terminalWriter, CheckService checkService, JsonSerializer jsonSerializer) {
+    public CheckRunCliCommand(TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter, CheckService checkService, JsonSerializer jsonSerializer) {
         this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.jsonSerializer = jsonSerializer;
     }
@@ -233,7 +236,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
         if (this.mode != CheckRunReportingMode.silent) {
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
-			this.terminalWriter.writeTable(new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable()), true);
+			this.terminalTableWritter.writeTable(new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable()), true);
         }
 
         return 0; // TODO: check the highest severity (0, 1, 2, 3) and return it as an error code

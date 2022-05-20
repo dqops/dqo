@@ -26,9 +26,6 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 import tech.tablesaw.api.Table;
 
-import java.util.Scanner;
-
-import static org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.LinkType.start;
 
 /**
  * Console terminal wrapper. Provides access to the terminal services.
@@ -84,57 +81,21 @@ public class TerminalWriterImpl implements TerminalWriter {
     }
 
     /**
-     * Clears the screen.
-     */
-    public void clearScreen() {
-        this.terminal.puts(InfoCmp.Capability.clear_screen);
-        this.terminal.flush();
-    }
-
-    /**
      * Renders a table model.
      * @param tableData Table data.
      * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
      */
     @Override
     public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-        int height = this.terminal.getHeight() / 3;
-        int rowsLeft = tableData.getRows().size();
-        int index = 0;
+        TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
 
-        while (rowsLeft > 0) {
-            int start = index * height;
-            int maxEnd = tableData.getRows().size();
-            if (start >= maxEnd) {
-                break;
-            }
-            int end = Math.min(start + height, maxEnd);
-            TableModel model = new BeanListTableModel<>(tableData.getRows().subList(start, end), tableData.getHeaders());
-
-            TableBuilder tableBuilder = new TableBuilder(model);
-            if (addBorder) {
-                tableBuilder.addInnerBorder(BorderStyle.oldschool);
-                tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-            }
-            String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
-
-            this.write(renderedTable);
-
-            if (rowsLeft >= height) {
-                this.writeLine("Do you want to go to next page?");
-                try {
-                    int response = this.terminal.reader().read();
-                    if (response != 'Y' && response != 'y') {
-                        break;
-                    }
-                } catch (Exception e) {
-                    return;
-                }
-            }
-
-            rowsLeft -= height;
-            index++;
+        TableBuilder tableBuilder = new TableBuilder(model);
+        if (addBorder) {
+            tableBuilder.addInnerBorder(BorderStyle.oldschool);
+            tableBuilder.addHeaderBorder(BorderStyle.oldschool);
         }
+        String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
+        this.write(renderedTable);
     }
 
     /**
@@ -144,44 +105,14 @@ public class TerminalWriterImpl implements TerminalWriter {
      */
     @Override
     public void writeTable(Table table, boolean addBorder) {
-        int height = addBorder ? this.terminal.getHeight() / 3 : this.terminal.getHeight() - 2;
-        int rowsLeft = table.rowCount();
-        int index = 0;
-
-        while (rowsLeft > 0) {
-            int start = index * height;
-            int maxEnd = table.rowCount();
-            if (start >= maxEnd) {
-                break;
-            }
-            int end = Math.min(start + height, maxEnd);
-            TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table.inRange(start, end));
-
-            TableBuilder tableBuilder = new TableBuilder(tableModel);
-            if (addBorder) {
-                tableBuilder.addInnerBorder(BorderStyle.oldschool);
-                tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-            }
-            String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
-
-            this.write(renderedTable);
-
-            if (rowsLeft >= height) {
-                this.writeLine("Do you want to go to next page? [y/N]");
-                Scanner scan = new Scanner(System.in);
-                try {
-                    int response = this.terminal.reader().read();
-                    if (response != 'Y' && response != 'y') {
-                        break;
-                    }
-                } catch (Exception e) {
-                    return;
-                }
-            }
-
-            rowsLeft -= height;
-            index++;
+        TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
+        TableBuilder tableBuilder = new TableBuilder(tableModel);
+        if (addBorder) {
+            tableBuilder.addInnerBorder(BorderStyle.oldschool);
+            tableBuilder.addHeaderBorder(BorderStyle.oldschool);
         }
+        String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
+        this.write(renderedTable);
     }
 
     /**
@@ -197,7 +128,31 @@ public class TerminalWriterImpl implements TerminalWriter {
             tableBuilder.addHeaderBorder(BorderStyle.oldschool);
         }
         String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
-        // TODO: support interactive paging for long lists
         this.write(renderedTable);
+    }
+
+    /**
+     * Clears the screen.
+     */
+    public void clearScreen() {
+        this.terminal.puts(InfoCmp.Capability.clear_screen);
+        this.terminal.flush();
+    }
+
+    /**
+     * Gets terminal width.
+     * @return Terminal width.
+     */
+    @Override
+    public Integer getTerminalWidth() {
+        return this.terminal.getWidth();
+    }
+
+    /**
+     * Gets terminal height.
+     * @return Terminal height.
+     */
+    public Integer getTerminalHeight() {
+        return this.terminal.getHeight();
     }
 }

@@ -50,6 +50,16 @@ public interface TerminalReader {
     Boolean promptBoolean(String question, boolean defaultValue, boolean acceptNullDefault);
 
     /**
+     * Asks the user to answer a multiple choice question.
+     * @param question Prompt (question)
+     * @param defaultValue Default value that is returned when the answer is empty.
+     * @param acceptNullDefault When true and the <code>defaultValue</code> is null then a null value is accepted.
+     *                          When false and the <code>defaultValue</code> is null then asks the user again until a response is given.
+     * @return User entered response.
+     */
+    char promptChar(String question, char defaultValue, boolean acceptNullDefault);
+
+    /**
      * Asks the user to pick a value from the enum list.
      * @param question Question to ask
      * @param enumType Enum type to pick a value from.

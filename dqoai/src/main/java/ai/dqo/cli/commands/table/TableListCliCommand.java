@@ -23,6 +23,7 @@ import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.TableNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -40,14 +41,18 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     private final TableService tableImportService;
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
+    private final TerminalTableWritter terminalTableWritter;
+
 
     @Autowired
     public TableListCliCommand(TerminalReader terminalReader,
 							   TerminalWriter terminalWriter,
-							   TableService tableImportService) {
+							   TableService tableImportService,
+                               TerminalTableWritter terminalTableWritter) {
         this.tableImportService = tableImportService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
@@ -101,7 +106,7 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
 
         CliOperationStatus cliOperationStatus = tableImportService.listTables(this.connectionName, this.tableName);
         if (cliOperationStatus.isSuccess()) {
-            this.terminalWriter.writeTable(cliOperationStatus.getTable(), true);
+            this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
             return 0;
         } else {
             this.terminalWriter.writeLine(cliOperationStatus.getMessage());

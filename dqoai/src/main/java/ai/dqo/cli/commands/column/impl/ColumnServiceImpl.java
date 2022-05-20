@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.column.impl;
 
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.metadata.search.ColumnSearchFilters;
@@ -43,14 +44,17 @@ public class ColumnServiceImpl implements ColumnService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
+	private final TerminalTableWritter terminalTableWritter;
 
 	@Autowired
 	public ColumnServiceImpl(UserHomeContextFactory userHomeContextFactory,
 							 TerminalReader terminalReader,
-							 TerminalWriter terminalWriter) {
+							 TerminalWriter terminalWriter,
+							 TerminalTableWritter terminalTableWritter) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.terminalTableWritter = terminalTableWritter;
 	}
 
 	/**
@@ -173,7 +177,7 @@ public class ColumnServiceImpl implements ColumnService {
 		}
 
 		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName);
-		this.terminalWriter.writeTable(listingStatus.getTable(), true);
+		this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
 		this.terminalWriter.writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
 		boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
 		if (!response) {

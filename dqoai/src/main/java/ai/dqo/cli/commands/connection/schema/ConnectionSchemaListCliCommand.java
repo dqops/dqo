@@ -21,6 +21,7 @@ import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +39,18 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 	private final ConnectionService connectionService;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
+	private final TerminalTableWritter terminalTableWritter;
+
 
 	@Autowired
 	public ConnectionSchemaListCliCommand(ConnectionService connectionService,
 								  	TerminalReader terminalReader,
-									TerminalWriter terminalWriter) {
+									TerminalWriter terminalWriter,
+								  	TerminalTableWritter terminalTableWritter) {
 		this.connectionService = connectionService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.terminalTableWritter = terminalTableWritter;
 	}
 
 	@CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -65,7 +70,7 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 		}
 
 		FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
-		this.terminalWriter.writeTable(formattedTable, true);
+		this.terminalTableWritter.writeTable(formattedTable, true);
 
 		return 0;
 	}
