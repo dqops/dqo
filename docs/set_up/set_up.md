@@ -82,7 +82,7 @@ Downloaded 3145728 of 223346570 bytes (1.41%)
 ...
 Downloaded 222298112 of 223346570 bytes (99.53%)
 Downloaded 223346570 of 223346570 bytes (100.00%)
-Installing Java JRE 17 at C:\Users\RadoslawNowak\Desktop\dqoai\Lib\site-packages\dqoai\jre17
+Installing Java JRE 17 at C:\dqoai\Lib\site-packages\dqoai\jre17
 ```
 
 Running the same command once again will launch the application. In the first run DQO.ai will ask you if you
