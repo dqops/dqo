@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.commands;
 
+import ai.dqo.cli.completion.completers.OutputFormatCompleter;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import picocli.CommandLine;
 
@@ -31,7 +32,8 @@ public abstract class BaseCommand {
     @CommandLine.Option(names = {"-h", "--help"}, description = "Show the help for the command and parameters", required = false, usageHelp = true)
     private boolean help;
 
-    @CommandLine.Option(names = {"-of", "--output-format"}, description = "Output format for tabular responses", required = false)
+    @CommandLine.Option(names = {"-of", "--output-format"}, description = "Output format for tabular responses", required = false,
+            completionCandidates = OutputFormatCompleter.class)
     private TabularOutputFormat outputFormat = TabularOutputFormat.TABLE;
 
     /**

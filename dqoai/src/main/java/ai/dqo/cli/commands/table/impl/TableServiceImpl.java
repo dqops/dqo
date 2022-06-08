@@ -16,7 +16,9 @@
 package ai.dqo.cli.commands.table.impl;
 
 
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -53,6 +55,7 @@ public class TableServiceImpl implements TableService {
     private SecretValueProvider secretValueProvider;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final TerminalTableWritter terminalTableWritter;
+    private final OutputFormatService outputFormatService;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -60,13 +63,15 @@ public class TableServiceImpl implements TableService {
                             TerminalReader terminalReader,
                             TerminalWriter terminalWriter,
                             SecretValueProvider secretValueProvider,
-                            TerminalTableWritter terminalTableWritter) {
+                            TerminalTableWritter terminalTableWritter,
+                            OutputFormatService outputFormatService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.secretValueProvider = secretValueProvider;
         this.terminalTableWritter = terminalTableWritter;
+        this.outputFormatService = outputFormatService;
     }
 
     /**
@@ -237,9 +242,10 @@ public class TableServiceImpl implements TableService {
      * List all tables to the connection from a given schema name.
      * @param connectionName Connection name.
      * @param tableName Table name filter.
+     * @param tabularOutputFormat tabular output format.
      * @return Cli operation status.
      */
-    public CliOperationStatus listTables(String connectionName, String tableName) {
+    public CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -260,8 +266,22 @@ public class TableServiceImpl implements TableService {
         }
 
         Table resultTable = createTablesTableFromTableSpecList(tableWrappers, userHome);
+
         cliOperationStatus.setSuccess(true);
-        cliOperationStatus.setTable(resultTable);
+        switch(tabularOutputFormat) {
+            case CSV: {
+                cliOperationStatus.setMessage(this.outputFormatService.tableToCsv(resultTable));
+                break;
+            }
+            case JSON: {
+                cliOperationStatus.setMessage(this.outputFormatService.tableToJson(resultTable));
+                break;
+            }
+            default: {
+                cliOperationStatus.setTable(resultTable);
+                break;
+            }
+        }
         return cliOperationStatus;
     }
 
@@ -341,7 +361,7 @@ public class TableServiceImpl implements TableService {
             return cliOperationStatus;
         }
 
-        CliOperationStatus listingStatus = listTables(connectionName, fullTableName);
+        CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE);
         this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
         this.terminalWriter.writeLine("Do You want to remove these " + tableWrappers.size() + " tables?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);

@@ -17,8 +17,11 @@ package ai.dqo.cli.commands.connection.schema;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
+import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
@@ -40,17 +43,19 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
 	private final TerminalTableWritter terminalTableWritter;
-
+	private final OutputFormatService outputFormatService;
 
 	@Autowired
 	public ConnectionSchemaListCliCommand(ConnectionService connectionService,
 								  	TerminalReader terminalReader,
 									TerminalWriter terminalWriter,
-								  	TerminalTableWritter terminalTableWritter) {
+								  	TerminalTableWritter terminalTableWritter,
+									OutputFormatService outputFormatService	  ) {
 		this.connectionService = connectionService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.terminalTableWritter = terminalTableWritter;
+		this.outputFormatService = outputFormatService;
 	}
 
 	@CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -69,9 +74,17 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 			this.name = this.terminalReader.prompt("Connection name (--name)", null, false);
 		}
 
-		FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
-		this.terminalTableWritter.writeTable(formattedTable, true);
-
-		return 0;
+		CliOperationStatus cliOperationStatus= this.connectionService.loadSchemaList(this.name, this.getOutputFormat());
+		if (cliOperationStatus.isSuccess()) {
+			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
+				this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+			} else {
+				this.terminalWriter.write(cliOperationStatus.getMessage());
+			}
+			return 0;
+		} else {
+			this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+			return -1;
+		}
 	}
 }

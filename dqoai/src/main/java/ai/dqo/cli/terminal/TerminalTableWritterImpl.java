@@ -1,6 +1,7 @@
 package ai.dqo.cli.terminal;
 
 import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.table.BeanListTableModel;
@@ -8,12 +9,13 @@ import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,14 +30,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
 	private UserHomeContextFactory userHomeContextFactory;
+	private OutputFormatService tableOutputService;
 
 	@Autowired
 	TerminalTableWritterImpl(TerminalReader terminalReader,
 							 TerminalWriter terminalWriter,
-							 UserHomeContextFactory userHomeContextFactory) {
+							 UserHomeContextFactory userHomeContextFactory,
+							 OutputFormatService tableOutputService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.userHomeContextFactory = userHomeContextFactory;
+		this.tableOutputService = tableOutputService;
 	}
 
 	/**
@@ -232,6 +237,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 		}
 	}
 
+	private StringColumn[] retrieveHeaders(TableModel tableModel) {
+		int columnCount = tableModel.getColumnCount();
+		StringColumn[] result = new StringColumn[columnCount];
+
+		for (int i = 0; i < columnCount; i++) {
+			result[i] = StringColumn.create(tableModel.getValue(0, i).toString());
+		}
+
+		return result;
+	}
+
 	/**
 	 * Renders a table with paging using a given table model.
 	 * @param tableModel Table model for the spring shell table.
@@ -239,14 +255,16 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(TableModel tableModel, boolean addBorder) {
-		TableBuilder tableBuilder = new TableBuilder(tableModel);
-		if (addBorder) {
-			tableBuilder.addInnerBorder(BorderStyle.oldschool);
-			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+		StringColumn[] headers = retrieveHeaders(tableModel);
+		Table resultTable = Table.create().addColumns(headers);
+
+		for(int y = 1; y < tableModel.getRowCount(); y++) {
+			Row row = resultTable.appendRow();
+			for (int x = 0; x < tableModel.getColumnCount(); x++) {
+				row.setString(x, tableModel.getValue(y, x).toString());
+			}
 		}
-		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-		// TODO: support interactive paging for long lists
-		this.terminalWriter.write(renderedTable);
+		writeTable(resultTable, addBorder);
 	}
 
 	/**

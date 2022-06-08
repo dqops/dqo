@@ -15,9 +15,11 @@
  */
 package ai.dqo.cli.commands.connection.impl;
 
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
@@ -63,6 +65,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final TerminalTableWritter terminalTableWritter;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private SecretValueProvider secretValueProvider;
+    private final OutputFormatService outputFormatService;
 
     @Autowired
     public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -70,13 +73,15 @@ public class ConnectionServiceImpl implements ConnectionService {
                                  TerminalReader terminalReader,
                                  TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWritter,
-                                 SecretValueProvider secretValueProvider) {
+                                 SecretValueProvider secretValueProvider,
+                                 OutputFormatService outputFormatService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.secretValueProvider = secretValueProvider;
+        this.outputFormatService = outputFormatService;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -88,10 +93,11 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Returns cli operation status.
      * @param connectionName Connection name.
      * @param fullTableName Full table name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Cli operation status.
      */
     @Override
-    public CliOperationStatus showTableForConnection(String connectionName, String fullTableName) {
+    public CliOperationStatus showTableForConnection(String connectionName, String fullTableName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -144,8 +150,22 @@ public class ConnectionServiceImpl implements ConnectionService {
                 row.setString(2, currentColumn == null ? "" : columnName);
                 row.setString(3, currentColumn == null ? "" : currentColumn.getTypeSnapshot().getColumnType());
             }
+
             cliOperationStatus.setSuccess(true);
-            cliOperationStatus.setTable(resultTable);
+            switch(tabularOutputFormat) {
+                case CSV: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToCsv(resultTable));
+                    break;
+                }
+                case JSON: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToJson(resultTable));
+                    break;
+                }
+                default: {
+                    cliOperationStatus.setTable(resultTable);
+                    break;
+                }
+            }
         } catch (Exception e) {
             cliOperationStatus.setFailedMessage(e.getMessage());
         }
@@ -157,10 +177,11 @@ public class ConnectionServiceImpl implements ConnectionService {
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Cli operation status.
      */
     @Override
-    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName) {
+    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -207,8 +228,22 @@ public class ConnectionServiceImpl implements ConnectionService {
                 row.setInt(2, tableWrapper != null ? tableWrapper.getSpec().getColumns().size() : 0);
                 row.setInt(3, tableWrapper.getSpec().hashCode());
             }
+
             cliOperationStatus.setSuccess(true);
-            cliOperationStatus.setTable(resultTable);
+            switch(tabularOutputFormat) {
+                case CSV: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToCsv(resultTable));
+                    break;
+                }
+                case JSON: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToJson(resultTable));
+                    break;
+                }
+                default: {
+                    cliOperationStatus.setTable(resultTable);
+                    break;
+                }
+            }
         } catch (Exception e) {
             cliOperationStatus.setFailedMessage(e.getMessage());
         }
@@ -223,9 +258,10 @@ public class ConnectionServiceImpl implements ConnectionService {
     /**
      * Returns a schemas of local connections.
      * @param connectionName Connection name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Schema list.
      */
-    public CliOperationStatus loadSchemaList(String connectionName) {
+    public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -270,6 +306,22 @@ public class ConnectionServiceImpl implements ConnectionService {
                 row.setString(0, sourceSchemaModel.getSchemaName());
                 row.setString(1, tablesCounter > 0 ? "yes" : "no");
                 row.setInt(2, tablesCounter);
+            }
+
+            cliOperationStatus.setSuccess(true);
+            switch(tabularOutputFormat) {
+                case CSV: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToCsv(resultTable));
+                    break;
+                }
+                case JSON: {
+                    cliOperationStatus.setMessage(this.outputFormatService.tableToJson(resultTable));
+                    break;
+                }
+                default: {
+                    cliOperationStatus.setTable(resultTable);
+                    break;
+                }
             }
         } catch (Exception e) {
             cliOperationStatus.setFailedMessage(e.getMessage());

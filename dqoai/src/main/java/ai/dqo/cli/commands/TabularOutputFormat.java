@@ -25,7 +25,15 @@ public enum TabularOutputFormat {
      * The output is an ASCII formatted table.
      */
     @JsonProperty("table")
-    TABLE
-
-    // TODO: CSV and JSON formats
+    TABLE,
+    /**
+     * The output is a csv table.
+     */
+    @JsonProperty("csv")
+    CSV,
+    /**
+     * The output is a json table.
+     */
+    @JsonProperty("json")
+    JSON,
 }

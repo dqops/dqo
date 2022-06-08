@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.column.impl.ColumnService;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
@@ -109,10 +110,14 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	@Override
 	public Integer call() throws Exception {
 
-		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName);
+		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName, this.getOutputFormat());
 
 		if (cliOperationStatus.isSuccess()) {
-			this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
+				this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+			} else {
+				this.terminalWriter.write(cliOperationStatus.getMessage());
+			}
 			return 0;
 		} else {
 			this.terminalWriter.writeLine(cliOperationStatus.getMessage());

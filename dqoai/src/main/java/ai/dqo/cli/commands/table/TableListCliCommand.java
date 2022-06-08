@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.table;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.commands.table.impl.TableService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
@@ -104,9 +105,14 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     @Override
     public Integer call() throws Exception {
 
-        CliOperationStatus cliOperationStatus = tableImportService.listTables(this.connectionName, this.tableName);
+        TabularOutputFormat tabularOutputFormat = this.getOutputFormat();
+        CliOperationStatus cliOperationStatus = tableImportService.listTables(this.connectionName, this.tableName, tabularOutputFormat);
         if (cliOperationStatus.isSuccess()) {
-            this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+            if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
+                this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+            } else {
+                this.terminalWriter.write(cliOperationStatus.getMessage());
+            }
             return 0;
         } else {
             this.terminalWriter.writeLine(cliOperationStatus.getMessage());

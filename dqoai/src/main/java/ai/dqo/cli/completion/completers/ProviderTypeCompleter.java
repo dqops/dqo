@@ -23,8 +23,7 @@ import java.util.EnumSet;
 import java.util.Iterator;
 
 /**
- * Connection list CLI parameter autocompletion source that should be applied on CLI command parameters
- * that accept a list of connections.
+ * Provider type parameter autocompletion source that should be applied on CLI command parameters.
  */
 public class ProviderTypeCompleter implements Iterable<String> {
     /**

@@ -15,7 +15,9 @@
  */
 package ai.dqo.cli.commands.column.impl;
 
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -45,26 +47,30 @@ public class ColumnServiceImpl implements ColumnService {
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
 	private final TerminalTableWritter terminalTableWritter;
+	private final OutputFormatService outputFormatService;
 
 	@Autowired
 	public ColumnServiceImpl(UserHomeContextFactory userHomeContextFactory,
 							 TerminalReader terminalReader,
 							 TerminalWriter terminalWriter,
-							 TerminalTableWritter terminalTableWritter) {
+							 TerminalTableWritter terminalTableWritter,
+							 OutputFormatService outputFormatService) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.terminalTableWritter = terminalTableWritter;
+		this.outputFormatService = outputFormatService;
 	}
 
 	/**
 	 * Loads a list of columns from a given connection and table.
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
+	 * @param tabularOutputFormat Tabular output format.
 	 * @return Cli operation status.
 	 */
 	@Override
-	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName) {
+	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -104,7 +110,21 @@ public class ColumnServiceImpl implements ColumnService {
 			}
 		}
 		cliOperationStatus.setSuccess(true);
-		cliOperationStatus.setTable(resultTable);
+		switch(tabularOutputFormat) {
+			case CSV: {
+				cliOperationStatus.setMessage(this.outputFormatService.tableToCsv(resultTable));
+				break;
+			}
+			case JSON: {
+				cliOperationStatus.setMessage(this.outputFormatService.tableToJson(resultTable));
+				break;
+			}
+			default: {
+				cliOperationStatus.setTable(resultTable);
+				break;
+			}
+		}
+
 		return cliOperationStatus;
 	}
 
@@ -176,7 +196,7 @@ public class ColumnServiceImpl implements ColumnService {
 			return cliOperationStatus;
 		}
 
-		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName);
+		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName, TabularOutputFormat.TABLE);
 		this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
 		this.terminalWriter.writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
 		boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);

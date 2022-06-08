@@ -17,12 +17,14 @@ package ai.dqo.cli.commands.check;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.check.impl.CheckService;
 import ai.dqo.cli.commands.check.impl.CliCheckExecutionProgressListener;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -45,6 +47,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private final TerminalTableWritter terminalTableWritter;
     private final CheckService checkService;
     private JsonSerializer jsonSerializer;
+    private final OutputFormatService outputFormatService;
 
     /**
      * Dependency injection constructor.
@@ -53,11 +56,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter, CheckService checkService, JsonSerializer jsonSerializer) {
+    public CheckRunCliCommand(TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter, CheckService checkService,
+                              JsonSerializer jsonSerializer, OutputFormatService outputFormatService) {
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.jsonSerializer = jsonSerializer;
+        this.outputFormatService = outputFormatService;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
@@ -235,8 +240,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
-			this.terminalTableWritter.writeTable(new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable()), true);
+            switch(this.getOutputFormat()) {
+                case CSV: {
+                    this.terminalWriter.write(this.outputFormatService.tableToCsv(tablesawDatasetTableModel));
+                    break;
+                }
+                case JSON: {
+                    this.terminalWriter.write(this.outputFormatService.tableToJson(tablesawDatasetTableModel));
+                    break;
+                }
+                default: {
+                    this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+                    break;
+                }
+            }
         }
 
         return 0; // TODO: check the highest severity (0, 1, 2, 3) and return it as an error code

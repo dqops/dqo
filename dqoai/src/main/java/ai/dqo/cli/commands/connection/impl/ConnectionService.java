@@ -15,9 +15,11 @@
  */
 package ai.dqo.cli.commands.connection.impl;
 
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -35,25 +37,28 @@ public interface ConnectionService {
      * Returns cli operation status.
      * @param connectionName Connection name.
      * @param fullTableName Full table name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Cli operation status.
      */
-    CliOperationStatus showTableForConnection(String connectionName, String fullTableName);
+    CliOperationStatus showTableForConnection(String connectionName, String fullTableName, TabularOutputFormat tabularOutputFormat);
 
     /**
      * Returns cli operation status.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Cli operation status.
      */
-    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName);
+    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat);
 
     /**
      * Returns a schemas of local connections.
      * @param connectionName Connection name.
+     * @param tabularOutputFormat Tabular output format.
      * @return Schema list.
      */
-    CliOperationStatus loadSchemaList(String connectionName);
+    CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat);
 
     /**
      * Returns a table of local connections.

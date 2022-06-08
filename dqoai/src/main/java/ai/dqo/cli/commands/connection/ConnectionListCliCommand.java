@@ -17,8 +17,10 @@ package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
+import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -40,14 +42,17 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private final ConnectionService connectionService;
     private final TerminalWriter terminalWriter;
     private final TerminalTableWritter terminalTableWritter;
+    private final OutputFormatService outputFormatService;
 
     @Autowired
     public ConnectionListCliCommand(ConnectionService connectionService,
 									TerminalWriter terminalWriter,
-                                    TerminalTableWritter terminalTableWritter) {
+                                    TerminalTableWritter terminalTableWritter,
+                                    OutputFormatService outputFormatService) {
         this.connectionService = connectionService;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
+        this.outputFormatService = outputFormatService;
     }
 
     @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -65,7 +70,20 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
             name = "*";
         }
         FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
-		this.terminalTableWritter.writeTable(formattedTable, true);
+        switch(this.getOutputFormat()) {
+            case CSV: {
+                this.terminalWriter.write(this.outputFormatService.tableToCsv(formattedTable));
+                break;
+            }
+            case JSON: {
+                this.terminalWriter.write(this.outputFormatService.tableToJson(formattedTable));
+                break;
+            }
+            default: {
+                this.terminalTableWritter.writeTable(formattedTable, true);
+                break;
+            }
+        }
 
         return 0;
     }

@@ -2,6 +2,7 @@ package ai.dqo.cli.commands.connection.table;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
@@ -61,9 +62,13 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 			this.table = this.terminalReader.prompt("Full table name (--schema)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.connectionService.showTableForConnection(connection, table);
+		CliOperationStatus cliOperationStatus = this.connectionService.showTableForConnection(connection, table, this.getOutputFormat());
 		if (cliOperationStatus.isSuccess()) {
-			this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
+				this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+			} else {
+				this.terminalWriter.write(cliOperationStatus.getMessage());
+			}
 			return 0;
 		} else {
 			this.terminalWriter.writeLine(cliOperationStatus.getMessage());
