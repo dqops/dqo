@@ -17,14 +17,15 @@ package ai.dqo.cli.commands.check;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.check.impl.CheckService;
 import ai.dqo.cli.commands.check.impl.CliCheckExecutionProgressListener;
+import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.output.OutputFormatService;
+import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -33,6 +34,8 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
@@ -48,6 +51,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private final CheckService checkService;
     private JsonSerializer jsonSerializer;
     private final OutputFormatService outputFormatService;
+    private final FileWritter fileWritter;
 
     /**
      * Dependency injection constructor.
@@ -57,12 +61,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      */
     @Autowired
     public CheckRunCliCommand(TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter, CheckService checkService,
-                              JsonSerializer jsonSerializer, OutputFormatService outputFormatService) {
+                              JsonSerializer jsonSerializer, OutputFormatService outputFormatService, FileWritter fileWritter) {
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
+        this.fileWritter = fileWritter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
@@ -244,15 +249,39 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
             switch(this.getOutputFormat()) {
                 case CSV: {
-                    this.terminalWriter.write(this.outputFormatService.tableToCsv(tablesawDatasetTableModel));
+                    String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
+                    if (this.isWriteToFile()) {
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalWriter.write(csvContent);
+                    }
                     break;
                 }
                 case JSON: {
-                    this.terminalWriter.write(this.outputFormatService.tableToJson(tablesawDatasetTableModel));
+                    String jsonContent = this.outputFormatService.tableToJson(tablesawDatasetTableModel);
+                    if (this.isWriteToFile()) {
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalWriter.write(jsonContent);
+                    }
                     break;
                 }
                 default: {
-                    this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+                    if (this.isWriteToFile()) {
+                        TableBuilder tableBuilder = new TableBuilder(tablesawDatasetTableModel);
+                        tableBuilder.addInnerBorder(BorderStyle.oldschool);
+                        tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+                        String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+                    }
                     break;
                 }
             }

@@ -36,6 +36,9 @@ public abstract class BaseCommand {
             completionCandidates = OutputFormatCompleter.class)
     private TabularOutputFormat outputFormat = TabularOutputFormat.TABLE;
 
+    @CommandLine.Option(names = {"-fw", "--file-write"}, description = "Write command response to a file", required = false)
+    private boolean writeToFile = false;
+
     /**
      * Throws a {@link CliRequiredParameterMissingException} exception because a <code>parameterName</code> is missing. Otherwise the method silently passes through
      * and the command code can prompt the user to provide a parameter value.
@@ -93,5 +96,21 @@ public abstract class BaseCommand {
      */
     public void setOutputFormat(TabularOutputFormat outputFormat) {
         this.outputFormat = outputFormat;
+    }
+
+    /**
+     * True when a cli command response will be written to a file.
+     * @return Write to file boolean value.
+     */
+    public boolean isWriteToFile() {
+        return writeToFile;
+    }
+
+    /**
+     * Sets the write to file parameter value.
+     * @param writeToFile Write to file parameter value.
+     */
+    public void setWriteToFile(boolean writeToFile) {
+        this.writeToFile = writeToFile;
     }
 }

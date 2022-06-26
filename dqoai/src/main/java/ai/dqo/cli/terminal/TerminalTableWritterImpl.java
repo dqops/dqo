@@ -1,8 +1,6 @@
 package ai.dqo.cli.terminal;
 
 import ai.dqo.cli.commands.status.CliOperationStatus;
-import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;
@@ -13,14 +11,6 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.nio.file.Path;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 
 /**
  * File wrapper. Provides access to the file services.
@@ -29,66 +19,15 @@ import java.util.TimeZone;
 public class TerminalTableWritterImpl implements TerminalTableWritter {
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
-	private UserHomeContextFactory userHomeContextFactory;
-	private OutputFormatService tableOutputService;
+	private final FileWritter fileWritter;
 
 	@Autowired
 	TerminalTableWritterImpl(TerminalReader terminalReader,
 							 TerminalWriter terminalWriter,
-							 UserHomeContextFactory userHomeContextFactory,
-							 OutputFormatService tableOutputService) {
+							 FileWritter fileWritter) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.userHomeContextFactory = userHomeContextFactory;
-		this.tableOutputService = tableOutputService;
-	}
-
-	/**
-	 * Return an ISO 8601 combined date and time string for specified date/time
-	 *
-	 * @param date
-	 *            Date
-	 * @return String with format "yyyy-MM-dd'T'HH:mm:ss'Z'"
-	 */
-	private static String getISO8601StringForCurrentDate(Date date) {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-		return dateFormat.format(date);
-	}
-
-	private CliOperationStatus writeStringToFile(String table) {
-		CliOperationStatus cliOperationStatus = new CliOperationStatus();
-		Path userHomeFolderPath = this.userHomeContextFactory.openLocalUserHome().getHomeRoot().getPhysicalAbsolutePath();
-
-		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true, false);
-		try {
-
-			if (response) {
-				String newTableFileName = getISO8601StringForCurrentDate(new Date()).replaceAll("\\s+","")
-						.replaceAll(":", "").replaceAll("-", "") + ".txt";
-				File exportDirectory = new File(userHomeFolderPath + "/export/");
-				exportDirectory.mkdir();
-				File newTableFile = new File(exportDirectory.getAbsolutePath() + "/" + newTableFileName);
-				newTableFile.createNewFile();
-				FileWriter myWriter = new FileWriter(newTableFile.getAbsolutePath());
-				myWriter.write(table);
-				myWriter.close();
-
-				cliOperationStatus.setSuccesMessage("Table saved to " + newTableFileName);
-
-				return cliOperationStatus;
-			}
-			String filePath = this.terminalReader.prompt("Write full file path:\n", "", false);
-			File newTableFile = new File(filePath);
-			FileWriter myWriter = new FileWriter(newTableFile);
-			myWriter.write(table);
-			myWriter.close();
-
-			cliOperationStatus.setSuccesMessage("Table saved to " + newTableFile);
-		} catch (Exception e) {
-			cliOperationStatus.setFailedMessage("Cannot save table to file:\n" + e);
-		}
-		return cliOperationStatus;
+		this.fileWritter = fileWritter;
 	}
 
 	@Override
@@ -101,7 +40,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return writeStringToFile(renderedTable);
+		return this.fileWritter.writeStringToFile(renderedTable);
 	}
 
 	@Override
@@ -114,7 +53,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return writeStringToFile(renderedTable);
+		return this.fileWritter.writeStringToFile(renderedTable);
 	}
 
 	@Override
@@ -126,7 +65,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return writeStringToFile(renderedTable);
+		return this.fileWritter.writeStringToFile(renderedTable);
 	}
 
 	/**

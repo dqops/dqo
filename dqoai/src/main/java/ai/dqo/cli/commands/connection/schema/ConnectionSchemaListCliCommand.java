@@ -22,13 +22,12 @@ import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FormattedTableDto;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
@@ -43,19 +42,19 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
 	private final TerminalTableWritter terminalTableWritter;
-	private final OutputFormatService outputFormatService;
+	private final FileWritter fileWritter;
 
 	@Autowired
 	public ConnectionSchemaListCliCommand(ConnectionService connectionService,
-								  	TerminalReader terminalReader,
-									TerminalWriter terminalWriter,
-								  	TerminalTableWritter terminalTableWritter,
-									OutputFormatService outputFormatService	  ) {
+										 TerminalReader terminalReader,
+										 TerminalWriter terminalWriter,
+										 TerminalTableWritter terminalTableWritter,
+										 FileWritter fileWritter) {
 		this.connectionService = connectionService;
-		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.terminalReader = terminalReader;
 		this.terminalTableWritter = terminalTableWritter;
-		this.outputFormatService = outputFormatService;
+		this.fileWritter = fileWritter;
 	}
 
 	@CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -77,9 +76,24 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 		CliOperationStatus cliOperationStatus= this.connectionService.loadSchemaList(this.name, this.getOutputFormat());
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
-				this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+				if (this.isWriteToFile()) {
+					TableBuilder tableBuilder = new TableBuilder(new TablesawDatasetTableModel(cliOperationStatus.getTable()));
+					tableBuilder.addInnerBorder(BorderStyle.oldschool);
+					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(renderedTable);
+					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+				} else {
+					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+				}
 			} else {
-				this.terminalWriter.write(cliOperationStatus.getMessage());
+				if (this.isWriteToFile()) {
+					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(cliOperationStatus.getMessage());
+					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+				}
+				else {
+					this.terminalWriter.write(cliOperationStatus.getMessage());
+				}
 			}
 			return 0;
 		} else {

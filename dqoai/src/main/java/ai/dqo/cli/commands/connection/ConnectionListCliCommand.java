@@ -20,13 +20,19 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
+import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
+import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.api.client.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.shell.table.BeanListTableModel;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
+import org.springframework.shell.table.TableModel;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
@@ -43,16 +49,19 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private final TerminalWriter terminalWriter;
     private final TerminalTableWritter terminalTableWritter;
     private final OutputFormatService outputFormatService;
+    private final FileWritter fileWritter;
 
     @Autowired
     public ConnectionListCliCommand(ConnectionService connectionService,
 									TerminalWriter terminalWriter,
                                     TerminalTableWritter terminalTableWritter,
-                                    OutputFormatService outputFormatService) {
+                                    OutputFormatService outputFormatService,
+                                    FileWritter fileWritter) {
         this.connectionService = connectionService;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
+        this.fileWritter = fileWritter;
     }
 
     @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
@@ -72,15 +81,40 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
         FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
         switch(this.getOutputFormat()) {
             case CSV: {
-                this.terminalWriter.write(this.outputFormatService.tableToCsv(formattedTable));
+                String csvContent = this.outputFormatService.tableToCsv(formattedTable);
+                if (this.isWriteToFile()) {
+                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                }
+                else {
+                    this.terminalWriter.write(csvContent);
+                }
                 break;
             }
             case JSON: {
-                this.terminalWriter.write(this.outputFormatService.tableToJson(formattedTable));
+                String jsonContent = this.outputFormatService.tableToJson(formattedTable);
+                if (this.isWriteToFile()) {
+                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                }
+                else {
+                    this.terminalWriter.write(jsonContent);
+                }
                 break;
             }
             default: {
-                this.terminalTableWritter.writeTable(formattedTable, true);
+                if (this.isWriteToFile()) {
+                    TableModel model = new BeanListTableModel<>(formattedTable.getRows(), formattedTable.getHeaders());
+                    TableBuilder tableBuilder = new TableBuilder(model);
+                    tableBuilder.addInnerBorder(BorderStyle.oldschool);
+                    tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+                    String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                    CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                    this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                }
+                else {
+                    this.terminalTableWritter.writeTable(formattedTable, true);
+                }
                 break;
             }
         }
