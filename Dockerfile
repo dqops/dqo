@@ -16,16 +16,14 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 # dqo
 ARG DQO_VERSION
 
-COPY ./distribution/target/dqo-distribution-$DQO_VERSION-bin.zip /app/temp/dqo-distribution-$DQO_VERSION-bin.zip
-RUN unzip /app/temp/dqo-distribution-$DQO_VERSION-bin.zip -d /app/dqo-$DQO_VERSION
-RUN rm -rf /app/temp
+RUN --mount=type=bind,target=/app/temp/,source=./distribution/target/ \
+    unzip /app/temp/dqo-distribution-$DQO_VERSION-bin.zip -d /app/dqo-$DQO_VERSION \
 
 COPY ./userhome /app/userhome
 RUN cd /app/userhome
 
 ENV DQO_HOME=/app/dqo-$DQO_VERSION
 ENV DQO_USER_HOME=/app/userhome
-
 
 #RUN apt-get install nano
 RUN chsh -s /bin/sh
