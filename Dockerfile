@@ -1,4 +1,6 @@
-FROM python:3.7-bullseye
+#FROM python:3.7-bullseye
+#FROM python:3.7-alpine
+FROM python:3.7-slim-bullseye
 WORKDIR /app
 
 RUN apt-get update
@@ -7,7 +9,7 @@ RUN apt-get install wget -y
 
 
 # install java
-RUN apt-get install -y openjdk-17-jdk && apt-get clean;
+RUN apt-get install -y openjdk-17-jre && apt-get clean;
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME/bin
 
