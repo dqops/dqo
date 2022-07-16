@@ -20,6 +20,7 @@ import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
@@ -48,6 +49,7 @@ import picocli.CommandLine;
             ColumnCliCommand.class,
             SettingsCliCommand.class,
             CloudCliCommand.class,
+            SensorCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {

@@ -53,6 +53,15 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
     }
 
     /**
+     * Returns the folder that contains the sensor files.
+     * @return Sensor folder.
+     */
+    @JsonIgnore
+    public FolderTreeNode getSensorFolderNode() {
+        return sensorFolderNode;
+    }
+
+    /**
      * Loads the data quality sensor definition spec with the sensor configuration details.
      * @return Loaded quality sensor spec.
      */

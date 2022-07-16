@@ -17,17 +17,26 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
 
 import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
+import ai.dqo.metadata.storage.localfiles.userhome.FileUserHomeImpl;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.utils.serialization.YamlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
+import static ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryImpl.CACHE_DURATION_SECONDS;
 
 /**
  * Creates a DQO_HOME come context and loads the home model from the file system.
  */
 @Component
-public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
+public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory, DqoHomeContextCache {
     private final YamlSerializer yamlSerializer;
     private final LocalFileSystemFactory localFileSystemFactory;
+    private DqoHomeContext cachedDqoHomeContext;
+    private Instant cachedAt;
 
     @Autowired
     public DqoHomeContextFactoryImpl(YamlSerializer yamlSerializer, LocalFileSystemFactory localFileSystemFactory) {
@@ -41,13 +50,31 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
      */
     @Override
     public DqoHomeContext openLocalDqoHome() {
-        // TODO: consider caching a home context instance and returning a shared instance, we will need to preload it to avoid race conditions if multiple threads are loading definitions
-        // it is probably enough to preload a list of rules and a list of sensor definitions + their list of provider sensors, we can load specs later (on demand)
-
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalDqoHome();
         DqoHomeContext dqoHomeContext = new DqoHomeContext(homeRoot);
         FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, this.yamlSerializer);
         dqoHomeContext.setDqoHome(fileDqoHomeModel);
+        dqoHomeContext.setDqoModelCache(this);
         return dqoHomeContext;
+    }
+
+    @Override
+    public void invalidateCache() {
+        this.cachedDqoHomeContext = null;
+        this.cachedAt = null;
+    }
+
+    @Override
+    public DqoHomeContext getCachedLocalDqoHome() {
+        if (this.cachedAt != null && this.cachedDqoHomeContext != null &&
+                this.cachedAt.plus(CACHE_DURATION_SECONDS, ChronoUnit.SECONDS).isAfter(Instant.now())) {
+            return this.cachedDqoHomeContext;
+        }
+
+        DqoHomeContext cachedDqoHomeContext = openLocalDqoHome();
+        this.cachedDqoHomeContext = cachedDqoHomeContext;
+        this.cachedAt = Instant.now();
+
+        return cachedDqoHomeContext;
     }
 }
