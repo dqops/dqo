@@ -55,6 +55,10 @@
             <outputDirectory>/</outputDirectory>
         </file>
         <file>
+            <source>${project.basedir}/../home/core-site.xml</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+        <file>
             <source>${project.basedir}/../VERSION</source>
             <outputDirectory>/</outputDirectory>
         </file>
