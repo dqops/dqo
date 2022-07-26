@@ -71,6 +71,9 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
         String exceptionMessage = e.getMessage();
         if (Strings.isNullOrEmpty(exceptionMessage)) {
 			this.terminalWriter.writeLine("Command failed");
+            if (this.coreConfigurationProperties.isPrintStackTrace()) {
+                e.printStackTrace();
+            }
         }
         else {
 			this.terminalWriter.writeLine("Command failed, error message: " + exceptionMessage);
