@@ -17,15 +17,11 @@
 
 export DQO_HOME=$(dirname $0)/home
 
-if [ -f .DQO_USER_HOME ]
-then
+if [ $(pwd)"/" = $(dirname $0) ]; then
+    export DQO_USER_HOME="$(dirname $0)/userhome"
+    if [ ! -d $DQO_USER_HOME ]; then
+        mkdir $DQO_USER_HOME
+    fi
+else
     export DQO_USER_HOME=.
-    return
-fi
-
-export DQO_USER_HOME="$(dirname $0)/userhome"
-
-if [ ! -d $DQO_USER_HOME ]
-then
-    mkdir $DQO_USER_HOME
 fi

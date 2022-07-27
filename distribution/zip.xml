@@ -91,6 +91,10 @@
             <outputDirectory>/bin</outputDirectory>
         </file>
         <file>
+            <source>${project.basedir}/../find-dqo-classpath.sh</source>
+            <outputDirectory>/bin</outputDirectory>
+        </file>
+        <file>
             <source>${project.basedir}/../dqo</source>
             <outputDirectory>/bin</outputDirectory>
         </file>
