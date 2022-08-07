@@ -38,14 +38,14 @@ public class SettingsServiceImpl implements SettingsService {
 		this.userHomeContextFactory = userHomeContextFactory;
 	}
 
-	private void createEmptySettingFile() {
-		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
 
 		SettingsSpec settingsSpec = new SettingsSpec();
-		SettingsWrapper settings = userHomeContext.getUserHome().getSettings();
+		SettingsWrapper settings = userHome.getSettings();
 		settings.setSpec(settingsSpec);
 		settings.setStatus(InstanceStatus.ADDED);
-		userHomeContext.flush();
+
+		return settings;
 	}
 
 	/**
@@ -60,10 +60,15 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		System.out.println(settings);
 
 		settings.setEditorName(editorName);
 		settings.setEditorPath(editorPath);
@@ -83,10 +88,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		if (Strings.isNullOrEmpty(settings.getEditorName())) {
 			cliOperationStatus.setFailedMessage(String.format("Editor name is not set"));
@@ -111,10 +119,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
-			createEmptySettingFile();
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		String editorName = settings.getEditorName();
 		String editorPath = settings.getEditorPath();
@@ -187,10 +198,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		settings.setApiKey(key);
 		userHomeContext.flush();
@@ -209,10 +223,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		String key = settings.getApiKey();
 		if (Strings.isNullOrEmpty(key)) {
@@ -237,10 +254,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		String key = settings.getApiKey();
 		if (Strings.isNullOrEmpty(key)) {
