@@ -15,7 +15,7 @@
  */
 package ai.dqo.sensors.table.timeliness;
 
-import shaded.parquet.com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum BuiltInTimeScale {
 

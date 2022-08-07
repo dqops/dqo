@@ -15,8 +15,7 @@
  */
 package ai.dqo.sensors.column.validity;
 
-
-import shaded.parquet.com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Predefined List formats.
