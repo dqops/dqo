@@ -25,7 +25,7 @@ if [ -e $(dirname $0)/dqoai/pom.xml ]; then
         exit $?
     fi
 
-    if [ ! -e $(dirname $0)/target/dqo-dqoai-$DQO_VERSION.jar ]; then
+    if [ ! -e $(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar ]; then
         if [ -d $(dirname $0)/dqoai ]; then
             . "$(dirname $0)/mvnw.sh" package -DskipTests -Pbuild-with-jdk-11 -f "$(dirname $0)/pom.xml"
 

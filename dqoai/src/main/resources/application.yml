@@ -28,6 +28,10 @@ https:
   # SSLv3,TLSv1.1,TLSv1.2
   protocols: TLSv1.2
 
+dfs:
+  permissions:
+    enabled: false
+
 dqo:
   python:
     interpreter: python

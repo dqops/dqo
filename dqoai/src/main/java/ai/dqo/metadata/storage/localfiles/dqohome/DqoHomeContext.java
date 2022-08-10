@@ -17,6 +17,7 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
 
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.dqohome.DqoHome;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextCache;
 
 /**
  * File based user home context used to operate on the user home file based model.
@@ -24,6 +25,7 @@ import ai.dqo.metadata.dqohome.DqoHome;
 public class DqoHomeContext {
     private final FolderTreeNode homeRoot;
     private DqoHome dqoHome;
+    private DqoHomeContextCache dqoHomeContextCache;
 
     /**
      * Creates a user home context given a virtual folder with the user home.
@@ -64,5 +66,12 @@ public class DqoHomeContext {
     public void flush() {
 		this.dqoHome.flush(); // flushes changes to the virtual file system
 		this.homeRoot.flush(); // flushes changes to disk
+    }
+
+    /**
+     * Associates the user home context with a user home context cache. The cache is flushed when the user context is persisted.
+     */
+    protected void setDqoModelCache(DqoHomeContextCache DqoHomeContextCache) {
+        this.dqoHomeContextCache = dqoHomeContextCache;
     }
 }

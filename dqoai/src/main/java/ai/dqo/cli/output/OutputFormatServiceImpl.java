@@ -38,7 +38,13 @@ public class OutputFormatServiceImpl implements OutputFormatService {
 		String csvContent = "";
 		for (int y = 0; y < rowNumber; y++) {
 			for (int x = 0; x < columnNumber; x++) {
-				csvContent += tableModel.getValue(y, x) == null ? "" : tableModel.getValue(y, x).toString();
+				if (y == 0) {
+					csvContent += tableModel.getValue(y, x) == null ? "" : tableModel.getValue(y, x).toString()
+							.toLowerCase().replace(' ', '_');
+				}
+				else {
+					csvContent += tableModel.getValue(y, x) == null ? "" : tableModel.getValue(y, x).toString();
+				}
 				csvContent += x == columnNumber - 1 ? "\n" : ';';
 			}
 		}
@@ -76,7 +82,7 @@ public class OutputFormatServiceImpl implements OutputFormatService {
 			jsonContent += "\n\t\t{\n";
 			for (int x = 0; x < columnNumber; x++) {
 				jsonContent += "\t\t\t\"";
-				jsonContent += tableModel.getValue(0, x).toString();
+				jsonContent += tableModel.getValue(0, x).toString().toLowerCase().replace(' ', '_');
 				jsonContent += "\":\"";
 				jsonContent += tableModel.getValue(y, x) == null ? "" : tableModel.getValue(y, x).toString();
 				jsonContent += "\",\n";

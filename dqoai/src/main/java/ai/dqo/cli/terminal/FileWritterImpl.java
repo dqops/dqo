@@ -47,7 +47,6 @@ public class FileWritterImpl implements FileWritter {
 
 		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true, false);
 		try {
-
 			if (response) {
 				String newTableFileName = getISO8601StringForCurrentDate(new Date()).replaceAll("\\s+","")
 						.replaceAll(":", "").replaceAll("-", "") + ".txt";
@@ -59,7 +58,7 @@ public class FileWritterImpl implements FileWritter {
 				myWriter.write(content);
 				myWriter.close();
 
-				cliOperationStatus.setSuccesMessage("Content saved to " + newTableFileName);
+				cliOperationStatus.setSuccesMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 
 				return cliOperationStatus;
 			}
@@ -69,7 +68,7 @@ public class FileWritterImpl implements FileWritter {
 			myWriter.write(content);
 			myWriter.close();
 
-			cliOperationStatus.setSuccesMessage("Content saved to " + newTableFile);
+			cliOperationStatus.setSuccesMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 		} catch (Exception e) {
 			cliOperationStatus.setFailedMessage("Cannot save content to file:\n" + e);
 		}
