@@ -27,4 +27,4 @@ ENV DQO_HOME=/app/dqo-$DQO_VERSION
 ENV DQO_USER_HOME=/app/userhome
 
 RUN chsh -s /bin/sh
-CMD ["/bin/sh", "/app/dqo-0.1.0/bin/dqo"]
+CMD ["/bin/sh", "/app/dqo-$DQO_VERSION/bin/dqo"]
