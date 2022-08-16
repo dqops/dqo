@@ -42,6 +42,7 @@ import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
 import ai.dqo.metadata.groupings.DimensionMappingSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -498,4 +499,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(FileIndexWrapperImpl fileIndexWrapper, P parameter);
+
+    /**
+     * Accepts a recurring schedule specification, it is the cron expression how to schedule the job.
+     * @param recurringScheduleSpec Recurring schedule.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(RecurringScheduleSpec recurringScheduleSpec, P parameter);
 }

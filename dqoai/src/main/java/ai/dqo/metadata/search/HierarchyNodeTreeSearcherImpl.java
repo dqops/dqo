@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -129,5 +130,21 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
 		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
 
         return (List<RuleDefinitionSpec>)(ArrayList<?>)matchingNodes;
+    }
+
+    /**
+     * Search for recurring schedules specs in the tree.
+     *
+     * @param startNode                      Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param recurringScheduleSearchFilters Search filters.
+     * @return Collection of recurring schedules specs nodes that passed the filter.
+     */
+    @Override
+    public Collection<RecurringScheduleSpec> findSchedules(HierarchyNode startNode, RecurringScheduleSearchFilters recurringScheduleSearchFilters) {
+        RecurringScheduleSearchFiltersVisitor searchFilterVisitor = recurringScheduleSearchFilters.createSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+
+        return (List<RecurringScheduleSpec>)(ArrayList<?>)matchingNodes;
     }
 }
