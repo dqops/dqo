@@ -1,10 +1,15 @@
 package ai.dqo.core.scheduler;
 
 import ai.dqo.core.scheduler.quartz.SpringIoCJobFactory;
+import ai.dqo.core.scheduler.scan.UniqueSchedulesCollection;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Job scheduling root class that manages an instance of a Quartz scheduler.
@@ -57,5 +62,13 @@ public class JobSchedulerServiceImpl {
         }
     }
 
-
+    public UniqueSchedulesCollection getActiveSchedules(JobKey jobKey) {
+        try {
+            List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
+            return null;
+        }
+        catch (Exception ex) {
+            throw new JobSchedulerException(ex);
+        }
+    }
 }

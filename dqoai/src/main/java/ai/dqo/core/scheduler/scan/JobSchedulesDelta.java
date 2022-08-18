@@ -6,16 +6,16 @@ package ai.dqo.core.scheduler.scan;
  * that should be unregistered.
  */
 public class JobSchedulesDelta {
-    private DetectedUniqueSchedulesCollection schedulesToAdd;
-    private DetectedUniqueSchedulesCollection schedulesToDelete;
+    private UniqueSchedulesCollection schedulesToAdd;
+    private UniqueSchedulesCollection schedulesToDelete;
 
     /**
      * Creates a new delta object.
      * @param schedulesToAdd New schedules to add to the scheduler.
      * @param schedulesToDelete Outdated schedules to be removed from the scheduler.
      */
-    public JobSchedulesDelta(DetectedUniqueSchedulesCollection schedulesToAdd,
-                             DetectedUniqueSchedulesCollection schedulesToDelete) {
+    public JobSchedulesDelta(UniqueSchedulesCollection schedulesToAdd,
+                             UniqueSchedulesCollection schedulesToDelete) {
         this.schedulesToAdd = schedulesToAdd;
         this.schedulesToDelete = schedulesToDelete;
     }
@@ -24,7 +24,7 @@ public class JobSchedulesDelta {
      * Returns the new schedules to add to the scheduler.
      * @return New schedules to add to the scheduler.
      */
-    public DetectedUniqueSchedulesCollection getSchedulesToAdd() {
+    public UniqueSchedulesCollection getSchedulesToAdd() {
         return schedulesToAdd;
     }
 
@@ -32,7 +32,7 @@ public class JobSchedulesDelta {
      * Returns the outdated schedules to be removed from the scheduler.
      * @return Outdated schedules to be removed from the scheduler.
      */
-    public DetectedUniqueSchedulesCollection getSchedulesToDelete() {
+    public UniqueSchedulesCollection getSchedulesToDelete() {
         return schedulesToDelete;
     }
 }

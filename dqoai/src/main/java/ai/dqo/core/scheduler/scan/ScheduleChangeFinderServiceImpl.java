@@ -32,14 +32,14 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * Loads (finds) all current schedules that are specified in the metadata.
      * @return All unique schedules to run data quality checks.
      */
-    public DetectedUniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
+    public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         RecurringScheduleSearchFilters recurringScheduleSearchFilters = new RecurringScheduleSearchFilters();
         Collection<RecurringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, recurringScheduleSearchFilters);
 
-        DetectedUniqueSchedulesCollection uniqueSchedulesCollection = new DetectedUniqueSchedulesCollection();
+        UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();
         uniqueSchedulesCollection.addAll(schedules);
 
         return uniqueSchedulesCollection;
@@ -52,13 +52,13 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
     @Override
-    public JobSchedulesDelta findSchedulesToAddOrRemove(DetectedUniqueSchedulesCollection currentRunningSchedules) {
+    public JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules) {
         assert currentRunningSchedules != null;
 
-        DetectedUniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedulesForDataQualityChecks();
+        UniqueSchedulesCollection currentMetadataSchedules = loadCurrentSchedulesForDataQualityChecks();
 
-        DetectedUniqueSchedulesCollection schedulesToAdd = currentMetadataSchedules.minus(currentRunningSchedules);
-        DetectedUniqueSchedulesCollection schedulesToRemove = currentRunningSchedules.minus(currentMetadataSchedules);
+        UniqueSchedulesCollection schedulesToAdd = currentMetadataSchedules.minus(currentRunningSchedules);
+        UniqueSchedulesCollection schedulesToRemove = currentRunningSchedules.minus(currentMetadataSchedules);
 
         return new JobSchedulesDelta(schedulesToAdd, schedulesToRemove);
     }

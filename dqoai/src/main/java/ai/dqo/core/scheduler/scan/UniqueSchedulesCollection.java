@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Collection (hash set) of unique schedule configurations that were detected for running the data quality checks.
  */
-public class DetectedUniqueSchedulesCollection {
+public class UniqueSchedulesCollection {
     private Set<RecurringScheduleSpec> uniqueSchedules = new LinkedHashSet<>();
 
     /**
@@ -36,8 +36,8 @@ public class DetectedUniqueSchedulesCollection {
      * @param other Other collection to compare.
      * @return New instance of the schedule's collection, without common schedules.
      */
-    public DetectedUniqueSchedulesCollection minus(DetectedUniqueSchedulesCollection other) {
-        DetectedUniqueSchedulesCollection missingInMine = new DetectedUniqueSchedulesCollection();
+    public UniqueSchedulesCollection minus(UniqueSchedulesCollection other) {
+        UniqueSchedulesCollection missingInMine = new UniqueSchedulesCollection();
         for (RecurringScheduleSpec mySchedule : uniqueSchedules) {
             if (other.uniqueSchedules.contains(mySchedule)) {
                 missingInMine.add(mySchedule);

@@ -12,5 +12,5 @@ public interface ScheduleChangeFinderService {
      * @param currentRunningSchedules Current running schedules.
      * @return The delta - two lists of schedules, to add and to remove from the scheduler.
      */
-    JobSchedulesDelta findSchedulesToAddOrRemove(DetectedUniqueSchedulesCollection currentRunningSchedules);
+    JobSchedulesDelta findSchedulesToAddOrRemove(UniqueSchedulesCollection currentRunningSchedules);
 }
