@@ -81,17 +81,23 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'\\d{5,5}') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'\\d{5,5}'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -101,16 +107,24 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
+        );
+
+        Assertions.assertEquals(expectedQuery,
                 renderedTemplate);
     }
 
@@ -119,18 +133,25 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber);
         runParameters.setTimeSeries(null);
 
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
+        );
+
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -141,27 +162,32 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                 DimensionsConfigurationSpecObjectMother.create(
                         DimensionMappingSpecObjectMother.createStaticValue("FR")));
 
-        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother
+            .renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'\\d{5,5}') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'FR' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'\\d{5,5}'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'FR' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
     void renderSensor_whenSetEmailRegexAndDimensionWithoutTimeSeries_thenRendersCorrectSql() {
-
-
         this.sut.setNamedRegex(BuiltInRegex.email); //We set a test regex "test_custom_regex_defined_by_user" - just to check that correct sql is rendered.
         runParameters.setTimeSeries(null);
         runParameters.setDimensions(
@@ -170,25 +196,29 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'FR' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'FR' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
     void renderSensor_whenSetPhoneNumberRegexAndDimensionOneStaticColumnWithoutTimeSeries_thenRendersCorrectSql() {
-
-
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber); //We set a test regex "test_custom_regex_defined_by_user" - just to check that correct sql is rendered.
         runParameters.setTimeSeries(null);
         runParameters.setDimensions(
@@ -197,21 +227,26 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'FR' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
-    }
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'FR' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
+    }
 
     @Test
     void renderSensor_whenDimension1StaticStringAndNoTimeSeriesAndSetCustomRegex_thenRendersCorrectSql() {
@@ -222,19 +257,26 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                 DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'\\d{5,5}') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'DE' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'\\d{5,5}'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'DE' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -246,19 +288,26 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                 DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'DE' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'DE' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -270,19 +319,26 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                 DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value, 'DE' AS dimension_1
-                                FROM %s AS analyzed_table
-                                GROUP BY dimension_1
-                                ORDER BY dimension_1""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value, 'DE' AS dimension_1
+                FROM %s AS analyzed_table
+                GROUP BY dimension_1
+                ORDER BY dimension_1""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -291,17 +347,24 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'\\d{5,5}') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'\\d{5,5}'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
@@ -310,38 +373,50 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
+
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
     void renderSensor_whenNoTimeSeriesAndSetEmailRegex_thenRendersCorrectSql() {
-
         this.sut.setNamedRegex(BuiltInRegex.email);
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-                                        ELSE 100.0 * SUM(
-                                                        CASE
-                                                            WHEN REGEXP_CONTAINS(analyzed_table.`id`, r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$') IS TRUE THEN 1 ELSE 0 END) / COUNT(analyzed_table.`id`)
-                                                        END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
-    }
 
+        String expectedQuery = String.format("""
+                SELECT CASE
+                        WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_CONTAINS(
+                                    analyzed_table.`id`,
+                                    r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$'
+                                ) IS TRUE THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(analyzed_table.`id`)
+                    END AS actual_value
+                FROM %s AS analyzed_table""",
+            JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
+
+        Assertions.assertEquals(expectedQuery, renderedTemplate);
+    }
 
 }
