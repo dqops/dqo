@@ -1,15 +1,22 @@
 package ai.dqo.core.scheduler;
 
+import ai.dqo.core.scheduler.quartz.JobKeys;
+import ai.dqo.core.scheduler.quartz.JobNames;
 import ai.dqo.core.scheduler.quartz.SpringIoCJobFactory;
+import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
+import org.quartz.JobDetail;
 import ai.dqo.core.scheduler.scan.UniqueSchedulesCollection;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static org.quartz.JobBuilder.newJob;
 import java.util.List;
+
 
 /**
  * Job scheduling root class that manages an instance of a Quartz scheduler.
@@ -19,6 +26,7 @@ public class JobSchedulerServiceImpl {
     private Scheduler scheduler;
     private StdSchedulerFactory schedulerFactory;
     private SpringIoCJobFactory jobFactory;
+    private JobDetail runChecksJob;
 
     /**
      * Job scheduler service constructor.
@@ -36,6 +44,14 @@ public class JobSchedulerServiceImpl {
      * Initializes and starts the scheduler.
      */
     public void start() {
+        createAndStartScheduler();
+        defineDefaultJobs();
+    }
+
+    /**
+     * Creates and starts a scheduler, but without any jobs.
+     */
+    public void createAndStartScheduler() {
         assert scheduler == null;
         try {
             this.scheduler = schedulerFactory.getScheduler();
@@ -43,6 +59,22 @@ public class JobSchedulerServiceImpl {
             this.scheduler.start();
         }
         catch (Exception ex) {
+            throw new JobSchedulerException(ex);
+        }
+    }
+
+    /**
+     * Defines the default jobs like running checks or synchronizing the metadata.
+     */
+    public void defineDefaultJobs() {
+        try {
+            this.runChecksJob = newJob(RunChecksSchedulerJob.class)
+                .withIdentity(JobKeys.RUN_CHECKS)
+                .build();
+            this.scheduler.addJob(this.runChecksJob, true);
+
+            
+        } catch (SchedulerException ex) {
             throw new JobSchedulerException(ex);
         }
     }
@@ -62,6 +94,14 @@ public class JobSchedulerServiceImpl {
         }
     }
 
+    /**
+     * Returns the default job scheduler. The scheduler must be started first.
+     * @return Quartz scheduler instance.
+     */
+    public Scheduler getScheduler() {
+        assert this.scheduler != null : "The scheduler must be first started";
+        return this.scheduler;
+    }
     public UniqueSchedulesCollection getActiveSchedules(JobKey jobKey) {
         try {
             List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
