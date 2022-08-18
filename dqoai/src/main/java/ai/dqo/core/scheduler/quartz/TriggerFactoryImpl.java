@@ -1,8 +1,9 @@
 package ai.dqo.core.scheduler.quartz;
 
 import ai.dqo.core.scheduler.JobSchedulerException;
+import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import org.apache.commons.lang3.StringUtils;
+import ai.dqo.utils.datetime.TimeZoneUtility;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,26 +25,28 @@ public class TriggerFactoryImpl implements TriggerFactory {
 
     /**
      * Creates a Quartz trigger for a given schedule.
-     * @param scheduleSpec Schedule specification.
+     * @param schedule Schedule specification.
      * @param jobKey Job key to identify a predefined job.
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(RecurringScheduleSpec scheduleSpec, JobKey jobKey) {
+    public Trigger createTrigger(RunChecksSchedule schedule, JobKey jobKey) {
         JobDataMap triggerJobData = new JobDataMap();
-        jobDataMapAdapter.setSchedule(triggerJobData, scheduleSpec);
+        jobDataMapAdapter.setSchedule(triggerJobData, schedule);
 
         TriggerBuilder<Trigger> triggerBuilder = newTrigger()
-                .withIdentity(scheduleSpec.toString())
+                .withIdentity(schedule.toString())
                 .usingJobData(triggerJobData);
 
         ScheduleBuilder<?> scheduleBuilder = null;
 
-        if (CronExpression.isValidExpression(scheduleSpec.getCronExpression())) {
-            scheduleBuilder = cronSchedule(scheduleSpec.getCronExpression());
+        RecurringScheduleSpec recurringSchedule = schedule.getRecurringSchedule();
+        if (CronExpression.isValidExpression(recurringSchedule.getCronExpression())) {
+            scheduleBuilder = cronSchedule(recurringSchedule.getCronExpression())
+                    .inTimeZone(schedule.getJavaTimeZone());
         }
         else {
-            throw new JobSchedulerException("Invalid cron schedule: " + scheduleSpec.getCronExpression());
+            throw new JobSchedulerException("Invalid cron schedule: " + recurringSchedule.getCronExpression());
         }
 
         Trigger trigger = triggerBuilder

@@ -1,8 +1,11 @@
 package ai.dqo.core.scheduler.scan;
 
+import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.RecurringScheduleSearchFilters;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
@@ -37,10 +40,21 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
         UserHome userHome = userHomeContext.getUserHome();
 
         RecurringScheduleSearchFilters recurringScheduleSearchFilters = new RecurringScheduleSearchFilters();
+        recurringScheduleSearchFilters.setEnabled(true);
+        // we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
         Collection<RecurringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, recurringScheduleSearchFilters);
 
         UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();
-        uniqueSchedulesCollection.addAll(schedules);
+        for (RecurringScheduleSpec recurringSchedule : schedules) {
+            ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
+            assert parentConnectionWrapper != null;
+
+            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.clone();
+            clonedRecurringSchedule.setHierarchyId(null);
+
+            RunChecksSchedule runChecksSchedule = new RunChecksSchedule(clonedRecurringSchedule, parentConnectionWrapper.getSpec().getTimeZone());
+            uniqueSchedulesCollection.add(runChecksSchedule);
+        }
 
         return uniqueSchedulesCollection;
     }

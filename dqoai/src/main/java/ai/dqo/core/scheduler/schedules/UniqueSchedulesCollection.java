@@ -1,6 +1,4 @@
-package ai.dqo.core.scheduler.scan;
-
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+package ai.dqo.core.scheduler.schedules;
 
 import java.util.*;
 
@@ -8,16 +6,15 @@ import java.util.*;
  * Collection (hash set) of unique schedule configurations that were detected for running the data quality checks.
  */
 public class UniqueSchedulesCollection {
-    private Set<RecurringScheduleSpec> uniqueSchedules = new LinkedHashSet<>();
+    private Set<RunChecksSchedule> uniqueSchedules = new LinkedHashSet<>();
 
     /**
      * Adds a recurring schedule to the collection. Only unique schedules are added.
      * @param recurringSchedule Recurring schedule specification that was found in the metadata.
      */
-    public void add(RecurringScheduleSpec recurringSchedule) {
+    public void add(RunChecksSchedule recurringSchedule) {
         if (!uniqueSchedules.contains(recurringSchedule)) {
-            RecurringScheduleSpec detachedSchedule = recurringSchedule.clone();
-            detachedSchedule.setHierarchyId(null);
+            RunChecksSchedule detachedSchedule = recurringSchedule.clone();
             uniqueSchedules.add(detachedSchedule);
         }
     }
@@ -26,7 +23,7 @@ public class UniqueSchedulesCollection {
      * Returns a collection of unique schedules for iteration.
      * @return Unique schedules that were detected.
      */
-    public Collection<RecurringScheduleSpec> getUniqueSchedules() {
+    public Collection<RunChecksSchedule> getUniqueSchedules() {
         return Collections.unmodifiableCollection(this.uniqueSchedules);
     }
 
@@ -38,7 +35,7 @@ public class UniqueSchedulesCollection {
      */
     public UniqueSchedulesCollection minus(UniqueSchedulesCollection other) {
         UniqueSchedulesCollection missingInMine = new UniqueSchedulesCollection();
-        for (RecurringScheduleSpec mySchedule : uniqueSchedules) {
+        for (RunChecksSchedule mySchedule : uniqueSchedules) {
             if (other.uniqueSchedules.contains(mySchedule)) {
                 missingInMine.add(mySchedule);
             }
@@ -51,9 +48,18 @@ public class UniqueSchedulesCollection {
      * Adds all unique schedules from the given collection.
      * @param schedules Collection of non unique schedules.
      */
-    public void addAll(Collection<RecurringScheduleSpec> schedules) {
-        for (RecurringScheduleSpec recurringSchedule : schedules) {
+    public void addAll(Collection<RunChecksSchedule> schedules) {
+        for (RunChecksSchedule recurringSchedule : schedules) {
             this.add(recurringSchedule);
         }
+    }
+
+    /**
+     * Checks if a given schedule is present.
+     * @param schedule Schedule to match (using equals and hashcode).
+     * @return True when this schedule is present, false when it is not.
+     */
+    public boolean contains(RunChecksSchedule schedule) {
+        return this.uniqueSchedules.contains(schedule);
     }
 }

@@ -1,5 +1,7 @@
 package ai.dqo.core.scheduler.scan;
 
+import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
+
 /**
  * Schedule detection service that scans the metadata and compares the current list of schedules used by the scheduler
  * with the current schedules. Removes outdated schedules.

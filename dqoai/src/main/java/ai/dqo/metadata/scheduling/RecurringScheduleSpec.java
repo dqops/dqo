@@ -29,6 +29,10 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.")
     private String cronExpression;
 
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Disables the schedule. When the value of this 'disable' field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.")
+    private boolean disable;
+
     /**
      * Returns the cron expression.
      * @return Cron expression.
@@ -44,6 +48,23 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
     public void setCronExpression(String cronExpression) {
         setDirtyIf(!Objects.equals(this.cronExpression, cronExpression));
         this.cronExpression = cronExpression;
+    }
+
+    /**
+     * When true, the schedule is disabled.
+     * @return True when the schedule is disabled.
+     */
+    public boolean isDisable() {
+        return disable;
+    }
+
+    /**
+     * Sets the 'disable' flag to pause the schedule.
+     * @param disable Disable the schedule.
+     */
+    public void setDisable(boolean disable) {
+        setDirtyIf(disable != this.disable);
+        this.disable = disable;
     }
 
     /**
