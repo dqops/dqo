@@ -5,6 +5,8 @@ site_url: https://docs.dqo.ai/latest/
 nav:
   - Home: 'index.md'
   - What is DQO: 'what_is_dqo/what_is_dqo.md'
+  - Set up: 'set_up/set_up.md'
+  - Getting started: 'getting_started/getting_started.md'
   - DQO concept:
     - Sensors: 'dqo_concept/sensors/sensors.md'
     - Rules: 'dqo_concept/rules/rules.md'
@@ -14,28 +16,6 @@ nav:
 #  - Folder structures:
 #    - DQO_USER_HOME: 'dqo_concept/user_home_folder_structure.md'
 #    - DQO_HOME: 'dqo_concept/dqo_home_folder_structure.md'
-  - Examples:
-      - Running examples: 'examples/running_examples.md'
-      - Timeliness:
-          - Current delay: 'examples/timeliness/current_delay/current_delay.md'
-          - Average delay: 'examples/timeliness/average_delay/average_delay.md'
-          - Column datetime difference percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-      - Uniqueness:
-          - Distinct count: 'examples/uniqueness/distinct_count/distinct_count.md'
-          - Distinct count percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
-      - Validity:
-          - Date type percent: 'examples/validity/date_type_percent/value_in_range_date_percent.md'
-          - Values in set percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
-          - Value in range date percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-          - Value in range numerical percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-          - String length in range percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-          - Regex match percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
-          - Non negative percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
-          - Not null count: 'examples/validity/not_null_count/not_null_count.md'
-          - Non negative count: 'examples/validity/non_negative_count/non_negative_count.md'
-          - Numerical type percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
-  - Set up: 'set_up/set_up.md'
-  - Getting started: 'getting_started/getting_started.md'
   - Working with DQO:
 #    - Quickstart: 'working_with_dqo/quickstart.md'
     - Adding connections: 'working_with_dqo/add_connection.md'
@@ -78,6 +58,26 @@ nav:
       - Non negative count: 'check_reference/validity/non_negative_count/non_negative_count.md'
       - Numerical type percent: 'check_reference/validity/numerical_type_percent/numerical_type_percent.md'
     - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
+  - Examples:
+      - Running examples: 'examples/running_examples.md'
+      - Timeliness:
+          - Current delay: 'examples/timeliness/current_delay/current_delay.md'
+          - Average delay: 'examples/timeliness/average_delay/average_delay.md'
+          - Column datetime difference percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+      - Uniqueness:
+          - Distinct count: 'examples/uniqueness/distinct_count/distinct_count.md'
+          - Distinct count percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
+      - Validity:
+          - Date type percent: 'examples/validity/date_type_percent/value_in_range_date_percent.md'
+          - Values in set percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
+          - Value in range date percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+          - Value in range numerical percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+          - String length in range percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+          - Regex match percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
+          - Non negative percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
+          - Not null count: 'examples/validity/not_null_count/not_null_count.md'
+          - Non negative count: 'examples/validity/non_negative_count/non_negative_count.md'
+          - Numerical type percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
   - Sensor reference:
       - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
       - Timeliness:
