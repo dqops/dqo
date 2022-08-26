@@ -1,0 +1,108 @@
+const sizes = {
+  0: '0rem',
+  '0.25': '0.0625rem',
+  '0.5': '0.125rem',
+  '0.75': '0.1875rem',
+  1: '0.25rem',
+  2: '0.5rem',
+  '2-05': '0.625rem',
+  3: '0.75rem',
+  3.5: '0.875rem',
+  '5.5': '1.375rem',
+  4: '1rem',
+  5: '1.25rem',
+  8: '2rem',
+  9: '2.25rem',
+  '9.5': '2.375rem',
+  10: '2.5rem',
+  11: '2.75rem',
+  12: '3rem',
+  '13.5': '3.375rem',
+  15: '3.75rem',
+  16: '4rem',
+  17: '4.25rem',
+  18: '4.5rem',
+  20: '5rem',
+  21: '5.25rem',
+  24: '6rem',
+  28: '7rem',
+  29: '7.25rem',
+  32: '8rem',
+  33: '8.25rem',
+  36: '9rem',
+  37: '9.25rem',
+  38: '9.5rem',
+  40: '10rem',
+  '40-75': '10.1875rem',
+  44: '11rem',
+  48: '12rem',
+  50: '12.5rem',
+  52: '13rem',
+  56: '14rem',
+  60: '15rem',
+  64: '16rem',
+  68: '17rem',
+  70: '17.5rem',
+  72: '18rem',
+  75: '18.75rem',
+  76: '19rem',
+  80: '20rem',
+  90: '22.5rem',
+  100: '25rem',
+  120: '30rem',
+  130: '32.5rem',
+  140: '35rem',
+  160: '40rem',
+  180: '45rem',
+  192: '48rem',
+  200: '50rem',
+  210: '52.5rem',
+  400: '100rem',
+  420: '105rem',
+  440: '110rem'
+};
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        'sidebar': '#111827',
+        gray: {
+          50: '#f3f4f6',
+          100: '#D1D5D9',
+          200: '#9CA3AF',
+          500: '#617280',
+          700: '#2D3748'
+        },
+        green: {
+          500: '#10B981',
+        },
+        red: {
+          50: '#F9FAFC',
+        },
+        purple: {
+          500: '#5048E5',
+        }
+      },
+      spacing: sizes,
+      minHeight: sizes,
+      maxHeight: sizes,
+      backgroundOpacity: {
+        4: '0.04',
+        8: '0.08'
+      },
+      borderRadius: sizes,
+      lineHeight: {
+        1: 1,
+        '1.5': 1.5,
+        2: 2,
+      },
+      boxShadow: {
+        header: '0px 1px 4px rgb(100 116 139 / 12%)',
+      }
+    },
+  },
+  plugins: [],
+  content: ["./src/**/*.{js,jsx,ts,tsx,html}", "./public/index.html"],
+};

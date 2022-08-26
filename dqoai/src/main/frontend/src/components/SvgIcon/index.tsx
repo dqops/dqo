@@ -1,0 +1,64 @@
+import React from 'react';
+
+import { ReactComponent as BellSvg } from './svg/bell.svg';
+import { ReactComponent as ChartBarSvg } from './svg/chart-bar.svg';
+import { ReactComponent as ClockSvg } from './svg/clock.svg';
+import { ReactComponent as CogSvg } from './svg/cog.svg';
+import { ReactComponent as DownloadSvg } from './svg/download.svg';
+import { ReactComponent as FacebookSvg } from './svg/facebook.svg';
+import { ReactComponent as GoogleSvg } from './svg/google.svg';
+import { ReactComponent as LockSvg } from './svg/lock.svg';
+import { ReactComponent as MenuSvg } from './svg/menu.svg';
+import { ReactComponent as SearchSvg } from './svg/search.svg';
+import { ReactComponent as SelectorSvg } from './svg/selector.svg';
+import { ReactComponent as ShoppingBagSvg } from './svg/shopping-bag.svg';
+import { ReactComponent as UploadSvg } from './svg/upload.svg';
+import { ReactComponent as UserSvg } from './svg/user.svg';
+import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
+import { ReactComponent as UserCircleSvg } from './svg/user-circle.svg';
+import { ReactComponent as UsersSvg } from './svg/users.svg';
+import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
+
+const iconsMap: any = {
+  bell: BellSvg,
+  'chart-bar': ChartBarSvg,
+  clock: ClockSvg,
+  cog: CogSvg,
+  download: DownloadSvg,
+  facebook: FacebookSvg,
+  google: GoogleSvg,
+  lock: LockSvg,
+  menu: MenuSvg,
+  search: SearchSvg,
+  selector: SelectorSvg,
+  'shopping-bag': ShoppingBagSvg,
+  upload: UploadSvg,
+  user: UserSvg,
+  'user-add': UserAddSvg,
+  'user-circle': UserCircleSvg,
+  'users': UsersSvg,
+  'x-circle': XCircleSvg,
+}
+
+interface SvgIconProps {
+  className?: string;
+  name: string;
+  onClick?: (e: any) => void;
+}
+
+const SvgIcon: React.FC<SvgIconProps> = ({ className, name, ...others }) => {
+  const Component = iconsMap[name];
+
+  if (!Component) {
+    return <div />
+  }
+
+  return (
+    React.cloneElement(<Component data-testid="svg-icon" />, {
+      className,
+      ...others,
+    })
+  );
+};
+
+export default SvgIcon;
