@@ -16,6 +16,7 @@
     "postcss": "^8.4.16",
     "postcss-cli": "^9.1.0",
     "postcss-preset-env": "^7.8.0",
+    "rc-tree": "^5.6.6",
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
     "react-dom": "^18.2.0",
