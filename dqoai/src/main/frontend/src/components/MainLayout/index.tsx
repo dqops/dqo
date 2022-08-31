@@ -16,7 +16,7 @@ children,
       <Sidebar />
       <div className="">
         <Header />
-        <div>{children}</div>
+        <div className="ml-70 mt-16 p-5">{children}</div>
       </div>
     </div>
   );

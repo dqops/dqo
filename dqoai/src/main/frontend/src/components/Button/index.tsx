@@ -20,9 +20,9 @@ interface IButtonProps {
 
 const colorsMap = {
   primary: {
-    contained: 'bg-purple-700 text-white',
-    outlined: 'bg-white text-purple-700 border border-purple-700',
-    text: 'bg-white text-purple-700'
+    contained: 'bg-indigo-700 text-white',
+    outlined: 'bg-white text-indigo-700 border border-indigo-700',
+    text: 'bg-white text-indigo-700'
   },
   secondary: {
     contained: 'bg-green-500 text-white',

@@ -18,6 +18,8 @@ import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
 import { ReactComponent as UserCircleSvg } from './svg/user-circle.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
+import { ReactComponent as BigQuerySvg } from './svg/big-query.svg';
+import { ReactComponent as SnowflakeSvg } from './svg/snowflake.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -38,6 +40,8 @@ const iconsMap: any = {
   'user-circle': UserCircleSvg,
   'users': UsersSvg,
   'x-circle': XCircleSvg,
+  'big-query': BigQuerySvg,
+  snowflake: SnowflakeSvg
 }
 
 interface SvgIconProps {
