@@ -18,8 +18,13 @@ import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
 import { ReactComponent as UserCircleSvg } from './svg/user-circle.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
-import { ReactComponent as BigQuerySvg } from './svg/big-query.svg';
+import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
+import { ReactComponent as BigQueryBigSvg } from './svg/bigquery-big.svg';
 import { ReactComponent as SnowflakeSvg } from './svg/snowflake.svg';
+import { ReactComponent as InfoSvg } from './svg/info.svg';
+import { ReactComponent as CheckSvg } from './svg/check.svg';
+import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
+import { ReactComponent as SnowflakeBigSvg } from './svg/snowflake-big.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -41,7 +46,12 @@ const iconsMap: any = {
   'users': UsersSvg,
   'x-circle': XCircleSvg,
   'big-query': BigQuerySvg,
-  snowflake: SnowflakeSvg
+  'bigquery-big': BigQueryBigSvg,
+  snowflake: SnowflakeSvg,
+  info: InfoSvg,
+  check: CheckSvg,
+  'chevron-down': ChevronDownSvg,
+  'snowflake-big': SnowflakeBigSvg,
 }
 
 interface SvgIconProps {

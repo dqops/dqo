@@ -25,7 +25,7 @@ const colorsMap = {
     text: 'bg-white text-indigo-700'
   },
   secondary: {
-    contained: 'bg-green-500 text-white',
+    contained: 'bg-gray-100 text-black',
     outlined: 'bg-white text-gray-300 border border-gray-300',
     text: 'bg-white text-gray-300'
   },

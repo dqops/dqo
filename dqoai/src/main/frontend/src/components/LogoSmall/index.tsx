@@ -1,17 +1,17 @@
 import React from "react";
 
-interface ILogoProps {
+interface ILogoSmallProps {
   variant?: string;
   width?: number | string;
   height?: number | string;
   className?: string;
 }
 
-const Logo: React.FC<ILogoProps> = (props) => {
+const LogoSmall: React.FC<ILogoSmallProps> = (props) => {
 
   return (
-    <img src="/logo.png" {...props} />
+    <img src="/logoSmall.png" {...props} />
   );
 };
 
-export default Logo;
+export default LogoSmall;

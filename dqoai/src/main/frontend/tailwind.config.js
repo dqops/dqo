@@ -27,6 +27,7 @@ const sizes = {
   24: '6rem',
   28: '7rem',
   29: '7.25rem',
+  30: '7.5rem',
   32: '8rem',
   33: '8.25rem',
   36: '9rem',
@@ -52,11 +53,13 @@ const sizes = {
   120: '30rem',
   130: '32.5rem',
   140: '35rem',
+  150: '37.5rem',
   160: '40rem',
   180: '45rem',
   192: '48rem',
   200: '50rem',
   210: '52.5rem',
+  240: '60rem',
   400: '100rem',
   420: '105rem',
   440: '110rem'
@@ -70,7 +73,7 @@ module.exports = {
         'sidebar': '#111827',
         gray: {
           50: '#f3f4f6',
-          100: '#D1D5D9',
+          100: '#E1E5E9',
           200: '#9CA3AF',
           500: '#617280',
           700: '#2D3748'
@@ -85,8 +88,21 @@ module.exports = {
           500: '#5048E5',
         }
       },
+      fontSize: {
+        xxs: ['11px', '12px'],
+        ss: ['12px', '14px'],
+        sm: ['14px', '16px'],
+        md: ['16px', '18px'],
+        lg: ['18px', '20px'],
+        xl: ['20px', '24px'],
+        '2xl': ['24px', '32px'],
+        '3xl': ['36px', '40px'],
+        '4xl': '40px',
+        '5xl': `48px`,
+      },
       spacing: sizes,
       minHeight: sizes,
+      minWidth: sizes,
       maxHeight: sizes,
       backgroundOpacity: {
         4: '0.04',
@@ -100,6 +116,9 @@ module.exports = {
       },
       boxShadow: {
         header: '0px 1px 4px rgb(100 116 139 / 12%)',
+      },
+      zIndex: {
+        1000: 1000,
       }
     },
   },

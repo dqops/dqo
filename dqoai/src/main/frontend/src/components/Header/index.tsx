@@ -12,10 +12,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ backInfo }) => {
-  const history = useHistory();
-
   return (
-    <div className="fixed top-0 left-70 right-0 min-h-16 bg-white shadow-header flex items-center justify-between px-4 z-50">
+    <div className="fixed top-0 left-70 right-0 min-h-16 bg-white shadow-header flex items-center justify-between px-4">
       <IconButton>
         <SvgIcon name="search" className="w-5 h-5 text-gray-500" />
       </IconButton>
