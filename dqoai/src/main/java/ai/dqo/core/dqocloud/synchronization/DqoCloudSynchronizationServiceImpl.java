@@ -102,4 +102,29 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
         userHomeContext.flush(); // commit the indexes
     }
+
+    /**
+     * Synchronizes all roots (sources, check definitions, data).
+     *
+     * @param synchronizationListener Synchronization listener to notify about the progress.
+     */
+    @Override
+    public void synchronizeAll(BaseFileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.SOURCES, synchronizationListener);
+        synchronizeFolder(DqoRoot.SENSORS, synchronizationListener);
+        synchronizeFolder(DqoRoot.RULES, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_READINGS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_ALERTS, synchronizationListener);
+    }
+
+    /**
+     * Synchronizes only the data roots (readings, alerts).
+     *
+     * @param synchronizationListener Synchronization listener to notify about the progress.
+     */
+    @Override
+    public void synchronizeData(BaseFileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.DATA_READINGS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_ALERTS, synchronizationListener);
+    }
 }

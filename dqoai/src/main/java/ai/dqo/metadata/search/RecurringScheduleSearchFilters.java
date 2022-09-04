@@ -4,22 +4,22 @@ package ai.dqo.metadata.search;
  * Search filters used to search for the recurring schedule specifications.
  */
 public class RecurringScheduleSearchFilters {
-    private Boolean enabled = true;
+    private Boolean scheduleEnabled = true;
 
     /**
      * Returns the filter for enabled only schedules.
      * @return Filter for the enabled or disabled status.
      */
-    public Boolean getEnabled() {
-        return enabled;
+    public Boolean getScheduleEnabled() {
+        return scheduleEnabled;
     }
 
     /**
      * Sets the filter for only enabled or disabled schedules.
-     * @param enabled Not null value for a filter.
+     * @param scheduleEnabled Not null value for a filter.
      */
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setScheduleEnabled(Boolean scheduleEnabled) {
+        this.scheduleEnabled = scheduleEnabled;
     }
 
     /**

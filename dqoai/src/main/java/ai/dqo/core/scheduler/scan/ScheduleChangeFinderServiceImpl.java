@@ -40,7 +40,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
         UserHome userHome = userHomeContext.getUserHome();
 
         RecurringScheduleSearchFilters recurringScheduleSearchFilters = new RecurringScheduleSearchFilters();
-        recurringScheduleSearchFilters.setEnabled(true);
+        recurringScheduleSearchFilters.setScheduleEnabled(true);
         // we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
         Collection<RecurringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, recurringScheduleSearchFilters);
 

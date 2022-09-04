@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshotFactory;
 import ai.dqo.data.readings.snapshot.SensorReadingsSnapshotFactory;
@@ -29,6 +30,9 @@ import ai.dqo.data.readings.normalization.SensorResultNormalizeService;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
+import ai.dqo.execution.checks.scheduled.ScheduledChecksCollection;
+import ai.dqo.execution.checks.scheduled.ScheduledTableChecksCollection;
+import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindService;
 import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -61,6 +65,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final RuleEvaluationService ruleEvaluationService;
     private final SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory;
     private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
+    private ScheduledTargetChecksFindService scheduledTargetChecksFindService;
 
     /**
      * Creates a data quality check execution service.
@@ -72,16 +77,18 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param ruleEvaluationService  Rule evaluation service.
      * @param sensorReadingsSnapshotFactory Sensor reading storage service.
      * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
+     * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      */
     @Autowired
     public CheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
-									 SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory,
-									 DataQualitySensorRunner dataQualitySensorRunner,
-									 ConnectionProviderRegistry connectionProviderRegistry,
-									 SensorResultNormalizeService sensorResultNormalizeService,
-									 RuleEvaluationService ruleEvaluationService,
-									 SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory,
-									 RuleResultsSnapshotFactory ruleResultsSnapshotFactory) {
+                                     SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory,
+                                     DataQualitySensorRunner dataQualitySensorRunner,
+                                     ConnectionProviderRegistry connectionProviderRegistry,
+                                     SensorResultNormalizeService sensorResultNormalizeService,
+                                     RuleEvaluationService ruleEvaluationService,
+                                     SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory,
+                                     RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
+                                     ScheduledTargetChecksFindService scheduledTargetChecksFindService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -90,6 +97,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.ruleEvaluationService = ruleEvaluationService;
         this.sensorReadingsSnapshotFactory = sensorReadingsSnapshotFactory;
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
+        this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
     }
 
     /**
@@ -113,6 +121,37 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 			executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     dummySensorExecution, checkExecutionSummary);
+        }
+
+        return checkExecutionSummary;
+    }
+
+    /**
+     * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
+     *
+     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param targetSchedule        Target schedule to match, when finding checks that should be executed.
+     * @param progressListener      Progress listener that receives progress calls.
+     * @return Check summary table with the count of alerts, checks and rules for each table.
+     */
+    @Override
+    public CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
+                                               RunChecksSchedule targetSchedule,
+                                               CheckExecutionProgressListener progressListener) {
+        UserHome userHome = checkExecutionContext.getUserHomeContext().getUserHome();
+        ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
+        CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
+
+        for(ScheduledTableChecksCollection scheduledChecksForTable : checksForSchedule.getTablesWithChecks()) {
+            TableWrapper targetTable = scheduledChecksForTable.getTargetTable();
+            ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
+
+            CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+            checkSearchFilters.setEnabled(true);
+            checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
+
+            executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+                    false, checkExecutionSummary);
         }
 
         return checkExecutionSummary;

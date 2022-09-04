@@ -28,4 +28,16 @@ public interface DqoCloudSynchronizationService {
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     void synchronizeFolder(DqoRoot dqoRoot, BaseFileSystemSynchronizationListener synchronizationListener);
+
+    /**
+     * Synchronizes all roots (sources, check definitions, data).
+     * @param synchronizationListener Synchronization listener to notify about the progress.
+     */
+    void synchronizeAll(BaseFileSystemSynchronizationListener synchronizationListener);
+
+    /**
+     * Synchronizes only the data roots (readings, alerts).
+     * @param synchronizationListener Synchronization listener to notify about the progress.
+     */
+    void synchronizeData(BaseFileSystemSynchronizationListener synchronizationListener);
 }

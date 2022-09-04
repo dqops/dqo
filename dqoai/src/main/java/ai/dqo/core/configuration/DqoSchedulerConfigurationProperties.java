@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoSchedulerConfigurationProperties implements Cloneable {
     private String scanMetadataCronSchedule;
+    private boolean enableCloudSync = true;
 
     /**
      * Returns the default cron expression used to scan the metadata for new schedules to run data quality checks.
@@ -42,6 +43,22 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
      */
     public void setScanMetadataCronSchedule(String scanMetadataCronSchedule) {
         this.scanMetadataCronSchedule = scanMetadataCronSchedule;
+    }
+
+    /**
+     * Returns true if "cloud sync" is enabled during the scheduler jobs.
+     * @return True when the synchronization is enabled.
+     */
+    public boolean isEnableCloudSync() {
+        return enableCloudSync;
+    }
+
+    /**
+     * Sets the flag to enable cloud synchronization.
+     * @param enableCloudSync Enable cloud synchronization.
+     */
+    public void setEnableCloudSync(boolean enableCloudSync) {
+        this.enableCloudSync = enableCloudSync;
     }
 
     @Override

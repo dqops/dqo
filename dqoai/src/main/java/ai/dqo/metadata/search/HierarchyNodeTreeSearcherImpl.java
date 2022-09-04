@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Finder service that traverses the hierarchy node tree and finds requested type of nodes.
@@ -146,5 +147,65 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
 
         return (List<RecurringScheduleSpec>)(ArrayList<?>)matchingNodes;
+    }
+
+    /**
+     * Search for all nodes that have a schedule defined and are not disabled. Schedule roots are nodes that have a schedule, so all nested checks should be executed
+     * within that schedule.
+     * Possible types of returned nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec}
+     *
+     * @param startNode                  Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param scheduleRootsSearchFilters Search filters.
+     * @return Collection of nodes of type {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec} that may have a custom schedule defined.
+     */
+    @Override
+    public Collection<HierarchyNode> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters) {
+        ScheduleRootsSearchFiltersVisitor searchFilterVisitor = scheduleRootsSearchFilters.createSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+
+        return matchingNodes;
+    }
+
+    /**
+     * Traverses a scheduled node (connection, table, column, check) and collects all enabled checks that would be executed as part of this schedule.
+     *
+     * @param startNode                    Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.).
+     *                                     The root node must have a schedule defined and it must match the schedule (cron expression) in the filter.
+     *                                     Possible start nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec}
+     * @param scheduledChecksSearchFilters Search filters to find all nested checks that would be included in the schedule.
+     * @return Collection of check nodes that passed the filter.
+     */
+    @Override
+    public Collection<AbstractCheckSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
+        if (startNode instanceof ConnectionSpec) {
+            ConnectionSpec connectionSpec = (ConnectionSpec) startNode;
+            assert connectionSpec.getSchedule() != null &&
+                    Objects.equals(connectionSpec.getSchedule(), scheduledChecksSearchFilters.getSchedule());
+        }
+        else if (startNode instanceof TableSpec) {
+            TableSpec tableSpec = (TableSpec) startNode;
+            assert tableSpec.getScheduleOverride() != null &&
+                    Objects.equals(tableSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
+        }
+        else if (startNode instanceof ColumnSpec) {
+            ColumnSpec columnSpec = (ColumnSpec) startNode;
+            assert columnSpec.getScheduleOverride() != null &&
+                    Objects.equals(columnSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
+        }
+        else if (startNode instanceof AbstractCheckSpec) {
+            AbstractCheckSpec checkSpec = (AbstractCheckSpec) startNode;
+            assert checkSpec.getScheduleOverride() != null &&
+                    Objects.equals(checkSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
+        }
+        else {
+            throw new IllegalArgumentException("startNode");
+        }
+
+        ScheduledChecksSearchFiltersVisitor searchFilterVisitor = scheduledChecksSearchFilters.createSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+
+        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
     }
 }

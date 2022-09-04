@@ -60,3 +60,4 @@ dqo:
     print-stack-trace: true
   scheduler:
     scan-metadata-cron-schedule: 0 0/10 * * * ?   # every 10 minutes
+    enable-cloud-sync: true

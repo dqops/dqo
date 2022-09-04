@@ -3,6 +3,7 @@ package ai.dqo.core.scheduler.scan;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
+import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -21,12 +22,21 @@ import org.springframework.stereotype.Component;
 public class SynchronizeMetadataSchedulerJob implements Job {
     private ScheduleChangeFinderService scheduleChangeFinderService;
     private JobSchedulerService jobSchedulerService;
+    private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
 
+    /**
+     * Creates a schedule metadata job instance using dependencies.
+     * @param scheduleChangeFinderService Schedule finder that knows how to identify schedules (cron expressions) in the metadata.
+     * @param jobSchedulerService Job scheduler used to update a list of schedules.
+     * @param schedulerFileSynchronizationService Cloud synchronization service.
+     */
     @Autowired
     public SynchronizeMetadataSchedulerJob(ScheduleChangeFinderService scheduleChangeFinderService,
-                                           JobSchedulerService jobSchedulerService) {
+                                           JobSchedulerService jobSchedulerService,
+                                           SchedulerFileSynchronizationService schedulerFileSynchronizationService) {
         this.scheduleChangeFinderService = scheduleChangeFinderService;
         this.jobSchedulerService = jobSchedulerService;
+        this.schedulerFileSynchronizationService = schedulerFileSynchronizationService;
     }
 
     /**
@@ -37,7 +47,7 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            // TODO: also run the "cloud sync" to pull the metadata, but that is optional and could be configured in the job configuration
+            this.schedulerFileSynchronizationService.synchronizeAll();
 
             UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
             JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);

@@ -29,7 +29,7 @@ public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor
      */
     @Override
     public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, List<HierarchyNode> parameter) {
-        Boolean enabledFilter = this.filters.getEnabled();
+        Boolean enabledFilter = this.filters.getScheduleEnabled();
         if (enabledFilter != null) {
             boolean mustBeDisabled = !enabledFilter;
             if (recurringScheduleSpec.isDisable() != mustBeDisabled) {

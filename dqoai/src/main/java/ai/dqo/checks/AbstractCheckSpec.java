@@ -23,6 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
@@ -35,6 +36,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,6 +53,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
         {
             put("time_series_override", o -> o.timeSeriesOverride);
             put("dimensions_override", o -> o.dimensionsOverride);
+            put("schedule_override", o -> o.scheduleOverride);
             put("comments", o -> o.comments);
         }
     };
@@ -64,6 +67,12 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DimensionsConfigurationSpec dimensionsOverride;
+
+    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -105,6 +114,24 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
         setDirtyIf(!Objects.equals(this.dimensionsOverride, dimensionsOverride));
         this.dimensionsOverride = dimensionsOverride;
         propagateHierarchyIdToField(dimensionsOverride, "dimensions_override");
+    }
+
+    /**
+     * Returns the schedule configuration for running the checks automatically.
+     * @return Schedule configuration.
+     */
+    public RecurringScheduleSpec getScheduleOverride() {
+        return scheduleOverride;
+    }
+
+    /**
+     * Stores a new schedule configuration.
+     * @param scheduleOverride New schedule configuration.
+     */
+    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
+        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
+        this.scheduleOverride = scheduleOverride;
+        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
     }
 
     /**
@@ -159,13 +186,16 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
         try {
             AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
             if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = dimensionsOverride.clone();
+                cloned.dimensionsOverride = cloned.dimensionsOverride.clone();
             }
             if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = timeSeriesOverride.clone();
+                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
+            }
+            if (cloned.scheduleOverride != null) {
+                cloned.scheduleOverride = cloned.scheduleOverride.clone();
             }
             if (cloned.comments != null) {
-                cloned.comments = comments.clone();
+                cloned.comments = cloned.comments.clone();
             }
             return cloned;
         }
@@ -189,6 +219,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
             if (cloned.timeSeriesOverride != null) {
                 cloned.timeSeriesOverride = timeSeriesOverride.expandAndTrim(secretValueProvider);
             }
+            cloned.scheduleOverride = null;
             cloned.comments = null;
             return cloned;
         }
