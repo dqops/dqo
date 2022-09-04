@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useRouteMatch, useHistory } from 'react-router-dom';
+import React from 'react';
 import IconButton from "../IconButton";
 import SvgIcon from "../SvgIcon";
 import Avatar from "react-avatar";
@@ -28,7 +27,7 @@ const Header: React.FC<HeaderProps> = ({ backInfo }) => {
           </div>
         </IconButton>
 
-        <Avatar src="images/avatars/avatar_1.png" className="!w-10 !h-10" round />
+        <Avatar name="John Doe" className="!w-10 !h-10" round />
       </div>
     </div>
   );
