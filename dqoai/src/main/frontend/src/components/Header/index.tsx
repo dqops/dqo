@@ -4,13 +4,9 @@ import SvgIcon from "../SvgIcon";
 import Avatar from "react-avatar";
 
 interface HeaderProps {
-  backInfo?: {
-    text: string;
-    path: string;
-  }
 }
 
-const Header: React.FC<HeaderProps> = ({ backInfo }) => {
+const Header: React.FC<HeaderProps> = () => {
   return (
     <div className="fixed top-0 left-70 right-0 min-h-16 bg-white shadow-header flex items-center justify-between px-4">
       <IconButton>

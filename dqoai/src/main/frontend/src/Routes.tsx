@@ -3,12 +3,12 @@ import { Route, Switch } from 'react-router';
 
 import Dashboard from './pages/Dashboard';
 
-function Routes(): React.ReactElement {
+const Routes: React.FC = () => {
   return (
     <Switch>
       <Route exact path="/" component={Dashboard} />
     </Switch>
   );
-}
+};
 
 export default Routes;

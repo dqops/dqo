@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import Portal from '../../hoc/Portal';
 import LogoSmall from '../LogoSmall';
 import Button from '../Button';
-import {Tabs} from '../Tabs';
+import Tabs from '../Tabs';
 import MainTab from './MainTab';
 import DriverPropertiesTab from './DriverPropertiesTab';
 import SshTab from './SshTab';

@@ -2,7 +2,7 @@ import React from 'react';
 import SectionWrapper from '../SectionWrapper';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
-import {Checkbox} from '../../Checkbox';
+import Checkbox from '../../Checkbox';
 import Select from '../../Select';
 
 const SshTab = () => {

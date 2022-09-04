@@ -17,7 +17,7 @@ const dbInfos: any = {
   }
 }
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const [step, setStep] = useState(0);
   const [database, setDatabase] = useState('');
   const [showDialog, setShowDialog] = useState(false);
