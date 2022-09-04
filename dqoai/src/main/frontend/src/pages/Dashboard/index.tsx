@@ -1,31 +1,29 @@
 import React, {useState} from 'react';
 import MainLayout from "../../components/MainLayout";
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
-import DatabaseDetail from '../../components/Dashboard/DetabaseDetail';
-import DatabaseConnectionDialog from '../../components/DatabaseConnectionDialog';
-
-const dbInfos: any = {
-  'big-query': {
-    title: 'Google BigQuery Connection Settings',
-    description: 'Google BigQuery connection settings',
-    logo: '/bigQuery.png',
-  },
-  snowflake: {
-    title: 'Snowflake Connection Settings',
-    description: 'Snowflake connection settings',
-    logo: '/snowflake.png',
-  }
-}
+import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
+import {DATABASE_TYPE} from '../../shared/enums';
 
 const Dashboard: React.FC = () => {
   const [step, setStep] = useState(0);
-  const [database, setDatabase] = useState('');
-  const [showDialog, setShowDialog] = useState(false);
+  const [database, setDatabase] = useState<DATABASE_TYPE | undefined>();
 
-  const onSelect = (db: string) => {
+  const onSelect = (db: DATABASE_TYPE) => {
     setDatabase(db);
-    setShowDialog(true);
+    setStep(1);
   }
+
+  const onPrev = () => {
+    if (step > 0) {
+      setStep(step - 1);
+    }
+  };
+  
+  const onNext = () => {
+    if (step < 1) {
+      setStep(step + 1);
+    }
+  };
 
   return (
     <MainLayout>
@@ -36,14 +34,9 @@ const Dashboard: React.FC = () => {
       }
       {
         step === 1 && (
-          <DatabaseDetail />
+          <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
         )
       }
-      <DatabaseConnectionDialog
-        open={showDialog}
-        onClose={() => setShowDialog(false)}
-        {...dbInfos[database]}
-      />
     </MainLayout>
   );
 };

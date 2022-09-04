@@ -71,7 +71,7 @@ const Button: React.FC<IButtonProps> = ({
         className,
         textSize ? `text-${textSize}` : 'text-base',
         'rounded-lg focus:outline-none flex items-center justify-center',
-        (!className || className.indexOf('py-') === -1) && 'py-2-05',
+        (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',
         { 'cursor-not-allowed': disabled },
       )}

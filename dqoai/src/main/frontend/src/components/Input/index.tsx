@@ -34,7 +34,7 @@ const Input: React.FC<IInputProps> = ({
 }) => (
   <div>
     <div className="flex space-x-1">
-      <label htmlFor={name} className="block text-base font-regular text-blue-dark-700 mb-1 capitalize">
+      <label htmlFor={name} className="block text-base font-regular text-gray-700 mb-1 capitalize text-sm">
         {label}
       </label>
     </div>
@@ -44,8 +44,8 @@ const Input: React.FC<IInputProps> = ({
         type={type || 'text'}
         placeholder={placeholder}
         className={clsx(
-          error ? 'border border-red-500' : 'focus:border-green-400 border-transparent',
-          'h-11 placeholder-gray-500 py-2.5 px-3 bg-gray-50 text-gray-500 focus:text-purple-700 border border-transparent focus:outline-none block min-w-40 w-full shadow-sm sm:text-base rounded-md',
+          error ? 'border border-red-500' : 'focus:ring-2 focus:ring-blue-400 focus:ring-opacity-80 focus:border-none border-gray-300',
+          'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full sm:text-base rounded',
           className
         )}
         value={value}

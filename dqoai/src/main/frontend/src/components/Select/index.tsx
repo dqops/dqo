@@ -13,7 +13,7 @@ interface SelectProps {
   options: Option[];
   placeholder?: string;
   value?: string;
-  onChange?: (val: string) => void;
+  onChange?: (val: any) => void;
   className?: string;
   info?: boolean;
 }
@@ -40,11 +40,11 @@ const Select: React.FC<SelectProps> = ({
   }
 
   return (
-    <div className={clsx('flex space-x-2', className)}>
+    <div className={clsx('', className)}>
       {
         label && (
           <div className="flex space-x-1">
-            <div className="block text-base font-regular text-blue-dark-700 mb-1">
+            <div className="block text-sm font-regular text-gray-700 mb-1">
               {label}
             </div>
             {
@@ -56,7 +56,7 @@ const Select: React.FC<SelectProps> = ({
         )
       }
       <div className="relative w-full min-w-40" ref={ref}>
-        <div className="cursor-pointer h-7 py-1.5 px-2 pr-10 text-black rounded bg-gray-100 text-sm border border-gray-200" onClick={toggleMenu}>
+        <div className="cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border border-gray-300" onClick={toggleMenu}>
           {
             selectedOption ? selectedOption.label : placeholder
           }
@@ -65,13 +65,13 @@ const Select: React.FC<SelectProps> = ({
             className={clsx('absolute transform top-1/2 -translate-y-2/4 right-2 text-black w-4', isOpen ? 'transform rotate-180' : '')}
           />
         </div>
-        <div className={clsx('absolute top-9 bg-gray-100 left-0 min-w-full z-10 shadow-lg border text-left rounded transition-all duration-150 ease-in', isOpen ? 'max-h-80 overflow-auto py-3' : 'opacity-0 max-h-0 overflow-hidden py-0')}>
+        <div className={clsx('absolute top-10 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in', isOpen ? 'max-h-80 overflow-auto py-3' : 'opacity-0 max-h-0 overflow-hidden py-0')}>
           {
             options.map((option, index) => (
               <div
                 data-testid="select-option"
                 key={index}
-                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-purple-700 text-sm"
+                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
                 onClick={() => handleClick(option)}
               >
                 {option.label}
