@@ -8,7 +8,7 @@ export interface TabsProps {
   onChange?: any;
 }
 
-const Tabs: React.FC<TabsProps> = (
+const Tabs = (
   {
     tabs,
     className,

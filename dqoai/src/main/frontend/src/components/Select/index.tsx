@@ -18,7 +18,7 @@ interface SelectProps {
   info?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({
+const Select = ({
   label,
   options = [],
   placeholder = 'Select Option',
@@ -26,7 +26,7 @@ const Select: React.FC<SelectProps> = ({
   onChange,
   className,
   info,
-}) => {
+}: SelectProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
 

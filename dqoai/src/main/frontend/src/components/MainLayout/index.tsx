@@ -8,9 +8,9 @@ interface LayoutProps {
   children?: any;
 }
 
-const MainLayout: React.FC<LayoutProps> = ({
+const MainLayout = ({
   children,
-}) => {
+}: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Sidebar />

@@ -3,10 +3,7 @@ import IconButton from "../IconButton";
 import SvgIcon from "../SvgIcon";
 import Avatar from "react-avatar";
 
-interface HeaderProps {
-}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header = () => {
   return (
     <div className="fixed top-0 left-70 right-0 min-h-16 bg-white shadow-header flex items-center justify-between z-10 px-4">
       <IconButton>

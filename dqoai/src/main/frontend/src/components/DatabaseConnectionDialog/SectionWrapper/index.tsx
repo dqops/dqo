@@ -7,7 +7,7 @@ interface ISectionWrapperProps {
   className?: string;
 }
 
-const SectionWrapper: React.FC<ISectionWrapperProps> = ({ title, children, className }) => {
+const SectionWrapper = ({ title, children, className }: ISectionWrapperProps) => {
   return (
     <div className={clsx('border border-gray-300 px-4 py-6 relative rounded', className)}>
       <div className="px-1 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">{title}</div>

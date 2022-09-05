@@ -4,7 +4,7 @@ import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import {DATABASE_TYPE} from '../../shared/enums';
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   const [step, setStep] = useState(0);
   const [database, setDatabase] = useState<DATABASE_TYPE | undefined>();
 

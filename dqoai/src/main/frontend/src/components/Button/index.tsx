@@ -46,7 +46,7 @@ const colorsMap = {
   },
 }
 
-const Button: React.FC<IButtonProps> = ({
+const Button = ({
   label,
   type = 'button',
   onClick,
@@ -59,7 +59,7 @@ const Button: React.FC<IButtonProps> = ({
   variant = 'contained',
   textSize,
   dataTestId,
-}) => {
+}: IButtonProps) => {
   const classes = color ? colorsMap[color][variant] : ''
 
   return (

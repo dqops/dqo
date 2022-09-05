@@ -11,7 +11,7 @@ interface IDatabaseConnectionProps {
   onNext: () => void;
 }
 
-const DatabaseConnection: React.FC<IDatabaseConnectionProps> = ({ type, onPrev, onNext }) => {
+const DatabaseConnection = ({ type, onPrev, onNext }: IDatabaseConnectionProps) => {
   return (
     <div>
       <div className="flex justify-between mb-4">

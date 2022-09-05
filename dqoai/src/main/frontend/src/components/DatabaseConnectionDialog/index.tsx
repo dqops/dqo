@@ -38,13 +38,13 @@ interface IDatabaseConnectionDialogProps {
   logo: string;
 }
 
-const DatabaseConnectionDialog: React.FC<IDatabaseConnectionDialogProps> = ({
+const DatabaseConnectionDialog = ({
   open,
   onClose,
   title,
   description,
   logo,
-}) => {
+}: IDatabaseConnectionDialogProps) => {
   const [activeTab, setActiveTab] = useState('main');
 
   return (

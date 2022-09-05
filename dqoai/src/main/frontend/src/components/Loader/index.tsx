@@ -6,7 +6,7 @@ interface ILoaderProps {
   className?: string;
 }
 
-const Loader: React.FC<ILoaderProps> = ({ className, isFull = true }) => (
+const Loader = ({ className, isFull = true }: ILoaderProps) => (
   <div className={(`${isFull ? 'w-full h-full min-h-screen' : ''} flex flex-col items-center justify-center`)}>
     <div role="status" className="text-green-500">
       <svg

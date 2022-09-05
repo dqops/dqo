@@ -17,7 +17,7 @@ interface ITextAreaProps {
   dataTestId?: string;
 }
 
-const TextArea: React.FC<ITextAreaProps> = ({
+const TextArea = ({
   label,
   className,
   placeholder,
@@ -30,7 +30,7 @@ const TextArea: React.FC<ITextAreaProps> = ({
   onClear,
   rows,
   dataTestId,
-}) => (
+}: ITextAreaProps) => (
   <div>
     <label htmlFor={name} className="block text-base font-regular text-blue-dark-700 mb-1">
       {label}

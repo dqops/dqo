@@ -7,7 +7,7 @@ interface ILogoSmallProps {
   className?: string;
 }
 
-const LogoSmall: React.FC<ILogoSmallProps> = (props) => {
+const LogoSmall = (props: ILogoSmallProps) => {
 
   return (
     <img src="/logoSmall.png" {...props} />

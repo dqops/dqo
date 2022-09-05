@@ -18,7 +18,7 @@ interface IInputProps {
   dataTestId?: string;
 }
 
-const Input: React.FC<IInputProps> = ({
+const Input = ({
   label,
   type,
   className,
@@ -31,7 +31,7 @@ const Input: React.FC<IInputProps> = ({
   onBlur,
   onClear,
   dataTestId,
-}) => (
+}: IInputProps) => (
   <div>
     <div className="flex space-x-1">
       <label htmlFor={name} className="block text-base font-regular text-gray-700 mb-1 capitalize text-sm">

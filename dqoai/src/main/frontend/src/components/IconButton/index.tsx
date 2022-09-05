@@ -6,7 +6,7 @@ interface IIconButtonProps {
   className?: string;
 }
 
-const IconButton: React.FC<IIconButtonProps> = ({ children, className }) => {
+const IconButton = ({ children, className }: IIconButtonProps) => {
   return (
     <button className={clsx('focus:outline-none w-10 h-10 hover:bg-red-50 rounded-full flex items-center justify-center', className)}>
       {children}

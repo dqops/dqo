@@ -6,7 +6,7 @@ interface ISelectDatabaseProps {
   onSelect: (db: DATABASE_TYPE) => void;
 }
 
-const SelectDatabase: React.FC<ISelectDatabaseProps> = ({ onSelect }) => {
+const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
   return (
     <div>
       <div className="text-2xl font-semibold text-gray-900 mb-4">Select a database</div>

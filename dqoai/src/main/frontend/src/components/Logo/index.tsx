@@ -7,7 +7,7 @@ interface ILogoProps {
   className?: string;
 }
 
-const Logo: React.FC<ILogoProps> = (props) => {
+const Logo = (props: ILogoProps) => {
 
   return (
     <img src="/logo.png" {...props} />

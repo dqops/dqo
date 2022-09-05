@@ -7,9 +7,10 @@ export interface CheckboxProps {
   className?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = (
-  { label = "Checkbox", className }: CheckboxProps
-) => {
+const Checkbox = ({
+  label = "Checkbox",
+  className
+}: CheckboxProps) => {
   const [checked, setChecked] = useState<boolean>(false);
 
   return (

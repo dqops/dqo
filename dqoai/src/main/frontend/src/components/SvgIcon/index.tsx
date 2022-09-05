@@ -60,7 +60,7 @@ interface SvgIconProps {
   onClick?: (e: any) => void;
 }
 
-const SvgIcon: React.FC<SvgIconProps> = ({ className, name, ...others }) => {
+const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
   const Component = iconsMap[name];
 
   if (!Component) {
