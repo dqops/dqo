@@ -4,6 +4,8 @@ import "rc-tree/assets/index.css"
 import {TreeNodeProps} from 'rc-tree/lib/TreeNode';
 import SvgIcon from '../SvgIcon';
 import './styles.css';
+import {useTabs} from '../../contexts/tabContext';
+import { DataNode } from 'rc-tree/es/interface';
 
 const treeData = [
   {
@@ -45,32 +47,16 @@ const treeData = [
       }
     ]
   },
-  {
-    key: "con3",
-    title: "My DB Connection 3",
-    children: [
-      {
-        key: "2-0-1",
-        title: "Tables",
-        children: [
-          { key: "2-0-1-0", title: "Users" },
-          { key: "2-0-1-1", title: "Products" },
-          { key: "2-0-1-2", title: "Books" },
-          { key: "2-0-1-3", title: "Tests" },
-          { key: "2-0-1-4", title: "Times" },
-          { key: "2-0-1-5", title: "News" },
-        ]
-      }
-    ]
-  }
-
 ];
 
 const ConnectionsTree = () => {
+  const { addTab } = useTabs();
+
   const onExpand = () => {
   };
   
-  const onSelect = () => {
+  const onClick = (event: any, node: DataNode) => {
+    addTab(node);
   };
 
   return (
@@ -83,7 +69,7 @@ const ConnectionsTree = () => {
         onExpand={onExpand}
         defaultSelectedKeys={[]}
         defaultCheckedKeys={[]}
-        onSelect={onSelect}
+        onClick={onClick}
         treeData={treeData}
         icon={(props: TreeNodeProps) => props.data?.children ? <SvgIcon name="grid" className="mr-2 w-4" /> : <SvgIcon name="table" className="mr-2 w-4" />}
         switcherIcon={(props: TreeNodeProps) => props.data?.children ? <SvgIcon name={props.expanded ? "arrow-alt-down" : "arrow-alt-right"} className="w-3 h-3" /> : null}
