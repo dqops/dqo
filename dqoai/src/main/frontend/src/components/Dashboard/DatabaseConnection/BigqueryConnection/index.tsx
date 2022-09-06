@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Input from '../../../Input';
-import SectionWrapper from '../../../DatabaseConnectionDialog/SectionWrapper';
+import SectionWrapper from '../../SectionWrapper';
 import Select from '../../../Select';
 import {BigQueryAuthenticationMode} from '../../../../shared/enums/bigquery.enum';
 

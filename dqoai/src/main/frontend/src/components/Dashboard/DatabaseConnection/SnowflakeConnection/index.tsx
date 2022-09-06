@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '../../../Input';
-import SectionWrapper from '../../../DatabaseConnectionDialog/SectionWrapper';
+import SectionWrapper from '../../SectionWrapper';
 
 const SnowflakeConnection = () => {
   return (
