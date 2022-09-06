@@ -25,6 +25,7 @@ import { ReactComponent as InfoSvg } from './svg/info.svg';
 import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as SnowflakeBigSvg } from './svg/snowflake-big.svg';
+import { ReactComponent as CloseSvg } from './svg/close.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -52,6 +53,7 @@ const iconsMap: any = {
   check: CheckSvg,
   'chevron-down': ChevronDownSvg,
   'snowflake-big': SnowflakeBigSvg,
+  close: CloseSvg,
 }
 
 interface SvgIconProps {

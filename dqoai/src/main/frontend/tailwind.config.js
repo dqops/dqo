@@ -114,6 +114,9 @@ module.exports = {
         '1.5': 1.5,
         2: 2,
       },
+      borderWidth: {
+        3: 3,
+      },
       boxShadow: {
         header: '0px 1px 4px rgb(100 116 139 / 12%)',
       },
