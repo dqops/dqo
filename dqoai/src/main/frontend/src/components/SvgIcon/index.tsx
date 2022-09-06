@@ -26,6 +26,11 @@ import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as SnowflakeBigSvg } from './svg/snowflake-big.svg';
 import { ReactComponent as CloseSvg } from './svg/close.svg';
+import { ReactComponent as TableSvg } from './svg/table.svg';
+import { ReactComponent as GridSvg } from './svg/grid.svg';
+import { ReactComponent as ArrowAltDownSvg } from './svg/arrow-alt-down.svg';
+import { ReactComponent as ArrowAltRightSvg } from './svg/arrow-alt-right.svg';
+
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -54,6 +59,10 @@ const iconsMap: any = {
   'chevron-down': ChevronDownSvg,
   'snowflake-big': SnowflakeBigSvg,
   close: CloseSvg,
+  table: TableSvg,
+  grid: GridSvg,
+  'arrow-alt-down': ArrowAltDownSvg,
+  'arrow-alt-right': ArrowAltRightSvg,
 }
 
 interface SvgIconProps {

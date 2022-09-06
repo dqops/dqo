@@ -1,6 +1,8 @@
 import React from 'react';
 import Tree from "rc-tree";
 import "rc-tree/assets/index.css"
+import {TreeNodeProps} from 'rc-tree/lib/TreeNode';
+import SvgIcon from '../SvgIcon';
 import './styles.css';
 
 const treeData = [
@@ -71,23 +73,21 @@ const ConnectionsTree = () => {
   const onSelect = () => {
   };
 
-  const onCheck = () => {
-  };
-  
   return (
     <div className="px-4 py-16 text-gray-100">
       <Tree
         className="myCls"
         showLine
-        checkable
         selectable={false}
         defaultExpandAll
         onExpand={onExpand}
         defaultSelectedKeys={[]}
         defaultCheckedKeys={[]}
         onSelect={onSelect}
-        onCheck={onCheck}
         treeData={treeData}
+        icon={(props: TreeNodeProps) => props.data?.children ? <SvgIcon name="grid" className="mr-2 w-4" /> : <SvgIcon name="table" className="mr-2 w-4" />}
+        switcherIcon={(props: TreeNodeProps) => props.data?.children ? <SvgIcon name={props.expanded ? "arrow-alt-down" : "arrow-alt-right"} className="w-3 h-3" /> : null}
+        rootClassName="connection-tree"
       />
     </div>
   );
