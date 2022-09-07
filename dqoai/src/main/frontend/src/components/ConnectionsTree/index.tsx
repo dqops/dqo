@@ -1,50 +1,71 @@
 import React from 'react';
 import Tree from "rc-tree";
-import "rc-tree/assets/index.css"
-import {TreeNodeProps} from 'rc-tree/lib/TreeNode';
+import { TreeNodeProps } from 'rc-tree/lib/TreeNode';
 import SvgIcon from '../SvgIcon';
-import './styles.css';
-import {useTabs} from '../../contexts/tabContext';
+import { useTabs } from '../../contexts/tabContext';
 import { DataNode } from 'rc-tree/es/interface';
+import "rc-tree/assets/index.css"
+import './styles.css';
 
 const treeData = [
   {
-    key: "0-0",
-    title: "My DB Connection 1",
+    key: "dqo-ai",
+    title: "dqo-ai",
     children: [
       {
-        key: "0-0-1",
-        title: "Tables",
+        key: "dqo-ai.public",
+        title: "Public",
         children: [
-          { key: "0-0-1-0", title: "Users" },
-          { key: "0-0-1-1", title: "Products" },
-          { key: "0-0-1-2", title: "Books" },
-          { key: "0-0-1-3", title: "Tests" },
+          { key: "dqo-ai.public.id", title: "Id" },
+          { key: "dqo-ai.public.title", title: "Title" },
         ]
-      }
+      },
+      {
+        key: "dqo-ai.album",
+        title: "Album",
+        children: [
+          { key: "dqo-ai.album.id", title: "Id" },
+          { key: "dqo-ai.album.title", title: "Title" },
+          { key: "dqo-ai.album.artistId", title: "Artist Id" },
+        ]
+      },
+      {
+        key: "dqo-ai.customer",
+        title: "Customer",
+        children: [
+          { key: "dqo-ai.customer.id", title: "Id" },
+          { key: "dqo-ai.customer.title", title: "Title" },
+          { key: "dqo-ai.customer.firstName", title: "FirstName" },
+          { key: "dqo-ai.customer.lastName", title: "LastName" },
+          { key: "dqo-ai.customer.email", title: "email" },
+        ]
+      },
+      {
+        key: "dqo-ai.employee",
+        title: "Employee",
+        children: [
+          { key: "dqo-ai.employee.id", title: "Id" },
+          { key: "dqo-ai.employee.title", title: "Title" },
+          { key: "dqo-ai.employee.firstName", title: "FirstName" },
+          { key: "dqo-ai.employee.lastName", title: "LastName" },
+          { key: "dqo-ai.employee.email", title: "email" },
+        ]
+      },
+      {
+        key: "dqo-ai.invoice",
+        title: "Invoice",
+        children: [
+          { key: "dqo-ai.invoice.id", title: "Id" },
+          { key: "dqo-ai.invoice.title", title: "Title" },
+          { key: "dqo-ai.invoice.amount", title: "Amount" },
+        ]
+      },
     ]
   },
   {
-    key: "con2",
-    title: "My DB Connection 2",
+    key: "documati",
+    title: "documati",
     children: [
-      {
-        key: "1-0-1",
-        title: "Tables",
-        children: [
-          { key: "1-0-1-0", title: "Users" },
-          { key: "1-0-1-1", title: "Products" },
-          { key: "1-0-1-2", title: "Books" },
-          { key: "1-0-1-3", title: "Tests" },
-          { key: "1-0-1-4", title: "Times" },
-          { key: "1-0-1-5", title: "News" },
-          { key: "1-0-1-6", title: "Organizations" },
-          { key: "1-0-1-7", title: "Repositories" },
-          { key: "1-0-1-8", title: "Comments" },
-          { key: "1-0-1-9", title: "Tags" },
-          { key: "1-0-2-0", title: "Slashes" },
-        ]
-      }
     ]
   },
 ];

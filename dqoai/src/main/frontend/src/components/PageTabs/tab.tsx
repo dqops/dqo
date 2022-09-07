@@ -33,7 +33,7 @@ const Tab = ({
       )}
       onClick={() => onChange && onChange(tab)}
     >
-      <div>{tab.label}</div>
+      <div className="truncate max-w-40">{tab.label}</div>
       <SvgIcon name="close" onClick={handleRemove} />
     </div>
   );

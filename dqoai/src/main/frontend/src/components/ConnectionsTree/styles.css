@@ -1,6 +1,10 @@
 .connection-tree .rc-tree-title {
     margin-left: 8px;
     color: black;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 170px;
 }
 
 .connection-tree .rc-tree-iconEle {
@@ -11,4 +15,13 @@
     color: #1e1e1e;
     background-image: none !important;
     padding-top: 1px;
+}
+
+.connection-tree.rc-tree .rc-tree-treenode span.rc-tree-iconEle {
+    vertical-align: 3px !important;
+}
+
+.connection-tree .rc-tree-node-content-wrapper.rc-tree-node-content-wrapper-normal {
+    margin-bottom: 4px;
+    margin-top: 4px;
 }
