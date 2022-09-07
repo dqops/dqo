@@ -30,7 +30,7 @@ import { ReactComponent as TableSvg } from './svg/table.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as ArrowAltDownSvg } from './svg/arrow-alt-down.svg';
 import { ReactComponent as ArrowAltRightSvg } from './svg/arrow-alt-right.svg';
-
+import { ReactComponent as AddSvg } from './svg/add.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -63,6 +63,7 @@ const iconsMap: any = {
   grid: GridSvg,
   'arrow-alt-down': ArrowAltDownSvg,
   'arrow-alt-right': ArrowAltRightSvg,
+  add: AddSvg,
 }
 
 interface SvgIconProps {
