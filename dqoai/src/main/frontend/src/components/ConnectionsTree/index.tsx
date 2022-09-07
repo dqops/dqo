@@ -4,6 +4,7 @@ import { TreeNodeProps } from 'rc-tree/lib/TreeNode';
 import SvgIcon from '../SvgIcon';
 import { useTabs } from '../../contexts/tabContext';
 import { DataNode } from 'rc-tree/es/interface';
+import { useHistory } from 'react-router-dom';
 import "rc-tree/assets/index.css"
 import './styles.css';
 
@@ -72,16 +73,21 @@ const treeData = [
 
 const ConnectionsTree = () => {
   const { addTab } = useTabs();
+  const history = useHistory();
 
   const onExpand = () => {
   };
   
   const onClick = (event: any, node: DataNode) => {
+    console.log('history.location', history.location);
+    if (history.location.pathname !== '/test') {
+      history.push('/test');
+    }
     addTab(node);
   };
 
   return (
-    <div className="px-4 py-16 text-gray-100">
+    <div className="px-4 text-gray-100">
       <Tree
         className="myCls"
         showLine
