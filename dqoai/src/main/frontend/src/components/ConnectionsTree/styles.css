@@ -1,5 +1,4 @@
 .connection-tree .rc-tree-title {
-    margin-left: 8px;
     color: black;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -9,6 +8,8 @@
 
 .connection-tree .rc-tree-iconEle {
     color: black;
+    width: initial !important;
+    height: initial !important;
 }
 
 .connection-tree .rc-tree-switcher {
