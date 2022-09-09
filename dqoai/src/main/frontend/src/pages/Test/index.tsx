@@ -20,23 +20,30 @@ const subTabs = [
 ]
 
 const TestPage = () => {
-  const { tabs, activeTab, setActiveTab, closeTab } = useTabs();
-  const [subActiveTab, setSubActiveTab] = useState('schema');
+  const {
+    tableTabs,
+    activeTableTab,
+    setActiveTableTab,
+    databaseTabs,
+    activeDatabaseTab,
+    setActiveDatabaseTab,
+    closeDatabaseTab,
+  } = useTabs();
 
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
         <PageTabs
-          tabs={tabs}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-          onRemoveTab={closeTab}
+          tabs={databaseTabs}
+          activeTab={activeDatabaseTab}
+          onChange={setActiveDatabaseTab}
+          onRemoveTab={closeDatabaseTab}
         />
         {
-          activeTab && (
+          activeDatabaseTab && (
             <div className="flex-1 bg-white border border-gray-300 flex-auto">
               <div className="py-6 border-b border-gray-300" />
-              <Tabs tabs={subTabs} activeTab={subActiveTab} onChange={setSubActiveTab} />
+              <Tabs tabs={tableTabs} activeTab={activeTableTab} onChange={setActiveTableTab} />
               <div className="border-b border-gray-300" />
             </div>
           )
