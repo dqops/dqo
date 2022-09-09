@@ -28,6 +28,9 @@ const TestPage = () => {
     activeDatabaseTab,
     setActiveDatabaseTab,
     closeDatabaseTab,
+    columnTabs,
+    activeColumnTab,
+    setActiveColumnTab
   } = useTabs();
 
   return (
@@ -42,9 +45,13 @@ const TestPage = () => {
         {
           activeDatabaseTab && (
             <div className="flex-1 bg-white border border-gray-300 flex-auto">
-              <div className="py-6 border-b border-gray-300" />
               <Tabs tabs={tableTabs} activeTab={activeTableTab} onChange={setActiveTableTab} />
               <div className="border-b border-gray-300" />
+              
+              <div className="px-0">
+                <Tabs tabs={columnTabs} activeTab={activeColumnTab} onChange={setActiveColumnTab} />
+                <div className="border-b border-gray-300" />
+              </div>
             </div>
           )
         }
