@@ -109,7 +109,10 @@ function TabProvider(props: any) {
     }
     setActiveTableTab(node.key.toString());
     if (activeDatabaseTab === databaseTab) {
-      setTableTabs([...tableTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
+      const exist = tableTabs.find((item) => item.value === node.key.toString());
+      if (!exist) {
+        setTableTabs([...tableTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
+      }
     } else {
       setTableTabs([{ label: node.title?.toString() || '', value: node.key.toString() }])
     }
