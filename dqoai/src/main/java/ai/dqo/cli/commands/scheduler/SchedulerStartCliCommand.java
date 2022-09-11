@@ -50,6 +50,7 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         this.jobSchedulerService.start();
+        this.jobSchedulerService.triggerMetadataSynchronization();
         return 0;
     }
 }

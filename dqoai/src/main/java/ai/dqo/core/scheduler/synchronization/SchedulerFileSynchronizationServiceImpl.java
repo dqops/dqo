@@ -61,12 +61,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
         }
 
         try {
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.SOURCES, this.synchronizationListenerMetadata);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.SENSORS, this.synchronizationListenerMetadata);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.RULES, this.synchronizationListenerMetadata);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.DATA_READINGS, this.synchronizationListenerMetadata);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.DATA_ALERTS, this.synchronizationListenerMetadata);
-
+            this.dqoCloudSynchronizationService.synchronizeAll(this.synchronizationListenerMetadata);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the metadata when refreshing the user home during a metadata refresh in the job scheduler.", ex);
@@ -93,10 +88,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
         }
 
         try {
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.RULES, this.synchronizationListenerData);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.DATA_READINGS, this.synchronizationListenerData);
-            this.dqoCloudSynchronizationService.synchronizeFolder(DqoRoot.DATA_ALERTS, this.synchronizationListenerData);
-
+            this.dqoCloudSynchronizationService.synchronizeData(this.synchronizationListenerData);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the data files when running schedule data quality checks.", ex);

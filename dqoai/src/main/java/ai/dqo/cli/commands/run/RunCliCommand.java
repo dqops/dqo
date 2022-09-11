@@ -57,7 +57,9 @@ public class RunCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         this.jobSchedulerService.start();
+        this.jobSchedulerService.triggerMetadataSynchronization();
         this.terminalReader.waitForExit("DQO was started in a server mode.");
+        this.jobSchedulerService.shutdown();
         return 0;
     }
 }

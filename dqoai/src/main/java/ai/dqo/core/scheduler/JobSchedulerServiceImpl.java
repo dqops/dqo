@@ -1,19 +1,12 @@
 package ai.dqo.core.scheduler;
 
-import ai.dqo.core.scheduler.quartz.JobDataMapAdapter;
-import ai.dqo.core.scheduler.quartz.JobKeys;
-import ai.dqo.core.scheduler.quartz.SpringIoCJobFactory;
-import ai.dqo.core.scheduler.quartz.TriggerFactory;
+import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
-import org.quartz.JobDetail;
+import org.quartz.*;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,10 +21,11 @@ import java.util.List;
 @Component
 public class JobSchedulerServiceImpl implements JobSchedulerService {
     private Scheduler scheduler;
-    private StdSchedulerFactory schedulerFactory;
+    private SchedulerFactory schedulerFactory;
     private SpringIoCJobFactory jobFactory;
     private TriggerFactory triggerFactory;
     private JobDataMapAdapter jobDataMapAdapter;
+    private ScheduledJobListener scheduledJobListener;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
 
@@ -39,16 +33,21 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * Job scheduler service constructor.
      * @param schedulerFactory Quartz scheduler factory (new).
      * @param jobFactory Custom job factory that uses Spring IoC for instantiating job instances.
+     * @param triggerFactory Trigger factory that creates quartz triggers for the schedules defined in the metadata.
+     * @param jobDataMapAdapter Job data adapter that can retrieve the original schedule from the trigger arguments.
+     * @param scheduledJobListener  Job listener that is notified when a job starts or finishes.
      */
     @Autowired
-    public JobSchedulerServiceImpl(StdSchedulerFactory schedulerFactory,
+    public JobSchedulerServiceImpl(SchedulerFactory schedulerFactory,
                                    SpringIoCJobFactory jobFactory,
                                    TriggerFactory triggerFactory,
-                                   JobDataMapAdapter jobDataMapAdapter) {
+                                   JobDataMapAdapter jobDataMapAdapter,
+                                   ScheduledJobListener scheduledJobListener) {
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
         this.triggerFactory = triggerFactory;
         this.jobDataMapAdapter = jobDataMapAdapter;
+        this.scheduledJobListener = scheduledJobListener;
     }
 
     /**
@@ -69,6 +68,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
             this.scheduler.start();
+            this.scheduler.getListenerManager().addJobListener(this.scheduledJobListener);
         }
         catch (Exception ex) {
             throw new JobSchedulerException(ex);
@@ -82,12 +82,14 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         try {
             this.runChecksJob = newJob(RunChecksSchedulerJob.class)
                 .withIdentity(JobKeys.RUN_CHECKS)
+                .storeDurably()
                 .build();
             this.scheduler.addJob(this.runChecksJob, true);
 
             this.synchronizeMetadataJob = newJob(SynchronizeMetadataSchedulerJob.class)
-                    .withIdentity(JobKeys.SYNCHRONIZE_METADATA)
-                    .build();
+                .withIdentity(JobKeys.SYNCHRONIZE_METADATA)
+                .storeDurably()
+                .build();
             this.scheduler.addJob(this.synchronizeMetadataJob, true);
         } catch (SchedulerException ex) {
             throw new JobSchedulerException(ex);
@@ -104,6 +106,19 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 this.scheduler.shutdown();
             }
             this.scheduler = null;
+        }
+        catch (Exception ex) {
+            throw new JobSchedulerException(ex);
+        }
+    }
+
+    /**
+     * Triggers the metadata synchronization job on the job scheduler. Calls the cloud sync and reload the metadata to detect new schedules.
+     */
+    @Override
+    public void triggerMetadataSynchronization() {
+        try {
+            this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA);
         }
         catch (Exception ex) {
             throw new JobSchedulerException(ex);

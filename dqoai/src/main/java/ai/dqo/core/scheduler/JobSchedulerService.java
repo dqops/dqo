@@ -21,6 +21,11 @@ public interface JobSchedulerService {
     void shutdown();
 
     /**
+     * Triggers the metadata synchronization job on the job scheduler. Calls the cloud sync and reload the metadata to detect new schedules.
+     */
+    void triggerMetadataSynchronization();
+
+    /**
      * Returns the default job scheduler. The scheduler must be started first.
      *
      * @return Quartz scheduler instance.
