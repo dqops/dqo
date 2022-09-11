@@ -1,10 +1,12 @@
 package ai.dqo.core.scheduler;
 
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.quartz.*;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import org.quartz.impl.StdSchedulerFactory;
@@ -28,6 +30,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private ScheduledJobListener scheduledJobListener;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
+    private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.summary;
 
     /**
      * Job scheduler service constructor.
@@ -51,10 +55,30 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     }
 
     /**
+     * Returns the file synchronization mode that was configured for the scheduler.
+     * @return File synchronization reporting mode.
+     */
+    public FileSystemSynchronizationReportingMode getSynchronizationMode() {
+        return synchronizationMode;
+    }
+
+    /**
+     * Returns the reporting mode for running the checks by the scheduler.
+     * @return Reporting mode during the check execution.
+     */
+    public CheckRunReportingMode getCheckRunReportingMode() {
+        return checkRunReportingMode;
+    }
+
+    /**
      * Initializes and starts the scheduler.
+     * @param synchronizationMode Cloud sync reporting mode.
+     * @param checkRunReportingMode Check execution reporting mode.
      */
     @Override
-    public void start() {
+    public void start(FileSystemSynchronizationReportingMode synchronizationMode, CheckRunReportingMode checkRunReportingMode) {
+        this.synchronizationMode = synchronizationMode;
+        this.checkRunReportingMode = checkRunReportingMode;
         createAndStartScheduler();
         defineDefaultJobs();
     }
@@ -67,8 +91,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         try {
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
-            this.scheduler.start();
             this.scheduler.getListenerManager().addJobListener(this.scheduledJobListener);
+            this.scheduler.start();
         }
         catch (Exception ex) {
             throw new JobSchedulerException(ex);

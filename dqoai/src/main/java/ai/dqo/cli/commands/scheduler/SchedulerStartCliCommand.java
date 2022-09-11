@@ -17,7 +17,9 @@ package ai.dqo.cli.commands.scheduler;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -41,6 +43,44 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
         this.jobSchedulerService = jobSchedulerService;
     }
 
+    @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "summary")
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
+
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "info")
+    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.info;
+
+    /**
+     * Returns the synchronization logging mode.
+     * @return Logging mode.
+     */
+    public FileSystemSynchronizationReportingMode getSynchronizationMode() {
+        return synchronizationMode;
+    }
+
+    /**
+     * Sets the reporting (logging) mode.
+     * @param synchronizationMode Reporting mode.
+     */
+    public void setSynchronizationMode(FileSystemSynchronizationReportingMode synchronizationMode) {
+        this.synchronizationMode = synchronizationMode;
+    }
+
+    /**
+     * Returns the check execution reporting mode.
+     * @return Check execution reporting mode.
+     */
+    public CheckRunReportingMode getCheckRunMode() {
+        return checkRunMode;
+    }
+
+    /**
+     * Sets the check execution reporting mode.
+     * @param checkRunMode Check execution reporting mode.
+     */
+    public void setCheckRunMode(CheckRunReportingMode checkRunMode) {
+        this.checkRunMode = checkRunMode;
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -49,7 +89,7 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        this.jobSchedulerService.start();
+        this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
         this.jobSchedulerService.triggerMetadataSynchronization();
         return 0;
     }

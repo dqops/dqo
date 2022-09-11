@@ -166,4 +166,36 @@ public class CheckExecutionSummary {
 		this.mediumSeverityAlertsColumn.set(row.getRowNumber(), mediumSeverityAlerts);
 		this.highSeverityAlertsColumn.set(row.getRowNumber(), highSeverityAlerts);
     }
+
+    /**
+     * Counts the number of checks that were executed.
+     * @return Total number of checks that were executed.
+     */
+    public int getTotalChecksExecutedCount() {
+        return this.checksExecutedColumn.isGreaterThan(0).size();
+    }
+
+    /**
+     * Counts the number of low severity alerts that were raised.
+     * @return Number of low severity alerts.
+     */
+    public int getLowSeverityAlertsCount() {
+        return this.lowSeverityAlertsColumn.isGreaterThan(0).size();
+    }
+
+    /**
+     * Counts the number of medium severity alerts that were raised.
+     * @return Number of medium severity alerts.
+     */
+    public int getMediumSeverityAlertsCount() {
+        return this.mediumSeverityAlertsColumn.isGreaterThan(0).size();
+    }
+
+    /**
+     * Counts the number of high severity alerts that were raised.
+     * @return Number of high severity alerts.
+     */
+    public int getHighSeverityAlertsCount() {
+        return this.highSeverityAlertsColumn.isGreaterThan(0).size();
+    }
 }

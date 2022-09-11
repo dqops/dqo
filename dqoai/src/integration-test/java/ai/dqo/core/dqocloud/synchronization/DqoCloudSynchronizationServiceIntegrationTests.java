@@ -17,7 +17,8 @@ package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.BaseIntegrationTest;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.synchronization.BaseFileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.SilentFileSystemSynchronizationListener;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
@@ -30,7 +31,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrationTest {
     private DqoCloudSynchronizationService sut;
-    private BaseFileSystemSynchronizationListener listener;
+    private FileSystemSynchronizationListener listener;
 
     /**
      * Called before each test.
@@ -43,7 +44,7 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
     protected void setUp() throws Throwable {
         super.setUp();
         this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(DqoCloudSynchronizationService.class);
-        this.listener = new BaseFileSystemSynchronizationListener();
+        this.listener = new SilentFileSystemSynchronizationListener();
     }
 
     @Test

@@ -15,6 +15,9 @@
  */
 package ai.dqo.core.filesystem.synchronization;
 
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+
 /**
  * File system synchronization service that synchronizes files between two file systems. It could synchronize local files
  * with the target file system.
@@ -24,10 +27,12 @@ public interface FileSystemSynchronizationService {
      * Synchronizes changes between two file systems.
      * @param source Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
      * @param target Target file system to send the changes in the source and download new changes.
+     * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
      * @return Synchronization result with two new file indexes after the file synchronization.
      */
     SynchronizationResult synchronize(FileSystemChangeSet source,
                                       FileSystemChangeSet target,
-                                      BaseFileSystemSynchronizationListener synchronizationListener);
+                                      DqoRoot dqoRoot,
+                                      FileSystemSynchronizationListener synchronizationListener);
 }

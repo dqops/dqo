@@ -16,7 +16,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.synchronization.BaseFileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 
 /**
  * File synchronization service. Performs a full synchronization of a given category of files to the DQO Cloud.
@@ -27,17 +27,17 @@ public interface DqoCloudSynchronizationService {
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeFolder(DqoRoot dqoRoot, BaseFileSystemSynchronizationListener synchronizationListener);
+    void synchronizeFolder(DqoRoot dqoRoot, FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes all roots (sources, check definitions, data).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeAll(BaseFileSystemSynchronizationListener synchronizationListener);
+    void synchronizeAll(FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes only the data roots (readings, alerts).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeData(BaseFileSystemSynchronizationListener synchronizationListener);
+    void synchronizeData(FileSystemSynchronizationListener synchronizationListener);
 }

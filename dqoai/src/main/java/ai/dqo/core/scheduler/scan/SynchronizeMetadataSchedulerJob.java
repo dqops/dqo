@@ -1,5 +1,6 @@
 package ai.dqo.core.scheduler.scan;
 
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
@@ -47,7 +48,8 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            this.schedulerFileSynchronizationService.synchronizeAll();
+            FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
+            this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode);
 
             UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
             JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);

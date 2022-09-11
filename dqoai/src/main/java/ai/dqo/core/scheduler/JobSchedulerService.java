@@ -1,8 +1,10 @@
 package ai.dqo.core.scheduler;
 
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 
@@ -11,9 +13,23 @@ import org.quartz.Scheduler;
  */
 public interface JobSchedulerService {
     /**
-     * Initializes and starts the scheduler.
+     * Returns the file synchronization mode that was configured for the scheduler.
+     * @return File synchronization reporting mode.
      */
-    void start();
+    FileSystemSynchronizationReportingMode getSynchronizationMode();
+
+    /**
+     * Returns the reporting mode for running the checks by the scheduler.
+     * @return Reporting mode during the check execution.
+     */
+    CheckRunReportingMode getCheckRunReportingMode();
+
+    /**
+     * Initializes and starts the scheduler.
+     * @param synchronizationMode File synchronization reporting mode.
+     * @param checkRunReportingMode Check execution reporting mode.
+     */
+    void start(FileSystemSynchronizationReportingMode synchronizationMode, CheckRunReportingMode checkRunReportingMode);
 
     /**
      * Stops the scheduler.

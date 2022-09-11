@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.check;
+package ai.dqo.execution.checks.progress;
 
 /**
  * Reporting mode for running data quality checks.
@@ -21,5 +21,6 @@ package ai.dqo.cli.commands.check;
 public enum CheckRunReportingMode {
     silent,
     summary,
+    info,
     debug
 }

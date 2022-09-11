@@ -19,7 +19,7 @@ import ai.dqo.core.dqocloud.filesystem.DqoCloudRemoteFileSystemServiceFactory;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.filesystemservice.localfiles.DqoUserHomeFileSystemFactory;
-import ai.dqo.core.filesystem.synchronization.BaseFileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.FileSystemChangeSet;
 import ai.dqo.core.filesystem.synchronization.FileSystemSynchronizationService;
 import ai.dqo.core.filesystem.synchronization.SynchronizationResult;
@@ -65,7 +65,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    public void synchronizeFolder(DqoRoot dqoRoot, BaseFileSystemSynchronizationListener synchronizationListener) {
+    public void synchronizeFolder(DqoRoot dqoRoot, FileSystemSynchronizationListener synchronizationListener) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -96,7 +96,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
-                sourceChangeSet, remoteChangeSet, synchronizationListener);
+                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationListener);
 
         localFileIndexWrapper.getSpec().setFolder(synchronizationResult.getSourceFileIndex());
         remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
@@ -109,7 +109,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeAll(BaseFileSystemSynchronizationListener synchronizationListener) {
+    public void synchronizeAll(FileSystemSynchronizationListener synchronizationListener) {
         synchronizeFolder(DqoRoot.SOURCES, synchronizationListener);
         synchronizeFolder(DqoRoot.SENSORS, synchronizationListener);
         synchronizeFolder(DqoRoot.RULES, synchronizationListener);
@@ -123,7 +123,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeData(BaseFileSystemSynchronizationListener synchronizationListener) {
+    public void synchronizeData(FileSystemSynchronizationListener synchronizationListener) {
         synchronizeFolder(DqoRoot.DATA_READINGS, synchronizationListener);
         synchronizeFolder(DqoRoot.DATA_ALERTS, synchronizationListener);
     }

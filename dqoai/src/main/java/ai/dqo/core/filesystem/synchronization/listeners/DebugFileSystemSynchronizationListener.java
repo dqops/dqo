@@ -13,48 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.cloud.sync.impl;
+package ai.dqo.core.filesystem.synchronization.listeners;
 
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.metadata.FileDifference;
-import ai.dqo.core.filesystem.synchronization.BaseFileSystemSynchronizationListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * File synchronization service to be used during the file synchronization. Shows progress.
+ * File synchronization listener that shows the output of all logging operations to the console.
  */
-public class CliFileSystemSynchronizationListener extends BaseFileSystemSynchronizationListener {
-    private DqoRoot rootType;
-    private boolean reportFiles;
+@Component
+public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSynchronizationListener {
     private TerminalWriter terminalWriter;
 
     /**
      * Creates a cli file synchronization listener.
-     * @param reportFiles True when every synchronized file should be reported.
      * @param terminalWriter Terminal writer to write the output.
      */
-    public CliFileSystemSynchronizationListener(DqoRoot rootType, boolean reportFiles, TerminalWriter terminalWriter) {
-        this.rootType = rootType;
-        this.reportFiles = reportFiles;
+    @Autowired
+    public DebugFileSystemSynchronizationListener(TerminalWriter terminalWriter) {
+        super(terminalWriter);
         this.terminalWriter = terminalWriter;
     }
 
     /**
      * Called when a local change (from the source) was applied on the target file system.
      *
+     * @param dqoRoot          DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the source file system that was applied (uploaded, deleted, etc.)
      */
     @Override
-    public void onSourceChangeAppliedToTarget(DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem, FileDifference fileDifference) {
-        if (!this.reportFiles) {
-            return;
-        }
+    public void onSourceChangeAppliedToTarget(DqoRoot dqoRoot, DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem, FileDifference fileDifference) {
+        super.onSourceChangeAppliedToTarget(dqoRoot, sourceFileSystem, targetFileSystem, fileDifference);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(rootType.toString());
+        sb.append(dqoRoot.toString());
         sb.append(" local -> cloud: ");
         if (fileDifference.isCurrentNew()) {
             sb.append(" [NEW]    ");
@@ -73,18 +71,17 @@ public class CliFileSystemSynchronizationListener extends BaseFileSystemSynchron
     /**
      * Called when a remote change (from the target system) was applied on the source file system (downloaded).
      *
+     * @param dqoRoot          DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference   Change in the target (remote) file system that was applied (uploaded, deleted, etc.) on the source system (downloaded).
      */
     @Override
-    public void onTargetChangeAppliedToSource(DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem, FileDifference fileDifference) {
-        if (!this.reportFiles) {
-            return;
-        }
+    public void onTargetChangeAppliedToSource(DqoRoot dqoRoot, DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem, FileDifference fileDifference) {
+        super.onTargetChangeAppliedToSource(dqoRoot, sourceFileSystem, targetFileSystem, fileDifference);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(rootType.toString());
+        sb.append(dqoRoot.toString());
         sb.append(" cloud -> local: ");
         if (fileDifference.isCurrentNew()) {
             sb.append(" [NEW]    ");

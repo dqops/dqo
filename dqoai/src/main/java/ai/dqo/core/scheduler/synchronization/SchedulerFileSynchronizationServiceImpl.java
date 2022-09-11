@@ -4,7 +4,9 @@ import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListenerProvider;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,36 +22,33 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
     private DqoCloudApiKeyProvider apiKeyProvider;
     private DqoCloudSynchronizationService dqoCloudSynchronizationService;
-    private SchedulerAllFileSystemSynchronizationListener synchronizationListenerMetadata;
-    private SchedulerDataFileSystemSynchronizationListener synchronizationListenerData;
+    private FileSystemSynchronizationListenerProvider fileSystemSynchronizationListenerProvider;
 
     /**
      * Creates a file synchronization service using dependencies.
      * @param schedulerConfigurationProperties Scheduler configuration properties.
      * @param apiKeyProvider Api key provider - just to verify that a DQO Cloud API Key is present, so a full cloud synchronization is possible.
      * @param dqoCloudSynchronizationService DQO Cloud synchronization service used to synchronize the metadata and data.
-     * @param synchronizationListenerMetadata Synchronization listener that is updated with the synchronization progress when the metadata is synchronized.
-     * @param synchronizationListenerData Synchronization listener used before and after checks are executed.
+     * @param fileSystemSynchronizationListenerProvider File system synchronization listener provider for creating (getting) the correct reporting mode.
      */
     @Autowired
     public SchedulerFileSynchronizationServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
                                                    DqoCloudApiKeyProvider apiKeyProvider,
                                                    DqoCloudSynchronizationService dqoCloudSynchronizationService,
-                                                   SchedulerAllFileSystemSynchronizationListener synchronizationListenerMetadata,
-                                                   SchedulerDataFileSystemSynchronizationListener synchronizationListenerData) {
+                                                   FileSystemSynchronizationListenerProvider fileSystemSynchronizationListenerProvider) {
         this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.apiKeyProvider = apiKeyProvider;
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
-        this.synchronizationListenerMetadata = synchronizationListenerMetadata;
-        this.synchronizationListenerData = synchronizationListenerData;
+        this.fileSystemSynchronizationListenerProvider = fileSystemSynchronizationListenerProvider;
     }
 
     /**
      * Synchronizes the whole user home, both the metadata (checks, rules, sensors) and the parquet data files. Should be called in the job that updates the metadata.
+     * @param synchronizationReportingMode File system synchronization mode.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
     @Override
-    public boolean synchronizeAll() {
+    public boolean synchronizeAll(FileSystemSynchronizationReportingMode synchronizationReportingMode) {
         if (!this.schedulerConfigurationProperties.isEnableCloudSync()) {
             return false;
         }
@@ -61,7 +60,8 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
         }
 
         try {
-            this.dqoCloudSynchronizationService.synchronizeAll(this.synchronizationListenerMetadata);
+            FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
+            this.dqoCloudSynchronizationService.synchronizeAll(synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the metadata when refreshing the user home during a metadata refresh in the job scheduler.", ex);
@@ -73,10 +73,11 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
 
     /**
      * Synchronizes only the data files (parquet files). Should be called in the job that executes the data quality checks.
+     * @param synchronizationReportingMode File system synchronization mode.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
     @Override
-    public boolean synchronizeData() {
+    public boolean synchronizeData(FileSystemSynchronizationReportingMode synchronizationReportingMode) {
         if (!this.schedulerConfigurationProperties.isEnableCloudSync()) {
             return false;
         }
@@ -88,7 +89,8 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
         }
 
         try {
-            this.dqoCloudSynchronizationService.synchronizeData(this.synchronizationListenerData);
+            FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
+            this.dqoCloudSynchronizationService.synchronizeData(synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the data files when running schedule data quality checks.", ex);

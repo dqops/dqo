@@ -5,6 +5,8 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SpringIoCJobFactory implements JobFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringIoCJobFactory.class);
+
     private BeanFactory beanFactory;
 
     /**
@@ -35,7 +39,13 @@ public class SpringIoCJobFactory implements JobFactory {
     @Override
     public Job newJob(TriggerFiredBundle triggerFiredBundle, Scheduler scheduler) throws SchedulerException {
         Class<? extends Job> jobClass = triggerFiredBundle.getJobDetail().getJobClass();
-        Job jobInstance = this.beanFactory.getBean(jobClass);
-        return jobInstance;
+        try {
+            Job jobInstance = this.beanFactory.getBean(jobClass);
+            return jobInstance;
+        }
+        catch (Exception ex) {
+            LOG.debug("Cannot create an instance of a job " + jobClass.getCanonicalName(), ex);
+            throw new SchedulerException("Cannot create an instance of a job " + jobClass.getCanonicalName(), ex);
+        }
     }
 }

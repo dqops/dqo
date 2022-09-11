@@ -1,17 +1,16 @@
-package ai.dqo.core.scheduler.runcheck;
+package ai.dqo.execution.checks.progress;
 
-import ai.dqo.execution.checks.progress.*;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Checks execution context progress listener used within a scheduler.
+ * Checks execution context progress listener that is silent and is not producing any messages to the console.
  * Just ignores all messages.
  */
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SchedulerCheckExecutionProgressListener implements CheckExecutionProgressListener {
+public class SilentCheckExecutionProgressListener implements CheckExecutionProgressListener {
     /**
      * Called before checks are started on a target table.
      *
