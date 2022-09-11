@@ -36,7 +36,7 @@ public class UniqueSchedulesCollection {
     public UniqueSchedulesCollection minus(UniqueSchedulesCollection other) {
         UniqueSchedulesCollection missingInMine = new UniqueSchedulesCollection();
         for (RunChecksSchedule mySchedule : uniqueSchedules) {
-            if (other.uniqueSchedules.contains(mySchedule)) {
+            if (!other.uniqueSchedules.contains(mySchedule)) {
                 missingInMine.add(mySchedule);
             }
         }

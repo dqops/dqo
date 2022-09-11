@@ -26,7 +26,7 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
         }
     };
 
-    @JsonPropertyDescription("Cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.")
+    @JsonPropertyDescription("Cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud. Use the Quartz compatible cron expression that could be generated at https://www.freeformatter.com/cron-expression-generator-quartz.html")
     private String cronExpression;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

@@ -9,7 +9,8 @@ import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.quartz.*;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
-import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,8 @@ import java.util.List;
  */
 @Component
 public class JobSchedulerServiceImpl implements JobSchedulerService {
+    private static final Logger LOG = LoggerFactory.getLogger(JobSchedulerServiceImpl.class);
+
     private Scheduler scheduler;
     private SchedulerFactory schedulerFactory;
     private SpringIoCJobFactory jobFactory;
@@ -95,6 +98,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.scheduler.start();
         }
         catch (Exception ex) {
+            LOG.error("Failed to start the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -116,6 +120,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 .build();
             this.scheduler.addJob(this.synchronizeMetadataJob, true);
         } catch (SchedulerException ex) {
+            LOG.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -132,6 +137,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.scheduler = null;
         }
         catch (Exception ex) {
+            LOG.error("Failed to stop the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -145,6 +151,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA);
         }
         catch (Exception ex) {
+            LOG.error("Failed to trigger the metadata synchronization in the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -178,6 +185,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             return schedulesCollection;
         }
         catch (Exception ex) {
+            LOG.error("Failed to list active schedules in the job scheduler " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -208,6 +216,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
         catch (Exception ex) {
+            LOG.error("Failed to activate new schedules the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
