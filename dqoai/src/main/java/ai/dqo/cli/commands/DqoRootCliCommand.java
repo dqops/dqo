@@ -20,9 +20,10 @@ import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.run.RunCliCommand;
+import ai.dqo.cli.commands.scheduler.SchedulerCliCommand;
 import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
-import ai.dqo.cli.commands.start.StartCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
 import org.springframework.beans.factory.BeanFactory;
@@ -51,7 +52,8 @@ import picocli.CommandLine;
             SettingsCliCommand.class,
             CloudCliCommand.class,
             SensorCliCommand.class,
-            StartCliCommand.class
+            SchedulerCliCommand.class,
+            RunCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {

@@ -13,24 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.start;
+package ai.dqo.cli.commands.scheduler;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "start scheduler" 2nd level CLI command - starts a scheduler that will run checks.
+ * "scheduler stop" 2nd level CLI command - stops a scheduler that was previously started.
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "scheduler", description = "Starts DQO in a server mode to run the check scheduler, continuously detects new definitions and runs checks")
-public class StartSchedulerCliCommand extends BaseCommand implements ICommand {
+@CommandLine.Command(name = "stop", description = "Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.")
+public class SchedulerStopCliCommand extends BaseCommand implements ICommand {
+    private JobSchedulerService jobSchedulerService;
+
+    /**
+     * Creates a cli command given the dependencies.
+     * @param jobSchedulerService Job scheduler dependency.
+     */
     @Autowired
-    public StartSchedulerCliCommand() {
+    public SchedulerStopCliCommand(JobSchedulerService jobSchedulerService) {
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -41,6 +49,7 @@ public class StartSchedulerCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
+        this.jobSchedulerService.shutdown();
         return 0;
     }
 }

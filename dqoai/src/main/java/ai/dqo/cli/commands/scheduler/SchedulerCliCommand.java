@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.start;
+package ai.dqo.cli.commands.scheduler;
 
 import ai.dqo.cli.commands.BaseCommand;
 import org.springframework.context.annotation.Scope;
@@ -21,11 +21,14 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "start" 1st level CLI command - a grouping command for starting a server mode (scheduler).
+ * "scheduler" 1st level CLI command - a grouping command for controlling the job scheduler.
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "start", description = "Starts DQO in a server mode, select the mode to activate",
-        subcommands = StartSchedulerCliCommand.class)
-public class StartCliCommand extends BaseCommand {
+@CommandLine.Command(name = "scheduler", description = "Controls the repeating task scheduler by starting, stopping or running a foreground job scheduler.",
+        subcommands = {
+            SchedulerStartCliCommand.class,
+            SchedulerStopCliCommand.class
+        })
+public class SchedulerCliCommand extends BaseCommand {
 }

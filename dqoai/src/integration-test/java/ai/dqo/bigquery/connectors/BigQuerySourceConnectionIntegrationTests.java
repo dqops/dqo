@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import tech.tablesaw.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +92,21 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 		this.sut.open();
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
-        Assertions.assertEquals(1, schemas.size());
+        Assertions.assertTrue(schemas.size() >= 1);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
         Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), expectedSchema)));
+    }
+
+    @Test
+    void listSchemas_whenBillingProjectIdNotPresentAndListeningPublicGoogleProjects_thenUsesBillingProjectIdFromCredentials() {
+        this.connectionSpec.getBigquery().setBillingProjectId(null);
+        this.connectionSpec.getBigquery().setQuotaProjectId(null);
+        this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.sut.open();
+        List<SourceSchemaModel> schemas = this.sut.listSchemas();
+
+        Assertions.assertTrue(schemas.size() >= 100);
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "austin_crime")));
     }
 
     @Test
@@ -131,6 +144,18 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
+    }
+
+    @Test
+    void executeQuery_whenBillingProjectIdNotPresentAndQueryingPublicGoogleProjects_thenUsesBillingProjectIdFromDefaultApplicationCredentials() {
+        this.connectionSpec.getBigquery().setBillingProjectId(null);
+        this.connectionSpec.getBigquery().setQuotaProjectId(null);
+        this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.sut.open();
+        Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`");
+
+        Assertions.assertNotNull(results);
+        Assertions.assertEquals(1, results.rowCount());
     }
 
     // TODO: add more integration tests to list tables, retrieve the table metadata, etc.

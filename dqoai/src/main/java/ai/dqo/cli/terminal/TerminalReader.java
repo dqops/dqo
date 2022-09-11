@@ -43,7 +43,7 @@ public interface TerminalReader {
      * Asks the user to answer a Y/N question.
      * @param question Prompt (question)
      * @param defaultValue Default value that is returned when the answer is empty.
-     * @param acceptNullDefault When true and the <code>defaultValue</code> is null then a null value is accepted.
+     * @param acceptNullDefault When true and the <code>defaultValue</code> is null then the default value is accepted.
      *                          When false and the <code>defaultValue</code> is null then asks the user again until a response is given.
      * @return User entered response.
      */
@@ -99,4 +99,10 @@ public interface TerminalReader {
      * @return Character that was read.
      */
     Character tryReadChar(long timeoutMillis);
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     */
+    void waitForExit(String startMessage);
 }
