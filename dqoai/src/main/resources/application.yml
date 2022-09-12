@@ -1,10 +1,15 @@
 spring:
   main:
-    web-application-type: NONE
+#    web-application-type: NONE
     allow-circular-references: true
     lazy-initialization: true
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: dqo
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher    # https://stackoverflow.com/questions/70036953/springboot-2-6-0-spring-fox-3-failed-to-start-bean-documentationpluginsboot
   shell:
     interactive:
       enabled: false
