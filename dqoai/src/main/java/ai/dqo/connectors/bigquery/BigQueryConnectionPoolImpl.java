@@ -20,8 +20,11 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.jdbc.JdbConnectionPoolCreateException;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.auth.oauth2.UserCredentials;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
+import com.google.common.base.MoreObjects;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.springframework.context.annotation.Scope;
@@ -97,16 +100,21 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
                     throw new ConnectorOperationFailedException("Unsupported authentication mode for BigQuery connection " + connectionSpec.getConnectionName() + ", mode: " + bigQueryParametersSpec.getAuthenticationMode());
             }
 
+            String defaultProjectFromCredentials = null;
+
+            if (googleCredentials instanceof UserCredentials) {
+                UserCredentials userCredentials = (UserCredentials)googleCredentials;
+                defaultProjectFromCredentials = userCredentials.getQuotaProjectId();
+            }
+            if(googleCredentials instanceof ServiceAccountCredentials) {
+                ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) googleCredentials;
+                defaultProjectFromCredentials = serviceAccountCredentials.getQuotaProjectId();
+            }
+
             BigQueryOptions.Builder builder = BigQueryOptions.newBuilder()
-                    .setCredentials(googleCredentials);
-
-            if (bigQueryParametersSpec.getBillingProjectId() != null) {
-                builder = builder.setProjectId(bigQueryParametersSpec.getBillingProjectId());
-            }
-
-            if (bigQueryParametersSpec.getQuotaProjectId() != null) {
-                builder = builder.setQuotaProjectId(bigQueryParametersSpec.getQuotaProjectId());
-            }
+                    .setCredentials(googleCredentials)
+                    .setProjectId(MoreObjects.firstNonNull(bigQueryParametersSpec.getBillingProjectId(), defaultProjectFromCredentials))
+                    .setQuotaProjectId(MoreObjects.firstNonNull(bigQueryParametersSpec.getQuotaProjectId(), defaultProjectFromCredentials));
 
             BigQueryOptions bigQueryOptions = builder.build();
             BigQuery service = bigQueryOptions.getService();

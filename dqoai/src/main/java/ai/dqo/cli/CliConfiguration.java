@@ -29,6 +29,8 @@ import org.jline.reader.*;
 import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.widget.TailTipWidgets;
+import org.quartz.SchedulerFactory;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -136,5 +138,14 @@ public class CliConfiguration {
         keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
         return lineReader;
+    }
+
+    /**
+     * Creates a default Quartz scheduler factory.
+     * @return Quartz default scheduler factory.
+     */
+    @Bean(name = "quartsSchedulerFactory")
+    public SchedulerFactory quartsSchedulerFactory() {
+        return new StdSchedulerFactory();
     }
 }

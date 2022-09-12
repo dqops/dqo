@@ -112,7 +112,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
 
                 Character character = this.terminalReader.tryReadChar(1000);
                 if (character != null) {
-                    this.terminalWriter.writeLine("API Key retrieval cancelled, run the \"login\" command again");
+                    this.terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
                     break;
                 }
 

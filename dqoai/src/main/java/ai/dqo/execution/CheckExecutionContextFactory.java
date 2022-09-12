@@ -15,6 +15,8 @@
  */
 package ai.dqo.execution;
 
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+
 /**
  * Check execution context factory. Opens the dqo home context and the user home context.
  */
@@ -24,4 +26,11 @@ public interface CheckExecutionContextFactory {
      * @return Check execution context.
      */
     CheckExecutionContext create();
+
+    /**
+     * Creates a new check execution context by using a given user context.
+     * @param userHomeContext User home context.
+     * @return Check execution context.
+     */
+    CheckExecutionContext create(UserHomeContext userHomeContext);
 }

@@ -42,6 +42,9 @@ public class DqoConfigurationProperties implements Cloneable {
     @Autowired
     private DqoCloudConfigurationProperties cloud;
 
+    @Autowired
+    private DqoSchedulerConfigurationProperties scheduler;
+
     private String home;
     private String yamlSchemaServer;
 
@@ -161,6 +164,22 @@ public class DqoConfigurationProperties implements Cloneable {
     }
 
     /**
+     * Returns the DQO scheduler configuration.
+     * @return Scheduler configuration.
+     */
+    public DqoSchedulerConfigurationProperties getScheduler() {
+        return scheduler;
+    }
+
+    /**
+     * Sets the scheduler configuration.
+     * @param scheduler Scheduler configuration.
+     */
+    public void setScheduler(DqoSchedulerConfigurationProperties scheduler) {
+        this.scheduler = scheduler;
+    }
+
+    /**
      * Clones the current object.
      * @return Deeply cloned instance.
      */
@@ -173,6 +192,7 @@ public class DqoConfigurationProperties implements Cloneable {
             cloned.secrets = this.secrets != null ? this.secrets.clone() : null;
             cloned.storage = this.storage != null ? this.storage.clone() : null;
             cloned.cloud = this.cloud != null ? this.cloud.clone() : null;
+            cloned.scheduler = this.scheduler != null ? this.scheduler.clone() : null;
             return cloned;
         }
         catch (Exception ex) {

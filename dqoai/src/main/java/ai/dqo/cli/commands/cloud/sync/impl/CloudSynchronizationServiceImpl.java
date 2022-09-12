@@ -23,6 +23,10 @@ import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.listeners.DebugFileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListenerProvider;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +36,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CloudSynchronizationServiceImpl implements CloudSynchronizationService {
     private DqoCloudSynchronizationService dqoCloudSynchronizationService;
+    private FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider;
     private DqoCloudApiKeyProvider apiKeyProvider;
     private CloudLoginService cloudLoginService;
     private TerminalReader terminalReader;
@@ -40,6 +45,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     /**
      * Default injection constructor.
      * @param dqoCloudSynchronizationService Cloud synchronization service.
+     * @param systemSynchronizationListenerProvider Synchronization listener provider.
      * @param apiKeyProvider Api key provider - used to check if the user logged in to DQO Cloud.
      * @param cloudLoginService Cloud login service - used to log in.
      * @param terminalReader Terminal reader.
@@ -48,11 +54,13 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     @Autowired
     public CloudSynchronizationServiceImpl(
             DqoCloudSynchronizationService dqoCloudSynchronizationService,
+            FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider,
             DqoCloudApiKeyProvider apiKeyProvider,
             CloudLoginService cloudLoginService,
             TerminalReader terminalReader,
             TerminalWriter terminalWriter) {
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
+        this.systemSynchronizationListenerProvider = systemSynchronizationListenerProvider;
         this.apiKeyProvider = apiKeyProvider;
         this.cloudLoginService = cloudLoginService;
         this.terminalReader = terminalReader;
@@ -62,11 +70,11 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     /**
      * Synchronize a folder type to/from DQO Cloud.
      * @param rootType Root type.
-     * @param reportFiles When true, files are reported.
+     * @param reportingMode File synchronization progress reporting mode.
      * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
      * @return 0 when success, -1 when an error.
      */
-    public int synchronizeRoot(DqoRoot rootType, boolean reportFiles, boolean headlessMode) {
+    public int synchronizeRoot(DqoRoot rootType, FileSystemSynchronizationReportingMode reportingMode, boolean headlessMode) {
         DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
         if (apiKey == null) {
             // the api key is missing
@@ -86,7 +94,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             }
         }
 
-        CliFileSystemSynchronizationListener synchronizationListener = new CliFileSystemSynchronizationListener(rootType, reportFiles, terminalWriter);
+        FileSystemSynchronizationListener synchronizationListener = this.systemSynchronizationListenerProvider.getSynchronizationListener(reportingMode);
         this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationListener);
 
         this.terminalWriter.writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");

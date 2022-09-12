@@ -18,7 +18,8 @@ package ai.dqo.cli.commands.check;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.check.impl.CheckService;
-import ai.dqo.cli.commands.check.impl.CliCheckExecutionProgressListener;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -30,6 +31,7 @@ import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     private final TerminalWriter terminalWriter;
     private final TerminalTableWritter terminalTableWritter;
     private final CheckService checkService;
+    private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private final OutputFormatService outputFormatService;
     private final FileWritter fileWritter;
@@ -60,11 +63,17 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter, CheckService checkService,
-                              JsonSerializer jsonSerializer, OutputFormatService outputFormatService, FileWritter fileWritter) {
+    public CheckRunCliCommand(TerminalWriter terminalWriter,
+                              TerminalTableWritter terminalTableWritter,
+                              CheckService checkService,
+                              CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
+                              JsonSerializer jsonSerializer,
+                              OutputFormatService outputFormatService,
+                              FileWritter fileWritter) {
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
+        this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
         this.fileWritter = fileWritter;
@@ -94,7 +103,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
     /**
@@ -241,7 +250,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setSensorName(this.sensor);
         filters.setEnabled(this.enabled);
 
-        CliCheckExecutionProgressListener progressListener = new CliCheckExecutionProgressListener(this.terminalWriter, this.mode, this.jsonSerializer);
+        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
@@ -287,6 +296,17 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             }
         }
 
-        return 0; // TODO: check the highest severity (0, 1, 2, 3) and return it as an error code
+        if (checkExecutionSummary.getHighSeverityAlertsCount() > 0) {
+            return 3;
+        }
+        else if (checkExecutionSummary.getMediumSeverityAlertsCount() > 0) {
+            return 2;
+        }
+        else if (checkExecutionSummary.getLowSeverityAlertsCount() > 0) {
+            return 1;
+        }
+        else {
+            return 0; // no alerts
+        }
     }
 }

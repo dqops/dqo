@@ -148,8 +148,8 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             }
 
             String billingProjectId = tryGetCurrentGcpProject();
-            String defaultGcpProject = billingProjectId != null ? billingProjectId : "${GCP_PROJECT}";
-            bigquerySpec.setBillingProjectId(terminalReader.prompt("Billing GCP project ID (-P=bigquery-billing-project-id)", defaultGcpProject, false));
+            String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
+            bigquerySpec.setBillingProjectId(terminalReader.prompt("Billing GCP project ID (-P=bigquery-billing-project-id), leave null to use the default GCP project from credentials" + defaultProjectMessage, null, true));
         }
 
         if (connectionProperties.containsKey("bigquery-authentication-mode")) {
@@ -170,6 +170,18 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
 
             BigQueryAuthenticationMode authenticationMode = terminalReader.promptEnum("GCP Authentication Mode", BigQueryAuthenticationMode.class, BigQueryAuthenticationMode.google_application_credentials, false);
             bigquerySpec.setAuthenticationMode(authenticationMode);
+        }
+
+        if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.google_application_credentials) {
+            // checking if the default credentials are present
+            String billingProjectId = tryGetCurrentGcpProject();
+            if (billingProjectId == null) {
+                // the credentials are not present, we can ask the user to perform a login
+                if (terminalReader.promptBoolean("Default GCP credentials are not available, run 'gcloud auth application-default login' to log in to GCP?", true, true)) {
+                    GCloudLoginService gCloudLoginService = this.beanFactory.getBean(GCloudLoginService.class);
+                    gCloudLoginService.authenticateUserForApplicationDefaultCredentials();
+                }
+            }
         }
 
         if (connectionProperties.containsKey("bigquery-json-key-content")) {
@@ -207,7 +219,9 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
                 throw new CliRequiredParameterMissingException("-P=bigquery-quota-project-id");
             }
 
-            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (-P=bigquery-quota-project-id)", bigquerySpec.getBillingProjectId(), true));
+            String billingProjectId = bigquerySpec.getBillingProjectId() != null ? bigquerySpec.getBillingProjectId() : tryGetCurrentGcpProject();
+            String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
+            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (-P=bigquery-quota-project-id), leave blank to use the default GCP project from credentials" + defaultProjectMessage, null, true));
         }
     }
 

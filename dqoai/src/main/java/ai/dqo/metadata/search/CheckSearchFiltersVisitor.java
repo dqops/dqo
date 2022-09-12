@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -23,6 +24,7 @@ import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.google.common.base.Strings;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Visitor for {@link CheckSearchFilters} that finds the correct nodes.
@@ -272,6 +274,13 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
             if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
                     !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        Set<HierarchyId> checkHierarchyIds = this.filters.getCheckHierarchyIds();
+        if (checkHierarchyIds != null) {
+            if (!checkHierarchyIds.contains(abstractCheckSpec.getHierarchyId())) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

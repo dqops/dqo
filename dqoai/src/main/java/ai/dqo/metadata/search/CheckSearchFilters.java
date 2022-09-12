@@ -15,6 +15,10 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.id.HierarchyId;
+
+import java.util.Set;
+
 /**
  * Hierarchy node search filters.
  */
@@ -22,6 +26,7 @@ public class CheckSearchFilters extends TableSearchFilters {
     private String columnName;
     private String checkName;
     private String sensorName;
+    private Set<HierarchyId> checkHierarchyIds;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -77,5 +82,21 @@ public class CheckSearchFilters extends TableSearchFilters {
      */
     public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
+    }
+
+    /**
+     * Returns a set of hierarchy ids of checks that must match. When not null, only checks in the set are returned as a result.
+     * @return A set of checks' hierarchy ids that must match or null when the check hierarchy id is not used for matching.
+     */
+    public Set<HierarchyId> getCheckHierarchyIds() {
+        return checkHierarchyIds;
+    }
+
+    /**
+     * Sets a set of hierarchy ids of checks that must match. When not null, only checks in the set are returned as a result.
+     * @param checkHierarchyIds A set of checks' hierarchy ids that must match or null when the check hierarchy id is not used for matching.
+     */
+    public void setCheckHierarchyIds(Set<HierarchyId> checkHierarchyIds) {
+        this.checkHierarchyIds = checkHierarchyIds;
     }
 }

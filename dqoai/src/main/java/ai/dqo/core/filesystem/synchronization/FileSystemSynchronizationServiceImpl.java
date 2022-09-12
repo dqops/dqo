@@ -17,9 +17,11 @@ package ai.dqo.core.filesystem.synchronization;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemService;
 import ai.dqo.core.filesystem.metadata.FileDifference;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -38,12 +40,14 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * Synchronizes changes between two file systems.
      * @param source Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
      * @param target Target file system to send the changes in the source and download new changes.
+     * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
      * @return Synchronization result with two new file indexes after the file synchronization.
      */
     public SynchronizationResult synchronize(FileSystemChangeSet source,
                                              FileSystemChangeSet target,
-                                             BaseFileSystemSynchronizationListener synchronizationListener) {
+                                             DqoRoot dqoRoot,
+                                             FileSystemSynchronizationListener synchronizationListener) {
         DqoFileSystem sourceFileSystem = source.getFileSystem();
         FolderMetadata lastSourceFolderIndex = source.getStoredFileIndex();
         DqoFileSystem targetFileSystem = target.getFileSystem();
@@ -51,7 +55,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
         assert Objects.equals(lastSourceFolderIndex.getRelativePath(), lastTargetFolderIndex.getRelativePath());
 
-        synchronizationListener.onSynchronizationBegin(sourceFileSystem, targetFileSystem);
+        synchronizationListener.onSynchronizationBegin(dqoRoot, sourceFileSystem, targetFileSystem);
 
         FileSystemService sourceFileSystemService = sourceFileSystem.getFileSystemService();
         AbstractFileSystemRoot sourceFileSystemRoot = sourceFileSystem.getFileSystemRoot();
@@ -85,7 +89,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     targetFileSystemService.deleteFile(targetFileSystemRoot, localChange.getRelativePath());
                 }
 
-                synchronizationListener.onSourceChangeAppliedToTarget(sourceFileSystem, targetFileSystem, localChange);
+                synchronizationListener.onSourceChangeAppliedToTarget(dqoRoot, sourceFileSystem, targetFileSystem, localChange);
                 synchronizedSourceChanges.add(localChange.getRelativePath());
                 newTargetFolderIndex.applyChange(localChange.getRelativePath(), localChange.getNewFile());
             }
@@ -107,7 +111,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 else if (otherChange.isCurrentDeleted()) {
                     sourceFileSystemService.deleteFile(sourceFileSystemRoot, otherChange.getRelativePath());
                 }
-                synchronizationListener.onTargetChangeAppliedToSource(sourceFileSystem, targetFileSystem, otherChange);
+                synchronizationListener.onTargetChangeAppliedToSource(dqoRoot, sourceFileSystem, targetFileSystem, otherChange);
                 newSourceFolderIndex.applyChange(otherChange.getRelativePath(), otherChange.getNewFile());
             }
         }
@@ -148,7 +152,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         }
         newTargetFolderIndex.freeze();
 
-        synchronizationListener.onSynchronizationFinished(sourceFileSystem, targetFileSystem);
+        synchronizationListener.onSynchronizationFinished(dqoRoot, sourceFileSystem, targetFileSystem);
 
         return new SynchronizationResult(newSourceFolderIndex, newTargetFolderIndex);
 //        return new SynchronizationResult(sourceFileIndexAfterChanges, targetFileIndexAfterChanges);

@@ -28,6 +28,8 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -58,6 +60,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 			put("default_dimensions", o -> o.defaultDimensions);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
+            put("schedule", o -> o.schedule);
         }
     };
 
@@ -96,6 +99,12 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DimensionsConfigurationSpec defaultDimensions;
+
+    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec schedule;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -253,6 +262,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the schedule configuration for running the checks automatically.
+     * @return Schedule configuration.
+     */
+    public RecurringScheduleSpec getSchedule() {
+        return schedule;
+    }
+
+    /**
+     * Stores a new schedule configuration.
+     * @param schedule New schedule configuration.
+     */
+    public void setSchedule(RecurringScheduleSpec schedule) {
+        setDirtyIf(!Objects.equals(this.schedule, schedule));
+        this.schedule = schedule;
+        propagateHierarchyIdToField(schedule, "schedule");
+    }
+
+    /**
      * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
      * @return Time zone name.
      */
@@ -275,21 +302,12 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      */
     @JsonIgnore
     public ZoneId getJavaTimeZoneId() {
-        if (Strings.isNullOrEmpty(this.timeZone)) {
-            return ZoneId.of("UTC");
-        }
-
         try {
-            ZoneId zoneId = ZoneId.of(this.timeZone);
+            ZoneId zoneId = TimeZoneUtility.parseZoneId(this.timeZone);
             return zoneId;
         }
         catch (Exception ex) {
-            try {
-                ZoneId zoneIdShort = ZoneId.of(this.timeZone, ZoneId.SHORT_IDS);
-                return zoneIdShort;
-            }
-            catch (Exception ex2) {
-            }
+            // ignore exceptions here, we will use UTC as a fallback
         }
 
         return ZoneId.of("UTC");
@@ -431,8 +449,8 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.comments != null) {
                 cloned.comments = cloned.comments.clone();
             }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
+            if (cloned.schedule != null) {
+                cloned.schedule = cloned.schedule.clone();
             }
             if (cloned.properties != null) {
                 cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
@@ -473,6 +491,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
             }
             cloned.comments = null;
+            cloned.schedule = null; // we probably don't need it here
             cloned.originalProperties = null;
             return cloned;
         }
@@ -492,6 +511,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             cloned.defaultTimeSeries = null;
             cloned.defaultDimensions = null;
             cloned.comments = null;
+            cloned.schedule = null;
             cloned.originalProperties = null;
             return cloned;
         }

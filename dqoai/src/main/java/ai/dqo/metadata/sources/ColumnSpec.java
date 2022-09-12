@@ -25,6 +25,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.rits.cloning.Cloner;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Objects;
 
@@ -50,6 +52,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 			put("time_series_override", o -> o.timeSeriesOverride);
 			put("dimensions_override", o -> o.dimensionsOverride);
 			put("checks", o -> o.checks);
+            put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
@@ -77,6 +80,12 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnCheckCategoriesSpec checks;
+
+    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -190,6 +199,24 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the schedule configuration for running the checks automatically.
+     * @return Schedule configuration.
+     */
+    public RecurringScheduleSpec getScheduleOverride() {
+        return scheduleOverride;
+    }
+
+    /**
+     * Stores a new schedule configuration.
+     * @param scheduleOverride New schedule configuration.
+     */
+    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
+        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
+        this.scheduleOverride = scheduleOverride;
+        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
+    }
+
+    /**
      * List of labels assigned to a column. Labels are used for targeting the execution of tests.
      * @return Labels collection.
      */
@@ -274,6 +301,10 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.comments = cloned.comments.clone();
             }
 
+            if (cloned.scheduleOverride != null) {
+                cloned.scheduleOverride = cloned.scheduleOverride.clone();
+            }
+
             if (cloned.checks != null) {
                 Cloner cloner = new Cloner();
                 cloned.checks = cloner.deepClone(cloned.checks);
@@ -311,6 +342,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
+            cloned.scheduleOverride = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
@@ -340,6 +372,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
+            cloned.scheduleOverride = null;
             cloned.timeSeriesOverride = null;
             cloned.dimensionsOverride = null;
             cloned.labels = null;

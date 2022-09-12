@@ -16,6 +16,8 @@
 package ai.dqo.execution.checks;
 
 
+import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.execution.checks.scheduled.ScheduledChecksCollection;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -36,4 +38,15 @@ public interface CheckExecutionService {
                        CheckSearchFilters checkSearchFilters,
                        CheckExecutionProgressListener progressListener,
                        boolean dummySensorExecution);
+
+    /**
+     * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
+     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param targetSchedule Target schedule to match, when finding checks that should be executed.
+     * @param progressListener Progress listener that receives progress calls.
+     * @return Check summary table with the count of alerts, checks and rules for each table.
+     */
+    CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
+                                        RunChecksSchedule targetSchedule,
+                                        CheckExecutionProgressListener progressListener);
 }

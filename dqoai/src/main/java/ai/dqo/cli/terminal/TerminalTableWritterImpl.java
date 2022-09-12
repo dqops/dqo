@@ -99,7 +99,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 			if (rowsLeft >= height) {
 				try {
-					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", ' ', false);
+					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
 					if (response == 'N' || response == 'n') {
 						return;
 					}

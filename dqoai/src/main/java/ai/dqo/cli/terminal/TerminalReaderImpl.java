@@ -301,4 +301,24 @@ public class TerminalReaderImpl implements TerminalReader {
             return null;
         }
     }
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     *
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     */
+    @Override
+    public void waitForExit(String startMessage) {
+        this.writer.writeLine(startMessage);
+        this.writer.writeLine("Press any key key to stop the application.");
+
+        while (true) {
+            Character character = this.tryReadChar(1000);
+            if (character != null) {
+                if (this.promptBoolean("Exit the application", false, false)) {
+                    return;
+                }
+            }
+        }
+    }
 }

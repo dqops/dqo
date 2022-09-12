@@ -24,6 +24,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Map;
 import java.util.Objects;
@@ -50,6 +52,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("checks", o -> o.checks);
+            put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
@@ -98,6 +101,12 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableCheckCategoriesSpec checks = new TableCheckCategoriesSpec();
+
+    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -255,6 +264,24 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the schedule configuration for running the checks automatically.
+     * @return Schedule configuration.
+     */
+    public RecurringScheduleSpec getScheduleOverride() {
+        return scheduleOverride;
+    }
+
+    /**
+     * Stores a new schedule configuration.
+     * @param scheduleOverride New schedule configuration.
+     */
+    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
+        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
+        this.scheduleOverride = scheduleOverride;
+        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
+    }
+
+    /**
      * Returns a hashtable of columns, indexed by the column name.
      * @return Dictionary of columns.
      */
@@ -356,6 +383,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.checks = null;
+            cloned.scheduleOverride = null;
             cloned.owner = null;
             cloned.comments = null;
             if (cloned.target != null) {
@@ -389,6 +417,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.timeSeries = null;
             cloned.dimensions = null;
             cloned.comments = null;
+            cloned.scheduleOverride = null;
             cloned.columns = this.columns.trim();
             return cloned;
         }

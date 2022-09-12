@@ -16,6 +16,7 @@
 package ai.dqo.execution;
 
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,5 +47,14 @@ public class CheckExecutionContextFactoryImpl implements CheckExecutionContextFa
      */
     public CheckExecutionContext create() {
         return new CheckExecutionContext(this.userHomeContextFactory.openLocalUserHome(), this.dqoHomeContextFactory.openLocalDqoHome());
+    }
+
+    /**
+     * Creates a new check execution context by using a given user context.
+     * @param userHomeContext User home context.
+     * @return Check execution context.
+     */
+    public CheckExecutionContext create(UserHomeContext userHomeContext) {
+        return new CheckExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
     }
 }

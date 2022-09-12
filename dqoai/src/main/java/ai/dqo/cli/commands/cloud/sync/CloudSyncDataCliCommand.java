@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -38,23 +39,23 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
         this.cloudSynchronizationService = cloudSynchronizationService;
     }
 
-    @CommandLine.Option(names = {"-f", "--show-files"}, description = "Show progress for all files", defaultValue = "true", required = false)
-    private boolean showFiles = true;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
+    private FileSystemSynchronizationReportingMode mode = FileSystemSynchronizationReportingMode.summary;
 
     /**
-     * True when each file should be shown.
-     * @return Show files.
+     * Returns the synchronization logging mode.
+     * @return Logging mode.
      */
-    public boolean isShowFiles() {
-        return showFiles;
+    public FileSystemSynchronizationReportingMode getMode() {
+        return mode;
     }
 
     /**
-     * Sets the show files flag.
-     * @param showFiles Show files flag.
+     * Sets the reporting (logging) mode.
+     * @param mode Reporting mode.
      */
-    public void setShowFiles(boolean showFiles) {
-        this.showFiles = showFiles;
+    public void setMode(FileSystemSynchronizationReportingMode mode) {
+        this.mode = mode;
     }
 
     /**
@@ -65,11 +66,11 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_READINGS, this.showFiles, this.isHeadless());
+        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_READINGS, this.mode, this.isHeadless());
         if (synchronizeReadingsResult < 0) {
             return synchronizeReadingsResult;
         }
-        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_ALERTS, this.showFiles, this.isHeadless());
+        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_ALERTS, this.mode, this.isHeadless());
         return synchronizeAlertsResult;
     }
 }

@@ -13,49 +13,58 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.filesystem.synchronization;
+package ai.dqo.core.filesystem.synchronization.listeners;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.metadata.FileDifference;
 
 /**
  * Base class that is a progress handler to learn which files are synchronized.
  */
-public class BaseFileSystemSynchronizationListener {
+public abstract class FileSystemSynchronizationListener {
+    // TODO: create a logger and log all operations in the debug severity mode
+
     /**
      * Called when the synchronization is about to begin. The synchronization is from the source to the target.
+     * @param dqoRoot DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
-    public void onSynchronizationBegin(DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem) {
+    public void onSynchronizationBegin(DqoRoot dqoRoot, DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem) {
     }
 
     /**
      * Called when the synchronization has finished. The synchronization is from the source to the target.
+     * @param dqoRoot DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
-    public void onSynchronizationFinished(DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem) {
+    public void onSynchronizationFinished(DqoRoot dqoRoot, DqoFileSystem sourceFileSystem, DqoFileSystem targetFileSystem) {
     }
 
     /**
      * Called when a local change (from the source) was applied on the target file system.
+     * @param dqoRoot DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference Change in the source file system that was applied (uploaded, deleted, etc.)
      */
-    public void onSourceChangeAppliedToTarget(DqoFileSystem sourceFileSystem,
+    public void onSourceChangeAppliedToTarget(DqoRoot dqoRoot,
+                                              DqoFileSystem sourceFileSystem,
                                               DqoFileSystem targetFileSystem,
                                               FileDifference fileDifference) {
     }
 
     /**
      * Called when a remote change (from the target system) was applied on the source file system (downloaded).
+     * @param dqoRoot DQO User home folder that will be synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      * @param fileDifference Change in the target (remote) file system that was applied (uploaded, deleted, etc.) on the source system (downloaded).
      */
-    public void onTargetChangeAppliedToSource(DqoFileSystem sourceFileSystem,
+    public void onTargetChangeAppliedToSource(DqoRoot dqoRoot,
+                                              DqoFileSystem sourceFileSystem,
                                               DqoFileSystem targetFileSystem,
                                               FileDifference fileDifference) {
     }

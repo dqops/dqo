@@ -20,10 +20,13 @@ import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.run.RunCliCommand;
+import ai.dqo.cli.commands.scheduler.SchedulerCliCommand;
 import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
+import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,15 +52,25 @@ import picocli.CommandLine;
             ColumnCliCommand.class,
             SettingsCliCommand.class,
             CloudCliCommand.class,
-            SensorCliCommand.class
+            SensorCliCommand.class,
+            SchedulerCliCommand.class,
+            RunCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private final BeanFactory beanFactory;
+    private JobSchedulerService jobSchedulerService;
 
+    /**
+     * Creates a default root CLI command.
+     * @param beanFactory Bean factory - used to delay the creation of the shell runner.
+     * @param jobSchedulerService Job scheduler - stops the scheduler on exit.
+     */
     @Autowired
-    public DqoRootCliCommand(BeanFactory beanFactory) {
+    public DqoRootCliCommand(BeanFactory beanFactory,
+                             JobSchedulerService jobSchedulerService) {
         this.beanFactory = beanFactory;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -69,6 +82,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         DqoShellRunnerService shellRunnerService = this.beanFactory.getBean(DqoShellRunnerService.class);
-        return shellRunnerService.call();
+        try {
+            return shellRunnerService.call();
+        }
+        finally {
+            this.jobSchedulerService.shutdown(); // shutdown the job scheduler in case that it was running
+        }
     }
 }
