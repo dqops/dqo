@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.commands;
 
+import ai.dqo.cli.ApplicationShutdownManager;
 import ai.dqo.cli.CliExitCodeGenerator;
 import ai.dqo.cli.CliInitializer;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
@@ -35,15 +36,18 @@ import java.util.Objects;
 public class CliMainCommandRunner implements CommandLineRunner {
     private final CliExitCodeGenerator cliExitCodeGenerator;
     private CliInitializer cliInitializer;
+    private ApplicationShutdownManager applicationShutdownManager;
     private final CommandLine commandLine;
 
     @Autowired
     public CliMainCommandRunner(CommandLine commandLine,
                                 CliExitCodeGenerator cliExitCodeGenerator,
-                                CliInitializer cliInitializer) {
+                                CliInitializer cliInitializer,
+                                ApplicationShutdownManager applicationShutdownManager) {
         this.commandLine = commandLine;
         this.cliExitCodeGenerator = cliExitCodeGenerator;
         this.cliInitializer = cliInitializer;
+        this.applicationShutdownManager = applicationShutdownManager;
     }
 
     /**
@@ -58,6 +62,7 @@ public class CliMainCommandRunner implements CommandLineRunner {
         try {
             int errorCode = commandLine.execute(args);
 			this.cliExitCodeGenerator.setExitCode(errorCode);
+            this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
         }
         catch (Exception ex) {
 			this.cliExitCodeGenerator.setExitCode(1);
