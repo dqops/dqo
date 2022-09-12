@@ -1,5 +1,6 @@
 package ai.dqo.core.scheduler;
 
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
@@ -7,6 +8,7 @@ import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import org.quartz.*;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private static final Logger LOG = LoggerFactory.getLogger(JobSchedulerServiceImpl.class);
 
     private Scheduler scheduler;
+    private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
     private SchedulerFactory schedulerFactory;
     private SpringIoCJobFactory jobFactory;
     private TriggerFactory triggerFactory;
@@ -38,6 +41,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
     /**
      * Job scheduler service constructor.
+     * @param schedulerConfigurationProperties Scheduler configuration properties.
      * @param schedulerFactory Quartz scheduler factory (new).
      * @param jobFactory Custom job factory that uses Spring IoC for instantiating job instances.
      * @param triggerFactory Trigger factory that creates quartz triggers for the schedules defined in the metadata.
@@ -45,11 +49,13 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * @param scheduledJobListener  Job listener that is notified when a job starts or finishes.
      */
     @Autowired
-    public JobSchedulerServiceImpl(SchedulerFactory schedulerFactory,
+    public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
+                                   SchedulerFactory schedulerFactory,
                                    SpringIoCJobFactory jobFactory,
                                    TriggerFactory triggerFactory,
                                    JobDataMapAdapter jobDataMapAdapter,
                                    ScheduledJobListener scheduledJobListener) {
+        this.schedulerConfigurationProperties = schedulerConfigurationProperties;
         this.schedulerFactory = schedulerFactory;
         this.jobFactory = jobFactory;
         this.triggerFactory = triggerFactory;
@@ -119,6 +125,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 .storeDurably()
                 .build();
             this.scheduler.addJob(this.synchronizeMetadataJob, true);
+
+            String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getScanMetadataCronSchedule();
+            RunChecksSchedule scanMetadataScheduleWithTZ = new RunChecksSchedule(new RecurringScheduleSpec(scanMetadataCronSchedule), "UTC");
+            Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataScheduleWithTZ, JobKeys.SYNCHRONIZE_METADATA);
+
+            this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
             LOG.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
@@ -197,27 +209,51 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     @Override
     public void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey) {
+        Exception firstException = null;
+        List<? extends Trigger> triggersOfJob = null;
+
         try {
-            List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
+            triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
+        }
+        catch (Exception ex) {
+            LOG.error("Failed to list scheduled jobs because " + ex.getMessage(), ex);
+            throw new JobSchedulerException(ex);
+        }
 
-            for (Trigger trigger : triggersOfJob) {
-                RunChecksSchedule scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+        for (Trigger trigger : triggersOfJob) {
+            RunChecksSchedule scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
 
-                if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
+            if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
+                try {
                     this.scheduler.unscheduleJob(trigger.getKey());
                 }
+                catch (Exception ex) {
+                    LOG.error("Failed to unschedule a job because " + ex.getMessage(), ex);
+                    if (firstException != null) {
+                        firstException = ex;
+                    }
+                }
             }
+        }
 
-            for (RunChecksSchedule scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
-                Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
+        for (RunChecksSchedule scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
+            Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
+            try {
                 if (!this.scheduler.checkExists(triggerToAdd.getKey())) {
                     this.scheduler.scheduleJob(triggerToAdd);
                 }
             }
+            catch (Exception ex) {
+                LOG.error("Failed to schedule a job because " + ex.getMessage(), ex);
+                if (firstException != null) {
+                    firstException = ex;
+                }
+            }
         }
-        catch (Exception ex) {
-            LOG.error("Failed to activate new schedules the job scheduler because " + ex.getMessage(), ex);
-            throw new JobSchedulerException(ex);
+
+        if (firstException != null) {
+            LOG.error("Failed to activate new schedules the job scheduler because " + firstException.getMessage(), firstException);
+            throw new JobSchedulerException(firstException);
         }
     }
 }

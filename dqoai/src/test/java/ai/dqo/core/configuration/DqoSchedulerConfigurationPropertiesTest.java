@@ -42,7 +42,7 @@ public class DqoSchedulerConfigurationPropertiesTest extends BaseTest {
     @Test
     void getScanMetadataCronSchedule_whenRetrieved_thenReturnsDefaultScheduleEvery10Minutes() {
         String sensorResultsStoragePath = this.sut.getScanMetadataCronSchedule();
-        String expected = "0 0/10 * * * ?";
+        String expected = "*/10 * * * *";
         Assertions.assertEquals(expected, sensorResultsStoragePath);
     }
 }
