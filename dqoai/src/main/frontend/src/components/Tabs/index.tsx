@@ -8,14 +8,12 @@ export interface TabsProps {
   onChange?: any;
 }
 
-const Tabs = (
-  {
-    tabs,
-    className,
-    activeTab,
-    onChange,
-  }: TabsProps
-) => {
+const Tabs = ({
+  tabs,
+  className,
+  activeTab,
+  onChange,
+}: TabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
   };
