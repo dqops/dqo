@@ -6,6 +6,7 @@ export interface TabsProps {
   className?: string;
   activeTab?: string;
   onChange?: any;
+  onCloseTab?: (value: string) => void;
 }
 
 const Tabs = ({
@@ -13,6 +14,7 @@ const Tabs = ({
   className,
   activeTab,
   onChange,
+  onCloseTab,
 }: TabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
@@ -27,6 +29,8 @@ const Tabs = ({
             tab={tab}
             active={activeTab === tab.value}
             onChange={onChangeTab}
+            closable={!!onCloseTab}
+            onClose={() => onCloseTab && onCloseTab(tab.value)}
           />
         ))
       }

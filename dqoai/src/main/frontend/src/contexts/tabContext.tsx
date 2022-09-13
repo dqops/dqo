@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ITab, TDataNode} from '../shared/interfaces';
 import {TREE_LEVEL} from '../shared/enums';
 import {findNode} from '../utils/tree';
@@ -122,7 +122,12 @@ function TabProvider(props: any) {
   };
   
   const closeTableTab = (value: string) => {
-    setDatabaseTabs(databaseTabs.filter((item) => item.value !== value));
+    const newTableTabs = tableTabs.filter((item) => item.value !== value);
+    setTableTabs(newTableTabs);
+    if (value === activeTableTab) {
+      setColumnTabs([]);
+      setActiveTableTab(newTableTabs[newTableTabs.length - 1]?.value);
+    }
   };
 
   const addColumnTab = (node: TDataNode) => {
@@ -130,7 +135,7 @@ function TabProvider(props: any) {
     keys.pop();
     const tableTab = keys.join('.');
     const parentNode = findNode(treeData, tableTab);
-    console.log('parentNode', parentNode, tableTab);
+
     if (parentNode) {
       addTableTab(parentNode);
     }
@@ -156,7 +161,9 @@ function TabProvider(props: any) {
       addColumnTab(node);
     }
   }
-  
+
+  const getTabLabel = useCallback((value: string) => findNode(treeData, value)?.title, [treeData]);
+
   return (
     <TabContext.Provider
       value={{
@@ -173,6 +180,7 @@ function TabProvider(props: any) {
         activeColumnTab,
         setActiveColumnTab,
         columnTabs,
+        getTabLabel,
       }}
       {...props}
     />
