@@ -384,6 +384,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.checks = null;
             cloned.scheduleOverride = null;
+            cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
             if (cloned.target != null) {
@@ -395,9 +396,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.dimensions != null) {
                 cloned.dimensions = cloned.dimensions.expandAndTrim(secretValueProvider);
             }
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone(); // TODO: should we expand labels? probably that is too far...
-            }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider);
             return cloned;
         }
@@ -407,18 +405,50 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Creates a trimmed version of the object without unwanted properties.
+     * Creates a cloned and trimmed version of the object without unwanted properties. Only the "target" is preserved and deeply cloned.
      * A trimmed version is passed to a Jinja2 sql template as a context parameter.
      * @return Trimmed version of this object.
      */
     public TableSpec trim() {
         try {
             TableSpec cloned = (TableSpec) this.clone();
+            if (cloned.target != null) {
+                cloned.target = cloned.target.clone();
+            }
+            cloned.checks = null;
+            cloned.owner = null;
             cloned.timeSeries = null;
             cloned.dimensions = null;
+            cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;
             cloned.columns = this.columns.trim();
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned", ex);
+        }
+    }
+
+    /**
+     * Creates a cloned copy that has no collection nodes like checks or columns.
+     * A bare clone is returned by the rest api.
+     * @return Bare clone of the object.
+     */
+    public TableSpec cloneBare() {
+        try {
+            TableSpec cloned = (TableSpec) this.clone();
+            if (cloned.target != null) {
+                cloned.target = cloned.target.clone();
+            }
+            cloned.checks = null;
+            cloned.owner = null;
+            cloned.timeSeries = null;
+            cloned.dimensions = null;
+            cloned.labels = null;
+            cloned.comments = null;
+            cloned.scheduleOverride = null;
+            cloned.columns = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

@@ -370,6 +370,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     public ColumnSpec trim() {
         try {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            if (cloned.typeSnapshot != null) {
+                cloned.typeSnapshot = cloned.typeSnapshot.clone();
+            }
             cloned.comments = null;
             cloned.checks = null;
             cloned.scheduleOverride = null;

@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "/api/connections", description = "Connection management")
+@Api(value = "Connections", description = "Connection management")
 public class ConnectionsController {
     private UserHomeContextFactory userHomeContextFactory;
 
