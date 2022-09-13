@@ -10,7 +10,7 @@ import "rc-tree/assets/index.css"
 import './styles.css';
 
 const ConnectionsTree = () => {
-  const { addTab, treeData } = useTabs();
+  const { changeActiveTab, treeData } = useTabs();
   const history = useHistory();
 
   const onExpand = () => {
@@ -20,7 +20,7 @@ const ConnectionsTree = () => {
     if (history.location.pathname !== '/test') {
       history.push('/test');
     }
-    addTab(node);
+    changeActiveTab(node);
   };
 
   return (

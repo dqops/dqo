@@ -4,6 +4,7 @@ import { TREE_LEVEL } from '../enums';
 export interface ITab {
   label: string;
   value: string;
+  type?: string;
 }
 
 export interface TDataNode extends DataNode {
