@@ -36,7 +36,7 @@ const ConnectionsTree = () => {
         onClick={onClick}
         treeData={treeData}
         icon={(props: any) => {
-          if (props.data?.level === TREE_LEVEL.SCHEMA) {
+          if (props.data?.level === TREE_LEVEL.SCHEMA || props.data?.level === TREE_LEVEL.TABLE) {
             return <SvgIcon name="grid" className="mr-2 w-4" />;
           }
           if (props.data?.level === TREE_LEVEL.COLUMN) {

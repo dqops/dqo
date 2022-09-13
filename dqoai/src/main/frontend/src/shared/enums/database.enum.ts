@@ -6,5 +6,6 @@ export enum DATABASE_TYPE {
 export enum TREE_LEVEL {
   DATABASE = 'database',
   SCHEMA = 'schema',
+  TABLE = 'table',
   COLUMN = 'column',
 }

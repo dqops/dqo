@@ -19,58 +19,65 @@ function TabProvider(props: any) {
       level: TREE_LEVEL.DATABASE,
       children: [
         {
-          key: "dqo-ai.public",
-          title: "Public",
+          key: 'dqo-ai.schema',
+          title: "Schema",
           level: TREE_LEVEL.SCHEMA,
           children: [
-            { key: "dqo-ai.public.id", title: "Id", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.public.title", title: "Title", level: TREE_LEVEL.COLUMN },
+            {
+              key: "dqo-ai.public",
+              title: "Public",
+              level: TREE_LEVEL.TABLE,
+              children: [
+                { key: "dqo-ai.public.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.public.title", title: "Title", level: TREE_LEVEL.COLUMN },
+              ]
+            },
+            {
+              key: "dqo-ai.album",
+              title: "Album",
+              level: TREE_LEVEL.TABLE,
+              children: [
+                { key: "dqo-ai.album.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.album.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.album.artistId", title: "Artist Id", level: TREE_LEVEL.COLUMN },
+              ]
+            },
+            {
+              key: "dqo-ai.customer",
+              title: "Customer",
+              level: TREE_LEVEL.TABLE,
+              children: [
+                { key: "dqo-ai.customer.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.email", title: "email", level: TREE_LEVEL.COLUMN },
+              ]
+            },
+            {
+              key: "dqo-ai.employee",
+              title: "Employee",
+              level: TREE_LEVEL.TABLE,
+              children: [
+                { key: "dqo-ai.employee.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.email", title: "email", level: TREE_LEVEL.COLUMN },
+              ]
+            },
+            {
+              key: "dqo-ai.invoice",
+              title: "Invoice",
+              level: TREE_LEVEL.TABLE,
+              children: [
+                { key: "dqo-ai.invoice.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.invoice.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.invoice.amount", title: "Amount", level: TREE_LEVEL.COLUMN },
+              ]
+            },
           ]
-        },
-        {
-          key: "dqo-ai.album",
-          title: "Album",
-          level: TREE_LEVEL.SCHEMA,
-          children: [
-            { key: "dqo-ai.album.id", title: "Id", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.album.title", title: "Title", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.album.artistId", title: "Artist Id", level: TREE_LEVEL.COLUMN },
-          ]
-        },
-        {
-          key: "dqo-ai.customer",
-          title: "Customer",
-          level: TREE_LEVEL.SCHEMA,
-          children: [
-            { key: "dqo-ai.customer.id", title: "Id", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.customer.title", title: "Title", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.customer.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.customer.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.customer.email", title: "email", level: TREE_LEVEL.COLUMN },
-          ]
-        },
-        {
-          key: "dqo-ai.employee",
-          title: "Employee",
-          level: TREE_LEVEL.SCHEMA,
-          children: [
-            { key: "dqo-ai.employee.id", title: "Id", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.employee.title", title: "Title", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.employee.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.employee.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.employee.email", title: "email", level: TREE_LEVEL.COLUMN },
-          ]
-        },
-        {
-          key: "dqo-ai.invoice",
-          title: "Invoice",
-          level: TREE_LEVEL.SCHEMA,
-          children: [
-            { key: "dqo-ai.invoice.id", title: "Id", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.invoice.title", title: "Title", level: TREE_LEVEL.COLUMN },
-            { key: "dqo-ai.invoice.amount", title: "Amount", level: TREE_LEVEL.COLUMN },
-          ]
-        },
+        }
       ]
     },
     {
@@ -79,9 +86,16 @@ function TabProvider(props: any) {
       level: TREE_LEVEL.DATABASE,
       children: [
         {
-          key: "documati.public",
-          title: 'Public',
-          level: TREE_LEVEL.SCHEMA
+          key: "documati.schema",
+          title: "Schema",
+          level: TREE_LEVEL.SCHEMA,
+          children: [
+            {
+              key: "documati.public",
+              title: 'Public',
+              level: TREE_LEVEL.TABLE
+            }
+          ]
         }
       ]
     },
@@ -154,7 +168,7 @@ function TabProvider(props: any) {
     if (node.level === TREE_LEVEL.DATABASE) {
       addDatabaseTab(node);
     }
-    if (node.level === TREE_LEVEL.SCHEMA) {
+    if (node.level === TREE_LEVEL.TABLE) {
       addTableTab(node);
     }
     if (node.level === TREE_LEVEL.COLUMN) {
