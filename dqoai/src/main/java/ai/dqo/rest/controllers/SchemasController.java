@@ -40,7 +40,7 @@ public class SchemasController {
      * @param connectionName Connection name.
      * @return List of schemas inside a connection.
      */
-    @GetMapping("{connectionName}/schemas")
+    @GetMapping("/{connectionName}/schemas")
     @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection")
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @Parameter(description = "Connection name") @PathVariable String connectionName) {

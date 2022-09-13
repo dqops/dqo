@@ -39,7 +39,7 @@ public class ColumnsController {
      * @parqm tableName      Table name
      * @return List of columns inside a table.
      */
-    @GetMapping("{connectionName}/schemas/{schemaName}/tables/{tableName}/columns")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns")
     @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table")
     public ResponseEntity<Flux<ColumnModel>> getSchemas(
             @Parameter(description = "Connection name") @PathVariable String connectionName,

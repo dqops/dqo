@@ -48,6 +48,7 @@ public abstract class BaseDirtyTrackingSpec implements DirtyStatus {
      * Sets the dirty flag to true if the parameter is true. Otherwise preserves the current dirty status.
      * @param hasChanged When true, sets the dirty flag to true.
      */
+    @JsonIgnore
     public void setDirtyIf(boolean hasChanged) {
         if(hasChanged) {
 			this.dirty = true;
