@@ -603,6 +603,53 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>com.github.kongchen</groupId>
+				<artifactId>swagger-maven-plugin</artifactId>
+				<version>3.1.8</version>
+				<configuration>
+					<apiSources>
+						<apiSource>
+							<springmvc>true</springmvc>
+							<locations>ai.dqo.rest.controllers</locations>
+							<schemes>http</schemes>
+							<host>localhost:8888</host>
+							<basePath>/</basePath>
+							<swaggerDirectory>${basedir}/target/swagger</swaggerDirectory>
+							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
+							<outputFormats>JSON,YAML</outputFormats>
+							<info>
+								<title>DQO.ai</title>
+								<version>v1</version>
+								<description>DQO.AI REST API</description>
+								<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
+								<contact>
+									<email>support@dqo.ai</email>
+									<name>DQO.ai Support</name>
+									<url>https://dqo.ai</url>
+								</contact>
+								<license>
+									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+									<name>Apache 2.0</name>
+								</license>
+							</info>
+							<securityDefinitions>
+								<securityDefinition>
+									<json>/securityDefinitions.json</json>
+								</securityDefinition>
+							</securityDefinitions>
+						</apiSource>
+					</apiSources>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
 				<version>4.22.0</version>

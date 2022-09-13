@@ -21,9 +21,9 @@ import java.util.stream.Stream;
  * REST api controller to return a list of connections.
  */
 @RestController
-@RequestMapping("/connections")
+@RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "/connections", description = "Connection management")
+@Api(value = "/api/connections", description = "Connection management")
 public class ConnectionsController {
     private UserHomeContextFactory userHomeContextFactory;
 
