@@ -1,0 +1,29 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import Header from '../Header';
+import Sidebar from '../Sidebar';
+
+interface LayoutProps {
+  children?: any;
+}
+
+const MainLayout = ({
+  children,
+}: LayoutProps) => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Sidebar />
+      <div className="">
+        <Header />
+        <div className="ml-70 mt-16 p-5">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+MainLayout.propTypes = {
+  children: PropTypes.any.isRequired,
+};
+
+export default MainLayout;
