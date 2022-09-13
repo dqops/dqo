@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { ITab, TDataNode } from '../shared/interfaces';
-import { TREE_LEVEL } from '../shared/enums';
+import React, {useState} from 'react';
+import {ITab, TDataNode} from '../shared/interfaces';
+import {TREE_LEVEL} from '../shared/enums';
+import {findNode} from '../utils/tree';
 
 const TabContext = React.createContext({} as any);
 
 function TabProvider(props: any) {
   const [activeDatabaseTab, setActiveDatabaseTab] = useState<string>();
   const [activeTableTab, setActiveTableTab] = useState<string>();
+  const [activeColumnTab, setActiveColumnTab] = useState<string>();
   const [databaseTabs, setDatabaseTabs] = useState<ITab[]>([]);
   const [tableTabs, setTableTabs] = useState<ITab[]>([]);
+  const [columnTabs, setColumnTabs] = useState<ITab[]>([]);
   const [treeData] = useState<TDataNode[]>([
     {
       key: "dqo-ai",
@@ -100,12 +103,12 @@ function TabProvider(props: any) {
       setActiveDatabaseTab('');
     }
   };
-  
+
   const addTableTab = (node: TDataNode) => {
     const databaseTab = node.key.toString().split('.')[0];
-    const databaseNode = treeData.find((item) => item.key === databaseTab);
-    if (databaseNode) {
-      addDatabaseTab(databaseNode);
+    const parentNode = findNode(treeData, databaseTab);
+    if (parentNode) {
+      addDatabaseTab(parentNode);
     }
     setActiveTableTab(node.key.toString());
     if (activeDatabaseTab === databaseTab) {
@@ -121,13 +124,36 @@ function TabProvider(props: any) {
   const closeTableTab = (value: string) => {
     setDatabaseTabs(databaseTabs.filter((item) => item.value !== value));
   };
-  
+
+  const addColumnTab = (node: TDataNode) => {
+    const keys = node.key.toString().split('.');
+    keys.pop();
+    const tableTab = keys.join('.');
+    const parentNode = findNode(treeData, tableTab);
+    console.log('parentNode', parentNode, tableTab);
+    if (parentNode) {
+      addTableTab(parentNode);
+    }
+    setActiveColumnTab(node.key.toString());
+    if (activeTableTab === tableTab) {
+      const exist = columnTabs.find((item) => item.value === node.key.toString());
+      if (!exist) {
+        setColumnTabs([...columnTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
+      }
+    } else {
+      setColumnTabs([{ label: node.title?.toString() || '', value: node.key.toString() }])
+    }
+  };
+
   const addTab = (node: TDataNode) => {
     if (node.level === TREE_LEVEL.DATABASE) {
       addDatabaseTab(node);
     }
     if (node.level === TREE_LEVEL.SCHEMA) {
       addTableTab(node);
+    }
+    if (node.level === TREE_LEVEL.COLUMN) {
+      addColumnTab(node);
     }
   }
   
@@ -144,6 +170,9 @@ function TabProvider(props: any) {
         closeTableTab,
         addTab,
         treeData,
+        activeColumnTab,
+        setActiveColumnTab,
+        columnTabs,
       }}
       {...props}
     />
