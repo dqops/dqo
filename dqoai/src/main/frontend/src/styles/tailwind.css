@@ -23,3 +23,25 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #E1E5E9;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #9CA3AF;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #ACB3BF;
+}

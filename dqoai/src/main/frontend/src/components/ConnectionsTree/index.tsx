@@ -1,93 +1,125 @@
 import React from 'react';
 import Tree from "rc-tree";
+import { TreeNodeProps } from 'rc-tree/lib/TreeNode';
+import SvgIcon from '../SvgIcon';
+import { useTabs } from '../../contexts/tabContext';
+import { DataNode } from 'rc-tree/es/interface';
+import { useHistory } from 'react-router-dom';
+import { TREE_LEVEL } from '../../shared/enums';
 import "rc-tree/assets/index.css"
 import './styles.css';
 
 const treeData = [
   {
-    key: "0-0",
-    title: "My DB Connection 1",
+    key: "dqo-ai",
+    title: "dqo-ai",
+    level: TREE_LEVEL.DATABASE,
     children: [
       {
-        key: "0-0-1",
-        title: "Tables",
+        key: "dqo-ai.public",
+        title: "Public",
+        level: TREE_LEVEL.SCHEMA,
         children: [
-          { key: "0-0-1-0", title: "Users" },
-          { key: "0-0-1-1", title: "Products" },
-          { key: "0-0-1-2", title: "Books" },
-          { key: "0-0-1-3", title: "Tests" },
+          { key: "dqo-ai.public.id", title: "Id", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.public.title", title: "Title", level: TREE_LEVEL.COLUMN },
         ]
-      }
+      },
+      {
+        key: "dqo-ai.album",
+        title: "Album",
+        level: TREE_LEVEL.SCHEMA,
+        children: [
+          { key: "dqo-ai.album.id", title: "Id", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.album.title", title: "Title", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.album.artistId", title: "Artist Id", level: TREE_LEVEL.COLUMN },
+        ]
+      },
+      {
+        key: "dqo-ai.customer",
+        title: "Customer",
+        level: TREE_LEVEL.SCHEMA,
+        children: [
+          { key: "dqo-ai.customer.id", title: "Id", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.customer.title", title: "Title", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.customer.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.customer.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.customer.email", title: "email", level: TREE_LEVEL.COLUMN },
+        ]
+      },
+      {
+        key: "dqo-ai.employee",
+        title: "Employee",
+        level: TREE_LEVEL.SCHEMA,
+        children: [
+          { key: "dqo-ai.employee.id", title: "Id", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.employee.title", title: "Title", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.employee.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.employee.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.employee.email", title: "email", level: TREE_LEVEL.COLUMN },
+        ]
+      },
+      {
+        key: "dqo-ai.invoice",
+        title: "Invoice",
+        level: TREE_LEVEL.SCHEMA,
+        children: [
+          { key: "dqo-ai.invoice.id", title: "Id", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.invoice.title", title: "Title", level: TREE_LEVEL.COLUMN },
+          { key: "dqo-ai.invoice.amount", title: "Amount", level: TREE_LEVEL.COLUMN },
+        ]
+      },
     ]
   },
   {
-    key: "con2",
-    title: "My DB Connection 2",
+    key: "documati",
+    title: "documati",
+    level: TREE_LEVEL.DATABASE,
     children: [
       {
-        key: "1-0-1",
-        title: "Tables",
-        children: [
-          { key: "1-0-1-0", title: "Users" },
-          { key: "1-0-1-1", title: "Products" },
-          { key: "1-0-1-2", title: "Books" },
-          { key: "1-0-1-3", title: "Tests" },
-          { key: "1-0-1-4", title: "Times" },
-          { key: "1-0-1-5", title: "News" },
-          { key: "1-0-1-6", title: "Organizations" },
-          { key: "1-0-1-7", title: "Repositories" },
-          { key: "1-0-1-8", title: "Comments" },
-          { key: "1-0-1-9", title: "Tags" },
-          { key: "1-0-2-0", title: "Slashes" },
-        ]
+        key: "documenti.public",
+        title: 'Public'
       }
     ]
   },
-  {
-    key: "con3",
-    title: "My DB Connection 3",
-    children: [
-      {
-        key: "2-0-1",
-        title: "Tables",
-        children: [
-          { key: "2-0-1-0", title: "Users" },
-          { key: "2-0-1-1", title: "Products" },
-          { key: "2-0-1-2", title: "Books" },
-          { key: "2-0-1-3", title: "Tests" },
-          { key: "2-0-1-4", title: "Times" },
-          { key: "2-0-1-5", title: "News" },
-        ]
-      }
-    ]
-  }
-
 ];
 
 const ConnectionsTree = () => {
+  const { addTab } = useTabs();
+  const history = useHistory();
+
   const onExpand = () => {
   };
   
-  const onSelect = () => {
+  const onClick = (event: any, node: DataNode) => {
+    if (history.location.pathname !== '/test') {
+      history.push('/test');
+    }
+    addTab(node);
   };
 
-  const onCheck = () => {
-  };
-  
   return (
-    <div className="px-4 py-16 text-gray-100">
+    <div className="px-4 text-gray-100">
       <Tree
         className="myCls"
         showLine
-        checkable
         selectable={false}
         defaultExpandAll
         onExpand={onExpand}
         defaultSelectedKeys={[]}
         defaultCheckedKeys={[]}
-        onSelect={onSelect}
-        onCheck={onCheck}
+        onClick={onClick}
         treeData={treeData}
+        icon={(props: any) => {
+          if (props.data?.level === TREE_LEVEL.SCHEMA) {
+            return <SvgIcon name="grid" className="mr-2 w-4" />;
+          }
+          if (props.data?.level === TREE_LEVEL.COLUMN) {
+            return <SvgIcon name="table" className="mr-2 w-4" />;
+          }
+          return null;
+        }}
+        switcherIcon={(props: TreeNodeProps) => props.data?.children ? <SvgIcon name={props.expanded ? "arrow-alt-down" : "arrow-alt-right"} className="w-3 h-3" /> : null}
+        rootClassName="connection-tree"
       />
     </div>
   );

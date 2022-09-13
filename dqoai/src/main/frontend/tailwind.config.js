@@ -103,6 +103,7 @@ module.exports = {
       spacing: sizes,
       minHeight: sizes,
       minWidth: sizes,
+      maxWidth: sizes,
       maxHeight: sizes,
       backgroundOpacity: {
         4: '0.04',
