@@ -1,12 +1,16 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ITab, TDataNode} from '../shared/interfaces';
 import {TREE_LEVEL} from '../shared/enums';
 import {findNode} from '../utils/tree';
+import {useActionDispatch} from '../hooks/useActionDispatch';
+import {getAllConnections} from '../redux/actions/connection.actions';
+import {useSelector} from 'react-redux';
+import {IRootState} from '../redux/reducers';
 
 const TabContext = React.createContext({} as any);
 
 function TabProvider(props: any) {
-  const [treeData] = useState<TDataNode[]>([
+  const [treeData, setTreeData] = useState<TDataNode[]>([
     {
       key: "dqo-ai",
       title: "dqo-ai",
@@ -96,6 +100,8 @@ function TabProvider(props: any) {
   ]);
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
+  const dispatch = useActionDispatch();
+  const { connections } = useSelector((state: IRootState) => state.connection);
   
   const changeActiveTab = (node: TDataNode) => {
     const existTab = tabs.find((item) => item.value === node.key.toString());
@@ -141,6 +147,18 @@ function TabProvider(props: any) {
     setTabs([...tabs, newTab]);
     setActiveTab(newTab.value);
   };
+
+  useEffect(() => {
+    dispatch(getAllConnections());
+  }, []);
+
+  useEffect(() => {
+    setTreeData(connections.map((item) => ({
+      key: item.name,
+      title: item.name,
+      level: TREE_LEVEL.DATABASE
+    })));
+  }, [connections]);
 
   return (
     <TabContext.Provider
