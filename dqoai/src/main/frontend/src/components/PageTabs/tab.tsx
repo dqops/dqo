@@ -28,7 +28,7 @@ const Tab = ({
   return (
     <div
       className={clsx(
-        'text-sm leading-20 text-black px-4 py-2 cursor-pointer flex text-gray-700 font-medium space-x-4',
+        'text-sm leading-20 text-black px-4 py-2 cursor-pointer flex text-gray-700 font-medium space-x-4 items-center',
         active ? 'font-semibold relative bg-white border-b-2 border-blue-600 text-blue-700 rounded-t-md shadow-sm' : '',
       )}
       onClick={() => onChange && onChange(tab)}

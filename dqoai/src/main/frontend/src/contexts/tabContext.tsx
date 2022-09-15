@@ -6,12 +6,6 @@ import {findNode} from '../utils/tree';
 const TabContext = React.createContext({} as any);
 
 function TabProvider(props: any) {
-  const [activeDatabaseTab, setActiveDatabaseTab] = useState<string>();
-  const [activeTableTab, setActiveTableTab] = useState<string>();
-  const [activeColumnTab, setActiveColumnTab] = useState<string>();
-  const [databaseTabs, setDatabaseTabs] = useState<ITab[]>([]);
-  const [tableTabs, setTableTabs] = useState<ITab[]>([]);
-  const [columnTabs, setColumnTabs] = useState<ITab[]>([]);
   const [treeData] = useState<TDataNode[]>([
     {
       key: "dqo-ai",
@@ -100,101 +94,65 @@ function TabProvider(props: any) {
       ]
     },
   ]);
+  const [tabs, setTabs] = useState<ITab[]>([]);
+  const [activeTab, setActiveTab] = useState<string>();
   
-  const addDatabaseTab = (node: TDataNode) => {
-    if (databaseTabs.find((item) => item.value === node.key.toString())) {
-      setActiveDatabaseTab(node.key.toString());
-    } else {
-      setActiveDatabaseTab(node.key.toString());
-      setDatabaseTabs([...databaseTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
+  const changeActiveTab = (node: TDataNode) => {
+    const existTab = tabs.find((item) => item.value === node.key.toString());
+    if (existTab) {
+      setActiveTab(node.key.toString());
+      return;
     }
-  };
+
+    const newTab = {
+      label: node.title?.toString() || '',
+      value: node.key.toString()
+    };
   
-  const closeDatabaseTab = (value: string) => {
-    setDatabaseTabs(databaseTabs.filter((item) => item.value !== value));
-    if (value === activeDatabaseTab) {
-      setTableTabs([]);
-      setActiveDatabaseTab('');
-    }
-  };
-
-  const addTableTab = (node: TDataNode) => {
-    const databaseTab = node.key.toString().split('.')[0];
-    const parentNode = findNode(treeData, databaseTab);
-    if (parentNode) {
-      addDatabaseTab(parentNode);
-    }
-    setActiveTableTab(node.key.toString());
-    if (activeDatabaseTab === databaseTab) {
-      const exist = tableTabs.find((item) => item.value === node.key.toString());
-      if (!exist) {
-        setTableTabs([...tableTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
-      }
+    if (activeTab) {
+      const newTabs = tabs.map((item) => item.value === activeTab ? newTab : item);
+      setTabs(newTabs);
     } else {
-      setTableTabs([{ label: node.title?.toString() || '', value: node.key.toString() }])
+      setTabs([newTab]);
     }
-  };
-  
-  const closeTableTab = (value: string) => {
-    const newTableTabs = tableTabs.filter((item) => item.value !== value);
-    setTableTabs(newTableTabs);
-    if (value === activeTableTab) {
-      setColumnTabs([]);
-      setActiveTableTab(newTableTabs[newTableTabs.length - 1]?.value);
-    }
-  };
-
-  const addColumnTab = (node: TDataNode) => {
-    const keys = node.key.toString().split('.');
-    keys.pop();
-    const tableTab = keys.join('.');
-    const parentNode = findNode(treeData, tableTab);
-
-    if (parentNode) {
-      addTableTab(parentNode);
-    }
-    setActiveColumnTab(node.key.toString());
-    if (activeTableTab === tableTab) {
-      const exist = columnTabs.find((item) => item.value === node.key.toString());
-      if (!exist) {
-        setColumnTabs([...columnTabs, { label: node.title?.toString() || '', value: node.key.toString() }])
-      }
-    } else {
-      setColumnTabs([{ label: node.title?.toString() || '', value: node.key.toString() }])
-    }
-  };
-
-  const addTab = (node: TDataNode) => {
-    if (node.level === TREE_LEVEL.DATABASE) {
-      addDatabaseTab(node);
-    }
-    if (node.level === TREE_LEVEL.TABLE) {
-      addTableTab(node);
-    }
-    if (node.level === TREE_LEVEL.COLUMN) {
-      addColumnTab(node);
-    }
+    setActiveTab(node.key.toString());
   }
-
+  
+  const closeTab = (value: string) => {
+    const newTabs = tabs.filter((item) => item.value !== value);
+    setTabs(newTabs);
+    if (value === activeTab) {
+      setActiveTab(newTabs[newTabs.length - 1]?.value);
+    }
+  };
+  
   const getTabLabel = useCallback((value: string) => findNode(treeData, value)?.title, [treeData]);
+
+  const onAddTab = () => {
+    const arr = tabs.filter((item) => item.type === 'editor').map((item) => parseInt(item.value, 10));
+    const maxEditor = Math.max(...arr, 0);
+
+    const newTab = {
+      label: `New Tab`,
+      value: `${maxEditor + 1}`,
+      type: 'editor'
+    }
+    
+    setTabs([...tabs, newTab]);
+    setActiveTab(newTab.value);
+  };
 
   return (
     <TabContext.Provider
       value={{
-        databaseTabs,
-        activeDatabaseTab,
-        setActiveDatabaseTab,
-        closeDatabaseTab,
-        tableTabs,
-        activeTableTab,
-        setActiveTableTab,
-        closeTableTab,
-        addTab,
+        changeActiveTab,
         treeData,
-        activeColumnTab,
-        setActiveColumnTab,
-        columnTabs,
         getTabLabel,
+        tabs,
+        activeTab,
+        setActiveTab,
+        closeTab,
+        onAddTab,
       }}
       {...props}
     />
