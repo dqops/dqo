@@ -41,7 +41,7 @@ public class ColumnsController {
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns")
     @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table")
-    public ResponseEntity<Flux<ColumnModel>> getSchemas(
+    public ResponseEntity<Flux<ColumnModel>> getColumns(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {

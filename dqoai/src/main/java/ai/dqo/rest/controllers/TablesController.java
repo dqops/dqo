@@ -45,7 +45,7 @@ public class TablesController {
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables")
     @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema")
-    public ResponseEntity<Flux<TableModel>> getSchemas(
+    public ResponseEntity<Flux<TableModel>> getTables(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
