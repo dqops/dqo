@@ -31,8 +31,8 @@
     "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run build:apiclient && react-scripts start",
+    "build": "npm run build:apiclient && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:apiclient": "rimraf ./src/api/* && node node/node_modules/npm/bin/npx-cli.js @openapitools/openapi-generator-cli@cli-4.3.1 generate --additional-properties=supportsES6,withInterfaces,useSingleRequestParameter -i ../../../target/swagger/dqo-ui-swagger.json -g typescript-axios -o ./src/api"
