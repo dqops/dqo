@@ -2,6 +2,9 @@ package ai.dqo.rest.server;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -15,7 +18,7 @@ import java.util.Collections;
  * Spring boot swagger configuration. Configures how Swagger shows the UI.
  */
 @Configuration
-public class SwaggerConfiguration {
+public class SwaggerConfiguration implements WebFluxConfigurer {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "DQO.ai REST API",
@@ -38,5 +41,14 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String baseUrl = "";
+        registry.
+                addResourceHandler(baseUrl + "/swagger-ui/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
+                .resourceChain(false);
     }
 }

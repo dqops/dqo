@@ -41,7 +41,7 @@ public class SchemasController {
      * @return List of schemas inside a connection.
      */
     @GetMapping("/{connectionName}/schemas")
-    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection")
+    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class)
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @Parameter(description = "Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();

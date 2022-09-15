@@ -43,10 +43,10 @@ public class ConnectionsController {
      * @return List of connections.
      */
     @GetMapping
-    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connection")
+    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connection", response = ConnectionModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 200, message = "OK", response = ConnectionModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Flux<ConnectionModel>> getAllConnections() {
@@ -68,10 +68,10 @@ public class ConnectionsController {
      * @return Connection model with the connection name and the connection specification.
      */
     @GetMapping("/{connectionName}")
-    @ApiOperation(value = "getConnection", notes = "Return the connection specification")
+    @ApiOperation(value = "getConnection", notes = "Return the connection specification", response = ConnectionModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection returned"),
+            @ApiResponse(code = 200, message = "Connection returned", response = ConnectionModel.class),
             @ApiResponse(code = 404, message = "Connection not found", response = SpringErrorPayload.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
@@ -101,10 +101,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PostMapping("/{connectionName}")
-    @ApiOperation(value = "createConnection", notes = "Creates a new connection")
+    @ApiOperation(value = "createConnection", notes = "Creates a new connection", response = Void.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = SpringErrorPayload.class), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields", response = SpringErrorPayload.class),
             @ApiResponse(code = 409, message = "Connection with the same name already exist", response = SpringErrorPayload.class),
@@ -140,10 +140,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}")
-    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection")
+    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully updated"),
+            @ApiResponse(code = 204, message = "Connection successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = SpringErrorPayload.class), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found", response = SpringErrorPayload.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
@@ -173,10 +173,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @DeleteMapping("/{connectionName}")
-    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
+    @ApiOperation(value = "deleteConnection", notes = "Deletes a connection", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully deleted"),
+            @ApiResponse(code = 204, message = "Connection successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Connection not found", response = SpringErrorPayload.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
