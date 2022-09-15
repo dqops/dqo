@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 
-import * as ConnectionApi from '../../api/connection.api';
+import * as ConnectionApi from '../../services/connection.api';
 import { CONNECTION_ACTION } from '../types';
 
 export const getConnectionsRequest = () => ({

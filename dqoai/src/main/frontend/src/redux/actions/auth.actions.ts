@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 
-import * as AuthApi from '../../api/auth.api';
+import * as AuthApi from '../../services/auth.api';
 import { AUTH_ACTION } from '../types';
 
 export const fetchCurrentUserRequest = () => ({
