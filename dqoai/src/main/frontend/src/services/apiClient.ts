@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { ConnectionsApiFactory } from '../api';
 
-const apiClient = axios.create({
-  baseURL: 'http://localhost:8888',
-});
-
-export default apiClient;
+export const ConnectionApiClient = ConnectionsApiFactory(
+  {},
+  "http://localhost:8888",
+  axios
+);
