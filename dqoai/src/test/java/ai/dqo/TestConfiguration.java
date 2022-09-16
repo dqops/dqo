@@ -18,6 +18,7 @@ package ai.dqo;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
@@ -27,7 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
  * Configuration for the unit tests.
  */
 @SpringBootConfiguration
-@EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class, WebMvcAutoConfiguration.class })
 @EnableConfigurationProperties
 @ComponentScan("ai.dqo")
 @ActiveProfiles("test")
