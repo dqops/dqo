@@ -1,175 +1,108 @@
-import React, { useCallback, useState } from 'react';
-
-import { TREE_LEVEL } from '../shared/enums';
-import { ITab, TDataNode } from '../shared/interfaces';
-import { findNode } from '../utils/tree';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ITab, TDataNode} from '../shared/interfaces';
+import {TREE_LEVEL} from '../shared/enums';
+import {findNode} from '../utils/tree';
+import {useActionDispatch} from '../hooks/useActionDispatch';
+import {getAllConnections} from '../redux/actions/connection.actions';
+import {useSelector} from 'react-redux';
+import {IRootState} from '../redux/reducers';
 
 const TabContext = React.createContext({} as any);
 
 function TabProvider(props: any) {
-  const [treeData] = useState<TDataNode[]>([
+  const [treeData, setTreeData] = useState<TDataNode[]>([
     {
-      key: 'dqo-ai',
-      title: 'dqo-ai',
+      key: "dqo-ai",
+      title: "dqo-ai",
       level: TREE_LEVEL.DATABASE,
       children: [
         {
           key: 'dqo-ai.schema',
-          title: 'Schema',
+          title: "Schema",
           level: TREE_LEVEL.SCHEMA,
           children: [
             {
-              key: 'dqo-ai.public',
-              title: 'Public',
+              key: "dqo-ai.public",
+              title: "Public",
               level: TREE_LEVEL.TABLE,
               children: [
-                {
-                  key: 'dqo-ai.public.id',
-                  title: 'Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.public.title',
-                  title: 'Title',
-                  level: TREE_LEVEL.COLUMN,
-                },
-              ],
+                { key: "dqo-ai.public.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.public.title", title: "Title", level: TREE_LEVEL.COLUMN },
+              ]
             },
             {
-              key: 'dqo-ai.album',
-              title: 'Album',
+              key: "dqo-ai.album",
+              title: "Album",
               level: TREE_LEVEL.TABLE,
               children: [
-                {
-                  key: 'dqo-ai.album.id',
-                  title: 'Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.album.title',
-                  title: 'Title',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.album.artistId',
-                  title: 'Artist Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-              ],
+                { key: "dqo-ai.album.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.album.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.album.artistId", title: "Artist Id", level: TREE_LEVEL.COLUMN },
+              ]
             },
             {
-              key: 'dqo-ai.customer',
-              title: 'Customer',
+              key: "dqo-ai.customer",
+              title: "Customer",
               level: TREE_LEVEL.TABLE,
               children: [
-                {
-                  key: 'dqo-ai.customer.id',
-                  title: 'Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.customer.title',
-                  title: 'Title',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.customer.firstName',
-                  title: 'FirstName',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.customer.lastName',
-                  title: 'LastName',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.customer.email',
-                  title: 'email',
-                  level: TREE_LEVEL.COLUMN,
-                },
-              ],
+                { key: "dqo-ai.customer.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.customer.email", title: "email", level: TREE_LEVEL.COLUMN },
+              ]
             },
             {
-              key: 'dqo-ai.employee',
-              title: 'Employee',
+              key: "dqo-ai.employee",
+              title: "Employee",
               level: TREE_LEVEL.TABLE,
               children: [
-                {
-                  key: 'dqo-ai.employee.id',
-                  title: 'Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.employee.title',
-                  title: 'Title',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.employee.firstName',
-                  title: 'FirstName',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.employee.lastName',
-                  title: 'LastName',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.employee.email',
-                  title: 'email',
-                  level: TREE_LEVEL.COLUMN,
-                },
-              ],
+                { key: "dqo-ai.employee.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.firstName", title: "FirstName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.lastName", title: "LastName", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.employee.email", title: "email", level: TREE_LEVEL.COLUMN },
+              ]
             },
             {
-              key: 'dqo-ai.invoice',
-              title: 'Invoice',
+              key: "dqo-ai.invoice",
+              title: "Invoice",
               level: TREE_LEVEL.TABLE,
               children: [
-                {
-                  key: 'dqo-ai.invoice.id',
-                  title: 'Id',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.invoice.title',
-                  title: 'Title',
-                  level: TREE_LEVEL.COLUMN,
-                },
-                {
-                  key: 'dqo-ai.invoice.amount',
-                  title: 'Amount',
-                  level: TREE_LEVEL.COLUMN,
-                },
-              ],
+                { key: "dqo-ai.invoice.id", title: "Id", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.invoice.title", title: "Title", level: TREE_LEVEL.COLUMN },
+                { key: "dqo-ai.invoice.amount", title: "Amount", level: TREE_LEVEL.COLUMN },
+              ]
             },
-          ],
-        },
-      ],
+          ]
+        }
+      ]
     },
     {
-      key: 'documati',
-      title: 'documati',
+      key: "documati",
+      title: "documati",
       level: TREE_LEVEL.DATABASE,
       children: [
         {
-          key: 'documati.schema',
-          title: 'Schema',
+          key: "documati.schema",
+          title: "Schema",
           level: TREE_LEVEL.SCHEMA,
           children: [
             {
-              key: 'documati.public',
+              key: "documati.public",
               title: 'Public',
-              level: TREE_LEVEL.TABLE,
-            },
-          ],
-        },
-      ],
+              level: TREE_LEVEL.TABLE
+            }
+          ]
+        }
+      ]
     },
   ]);
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
-
+  const dispatch = useActionDispatch();
+  const { connections } = useSelector((state: IRootState) => state.connection);
+  
   const changeActiveTab = (node: TDataNode) => {
     const existTab = tabs.find((item) => item.value === node.key.toString());
     if (existTab) {
@@ -179,18 +112,18 @@ function TabProvider(props: any) {
 
     const newTab = {
       label: node.title?.toString() || '',
-      value: node.key.toString(),
+      value: node.key.toString()
     };
-
+  
     if (activeTab) {
-      const newTabs = tabs.map((item) => (item.value === activeTab ? newTab : item));
+      const newTabs = tabs.map((item) => item.value === activeTab ? newTab : item);
       setTabs(newTabs);
     } else {
       setTabs([newTab]);
     }
     setActiveTab(node.key.toString());
-  };
-
+  }
+  
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
     setTabs(newTabs);
@@ -198,24 +131,34 @@ function TabProvider(props: any) {
       setActiveTab(newTabs[newTabs.length - 1]?.value);
     }
   };
-
+  
   const getTabLabel = useCallback((value: string) => findNode(treeData, value)?.title, [treeData]);
 
   const onAddTab = () => {
-    const arr = tabs
-      .filter((item) => item.type === 'editor')
-      .map((item) => parseInt(item.value, 10));
+    const arr = tabs.filter((item) => item.type === 'editor').map((item) => parseInt(item.value, 10));
     const maxEditor = Math.max(...arr, 0);
 
     const newTab = {
       label: `New Tab`,
       value: `${maxEditor + 1}`,
-      type: 'editor',
-    };
-
+      type: 'editor'
+    }
+    
     setTabs([...tabs, newTab]);
     setActiveTab(newTab.value);
   };
+
+  useEffect(() => {
+    dispatch(getAllConnections());
+  }, []);
+
+  useEffect(() => {
+    setTreeData(connections.map((item) => ({
+      key: item.name,
+      title: item.name,
+      level: TREE_LEVEL.DATABASE
+    })));
+  }, [connections]);
 
   return (
     <TabContext.Provider

@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^10.4.8",
+    "axios": "^0.27.2",
     "clsx": "^1.2.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^3.5.1",
@@ -25,14 +26,22 @@
     "react": "^18.2.0",
     "react-avatar": "^5.0.3",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
+    "redux": "^4.2.0",
+    "redux-thunk": "^2.4.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.8.2",
+    "@openapitools/openapi-generator-cli": "^1.0.18-4.3.1"
     "tailwindcss": "^3.1.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run build:apiclient && react-scripts start",
+    "build": "npm run build:apiclient && react-scripts build",
     "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build:apiclient": "rimraf ./src/api/* && node node/node_modules/npm/bin/npx-cli.js @openapitools/openapi-generator-cli@cli-4.3.1 generate --additional-properties=supportsES6,withInterfaces,useSingleRequestParameter -i ../../../target/swagger/dqo-ui-swagger.json -g typescript-axios -o ./src/api"
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
     "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx,json} --fix"
