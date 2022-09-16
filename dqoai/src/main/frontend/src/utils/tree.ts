@@ -1,6 +1,6 @@
-import {TDataNode} from '../shared/interfaces';
+import { TDataNode } from '../shared/interfaces';
 
-export const findNode = (treeData: TDataNode[], key: string): (TDataNode | undefined) => {
+export const findNode = (treeData: TDataNode[], key: string): TDataNode | undefined => {
   for (const item of treeData) {
     if (item.key === key) {
       return item;
@@ -12,4 +12,4 @@ export const findNode = (treeData: TDataNode[], key: string): (TDataNode | undef
       }
     }
   }
-}
+};

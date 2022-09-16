@@ -1,6 +1,6 @@
 export enum DATABASE_TYPE {
   BIGQUERY = 'bigquery',
-  SNOWFLAKE = 'snowflake'
+  SNOWFLAKE = 'snowflake',
 }
 
 export enum TREE_LEVEL {

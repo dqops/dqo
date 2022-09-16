@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface ILogoProps {
   variant?: string;
@@ -8,10 +8,7 @@ interface ILogoProps {
 }
 
 const Logo = (props: ILogoProps) => {
-
-  return (
-    <img src="/logo.png" {...props} />
-  );
+  return <img src='/logo.png' {...props} />;
 };
 
 export default Logo;
