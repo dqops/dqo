@@ -2,7 +2,7 @@
 The query for this check counts unique values in a specified column.
 
 Successfully classified records are assigned value of 1, and any other values, 0.
-Those values are then summed (so effectively we perform count of valid values).
+Those values are then summed (so the counting of valid values is effectively performed).
 ___
 ## Jinja Template
 === "BigQuery"
