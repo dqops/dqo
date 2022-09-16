@@ -3,11 +3,11 @@ import { combineReducers } from 'redux';
 import connectionReducer, { IConnectionState } from './connection.reducer';
 
 export interface IRootState {
-  connection: IConnectionState
+  connection: IConnectionState;
 }
 
 const rootReducer = combineReducers<IRootState>({
-  connection: connectionReducer
+  connection: connectionReducer,
 });
 
 export default rootReducer;

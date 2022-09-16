@@ -1,9 +1,11 @@
 import React from 'react';
+
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Routes from "./Routes";
+
 import AppProvider from './contexts/AppProvider';
 import store from './redux/store';
-import { Provider } from 'react-redux';
+import Routes from './Routes';
 
 const App = () => {
   return (
