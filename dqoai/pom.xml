@@ -35,9 +35,6 @@
 		<java.version>15</java.version>
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
-		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-		<node.version>v16.13.0</node.version>
-		<npm.version>8.1.0</npm.version>
 	</properties>
 
 	<reporting>
@@ -103,11 +100,11 @@
 					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
-						<version>${frontend-maven-plugin.version}</version>
+						<version>1.12.1</version>
 						<configuration>
 							<workingDirectory>src/main/frontend</workingDirectory>
-							<nodeVersion>${node.version}</nodeVersion>
-							<npmVersion>${npm.version}</npmVersion>
+							<nodeVersion>v16.13.0</nodeVersion>
+							<npmVersion>8.19.2</npmVersion>
 						</configuration>
 						<executions>
 							<execution>
@@ -163,7 +160,7 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
 									<resources>
 										<resource>
 											<directory>src/main/frontend/build</directory>
@@ -178,10 +175,10 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
 									<resources>
 										<resource>
-											<directory>${basedir}/target/swagger</directory>
+											<directory>${project.basedir}/target/swagger</directory>
 										</resource>
 									</resources>
 								</configuration>
@@ -428,7 +425,7 @@
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-secretmanager</artifactId>
-			<version>2.3.1</version>
+			<version>2.3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
@@ -470,7 +467,7 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 
-				<!-- and additional exclussion -->
+				<!-- and additional exclusion -->
 				<exclusion>
 					<groupId>ch.qos.reload4j</groupId>
 					<artifactId>reload4j</artifactId>
@@ -727,7 +724,7 @@
 							<schemes>http</schemes>
 							<host>localhost:8888</host>
 							<basePath>/</basePath>
-							<swaggerDirectory>${basedir}/target/swagger</swaggerDirectory>
+							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
 							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
 							<outputFormats>JSON,YAML</outputFormats>
 							<info>
@@ -818,6 +815,47 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+							<generatorName>typescript-axios</generatorName>
+							<output>${project.basedir}/src/main/frontend/src/api</output>
+							<configOptions>
+								<supportsES6>true</supportsES6>
+								<withInterfaces>true</withInterfaces>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
+							<arguments>
+								<argument>${project.basedir}/src/main/frontend/src/api</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
