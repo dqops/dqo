@@ -112,13 +112,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 
@@ -166,13 +170,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 
