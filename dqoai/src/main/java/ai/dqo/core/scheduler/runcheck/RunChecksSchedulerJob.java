@@ -82,18 +82,15 @@ public class RunChecksSchedulerJob implements Job {
             RunChecksSchedule runChecksSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
             CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
 
-            CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(checkRunReportingMode);
+            CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
+                    checkRunReportingMode, true);
             CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
                     checkExecutionContext, runChecksSchedule, progressListener);
-
-            if (checkRunReportingMode != CheckRunReportingMode.silent) {
-                TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
-                this.terminalTableWritter.writeWholeTable(tablesawDatasetTableModel, true);
-            }
 
             this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
         }
         catch (Exception ex) {
+            ex.printStackTrace(); // temporary
             throw new JobExecutionException(ex);
         }
     }

@@ -21,7 +21,7 @@ import ai.dqo.execution.sqltemplates.JinjaTemplateRenderOutput;
 /**
  * Progress event raised after an SQL template was rendered from a Jinja2 template.
  */
-public class SqlTemplateRenderedRendered extends CheckExecutionProgressEvent {
+public class SqlTemplateRenderedRenderedEvent extends CheckExecutionProgressEvent {
     private final JinjaTemplateRenderInput input;
     private final JinjaTemplateRenderOutput output;
 
@@ -31,7 +31,7 @@ public class SqlTemplateRenderedRendered extends CheckExecutionProgressEvent {
      * @param input  Input object with the template to be rendered.
      * @param output Rendered SQL or an error message.
      */
-    public SqlTemplateRenderedRendered(JinjaTemplateRenderInput input, JinjaTemplateRenderOutput output) {
+    public SqlTemplateRenderedRenderedEvent(JinjaTemplateRenderInput input, JinjaTemplateRenderOutput output) {
         this.input = input;
         this.output = output;
     }

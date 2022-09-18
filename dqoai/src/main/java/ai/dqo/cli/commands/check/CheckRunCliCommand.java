@@ -250,7 +250,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setSensorName(this.sensor);
         filters.setEnabled(this.enabled);
 
-        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode);
+        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {

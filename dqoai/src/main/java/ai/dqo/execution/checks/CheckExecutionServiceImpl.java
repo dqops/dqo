@@ -123,6 +123,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     dummySensorExecution, checkExecutionSummary);
         }
 
+        progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
+
         return checkExecutionSummary;
     }
 
@@ -153,6 +155,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     false, checkExecutionSummary);
         }
+
+        progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
 
         return checkExecutionSummary;
     }

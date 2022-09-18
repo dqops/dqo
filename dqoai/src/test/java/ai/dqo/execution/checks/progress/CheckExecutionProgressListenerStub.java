@@ -23,6 +23,27 @@ import java.util.List;
  */
 public class CheckExecutionProgressListenerStub implements CheckExecutionProgressListener {
     private final List<CheckExecutionProgressEvent> events = new ArrayList<>();
+    private boolean showSummary;
+
+    /**
+     * Returns the flag that says if the summary should be printed.
+     *
+     * @return true when the summary will be printed, false otherwise.
+     */
+    @Override
+    public boolean isShowSummary() {
+        return this.showSummary;
+    }
+
+    /**
+     * Sets the flag to show the summary.
+     *
+     * @param showSummary Show summary (effective only when the mode is not silent).
+     */
+    @Override
+    public void setShowSummary(boolean showSummary) {
+        this.showSummary = showSummary;
+    }
 
     /**
      * Called before checks are started on a target table.
@@ -120,7 +141,7 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onSqlTemplateRendered(SqlTemplateRenderedRendered event) {
+    public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
 		this.events.add(event);
     }
 
@@ -132,5 +153,15 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
     @Override
     public void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called after all data quality checks were executed.
+     *
+     * @param event Data quality check execution summary for one batch of checks.
+     */
+    @Override
+    public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
+        this.events.add(event);
     }
 }
