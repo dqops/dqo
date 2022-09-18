@@ -14,6 +14,7 @@ import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -31,7 +32,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
     private Scheduler scheduler;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
-    private SchedulerFactory schedulerFactory;
+    private SchedulerFactoryBean schedulerFactory;
     private SpringIoCJobFactory jobFactory;
     private TriggerFactory triggerFactory;
     private JobDataMapAdapter jobDataMapAdapter;
@@ -52,7 +53,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     @Autowired
     public JobSchedulerServiceImpl(DqoSchedulerConfigurationProperties schedulerConfigurationProperties,
-                                   SchedulerFactory schedulerFactory,
+                                   SchedulerFactoryBean schedulerFactory,
                                    SpringIoCJobFactory jobFactory,
                                    TriggerFactory triggerFactory,
                                    JobDataMapAdapter jobDataMapAdapter,
@@ -102,8 +103,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         try {
             this.scheduler = schedulerFactory.getScheduler();
             this.scheduler.setJobFactory(this.jobFactory);
-            this.scheduler.getListenerManager().addJobListener(this.scheduledJobListener);
-            this.scheduler.start();
+            if (this.scheduler.getListenerManager().getJobListeners().stream()
+                    .allMatch(l -> l != this.scheduledJobListener)) {
+                this.scheduler.getListenerManager().addJobListener(this.scheduledJobListener);
+            }
+            this.schedulerFactory.start();
         }
         catch (Exception ex) {
             LOG.error("Failed to start the job scheduler because " + ex.getMessage(), ex);
@@ -116,17 +120,21 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     public void defineDefaultJobs() {
         try {
-            this.runChecksJob = newJob(RunChecksSchedulerJob.class)
-                .withIdentity(JobKeys.RUN_CHECKS)
-                .storeDurably()
-                .build();
-            this.scheduler.addJob(this.runChecksJob, true);
+            if (!this.scheduler.checkExists(JobKeys.RUN_CHECKS)) {
+                this.runChecksJob = newJob(RunChecksSchedulerJob.class)
+                        .withIdentity(JobKeys.RUN_CHECKS)
+                        .storeDurably()
+                        .build();
+                this.scheduler.addJob(this.runChecksJob, true);
+            }
 
-            this.synchronizeMetadataJob = newJob(SynchronizeMetadataSchedulerJob.class)
-                .withIdentity(JobKeys.SYNCHRONIZE_METADATA)
-                .storeDurably()
-                .build();
-            this.scheduler.addJob(this.synchronizeMetadataJob, true);
+            if (!this.scheduler.checkExists(JobKeys.SYNCHRONIZE_METADATA)) {
+                this.synchronizeMetadataJob = newJob(SynchronizeMetadataSchedulerJob.class)
+                        .withIdentity(JobKeys.SYNCHRONIZE_METADATA)
+                        .storeDurably()
+                        .build();
+                this.scheduler.addJob(this.synchronizeMetadataJob, true);
+            }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getScanMetadataCronSchedule();
             RunChecksSchedule scanMetadataScheduleWithTZ = new RunChecksSchedule(new RecurringScheduleSpec(scanMetadataCronSchedule), "UTC");
@@ -147,7 +155,21 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     public void shutdown() {
         try {
             if (this.scheduler != null) {
-                this.scheduler.shutdown();
+                List<? extends Trigger> triggersOfRunChecks = this.scheduler.getTriggersOfJob(JobKeys.RUN_CHECKS);
+                if (triggersOfRunChecks != null) {
+                    for (Trigger trigger : triggersOfRunChecks) {
+                        this.scheduler.unscheduleJob(trigger.getKey());
+                    }
+                }
+
+                List<? extends Trigger> triggersOfSynchronizeMeta = this.scheduler.getTriggersOfJob(JobKeys.SYNCHRONIZE_METADATA);
+                if (triggersOfRunChecks != null) {
+                    for (Trigger trigger : triggersOfSynchronizeMeta) {
+                        this.scheduler.unscheduleJob(trigger.getKey());
+                    }
+                }
+
+                this.schedulerFactory.stop();
             }
             this.scheduler = null;
         }

@@ -1,6 +1,8 @@
 spring:
   main:
     lazy-initialization: true
+  quartz:
+    wait-for-jobs-to-complete-on-shutdown: true
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
@@ -13,7 +15,7 @@ spring:
       enabled: false
 
 server:
-  port: 8888
+  port: ${port:8888}
   shutdown: graceful
 
 logging:
@@ -27,6 +29,8 @@ logging:
           util: ERROR
     com:
       google: OFF
+    ai:
+      dqo: WARN
 
 picocli:
   ansi: true
@@ -38,6 +42,8 @@ https:
 dfs:
   permissions:
     enabled: false
+
+# when adding new parameters, remember to add them to DqoRootCliCommand, so they are listed by running "dqo --help" and they are documented
 
 dqo:
   python:
