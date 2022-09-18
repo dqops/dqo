@@ -1,7 +1,5 @@
 spring:
   main:
-#    web-application-type: NONE
-    allow-circular-references: true
     lazy-initialization: true
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -16,6 +14,7 @@ spring:
 
 server:
   port: 8888
+  shutdown: graceful
 
 logging:
   level:

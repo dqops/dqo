@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
+
 import static org.quartz.JobBuilder.newJob;
 import java.util.List;
 
@@ -141,6 +143,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      * Stops the scheduler.
      */
     @Override
+    @PreDestroy
     public void shutdown() {
         try {
             if (this.scheduler != null) {
