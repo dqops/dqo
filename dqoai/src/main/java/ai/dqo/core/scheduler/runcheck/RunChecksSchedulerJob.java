@@ -1,6 +1,5 @@
 package ai.dqo.core.scheduler.runcheck;
 
-import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
@@ -14,7 +13,6 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
-import ai.dqo.execution.checks.progress.SilentCheckExecutionProgressListener;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -90,7 +88,6 @@ public class RunChecksSchedulerJob implements Job {
             this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
         }
         catch (Exception ex) {
-            ex.printStackTrace(); // temporary
             throw new JobExecutionException(ex);
         }
     }

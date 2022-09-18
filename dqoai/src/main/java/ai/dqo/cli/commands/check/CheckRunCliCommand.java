@@ -20,7 +20,7 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.check.impl.CheckService;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;

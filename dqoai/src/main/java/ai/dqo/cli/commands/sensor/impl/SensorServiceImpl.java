@@ -1,10 +1,9 @@
 package ai.dqo.cli.commands.sensor.impl;
 
 import ai.dqo.cli.commands.SensorFileExtension;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;

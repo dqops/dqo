@@ -1,6 +1,6 @@
 package ai.dqo.cli.terminal;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;

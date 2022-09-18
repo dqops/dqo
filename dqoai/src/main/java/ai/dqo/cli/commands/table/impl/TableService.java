@@ -16,7 +16,7 @@
 package ai.dqo.cli.commands.table.impl;
 
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import tech.tablesaw.api.Table;
 
 /**

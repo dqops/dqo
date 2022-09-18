@@ -1,6 +1,6 @@
 package ai.dqo.cli.terminal;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 
 public interface FileWritter {
 	/**

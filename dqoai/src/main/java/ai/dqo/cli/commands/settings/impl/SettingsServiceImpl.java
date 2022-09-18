@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli.commands.settings.impl;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.SettingsSpec;
 import ai.dqo.metadata.sources.SettingsWrapper;

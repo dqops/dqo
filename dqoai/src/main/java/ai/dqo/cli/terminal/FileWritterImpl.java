@@ -1,6 +1,6 @@
 package ai.dqo.cli.terminal;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
