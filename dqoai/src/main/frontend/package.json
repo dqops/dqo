@@ -36,13 +36,12 @@
     "@openapitools/openapi-generator-cli": "^2.5.2"
   },
   "scripts": {
-    "start": "npm run build:apiclient && react-scripts start",
-    "build": "npm run build:apiclient && react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx,json} --fix",
-    "build:apiclient": "rimraf ./src/api/* && openapi-generator-cli generate --additional-properties=supportsES6,withInterfaces,enumPropertyNaming=original,stringEnums=true,allowUnicodeIdentifiers=true -i ../../../target/swagger/dqo-ui-swagger.json -g typescript-axios -o ./src/api"
+    "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx,json} --fix"
   },
   "browserslist": {
     "production": [
