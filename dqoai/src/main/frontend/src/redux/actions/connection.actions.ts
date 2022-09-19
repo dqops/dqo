@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
-import { CONNECTION_ACTION } from '../types';
 import { ConnectionApiClient } from '../../services/apiClient';
+import { CONNECTION_ACTION } from '../types';
 
 export const getConnectionsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS,
@@ -14,7 +14,7 @@ export const getConnectionsSuccess = (data: any) => ({
 
 export const getConnectionsFailed = (error: any) => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS_ERROR,
-  error
+  error,
 });
 
 export const getAllConnections = () => async (dispatch: Dispatch) => {

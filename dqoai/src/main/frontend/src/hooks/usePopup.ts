@@ -10,7 +10,7 @@ function usePopup(ref: any) {
         setIsOpen(false);
       }
     },
-    [ref, isOpen]
+    [ref, isOpen],
   );
 
   useEffect(() => {

@@ -1,36 +1,36 @@
 import React from 'react';
 
+import { ReactComponent as AddSvg } from './svg/add.svg';
+import { ReactComponent as ArrowAltDownSvg } from './svg/arrow-alt-down.svg';
+import { ReactComponent as ArrowAltRightSvg } from './svg/arrow-alt-right.svg';
 import { ReactComponent as BellSvg } from './svg/bell.svg';
+import { ReactComponent as BigQueryBigSvg } from './svg/bigquery-big.svg';
+import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
 import { ReactComponent as ChartBarSvg } from './svg/chart-bar.svg';
+import { ReactComponent as CheckSvg } from './svg/check.svg';
+import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
+import { ReactComponent as CloseSvg } from './svg/close.svg';
 import { ReactComponent as CogSvg } from './svg/cog.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
 import { ReactComponent as FacebookSvg } from './svg/facebook.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
+import { ReactComponent as GridSvg } from './svg/grid.svg';
+import { ReactComponent as InfoSvg } from './svg/info.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
 import { ReactComponent as SearchSvg } from './svg/search.svg';
 import { ReactComponent as SelectorSvg } from './svg/selector.svg';
 import { ReactComponent as ShoppingBagSvg } from './svg/shopping-bag.svg';
+import { ReactComponent as SnowflakeBigSvg } from './svg/snowflake-big.svg';
+import { ReactComponent as SnowflakeSvg } from './svg/snowflake.svg';
+import { ReactComponent as TableSvg } from './svg/table.svg';
 import { ReactComponent as UploadSvg } from './svg/upload.svg';
-import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UserAddSvg } from './svg/user-add.svg';
 import { ReactComponent as UserCircleSvg } from './svg/user-circle.svg';
+import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
-import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
-import { ReactComponent as BigQueryBigSvg } from './svg/bigquery-big.svg';
-import { ReactComponent as SnowflakeSvg } from './svg/snowflake.svg';
-import { ReactComponent as InfoSvg } from './svg/info.svg';
-import { ReactComponent as CheckSvg } from './svg/check.svg';
-import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
-import { ReactComponent as SnowflakeBigSvg } from './svg/snowflake-big.svg';
-import { ReactComponent as CloseSvg } from './svg/close.svg';
-import { ReactComponent as TableSvg } from './svg/table.svg';
-import { ReactComponent as GridSvg } from './svg/grid.svg';
-import { ReactComponent as ArrowAltDownSvg } from './svg/arrow-alt-down.svg';
-import { ReactComponent as ArrowAltRightSvg } from './svg/arrow-alt-right.svg';
-import { ReactComponent as AddSvg } from './svg/add.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -49,7 +49,7 @@ const iconsMap: any = {
   user: UserSvg,
   'user-add': UserAddSvg,
   'user-circle': UserCircleSvg,
-  'users': UsersSvg,
+  users: UsersSvg,
   'x-circle': XCircleSvg,
   'big-query': BigQuerySvg,
   'bigquery-big': BigQueryBigSvg,
@@ -64,7 +64,7 @@ const iconsMap: any = {
   'arrow-alt-down': ArrowAltDownSvg,
   'arrow-alt-right': ArrowAltRightSvg,
   add: AddSvg,
-}
+};
 
 interface SvgIconProps {
   className?: string;
@@ -76,15 +76,13 @@ const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
   const Component = iconsMap[name];
 
   if (!Component) {
-    return <div />
+    return <div />;
   }
 
-  return (
-    React.cloneElement(<Component data-testid="svg-icon" />, {
-      className,
-      ...others,
-    })
-  );
+  return React.cloneElement(<Component data-testid='svg-icon' />, {
+    className,
+    ...others,
+  });
 };
 
 export default SvgIcon;
