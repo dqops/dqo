@@ -54,6 +54,8 @@ public class CheckServiceImpl implements CheckService {
     public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters, CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
         CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
-        return this.checkExecutionService.executeChecks(checkExecutionContext, checkSearchFilters, checkExecutionProgressListener, dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
+                checkExecutionContext, checkSearchFilters, checkExecutionProgressListener, dummyRun);
+        return checkExecutionSummary;
     }
 }

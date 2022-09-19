@@ -20,6 +20,18 @@ package ai.dqo.execution.checks.progress;
  */
 public interface CheckExecutionProgressListener {
     /**
+     * Returns the flag that says if the summary should be printed.
+     * @return true when the summary will be printed, false otherwise.
+     */
+    boolean isShowSummary();
+
+    /**
+     * Sets the flag to show the summary.
+     * @param showSummary Show summary (effective only when the mode is not silent).
+     */
+    void setShowSummary(boolean showSummary);
+
+    /**
      * Called before checks are started on a target table.
      * @param event Log event.
      */
@@ -77,7 +89,7 @@ public interface CheckExecutionProgressListener {
      * Called after an SQL template was rendered from a Jinja2 template.
      * @param event Log event.
      */
-    void onSqlTemplateRendered(SqlTemplateRenderedRendered event);
+    void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event);
 
     /**
      * Called before a sensor SQL is executed on a connection.
@@ -85,4 +97,9 @@ public interface CheckExecutionProgressListener {
      */
     void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event);
 
+    /**
+     * Called after all data quality checks were executed.
+     * @param event Data quality check execution summary for one batch of checks.
+     */
+    void onCheckExecutionFinished(CheckExecutionFinishedEvent event);
 }

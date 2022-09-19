@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { ConnectionsApiFactory, Configuration } from '../api';
 
-import { ConnectionsApiFactory } from '../api';
-
-export const ConnectionApiClient = ConnectionsApiFactory({}, 'http://localhost:8888', axios);
+export const ConnectionApiClient = ConnectionsApiFactory(
+  new Configuration(),
+  "http://localhost:8888",
+  axios
+);

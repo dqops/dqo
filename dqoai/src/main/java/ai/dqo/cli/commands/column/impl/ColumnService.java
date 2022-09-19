@@ -16,9 +16,8 @@
 package ai.dqo.cli.commands.column.impl;
 
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.metadata.sources.ColumnSpec;
-import tech.tablesaw.api.Table;
 
 /**
  * Service that performs column operations.

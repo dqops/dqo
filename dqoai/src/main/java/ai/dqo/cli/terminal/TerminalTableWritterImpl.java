@@ -1,6 +1,6 @@
 package ai.dqo.cli.terminal;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;
@@ -112,13 +112,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 
@@ -166,13 +170,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 

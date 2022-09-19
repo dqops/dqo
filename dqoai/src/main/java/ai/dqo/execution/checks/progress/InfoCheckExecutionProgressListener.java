@@ -17,15 +17,15 @@ package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.utils.serialization.JsonSerializer;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
 /**
  * Check execution progress listener that is reporting all operations to the console, performing a debug mode reporting.
  */
-@Component
 public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionProgressListener {
     /**
      * Creates a CLI progress listener using a terminal writer to print out the results.
@@ -149,7 +149,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
      * @param event Log event.
      */
     @Override
-    public void onSqlTemplateRendered(SqlTemplateRenderedRendered event) {
+    public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
     }
 
     /**

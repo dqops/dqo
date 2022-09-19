@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Connections", description = "Connection management")
 public class ConnectionsController {
-    private UserHomeContextFactory userHomeContextFactory;
+    private final UserHomeContextFactory userHomeContextFactory;
 
     @Autowired
     public ConnectionsController(UserHomeContextFactory userHomeContextFactory) {
@@ -101,10 +101,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PostMapping("/{connectionName}")
-    @ApiOperation(value = "createConnection", notes = "Creates a new connection", response = Void.class)
+    @ApiOperation(value = "createConnection", notes = "Creates a new connection")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New connection successfully created", response = Void.class),
+            @ApiResponse(code = 201, message = "New connection successfully created"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = SpringErrorPayload.class), // TODO: returned when the validation failed
             @ApiResponse(code = 406, message = "Rejected, missing required fields", response = SpringErrorPayload.class),
             @ApiResponse(code = 409, message = "Connection with the same name already exist", response = SpringErrorPayload.class),
@@ -140,10 +140,10 @@ public class ConnectionsController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}")
-    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection", response = Void.class)
+    @ApiOperation(value = "updateConnection", notes = "Updates an existing connection")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully updated", response = Void.class),
+            @ApiResponse(code = 204, message = "Connection successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = SpringErrorPayload.class), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found", response = SpringErrorPayload.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )

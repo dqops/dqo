@@ -17,7 +17,7 @@ package ai.dqo.cli.commands.table.impl;
 
 
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;

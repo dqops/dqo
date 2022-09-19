@@ -17,16 +17,13 @@ package ai.dqo.cli.commands.connection.impl;
 
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
-import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-
-import java.util.List;
 
 /**
  * Connection management service.

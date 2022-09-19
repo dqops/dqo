@@ -19,7 +19,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.BeforeSqlTemplateRenderEvent;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.SqlTemplateRenderedRendered;
+import ai.dqo.execution.checks.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.utils.python.PythonCallerService;
 import ai.dqo.utils.python.PythonExecutionException;
@@ -107,11 +107,11 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
 
         if (output.getError() != null) {
-            progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRendered(inputDto, output));
+            progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
             throw new PythonExecutionException("Quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
         }
 
-        progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRendered(inputDto, output));
+        progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
         return output.getResult();
     }
 }

@@ -7,8 +7,9 @@ public interface CheckExecutionProgressListenerProvider {
     /**
      * Returns a check execution progress listener for the requested reporting level.
      *
-     * @param reportingMode Reporting level.
+     * @param reportingMode         Reporting level.
+     * @param writeSummaryToConsole Write the summary after running the checks to the console.
      * @return Check execution progress listener.
      */
-    CheckExecutionProgressListener getProgressListener(CheckRunReportingMode reportingMode);
+    CheckExecutionProgressListener getProgressListener(CheckRunReportingMode reportingMode, boolean writeSummaryToConsole);
 }

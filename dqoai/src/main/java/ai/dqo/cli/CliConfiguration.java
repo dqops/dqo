@@ -139,13 +139,4 @@ public class CliConfiguration {
 
         return lineReader;
     }
-
-    /**
-     * Creates a default Quartz scheduler factory.
-     * @return Quartz default scheduler factory.
-     */
-    @Bean(name = "quartsSchedulerFactory")
-    public SchedulerFactory quartsSchedulerFactory() {
-        return new StdSchedulerFactory();
-    }
 }
