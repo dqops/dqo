@@ -12,4 +12,5 @@ export const findNode = (treeData: TDataNode[], key: string): TDataNode | undefi
       }
     }
   }
+  return undefined;
 };

@@ -19,7 +19,7 @@ const ConnectionsTree = () => {
     // TODO Load tables
   };
 
-  const onClick = (event: any, node: DataNode) => {
+  const onClick = (_event: any, node: DataNode) => {
     if (history.location.pathname !== '/test') {
       history.push('/test');
     }
