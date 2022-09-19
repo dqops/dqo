@@ -1,5 +1,5 @@
-import { CONNECTION_ACTION } from '../types';
 import { IConnection } from '../../shared/interfaces';
+import { CONNECTION_ACTION } from '../types';
 
 export interface IConnectionState {
   connections: IConnection[];
@@ -31,7 +31,7 @@ const connectionReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
-        error: action.error
+        error: action.error,
       };
     default:
       return state;

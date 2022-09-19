@@ -41,16 +41,16 @@ export interface IConnection {
     comments?: IComment[];
     database_name: string;
     default_dimensions?: {
-      dimension_1: IDimension,
-      dimension_2: IDimension,
-      dimension_3: IDimension,
-      dimension_4: IDimension,
-      dimension_5: IDimension,
-      dimension_6: IDimension,
-      dimension_7: IDimension,
-      dimension_8: IDimension,
+      dimension_1: IDimension;
+      dimension_2: IDimension;
+      dimension_3: IDimension;
+      dimension_4: IDimension;
+      dimension_5: IDimension;
+      dimension_6: IDimension;
+      dimension_7: IDimension;
+      dimension_8: IDimension;
     };
-    default_time_series?: IDefaultTimeSeries,
+    default_time_series?: IDefaultTimeSeries;
     password?: string;
     properties: any;
     provider_type: string;
@@ -58,9 +58,9 @@ export interface IConnection {
       cron_expression: string;
       disable: boolean;
     };
-    snowflake?: ISnowflake
+    snowflake?: ISnowflake;
     time_zone?: string;
     url?: string;
     user?: string;
-  }
+  };
 }

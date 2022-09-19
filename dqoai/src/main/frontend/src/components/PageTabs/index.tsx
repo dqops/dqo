@@ -1,7 +1,8 @@
-import React from "react";
-import Tab, { TabOption } from "./tab";
-import SvgIcon from '../SvgIcon';
+import React from 'react';
+
 import IconButton from '../IconButton';
+import SvgIcon from '../SvgIcon';
+import Tab, { TabOption } from './tab';
 
 export interface IPageTabsProps {
   tabs: TabOption[];
@@ -26,21 +27,19 @@ const PageTabs = ({
 
   return (
     <div className={`flex space-x-4 ${className}`}>
-      <div className="flex">
-        {
-          tabs.map((tab) => (
-            <Tab
-              key={tab.value}
-              tab={tab}
-              active={activeTab === tab.value}
-              onChange={onChangeTab}
-              onRemove={() => onRemoveTab(tab.value)}
-            />
-          ))
-        }
+      <div className='flex'>
+        {tabs.map((tab) => (
+          <Tab
+            key={tab.value}
+            tab={tab}
+            active={activeTab === tab.value}
+            onChange={onChangeTab}
+            onRemove={() => onRemoveTab(tab.value)}
+          />
+        ))}
       </div>
-      <IconButton className="bg-blue-100 hover:bg-opacity-80 w-8 h-8 m-1" onClick={onAddTab}>
-        <SvgIcon name="add" className="w-5 text-blue-500" />
+      <IconButton className='bg-blue-100 hover:bg-opacity-80 w-8 h-8 m-1' onClick={onAddTab}>
+        <SvgIcon name='add' className='w-5 text-blue-500' />
       </IconButton>
     </div>
   );
