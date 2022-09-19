@@ -12,10 +12,18 @@ public interface TerminalTableWritter {
 	CliOperationStatus writeTableToFile(TableModel tableModel);
 
 	/**
-	 * Renders a table model with paging.
-	 * @param tableData Table data.
-	 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+	 * Shows a tablesaw table and asks the user to pick one row.
+	 * @param question Question that is shown before the table.
+	 * @param table Table (tablesaw) data.
+	 * @return 0-based row index that was selected or the default value (may be null).
 	 */
+	Integer pickTableRowWithPaging(String question, Table table);
+
+		/**
+		 * Renders a table model with paging.
+		 * @param tableData Table data.
+		 * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
+		 */
 	void writeTable(FormattedTableDto<?> tableData, boolean addBorder);
 
 	/**
