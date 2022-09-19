@@ -7,7 +7,8 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -26,12 +27,6 @@
     "react/require-default-props": "off",
     // Allow non-defined react props as undefined
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "argsIgnorePattern": "^_"
-      }
-    ],
     "react/jsx-props-no-spreading": "off",
     "no-nested-ternary": "off",
     "react/button-has-type": "off",
@@ -72,6 +67,7 @@
           "caseInsensitive": true
         }
       }
-    ]
+    ],
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }
