@@ -4,25 +4,26 @@ import { SchemaApiClient } from '../../services/apiClient';
 import { SCHEMA_ACTION } from '../types';
 
 export const getSchemasRequest = () => ({
-  type: SCHEMA_ACTION.GET_SCHEMAS,
+  type: SCHEMA_ACTION.GET_SCHEMAS
 });
 
 export const getSchemasSuccess = (data: any) => ({
   type: SCHEMA_ACTION.GET_SCHEMAS_SUCCESS,
-  data,
+  data
 });
 
 export const getSchemasFailed = (error: any) => ({
   type: SCHEMA_ACTION.GET_SCHEMAS_ERROR,
-  error,
+  error
 });
 
-export const getSchemasByConnection = (connectionName: string) => async (dispatch: Dispatch) => {
-  dispatch(getSchemasRequest());
-  try {
-    const res = await SchemaApiClient.getSchemas(connectionName);
-    dispatch(getSchemasSuccess(res.data));
-  } catch (err) {
-    dispatch(getSchemasFailed(err));
-  }
-};
+export const getSchemasByConnection =
+  (connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getSchemasRequest());
+    try {
+      const res = await SchemaApiClient.getSchemas(connectionName);
+      dispatch(getSchemasSuccess(res.data));
+    } catch (err) {
+      dispatch(getSchemasFailed(err));
+    }
+  };

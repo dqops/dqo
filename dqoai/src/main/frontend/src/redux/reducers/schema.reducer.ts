@@ -10,7 +10,7 @@ export interface ISchemaState {
 const initialState: ISchemaState = {
   schemas: [],
   loading: false,
-  error: null,
+  error: null
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -18,20 +18,20 @@ const schemaReducer = (state = initialState, action: any) => {
     case SCHEMA_ACTION.GET_SCHEMAS:
       return {
         ...state,
-        loading: true,
+        loading: true
       };
     case SCHEMA_ACTION.GET_SCHEMAS_SUCCESS:
       return {
         ...state,
         loading: false,
         schemas: action.data,
-        error: null,
+        error: null
       };
     case SCHEMA_ACTION.GET_SCHEMAS_ERROR:
       return {
         ...state,
         loading: false,
-        error: action.error,
+        error: action.error
       };
     default:
       return state;

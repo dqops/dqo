@@ -19,7 +19,7 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  onAddTab,
+  onAddTab
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
@@ -27,7 +27,7 @@ const PageTabs = ({
 
   return (
     <div className={`flex space-x-4 ${className}`}>
-      <div className='flex'>
+      <div className="flex">
         {tabs.map((tab) => (
           <Tab
             key={tab.value}
@@ -38,8 +38,11 @@ const PageTabs = ({
           />
         ))}
       </div>
-      <IconButton className='bg-blue-100 hover:bg-opacity-80 w-8 h-8 m-1' onClick={onAddTab}>
-        <SvgIcon name='add' className='w-5 text-blue-500' />
+      <IconButton
+        className="bg-blue-100 hover:bg-opacity-80 w-8 h-8 m-1"
+        onClick={onAddTab}
+      >
+        <SvgIcon name="add" className="w-5 text-blue-500" />
       </IconButton>
     </div>
   );

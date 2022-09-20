@@ -10,7 +10,7 @@ export interface IRootState {
 
 const rootReducer = combineReducers<IRootState>({
   connection: connectionReducer,
-  schema: schemaReducer,
+  schema: schemaReducer
 });
 
 export default rootReducer;

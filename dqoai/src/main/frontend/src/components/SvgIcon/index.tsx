@@ -63,7 +63,7 @@ const iconsMap: any = {
   grid: GridSvg,
   'arrow-alt-down': ArrowAltDownSvg,
   'arrow-alt-right': ArrowAltRightSvg,
-  add: AddSvg,
+  add: AddSvg
 };
 
 interface SvgIconProps {
@@ -79,9 +79,9 @@ const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
     return <div />;
   }
 
-  return React.cloneElement(<Component data-testid='svg-icon' />, {
+  return React.cloneElement(<Component data-testid="svg-icon" />, {
     className,
-    ...others,
+    ...others
   });
 };
 

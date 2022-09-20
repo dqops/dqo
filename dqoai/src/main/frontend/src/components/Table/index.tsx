@@ -27,10 +27,10 @@ export const Table: React.FC<TableProps> = ({
   className,
   emptyMessage = 'No Data',
   onClickRow,
-  loading,
+  loading
 }) => {
   return (
-    <div className='w-full'>
+    <div className="w-full">
       <table className={className}>
         <thead>
           <tr>
@@ -39,7 +39,11 @@ export const Table: React.FC<TableProps> = ({
                 key={column.value}
                 className={`text-left px-2 pt-2 pb-2 text-black-200 text-base font-semibold min-w-20 pr-4 ${column.className}`}
               >
-                {column.header ? <>{column.header()}</> : <div>{column.label}</div>}
+                {column.header ? (
+                  <>{column.header()}</>
+                ) : (
+                  <div>{column.label}</div>
+                )}
               </th>
             ))}
           </tr>
@@ -47,10 +51,13 @@ export const Table: React.FC<TableProps> = ({
         <tbody>
           {loading ? (
             <tr>
-              <td colSpan={columns.length} className='py-5 min-h-80 text-base text-center'>
-                <div className='min-h-80 flex items-center justify-center'>
-                  <SvgIcon name='spinner' className='mr-2' />
-                  <span className='text-sm'>Loading...</span>
+              <td
+                colSpan={columns.length}
+                className="py-5 min-h-80 text-base text-center"
+              >
+                <div className="min-h-80 flex items-center justify-center">
+                  <SvgIcon name="spinner" className="mr-2" />
+                  <span className="text-sm">Loading...</span>
                 </div>
               </td>
             </tr>
@@ -58,23 +65,31 @@ export const Table: React.FC<TableProps> = ({
             <>
               {data.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length} className='py-5 text-base text-center'>
-                    <div className='min-h-80 flex items-center justify-center'>{emptyMessage}</div>
+                  <td
+                    colSpan={columns.length}
+                    className="py-5 text-base text-center"
+                  >
+                    <div className="min-h-80 flex items-center justify-center">
+                      {emptyMessage}
+                    </div>
                   </td>
                 </tr>
               ) : (
                 <>
                   {data.map((item, index) => (
                     <tr
-                      data-testid='table-row'
+                      data-testid="table-row"
                       key={index}
                       onClick={() => onClickRow && onClickRow(item)}
-                      className='border-b border-gray-150 last:border-b-0'
+                      className="border-b border-gray-150 last:border-b-0"
                     >
                       {columns.map((column) => (
                         <td
                           key={column.value}
-                          className={clsx('text-left px-2 py-4', column.className)}
+                          className={clsx(
+                            'text-left px-2 py-4',
+                            column.className
+                          )}
                         >
                           {column.render(item[column.value], item, index)}
                         </td>

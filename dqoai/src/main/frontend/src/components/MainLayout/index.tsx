@@ -11,18 +11,18 @@ interface LayoutProps {
 
 const MainLayout = ({ children }: LayoutProps) => {
   return (
-    <div className='flex min-h-screen'>
+    <div className="flex min-h-screen">
       <Sidebar />
-      <div className='flex flex-1'>
+      <div className="flex flex-1">
         <Header />
-        <div className='ml-70 mt-16 p-5 flex-1'>{children}</div>
+        <div className="ml-70 mt-16 p-5 flex-1">{children}</div>
       </div>
     </div>
   );
 };
 
 MainLayout.propTypes = {
-  children: PropTypes.any.isRequired,
+  children: PropTypes.any.isRequired
 };
 
 export default MainLayout;

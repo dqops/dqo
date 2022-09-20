@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
-import { DATABASE_TYPE } from '../../shared/enums';
+import { DATABASE_TYPE } from '@/shared/enums';
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);
@@ -29,7 +29,9 @@ const Dashboard = () => {
   return (
     <MainLayout>
       {step === 0 && <SelectDatabase onSelect={onSelect} />}
-      {step === 1 && <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />}
+      {step === 1 && (
+        <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
+      )}
     </MainLayout>
   );
 };

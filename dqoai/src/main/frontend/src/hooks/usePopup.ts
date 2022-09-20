@@ -10,7 +10,7 @@ function usePopup(ref: any) {
         setIsOpen(false);
       }
     },
-    [ref, isOpen],
+    [ref, isOpen]
   );
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function usePopup(ref: any) {
     isOpen,
     closeMenu,
     openMenu,
-    toggleMenu,
+    toggleMenu
   };
 }
 

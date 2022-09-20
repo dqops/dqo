@@ -32,18 +32,18 @@ const Input = ({
   onChange,
   onBlur,
   onClear,
-  dataTestId,
+  dataTestId
 }: IInputProps) => (
   <div>
-    <div className='flex space-x-1'>
+    <div className="flex space-x-1">
       <label
         htmlFor={name}
-        className='block text-base font-regular text-gray-700 mb-1 capitalize text-sm'
+        className="block text-base font-regular text-gray-700 mb-1 capitalize text-sm"
       >
         {label}
       </label>
     </div>
-    <div className='relative'>
+    <div className="relative">
       <input
         name={name}
         type={type || 'text'}
@@ -53,7 +53,7 @@ const Input = ({
             ? 'border border-red-500'
             : 'focus:ring-2 focus:ring-blue-400 focus:ring-opacity-80 focus:border-none border-gray-300',
           'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full sm:text-base rounded',
-          className,
+          className
         )}
         value={value}
         onChange={onChange}
@@ -61,12 +61,16 @@ const Input = ({
         data-testid={dataTestId}
       />
       {value && (
-        <div className='absolute top-1/2 right-4 bg-gray-50 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center'>
-          <SvgIcon name='subtract' className='cursor-pointer w-2 h-2' onClick={onClear} />
+        <div className="absolute top-1/2 right-4 bg-gray-50 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
+          <SvgIcon
+            name="subtract"
+            className="cursor-pointer w-2 h-2"
+            onClick={onClear}
+          />
         </div>
       )}
     </div>
-    {error && <div className='text-red-500 text-sm ml-2'>{helperText}</div>}
+    {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
   </div>
 );
 

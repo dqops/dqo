@@ -12,45 +12,56 @@ interface IDatabaseConnectionProps {
   onNext: () => void;
 }
 
-const DatabaseConnection = ({ type, onPrev, onNext }: IDatabaseConnectionProps) => {
+const DatabaseConnection = ({
+  type,
+  onPrev,
+  onNext
+}: IDatabaseConnectionProps) => {
   return (
     <div>
-      <div className='flex justify-between mb-4'>
+      <div className="flex justify-between mb-4">
         <div>
-          <div className='text-2xl font-semibold mb-3'>Connect a database</div>
+          <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>
-            {type === DATABASE_TYPE.BIGQUERY ? 'Google Bigquery' : 'Snowflake'} Connection Settings
+            {type === DATABASE_TYPE.BIGQUERY ? 'Google Bigquery' : 'Snowflake'}{' '}
+            Connection Settings
           </div>
         </div>
         <img
-          src={type === DATABASE_TYPE.BIGQUERY ? '/bigQuery.png' : '/snowflake.png'}
-          className='h-16'
-          alt='db logo'
+          src={
+            type === DATABASE_TYPE.BIGQUERY ? '/bigQuery.png' : '/snowflake.png'
+          }
+          className="h-16"
+          alt="db logo"
         />
       </div>
 
-      <div className='bg-white rounded-lg px-4 py-6 border border-gray-100'>
-        <Input label='Database Name' className='mb-4' />
-        <Input label='JDBC driver url' className='mb-4' />
-        <Input label='Username' className='mb-4' />
-        <Input label='Password' className='mb-6' />
+      <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
+        <Input label="Database Name" className="mb-4" />
+        <Input label="JDBC driver url" className="mb-4" />
+        <Input label="Username" className="mb-4" />
+        <Input label="Password" className="mb-6" />
 
-        {type === DATABASE_TYPE.BIGQUERY ? <BigqueryConnection /> : <SnowflakeConnection />}
-        <Input label='Timezone' className='mb-4' />
+        {type === DATABASE_TYPE.BIGQUERY ? (
+          <BigqueryConnection />
+        ) : (
+          <SnowflakeConnection />
+        )}
+        <Input label="Timezone" className="mb-4" />
 
-        <div className='flex space-x-4 justify-end mt-6'>
+        <div className="flex space-x-4 justify-end mt-6">
           <Button
-            color='primary'
-            variant='outlined'
-            label='Prev'
-            className='w-40'
+            color="primary"
+            variant="outlined"
+            label="Prev"
+            className="w-40"
             onClick={onPrev}
           />
           <Button
-            color='primary'
-            variant='contained'
-            label='Next'
-            className='w-40'
+            color="primary"
+            variant="contained"
+            label="Next"
+            className="w-40"
             onClick={onNext}
           />
         </div>

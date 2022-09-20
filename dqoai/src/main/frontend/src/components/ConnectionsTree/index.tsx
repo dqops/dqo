@@ -23,9 +23,9 @@ const ConnectionsTree = () => {
   };
 
   return (
-    <div className='px-4 text-gray-100'>
+    <div className="px-4 text-gray-100">
       <Tree
-        className='myCls'
+        className="myCls"
         showLine
         selectable={false}
         defaultExpandAll
@@ -34,11 +34,14 @@ const ConnectionsTree = () => {
         treeData={treeData}
         onExpand={() => {}}
         icon={(props: any) => {
-          if (props.data?.level === TREE_LEVEL.SCHEMA || props.data?.level === TREE_LEVEL.TABLE) {
-            return <SvgIcon name='grid' className='mr-2 w-4' />;
+          if (
+            props.data?.level === TREE_LEVEL.SCHEMA ||
+            props.data?.level === TREE_LEVEL.TABLE
+          ) {
+            return <SvgIcon name="grid" className="mr-2 w-4" />;
           }
           if (props.data?.level === TREE_LEVEL.COLUMN) {
-            return <SvgIcon name='table' className='mr-2 w-4' />;
+            return <SvgIcon name="table" className="mr-2 w-4" />;
           }
           return null;
         }}
@@ -46,11 +49,11 @@ const ConnectionsTree = () => {
           props.data?.children ? (
             <SvgIcon
               name={props.expanded ? 'arrow-alt-down' : 'arrow-alt-right'}
-              className='w-3 h-3'
+              className="w-3 h-3"
             />
           ) : null
         }
-        rootClassName='connection-tree'
+        rootClassName="connection-tree"
       />
     </div>
   );

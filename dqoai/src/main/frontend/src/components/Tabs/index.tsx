@@ -10,7 +10,13 @@ export interface TabsProps {
   onCloseTab?: (value: string) => void;
 }
 
-const Tabs = ({ tabs, className, activeTab, onChange, onCloseTab }: TabsProps) => {
+const Tabs = ({
+  tabs,
+  className,
+  activeTab,
+  onChange,
+  onCloseTab
+}: TabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
   };
