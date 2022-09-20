@@ -15,10 +15,6 @@ const ConnectionsTree = () => {
   const { changeActiveTab, treeData } = useTabs();
   const history = useHistory();
 
-  const onExpand = () => {
-    // TODO Load tables
-  };
-
   const onClick = (_event: any, node: DataNode) => {
     if (history.location.pathname !== '/test') {
       history.push('/test');
@@ -33,11 +29,10 @@ const ConnectionsTree = () => {
         showLine
         selectable={false}
         defaultExpandAll
-        onExpand={onExpand}
         defaultSelectedKeys={[]}
-        defaultCheckedKeys={[]}
         onClick={onClick}
         treeData={treeData}
+        onExpand={() => {}}
         icon={(props: any) => {
           if (props.data?.level === TREE_LEVEL.SCHEMA || props.data?.level === TREE_LEVEL.TABLE) {
             return <SvgIcon name='grid' className='mr-2 w-4' />;

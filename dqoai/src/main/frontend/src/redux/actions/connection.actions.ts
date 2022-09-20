@@ -26,3 +26,8 @@ export const getAllConnections = () => async (dispatch: Dispatch) => {
     dispatch(getConnectionsFailed(err));
   }
 };
+
+export const setActiveConnection = (activeConnection: string) => ({
+  type: CONNECTION_ACTION.SET_ACTIVE_CONNECTION,
+  activeConnection,
+});

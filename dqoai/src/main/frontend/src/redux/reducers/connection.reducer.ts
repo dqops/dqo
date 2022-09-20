@@ -1,16 +1,18 @@
-import { IConnection } from '../../shared/interfaces';
+import { ConnectionModel } from '../../api';
 import { CONNECTION_ACTION } from '../types';
 
 export interface IConnectionState {
-  connections: IConnection[];
+  connections: ConnectionModel[];
   loading: boolean;
   error: any;
+  activeConnection: string;
 }
 
 const initialState: IConnectionState = {
   connections: [],
   loading: false,
   error: null,
+  activeConnection: '',
 };
 
 const connectionReducer = (state = initialState, action: any) => {
@@ -32,6 +34,11 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         error: action.error,
+      };
+    case CONNECTION_ACTION.SET_ACTIVE_CONNECTION:
+      return {
+        ...state,
+        activeConnection: action.activeConnection,
       };
     default:
       return state;

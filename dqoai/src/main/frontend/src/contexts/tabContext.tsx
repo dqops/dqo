@@ -3,11 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { useActionDispatch } from '../hooks/useActionDispatch';
-import { getAllConnections } from '../redux/actions/connection.actions';
+import { getAllConnections, setActiveConnection } from '../redux/actions/connection.actions';
+import { getSchemasByConnection } from '../redux/actions/schema.actions';
 import { IRootState } from '../redux/reducers';
 import { TREE_LEVEL } from '../shared/enums';
 import { ITab, TDataNode } from '../shared/interfaces';
-import { findNode } from '../utils/tree';
+import { findNode, generateTreeNodes } from '../utils/tree';
 
 const TabContext = React.createContext({} as any);
 
@@ -103,10 +104,15 @@ function TabProvider(props: any) {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
   const dispatch = useActionDispatch();
-  const { connections } = useSelector((state: IRootState) => state.connection);
+  const { connections, activeConnection } = useSelector((state: IRootState) => state.connection);
+  const { schemas } = useSelector((state: IRootState) => state.schema);
 
   const changeActiveTab = (node: TDataNode) => {
     const existTab = tabs.find((item) => item.value === node.key.toString());
+    if (node.level === TREE_LEVEL.DATABASE) {
+      dispatch(setActiveConnection(node.key.toString()));
+      dispatch(getSchemasByConnection(node.key.toString()));
+    }
     if (existTab) {
       setActiveTab(node.key.toString());
       return;
@@ -152,19 +158,36 @@ function TabProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
+  const expandTab = (keys: string[], info: any) => {
+    console.log('keys', keys, info);
+  };
+
   useEffect(() => {
     dispatch(getAllConnections());
   }, []);
 
   useEffect(() => {
-    setTreeData(
-      connections.map((item) => ({
-        key: item.name,
-        title: item.name,
-        level: TREE_LEVEL.DATABASE,
-      })),
-    );
+    setTreeData(generateTreeNodes(connections, ['name'], TREE_LEVEL.DATABASE));
   }, [connections]);
+
+  useEffect(() => {
+    if (activeConnection) {
+      setTreeData(
+        treeData.map((item) =>
+          item.key.toString() === activeConnection
+            ? {
+                ...item,
+                children: generateTreeNodes(
+                  schemas,
+                  ['connectionName', 'schemaName'],
+                  TREE_LEVEL.SCHEMA,
+                ),
+              }
+            : item,
+        ),
+      );
+    }
+  }, [activeConnection, schemas]);
 
   return (
     <TabContext.Provider
@@ -177,6 +200,7 @@ function TabProvider(props: any) {
         setActiveTab,
         closeTab,
         onAddTab,
+        expandTab,
       }}
       {...props}
     />
