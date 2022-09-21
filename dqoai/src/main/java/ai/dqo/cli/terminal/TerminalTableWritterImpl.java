@@ -76,6 +76,9 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
 		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		if( height == 0) {
+			height = 1;
+		}
 		int rowsLeft = tableData.getRows().size();
 		int index = 0;
 
@@ -134,6 +137,9 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
 		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		if( height == 0) {
+			height = 1;
+		}
 		int rowsLeft = table.rowCount();
 		int index = 0;
 
