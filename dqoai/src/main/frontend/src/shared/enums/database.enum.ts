@@ -7,5 +7,6 @@ export enum TREE_LEVEL {
   DATABASE = 'database',
   SCHEMA = 'schema',
   TABLE = 'table',
-  COLUMN = 'column'
+  COLUMN = 'column',
+  ROOT = 'root'
 }

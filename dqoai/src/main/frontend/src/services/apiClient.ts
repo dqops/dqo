@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   ConnectionsApiFactory,
   Configuration,
-  SchemasApiFactory
+  SchemasApiFactory, TablesApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -13,6 +13,12 @@ export const ConnectionApiClient = ConnectionsApiFactory(
 );
 
 export const SchemaApiClient = SchemasApiFactory(
+  new Configuration(),
+  'http://localhost:8888',
+  axios
+);
+
+export const TableApiClient = TablesApiFactory(
   new Configuration(),
   'http://localhost:8888',
   axios

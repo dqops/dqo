@@ -12,4 +12,14 @@ export interface TDataNode extends DataNode {
   level: TREE_LEVEL;
   children?: TDataNode[];
   activeNode?: string;
+  collapsed: boolean;
+}
+
+export interface ITreeNode {
+  key: string;
+  module: string;
+  children?: ITreeNode[];
+  level: TREE_LEVEL;
+  collapsed: boolean;
+  parent: string;
 }

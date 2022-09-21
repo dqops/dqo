@@ -2,7 +2,7 @@ import React from 'react';
 
 import MainLayout from '../../components/MainLayout';
 import PageTabs from '../../components/PageTabs';
-import { useTabs } from '@/contexts/tabContext';
+import { useTabs } from '../../contexts/tabContext';
 
 const TestPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, getTabLabel } =

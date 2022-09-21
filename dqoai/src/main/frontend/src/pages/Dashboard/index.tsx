@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
-import { DATABASE_TYPE } from '@/shared/enums';
+import { DATABASE_TYPE } from '../../shared/enums';
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);

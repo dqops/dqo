@@ -1,19 +1,16 @@
 import { TREE_LEVEL } from '../shared/enums';
-import { TDataNode } from '../shared/interfaces';
+import { ITreeNode } from '../shared/interfaces';
 
 export const findNode = (
-  treeData: TDataNode[],
+  treeData: ITreeNode,
   key: string
-): TDataNode | undefined => {
-  for (const item of treeData) {
-    if (item.key === key) {
-      return item;
-    }
-    if (item.children && item.children.length) {
-      const result = findNode(item.children, key);
-      if (result) {
-        return result;
-      }
+): ITreeNode | undefined => {
+  if (treeData.key === key) return treeData;
+
+  if (treeData.children) {
+    for (const item of treeData.children) {
+      const node = findNode(item, key);
+      if (node) return node;
     }
   }
   return undefined;
