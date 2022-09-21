@@ -25,8 +25,9 @@ const ConnectionsTree = () => {
   const getIcon = (level: TREE_LEVEL) => {
     if (level === TREE_LEVEL.DATABASE) return 'database';
     if (level === TREE_LEVEL.SCHEMA) return 'schema';
+    if (level === TREE_LEVEL.TABLE) return 'table';
 
-    return 'table';
+    return 'column';
   };
 
   const renderNode = (node: ITreeNode) => {

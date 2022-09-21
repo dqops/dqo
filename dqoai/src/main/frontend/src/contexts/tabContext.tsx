@@ -6,8 +6,9 @@ import { IRootState } from '../redux/reducers';
 import { TREE_LEVEL } from '../shared/enums';
 import { ITab, ITreeNode } from '../shared/interfaces';
 import { findNode } from '../utils/tree';
-import { ConnectionModel, SchemaModel, TableModel } from '../api';
+import { ColumnModel, ConnectionModel, SchemaModel, TableModel } from '../api';
 import {
+  ColumnApiClient,
   ConnectionApiClient,
   SchemaApiClient,
   TableApiClient
@@ -51,9 +52,25 @@ function TabProvider(props: any) {
         const res = await TableApiClient.getTables(connectionName, node.module);
 
         treeNode.children = res.data.map((table: TableModel) => ({
-          module: table.connectionName || '',
-          key: `${node.key}.${table.connectionName}`,
+          module: table.spec?.target?.table_name || '',
+          key: `${node.key}.${table.spec?.target?.table_name}`,
           level: TREE_LEVEL.TABLE,
+          parent: node.key,
+          collapsed: true
+        }));
+      } else if (node.level === TREE_LEVEL.TABLE) {
+        const connectionName = node.key.split('.')[1] || '';
+        const schemaName = node.key.split('.')[2] || '';
+        const res = await ColumnApiClient.getColumns(
+          connectionName,
+          schemaName,
+          node.module
+        );
+
+        treeNode.children = res.data.map((column: ColumnModel) => ({
+          module: column.columnName || '',
+          key: `${node.key}.${column.columnName}`,
+          level: TREE_LEVEL.COLUMN,
           parent: node.key,
           collapsed: true
         }));
