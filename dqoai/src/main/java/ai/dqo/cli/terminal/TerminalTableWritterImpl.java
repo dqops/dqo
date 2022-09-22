@@ -30,6 +30,36 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 		this.fileWritter = fileWritter;
 	}
 
+	/**
+	 * Shows a tablesaw table and asks the user to pick one row.
+	 * @param question Question that is shown before the table.
+	 * @param table Table (tablesaw) data.
+	 * @return 0-based row index that was selected or the default value (may be null).
+	 */
+	public Integer pickTableRowWithPaging(String question, Table table) {
+		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
+
+		this.terminalWriter.writeLine(question);
+		this.writeTable(tableModel, false);
+
+		while (true) {
+			String line = this.terminalReader.prompt("Please enter one of the [] values: ", "", false);
+
+			int rowCount = table.rowCount();
+			try {
+				int pickedNumber = Integer.parseInt(line.trim());
+				if (pickedNumber <= 0 || pickedNumber > rowCount) {
+					this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+				}
+				else {
+					return pickedNumber - 1;  // WATCH OUT: the user picks a 1-based row index, so the user picks [1] to get the very first row, but rows are 0-based indexed and we will return 0 as the selected row index
+				}
+			} catch (NumberFormatException nfe) {
+				this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+			}
+		}
+	}
+
 	@Override
 	public CliOperationStatus writeTableToFile(FormattedTableDto<?> tableData) {
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
