@@ -33,6 +33,7 @@ import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as SchemaSvg } from './svg/schema.svg';
+import { ReactComponent as ColumnSvg } from './svg/column.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -67,7 +68,8 @@ const iconsMap: any = {
   'arrow-alt-right': ArrowAltRightSvg,
   add: AddSvg,
   database: DatabaseSvg,
-  schema: SchemaSvg
+  schema: SchemaSvg,
+  column: ColumnSvg
 };
 
 interface SvgIconProps {

@@ -85,8 +85,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "test",
-      "lint --fix",
-      "lint"
+      "tslint:fix"
     ],
     "*.json": [
       "prettier --write"
