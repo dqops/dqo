@@ -38,20 +38,22 @@ const ConnectionsTree = () => {
     return (
       <div onClick={() => onClick(node)}>
         <div className="flex text-black space-x-2 items-center mb-2">
-          {node.level !== TREE_LEVEL.COLUMN && (
-            <SvgIcon
-              className="w-4"
-              name={node.collapsed ? 'arrow-alt-right' : 'arrow-alt-down'}
-            />
-          )}
+          <div className="w-4 shrink-0">
+            {node.level !== TREE_LEVEL.COLUMN && (
+              <SvgIcon
+                className="w-4"
+                name={node.collapsed ? 'arrow-alt-right' : 'arrow-alt-down'}
+              />
+            )}
+          </div>
           <SvgIcon
             name={getIcon(node.level)}
             className={clsx(
-              'w-4',
+              'w-4 shrink-0',
               node.level !== TREE_LEVEL.COLUMN ? '!ml-1' : ''
             )}
           />
-          <div>{node.module}</div>
+          <div className="truncate">{node.module}</div>
         </div>
       </div>
     );
