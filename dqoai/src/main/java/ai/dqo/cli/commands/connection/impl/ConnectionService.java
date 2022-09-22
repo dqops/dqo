@@ -102,4 +102,11 @@ public interface ConnectionService {
      * @param terminalWriter Terminal writer that should be used to write any messages.
      */
     void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter);
+
+    /**
+     * Finds a connection and opens the default text editor to edit the yaml file.
+     * @param connectionName Connection name.
+     * @return Error code: 0 when the table was found, -1 when the connection was not found.
+     */
+    int launchEditorForConnection(String connectionName);
 }

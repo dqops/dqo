@@ -18,6 +18,7 @@ package ai.dqo.cli.commands.connection.impl;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.commands.CliOperationStatus;
+import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
@@ -61,6 +62,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private SecretValueProvider secretValueProvider;
     private final OutputFormatService outputFormatService;
+    private final EditorLaunchService editorLaunchService;
 
     @Autowired
     public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -69,7 +71,8 @@ public class ConnectionServiceImpl implements ConnectionService {
                                  TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWritter,
                                  SecretValueProvider secretValueProvider,
-                                 OutputFormatService outputFormatService) {
+                                 OutputFormatService outputFormatService,
+                                 EditorLaunchService editorLaunchService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
@@ -77,6 +80,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         this.terminalTableWritter = terminalTableWritter;
         this.secretValueProvider = secretValueProvider;
         this.outputFormatService = outputFormatService;
+        this.editorLaunchService = editorLaunchService;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -527,5 +531,24 @@ public class ConnectionServiceImpl implements ConnectionService {
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         connectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader, terminalWriter);
+    }
+
+    /**
+     * Finds a connection and opens the default text editor to edit the yaml file.
+     * @param connectionName Connection name.
+     * @return Error code: 0 when the table was found, -1 when the connection was not found.
+     */
+    @Override
+    public int launchEditorForConnection(String connectionName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            this.terminalWriter.writeLine(String.format("Connection '%s' not found", connectionName));
+            return -1;
+        }
+        this.editorLaunchService.openEditorForConnection(connectionWrapper);
+
+        return 0;
     }
 }
