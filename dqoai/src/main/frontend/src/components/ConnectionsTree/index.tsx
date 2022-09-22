@@ -1,62 +1,71 @@
 import React from 'react';
 
-import Tree from 'rc-tree';
-import { DataNode } from 'rc-tree/es/interface';
-import { TreeNodeProps } from 'rc-tree/lib/TreeNode';
+import Tree from 'react-ui-tree';
 import { useHistory } from 'react-router-dom';
 
 import { useTabs } from '../../contexts/tabContext';
-import { TREE_LEVEL } from '../../shared/enums';
 import SvgIcon from '../SvgIcon';
-import 'rc-tree/assets/index.css';
+import { ITreeNode } from '../../shared/interfaces';
+import 'react-ui-tree/dist/react-ui-tree.css';
 import './styles.css';
+import clsx from 'clsx';
+import { TREE_LEVEL } from '../../shared/enums';
 
 const ConnectionsTree = () => {
-  const { changeActiveTab, treeData } = useTabs();
+  const { changeActiveTab, treeData, setTreeData } = useTabs();
   const history = useHistory();
 
-  const onExpand = () => {
-    // TODO Load tables
-  };
-
-  const onClick = (_event: any, node: DataNode) => {
+  const onClick = (node: ITreeNode) => {
     if (history.location.pathname !== '/test') {
       history.push('/test');
     }
     changeActiveTab(node);
   };
 
-  return (
-    <div className='px-4 text-gray-100'>
-      <Tree
-        className='myCls'
-        showLine
-        selectable={false}
-        defaultExpandAll
-        onExpand={onExpand}
-        defaultSelectedKeys={[]}
-        defaultCheckedKeys={[]}
-        onClick={onClick}
-        treeData={treeData}
-        icon={(props: any) => {
-          if (props.data?.level === TREE_LEVEL.SCHEMA || props.data?.level === TREE_LEVEL.TABLE) {
-            return <SvgIcon name='grid' className='mr-2 w-4' />;
-          }
-          if (props.data?.level === TREE_LEVEL.COLUMN) {
-            return <SvgIcon name='table' className='mr-2 w-4' />;
-          }
-          return null;
-        }}
-        switcherIcon={(props: TreeNodeProps) =>
-          props.data?.children ? (
+  const getIcon = (level: TREE_LEVEL) => {
+    if (level === TREE_LEVEL.DATABASE) return 'database';
+    if (level === TREE_LEVEL.SCHEMA) return 'schema';
+
+    return 'table';
+  };
+
+  const renderNode = (node: ITreeNode) => {
+    if (node.key === 'root') {
+      return <div />;
+    }
+
+    return (
+      <div onClick={() => onClick(node)}>
+        <div className="flex text-black space-x-2 items-center mb-2">
+          {node.level !== TREE_LEVEL.COLUMN && (
             <SvgIcon
-              name={props.expanded ? 'arrow-alt-down' : 'arrow-alt-right'}
-              className='w-3 h-3'
+              className="w-4"
+              name={node.collapsed ? 'arrow-alt-right' : 'arrow-alt-down'}
             />
-          ) : null
-        }
-        rootClassName='connection-tree'
-      />
+          )}
+          <SvgIcon
+            name={getIcon(node.level)}
+            className={clsx(
+              'w-4',
+              node.level !== TREE_LEVEL.COLUMN ? '!ml-1' : ''
+            )}
+          />
+          <div>{node.module}</div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="px-4 text-gray-100">
+      <div className="-ml-5">
+        <Tree
+          paddingLeft={20}
+          tree={treeData}
+          onChange={setTreeData}
+          renderNode={renderNode}
+        />
+      </div>
     </div>
   );
 };

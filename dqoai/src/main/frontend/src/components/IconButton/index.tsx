@@ -13,7 +13,7 @@ const IconButton = ({ children, className, onClick }: IIconButtonProps) => {
     <button
       className={clsx(
         'focus:outline-none w-10 h-10 rounded-full flex items-center justify-center',
-        className,
+        className
       )}
       onClick={onClick}
     >

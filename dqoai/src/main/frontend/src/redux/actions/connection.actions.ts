@@ -4,17 +4,17 @@ import { ConnectionApiClient } from '../../services/apiClient';
 import { CONNECTION_ACTION } from '../types';
 
 export const getConnectionsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTIONS,
+  type: CONNECTION_ACTION.GET_CONNECTIONS
 });
 
 export const getConnectionsSuccess = (data: any) => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS_SUCCESS,
-  data,
+  data
 });
 
 export const getConnectionsFailed = (error: any) => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS_ERROR,
-  error,
+  error
 });
 
 export const getAllConnections = () => async (dispatch: Dispatch) => {
@@ -26,3 +26,8 @@ export const getAllConnections = () => async (dispatch: Dispatch) => {
     dispatch(getConnectionsFailed(err));
   }
 };
+
+export const setActiveConnection = (activeConnection: string) => ({
+  type: CONNECTION_ACTION.SET_ACTIVE_CONNECTION,
+  activeConnection
+});

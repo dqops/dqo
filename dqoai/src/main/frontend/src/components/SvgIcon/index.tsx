@@ -31,6 +31,8 @@ import { ReactComponent as UserCircleSvg } from './svg/user-circle.svg';
 import { ReactComponent as UserSvg } from './svg/user.svg';
 import { ReactComponent as UsersSvg } from './svg/users.svg';
 import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
+import { ReactComponent as DatabaseSvg } from './svg/database.svg';
+import { ReactComponent as SchemaSvg } from './svg/schema.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -64,6 +66,8 @@ const iconsMap: any = {
   'arrow-alt-down': ArrowAltDownSvg,
   'arrow-alt-right': ArrowAltRightSvg,
   add: AddSvg,
+  database: DatabaseSvg,
+  schema: SchemaSvg
 };
 
 interface SvgIconProps {
@@ -79,9 +83,9 @@ const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
     return <div />;
   }
 
-  return React.cloneElement(<Component data-testid='svg-icon' />, {
+  return React.cloneElement(<Component data-testid="svg-icon" />, {
     className,
-    ...others,
+    ...others
   });
 };
 

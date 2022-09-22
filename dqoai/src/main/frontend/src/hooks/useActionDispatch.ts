@@ -7,7 +7,8 @@ export const useActionDispatch = () => {
   const dispatch = useDispatch();
 
   return (dispatchAction: object | ActionDispatch) => {
-    if (typeof dispatchAction === 'object') return dispatch(dispatchAction as any);
+    if (typeof dispatchAction === 'object')
+      return dispatch(dispatchAction as any);
 
     return dispatchAction(dispatch);
   };

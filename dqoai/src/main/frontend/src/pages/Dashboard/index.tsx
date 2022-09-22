@@ -29,7 +29,9 @@ const Dashboard = () => {
   return (
     <MainLayout>
       {step === 0 && <SelectDatabase onSelect={onSelect} />}
-      {step === 1 && <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />}
+      {step === 1 && (
+        <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
+      )}
     </MainLayout>
   );
 };

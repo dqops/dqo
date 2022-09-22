@@ -14,8 +14,8 @@ const Checkbox = ({ label = 'Checkbox', className }: CheckboxProps) => {
   return (
     <label className={`relative cursor-pointer rounded-sm ${className}`}>
       <input
-        className='absolute opacity-0'
-        type='checkbox'
+        className="absolute opacity-0"
+        type="checkbox"
         onChange={(e) => setChecked(e.target.checked)}
       />
       <span
@@ -25,12 +25,12 @@ const Checkbox = ({ label = 'Checkbox', className }: CheckboxProps) => {
       >
         {checked && (
           <SvgIcon
-            name='check'
-            className='absolute w-3 top-1/2 transform -translate-y-1/2 text-white'
+            name="check"
+            className="absolute w-3 top-1/2 transform -translate-y-1/2 text-white"
           />
         )}
       </span>
-      <span className='text-sm pl-5'>{label}</span>
+      <span className="text-sm pl-5">{label}</span>
     </label>
   );
 };
