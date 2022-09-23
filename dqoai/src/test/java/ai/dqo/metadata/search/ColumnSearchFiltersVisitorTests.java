@@ -174,7 +174,7 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
         HierarchyId hierarchyId = new HierarchyId(arr);
 		this.columnSpec.setHierarchyId(hierarchyId);
         ArrayList<HierarchyNode>list = new ArrayList<>();
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, list);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, new SearchParameterObject(list, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 

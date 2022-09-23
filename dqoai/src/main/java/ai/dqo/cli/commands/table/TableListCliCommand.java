@@ -63,6 +63,13 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
             required = false, completionCandidates = TableNameCompleter.class)
     private String tableName;
 
+    @CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter",
+            required = false)
+    private String[] dimensions;
+
+    @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+    private String[] labels;
+
     /**
      * Returns the connection name.
      * @return Connection name.
@@ -96,6 +103,22 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     }
 
     /**
+     * Returns the dimensions filter.
+     * @return Dimensions filter.
+     */
+    public String[] getDimensions() {
+        return dimensions;
+    }
+
+    /**
+     * Sets the dimensions filter.
+     * @param dimensions Dimensions filter.
+     */
+    public void setDimensions(String[] dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -105,7 +128,7 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
     public Integer call() throws Exception {
 
         TabularOutputFormat tabularOutputFormat = this.getOutputFormat();
-        CliOperationStatus cliOperationStatus = tableImportService.listTables(this.connectionName, this.tableName, tabularOutputFormat);
+        CliOperationStatus cliOperationStatus = tableImportService.listTables(this.connectionName, this.tableName, tabularOutputFormat, dimensions, labels);
         if (cliOperationStatus.isSuccess()) {
             if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
                 if (this.isWriteToFile()) {

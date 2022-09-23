@@ -58,6 +58,12 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 	@CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
 	private String name;
 
+	@CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter", required = false)
+	private String[] dimensions;
+
+	@CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+	private String[] labels;
+
 	/**
 	 * Computes a result, or throws an exception if unable to do so.
 	 *
@@ -71,7 +77,7 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 			this.name = this.terminalReader.prompt("Connection name (--name)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus= this.connectionService.loadSchemaList(this.name, this.getOutputFormat());
+		CliOperationStatus cliOperationStatus= this.connectionService.loadSchemaList(this.name, this.getOutputFormat(), dimensions, labels);
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
 				if (this.isWriteToFile()) {

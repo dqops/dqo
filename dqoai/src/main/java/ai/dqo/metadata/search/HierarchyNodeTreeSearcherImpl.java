@@ -58,7 +58,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
         CheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -72,7 +74,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<ConnectionSpec> findConnections(HierarchyNode startNode, ConnectionSearchFilters connectionSearchFilters) {
         ConnectionSearchFiltersVisitor searchFilterVisitor = connectionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<ConnectionSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -86,7 +90,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<TableWrapper> findTables(HierarchyNode startNode, TableSearchFilters tableSearchFilters) {
         TableSearchFiltersVisitor searchFilterVisitor = tableSearchFilters.createTableSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<TableWrapper>)(ArrayList<?>)matchingNodes;
     }
@@ -100,7 +106,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<ColumnSpec> findColumns(HierarchyNode startNode, ColumnSearchFilters columnSearchFilters) {
         ColumnSearchFiltersVisitor searchFilterVisitor = columnSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<ColumnSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -114,7 +122,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<SensorDefinitionSpec> findSensors(HierarchyNode startNode, SensorDefinitionSearchFilters sensorDefinitionSearchFilters) {
         SensorDefinitionSearchFiltersVisitor searchFilterVisitor = sensorDefinitionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<SensorDefinitionSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -128,7 +138,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<RuleDefinitionSpec> findRules(HierarchyNode startNode, RuleDefinitionSearchFilters ruleDefinitionSearchFilters) {
         RuleDefinitionSearchFiltersVisitor searchFilterVisitor = ruleDefinitionSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
 
         return (List<RuleDefinitionSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -144,7 +156,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<RecurringScheduleSpec> findSchedules(HierarchyNode startNode, RecurringScheduleSearchFilters recurringScheduleSearchFilters) {
         RecurringScheduleSearchFiltersVisitor searchFilterVisitor = recurringScheduleSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, null, null)));
 
         return (List<RecurringScheduleSpec>)(ArrayList<?>)matchingNodes;
     }
@@ -162,7 +174,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     public Collection<HierarchyNode> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters) {
         ScheduleRootsSearchFiltersVisitor searchFilterVisitor = scheduleRootsSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, null, null)));
 
         return matchingNodes;
     }
@@ -204,7 +216,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
 
         ScheduledChecksSearchFiltersVisitor searchFilterVisitor = scheduledChecksSearchFilters.createSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, matchingNodes));
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, null, null)));
 
         return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
     }

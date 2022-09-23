@@ -49,6 +49,12 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false)
 	private String table;
 
+	@CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter", required = false)
+	private String[] dimensions;
+
+	@CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+	private String[] labels;
+
 	/**
 	 * Computes a result, or throws an exception if unable to do so.
 	 *
@@ -67,7 +73,7 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 			this.schema = this.terminalReader.prompt("Schema name (--schema)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.connectionService.loadTableList(connection, schema, table, this.getOutputFormat());
+		CliOperationStatus cliOperationStatus = this.connectionService.loadTableList(connection, schema, table, this.getOutputFormat(), dimensions, labels);
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
 				if (this.isWriteToFile()) {

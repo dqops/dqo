@@ -18,6 +18,8 @@ package ai.dqo.metadata.definitions.sensors;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.search.DimensionSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
 
 import java.util.List;
 
@@ -69,7 +71,6 @@ public class ProviderSensorDefinitionListImpl extends AbstractIndexingList<Provi
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

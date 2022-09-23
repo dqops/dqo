@@ -106,6 +106,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
+    @CommandLine.Option(names = {"-ad", "--dimension"}, description = "Dimension filter",
+            required = false)
+    private String[] dimensions;
+
+    @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+    private String[] labels;
+
     /**
      * Gets the connection name.
      * @return Connection name.
@@ -249,6 +256,8 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setEnabled(this.enabled);
+        filters.setDimensions(this.dimensions);
+        filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);

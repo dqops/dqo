@@ -21,7 +21,6 @@ import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -37,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -60,6 +58,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 			put("default_dimensions", o -> o.defaultDimensions);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
+            put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
         }
     };
@@ -119,6 +118,11 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+
+    @JsonPropertyDescription("Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private LabelSetSpec labels;
 
     /**
      * Default constructor.
@@ -386,6 +390,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * List of labels assigned to a table. Labels are used for targeting the execution of tests.
+     * @return Labels collection.
+     */
+    public LabelSetSpec getLabels() {
+        return labels;
+    }
+
+    /**
+     * Changes a list of labels.
+     * @param labels Labels collection.
+     */
+    public void setLabels(LabelSetSpec labels) {
+        setDirtyIf(!Objects.equals(this.labels, labels));
+        this.labels = labels;
+        propagateHierarchyIdToField(labels, "labels");
+    }
+
+    /**
      * Check if the object is dirty (has changes).
      *
      * @return True when the object is dirty and has modifications.
@@ -420,7 +442,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

@@ -28,7 +28,7 @@ public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getScheduleEnabled();
         if (enabledFilter != null) {
             boolean mustBeDisabled = !enabledFilter;
@@ -37,7 +37,7 @@ public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor
             }
         }
 
-        parameter.add(recurringScheduleSpec);
+        parameter.getNodes().add(recurringScheduleSpec);
         return TreeNodeTraversalResult.STOP_TRAVERSAL; // no children possible
     }
 }

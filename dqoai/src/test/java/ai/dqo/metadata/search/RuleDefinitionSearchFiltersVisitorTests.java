@@ -61,13 +61,13 @@ public class RuleDefinitionSearchFiltersVisitorTests extends BaseTest {
     void acceptRuleDefinitionList_whenCalledForRuleDefinitionList_thenReturnsTraverseChildren() {
 		this.ruleDefinitionSearchFilters.setRuleName("test2");
 		this.sut = new RuleDefinitionSearchFiltersVisitor(this.ruleDefinitionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionList, ruleDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionList, new SearchParameterObject(ruleDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptRuleDefinitionList_whenCalledForRuleDefinitionListWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionList, ruleDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionList, new SearchParameterObject(ruleDefinitionWrappers, null, null));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -75,13 +75,13 @@ public class RuleDefinitionSearchFiltersVisitorTests extends BaseTest {
     void acceptRuleDefinitionWrapper_whenCalledForRuleDefinitionWrapper_thenReturnsSkipChildren() {
 		this.ruleDefinitionSearchFilters.setRuleName("test2");
 		this.sut = new RuleDefinitionSearchFiltersVisitor(this.ruleDefinitionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionWrapper, ruleDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionWrapper, new SearchParameterObject(ruleDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptRuleDefinitionWrapper_whenCalledForRuleDefinitionWrapperWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionWrapper, ruleDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.ruleDefinitionWrapper, new SearchParameterObject(ruleDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 }
