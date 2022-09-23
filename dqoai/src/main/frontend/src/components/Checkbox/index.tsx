@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import SvgIcon from '../SvgIcon';
 
@@ -6,17 +6,18 @@ export interface CheckboxProps {
   type?: string;
   label?: any;
   className?: string;
+  checked?: boolean;
+  onChange: (value: boolean) => void;
 }
 
-const Checkbox = ({ label = 'Checkbox', className }: CheckboxProps) => {
-  const [checked, setChecked] = useState<boolean>(false);
-
+const Checkbox = ({ label, className, checked, onChange }: CheckboxProps) => {
   return (
     <label className={`relative cursor-pointer rounded-sm ${className}`}>
       <input
         className="absolute opacity-0"
         type="checkbox"
-        onChange={(e) => setChecked(e.target.checked)}
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
       />
       <span
         className={`absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center border-gray-150 ${
@@ -30,7 +31,7 @@ const Checkbox = ({ label = 'Checkbox', className }: CheckboxProps) => {
           />
         )}
       </span>
-      <span className="text-sm pl-5">{label}</span>
+      {label && <span className="text-sm pl-5">{label}</span>}
     </label>
   );
 };

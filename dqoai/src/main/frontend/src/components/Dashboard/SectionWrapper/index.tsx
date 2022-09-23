@@ -20,7 +20,7 @@ const SectionWrapper = ({
         className
       )}
     >
-      <div className="px-1 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">
+      <div className="px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">
         {title}
       </div>
       {children}

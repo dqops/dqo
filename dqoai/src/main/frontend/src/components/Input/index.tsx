@@ -36,12 +36,14 @@ const Input = ({
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
-      <label
-        htmlFor={name}
-        className="block text-base font-regular text-gray-700 mb-1 capitalize text-sm"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={name}
+          className="block text-base font-regular text-gray-700 mb-2 capitalize text-sm"
+        >
+          {label}
+        </label>
+      )}
     </div>
     <div className="relative">
       <input
@@ -61,7 +63,7 @@ const Input = ({
         data-testid={dataTestId}
       />
       {value && (
-        <div className="absolute top-1/2 right-4 bg-gray-50 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
+        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
           <SvgIcon
             name="subtract"
             className="cursor-pointer w-2 h-2"

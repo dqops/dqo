@@ -3,11 +3,23 @@ import React from 'react';
 import MainLayout from '../../components/MainLayout';
 import PageTabs from '../../components/PageTabs';
 import { useTabs } from '../../contexts/tabContext';
+import { findNode } from '../../utils/tree';
+import { TREE_LEVEL } from '../../shared/enums';
+import ConnectionView from '../../components/Connection/ConnectionView';
 
 const TestPage = () => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, getTabLabel } =
-    useTabs();
+  const {
+    tabs,
+    setActiveTab,
+    activeTab,
+    onAddTab,
+    closeTab,
+    getTabLabel,
+    treeData
+  } = useTabs();
 
+  const activeNode = findNode(treeData, activeTab);
+  console.log('activeTable', activeNode);
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
@@ -18,18 +30,11 @@ const TestPage = () => {
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
         />
-        {activeTab && (
-          <div className="flex-1 bg-white border border-gray-300 flex-auto">
-            {activeTab && (
-              <div className="px-4 py-6">
-                <div>{getTabLabel(activeTab)}</div>
-                {/*<div className="text-2xl mb-4 font-semibold">*/}
-                {/*  {`${getTabLabel(activeTableTab)} Table / ${getTabLabel(activeColumnTab)} Column`}</div>*/}
-                {/*<Table columns={columns} data={data} className="w-full border border-gray-300" />*/}
-              </div>
-            )}
-          </div>
-        )}
+        <div className="flex-1 bg-white border border-gray-300 flex-auto">
+          {activeNode?.level === TREE_LEVEL.DATABASE && (
+            <ConnectionView node={activeNode} />
+          )}
+        </div>
       </div>
     </MainLayout>
   );
