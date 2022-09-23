@@ -7,6 +7,7 @@ import { ConnectionModel } from '../../../api';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
+import { merge } from 'lodash';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -33,10 +34,9 @@ const ConnectionView: React.FC<IConnectionViewProps> = ({ node }) => {
   }, [connection]);
 
   const mutateFormData = (obj: any) => {
-    setFormData({
-      ...formData,
-      ...obj
-    });
+    const newFormData = { ...formData };
+    merge(newFormData, obj);
+    setFormData(newFormData);
   };
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const ConnectionView: React.FC<IConnectionViewProps> = ({ node }) => {
       </div>
       <div>
         {activeTab === 'connection' && (
-          <ConnectionDetail connection={connection} onChange={mutateFormData} />
+          <ConnectionDetail connection={formData} onChange={mutateFormData} />
         )}
         {activeTab === 'schedule' && (
           <ScheduleDetail

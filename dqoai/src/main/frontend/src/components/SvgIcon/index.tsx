@@ -9,6 +9,7 @@ import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
 import { ReactComponent as ChartBarSvg } from './svg/chart-bar.svg';
 import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
+import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
 import { ReactComponent as CloseSvg } from './svg/close.svg';
 import { ReactComponent as CogSvg } from './svg/cog.svg';
@@ -60,6 +61,7 @@ const iconsMap: any = {
   info: InfoSvg,
   check: CheckSvg,
   'chevron-down': ChevronDownSvg,
+  'chevron-up': ChevronUpSvg,
   'snowflake-big': SnowflakeBigSvg,
   close: CloseSvg,
   table: TableSvg,

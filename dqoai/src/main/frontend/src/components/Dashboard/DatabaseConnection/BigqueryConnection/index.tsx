@@ -36,9 +36,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   const handleChange = (obj: any) => {
     onChange({
       spec: {
-        bigquery: {
-          ...obj
-        }
+        bigquery: obj
       }
     });
   };
