@@ -43,6 +43,7 @@ public class TableOwnerSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Data steward name")
     private String dataSteward;
+
     @JsonPropertyDescription("Business application name")
     private String application;
 

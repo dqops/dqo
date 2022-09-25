@@ -6,7 +6,8 @@ import { IRootState } from '../redux/reducers';
 import { TREE_LEVEL } from '../shared/enums';
 import { ITab, ITreeNode } from '../shared/interfaces';
 import { findNode } from '../utils/tree';
-import { ColumnModel, ConnectionModel, SchemaModel, TableModel } from '../api';
+import { AxiosResponse } from 'axios';
+import { ConnectionBasicModel, SchemaModel, TableBasicModel, ColumnBasicModel } from '../api';
 import {
   ColumnApiClient,
   ConnectionApiClient,
@@ -39,21 +40,21 @@ function TabProvider(props: any) {
 
     if (!treeNode?.children) {
       if (node.level === TREE_LEVEL.DATABASE) {
-        const res = await SchemaApiClient.getSchemas(node.module);
-        treeNode.children = res.data.map((schema: SchemaModel) => ({
-          module: schema.schemaName || '',
-          key: `${node.key}.${schema.schemaName}`,
+        const res : AxiosResponse<SchemaModel[], any> = await SchemaApiClient.getSchemas(node.module);
+        treeNode.children = res.data.map(schema => ({
+          module: schema.schema_name || '',
+          key: `${node.key}.${schema.schema_name}`,
           level: TREE_LEVEL.SCHEMA,
           parent: node.key,
           collapsed: true
         }));
       } else if (node.level === TREE_LEVEL.SCHEMA) {
         const connectionName = node.key.split('.')[1] || '';
-        const res = await TableApiClient.getTables(connectionName, node.module);
+        const res : AxiosResponse<TableBasicModel[], any> = await TableApiClient.getTables(connectionName, node.module);
 
-        treeNode.children = res.data.map((table: TableModel) => ({
-          module: table.spec?.target?.table_name || '',
-          key: `${node.key}.${table.spec?.target?.table_name}`,
+        treeNode.children = res.data.map(table => ({
+          module: table.target?.table_name || '',
+          key: `${node.key}.${table.target?.table_name}`,
           level: TREE_LEVEL.TABLE,
           parent: node.key,
           collapsed: true
@@ -61,15 +62,15 @@ function TabProvider(props: any) {
       } else if (node.level === TREE_LEVEL.TABLE) {
         const connectionName = node.key.split('.')[1] || '';
         const schemaName = node.key.split('.')[2] || '';
-        const res = await ColumnApiClient.getColumns(
+        const res : AxiosResponse<ColumnBasicModel[], any> = await ColumnApiClient.getColumns(
           connectionName,
           schemaName,
           node.module
         );
 
-        treeNode.children = res.data.map((column: ColumnModel) => ({
-          module: column.columnName || '',
-          key: `${node.key}.${column.columnName}`,
+        treeNode.children = res.data.map(column => ({
+          module: column.column_name || '',
+          key: `${node.key}.${column.column_name}`,
           level: TREE_LEVEL.COLUMN,
           parent: node.key,
           collapsed: true
@@ -137,13 +138,13 @@ function TabProvider(props: any) {
   };
 
   const getConnections = async () => {
-    const res = await ConnectionApiClient.getAllConnections();
+    const res : AxiosResponse<ConnectionBasicModel[], any> = await ConnectionApiClient.getAllConnections();
 
     setTreeData({
       ...treeData,
-      children: res.data.map((connection: ConnectionModel) => ({
-        module: connection.name || '',
-        key: `root.${connection.name}`,
+      children: res.data.map(connection => ({
+        module: connection.connection_name || '',
+        key: `root.${connection.connection_name}`,
         level: TREE_LEVEL.DATABASE,
         parent: 'root',
         collapsed: true

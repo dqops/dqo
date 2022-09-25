@@ -21,7 +21,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
             <div>Connection name:</div>
           </td>
           <td className="px-4 py-2">
-            <div>{connection?.name}</div>
+            <div>{connection?.connection_name}</div>
           </td>
         </tr>
         <tr>
