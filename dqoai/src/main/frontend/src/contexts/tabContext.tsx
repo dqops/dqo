@@ -141,10 +141,6 @@ function TabProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const expandTab = (keys: string[], info: any) => {
-    console.log('keys', keys, info);
-  };
-
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -197,7 +193,6 @@ function TabProvider(props: any) {
         setActiveTab,
         closeTab,
         onAddTab,
-        expandTab
       }}
       {...props}
     />
