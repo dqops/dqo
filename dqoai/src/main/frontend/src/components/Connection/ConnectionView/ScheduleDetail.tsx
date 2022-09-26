@@ -4,27 +4,37 @@ import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import { AxiosResponse } from 'axios';
 
 interface IScheduleDetailProps {
-  schedule?: RecurringScheduleSpec;
-  onChange: any;
+  connectionName: string;
 }
 
-const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
-  schedule,
-  onChange
-}) => {
+const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
+  const [schedule, setSchedule] = useState<RecurringScheduleSpec>();
+
+  const fetchSchedule = async () => {
+    try {
+      const res: AxiosResponse<RecurringScheduleSpec> =
+        await ConnectionApiClient.getConnectionSchedule(connectionName);
+      setSchedule(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSchedule().then();
+  }, []);
 
   const handleChange = (obj: any) => {
-    onChange({
-      spec: {
-        schedule: {
-          ...obj
-        }
-      }
+    setSchedule({
+      ...schedule,
+      ...obj
     });
   };
 

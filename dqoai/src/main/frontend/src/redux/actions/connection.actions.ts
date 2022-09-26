@@ -2,6 +2,8 @@ import { Dispatch } from 'redux';
 
 import { ConnectionApiClient } from '../../services/apiClient';
 import { CONNECTION_ACTION } from '../types';
+import { AxiosResponse } from 'axios';
+import { ConnectionBasicModel } from '../../api';
 
 export const getConnectionsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS
@@ -20,7 +22,8 @@ export const getConnectionsFailed = (error: any) => ({
 export const getAllConnections = () => async (dispatch: Dispatch) => {
   dispatch(getConnectionsRequest());
   try {
-    const res = await ConnectionApiClient.getAllConnections();
+    const res: AxiosResponse<ConnectionBasicModel[]> =
+      await ConnectionApiClient.getAllConnections();
     dispatch(getConnectionsSuccess(res.data));
   } catch (err) {
     dispatch(getConnectionsFailed(err));

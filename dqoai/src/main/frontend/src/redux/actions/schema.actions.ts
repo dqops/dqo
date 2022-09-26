@@ -2,6 +2,8 @@ import { Dispatch } from 'redux';
 
 import { SchemaApiClient } from '../../services/apiClient';
 import { SCHEMA_ACTION } from '../types';
+import {AxiosResponse} from 'axios';
+import {SchemaModel} from '../../api';
 
 export const getSchemasRequest = () => ({
   type: SCHEMA_ACTION.GET_SCHEMAS
@@ -21,7 +23,8 @@ export const getSchemasByConnection =
   (connectionName: string) => async (dispatch: Dispatch) => {
     dispatch(getSchemasRequest());
     try {
-      const res = await SchemaApiClient.getSchemas(connectionName);
+      const res: AxiosResponse<SchemaModel[]> =
+        await SchemaApiClient.getSchemas(connectionName);
       dispatch(getSchemasSuccess(res.data));
     } catch (err) {
       dispatch(getSchemasFailed(err));

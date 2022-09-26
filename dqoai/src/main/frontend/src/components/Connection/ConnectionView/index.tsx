@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
-import { ConnectionApiClient } from '../../../services/apiClient';
-import { ConnectionModel } from '../../../api';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import { merge } from 'lodash';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -26,30 +23,6 @@ const tabs = [
 
 const ConnectionView: React.FC<IConnectionViewProps> = ({ node }) => {
   const [activeTab, setActiveTab] = useState('connection');
-  const [connection, setConnection] = useState<ConnectionModel>();
-  const [formData, setFormData] = useState<ConnectionModel>();
-
-  useEffect(() => {
-    setFormData(connection);
-  }, [connection]);
-
-  const mutateFormData = (obj: any) => {
-    const newFormData = { ...formData };
-    merge(newFormData, obj);
-    setFormData(newFormData);
-  };
-
-  useEffect(() => {
-    if (node) {
-      ConnectionApiClient.getConnection(node.module)
-        .then((res) => {
-          setConnection(res.data);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }, [node]);
 
   return (
     <div className="">
@@ -70,13 +43,10 @@ const ConnectionView: React.FC<IConnectionViewProps> = ({ node }) => {
       </div>
       <div>
         {activeTab === 'connection' && (
-          <ConnectionDetail connection={formData} onChange={mutateFormData} />
+          <ConnectionDetail connectionName={node.module} />
         )}
         {activeTab === 'schedule' && (
-          <ScheduleDetail
-            schedule={formData?.spec?.schedule}
-            onChange={mutateFormData}
-          />
+          <ScheduleDetail connectionName={node.module} />
         )}
       </div>
     </div>
