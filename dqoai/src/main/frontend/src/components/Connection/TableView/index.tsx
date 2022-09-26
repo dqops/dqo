@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
-import Tabs from '../../Tabs';
-import ConnectionDetail from './ConnectionDetail';
-import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
+import Tabs from '../../Tabs';
+import TableDetails from './TableDetails';
+import ScheduleDetail from './ScheduleDetail';
 
-interface IConnectionViewProps {
+interface ITableViewProps {
   node: ITreeNode;
 }
 
 const tabs = [
   {
-    label: 'Connection',
-    value: 'connection'
+    label: 'Table',
+    value: 'table'
   },
   {
     label: 'Schedule',
@@ -21,8 +21,11 @@ const tabs = [
   }
 ];
 
-const ConnectionView = ({ node }: IConnectionViewProps) => {
-  const [activeTab, setActiveTab] = useState('connection');
+const TableView = ({ node }: ITableViewProps) => {
+  const [activeTab, setActiveTab] = useState('table');
+
+  const connectionName = node.key.split('.')[1] || '';
+  const schemaName = node.key.split('.')[2] || '';
 
   return (
     <div className="">
@@ -41,16 +44,18 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
+      <div>{activeTab === 'tab' && <TableDetails />}</div>
       <div>
-        {activeTab === 'connection' && (
-          <ConnectionDetail connectionName={node.module} />
-        )}
         {activeTab === 'schedule' && (
-          <ScheduleDetail connectionName={node.module} />
+          <ScheduleDetail
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={node.module}
+          />
         )}
       </div>
     </div>
   );
 };
 
-export default ConnectionView;
+export default TableView;
