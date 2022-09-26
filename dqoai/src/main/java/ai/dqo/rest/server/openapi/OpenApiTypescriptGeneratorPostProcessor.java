@@ -37,7 +37,7 @@ public class OpenApiTypescriptGeneratorPostProcessor {
                     StringBuilder stringBuilder = new StringBuilder();
                     stringBuilder.append("    ");
                     for (char enumChar : enumValue.toCharArray()) {
-                        if (Character.isLetter(enumChar)) {
+                        if (Character.isLetter(enumChar) || enumChar == '_') {
                             stringBuilder.append(enumChar);
                         }
                         else if (Character.isDigit(enumChar)) {

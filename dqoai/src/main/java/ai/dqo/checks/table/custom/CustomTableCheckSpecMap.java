@@ -17,6 +17,8 @@ package ai.dqo.checks.table.custom;
 
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.search.DimensionSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
 
 /**
  * Dictionary of custom table checks indexed by user defined check names.
@@ -27,7 +29,6 @@ public class CustomTableCheckSpecMap extends AbstractDirtyTrackingSpecMap<Custom
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

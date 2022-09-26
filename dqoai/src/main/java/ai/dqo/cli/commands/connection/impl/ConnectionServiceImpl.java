@@ -177,10 +177,13 @@ public class ConnectionServiceImpl implements ConnectionService {
      * @param schemaName Schema name.
      * @param tableName Table name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Cli operation status.
      */
     @Override
-    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat) {
+    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
+                                            String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -208,6 +211,8 @@ public class ConnectionServiceImpl implements ConnectionService {
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
             tableSearchFilters.setSchemaTableName(schemaName + ".*");
+            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
             HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -258,9 +263,11 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Returns a schemas of local connections.
      * @param connectionName Connection name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Schema list.
      */
-    public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat) {
+    public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -288,6 +295,8 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
+            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
             HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -331,14 +340,18 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     /**
      * Returns a table of local connections.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Connection list.
      */
-    public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter) {
+    public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter, String[] dimensions, String[] labels) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(connectionNameFilter);
+        connectionSearchFilters.setDimensions(dimensions);
+        connectionSearchFilters.setLabels(labels);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -425,7 +438,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             return cliOperationStatus;
         }
 
-        FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName);
+        FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName, null, null);
         this.terminalTableWritter.writeTable(connectionTables, true);
         this.terminalWriter.writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);

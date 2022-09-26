@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -40,11 +41,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a list of connections.
      *
      * @param connectionList List of connections.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter      Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -67,12 +68,18 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionWrapper Connection wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
+
+        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
+        dimensionSearcherObject.setConnectionDimension(connectionWrapper.getSpec().getDefaultDimensions());
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -88,11 +95,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a collection of tables inside a connection.
      *
      * @param tableList Table list.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableList tableList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -115,12 +122,18 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a table wrapper (lazy loader).
      *
      * @param tableWrapper Table wrapper.
-     * @param parameter    Target list where found hierarchy nodes should be added.
+     * @param parameter    Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
+
+        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
+        dimensionSearcherObject.setTableDimension(tableWrapper.getSpec().getDimensions());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -141,12 +154,18 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a table specification.
      *
      * @param tableSpec Table specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
+
+        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        labelsSearcherObject.setTableLabels(tableSpec.getLabels());
+        dimensionSearcherObject.setTableDimension(tableSpec.getDimensions());
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -165,11 +184,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a column collection (map).
      *
      * @param columnSpecMap Column collection.
-     * @param parameter     Target list where found hierarchy nodes should be added.
+     * @param parameter     Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -192,12 +211,19 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a column specification.
      *
      * @param columnSpec Column specification.
-     * @param parameter  Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
+
+        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
+        dimensionSearcherObject.setColumnDimension(columnSpec.getDimensionsOverride());
+
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -207,15 +233,44 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
+        labelsSearcherObject.setTableLabels(columnSpec.getLabels());
+        dimensionSearcherObject.setTableDimension(columnSpec.getDimensionsOverride());
+
+        DimensionsConfigurationSpec overridenDimension = dimensionSearcherObject.getColumnDimension() != null
+                ? dimensionSearcherObject.getColumnDimension()
+                : dimensionSearcherObject.getTableDimension() != null
+                ? dimensionSearcherObject.getTableDimension()
+                : dimensionSearcherObject.getConnectionDimension();
+        LabelSetSpec overridenLabels = new LabelSetSpec();
+
+        if (labelsSearcherObject.getColumnLabels() != null) {
+            overridenLabels.addAll(labelsSearcherObject.getColumnLabels());
+        }
+
+        if (labelsSearcherObject.getTableLabels() != null) {
+            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+        }
+
+        if (labelsSearcherObject.getConnectionLabels() != null) {
+            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+        }
+
+        if (!DimensionSearchMatcher.matchAllColumnDimensions(this.filters, overridenDimension)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+        if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
-            parameter.add(columnSpec);
+            parameter.getNodes().add(columnSpec);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         String columnName = columnSpec.getHierarchyId().getLast().toString();
         if (StringPatternComparer.matchSearchPattern(columnName, columnNameFilter)) {
-            parameter.add(columnSpec);
+            parameter.getNodes().add(columnSpec);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

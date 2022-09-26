@@ -45,23 +45,30 @@ public interface ConnectionService {
      * @param schemaName Schema name.
      * @param tableName Table name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Cli operation status.
      */
-    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat);
+    CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
+                                     String[] dimensions, String[] labels);
 
     /**
      * Returns a schemas of local connections.
      * @param connectionName Connection name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Schema list.
      */
-    CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat);
+    CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels);
 
     /**
      * Returns a table of local connections.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Connection list.
      */
-    FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter);
+    FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter, String[] dimensions, String[] labels);
 
     /**
      * Adds a new connection.

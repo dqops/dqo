@@ -16,6 +16,8 @@
 package ai.dqo.metadata.id;
 
 import ai.dqo.metadata.basespecs.DirtyStatus;
+import ai.dqo.metadata.search.DimensionSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
 
 /**
  * Interface implemented by objects that are represented on the hierarchy ID tree.

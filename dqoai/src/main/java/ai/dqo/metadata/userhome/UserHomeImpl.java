@@ -21,6 +21,8 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.search.DimensionSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -292,7 +294,6 @@ public class UserHomeImpl implements UserHome {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

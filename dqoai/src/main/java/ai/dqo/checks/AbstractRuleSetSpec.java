@@ -20,6 +20,8 @@ import ai.dqo.metadata.id.ChildFieldEntry;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.search.DimensionSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.rules.custom.CustomRuleThresholdsSpec;
@@ -51,7 +53,6 @@ public abstract class AbstractRuleSetSpec extends AbstractSpec {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

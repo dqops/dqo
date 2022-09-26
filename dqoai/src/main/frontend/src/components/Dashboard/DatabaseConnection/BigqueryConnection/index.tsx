@@ -65,7 +65,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         onChange={(value) => handleChange({ authentication_mode: value })}
       />
       {spec?.authentication_mode ===
-        BigQueryParametersSpecAuthenticationModeEnum.jsonx5fkeyx5fcontent && (
+        BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
         <Input
           label="JSON key content"
           className="mb-4"
@@ -75,7 +75,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         />
       )}
       {spec?.authentication_mode ===
-        BigQueryParametersSpecAuthenticationModeEnum.jsonx5fkeyx5fpath && (
+        BigQueryParametersSpecAuthenticationModeEnum.json_key_path && (
         <Input
           label="A path to the JSON key file"
           className="mb-4"

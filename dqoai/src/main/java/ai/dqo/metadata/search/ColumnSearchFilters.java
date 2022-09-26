@@ -23,6 +23,8 @@ public class ColumnSearchFilters {
     private String schemaTableName;
     private String columnName;
     private Boolean enabled = true;
+    private String[] dimensions;
+    private String[] labels;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -97,4 +99,37 @@ public class ColumnSearchFilters {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    /**
+     * Returns the dimension name search patterns.
+     * @return Dimension search patterns.
+     */
+    public String[] getDimensions() {
+        return dimensions;
+    }
+
+    /**
+     * Sets the dimension search patterns.
+     * @param dimensions dimension search patterns.
+     */
+    public void setDimensions(String[] dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    /**
+     * Returns the label search patterns.
+     * @return Label search patterns.
+     */
+    public String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * Sets the label search patterns.
+     * @param labels label search patterns.
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
 }

@@ -66,16 +66,20 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param tabularOutputFormat Tabular output format.
+	 * @param dimensions Dimensions filter.
+	 * @param labels Labels filter.
 	 * @return Cli operation status.
 	 */
 	@Override
-	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat) {
+	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
 		columnSearchFilters.setColumnName(columnName);
 		columnSearchFilters.setSchemaTableName(tableName);
 		columnSearchFilters.setConnectionName(connectionName);
+		columnSearchFilters.setDimensions(dimensions);
+		columnSearchFilters.setLabels(labels);
 
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
 		HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -195,7 +199,7 @@ public class ColumnServiceImpl implements ColumnService {
 			return cliOperationStatus;
 		}
 
-		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName, TabularOutputFormat.TABLE);
+		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName, TabularOutputFormat.TABLE, null, null);
 		this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
 		this.terminalWriter.writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
 		boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);

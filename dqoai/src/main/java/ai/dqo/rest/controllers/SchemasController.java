@@ -5,10 +5,12 @@ import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.ConnectionModel;
-import ai.dqo.rest.models.SchemaModel;
+import ai.dqo.rest.models.metadata.SchemaModel;
+import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,12 @@ public class SchemasController {
      */
     @GetMapping("/{connectionName}/schemas")
     @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SchemaModel[].class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @Parameter(description = "Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
