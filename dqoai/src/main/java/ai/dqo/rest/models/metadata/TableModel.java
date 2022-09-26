@@ -19,6 +19,9 @@ public class TableModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    @JsonPropertyDescription("Table hash that identifies the table using a unique hash code.")
+    private Long tableHash;
+
     @JsonPropertyDescription("Full table specification including all nested information, the table name is inside the 'target' property.")
     private TableSpec spec;
 }

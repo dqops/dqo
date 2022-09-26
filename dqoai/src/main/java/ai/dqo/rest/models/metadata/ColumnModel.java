@@ -26,6 +26,9 @@ public class ColumnModel {
     @JsonPropertyDescription("Column name.")
     private String columnName;
 
+    @JsonPropertyDescription("Column hash that identifies the column using a unique hash code.")
+    private Long columnHash;
+
     @JsonPropertyDescription("Full column specification.")
     private ColumnSpec spec;
 }

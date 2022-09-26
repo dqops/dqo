@@ -21,6 +21,9 @@ public class TableBasicModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    @JsonPropertyDescription("Table hash that identifies the table using a unique hash code.")
+    private Long tableHash;
+
     @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
     private TableTargetSpec target = new TableTargetSpec();
 
@@ -46,6 +49,7 @@ public class TableBasicModel {
     public static TableBasicModel fromTableSpecification(String connectionName, TableSpec tableSpec) {
         return new TableBasicModel() {{
             setConnectionName(connectionName);
+            setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getTarget());
             setDisabled(tableSpec.isDisabled());
             setStage(tableSpec.getStage());

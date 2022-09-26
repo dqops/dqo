@@ -114,8 +114,8 @@ public class HierarchyId {
     }
 
     /**
-     * Returns a regular 32 bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
-     * @return 32 bit hash.
+     * Returns a regular 32-bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
+     * @return 32-bit hash.
      */
     @Override
     public int hashCode() {
@@ -123,8 +123,8 @@ public class HierarchyId {
     }
 
     /**
-     * Calculate a 64 bit hash of the path.
-     * @return 64 bit hash.
+     * Calculate a 64-bit hash of the path.
+     * @return 64-bit hash.
      */
     public long hashCode64() {
         List<HashCode> elementHashes = Arrays.stream(this.elements)

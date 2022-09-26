@@ -120,9 +120,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
+        TableSpec tableSpec = tableWrapper.getSpec();
         TableModel tableModel = new TableModel() {{
             setConnectionName(connectionWrapper.getName());
-            setSpec(tableWrapper.getSpec());
+            setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
+            setSpec(tableSpec);
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200

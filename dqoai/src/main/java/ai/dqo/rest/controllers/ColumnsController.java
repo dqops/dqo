@@ -135,6 +135,7 @@ public class ColumnsController {
             setConnectionName(connectionName);
             setTable(tableWrapper.getPhysicalTableName());
             setColumnName(columnName);
+            setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setSpec(columnSpec);
         }};
 

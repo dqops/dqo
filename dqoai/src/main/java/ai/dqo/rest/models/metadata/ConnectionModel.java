@@ -19,6 +19,9 @@ public class ConnectionModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
+    private Long connectionHash;
+
     @JsonPropertyDescription("Full connection specification, including all nested objects (but not a list of tables).")
     private ConnectionSpec spec;
 }

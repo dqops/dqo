@@ -4,13 +4,11 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.metadata.sources.ConnectionList;
-import ai.dqo.metadata.sources.ConnectionSpec;
-import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.LabelSetSpec;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.dictionaries.CommonColumnModel;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
@@ -27,8 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -92,9 +90,11 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
         ConnectionModel connectionModel = new ConnectionModel() {{
             setConnectionName(connectionName);
-            setSpec(connectionWrapper.getSpec());
+            setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
+            setSpec(connectionSpec);
         }};
 
         return new ResponseEntity<>(Mono.just(connectionModel), HttpStatus.OK); // 200
@@ -279,6 +279,54 @@ public class ConnectionsController {
 
         return new ResponseEntity<>(Mono.justOrEmpty(dimensions), HttpStatus.OK); // 200
     }
+
+    /**
+     * Finds common column names that are used on one or more tables. The columns are sorted descending by number of tables (where the column is used) and the column name ascending.
+     * @param connectionName Connection name.
+     * @return Sorted collection of most common columns.
+     */
+    @GetMapping("/{connectionName}/commoncolumns")
+    @ApiOperation(value = "getConnectionCommonColumns", notes = "Finds common column names that are used on one or more tables. " +
+            "The list of columns is sorted by the count of occurrence and the column name.", response = CommonColumnModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of common columns within a connection returned", response = CommonColumnModel[].class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<CommonColumnModel>> getConnectionCommonColumns(
+            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        List<TableWrapper> tableWrapperList = connectionWrapper.getTables().toList();
+        Map<String, CommonColumnModel> foundColumns = new HashMap<>();
+        for (TableWrapper tableWrapper : tableWrapperList) {
+            ColumnSpecMap columns = tableWrapper.getSpec().getColumns();
+            for (String columnName : columns.keySet()) {
+                CommonColumnModel commonColumnModel = foundColumns.get(columnName);
+                if (commonColumnModel == null) {
+                    commonColumnModel = new CommonColumnModel(columnName, 1);
+                    foundColumns.put(columnName, commonColumnModel);
+                } else {
+                    commonColumnModel.setTablesCount(commonColumnModel.getTablesCount() + 1);
+                }
+            }
+        }
+
+        List<CommonColumnModel> sortedCommonColumnList = foundColumns.values().stream()
+                .sorted()
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(Flux.fromIterable(sortedCommonColumnList), HttpStatus.OK); // 200
+    }
+
 
     /**
      * Creates (adds) a new connection.

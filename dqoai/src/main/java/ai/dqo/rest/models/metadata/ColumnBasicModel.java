@@ -27,6 +27,9 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Column name.")
     private String columnName;
 
+    @JsonPropertyDescription("Column hash that identifies the column using a unique hash code.")
+    private Long columnHash;
+
     @JsonPropertyDescription("Disables all data quality checks on the column. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
@@ -49,6 +52,7 @@ public class ColumnBasicModel {
                                                            ColumnSpec columnSpec) {
         return new ColumnBasicModel() {{
             setConnectionName(connectionName);
+            setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);
             setColumnName(columnName);
             setDisabled(columnSpec.isDisabled());

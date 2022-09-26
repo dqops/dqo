@@ -22,6 +22,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
+    private Long connectionHash;
+
     @JsonPropertyDescription("Database name (for those sources that have a database/schema/table separation).")
     private String databaseName;
 
@@ -55,6 +58,7 @@ public class ConnectionBasicModel {
     public static ConnectionBasicModel fromConnectionSpecification(String connectionName, ConnectionSpec connectionSpec) {
         return new ConnectionBasicModel() {{
             setConnectionName(connectionName);
+            setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setDatabaseName(connectionSpec.getDatabaseName());
             setProviderType(connectionSpec.getProviderType());
             setUrl(connectionSpec.getUrl());
