@@ -66,8 +66,10 @@ const sizes = {
   440: '110rem'
 };
 
+const withMT = require("@material-tailwind/react/utils/withMT");
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+module.exports = withMT({
   theme: {
     extend: {
       colors: {
@@ -103,7 +105,10 @@ module.exports = {
       },
       spacing: sizes,
       minHeight: sizes,
-      minWidth: sizes,
+      minWidth: {
+        ...sizes,
+        'initial': 'initial'
+      },
       maxWidth: sizes,
       maxHeight: sizes,
       backgroundOpacity: {
@@ -129,4 +134,4 @@ module.exports = {
   },
   plugins: [],
   content: ["./src/**/*.{js,jsx,ts,tsx,html}", "./public/index.html"],
-};
+});

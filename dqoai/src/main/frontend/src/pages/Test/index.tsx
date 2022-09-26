@@ -8,18 +8,11 @@ import { TREE_LEVEL } from '../../shared/enums';
 import ConnectionView from '../../components/Connection/ConnectionView';
 
 const TestPage = () => {
-  const {
-    tabs,
-    setActiveTab,
-    activeTab,
-    onAddTab,
-    closeTab,
-    getTabLabel,
-    treeData
-  } = useTabs();
+  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
+    useTabs();
 
   const activeNode = findNode(treeData, activeTab);
-  console.log('activeTable', activeNode);
+
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
