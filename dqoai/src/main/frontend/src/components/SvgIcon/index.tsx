@@ -35,6 +35,9 @@ import { ReactComponent as XCircleSvg } from './svg/x-circle.svg';
 import { ReactComponent as DatabaseSvg } from './svg/database.svg';
 import { ReactComponent as SchemaSvg } from './svg/schema.svg';
 import { ReactComponent as ColumnSvg } from './svg/column.svg';
+import { ReactComponent as EditSvg } from './svg/edit.svg';
+import { ReactComponent as DeleteSvg } from './svg/delete.svg';
+import { ReactComponent as SaveSvg } from './svg/save.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -71,7 +74,10 @@ const iconsMap: any = {
   add: AddSvg,
   database: DatabaseSvg,
   schema: SchemaSvg,
-  column: ColumnSvg
+  column: ColumnSvg,
+  edit: EditSvg,
+  delete: DeleteSvg,
+  save: SaveSvg
 };
 
 interface SvgIconProps {
