@@ -121,14 +121,14 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		this.sut.getSpec().getParams().put("p1", "val");
+		this.sut.getSpec().getParameters().put("p1", "val");
 		this.sut.flush();
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
         FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
         RuleDefinitionSpec spec2 = sut2.getSpec();
-        Assertions.assertEquals("val", spec2.getParams().get("p1"));
+        Assertions.assertEquals("val", spec2.getParameters().get("p1"));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void flush_whenExistingWasMarkedForDeletion_thenDeletesRuleFromDisk() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -201,7 +201,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -215,7 +215,7 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();

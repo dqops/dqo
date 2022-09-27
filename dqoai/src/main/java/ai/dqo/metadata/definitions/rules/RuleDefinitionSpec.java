@@ -17,11 +17,10 @@ package ai.dqo.metadata.definitions.rules;
 
 import ai.dqo.execution.rules.runners.python.PythonRuleRunner;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,10 +38,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class RuleDefinitionSpec extends AbstractSpec {
+public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<RuleDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("time_window", o -> o.timeWindow);
+            put("fields", o -> o.fields);
         }
     };
 
@@ -58,12 +58,16 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Rule time window configuration when the mode is previous_readings. Configures the number of past time windows (sensor readings) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
     private RuleTimeWindowSettingsSpec timeWindow;
 
+    @JsonPropertyDescription("List of fields that are parameters of a custom rule. Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private ParameterDefinitionsListSpec fields;
+
     @JsonPropertyDescription("Additional rule parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> params = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
 
     @JsonIgnore
-    private LinkedHashMap<String, String> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
 
     /**
      * Rule implementation type.
@@ -135,21 +139,39 @@ public class RuleDefinitionSpec extends AbstractSpec {
     }
 
     /**
+     * Returns a list of parameters (fields) used on this rule. Those parameters are shown by the DQO UI.
+     * @return List of parameters.
+     */
+    public ParameterDefinitionsListSpec getFields() {
+        return fields;
+    }
+
+    /**
+     * Sets the new list of fields.
+     * @param fields List of fields.
+     */
+    public void setFields(ParameterDefinitionsListSpec fields) {
+        setDirtyIf(!Objects.equals(this.fields, fields));
+        this.fields = fields;
+        propagateHierarchyIdToField(fields, "fields");
+    }
+
+    /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParams() {
-        return params;
+    public LinkedHashMap<String, String> getParameters() {
+        return parameters;
     }
 
     /**
      * Sets a dictionary of parameters passed to the rule.
-     * @param params Key/value dictionary with extra parameters.
+     * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParams(LinkedHashMap<String, String> params) {
-		setDirtyIf(!Objects.equals(this.params, params));
-        this.params = params;
-		this.originalParams = (LinkedHashMap<String, String>) params.clone();
+    public void setParameters(LinkedHashMap<String, String> parameters) {
+		setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters;
+		this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
     }
 
     /**
@@ -159,7 +181,7 @@ public class RuleDefinitionSpec extends AbstractSpec {
      */
     @Override
     public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.params, this.originalParams);
+        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
     }
 
     /**
@@ -169,7 +191,7 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @Override
     public void clearDirty(boolean propagateToChildren) {
         super.clearDirty(propagateToChildren);
-		this.originalParams = (LinkedHashMap<String, String>) this.params.clone();
+		this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
     }
 
     /**
@@ -202,5 +224,47 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @Override
     public boolean isDefault() {
         return false;
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public RuleDefinitionSpec clone() {
+        try {
+            RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.clone();
+            if (cloned.fields != null) {
+                cloned.fields = cloned.fields.clone();
+            }
+            if (cloned.timeWindow != null) {
+                cloned.timeWindow = cloned.timeWindow.clone();
+            }
+            if (cloned.parameters != null) {
+                cloned.parameters = (LinkedHashMap<String, String>) cloned.parameters.clone();
+            }
+            if (cloned.originalParameters != null) {
+                cloned.originalParameters = (LinkedHashMap<String, String>) cloned.originalParameters.clone();
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned.");
+        }
+    }
+
+    /**
+     * Creates a trimmed version of the object without unwanted properties.
+     * @return Trimmed version of this object.
+     */
+    public RuleDefinitionSpec trim() {
+        try {
+            RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.clone();
+            cloned.fields = null;
+            cloned.originalParameters = null;
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned.");
+        }
     }
 }

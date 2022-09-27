@@ -36,6 +36,8 @@ import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHomeImpl;
+import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
@@ -731,6 +733,30 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a parameter definition specification, it describes a single parameter for custom sensors and rules.
+     *
+     * @param parameterDefinitionSpec Parameter definition specification.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParameterDefinitionSpec parameterDefinitionSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of parameter definitions, it describes all parameters for custom sensors and rules.
+     *
+     * @param parameterDefinitionSpecs Parameter definitions list.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

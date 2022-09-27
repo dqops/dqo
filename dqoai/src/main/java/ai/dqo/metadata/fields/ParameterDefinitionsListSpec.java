@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.comments;
+package ai.dqo.metadata.fields;
 
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
 /**
- * List of comments.
+ * List of parameter definitions - the parameters for custom sensors or custom rules.
  */
-public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec> implements Cloneable {
+public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<ParameterDefinitionSpec> implements Cloneable {
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
@@ -37,14 +37,14 @@ public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec>
      * Creates and returns a copy of this object.
      */
     @Override
-    public CommentsListSpec clone() {
-        CommentsListSpec cloned = new CommentsListSpec();
+    public ParameterDefinitionsListSpec clone() {
+        ParameterDefinitionsListSpec cloned = new ParameterDefinitionsListSpec();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
-        for (CommentSpec comment : this) {
-            cloned.add(comment.clone());
+        for (ParameterDefinitionSpec parameterDefinitionSpec : this) {
+            cloned.add(parameterDefinitionSpec.clone());
         }
 
         if (!this.isDirty()) {
