@@ -5,6 +5,7 @@ import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
+import CommentsTab from './CommentsTab';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -18,6 +19,10 @@ const tabs = [
   {
     label: 'Schedule',
     value: 'schedule'
+  },
+  {
+    label: 'Comments',
+    value: 'comments'
   }
 ];
 
@@ -47,6 +52,9 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
         )}
         {activeTab === 'schedule' && (
           <ScheduleDetail connectionName={node.module} />
+        )}
+        {activeTab === 'comments' && (
+          <CommentsTab connectionName={node.module} />
         )}
       </div>
     </div>
