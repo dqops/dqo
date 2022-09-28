@@ -25,11 +25,11 @@ const tabs = [
   }
 ];
 
-const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
+const ScheduleDetail = ({
   connectionName,
   schemaName,
   tableName
-}) => {
+}: IScheduleDetailProps) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
