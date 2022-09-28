@@ -11,6 +11,7 @@ import ai.dqo.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionWrap
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static ai.dqo.metadata.storage.localfiles.SpecFileNames.*;
@@ -24,6 +25,7 @@ public class RuleServiceImpl implements RuleService {
 	private final DqoHomeContextFactory dqoHomeContextFactory;
 	private final EditorLaunchService editorLaunchService;
 
+	@Autowired
 	public RuleServiceImpl(UserHomeContextFactory userHomeContextFactory, DqoHomeContextFactory dqoHomeContextFactory,
 						   EditorLaunchService editorLaunchService) {
 		this.userHomeContextFactory = userHomeContextFactory;
