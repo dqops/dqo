@@ -38,6 +38,9 @@ nav:
 #          - remove: 'commands/connection/remove/connection_remove.md'
 #          - update: 'commands/connection/update/connection_update.md'
       - cloud: 'commands/cloud/cloud.md'
+  - Scheduler:
+    - Introduction to the scheduler: 'Scheduler/Introduction_to_the_scheduler.md'
+    - Cron formatting: 'Scheduler/Cron_formatting.md'
   - Check reference:
     - Timeliness:
         - Average delay: 'check_reference/timeliness/average_delay/average_delay.md'
