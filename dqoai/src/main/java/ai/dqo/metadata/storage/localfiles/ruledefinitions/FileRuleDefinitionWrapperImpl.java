@@ -56,6 +56,15 @@ public class FileRuleDefinitionWrapperImpl extends RuleDefinitionWrapperImpl {
     }
 
     /**
+     * Returns the folder that contains the rule files.
+     * @return Rule folder.
+     */
+    @JsonIgnore
+    public FolderTreeNode getRuleFolderNode() {
+        return customRuleFolderNode;
+    }
+
+    /**
      * Returns the rule module name inside the folder. This is the bare file name without the .py or .dqorule.yaml extensions.
      * @return Bare rule name inside the folder.
      */

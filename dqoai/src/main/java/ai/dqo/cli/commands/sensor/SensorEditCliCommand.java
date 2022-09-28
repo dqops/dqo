@@ -22,7 +22,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "edit", description = "Run checks matching specified filters")
+@CommandLine.Command(name = "edit", description = "Edit sensor that match filters")
 public class SensorEditCliCommand extends BaseCommand implements ICommand {
 	private final SensorService sensorService;
 	private final TerminalReader terminalReader;

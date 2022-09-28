@@ -44,7 +44,15 @@ const TableView = ({ node }: ITableViewProps) => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
-      <div>{activeTab === 'tab' && <TableDetails />}</div>
+      <div>
+        {activeTab === 'table' && (
+          <TableDetails
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={node.module}
+          />
+        )}
+      </div>
       <div>
         {activeTab === 'schedule' && (
           <ScheduleDetail
