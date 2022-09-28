@@ -15,16 +15,14 @@
  */
 package ai.dqo.checks.table;
 
+import ai.dqo.checks.AbstractCheckCategoriesSpec;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
-import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -41,14 +39,13 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableCheckCategoriesSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class TableCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategoriesSpec.FIELDS) {
         {
             put("validity", o -> o.validity);
             put("consistency", o -> o.consistency);
-            put("custom", o -> o.custom);
             put("timeliness", o -> o.timeliness);
-
+            put("custom", o -> o.custom);
         }
     };
 

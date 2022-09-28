@@ -48,6 +48,10 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
     @JsonPropertyDescription("Disables the data quality sensor. Only enabled sensors are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     private boolean disabled;
 
+    @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String filter;
+
     /**
      * Checks if the sensor (and its parent check) is disabled.
      * @return True when the check is disabled.
@@ -64,10 +68,6 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
 		this.setDirtyIf(this.disabled != disabled);
         this.disabled = disabled;
     }
-
-    @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String filter;
 
     /**
      * Returns an optional WHERE clause filter used by this check for SQL sensors.

@@ -15,17 +15,15 @@
  */
 package ai.dqo.checks.column;
 
+import ai.dqo.checks.AbstractCheckCategoriesSpec;
 import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
 import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
 import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
-import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -42,14 +40,14 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnCheckCategoriesSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategoriesSpec.FIELDS) {
         {
 			put("validity", o -> o.validity);
 			put("uniqueness", o -> o.uniqueness);
             put("completeness", o -> o.completeness);
-			put("custom", o -> o.custom);
             put("consistency", o -> o.consistency);
+            put("custom", o -> o.custom);
         }
     };
 
