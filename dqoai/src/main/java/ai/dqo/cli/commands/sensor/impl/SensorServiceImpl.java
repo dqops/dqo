@@ -4,6 +4,7 @@ import ai.dqo.cli.commands.SensorFileExtension;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -55,6 +56,9 @@ public class SensorServiceImpl implements SensorService {
 			FileSensorDefinitionWrapperImpl newSensorDefinitionWrapper = (FileSensorDefinitionWrapperImpl)userHome.getSensors().createAndAddNew(sensorName);
 			newSensorDefinitionWrapper.setSpec(dqoSensorDefinitionWrapper.getSpec());
 			sensorDefinitionWrapper = newSensorDefinitionWrapper;
+			sensorDefinitionWrapper.setStatus(InstanceStatus.ADDED);
+			sensorDefinitionWrapper.flush();
+			userHome.flush();
 		}
 
 		if (provider == null) {
