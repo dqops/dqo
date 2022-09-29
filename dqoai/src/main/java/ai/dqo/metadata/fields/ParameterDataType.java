@@ -21,12 +21,18 @@ public enum ParameterDataType {
     @JsonProperty("double")
     double_type,
 
-    @JsonProperty("datetime")
-    datetime_type,
+    @JsonProperty("instant")
+    instant_type,
 
     @JsonProperty("column_name")
     column_name_type, // this is a string, but should match a known column name from the same table
 
     @JsonProperty("enum")
-    enum_type
+    enum_type,
+
+    @JsonProperty("string_list")
+    string_list_type,
+
+    @JsonProperty("object")
+    object_type
 }

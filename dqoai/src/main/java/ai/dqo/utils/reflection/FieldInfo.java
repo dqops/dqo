@@ -2,7 +2,10 @@ package ai.dqo.utils.reflection;
 
 import ai.dqo.metadata.fields.ParameterDataType;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Describes a single field that is a parameter on a sensor parameter class or a rule.
@@ -14,6 +17,7 @@ public class FieldInfo {
     private String helpText;
     private Class<?> clazz;
     private ParameterDataType dataType;
+    private Map<String, EnumValueInfo> enumValuesByName;
     private Method getterMethod;
     private Method setterMethod;
 
@@ -114,6 +118,22 @@ public class FieldInfo {
     }
 
     /**
+     * Stores the dictionary of possible enum values, keyed by the name. Used when the field type is an enum.
+     * @return Dictionary of enum values possible for an enum value.
+     */
+    public Map<String, EnumValueInfo> getEnumValuesByName() {
+        return enumValuesByName;
+    }
+
+    /**
+     * Stores a dictionary of possible enum values supported by the field.
+     * @param enumValuesByName Map of enum values.
+     */
+    public void setEnumValuesByName(Map<String, EnumValueInfo> enumValuesByName) {
+        this.enumValuesByName = enumValuesByName;
+    }
+
+    /**
      * Returns the declared getter method to read the field value using a declared getter.
      * @return Returns the getter method.
      */
@@ -143,5 +163,52 @@ public class FieldInfo {
      */
     public void setSetterMethod(Method setterMethod) {
         this.setterMethod = setterMethod;
+    }
+
+    /**
+     * Retrieves the field value. Enum fields are converted to the name (string).
+     * @param parentObject Parent object to read the field using the getter method.
+     * @return Field value.
+     */
+    public Object getFieldValue(Object parentObject) {
+        try {
+            Object result = this.getterMethod.invoke(parentObject);
+            if (result == null) {
+                return null;
+            }
+
+            if (this.clazz.isEnum()) {
+                // convert to a java name
+                return ((Enum<?>)result).name();
+            }
+
+            return result;
+        }
+        catch (InvocationTargetException e) {
+            throw new FieldAccessException("Invocation exception", e);
+        } catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception", e);
+        }
+    }
+
+    /**
+     * Sets the field value. Converts enum names to enum values.
+     * @param value Value to store in the field.
+     * @param targetObject Target object.
+     */
+    public void setFieldValue(Object value, Object targetObject) {
+        try {
+            if (value != null && this.clazz.isEnum()) {
+                EnumValueInfo enumValueInfo = this.enumValuesByName.get(value);
+                value = enumValueInfo.getEnumInstance(); // convert the name to the actual enum instance
+            }
+
+            this.setterMethod.invoke(targetObject, value);
+        }
+        catch (InvocationTargetException e) {
+            throw new FieldAccessException("Invocation exception", e);
+        } catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception", e);
+        }
     }
 }
