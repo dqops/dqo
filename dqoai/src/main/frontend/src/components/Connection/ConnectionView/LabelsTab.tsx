@@ -1,26 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { CommentSpec } from '../../../api';
 import { AxiosResponse } from 'axios';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 
-interface ICommentItemProps {
+interface ILabelItemProps {
   idx: number;
-  comment: CommentSpec;
-  onChange: (key: number, value?: string) => void;
+  label: string;
+  onChange: (key: number, value: string) => void;
   onRemove: (key: number) => void;
 }
 
-const CommentItem = ({
-  idx,
-  comment,
-  onChange,
-  onRemove
-}: ICommentItemProps) => {
+const LabelItem = ({ idx, label, onChange, onRemove }: ILabelItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [text, setText] = useState(comment.comment);
+  const [text, setText] = useState(label);
 
   const onEdit = () => setIsEditing(true);
 
@@ -35,11 +29,9 @@ const CommentItem = ({
         {isEditing ? (
           <Input value={text} onChange={(e) => setText(e.target.value)} />
         ) : (
-          comment.comment
+          label
         )}
       </td>
-      <td className="px-8 min-w-60 py-2">{comment.comment_by}</td>
-      <td className="px-8 min-w-60 py-2">{comment.date}</td>
       <td className="px-8 min-w-40 py-2">
         <div className="flex space-x-2 items-center justify-center">
           <IconButton size="sm" onClick={isEditing ? onSave : onEdit}>
@@ -54,76 +46,58 @@ const CommentItem = ({
   );
 };
 
-interface ICommentsTabProps {
+interface ILabelsTabProps {
   connectionName: string;
 }
 
-const CommentsTab = ({ connectionName }: ICommentsTabProps) => {
-  const [comments, setComments] = useState<CommentSpec[]>([]);
+const LabelsTab = ({ connectionName }: ILabelsTabProps) => {
+  const [labels, setLabels] = useState<string[]>([]);
   const [text, setText] = useState('');
 
-  const fetchComments = async () => {
+  const fetchLabels = async () => {
     try {
-      const res: AxiosResponse<CommentSpec[]> =
-        await ConnectionApiClient.getConnectionComments(connectionName);
+      const res: AxiosResponse<string[]> =
+        await ConnectionApiClient.getConnectionLabels(connectionName);
 
-      setComments(res.data);
+      setLabels(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    fetchComments().then();
+    fetchLabels().then();
   }, [connectionName]);
 
   const onAdd = () => {
-    setComments([
-      ...comments,
-      {
-        comment: text,
-        comment_by: 'user',
-        date: new Date().toDateString()
-      }
-    ]);
+    setLabels([...labels, text]);
     setText('');
   };
 
-  const onChangeComment = (key: number, value?: string) => {
-    setComments(
-      comments.map((comment, index) =>
-        key === index
-          ? {
-              ...comment,
-              comment: value
-            }
-          : comment
-      )
-    );
+  const onChangeLabel = (key: number, value: string) => {
+    setLabels(labels.map((label, index) => (key === index ? value : label)));
   };
 
-  const onRemoveComment = (key: number) => {
-    setComments(comments.filter((item, index) => index !== key));
+  const onRemoveLabel = (key: number) => {
+    setLabels(labels.filter((item, index) => index !== key));
   };
 
   return (
     <div className="p-4">
       <table className="my-6 w-full">
         <thead>
-          <th className="text-left min-w-40 w-full pr-4 py-2">Comment</th>
-          <th className="text-left min-w-60 px-8 py-2">Author</th>
-          <th className="text-left min-w-60 px-8 py-2">Date</th>
+          <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
           <th className="px-8 min-w-40 py-2">Action</th>
         </thead>
         <tbody>
-          {comments &&
-            comments.map((comment, index) => (
-              <CommentItem
-                comment={comment}
+          {labels &&
+            labels.map((label, index) => (
+              <LabelItem
+                label={label}
                 key={index}
                 idx={index}
-                onChange={onChangeComment}
-                onRemove={onRemoveComment}
+                onChange={onChangeLabel}
+                onRemove={onRemoveLabel}
               />
             ))}
         </tbody>
@@ -144,4 +118,4 @@ const CommentsTab = ({ connectionName }: ICommentsTabProps) => {
   );
 };
 
-export default CommentsTab;
+export default LabelsTab;

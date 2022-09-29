@@ -6,6 +6,8 @@ import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
 import CommentsTab from './CommentsTab';
+import LabelsTab from './LabelsTab';
+import TimeSeriesTab from './TimeSeriesTab';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -21,8 +23,16 @@ const tabs = [
     value: 'schedule'
   },
   {
+    label: 'Time series',
+    value: 'time'
+  },
+  {
     label: 'Comments',
     value: 'comments'
+  },
+  {
+    label: 'Labels',
+    value: 'labels'
   }
 ];
 
@@ -53,9 +63,11 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
         {activeTab === 'schedule' && (
           <ScheduleDetail connectionName={node.module} />
         )}
+        {activeTab === 'time' && <TimeSeriesTab connectionName={node.module} />}
         {activeTab === 'comments' && (
           <CommentsTab connectionName={node.module} />
         )}
+        {activeTab === 'labels' && <LabelsTab connectionName={node.module} />}
       </div>
     </div>
   );
