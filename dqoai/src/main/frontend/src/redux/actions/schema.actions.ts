@@ -2,8 +2,8 @@ import { Dispatch } from 'redux';
 
 import { SchemaApiClient } from '../../services/apiClient';
 import { SCHEMA_ACTION } from '../types';
-import {AxiosResponse} from 'axios';
-import {SchemaModel} from '../../api';
+import { AxiosResponse } from 'axios';
+import { SchemaModel } from '../../api';
 
 export const getSchemasRequest = () => ({
   type: SCHEMA_ACTION.GET_SCHEMAS

@@ -192,7 +192,7 @@ function TabProvider(props: any) {
         activeTab,
         setActiveTab,
         closeTab,
-        onAddTab,
+        onAddTab
       }}
       {...props}
     />

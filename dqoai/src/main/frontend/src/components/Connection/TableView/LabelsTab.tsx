@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import { TableApiClient } from '../../../services/apiClient';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
-import LabelItem from './LabelItem';
+import LabelItem from '../ConnectionView/LabelItem';
 
 interface ILabelsTabProps {
   connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
-const LabelsTab = ({ connectionName }: ILabelsTabProps) => {
+const LabelsTab = ({
+  connectionName,
+  schemaName,
+  tableName
+}: ILabelsTabProps) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [text, setText] = useState('');
 
   const fetchLabels = async () => {
     try {
-      const res: AxiosResponse<string[]> =
-        await ConnectionApiClient.getConnectionLabels(connectionName);
+      const res: AxiosResponse<string[]> = await TableApiClient.getTableLabels(
+        connectionName,
+        schemaName,
+        tableName
+      );
 
       setLabels(res.data);
     } catch (err) {
