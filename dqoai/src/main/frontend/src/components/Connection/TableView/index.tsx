@@ -6,6 +6,8 @@ import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
 import TableColumns from './TableColumns';
+import LabelsTab from './LabelsTab';
+import CommentsTab from './CommentsTab';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -19,6 +21,14 @@ const tabs = [
   {
     label: 'Schedule',
     value: 'schedule'
+  },
+  {
+    label: 'Labels',
+    value: 'labels'
+  },
+  {
+    label: 'Comments',
+    value: 'comments'
   },
   {
     label: 'Columns',
@@ -61,6 +71,24 @@ const TableView = ({ node }: ITableViewProps) => {
       <div>
         {activeTab === 'schedule' && (
           <ScheduleDetail
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={node.module}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'comments' && (
+          <CommentsTab
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={node.module}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'labels' && (
+          <LabelsTab
             connectionName={connectionName}
             schemaName={schemaName}
             tableName={node.module}

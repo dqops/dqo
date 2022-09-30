@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { CommentSpec } from '../../../api';
 import { AxiosResponse } from 'axios';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import { TableApiClient } from '../../../services/apiClient';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
-import CommentItem from './CommentItem';
+import CommentItem from '../ConnectionView/CommentItem';
 
 interface ICommentsTabProps {
   connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
-const CommentsTab = ({ connectionName }: ICommentsTabProps) => {
+const CommentsTab = ({
+  connectionName,
+  schemaName,
+  tableName
+}: ICommentsTabProps) => {
   const [comments, setComments] = useState<CommentSpec[]>([]);
   const [text, setText] = useState('');
 
   const fetchComments = async () => {
     try {
       const res: AxiosResponse<CommentSpec[]> =
-        await ConnectionApiClient.getConnectionComments(connectionName);
+        await TableApiClient.getTableComments(
+          connectionName,
+          schemaName,
+          tableName
+        );
 
       setComments(res.data);
     } catch (err) {
