@@ -18,8 +18,6 @@ package ai.dqo.rules;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -136,17 +134,17 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
         }
 
         R high = getHigh();
-        if (high != null && !high.isDisable()) {
+        if (high != null && !high.isDisabled()) {
             return true;
         }
 
         R medium = getMedium();
-        if (medium != null && !medium.isDisable()) {
+        if (medium != null && !medium.isDisabled()) {
             return true;
         }
 
         R low = getLow();
-		return low != null && !low.isDisable();
+		return low != null && !low.isDisabled();
 	}
 
     /**

@@ -34,8 +34,8 @@ public class MaxValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
+		this.sut.setDisabled(true);
+        Assertions.assertTrue(this.sut.isDisabled());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -43,11 +43,11 @@ public class MaxValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
+		this.sut.setDisabled(true);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
+		this.sut.setDisabled(true);
         Assertions.assertFalse(this.sut.isDirty());
     }
 

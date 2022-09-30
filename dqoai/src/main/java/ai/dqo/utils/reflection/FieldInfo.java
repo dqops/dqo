@@ -5,7 +5,6 @@ import ai.dqo.metadata.fields.ParameterDataType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Describes a single field that is a parameter on a sensor parameter class or a rule.
@@ -20,6 +19,7 @@ public class FieldInfo {
     private Map<String, EnumValueInfo> enumValuesByName;
     private Method getterMethod;
     private Method setterMethod;
+    private boolean isDirectField;
 
     /**
      * Returns the field name used on the class.
@@ -163,6 +163,22 @@ public class FieldInfo {
      */
     public void setSetterMethod(Method setterMethod) {
         this.setterMethod = setterMethod;
+    }
+
+    /**
+     * Returns true if the field is directly defined on the superclass. False when the field is inherited from a super class (base class).
+     * @return True when directly defined on the class, false if defined in a super class.
+     */
+    public boolean isDirectField() {
+        return isDirectField;
+    }
+
+    /**
+     * Sets the direct flag to identify fields defined on the target (top most in the class hierarchy) class, or false when the field was inherited.
+     * @param directField True - direct, false - inherited.
+     */
+    public void setDirectField(boolean directField) {
+        isDirectField = directField;
     }
 
     /**

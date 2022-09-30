@@ -30,7 +30,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void getFieldValue_whenStringFieldNull_thenReturnsNull() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("fieldName");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setFieldName(null);
@@ -42,7 +42,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void getFieldValue_whenStringFieldNotNull_thenReturnsValue() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("fieldName");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setFieldName("some name");
@@ -54,7 +54,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void getFieldValue_whenEnumFieldNotNull_thenReturnsStringValue() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("dataType");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setDataType(ParameterDataType.double_type);
@@ -66,7 +66,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void setFieldValue_whenStringFieldNull_thenStoresValue() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("fieldName");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setFieldName("not empty");
@@ -78,7 +78,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void setFieldValue_whenStringFieldNotNull_thenStoresValue() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("fieldName");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setFieldName("not empty");
@@ -90,7 +90,7 @@ public class FieldInfoTests extends BaseTest {
     @Test
     void setFieldValue_whenEnumFieldNotNull_thenStoresValue() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("dataType");
-        FieldInfo sut = this.reflectionService.makeFieldInfo(field);
+        FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setDataType(ParameterDataType.double_type);

@@ -1,12 +1,16 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentCheckSpec;
+import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentRulesSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleThresholdsSpec;
+import ai.dqo.rules.comparison.MinValueRuleThresholdsSpec;
 import ai.dqo.sensors.column.validity.BuiltInDateFormats;
+import ai.dqo.sensors.column.validity.ColumnValidityDateTypePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Objects;
 
 @SpringBootTest
 public class ReflectionServiceImplTests extends BaseTest {
@@ -54,6 +59,52 @@ public class ReflectionServiceImplTests extends BaseTest {
     }
 
     @Test
+    void reflectClass_whenReflectingCheckSpecification_thenReturnsAllBaseFields() {
+        ClassInfo classInfo = this.sut.reflectClass(ColumnValidityDateTypePercentCheckSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(6, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "timeSeriesOverride")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "comments")));
+    }
+
+    @Test
+    void reflectClass_whenReflectingCheckSpecification_thenReturnsAlsoInheritedFieldsFields() {
+        ClassInfo classInfo = this.sut.reflectClass(ColumnValidityDateTypePercentCheckSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(6, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "parameters")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "rules")));
+    }
+
+    @Test
+    void reflectClass_whenReflectingSensorParametersSpecification_thenReturnsAllRequestedFields() {
+        ClassInfo classInfo = this.sut.reflectClass(ColumnValidityDateTypePercentSensorParametersSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(4, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "namedDateFormat")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "disabled")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "filter")));
+    }
+
+    @Test
+    void reflectClass_whenReflectingRulesSetClass_thenReturnsAllRequestedFields() {
+        ClassInfo classInfo = this.sut.reflectClass(ColumnValidityDateTypePercentRulesSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(2, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minCount")));
+    }
+
+    @Test
+    void reflectClass_whenReflectingRulesThresholdsClass_thenReturnsAllRequestedFields() {
+        ClassInfo classInfo = this.sut.reflectClass(MinValueRuleThresholdsSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(5, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "low")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "medium")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "high")));
+    }
+
+    @Test
     void createEnumValue_whenEnumFieldGivenWithPropertyName_thenReturnsEnumInfo() {
         EnumValueInfo enumValue = this.sut.createEnumValue(BuiltInDateFormats.ISO8601);
         Assertions.assertNotNull(enumValue);
@@ -66,14 +117,14 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenFieldIsStatic_thenIsNotReturned() throws Exception {
         Field field = ParameterDefinitionSpec.class.getField("FIELDS");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNull(fieldInfo);
     }
 
     @Test
     void makeFieldInfo_whenSimpleStringFieldWithJsonPropertyTypeAnnotation_thenReturnsFieldInfo() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("fieldName");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.string_type, fieldInfo.getDataType());
@@ -88,7 +139,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenSimpleBooleanField_thenReturnsFieldInfo() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("required");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.boolean_type, fieldInfo.getDataType());
@@ -103,7 +154,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenSimpleIntField_thenReturnsFieldInfo() throws Exception {
         Field field = RuleTimeWindowSettingsSpec.class.getDeclaredField("predictionTimeWindow");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.integer_type, fieldInfo.getDataType());
@@ -118,7 +169,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenSimpleDoubleField_thenReturnsFieldInfo() throws Exception {
         Field field = PercentMovingAverageRuleParametersSpec.class.getDeclaredField("maxPercentAbove");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.double_type, fieldInfo.getDataType());
@@ -133,7 +184,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenFieldIsListOfStrings_thenReturnsFieldInfo() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("allowedValues");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.string_list_type, fieldInfo.getDataType());
@@ -148,7 +199,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     @Test
     void makeFieldInfo_whenFieldIsJavaEnum_thenReturnsFieldInfoWithEnumValues() throws Exception {
         Field field = ParameterDefinitionSpec.class.getDeclaredField("dataType");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.enum_type, fieldInfo.getDataType());
@@ -160,14 +211,14 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Map<String, EnumValueInfo> enumValuesByYamlName = fieldInfo.getEnumValuesByName();
         Assertions.assertNotNull(enumValuesByYamlName);
-        Assertions.assertEquals(9, enumValuesByYamlName.size());
+        Assertions.assertEquals(10, enumValuesByYamlName.size());
         Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string_type").getEnumInstance());
     }
 
     @Test
     void makeFieldInfo_whenFieldIsOtherObject_thenReturnsFieldInfoAsObjectType() throws Exception {
         Field field = PercentMovingAverageRuleThresholdsSpec.class.getDeclaredField("high");
-        FieldInfo fieldInfo = this.sut.makeFieldInfo(field);
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.object_type, fieldInfo.getDataType());

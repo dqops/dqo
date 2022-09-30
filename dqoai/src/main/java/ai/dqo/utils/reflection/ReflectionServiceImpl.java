@@ -63,12 +63,17 @@ public class ReflectionServiceImpl implements ReflectionService {
      */
     protected ClassInfo reflectClass(Class<?> targetClass) {
         ClassInfo classInfo = new ClassInfo(targetClass);
-        Field[] fields = targetClass.getDeclaredFields();
-        for (Field field : fields) {
-            FieldInfo fieldInfo = makeFieldInfo(field);
-            if (fieldInfo != null) {
-                classInfo.getFields().add(fieldInfo);
+
+        Class<?> reflectedClass = targetClass;
+        while (reflectedClass != Object.class) {
+            Field[] fields = reflectedClass.getDeclaredFields();
+            for (Field field : fields) {
+                FieldInfo fieldInfo = makeFieldInfo(targetClass, field);
+                if (fieldInfo != null) {
+                    classInfo.getFields().add(fieldInfo);
+                }
             }
+            reflectedClass = reflectedClass.getSuperclass();
         }
 
         return classInfo;
@@ -76,10 +81,11 @@ public class ReflectionServiceImpl implements ReflectionService {
 
     /**
      * Creates a field info from a given field, when the field is yaml serializable.
+     * @param targetClass Target class (superclass).
      * @param field Field object received from the java reflection api.
      * @return Field info for valid fields or null.
      */
-    protected FieldInfo makeFieldInfo(Field field) {
+    protected FieldInfo makeFieldInfo(Class<?> targetClass, Field field) {
         if (field.isSynthetic()) {
             return null;
         }
@@ -110,6 +116,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setYamlFieldName(yamlFieldName);
             setDisplayName(displayName != null ? displayName : yamlFieldName);
             setHelpText(helpText);
+            setDirectField(targetClass == field.getDeclaringClass());
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?
