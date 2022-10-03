@@ -109,7 +109,10 @@ module.exports = withMT({
         ...sizes,
         'initial': 'initial'
       },
-      maxWidth: sizes,
+      maxWidth: {
+        ...sizes,
+        'tab-wrapper': 'calc(100vw - 340px)'
+      },
       maxHeight: sizes,
       backgroundOpacity: {
         4: '0.04',

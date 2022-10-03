@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
@@ -8,12 +8,15 @@ import Button from '../../Button';
 import CommentsTab from './CommentsTab';
 import LabelsTab from './LabelsTab';
 import TimeSeriesTab from './TimeSeriesTab';
+import { SchemaApiClient } from '../../../services/apiClient';
+import { SchemaModel } from '../../../api';
+import SchemaDetail from '../SchemaView';
 
 interface IConnectionViewProps {
   node: ITreeNode;
 }
 
-const tabs = [
+const initTabs = [
   {
     label: 'Connection',
     value: 'connection'
@@ -38,6 +41,47 @@ const tabs = [
 
 const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
+  const [schemas, setSchemas] = useState<SchemaModel[]>([]);
+  const [tabs, setTabs] = useState(initTabs);
+
+  useEffect(() => {
+    SchemaApiClient.getSchemas(node.module).then((res) => {
+      setSchemas(res.data);
+    });
+  }, [node]);
+
+  useEffect(() => {
+    setTabs([
+      ...initTabs,
+      ...schemas.map((item) => ({
+        label: item.schema_name || '',
+        value: item.schema_name || ''
+      }))
+    ]);
+  }, [schemas]);
+
+  const renderTabContent = () => {
+    if (activeTab === 'connection') {
+      return <ConnectionDetail connectionName={node.module} />;
+    }
+    if (activeTab === 'schedule') {
+      return <ScheduleDetail connectionName={node.module} />;
+    }
+    if (activeTab === 'time') {
+      return <TimeSeriesTab connectionName={node.module} />;
+    }
+    if (activeTab === 'comments') {
+      return <CommentsTab connectionName={node.module} />;
+    }
+    if (activeTab === 'labels') {
+      return <LabelsTab connectionName={node.module} />;
+    }
+    return (
+      <SchemaDetail
+        schema={schemas.find((item) => item.schema_name === activeTab)}
+      />
+    );
+  };
 
   return (
     <div className="">
@@ -56,19 +100,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
-      <div>
-        {activeTab === 'connection' && (
-          <ConnectionDetail connectionName={node.module} />
-        )}
-        {activeTab === 'schedule' && (
-          <ScheduleDetail connectionName={node.module} />
-        )}
-        {activeTab === 'time' && <TimeSeriesTab connectionName={node.module} />}
-        {activeTab === 'comments' && (
-          <CommentsTab connectionName={node.module} />
-        )}
-        {activeTab === 'labels' && <LabelsTab connectionName={node.module} />}
-      </div>
+      {renderTabContent()}
     </div>
   );
 };
