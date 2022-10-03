@@ -22,7 +22,7 @@ const Tabs = ({
   };
 
   return (
-    <div className={`flex ${className}`}>
+    <div className={`flex overflow-auto pb-2 max-w-tab-wrapper ${className}`}>
       {tabs.map((tab) => (
         <Tab
           key={tab.value}
