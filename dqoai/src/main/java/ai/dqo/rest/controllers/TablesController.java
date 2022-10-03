@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.table.TableCheckCategoriesSpec;
@@ -9,6 +24,8 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.mapping.CheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.metadata.TableModel;
@@ -41,10 +58,18 @@ import java.util.stream.Stream;
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
     private UserHomeContextFactory userHomeContextFactory;
+    private CheckMappingService checkMappingService;
 
+    /**
+     * Creates an instance of a controller by injecting dependencies.
+     * @param userHomeContextFactory User home context factory.
+     * @param checkMappingService Check mapper to convert the check specification to/from a UI model.
+     */
     @Autowired
-    public TablesController(UserHomeContextFactory userHomeContextFactory) {
+    public TablesController(UserHomeContextFactory userHomeContextFactory,
+                            CheckMappingService checkMappingService) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.checkMappingService = checkMappingService;
     }
 
     /**
@@ -408,6 +433,50 @@ public class TablesController {
         TableCheckCategoriesSpec checks = tableSpec.getChecks();
 
         return new ResponseEntity<>(Mono.just(checks), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality checks for a UI friendly mode on a table given a connection name and a table names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return UI friendly data quality check list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
+    @ApiOperation(value = "getTableChecksUI", notes = "Return a UI friendly model of all table level data quality checks on a table", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TableCheckCategoriesSpec checks = tableSpec.getChecks();
+        if (checks == null) {
+            checks = new TableCheckCategoriesSpec();
+        }
+        UIAllChecksModel checksUiModel = this.checkMappingService.createUiModel(checks);
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**

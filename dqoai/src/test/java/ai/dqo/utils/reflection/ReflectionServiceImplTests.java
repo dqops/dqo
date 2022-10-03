@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
@@ -134,6 +149,8 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("Field name that matches the field name (snake_case) used in the YAML specification.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(null, fieldInfo.getDefaultValue());
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
@@ -149,6 +166,8 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("True when the value for the parameter must be provided.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(false, fieldInfo.getDefaultValue());
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
@@ -164,6 +183,8 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor reading timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor reading. The default is 14 (days).", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(0, fieldInfo.getDefaultValue());
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
@@ -179,6 +200,8 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
@@ -194,6 +217,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("List of allowed values for a field that is of an enum type.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertNotNull(fieldInfo.getConstructor());
     }
 
     @Test
@@ -213,6 +237,8 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(enumValuesByYamlName);
         Assertions.assertEquals(10, enumValuesByYamlName.size());
         Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string_type").getEnumInstance());
+        Assertions.assertEquals(null, fieldInfo.getDefaultValue());
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
     @Test
@@ -228,5 +254,6 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("Rule threshold for a high severity (3) alert.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertNotNull(fieldInfo.getConstructor());
     }
 }
