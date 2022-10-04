@@ -75,23 +75,23 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
 
     @JsonPropertyDescription("Disable the rule at all severity levels.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean disable;
+    private boolean disabled;
 
     /**
      * Disable the quality rule and prevent it from executing.
      * @return Rule is disabled.
      */
-    public boolean isDisable() {
-        return disable;
+    public boolean isDisabled() {
+        return disabled;
     }
 
     /**
      * Changes the disabled flag of a quality rule.
-     * @param disable When true, the test will be disabled and will not be executed.
+     * @param disabled When true, the test will be disabled and will not be executed.
      */
-    public void setDisable(boolean disable) {
-		this.setDirtyIf(this.disable != disable);
-        this.disable = disable;
+    public void setDisabled(boolean disabled) {
+		this.setDirtyIf(this.disabled != disabled);
+        this.disabled = disabled;
     }
 
     /**
@@ -129,7 +129,7 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
      */
     @JsonIgnore
     public boolean isEnabled() {
-        if (this.disable) {
+        if (this.disabled) {
             return false;
         }
 
@@ -160,7 +160,7 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
             return false;
         }
 
-        return !this.disable;
+        return !this.disabled;
     }
 
     /**

@@ -38,7 +38,7 @@ const SchemaView = ({ node }: ISchemaViewProps) => {
       />
     );
   };
-
+  
   return (
     <div>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">

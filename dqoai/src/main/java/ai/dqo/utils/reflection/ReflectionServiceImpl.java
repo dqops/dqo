@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.utils.reflection;
 
 import ai.dqo.metadata.fields.ControlType;
@@ -9,15 +24,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +45,13 @@ public class ReflectionServiceImpl implements ReflectionService {
         put(Double.class, ParameterDataType.double_type);
         put(double.class, ParameterDataType.double_type);
         put(Instant.class, ParameterDataType.instant_type);
+    }};
+
+    private static final Map<Class<?>, Object> DEFAULT_VALUES = new HashMap<>() {{
+        put(int.class, 0);
+        put(long.class, 0L);
+        put(boolean.class, false);
+        put(double.class, 0.0);
     }};
 
     private Map<Class<?>, ClassInfo> reflectedClasses = new HashMap<>(); // accessed in a synchronized scope
@@ -117,6 +133,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setDisplayName(displayName != null ? displayName : yamlFieldName);
             setHelpText(helpText);
             setDirectField(targetClass == field.getDeclaringClass());
+            setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?
@@ -134,9 +151,19 @@ public class ReflectionServiceImpl implements ReflectionService {
                 fieldInfo.setEnumValuesByName(enumDictionary);
             } else if (fieldType == List.class && ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0] == String.class) {
                 parameterDataType = ParameterDataType.string_list_type;
+                try {
+                    Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
+                    fieldInfo.setConstructor(emptyConstructor);
+                } catch (NoSuchMethodException e) {
+                }
             }
             else {
                 parameterDataType = ParameterDataType.object_type;
+                Constructor<?>[] constructors = fieldType.getDeclaredConstructors();
+                Optional<Constructor<?>> parameterlessConstructor = Arrays.stream(constructors)
+                        .filter(c -> c.getParameterCount() == 0)
+                        .findFirst();
+                parameterlessConstructor.ifPresent(fieldInfo::setConstructor);
             }
         }
         fieldInfo.setDataType(parameterDataType);
