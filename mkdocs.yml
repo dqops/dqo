@@ -41,6 +41,7 @@ nav:
   - Scheduler:
     - Introduction to the scheduler: 'Scheduler/Introduction_to_the_scheduler.md'
     - Cron formatting: 'Scheduler/Cron_formatting.md'
+    - Enabling and disabling schedules: 'Scheduler/Enabling_and_disabling_schedules.md'
     - Cloud logging: 'Scheduler/Cloud_logging.md'
     - Console logging modes: 'Scheduler/Console_logging_modes.md'
     - Timezone configuration: 'Scheduler/Timezone_configuration.md'
