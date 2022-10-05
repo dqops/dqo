@@ -1,6 +1,7 @@
 Cloud is a platform with dashboards with results of the checks.
 
 An application programming interface (API) key is a unique code used to identify and authenticate an application or user. It is generated when first register.
+API key is stored in a YAML file named `.localsettings.dqosettings.yaml` in `userhome` catalogue.
 
 There are 3 methods to log on the Cloud:
 
@@ -10,6 +11,7 @@ There are 3 methods to log on the Cloud:
 
 - Server mode
 
+### Cloud synchronization works only if the application was first logged on, so a call to "cloud login" is required.
 
 ### Using `Cloud login` command
 
