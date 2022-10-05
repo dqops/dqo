@@ -38,13 +38,15 @@ This opens the DQO Cloud API Key request, please log in or create a DQO Cloud ac
 
 ### CLI mode
 
-In order to log on the Cloud in CLI mode use following command:
+In order to log on the Cloud in CLI mode run DQO and use following command:
 
 ```
 --dqo.cloud.api-key=<ApiKey>
 ```
 
 ### Server mode
+
+In order to log on the Cloud in server mode use following command:
 
 ```
 set DQO_CLOUD_API-KEY=<ApiKey>
