@@ -1,33 +1,64 @@
-import React from 'react';
-import { SchemaModel } from '../../../api';
+import React, { useEffect, useState } from 'react';
+import { ITreeNode } from '../../../shared/interfaces';
+import { TableApiClient } from '../../../services/apiClient';
+import Tabs from '../../Tabs';
+import { TabOption } from '../../Tabs/tab';
+import TableDetails from '../TableView/TableDetails';
+import SvgIcon from '../../SvgIcon';
+import Button from '../../Button';
 
-interface ISchemaDetailProps {
-  schema?: SchemaModel;
+interface ISchemaViewProps {
+  node: ITreeNode;
 }
 
-const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema}) => {
+const SchemaView = ({ node }: ISchemaViewProps) => {
+  const connectionName = node.key.split('.')[1] || '';
+  const [tabs, setTabs] = useState<TabOption[]>([]);
+  const [activeTab, setActiveTab] = useState('');
+
+  useEffect(() => {
+    TableApiClient.getTables(connectionName, node.module).then((res) => {
+      setTabs(
+        res.data.map((item) => ({
+          label: item.target?.table_name || '',
+          value: item.target?.table_name || ''
+        }))
+      );
+
+      setActiveTab(res.data[0]?.target?.table_name || '');
+    });
+  }, [node, connectionName]);
+
+  const renderContent = () => {
+    return (
+      <TableDetails
+        connectionName={connectionName}
+        schemaName={node.module}
+        tableName={activeTab}
+      />
+    );
+  };
+  
   return (
-    <div className="p-4">
-      <table className="mb-6">
-        <tr>
-          <td className="px-4 py-2">
-            <div>Connection name:</div>
-          </td>
-          <td className="px-4 py-2">
-            <div>{schema?.connection_name}</div>
-          </td>
-        </tr>
-        <tr>
-          <td className="px-4 py-2">
-            <div>Schema name:</div>
-          </td>
-          <td className="px-4 py-2">
-            <div>{schema?.schema_name}</div>
-          </td>
-        </tr>
-      </table>
+    <div>
+      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
+        <div className="flex items-center space-x-2">
+          <SvgIcon name="schema" className="w-5 h-5" />
+          <div className="text-xl font-semibold">{node.module}</div>
+        </div>
+        <Button
+          color="primary"
+          variant="contained"
+          label="Save"
+          className="w-40"
+        />
+      </div>
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      </div>
+      <div>{renderContent()}</div>
     </div>
   );
 };
 
-export default SchemaDetail;
+export default SchemaView;

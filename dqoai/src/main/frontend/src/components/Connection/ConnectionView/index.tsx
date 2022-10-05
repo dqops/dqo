@@ -10,7 +10,7 @@ import LabelsTab from './LabelsTab';
 import TimeSeriesTab from './TimeSeriesTab';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { SchemaModel } from '../../../api';
-import SchemaDetail from '../SchemaView';
+import SchemaDetail from '../SchemaView/SchemaDetail';
 
 interface IConnectionViewProps {
   node: ITreeNode;

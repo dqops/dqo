@@ -7,6 +7,7 @@ import { findNode } from '../../utils/tree';
 import { TREE_LEVEL } from '../../shared/enums';
 import ConnectionView from '../../components/Connection/ConnectionView';
 import TableView from '../../components/Connection/TableView';
+import SchemaView from '../../components/Connection/SchemaView';
 
 const TestPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
@@ -27,6 +28,9 @@ const TestPage = () => {
         <div className="flex-1 bg-white border border-gray-300 flex-auto">
           {activeNode?.level === TREE_LEVEL.DATABASE && (
             <ConnectionView node={activeNode} />
+          )}
+          {activeNode?.level === TREE_LEVEL.SCHEMA && (
+            <SchemaView node={activeNode} />
           )}
           {activeNode?.level === TREE_LEVEL.TABLE && (
             <TableView node={activeNode} />
