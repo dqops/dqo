@@ -3,8 +3,11 @@ Cloud is a platform with dashboards with results of the checks.
 An application programming interface (API) key is a unique code used to identify and authenticate an application or user. It is generated when first register.
 
 There are 3 methods to log on the Cloud:
+
 - Using `Cloud login` command
+
 - CLI mode
+
 - Server mode
 
 
