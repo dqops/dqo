@@ -4,6 +4,7 @@ import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import LabelsTab from './LabelsTab';
+import CommentsTab from './CommentsTab';
 
 interface IColumnViewProps {
   node: ITreeNode;
@@ -51,6 +52,14 @@ const ColumnView = ({ node }: IColumnViewProps) => {
       <div>
         {activeTab === 'labels' && (
           <LabelsTab
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={node.module}
+          />
+        )}
+        {activeTab === 'comments' && (
+          <CommentsTab
             connectionName={connectionName}
             schemaName={schemaName}
             tableName={tableName}

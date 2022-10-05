@@ -1,29 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { CommentSpec } from '../../../api';
 import { AxiosResponse } from 'axios';
-import { TableApiClient } from '../../../services/apiClient';
+import { ColumnApiClient } from '../../../services/apiClient';
 import CommentsView from '../CommentsView';
 
 interface ICommentsTabProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
+  columnName: string;
 }
 
 const CommentsTab = ({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  columnName,
 }: ICommentsTabProps) => {
   const [comments, setComments] = useState<CommentSpec[]>([]);
 
   const fetchComments = async () => {
     try {
       const res: AxiosResponse<CommentSpec[]> =
-        await TableApiClient.getTableComments(
+        await ColumnApiClient.getColumnComments(
           connectionName,
           schemaName,
-          tableName
+          tableName,
+          columnName
         );
 
       setComments(res.data);
