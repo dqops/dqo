@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { TableApiClient } from '../../../services/apiClient';
+import { ColumnApiClient } from '../../../services/apiClient';
 import LabelsView from '../LabelsView';
 
 interface ILabelsTabProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
+  columnName: string;
 }
 
 const LabelsTab = ({
   connectionName,
   schemaName,
-  tableName
+  tableName,
+  columnName
 }: ILabelsTabProps) => {
   const [labels, setLabels] = useState<string[]>([]);
 
   const fetchLabels = async () => {
     try {
-      const res: AxiosResponse<string[]> = await TableApiClient.getTableLabels(
-        connectionName,
-        schemaName,
-        tableName
-      );
+      const res: AxiosResponse<string[]> =
+        await ColumnApiClient.getColumnLabels(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName
+        );
 
       setLabels(res.data);
     } catch (err) {

@@ -8,6 +8,7 @@ import { TREE_LEVEL } from '../../shared/enums';
 import ConnectionView from '../../components/Connection/ConnectionView';
 import TableView from '../../components/Connection/TableView';
 import SchemaView from '../../components/Connection/SchemaView';
+import ColumnView from '../../components/Connection/ColumnView';
 
 const TestPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
@@ -34,6 +35,9 @@ const TestPage = () => {
           )}
           {activeNode?.level === TREE_LEVEL.TABLE && (
             <TableView node={activeNode} />
+          )}
+          {activeNode?.level === TREE_LEVEL.COLUMN && (
+            <ColumnView node={activeNode} />
           )}
         </div>
       </div>
