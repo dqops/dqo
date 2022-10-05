@@ -41,6 +41,7 @@ nav:
   - Scheduler:
     - Introduction to the scheduler: 'Scheduler/Introduction_to_the_scheduler.md'
     - Cron formatting: 'Scheduler/Cron_formatting.md'
+    - Cloud logging: 'Scheduler/Cloud_logging.md'
   - Check reference:
     - Timeliness:
         - Average delay: 'check_reference/timeliness/average_delay/average_delay.md'

@@ -5,22 +5,70 @@ Scheduler is a tool that enables running a check at a specific time or at a defi
 It can be used on a certain table or a column within a table or on a whole connection.
 
 Synchronization can be done on a:
-- metadata - it detects changes to the connections and synchronizes with the DQO Cloud at a defined frequency
-- data (check run operations)
-  - it synchronizes the parquet files from the DQO Cloud 
-  - it runs data quality checks 
-  - it pushes (synchornizes) parquet files back to DQO Cloud
+
+* metadata - it detects changes to the connections and synchronizes with the DQO Cloud at a defined frequency
+
+* data (check run operations)
+  * * it synchronizes the parquet files from the DQO Cloud
+  * * it runs data quality checks
+  * * it pushes (synchornizes) parquet files back to DQO Cloud
 
 ### Synchronizing metadata
 
 First let's start with synchronizing metadata. Metadata is the data that describes other data. They are stored as YAML files in the catalogue of a connection in `userhome/sources`.
-There are two methods to synchronize metadata: shell mode and server mode.
+There are two methods to synchronize metadata: CLI mode and server mode.
 
-#### Shell mode
+#### CLI mode
 
+Open the CLI and start the DQO.
 
+In order to define a frequency in [cron format](Cron_formatting.md) of a synchronization of a connection use following command:
+
+```
+--dqo.scheduler.scan-metadata-cron-schedule=<frequency>
+```
+
+Please use quotation marks when defining a frequency.
+
+In order to enable/disable synchronization with the cloud use following command:
+
+```
+--dqo.scheduler.enable-cloud-sync=<true/false>
+```
+
+To enable type `true`, to disable type `false`.
 
 #### Server mode
+
+Open the CLI, do not start DQO.
+
+In order to define a frequency in [cron format](Cron_formatting.md) of a synchronization of a connection use following command:
+
+```
+set DQO_SCHEDULER_SCANMETADATACRONSCHEDULE=<frequency>
+```
+
+Please use quotation marks when defining a frequency.
+
+Having run the above command, now run:
+
+```
+dqo run
+```
+
+In order to enable/disable synchronization with the cloud use following command:
+
+```
+set DQO_SCHEDULER_ENABLECLOUDSYNC=<true/false>
+```
+
+To enable type `true`, to disable type `false`.
+
+Having run the above command, now run:
+
+```
+dqo run
+```
 
 ### Synchronizing data(check run operations)
 
