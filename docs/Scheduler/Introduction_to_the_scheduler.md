@@ -1,10 +1,30 @@
 This guide is an introduction to what a scheduler is and how it works.
 
-Scheduler is a tool that enables running a check at a specific time or at a defined frequency.
+Scheduler is a tool that enables running a check at a specific time or at a defined frequency and then synchronize the results with the cloud.
 
 It can be used on a certain table or a column within a table or on a whole connection.
 
-### Schedule a check on a column
+Synchronization can be done on a:
+- metadata - it detects changes to the connections and synchronizes with the DQO Cloud at a defined frequency
+- data (check run operations)
+  - it synchronizes the parquet files from the DQO Cloud 
+  - it runs data quality checks 
+  - it pushes (synchornizes) parquet files back to DQO Cloud
+
+### Synchronizing metadata
+
+First let's start with synchronizing metadata. Metadata is the data that describes other data. They are stored as YAML files in the catalogue of a connection in `userhome/sources`.
+There are two methods to synchronize metadata: shell mode and server mode.
+
+#### Shell mode
+
+
+
+#### Server mode
+
+### Synchronizing data(check run operations)
+
+#### Schedule a check on a column
 
 In order to schedule a check on a certain column, open a YAML file of the table.
 
@@ -56,7 +76,7 @@ spec:
 
 To run a scheduler use `scheduler start` command, to stop use `scheduler stop` command.
 
-### Schedule a check on a table
+#### Schedule a check on a table
 
 In order to schedule a check on a certain table, open a YAML file of a table.
 
@@ -85,7 +105,7 @@ spec:
 
 To run a scheduler use `scheduler start` command, to stop use `scheduler stop` command.
 
-### Schedule a check on a connection
+#### Schedule a check on a connection
 
 In order to schedule a check on a whole connection, open a YAML file of a connection.
 
