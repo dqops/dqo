@@ -126,7 +126,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
           label="Save"
           className="w-40"
           onClick={onUpdate}
-          loading={!isUpdating}
+          loading={isUpdating}
         />
       </div>
       <div className="border-b border-gray-300">
