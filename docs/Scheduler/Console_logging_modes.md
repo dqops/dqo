@@ -10,6 +10,8 @@ The `run` and `scheduler start` command can be both run in different modes:
 
 ### Debug mode
 
+Command : `run -m=debug`
+
 In the debug mode, following information is provided:
 
 - start and finish of the cloud synchronization
@@ -111,6 +113,8 @@ DATA_ALERTS local <-> cloud synchronization finished
 
 ### Info mode
 
+Command : `run -m=info`
+
 In the info mode, following information is provided:
 
 - start and finish of the cloud synchronization
@@ -164,6 +168,8 @@ DATA_ALERTS local <-> cloud synchronization finished
 
 ### Silent mode
 
+Command : `run -m=silent`
+
 In the silent mode, only information about start and finish of the cloud synchronization is provided.
 
 ```
@@ -187,6 +193,8 @@ DATA_ALERTS local <-> cloud synchronization finished
 ```
 
 ### Summary mode
+
+Command : `run -m=summary`
 
 This is the default mode.
 
