@@ -1,1 +1,4 @@
-the reporting parameters for "run" and "scheduler start" parameters (--synchronization-mode and --mode) are described, they are controling the level of console logging
+The `run` and `scheduler start` command can be both run in different modes:
+* debug
+* silent
+* summary
