@@ -9,9 +9,9 @@ Synchronization can be done on a:
 * metadata - it detects changes to the connections and synchronizes with the DQO Cloud at a defined frequency
 
 * data (check run operations)
-  * * it synchronizes the parquet files from the DQO Cloud
-  * * it runs data quality checks
-  * * it pushes (synchornizes) parquet files back to DQO Cloud
+    * it synchronizes the parquet files from the DQO Cloud
+    * it runs data quality checks
+    * it pushes (synchornizes) parquet files back to DQO Cloud
 
 ### Synchronizing metadata
 
