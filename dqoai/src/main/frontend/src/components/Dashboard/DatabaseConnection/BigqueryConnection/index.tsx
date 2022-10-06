@@ -33,6 +33,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
   spec,
   onChange
 }) => {
+  console.log('connectionBasic', spec?.billing_project_id);
   const handleChange = (obj: any) => {
     onChange({
       bigquery: {

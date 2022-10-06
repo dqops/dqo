@@ -34,3 +34,52 @@ export const setActiveConnection = (activeConnection: string) => ({
   type: CONNECTION_ACTION.SET_ACTIVE_CONNECTION,
   activeConnection
 });
+
+export const getConnectionBasicRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_BASIC
+});
+
+export const getConnectionBasicSuccess = (data: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_BASIC_SUCCESS,
+  data
+});
+
+export const getConnectionBasicFailed = (error: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR,
+  error
+});
+
+export const getConnectionBasic =
+  (connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionBasicRequest());
+    try {
+      const res = await ConnectionApiClient.getConnectionBasic(connectionName);
+      dispatch(getConnectionBasicSuccess(res.data));
+    } catch (err) {
+      dispatch(getConnectionsFailed(err));
+    }
+  };
+
+export const updateConnectionBasicRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC
+});
+
+export const updateConnectionBasicSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS
+});
+
+export const updateConnectionBasicFailed = (error: any) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_ERROR,
+  error
+});
+
+export const updateConnectionBasic =
+  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+    dispatch(updateConnectionBasicRequest());
+    try {
+      await ConnectionApiClient.updateConnectionBasic(connectionName, data);
+      dispatch(updateConnectionBasicSuccess());
+    } catch (err) {
+      dispatch(updateConnectionBasicFailed(err));
+    }
+  };
