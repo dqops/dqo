@@ -19,7 +19,7 @@ const CommentsView = ({ comments, onChange }: ICommentsViewProps) => {
       {
         comment: text,
         comment_by: 'user',
-        date: new Date().toDateString()
+        date: new Date().toISOString()
       }
     ]);
     setText('');

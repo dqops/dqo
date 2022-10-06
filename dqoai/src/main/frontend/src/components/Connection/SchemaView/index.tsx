@@ -30,6 +30,10 @@ const SchemaView = ({ node }: ISchemaViewProps) => {
   }, [node, connectionName]);
 
   const renderContent = () => {
+    if (!activeTab) {
+      return null;
+    }
+
     return (
       <TableDetails
         connectionName={connectionName}

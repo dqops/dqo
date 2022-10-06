@@ -5,19 +5,33 @@ import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import CommentsTab from './CommentsTab';
-import LabelsTab from './LabelsTab';
 import TimeSeriesTab from './TimeSeriesTab';
 import { SchemaApiClient } from '../../../services/apiClient';
-import { ConnectionBasicModel, SchemaModel } from '../../../api';
+import {
+  CommentSpec,
+  ConnectionBasicModel,
+  RecurringScheduleSpec,
+  SchemaModel,
+  TimeSeriesConfigurationSpec
+} from '../../../api';
 import SchemaDetail from '../SchemaView/SchemaDetail';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
-  updateConnectionBasic
+  getConnectionComments,
+  getConnectionLabels,
+  getConnectionSchedule,
+  getConnectionTime,
+  updateConnectionBasic,
+  updateConnectionComments,
+  updateConnectionLabels,
+  updateConnectionSchedule,
+  updateConnectionTime
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import CommentsView from '../CommentsView';
+import LabelsView from '../LabelsView';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -50,11 +64,22 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const [tabs, setTabs] = useState(initTabs);
-  const { connectionBasic, isUpdating } = useSelector(
-    (state: IRootState) => state.connection
-  );
+  const {
+    connectionBasic,
+    schedule,
+    timeSeries,
+    comments,
+    labels,
+    isUpdating
+  } = useSelector((state: IRootState) => state.connection);
   const [updatedConnectionBasic, setUpdatedConnectionBasic] =
     useState<ConnectionBasicModel>();
+  const [updatedSchedule, setUpdatedSchedule] =
+    useState<RecurringScheduleSpec>();
+  const [updatedTimeSeries, setUpdatedTimeSeries] =
+    useState<TimeSeriesConfigurationSpec>();
+  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
+  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const dispatch = useActionDispatch();
   const connectionName = useMemo(() => node.module, [node]);
 
@@ -63,10 +88,36 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   }, [connectionBasic]);
 
   useEffect(() => {
+    setUpdatedSchedule(schedule);
+  }, [schedule]);
+
+  useEffect(() => {
+    setUpdatedTimeSeries(timeSeries);
+  }, [timeSeries]);
+
+  useEffect(() => {
+    setUpdatedComments(comments);
+  }, [comments]);
+  useEffect(() => {
+    setUpdatedLabels(labels);
+  }, [labels]);
+
+  useEffect(() => {
     SchemaApiClient.getSchemas(connectionName).then((res) => {
       setSchemas(res.data);
     });
+
+    setUpdatedConnectionBasic(undefined);
+    setUpdatedSchedule(undefined);
+    setUpdatedTimeSeries(undefined);
+    setUpdatedComments([]);
+    setUpdatedLabels([]);
+
     dispatch(getConnectionBasic(connectionName));
+    dispatch(getConnectionSchedule(connectionName));
+    dispatch(getConnectionTime(connectionName));
+    dispatch(getConnectionComments(connectionName));
+    dispatch(getConnectionLabels(connectionName));
   }, [connectionName]);
 
   useEffect(() => {
@@ -79,6 +130,24 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     ]);
   }, [schemas]);
 
+  const onUpdate = async () => {
+    if (activeTab === 'connection') {
+      dispatch(updateConnectionBasic(connectionName, updatedConnectionBasic));
+    }
+    if (activeTab === 'schedule') {
+      dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
+    }
+    if (activeTab === 'time') {
+      dispatch(updateConnectionTime(connectionName, updatedTimeSeries));
+    }
+    if (activeTab === 'comments') {
+      dispatch(updateConnectionComments(connectionName, updatedComments));
+    }
+    if (activeTab === 'labels') {
+      dispatch(updateConnectionLabels(connectionName, updatedLabels));
+    }
+  };
+
   const renderTabContent = () => {
     if (activeTab === 'connection') {
       return (
@@ -89,28 +158,37 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
       );
     }
     if (activeTab === 'schedule') {
-      return <ScheduleDetail connectionName={connectionName} />;
+      return (
+        <ScheduleDetail
+          schedule={updatedSchedule}
+          setSchedule={setUpdatedSchedule}
+        />
+      );
     }
     if (activeTab === 'time') {
-      return <TimeSeriesTab connectionName={connectionName} />;
+      return (
+        <TimeSeriesTab
+          timeSeries={updatedTimeSeries}
+          setTimeSeries={setUpdatedTimeSeries}
+        />
+      );
     }
     if (activeTab === 'comments') {
-      return <CommentsTab connectionName={connectionName} />;
+      return (
+        <CommentsView
+          comments={updatedComments}
+          onChange={setUpdatedComments}
+        />
+      );
     }
     if (activeTab === 'labels') {
-      return <LabelsTab connectionName={connectionName} />;
+      return <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />;
     }
     return (
       <SchemaDetail
         schema={schemas.find((item) => item.schema_name === activeTab)}
       />
     );
-  };
-
-  const onUpdate = async () => {
-    if (activeTab === 'connection') {
-      dispatch(updateConnectionBasic(connectionName, updatedConnectionBasic));
-    }
   };
 
   return (

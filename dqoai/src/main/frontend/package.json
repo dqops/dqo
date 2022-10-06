@@ -17,6 +17,7 @@
     "axios": "^0.27.2",
     "clsx": "^1.2.1",
     "lodash": "^4.17.21",
+    "moment": "^2.29.4",
     "postcss": "^8.4.16",
     "postcss-cli": "^9.1.0",
     "postcss-preset-env": "^7.8.0",

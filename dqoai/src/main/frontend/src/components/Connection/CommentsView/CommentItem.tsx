@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
+import moment from 'moment';
 
 interface ICommentItemProps {
   idx: number;
@@ -37,7 +38,9 @@ const CommentItem = ({
         )}
       </td>
       <td className="px-8 min-w-60 py-2">{comment.comment_by}</td>
-      <td className="px-8 min-w-60 py-2">{comment.date}</td>
+      <td className="px-8 min-w-60 py-2">
+        {moment(comment.date).format('MMM, DD YYYY')}
+      </td>
       <td className="px-8 min-w-40 py-2">
         <div className="flex space-x-2 items-center justify-center">
           <IconButton size="sm" onClick={isEditing ? onSave : onEdit}>
