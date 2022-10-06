@@ -56,10 +56,28 @@ DATA_ALERTS local <-> cloud synchronization finished
 ### Silent mode
 
 ```
-
+dqo.ai> run -m=silent
+DQO was started in a server mode.
+Press any key key to stop the application.
+SOURCES local <-> cloud synchronization started
+SOURCES local <-> cloud synchronization finished
+SENSORS local <-> cloud synchronization started
+SENSORS local <-> cloud synchronization finished
+RULES local <-> cloud synchronization started
+RULES local <-> cloud synchronization finished
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
+DATA_ALERTS local <-> cloud synchronization started
+DATA_ALERTS local <-> cloud synchronization finished
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
+DATA_ALERTS local <-> cloud synchronization started
+DATA_ALERTS local <-> cloud synchronization finished
 ```
 
 ### Summary mode
+
+This is the default mode.
 
 ```
 
