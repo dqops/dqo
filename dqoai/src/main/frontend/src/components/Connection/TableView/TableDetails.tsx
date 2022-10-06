@@ -34,7 +34,7 @@ const TableDetails = ({
 
   useEffect(() => {
     fetchDetail().then();
-  }, []);
+  }, [connectionName, schemaName, tableName]);
 
   const handleChange = (obj: any) => {
     setTableBasic({
