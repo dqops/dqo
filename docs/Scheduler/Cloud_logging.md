@@ -11,7 +11,7 @@ There are 3 methods to log on the Cloud:
 
 - Server mode
 
-Cloud synchronization works only if the application was first logged on, so a call to "cloud login" is required.
+To be able to use cloud synchronization it is required to use `cloud login` command, as you need to be logged on first.
 
 ### Using `Cloud login` command
 
