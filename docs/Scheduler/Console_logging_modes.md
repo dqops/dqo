@@ -7,12 +7,24 @@ The `run` and `scheduler start` command can be both run in different modes:
 ### Debug mode
 
 ```
+dqo.ai> run -m=debug
+DQO was started in a server mode.
+Press any key key to stop the application.
+SOURCES local <-> cloud synchronization started
+SOURCES local <-> cloud synchronization finished
+SENSORS local <-> cloud synchronization started
+SENSORS local <-> cloud synchronization finished
+RULES local <-> cloud synchronization started
+RULES local <-> cloud synchronization finished
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
 DATA_ALERTS local <-> cloud synchronization started
 DATA_ALERTS local <-> cloud synchronization finished
 DATA_READINGS local <-> cloud synchronization started
 DATA_READINGS local <-> cloud synchronization finished
 DATA_ALERTS local <-> cloud synchronization started
 DATA_ALERTS local <-> cloud synchronization finished
+
 **************************************************
 Executing data quality checks on table austin_311.311_service_requests from connection connection_1
 **************************************************
