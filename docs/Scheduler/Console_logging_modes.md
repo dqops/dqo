@@ -80,5 +80,30 @@ DATA_ALERTS local <-> cloud synchronization finished
 This is the default mode.
 
 ```
-
+dqo.ai> run -m=summary
+DQO was started in a server mode.
+Press any key key to stop the application.
+SOURCES local <-> cloud synchronization started
+SOURCES local <-> cloud synchronization finished
+SENSORS local <-> cloud synchronization started
+SENSORS local <-> cloud synchronization finished
+RULES local <-> cloud synchronization started
+RULES local <-> cloud synchronization finished
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
+DATA_ALERTS local <-> cloud synchronization started
+DATA_ALERTS local <-> cloud synchronization finished
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
+DATA_ALERTS local <-> cloud synchronization started
+DATA_ALERTS local <-> cloud synchronization finished
++------------+-------------------------------+------+--------------+-------------+------------+---------------+-------------+
+|Connection  |Table                          |Checks|Sensor results|Valid results|Alerts (low)|Alerts (medium)|Alerts (high)|
++------------+-------------------------------+------+--------------+-------------+------------+---------------+-------------+
+|connection_1|austin_311.311_service_requests|1     |1             |1            |0           |0              |0            |
++------------+-------------------------------+------+--------------+-------------+------------+---------------+-------------+
+DATA_READINGS local <-> cloud synchronization started
+DATA_READINGS local <-> cloud synchronization finished
+DATA_ALERTS local <-> cloud synchronization started
+DATA_ALERTS local <-> cloud synchronization finished
 ```
