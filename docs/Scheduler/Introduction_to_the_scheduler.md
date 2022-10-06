@@ -2,7 +2,7 @@ This guide is an introduction to what a scheduler is and how it works.
 
 Scheduler is a tool that enables running a check at a specific time or at a defined frequency and then synchronize the results with the cloud.
 
-It can be used on a certain connection, table, check or a column within a table or on a whole connection.
+It can be used on a certain table, check or a column within a table or on a whole connection.
 
 Synchronization can be done on a:
 
