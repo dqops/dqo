@@ -200,7 +200,7 @@ spec:
     time_gradient: day
   checks: {}
   schedule_override:
-    cron_expression: "*/5 * * * *"
+    cron_expression: "*/1 * * * *"
     disable: false
 ```
 
@@ -227,7 +227,7 @@ spec:
     authentication_mode: google_application_credentials
   time_zone: UTC
   schedule:
-    cron_expression: "*/5 * * * *"
+    cron_expression: "*/1 * * * *"
     disable: false
 ```
 
