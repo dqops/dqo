@@ -1,10 +1,32 @@
 The `run` and `scheduler start` command can be both run in different modes:
+
 * debug
+
 * info
+
 * silent
+
 * summary
 
 ### Debug mode
+
+In the debug mode, following information is provided:
+
+- start and finish of the cloud synchronization
+
+- execution of data quality checks
+
+- start and finish of the execution of a sensor for a check
+
+- calling Jinja2 rendering template
+
+- execution SQL syntax on connection and SQL syntax
+
+- results returned by the sensor
+
+- rule evaluation results
+
+- final results
 
 ```
 dqo.ai> run -m=debug
@@ -89,6 +111,16 @@ DATA_ALERTS local <-> cloud synchronization finished
 
 ### Info mode
 
+In the info mode, following information is provided:
+
+- start and finish of the cloud synchronization
+
+- execution of data quality checks
+
+- start and finish of the execution of a sensor for a check
+
+- final results
+
 ```
 dqo.ai> run -m=info
 DQO was started in a server mode.
@@ -132,6 +164,8 @@ DATA_ALERTS local <-> cloud synchronization finished
 
 ### Silent mode
 
+In the silent mode, only information about start and finish of the cloud synchronization is provided.
+
 ```
 dqo.ai> run -m=silent
 DQO was started in a server mode.
@@ -155,6 +189,12 @@ DATA_ALERTS local <-> cloud synchronization finished
 ### Summary mode
 
 This is the default mode.
+
+In the summary mode, following information is provided:
+
+- start and finish of the cloud synchronization
+
+- final results
 
 ```
 dqo.ai> run -m=summary
