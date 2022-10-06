@@ -29,7 +29,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
 
   useEffect(() => {
     fetchSchedule().then();
-  }, []);
+  }, [connectionName]);
 
   const handleChange = (obj: any) => {
     setSchedule({
