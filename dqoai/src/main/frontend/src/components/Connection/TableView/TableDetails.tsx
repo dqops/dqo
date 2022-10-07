@@ -1,41 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { TableApiClient } from '../../../services/apiClient';
-import { AxiosResponse } from 'axios';
+import React from 'react';
 import { TableBasicModel } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 
 interface ITableDetailsProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
+  tableBasic?: TableBasicModel;
+  setTableBasic: (value: TableBasicModel) => void;
 }
 
-const TableDetails = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITableDetailsProps) => {
-  const [tableBasic, setTableBasic] = useState<TableBasicModel>();
-
-  const fetchDetail = async () => {
-    try {
-      const res: AxiosResponse<TableBasicModel> =
-        await TableApiClient.getTableBasic(
-          connectionName,
-          schemaName,
-          tableName
-        );
-      setTableBasic(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchDetail().then();
-  }, [connectionName, schemaName, tableName]);
-
+const TableDetails = ({ tableBasic, setTableBasic }: ITableDetailsProps) => {
   const handleChange = (obj: any) => {
     setTableBasic({
       ...tableBasic,

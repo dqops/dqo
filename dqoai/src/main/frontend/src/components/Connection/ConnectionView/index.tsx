@@ -132,19 +132,26 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
 
   const onUpdate = async () => {
     if (activeTab === 'connection') {
-      dispatch(updateConnectionBasic(connectionName, updatedConnectionBasic));
+      await dispatch(
+        updateConnectionBasic(connectionName, updatedConnectionBasic)
+      );
+      await dispatch(getConnectionBasic(connectionName));
     }
     if (activeTab === 'schedule') {
-      dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
+      await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
+      await dispatch(getConnectionSchedule(connectionName));
     }
     if (activeTab === 'time') {
-      dispatch(updateConnectionTime(connectionName, updatedTimeSeries));
+      await dispatch(updateConnectionTime(connectionName, updatedTimeSeries));
+      await dispatch(getConnectionTime(connectionName));
     }
     if (activeTab === 'comments') {
-      dispatch(updateConnectionComments(connectionName, updatedComments));
+      await dispatch(updateConnectionComments(connectionName, updatedComments));
+      await dispatch(getConnectionComments(connectionName));
     }
     if (activeTab === 'labels') {
-      dispatch(updateConnectionLabels(connectionName, updatedLabels));
+      await dispatch(updateConnectionLabels(connectionName, updatedLabels));
+      await dispatch(getConnectionLabels(connectionName));
     }
   };
 
