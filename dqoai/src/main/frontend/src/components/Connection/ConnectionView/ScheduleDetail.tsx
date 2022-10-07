@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
@@ -37,6 +37,26 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
     if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
     }
+  };
+
+  const onChangeMinutes = (val: number) => {
+    if (mode === 'minutes') {
+      handleChange({ cron_expression: `*/${val} * * * *` });
+    }
+    if (mode === 'hour') {
+      handleChange({ cron_expression: `${val} * * * *` });
+    }
+    if (mode === 'day') {
+      handleChange({ cron_expression: `${hour} ${val} * * *` });
+    }
+    setMinutes(val);
+  };
+
+  const onChangeHour = (val: number) => {
+    if (mode === 'day') {
+      handleChange({ cron_expression: `${val} ${minutes} * * *` });
+    }
+    setHour(val);
   };
 
   return (
@@ -83,7 +103,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
             <div>minutes</div>
           </div>
@@ -103,7 +123,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
             <div>minutes past hour</div>
           </div>
@@ -119,13 +139,18 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
         {mode === 'day' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
             <div>At</div>
-            <NumberInput min={0} max={60} value={hour} onChange={setHour} />
+            <NumberInput
+              min={0}
+              max={60}
+              value={hour}
+              onChange={onChangeHour}
+            />
             <div>:</div>
             <NumberInput
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
           </div>
         )}
