@@ -25,17 +25,20 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
     });
   };
 
-  useEffect(() => {
-    if (mode === 'minutes') {
+  const onChangeMode = (e: any) => {
+    setMode(e.target.value);
+
+    if (e.target.value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
     }
-    if (mode === 'hour') {
+    if (e.target.value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
     }
-    if (mode === 'day') {
+    if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
     }
-  }, [minutes, hour, mode]);
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6">
@@ -58,8 +61,8 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={schedule?.disable}
-              onChange={(value) => handleChange({ disable: value })}
+              checked={schedule?.disabled}
+              onChange={(value) => handleChange({ disabled: value })}
             />
           </td>
         </tr>
@@ -71,7 +74,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
           value="minutes"
           label="Run every X minutes"
           checked={mode === 'minutes'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'minutes' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -91,7 +94,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
           label="Run every hour"
           value="hour"
           checked={mode === 'hour'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'hour' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -111,7 +114,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
           label="Run every day"
           value="day"
           checked={mode === 'day'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'day' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">

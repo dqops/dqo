@@ -106,8 +106,8 @@ const ScheduleDetail = ({
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={schedule?.disable}
-              onChange={(value) => handleChange({ disable: value })}
+              checked={schedule?.disabled}
+              onChange={(value) => handleChange({ disabled: value })}
             />
           </td>
         </tr>
