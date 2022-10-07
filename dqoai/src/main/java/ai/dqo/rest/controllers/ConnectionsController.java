@@ -473,7 +473,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionSchedule(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Connection basic details") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+            @Parameter(description = "Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -550,7 +550,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionComments(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "List of labels") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @Parameter(description = "List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
