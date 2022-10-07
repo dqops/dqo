@@ -19,15 +19,15 @@ import ai.dqo.checks.AbstractCheckCategoriesSpec;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 
 /**
- * Service that converts UI models to the data quality check specifications or creates the UI model from the data quality check specifications,
+ * Service that creates the UI model from the data quality check specifications,
  * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
  */
-public interface CheckMappingService {
+public interface SpecToUiCheckMappingService {
     /**
      * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into DAMA dimensions.
      *
-     * @param checkDimensionsSpec Table level data quality checks container or a column level data quality checks container.
+     * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.
      */
-    UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkDimensionsSpec);
+    UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkCategoriesSpec);
 }

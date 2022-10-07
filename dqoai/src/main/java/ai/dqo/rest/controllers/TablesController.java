@@ -25,7 +25,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
-import ai.dqo.rest.models.checks.mapping.CheckMappingService;
+import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
+import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.metadata.TableModel;
@@ -58,18 +59,22 @@ import java.util.stream.Stream;
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
     private UserHomeContextFactory userHomeContextFactory;
-    private CheckMappingService checkMappingService;
+    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
-     * @param userHomeContextFactory User home context factory.
-     * @param checkMappingService Check mapper to convert the check specification to/from a UI model.
+     * @param userHomeContextFactory      User home context factory.
+     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
+     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
      */
     @Autowired
     public TablesController(UserHomeContextFactory userHomeContextFactory,
-                            CheckMappingService checkMappingService) {
+                            SpecToUiCheckMappingService specToUiCheckMappingService,
+                            UiToSpecCheckMappingService uiToSpecCheckMappingService) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.checkMappingService = checkMappingService;
+        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
     }
 
     /**
@@ -474,7 +479,7 @@ public class TablesController {
         if (checks == null) {
             checks = new TableCheckCategoriesSpec();
         }
-        UIAllChecksModel checksUiModel = this.checkMappingService.createUiModel(checks);
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
 
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
@@ -991,6 +996,62 @@ public class TablesController {
             tableSpec.setChecks(tableCheckCategoriesSpec.get());
         } else {
             tableSpec.setChecks(new TableCheckCategoriesSpec()); // it is never empty...
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the data quality check specification on an existing table from a check UI model with a patch of changes.
+     * @param connectionName           Connection name.
+     * @param schemaName               Schema name.
+     * @param tableName                Table name.
+     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
+    @ApiOperation(value = "updateTableChecksUI", notes = "Updates the data quality checks from a UI model that contains a patch with changes.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality checks successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTableChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "UI model with the changes to be applied to the data quality checks configuration.")
+            @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (uiAllChecksModel.isPresent()) {
+            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableSpec.getChecks());
+        } else {
+            // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }
         userHomeContext.flush();
 

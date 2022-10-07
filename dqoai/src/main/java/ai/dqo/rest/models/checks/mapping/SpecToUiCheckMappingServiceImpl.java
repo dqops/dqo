@@ -37,11 +37,11 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Service that converts UI models to the data quality check specifications or creates the UI model from the data quality check specifications,
+ * Service that creates the UI model from the data quality check specifications,
  * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
  */
 @Component
-public class CheckMappingServiceImpl implements CheckMappingService {
+public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingService {
     private ReflectionService reflectionService;
 
     /**
@@ -49,19 +49,19 @@ public class CheckMappingServiceImpl implements CheckMappingService {
      * @param reflectionService Reflection service used to read the list of checks.
      */
     @Autowired
-    public CheckMappingServiceImpl(ReflectionService reflectionService) {
+    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService) {
         this.reflectionService = reflectionService;
     }
 
     /**
      * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into DAMA dimensions.
-     * @param checkDimensionsSpec Table level data quality checks container or a column level data quality checks container.
+     * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.
      */
     @Override
-    public UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkDimensionsSpec) {
+    public UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkCategoriesSpec) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
-        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkDimensionsSpec.getClass());
+        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
         for (FieldInfo dimensionFieldInfo : dimensionsFields) {
             if (Objects.equals(dimensionFieldInfo.getClassFieldName(), "custom")) {
@@ -69,7 +69,7 @@ public class CheckMappingServiceImpl implements CheckMappingService {
                 continue;
             }
 
-            Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkDimensionsSpec);
+            Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             UIQualityDimensionModel dimensionModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
             uiAllChecksModel.getQualityDimensions().add(dimensionModel);
         }
@@ -140,7 +140,7 @@ public class CheckMappingServiceImpl implements CheckMappingService {
             }
 
             AbstractRuleThresholdsSpec ruleFieldValue = (AbstractRuleThresholdsSpec)ruleFieldInfo.getFieldValueOrNewObject(rulesSpec);
-            UIRuleThresholdsModel ruleModel = createRuleModel(ruleFieldInfo, ruleFieldValue);
+            UIRuleThresholdsModel ruleModel = createRuleThresholdsModel(ruleFieldInfo, ruleFieldValue);
             checkModel.getRules().add(ruleModel);
         }
 
@@ -153,7 +153,7 @@ public class CheckMappingServiceImpl implements CheckMappingService {
      * @param ruleFieldValue Rule threshold object with the low/medium/high values.
      * @return Rule threshold model.
      */
-    protected UIRuleThresholdsModel createRuleModel(FieldInfo ruleFieldInfo, AbstractRuleThresholdsSpec ruleFieldValue) {
+    protected UIRuleThresholdsModel createRuleThresholdsModel(FieldInfo ruleFieldInfo, AbstractRuleThresholdsSpec ruleFieldValue) {
         UIRuleThresholdsModel thresholdsModel = new UIRuleThresholdsModel();
         thresholdsModel.setFieldName(ruleFieldInfo.getDisplayName());
         thresholdsModel.setDisabled(ruleFieldValue.isDisabled());

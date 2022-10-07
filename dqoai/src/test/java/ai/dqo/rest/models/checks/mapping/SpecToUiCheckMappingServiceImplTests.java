@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class CheckMappingServiceImplTests extends BaseTest {
-    private CheckMappingServiceImpl sut;
+public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
+    private SpecToUiCheckMappingServiceImpl sut;
 
     /**
      * Called before each test.
@@ -38,7 +38,7 @@ public class CheckMappingServiceImplTests extends BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-        this.sut = new CheckMappingServiceImpl(new ReflectionServiceImpl());
+        this.sut = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
     }
 
     @Test

@@ -37,7 +37,10 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UICheckModel", description = "UI model that returns the form definition and the form data to edit a single data quality check.")
 public class UICheckModel {
-    @JsonPropertyDescription("Data quality check name.")
+    /**
+     * Data quality check name that is used in YAML file. Identifies the data quality check.
+     */
+    @JsonPropertyDescription("Data quality check name that is used in YAML.")
     private String checkName;
 
     @JsonPropertyDescription("Help text that describes the data quality check.")

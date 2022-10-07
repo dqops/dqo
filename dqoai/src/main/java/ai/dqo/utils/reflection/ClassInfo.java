@@ -53,13 +53,29 @@ public class ClassInfo {
 
     /**
      * Retrieves a field given the class field name.
-     * @param fieldName Field's name in the Java class.
-     * @return Fiend info or null when the field was not found.
+     * @param classFieldName Field's name in the Java class.
+     * @return Field info or null when the field was not found.
      */
-    public FieldInfo getField(String fieldName) {
+    public FieldInfo getField(String classFieldName) {
         for (int i = 0; i < fields.size(); i++) {
             FieldInfo fieldInfo = fields.get(i);
-            if (Objects.equals(fieldName, fieldInfo.getClassFieldName())) {
+            if (Objects.equals(classFieldName, fieldInfo.getClassFieldName())) {
+                return fieldInfo;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves a field given the yaml field name.
+     * @param yamlCheckName Field's name in the YAML file.
+     * @return Field info or null when the field was not found.
+     */
+    public FieldInfo getFieldByYamlName(String yamlCheckName) {
+        for (int i = 0; i < fields.size(); i++) {
+            FieldInfo fieldInfo = fields.get(i);
+            if (Objects.equals(yamlCheckName, fieldInfo.getYamlFieldName())) {
                 return fieldInfo;
             }
         }
