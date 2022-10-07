@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   ConnectionBasicModel,
   ConnectionSpecProviderTypeEnum
@@ -6,34 +6,16 @@ import {
 import Input from '../../Input';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
-import { AxiosResponse } from 'axios';
-import { ConnectionApiClient } from '../../../services/apiClient';
 
 interface IConnectionDetailProps {
-  connectionName: string;
+  connectionBasic?: ConnectionBasicModel;
+  setConnectionBasic: (value: ConnectionBasicModel) => void;
 }
 
 const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
-  connectionName
+  connectionBasic,
+  setConnectionBasic
 }) => {
-  const [connectionBasic, setConnectionBasic] =
-    useState<ConnectionBasicModel>();
-
-  const fetchConnectionBasic = async () => {
-    try {
-      const res: AxiosResponse<ConnectionBasicModel> =
-        await ConnectionApiClient.getConnectionBasic(connectionName);
-
-      setConnectionBasic(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchConnectionBasic().then();
-  }, []);
-
   const onChange = (obj: any) => {
     setConnectionBasic({
       ...connectionBasic,

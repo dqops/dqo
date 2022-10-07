@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   TimeSeriesConfigurationSpec,
   TimeSeriesConfigurationSpecModeEnum,
   TimeSeriesConfigurationSpecTimeGradientEnum
 } from '../../../api';
-import { AxiosResponse } from 'axios';
-import { ConnectionApiClient } from '../../../services/apiClient';
 import Select from '../../Select';
 import Input from '../../Input';
 import NumberInput from '../../NumberInput';
 
 interface IConnectionDetailProps {
-  connectionName: string;
+  timeSeries?: TimeSeriesConfigurationSpec;
+  setTimeSeries: (val: TimeSeriesConfigurationSpec) => void;
 }
 
 const TimeSeriesTab: React.FC<IConnectionDetailProps> = ({
-  connectionName
+  timeSeries,
+  setTimeSeries
 }) => {
-  const [timeSeries, setTimeSeries] = useState<TimeSeriesConfigurationSpec>();
-
-  const fetchTimeSeries = async () => {
-    try {
-      const res: AxiosResponse<TimeSeriesConfigurationSpec> =
-        await ConnectionApiClient.getConnectionDefaultTimeSeries(
-          connectionName
-        );
-
-      setTimeSeries(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchTimeSeries().then();
-  }, [connectionName]);
-
   const onChange = (obj: any) => {
     setTimeSeries({
       ...timeSeries,

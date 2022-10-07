@@ -1,16 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import CommentsTab from './CommentsTab';
-import LabelsTab from './LabelsTab';
 import TimeSeriesTab from './TimeSeriesTab';
 import { SchemaApiClient } from '../../../services/apiClient';
-import { SchemaModel } from '../../../api';
+import {
+  CommentSpec,
+  ConnectionBasicModel,
+  RecurringScheduleSpec,
+  SchemaModel,
+  TimeSeriesConfigurationSpec
+} from '../../../api';
 import SchemaDetail from '../SchemaView/SchemaDetail';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import {
+  getConnectionBasic,
+  getConnectionComments,
+  getConnectionLabels,
+  getConnectionSchedule,
+  getConnectionTime,
+  updateConnectionBasic,
+  updateConnectionComments,
+  updateConnectionLabels,
+  updateConnectionSchedule,
+  updateConnectionTime
+} from '../../../redux/actions/connection.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import CommentsView from '../CommentsView';
+import LabelsView from '../LabelsView';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -43,12 +64,61 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const [tabs, setTabs] = useState(initTabs);
+  const {
+    connectionBasic,
+    schedule,
+    timeSeries,
+    comments,
+    labels,
+    isUpdating
+  } = useSelector((state: IRootState) => state.connection);
+  const [updatedConnectionBasic, setUpdatedConnectionBasic] =
+    useState<ConnectionBasicModel>();
+  const [updatedSchedule, setUpdatedSchedule] =
+    useState<RecurringScheduleSpec>();
+  const [updatedTimeSeries, setUpdatedTimeSeries] =
+    useState<TimeSeriesConfigurationSpec>();
+  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
+  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const dispatch = useActionDispatch();
+  const connectionName = useMemo(() => node.module, [node]);
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(node.module).then((res) => {
+    setUpdatedConnectionBasic(connectionBasic);
+  }, [connectionBasic]);
+
+  useEffect(() => {
+    setUpdatedSchedule(schedule);
+  }, [schedule]);
+
+  useEffect(() => {
+    setUpdatedTimeSeries(timeSeries);
+  }, [timeSeries]);
+
+  useEffect(() => {
+    setUpdatedComments(comments);
+  }, [comments]);
+  useEffect(() => {
+    setUpdatedLabels(labels);
+  }, [labels]);
+
+  useEffect(() => {
+    SchemaApiClient.getSchemas(connectionName).then((res) => {
       setSchemas(res.data);
     });
-  }, [node]);
+
+    setUpdatedConnectionBasic(undefined);
+    setUpdatedSchedule(undefined);
+    setUpdatedTimeSeries(undefined);
+    setUpdatedComments([]);
+    setUpdatedLabels([]);
+
+    dispatch(getConnectionBasic(connectionName));
+    dispatch(getConnectionSchedule(connectionName));
+    dispatch(getConnectionTime(connectionName));
+    dispatch(getConnectionComments(connectionName));
+    dispatch(getConnectionLabels(connectionName));
+  }, [connectionName]);
 
   useEffect(() => {
     setTabs([
@@ -60,21 +130,59 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     ]);
   }, [schemas]);
 
-  const renderTabContent = () => {
+  const onUpdate = async () => {
     if (activeTab === 'connection') {
-      return <ConnectionDetail connectionName={node.module} />;
+      dispatch(updateConnectionBasic(connectionName, updatedConnectionBasic));
     }
     if (activeTab === 'schedule') {
-      return <ScheduleDetail connectionName={node.module} />;
+      dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
     }
     if (activeTab === 'time') {
-      return <TimeSeriesTab connectionName={node.module} />;
+      dispatch(updateConnectionTime(connectionName, updatedTimeSeries));
     }
     if (activeTab === 'comments') {
-      return <CommentsTab connectionName={node.module} />;
+      dispatch(updateConnectionComments(connectionName, updatedComments));
     }
     if (activeTab === 'labels') {
-      return <LabelsTab connectionName={node.module} />;
+      dispatch(updateConnectionLabels(connectionName, updatedLabels));
+    }
+  };
+
+  const renderTabContent = () => {
+    if (activeTab === 'connection') {
+      return (
+        <ConnectionDetail
+          connectionBasic={updatedConnectionBasic}
+          setConnectionBasic={setUpdatedConnectionBasic}
+        />
+      );
+    }
+    if (activeTab === 'schedule') {
+      return (
+        <ScheduleDetail
+          schedule={updatedSchedule}
+          setSchedule={setUpdatedSchedule}
+        />
+      );
+    }
+    if (activeTab === 'time') {
+      return (
+        <TimeSeriesTab
+          timeSeries={updatedTimeSeries}
+          setTimeSeries={setUpdatedTimeSeries}
+        />
+      );
+    }
+    if (activeTab === 'comments') {
+      return (
+        <CommentsView
+          comments={updatedComments}
+          onChange={setUpdatedComments}
+        />
+      );
+    }
+    if (activeTab === 'labels') {
+      return <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />;
     }
     return (
       <SchemaDetail
@@ -88,13 +196,15 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{connectionName}</div>
         </div>
         <Button
           color="primary"
           variant="contained"
           label="Save"
           className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
         />
       </div>
       <div className="border-b border-gray-300">

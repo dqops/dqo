@@ -57,7 +57,7 @@ const Input = ({
           'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full sm:text-base rounded',
           className
         )}
-        value={value}
+        value={value || ''}
         onChange={onChange}
         onBlur={onBlur}
         data-testid={dataTestId}

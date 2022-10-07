@@ -80,7 +80,7 @@ const Button = ({
       data-testid={dataTestId}
     >
       {loading ? (
-        <Loader className="w-6 h-6" />
+        <Loader className="w-6 h-6" isFull={false} />
       ) : (
         <>
           {leftIcon}

@@ -1,4 +1,10 @@
-import { ConnectionModel } from '../../api';
+import {
+  CommentSpec,
+  ConnectionBasicModel,
+  ConnectionModel,
+  RecurringScheduleSpec,
+  TimeSeriesConfigurationSpec
+} from '../../api';
 import { CONNECTION_ACTION } from '../types';
 
 export interface IConnectionState {
@@ -6,13 +12,22 @@ export interface IConnectionState {
   loading: boolean;
   error: any;
   activeConnection: string;
+  connectionBasic?: ConnectionBasicModel;
+  isUpdating: boolean;
+  schedule?: RecurringScheduleSpec;
+  timeSeries?: TimeSeriesConfigurationSpec;
+  comments: CommentSpec[];
+  labels: string[];
 }
 
 const initialState: IConnectionState = {
   connections: [],
   loading: false,
   error: null,
-  activeConnection: ''
+  activeConnection: '',
+  isUpdating: false,
+  comments: [],
+  labels: []
 };
 
 const connectionReducer = (state = initialState, action: any) => {
@@ -35,10 +50,185 @@ const connectionReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
+    case CONNECTION_ACTION.GET_CONNECTION_BASIC:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_BASIC_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        connectionBasic: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
     case CONNECTION_ACTION.SET_ACTIVE_CONNECTION:
       return {
         ...state,
         activeConnection: action.activeConnection
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_BASIC:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        schedule: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_TIME:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_TIME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        timeSeries: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_TIME_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_COMMENTS:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        comments: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_COMMENTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_LABELS:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_LABELS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        labels: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_LABELS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_LABELS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
       };
     default:
       return state;
