@@ -34,13 +34,14 @@ const SchemaView = ({ node }: ISchemaViewProps) => {
       return null;
     }
 
-    return (
-      <TableDetails
-        connectionName={connectionName}
-        schemaName={node.module}
-        tableName={activeTab}
-      />
-    );
+    return <div />;
+    // return (
+    //   <TableDetails
+    //     connectionName={connectionName}
+    //     schemaName={node.module}
+    //     tableName={activeTab}
+    //   />
+    // );
   };
 
   return (

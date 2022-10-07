@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
@@ -6,8 +6,29 @@ import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
 import TableColumns from './TableColumns';
-import LabelsTab from './LabelsTab';
-import CommentsTab from './CommentsTab';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import {
+  CommentSpec,
+  RecurringScheduleSpec,
+  TableBasicModel,
+  TimeSeriesConfigurationSpec
+} from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import {
+  getTableBasic,
+  getTableComments,
+  getTableLabels,
+  getTableSchedule,
+  getTableTime,
+  updateTableBasic,
+  updateTableComments,
+  updateTableLabels,
+  updateTableSchedule,
+  updateTableTime
+} from '../../../redux/actions/table.actions';
+import CommentsView from '../CommentsView';
+import LabelsView from '../LabelsView';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -23,12 +44,12 @@ const tabs = [
     value: 'schedule'
   },
   {
-    label: 'Labels',
-    value: 'labels'
-  },
-  {
     label: 'Comments',
     value: 'comments'
+  },
+  {
+    label: 'Labels',
+    value: 'labels'
   },
   {
     label: 'Columns',
@@ -39,8 +60,107 @@ const tabs = [
 const TableView = ({ node }: ITableViewProps) => {
   const [activeTab, setActiveTab] = useState('table');
 
+  const { tableBasic, schedule, timeSeries, comments, labels, isUpdating } =
+    useSelector((state: IRootState) => state.table);
+
   const connectionName = node.key.split('.')[1] || '';
   const schemaName = node.key.split('.')[2] || '';
+  const tableName = node.module;
+
+  const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
+  const [updatedSchedule, setUpdatedSchedule] =
+    useState<RecurringScheduleSpec>();
+  const [updatedTimeSeries, setUpdatedTimeSeries] =
+    useState<TimeSeriesConfigurationSpec>();
+  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
+  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    setUpdatedTableBasic(tableBasic);
+  }, [tableBasic]);
+
+  useEffect(() => {
+    setUpdatedSchedule(schedule);
+  }, [schedule]);
+
+  useEffect(() => {
+    setUpdatedTimeSeries(timeSeries);
+  }, [timeSeries]);
+
+  useEffect(() => {
+    setUpdatedComments(comments);
+  }, [comments]);
+  useEffect(() => {
+    setUpdatedLabels(labels);
+  }, [labels]);
+
+  useEffect(() => {
+    setUpdatedTableBasic(undefined);
+    setUpdatedSchedule(undefined);
+    setUpdatedTimeSeries(undefined);
+    setUpdatedComments([]);
+    setUpdatedLabels([]);
+
+    dispatch(getTableBasic(connectionName, schemaName, tableName));
+    dispatch(getTableSchedule(connectionName, schemaName, tableName));
+    dispatch(getTableTime(connectionName, schemaName, tableName));
+    dispatch(getTableComments(connectionName, schemaName, tableName));
+    dispatch(getTableLabels(connectionName, schemaName, tableName));
+  }, [connectionName, schemaName, tableName]);
+
+  const onUpdate = async () => {
+    if (activeTab === 'table') {
+      await dispatch(
+        updateTableBasic(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedTableBasic
+        )
+      );
+      await dispatch(getTableBasic(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'schedule') {
+      await dispatch(
+        updateTableSchedule(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedSchedule
+        )
+      );
+      await dispatch(getTableSchedule(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'time') {
+      await dispatch(
+        updateTableTime(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedTimeSeries
+        )
+      );
+      await dispatch(getTableTime(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'comments') {
+      await dispatch(
+        updateTableComments(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedComments
+        )
+      );
+      await dispatch(getTableComments(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'labels') {
+      await dispatch(
+        updateTableLabels(connectionName, schemaName, tableName, updatedLabels)
+      );
+      await dispatch(getTableLabels(connectionName, schemaName, tableName));
+    }
+  };
 
   return (
     <div className="">
@@ -54,6 +174,8 @@ const TableView = ({ node }: ITableViewProps) => {
           variant="contained"
           label="Save"
           className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
         />
       </div>
       <div className="border-b border-gray-300">
@@ -62,37 +184,30 @@ const TableView = ({ node }: ITableViewProps) => {
       <div>
         {activeTab === 'table' && (
           <TableDetails
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
+            tableBasic={updatedTableBasic}
+            setTableBasic={setUpdatedTableBasic}
           />
         )}
       </div>
       <div>
         {activeTab === 'schedule' && (
           <ScheduleDetail
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
+            schedule={updatedSchedule}
+            setSchedule={setUpdatedSchedule}
           />
         )}
       </div>
       <div>
         {activeTab === 'comments' && (
-          <CommentsTab
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
+          <CommentsView
+            comments={updatedComments}
+            onChange={setUpdatedComments}
           />
         )}
       </div>
       <div>
         {activeTab === 'labels' && (
-          <LabelsTab
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
-          />
+          <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />
         )}
       </div>
       <div>
