@@ -4,12 +4,14 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -42,7 +44,7 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @JsonPropertyDescription("Disables the schedule. When the value of this 'disable' field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.")
-    private boolean disable;
+    private boolean disabled;
 
     /**
      * Returns the cron expression.
@@ -65,17 +67,17 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
      * When true, the schedule is disabled.
      * @return True when the schedule is disabled.
      */
-    public boolean isDisable() {
-        return disable;
+    public boolean isDisabled() {
+        return disabled;
     }
 
     /**
      * Sets the 'disable' flag to pause the schedule.
-     * @param disable Disable the schedule.
+     * @param disabled Disable the schedule.
      */
-    public void setDisable(boolean disable) {
-        setDirtyIf(disable != this.disable);
-        this.disable = disable;
+    public void setDisabled(boolean disabled) {
+        setDirtyIf(disabled != this.disabled);
+        this.disabled = disabled;
     }
 
     /**
@@ -112,5 +114,21 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned.");
         }
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isDefault() {
+        if (!Strings.isNullOrEmpty(this.cronExpression) || this.disabled) {
+            return false;
+        }
+
+        return super.isDefault();
     }
 }

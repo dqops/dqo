@@ -17,6 +17,8 @@ spring:
 server:
   port: ${port:8888}
   shutdown: graceful
+  error:
+    include-stacktrace: always
 
 logging:
   level:

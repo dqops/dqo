@@ -1,10 +1,7 @@
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
-
-import java.util.List;
 
 /**
  * Metadata node search visitor that is searching for all unique recurring schedules.
@@ -32,7 +29,7 @@ public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor
         Boolean enabledFilter = this.filters.getScheduleEnabled();
         if (enabledFilter != null) {
             boolean mustBeDisabled = !enabledFilter;
-            if (recurringScheduleSpec.isDisable() != mustBeDisabled) {
+            if (recurringScheduleSpec.isDisabled() != mustBeDisabled) {
                 return TreeNodeTraversalResult.STOP_TRAVERSAL; // no children possible
             }
         }

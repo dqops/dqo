@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -239,7 +240,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneab
             return false;
         }
         return this.mode == null && this.timeGradient == null &&
-				this.timestampColumn == null &&
+                Strings.isNullOrEmpty(this.timestampColumn) &&
 				this.timeWindowPeriods == null &&
 				this.incrementalTimeWindowPeriods == null &&
 				this.excludedRecentPeriods == null;
