@@ -3,7 +3,7 @@ A schedule can be switched on or off by providing a parameter:
 - `true` to disable a schedule
 - `false` to enable a schedule 
  
-to `disable:` function in a schedule definition.
+to `disabled:` function in a schedule definition.
 
 ### Enabling/disabling a check on a table/column/check
 
@@ -39,7 +39,7 @@ spec:
                   min_value: 90.0
             schedule_override:
               cron_expression: "*/1 * * * *"
-              disable: true
+              disabled: true
     complaint_description:
       type_snapshot:
         column_type: STRING
@@ -68,5 +68,5 @@ spec:
   time_zone: UTC
   schedule:
     cron_expression: "*/1 * * * *"
-    disable: false
+    disabled: false
 ```

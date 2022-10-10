@@ -18,7 +18,7 @@ spec:
   time_zone: UTC
   schedule:
     cron_expression: "*/1 * * * *"
-    disable: false
+    disabled: false
 ```
 
 Below are the examples of the available IDs returned by java.util.TimeZone#getAvailableIDs().

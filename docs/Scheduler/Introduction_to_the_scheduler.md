@@ -80,7 +80,7 @@ Type `schedule_override` below the definition of the check. In this example chec
 
 Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disable:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -112,7 +112,7 @@ spec:
                   min_value: 90.0
             schedule_override:
               cron_expression: "*/1 * * * *"
-              disable: false
+              disabled: false
     complaint_description:
       type_snapshot:
         column_type: STRING
@@ -133,7 +133,7 @@ Type `schedule_override` between the checked column and the definition of the ch
 
 Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disable:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -153,7 +153,7 @@ spec:
         nullable: true
       schedule_override:
         cron_expression: "*/1 * * * *"
-        disable: false
+        disabled: false
       checks:
         uniqueness:
           distinct_count_percent:
@@ -185,7 +185,7 @@ Type `schedule_override` between `checks: {}` and `columns:`.
 
 Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disable:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -201,7 +201,7 @@ spec:
   checks: {}
   schedule_override:
     cron_expression: "*/1 * * * *"
-    disable: false
+    disabled: false
 ```
 
 To run a scheduler use `scheduler start` command, to stop use `scheduler stop` command.
@@ -214,7 +214,7 @@ Type `schedule` at the end, right after `time_zone`.
 
 Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disable:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json
@@ -228,7 +228,7 @@ spec:
   time_zone: UTC
   schedule:
     cron_expression: "*/1 * * * *"
-    disable: false
+    disabled: false
 ```
 
 To run a scheduler use `scheduler start` command, to stop use `scheduler stop` command.
