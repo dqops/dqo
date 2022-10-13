@@ -108,7 +108,7 @@ public class ColumnValidityValueInRangeNumericalPercentSensorParametersSpec exte
      * Returns the boolean deciding whether to include the minimal value in the range.
      * @return Boolean deciding whether to include the minimal value.
      */
-    public Boolean getIncludeMinValue() {
+    public Boolean isIncludeMinValue() {
         return includeMinValue;
     }
 
@@ -125,7 +125,7 @@ public class ColumnValidityValueInRangeNumericalPercentSensorParametersSpec exte
      * Returns the boolean deciding whether to include the maximal value in the range.
      * @return Boolean deciding whether to include the maximal value.
      */
-    public Boolean getIncludeMaxValue() {
+    public Boolean isIncludeMaxValue() {
         return includeMaxValue;
     }
 

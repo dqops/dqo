@@ -195,8 +195,6 @@ public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
         this.setDirtyIf(!Objects.equals(this.valueInRangeNumericalPercent, valueInRangeNumericalPercent));
         this.valueInRangeNumericalPercent = valueInRangeNumericalPercent;
         propagateHierarchyIdToField(valueInRangeNumericalPercent, "value_in_range_numerical_percent");
-
-        this.valueInRangeNumericalPercent = valueInRangeNumericalPercent;
     }
 
     /**
@@ -265,6 +263,14 @@ public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
         this.setDirtyIf(!Objects.equals(dateTypePercent, this.dateTypePercent));
         this.dateTypePercent = dateTypePercent;
         propagateHierarchyIdToField(dateTypePercent, "date_type_percent");
+    }
+
+    /**
+     * Returns the column validity values in set percent check.
+     * @return Column validity values in set percent check.
+     */
+    public ColumnValidityValuesInSetPercentCheckSpec getValuesInSetPercent() {
+        return valuesInSetPercent;
     }
 
     /**

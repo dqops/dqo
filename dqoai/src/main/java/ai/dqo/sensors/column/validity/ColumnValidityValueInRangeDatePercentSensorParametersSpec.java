@@ -108,7 +108,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpec extends A
      * Returns the boolean deciding whether to include the lower limit of the range.
      * @return Boolean deciding whether to include the lower bound.
      */
-    public Boolean getIncludeMinValue() {
+    public Boolean isIncludeMinValue() {
         return includeMinValue;
     }
     /**
@@ -124,7 +124,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpec extends A
      * Returns the boolean deciding whether to include the upper limit of the range.
      * @return Boolean deciding whether to include the upper bound.
      */
-    public Boolean getIncludeMaxValue() {
+    public Boolean isIncludeMaxValue() {
         return includeMaxValue;
     }
 

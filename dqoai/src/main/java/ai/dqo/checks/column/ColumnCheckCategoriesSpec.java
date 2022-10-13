@@ -45,7 +45,7 @@ public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
         {
 			put("validity", o -> o.validity);
 			put("uniqueness", o -> o.uniqueness);
-            put("completeness", o -> o.completeness);
+//            put("completeness", o -> o.completeness);
             put("consistency", o -> o.consistency);
             put("custom", o -> o.custom);
         }
@@ -59,13 +59,13 @@ public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
     @JsonPropertyDescription("Configuration of uniqueness checks on a table level. Uniqueness checks verify that the column values are unique or the percentage of duplicates is acceptable.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BuiltInColumnUniquenessChecksSpec uniqueness = new BuiltInColumnUniquenessChecksSpec();
+    private BuiltInColumnUniquenessChecksSpec uniqueness;
 
-    //TODO add description
-    @JsonPropertyDescription("Configuration of completeness checks on a column level. Completeness checks verify...")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BuiltInColumnCompletenessChecksSpec completeness;
+//    //TODO add description
+//    @JsonPropertyDescription("Configuration of completeness checks on a column level. Completeness checks verify...")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private BuiltInColumnCompletenessChecksSpec completeness;
 
     @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
