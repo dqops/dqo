@@ -35,8 +35,8 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
      * Default constructor.
      */
     public PercentMovingStdevRuleParametersSpec() {
-        this.multipleStdevBelow = -123456.0;
-        this.multipleStdevAbove = -123456.0;
+        this.multipleStdevBelow = null;
+        this.multipleStdevAbove = null;
     }
 
     /**
