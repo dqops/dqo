@@ -32,7 +32,7 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
       }`}
       onClick={() => onChange && onChange(tab)}
     >
-      <div className="truncate max-w-40">{tab.label}</div>
+      <div className="truncate max-w-40 capitalize">{tab.label}</div>
       {closable && active && (
         <SvgIcon
           name="close"

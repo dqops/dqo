@@ -17,6 +17,7 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
+  getTableChecksUI,
   getTableComments,
   getTableLabels,
   getTableSchedule,
@@ -29,6 +30,7 @@ import {
 } from '../../../redux/actions/table.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
+import DataQualityChecks from './DataQualityChecks';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -42,6 +44,10 @@ const tabs = [
   {
     label: 'Schedule',
     value: 'schedule'
+  },
+  {
+    label: 'Data Quality Checks',
+    value: 'data-quality-checks'
   },
   {
     label: 'Comments',
@@ -60,8 +66,15 @@ const tabs = [
 const TableView = ({ node }: ITableViewProps) => {
   const [activeTab, setActiveTab] = useState('table');
 
-  const { tableBasic, schedule, timeSeries, comments, labels, isUpdating } =
-    useSelector((state: IRootState) => state.table);
+  const {
+    tableBasic,
+    schedule,
+    timeSeries,
+    comments,
+    labels,
+    checksUI,
+    isUpdating
+  } = useSelector((state: IRootState) => state.table);
 
   const connectionName = node.key.split('.')[1] || '';
   const schemaName = node.key.split('.')[2] || '';
@@ -107,6 +120,7 @@ const TableView = ({ node }: ITableViewProps) => {
     dispatch(getTableTime(connectionName, schemaName, tableName));
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
+    dispatch(getTableChecksUI(connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
@@ -195,6 +209,11 @@ const TableView = ({ node }: ITableViewProps) => {
             schedule={updatedSchedule}
             setSchedule={setUpdatedSchedule}
           />
+        )}
+      </div>
+      <div>
+        {activeTab === 'data-quality-checks' && (
+          <DataQualityChecks checksUI={checksUI} />
         )}
       </div>
       <div>

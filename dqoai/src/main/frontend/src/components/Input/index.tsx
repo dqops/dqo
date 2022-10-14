@@ -39,7 +39,7 @@ const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className="block text-base font-regular text-gray-700 mb-2 capitalize text-sm"
+          className="block font-regular text-gray-700 mb-1 capitalize text-sm"
         >
           {label}
         </label>

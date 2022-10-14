@@ -3,7 +3,8 @@ import {
   TableBasicModel,
   TableModel,
   RecurringScheduleSpec,
-  TimeSeriesConfigurationSpec
+  TimeSeriesConfigurationSpec,
+  TableCheckCategoriesSpec, UIAllChecksModel
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -18,6 +19,8 @@ export interface ITableState {
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
   labels: string[];
+  checks?: TableCheckCategoriesSpec;
+  checksUI?: UIAllChecksModel;
 }
 
 const initialState: ITableState = {
@@ -223,6 +226,42 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checks: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checksUI: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR:
+      return {
+        ...state,
+        loading: false,
         error: action.error
       };
     default:

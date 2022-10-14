@@ -5,7 +5,7 @@ import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import TimeSeriesTab from './TimeSeriesTab';
+import TimeSeriesView from '../TimeSeriesView';
 import { SchemaApiClient } from '../../../services/apiClient';
 import {
   CommentSpec,
@@ -174,10 +174,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     }
     if (activeTab === 'time') {
       return (
-        <TimeSeriesTab
-          timeSeries={updatedTimeSeries}
-          setTimeSeries={setUpdatedTimeSeries}
-        />
+        <div className="p-4">
+          <TimeSeriesView
+            timeSeries={updatedTimeSeries}
+            setTimeSeries={setUpdatedTimeSeries}
+          />
+        </div>
       );
     }
     if (activeTab === 'comments') {

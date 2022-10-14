@@ -331,3 +331,63 @@ export const updateTableLabels =
       dispatch(updateTableLabelsFailed(err));
     }
   };
+
+export const getTableChecksRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
+});
+
+export const getTableChecksSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
+  data
+});
+
+export const getTableChecksFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR,
+  error
+});
+
+export const getTableChecks =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableChecksRequest());
+    try {
+      const res = await TableApiClient.getTableChecks(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableChecksFailed(err));
+    }
+  };
+
+export const getTableChecksUiRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI
+});
+
+export const getTableChecksUiSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
+  data
+});
+
+export const getTableChecksUiFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  error
+});
+
+export const getTableChecksUI =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableChecksUiRequest());
+    try {
+      const res = await TableApiClient.getTableChecksUI(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableChecksUiSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableChecksUiFailed(err));
+    }
+  };
