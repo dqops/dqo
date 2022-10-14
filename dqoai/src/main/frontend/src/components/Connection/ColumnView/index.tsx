@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
-import LabelsTab from './LabelsTab';
-import CommentsTab from './CommentsTab';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { ColumnBasicModel, CommentSpec } from '../../../api';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import {
+  getColumnBasic,
+  getColumnComments,
+  getColumnLabels,
+  updateColumnBasic,
+  updateColumnComments,
+  updateColumnLabels
+} from '../../../redux/actions/column.actions';
+import CommentsView from '../CommentsView';
+import LabelsView from '../LabelsView';
+import ColumnDetails from './ColumnDetails';
 
 interface IColumnViewProps {
   node: ITreeNode;
@@ -16,21 +29,101 @@ const tabs = [
     value: 'column'
   },
   {
-    label: 'Labels',
-    value: 'labels'
-  },
-  {
     label: 'Comments',
     value: 'comments'
+  },
+  {
+    label: 'Labels',
+    value: 'labels'
   }
 ];
 
 const ColumnView = ({ node }: IColumnViewProps) => {
   const [activeTab, setActiveTab] = useState('column');
 
-  const connectionName = node.key.split('.')[1] || '';
-  const schemaName = node.key.split('.')[2] || '';
-  const tableName = node.key.split('.')[2] || '';
+  const { columnBasic, comments, labels, isUpdating } = useSelector(
+    (state: IRootState) => state.column
+  );
+
+  const { connectionName, schemaName, tableName, columnName } = useMemo(() => {
+    const connectionName = node.key.split('.')[1] || '';
+    const schemaName = node.key.split('.')[2] || '';
+    const tableName = node.key.split('.')[2] || '';
+    const columnName = node.module;
+
+    return { connectionName, schemaName, tableName, columnName };
+  }, [node]);
+
+  const [updatedColumnBasic, setUpdatedColumnBasic] =
+    useState<ColumnBasicModel>();
+  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
+  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    setUpdatedComments(comments);
+  }, [comments]);
+  useEffect(() => {
+    setUpdatedLabels(labels);
+  }, [labels]);
+  useEffect(() => {
+    setUpdatedColumnBasic(columnBasic);
+  }, [columnBasic]);
+
+  useEffect(() => {
+    setUpdatedComments([]);
+    setUpdatedLabels([]);
+
+    dispatch(getColumnBasic(connectionName, schemaName, tableName, columnName));
+    dispatch(
+      getColumnComments(connectionName, schemaName, tableName, columnName)
+    );
+    dispatch(
+      getColumnLabels(connectionName, schemaName, tableName, columnName)
+    );
+  }, [connectionName, schemaName, tableName, columnName]);
+
+  const onUpdate = async () => {
+    if (activeTab === 'column') {
+      await dispatch(
+        updateColumnBasic(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedColumnBasic
+        )
+      );
+    }
+    if (activeTab === 'comments') {
+      await dispatch(
+        updateColumnComments(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedComments
+        )
+      );
+      await dispatch(
+        getColumnComments(connectionName, schemaName, tableName, columnName)
+      );
+    }
+    if (activeTab === 'labels') {
+      await dispatch(
+        updateColumnLabels(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedLabels
+        )
+      );
+      await dispatch(
+        getColumnLabels(connectionName, schemaName, tableName, columnName)
+      );
+    }
+  };
 
   return (
     <div className="">
@@ -44,27 +137,28 @@ const ColumnView = ({ node }: IColumnViewProps) => {
           variant="contained"
           label="Save"
           className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
         />
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
       <div>
-        {activeTab === 'labels' && (
-          <LabelsTab
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-            columnName={node.module}
+        {activeTab === 'column' && (
+          <ColumnDetails
+            columnBasic={updatedColumnBasic}
+            setColumnBasic={setUpdatedColumnBasic}
           />
         )}
         {activeTab === 'comments' && (
-          <CommentsTab
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-            columnName={node.module}
+          <CommentsView
+            comments={updatedComments}
+            onChange={setUpdatedComments}
           />
+        )}
+        {activeTab === 'labels' && (
+          <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />
         )}
       </div>
     </div>
