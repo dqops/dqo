@@ -16,6 +16,7 @@
 package ai.dqo.rest.models.checks.mapping;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
 import ai.dqo.checks.table.TableCheckCategoriesSpec;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -45,6 +46,16 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableCheckCategoriesSpec tableCheckCategoriesSpec = new TableCheckCategoriesSpec();
         UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(3, uiModel.getQualityDimensions().size());
+    }
+
+
+    @Test
+    void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
+        ColumnCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnCheckCategoriesSpec();
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(3, uiModel.getQualityDimensions().size());
