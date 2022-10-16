@@ -15,9 +15,8 @@
  */
 package ai.dqo.bigquery.sensors.column.validity;
 
-import ai.dqo.sensors.column.validity.ColumnValidityRegexMatchPercentSensorParametersSpec;
-import ai.dqo.checks.column.validity.ColumnValidityRegexMatchPercentCheckSpec;
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.checks.column.validity.ColumnValidityRegexMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -30,7 +29,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.validity.BuiltInRegex;
-
+import ai.dqo.sensors.column.validity.ColumnValidityRegexMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

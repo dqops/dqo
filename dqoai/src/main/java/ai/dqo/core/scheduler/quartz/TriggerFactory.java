@@ -1,7 +1,6 @@
 package ai.dqo.core.scheduler.quartz;
 
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import org.quartz.JobKey;
 import org.quartz.Trigger;
 

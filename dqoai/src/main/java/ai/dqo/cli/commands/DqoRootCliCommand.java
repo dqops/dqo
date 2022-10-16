@@ -27,7 +27,6 @@ import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
-import ai.dqo.cli.completion.completers.SensorExtensionCompleter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.BeanFactory;

@@ -6,7 +6,6 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.table.timeliness.TableTimelinessAverageDelaySensorParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessCurrentDelaySensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

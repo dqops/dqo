@@ -16,10 +16,10 @@
 package ai.dqo.metadata.storage.localfiles.ruledefinitions;
 
 import ai.dqo.core.filesystem.ApiVersion;
+import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapperImpl;

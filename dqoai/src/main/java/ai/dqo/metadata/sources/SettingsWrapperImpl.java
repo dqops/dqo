@@ -18,8 +18,6 @@ package ai.dqo.metadata.sources;
 import ai.dqo.metadata.basespecs.AbstractElementWrapper;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**

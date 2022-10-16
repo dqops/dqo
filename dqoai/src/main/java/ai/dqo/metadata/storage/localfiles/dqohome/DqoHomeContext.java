@@ -17,7 +17,6 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
 
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.dqohome.DqoHome;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextCache;
 
 /**
  * File based user home context used to operate on the user home file based model.

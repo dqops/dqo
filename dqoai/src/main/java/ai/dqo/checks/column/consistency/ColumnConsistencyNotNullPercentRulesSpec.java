@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package ai.dqo.checks.column.consistency;
+
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+
 import java.util.Objects;
 /**
  * Column not null percent rules (a list of supported rules).

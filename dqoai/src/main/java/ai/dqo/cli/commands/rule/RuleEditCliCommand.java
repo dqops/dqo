@@ -1,13 +1,14 @@
 package ai.dqo.cli.commands.rule;
 
-import ai.dqo.cli.commands.*;
+import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
+import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.RuleFileExtension;
 import ai.dqo.cli.commands.rule.impl.RuleService;
-import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.completion.completers.RuleExtensionCompleter;
 import ai.dqo.cli.completion.completers.RuleNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.connectors.ProviderType;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

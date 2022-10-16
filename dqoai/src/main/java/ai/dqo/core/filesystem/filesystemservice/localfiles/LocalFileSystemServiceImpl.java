@@ -15,14 +15,13 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.localfiles;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.FileMetadataReadException;
 import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
+import ai.dqo.core.filesystem.filesystemservice.contract.FileMetadataReadException;
 import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemChangeException;
 import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemReadException;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.utils.exceptions.CloseableHelper;
-import com.google.common.collect.Streams;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import org.apache.commons.io.FileUtils;
@@ -30,11 +29,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Objects;
-import java.util.stream.StreamSupport;
 
 /**
  * Local file system implementation.

@@ -3,7 +3,10 @@ package ai.dqo.execution.checks.scheduled;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.TableWrapper;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Collection of tables and their checks that will be executed for a single schedule.

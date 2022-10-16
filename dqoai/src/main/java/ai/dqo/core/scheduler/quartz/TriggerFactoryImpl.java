@@ -3,7 +3,6 @@ package ai.dqo.core.scheduler.quartz;
 import ai.dqo.core.scheduler.JobSchedulerException;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.utils.datetime.TimeZoneUtility;
 import com.cronutils.mapper.CronMapper;
 import com.cronutils.model.Cron;
 import com.cronutils.model.definition.CronDefinition;
@@ -14,7 +13,6 @@ import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.cronutils.model.CronType.QUARTZ;
 import static com.cronutils.model.CronType.UNIX;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;

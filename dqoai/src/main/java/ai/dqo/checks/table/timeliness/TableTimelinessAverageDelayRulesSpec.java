@@ -4,7 +4,6 @@ import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.averages.PercentMovingAverageRuleThresholdsSpec;
-import ai.dqo.rules.comparison.MinValueRuleThresholdsSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

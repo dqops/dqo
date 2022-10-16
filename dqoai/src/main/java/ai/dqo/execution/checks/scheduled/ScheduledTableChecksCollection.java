@@ -4,7 +4,10 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.TableWrapper;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Collection of checks inside a single table that should be executed as part of a schedule.

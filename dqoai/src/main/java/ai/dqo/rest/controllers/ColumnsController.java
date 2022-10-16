@@ -16,7 +16,6 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;

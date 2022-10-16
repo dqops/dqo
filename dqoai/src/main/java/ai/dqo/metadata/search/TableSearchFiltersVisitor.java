@@ -16,8 +16,6 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;

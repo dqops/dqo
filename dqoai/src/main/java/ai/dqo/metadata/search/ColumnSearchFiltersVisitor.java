@@ -16,12 +16,9 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link ColumnSearchFilters} that finds the correct nodes.

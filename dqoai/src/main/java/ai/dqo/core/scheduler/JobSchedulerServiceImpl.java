@@ -7,10 +7,10 @@ import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import org.quartz.*;
-import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import java.util.List;
 
 import static org.quartz.JobBuilder.newJob;
-import java.util.List;
 
 
 /**

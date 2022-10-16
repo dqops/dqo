@@ -18,15 +18,11 @@ package ai.dqo.cli.commands;
 import ai.dqo.cli.ApplicationShutdownManager;
 import ai.dqo.cli.CliExitCodeGenerator;
 import ai.dqo.cli.CliInitializer;
-import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Main command runner that parses the CLI command line arguments and executes a selected command.

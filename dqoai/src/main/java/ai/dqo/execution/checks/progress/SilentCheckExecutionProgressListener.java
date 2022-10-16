@@ -4,9 +4,6 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 /**
  * Checks execution context progress listener that is silent and is not producing any messages to the console.

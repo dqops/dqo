@@ -19,8 +19,6 @@ import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.rules.averages.PercentMovingAverageRuleThresholdsSpec;
 import ai.dqo.rules.comparison.MinValueRuleThresholdsSpec;
 import ai.dqo.rules.comparison.ValueEqualsRuleThresholdsSpec;

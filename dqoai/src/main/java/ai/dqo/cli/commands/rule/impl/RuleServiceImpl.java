@@ -14,7 +14,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static ai.dqo.metadata.storage.localfiles.SpecFileNames.*;
+import static ai.dqo.metadata.storage.localfiles.SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY;
+import static ai.dqo.metadata.storage.localfiles.SpecFileNames.CUSTOM_RULE_SPEC_FILE_EXT_YAML;
 
 /**
  * Service called from the "rule" cli commands to edit a template.

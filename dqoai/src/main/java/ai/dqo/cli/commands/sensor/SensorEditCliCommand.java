@@ -1,10 +1,10 @@
 package ai.dqo.cli.commands.sensor;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.SensorFileExtension;
 import ai.dqo.cli.commands.sensor.impl.SensorService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.completion.completers.SensorExtensionCompleter;
 import ai.dqo.cli.completion.completers.SensorNameCompleter;

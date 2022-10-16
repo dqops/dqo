@@ -26,8 +26,8 @@ import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
 import ai.dqo.checks.table.TableCheckCategoriesSpec;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
-import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.relevance.BuiltInTableRelevanceChecksSpec;
+import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -44,7 +44,6 @@ import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
 import ai.dqo.metadata.groupings.DimensionMappingSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -58,8 +57,6 @@ import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
 import ai.dqo.sensors.table.AllTableSensorsSpec;
-
-import java.util.List;
 
 /**
  * Base class for search visitors that simply visits all nodes.

@@ -1,6 +1,9 @@
 package ai.dqo.core.scheduler.schedules;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Collection (hash set) of unique schedule configurations that were detected for running the data quality checks.

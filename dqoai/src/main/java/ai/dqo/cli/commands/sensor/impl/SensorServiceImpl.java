@@ -1,7 +1,7 @@
 package ai.dqo.cli.commands.sensor.impl;
 
-import ai.dqo.cli.commands.SensorFileExtension;
 import ai.dqo.cli.commands.CliOperationStatus;
+import ai.dqo.cli.commands.SensorFileExtension;
 import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.basespecs.InstanceStatus;

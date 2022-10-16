@@ -16,7 +16,6 @@
 package ai.dqo.checks.column;
 
 import ai.dqo.checks.AbstractCheckCategoriesSpec;
-import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
 import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;

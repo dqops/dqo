@@ -16,16 +16,19 @@
 package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.column.impl.ColumnService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.terminal.*;
+import ai.dqo.cli.terminal.FileWritter;
+import ai.dqo.cli.terminal.TablesawDatasetTableModel;
+import ai.dqo.cli.terminal.TerminalTableWritter;
+import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;

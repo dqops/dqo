@@ -16,8 +16,8 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.sensors.AbstractSensorParametersSpec;

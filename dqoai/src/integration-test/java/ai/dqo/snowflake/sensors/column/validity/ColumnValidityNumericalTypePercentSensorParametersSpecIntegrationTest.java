@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package ai.dqo.snowflake.sensors.column.validity;
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+
 import ai.dqo.checks.column.validity.ColumnValidityNumericalTypePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;

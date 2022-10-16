@@ -16,10 +16,10 @@
 package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.FormattedTableDto;

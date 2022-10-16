@@ -15,7 +15,6 @@
  */
 package ai.dqo.sensors.table.timeliness;
 
-import ai.dqo.sensors.table.timeliness.TableTimelinessCurrentDelaySensorParametersSpec;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;

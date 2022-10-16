@@ -15,17 +15,15 @@
  */
 package ai.dqo.checks.column.completeness;
 
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
+import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 

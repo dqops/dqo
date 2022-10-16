@@ -23,8 +23,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * UI model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).
  */

@@ -15,12 +15,11 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link ConnectionSearchFilters} that finds the correct nodes.

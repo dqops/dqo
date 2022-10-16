@@ -17,11 +17,11 @@ package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
+import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
 import ai.dqo.data.readings.snapshot.SensorReadingsTimeSeriesData;
 import ai.dqo.data.readings.snapshot.SensorReadingsTimeSeriesMap;
 import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.rules.*;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;

@@ -18,9 +18,6 @@ package ai.dqo.execution.checks.progress;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
 /**

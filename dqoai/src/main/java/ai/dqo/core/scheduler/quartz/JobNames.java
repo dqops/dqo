@@ -1,7 +1,5 @@
 package ai.dqo.core.scheduler.quartz;
 
-import org.quartz.JobKey;
-
 /**
  * Constants with the default Quartz job names.
  */
