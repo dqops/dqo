@@ -127,8 +127,13 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
         DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
-        labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dimensionSearcherObject.setTableDimension(tableWrapper.getSpec().getDimensions());
+        if (labelsSearcherObject != null) {
+            labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
+        }
+
+        if (dimensionSearcherObject != null) {
+            dimensionSearcherObject.setTableDimension(tableWrapper.getSpec().getDimensions());
+        }
 
         DimensionsConfigurationSpec overridenDimension = dimensionSearcherObject.getTableDimension() != null
                 ? dimensionSearcherObject.getTableDimension()

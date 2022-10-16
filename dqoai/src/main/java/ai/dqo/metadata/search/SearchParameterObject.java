@@ -2,6 +2,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.id.HierarchyNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchParameterObject {
@@ -13,6 +14,16 @@ public class SearchParameterObject {
 		this.nodes = nodes;
 		this.dimensionSearcherObject = dimensionSearcherObject;
 		this.labelsSearcherObject = labelsSearcherObject;
+	}
+
+	public SearchParameterObject(List<HierarchyNode> nodes) {
+		this.nodes = nodes;
+		this.dimensionSearcherObject = new DimensionSearcherObject();
+		this.labelsSearcherObject = new LabelsSearcherObject();
+	}
+
+	public SearchParameterObject() {
+		this(new ArrayList<>());
 	}
 
 	public List<HierarchyNode> getNodes() {

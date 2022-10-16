@@ -18,7 +18,7 @@ public final class UserHomeContextFactoryObjectMother {
      * Creates a user home context factory that creates an empty, file-based user context in a temporary folder.
      * @return Returns a stub factory that returns an empty file based user context.
      */
-    public static UserHomeContextFactory createWithTemporaryContext() {
+    public static UserHomeContextFactory createWithEmptyTemporaryContext() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
         return new UserHomeContextFactoryStub(inMemoryFileHomeContext);
     }

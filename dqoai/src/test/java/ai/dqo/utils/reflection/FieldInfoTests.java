@@ -77,7 +77,7 @@ public class FieldInfoTests extends BaseTest {
         target.setDataType(ParameterDataType.double_type);
 
         Object fieldValue = sut.getFieldValue(target);
-        Assertions.assertEquals("double_type", fieldValue);
+        Assertions.assertEquals("double", fieldValue);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class FieldInfoTests extends BaseTest {
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setDataType(ParameterDataType.double_type);
 
-        sut.setFieldValue("string_type", target);
+        sut.setFieldValue("string", target);
         Assertions.assertEquals(ParameterDataType.string_type, target.getDataType());
     }
 
