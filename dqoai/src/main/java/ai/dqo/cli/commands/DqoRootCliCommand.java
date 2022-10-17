@@ -132,6 +132,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "This parameter is effective only in CLI mode.", defaultValue = "true")
     private Boolean dqoCorePrintStackTrace;
 
+    @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
+            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "900")
+    private Long lockWaitTimeoutSeconds;
+
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
             description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "true")

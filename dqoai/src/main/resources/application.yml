@@ -73,6 +73,7 @@ dqo:
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
   core:
     print-stack-trace: true
+    lock-wait-timeout-seconds: 900
   scheduler:
     scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
     enable-cloud-sync: true
