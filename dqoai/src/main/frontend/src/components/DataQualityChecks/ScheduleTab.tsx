@@ -1,7 +1,7 @@
 import React from 'react';
-import Checkbox from '../../../Checkbox';
-import Input from '../../../Input';
-import { RecurringScheduleSpec } from '../../../../api';
+import Checkbox from '../Checkbox';
+import Input from '../Input';
+import { RecurringScheduleSpec } from '../../api';
 
 interface IScheduleTabProps {
   schedule?: RecurringScheduleSpec;

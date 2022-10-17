@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIRuleThresholdsModel } from '../../../../api';
-import Checkbox from '../../../Checkbox';
-import SvgIcon from '../../../SvgIcon';
+import { UICheckModel, UIRuleThresholdsModel } from '../../api';
+import Checkbox from '../Checkbox';
+import SvgIcon from '../SvgIcon';
 import CheckRulesTable from './CheckRulesTable';
 import CheckSettings from './CheckSettings';
 

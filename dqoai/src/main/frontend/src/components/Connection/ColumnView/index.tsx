@@ -5,10 +5,11 @@ import Button from '../../Button';
 import Tabs from '../../Tabs';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { ColumnBasicModel, CommentSpec } from '../../../api';
+import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnBasic,
+  getColumnChecksUi,
   getColumnComments,
   getColumnLabels,
   updateColumnBasic,
@@ -18,6 +19,7 @@ import {
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import ColumnDetails from './ColumnDetails';
+import DataQualityChecks from '../../DataQualityChecks';
 
 interface IColumnViewProps {
   node: ITreeNode;
@@ -27,6 +29,10 @@ const tabs = [
   {
     label: 'Column',
     value: 'column'
+  },
+  {
+    label: 'Data Quality Checks',
+    value: 'data-quality-checks'
   },
   {
     label: 'Comments',
@@ -41,14 +47,14 @@ const tabs = [
 const ColumnView = ({ node }: IColumnViewProps) => {
   const [activeTab, setActiveTab] = useState('column');
 
-  const { columnBasic, comments, labels, isUpdating } = useSelector(
+  const { columnBasic, comments, labels, isUpdating, checksUI } = useSelector(
     (state: IRootState) => state.column
   );
 
   const { connectionName, schemaName, tableName, columnName } = useMemo(() => {
     const connectionName = node.key.split('.')[1] || '';
     const schemaName = node.key.split('.')[2] || '';
-    const tableName = node.key.split('.')[2] || '';
+    const tableName = node.key.split('.')[3] || '';
     const columnName = node.module;
 
     return { connectionName, schemaName, tableName, columnName };
@@ -58,6 +64,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     useState<ColumnBasicModel>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
 
   useEffect(() => {
@@ -71,6 +78,10 @@ const ColumnView = ({ node }: IColumnViewProps) => {
   }, [columnBasic]);
 
   useEffect(() => {
+    setUpdatedChecksUI(checksUI);
+  }, [checksUI]);
+
+  useEffect(() => {
     setUpdatedComments([]);
     setUpdatedLabels([]);
 
@@ -80,6 +91,9 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     );
     dispatch(
       getColumnLabels(connectionName, schemaName, tableName, columnName)
+    );
+    dispatch(
+      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
     );
   }, [connectionName, schemaName, tableName, columnName]);
 
@@ -151,6 +165,11 @@ const ColumnView = ({ node }: IColumnViewProps) => {
             setColumnBasic={setUpdatedColumnBasic}
           />
         )}
+        <div>
+          {activeTab === 'data-quality-checks' && (
+            <DataQualityChecks checksUI={updatedChecksUI} />
+          )}
+        </div>
         {activeTab === 'comments' && (
           <CommentsView
             comments={updatedComments}

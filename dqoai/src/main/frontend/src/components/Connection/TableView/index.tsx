@@ -30,7 +30,7 @@ import {
 } from '../../../redux/actions/table.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
-import DataQualityChecks from './DataQualityChecks';
+import DataQualityChecks from '../../DataQualityChecks';
 
 interface ITableViewProps {
   node: ITreeNode;

@@ -1,6 +1,6 @@
 import React from 'react';
-import SvgIcon from '../../../SvgIcon';
-import { UIRuleThresholdsModel } from '../../../../api';
+import SvgIcon from '../SvgIcon';
+import { UIRuleThresholdsModel } from '../../api';
 
 interface ICheckRulesTableProps {
   rules: UIRuleThresholdsModel[];

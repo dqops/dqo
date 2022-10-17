@@ -1,7 +1,7 @@
 import React from 'react';
-import { TableConsistencyRowCountSensorParametersSpec } from '../../../../api';
-import Checkbox from '../../../Checkbox';
-import TextArea from '../../../TextArea';
+import { TableConsistencyRowCountSensorParametersSpec } from '../../api';
+import Checkbox from '../Checkbox';
+import TextArea from '../TextArea';
 
 interface ISensorParametersSettingsProps {
   parameters?: TableConsistencyRowCountSensorParametersSpec;

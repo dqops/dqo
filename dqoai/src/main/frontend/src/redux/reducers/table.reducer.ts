@@ -4,7 +4,8 @@ import {
   TableModel,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec,
-  TableCheckCategoriesSpec, UIAllChecksModel
+  TableCheckCategoriesSpec,
+  UIAllChecksModel
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 

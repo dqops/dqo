@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import DimensionItem from './DimensionItem';
 import ScheduleTab from './ScheduleTab';
-import TimeSeriesView from '../../TimeSeriesView';
-import CommentsView from '../../CommentsView';
+import TimeSeriesView from '../Connection/TimeSeriesView';
+import CommentsView from '../Connection/CommentsView';
 import SensorParametersSettings from './SensorParametersSettings';
-import Tabs from '../../../Tabs';
+import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
-import SvgIcon from '../../../SvgIcon';
-import IconButton from '../../../IconButton';
+import SvgIcon from '../SvgIcon';
+import IconButton from '../IconButton';
 import SpecRuleSettings from './SpecRuleSettings';
 
 interface ICheckSettingsProps {

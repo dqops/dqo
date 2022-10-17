@@ -1,7 +1,7 @@
 import React from 'react';
-import { MaxValueRuleThresholdsSpec } from '../../../../api';
-import Checkbox from '../../../Checkbox';
-import Input from '../../../Input';
+import { MaxValueRuleThresholdsSpec } from '../../api';
+import Checkbox from '../Checkbox';
+import Input from '../Input';
 
 interface ISpecRuleSettingsProps {
   rule?: MaxValueRuleThresholdsSpec;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { UIAllChecksModel } from '../../../../api';
+import { UIAllChecksModel } from '../../api';
 import CheckListItem from './CheckListItem';
 
 interface IDataQualityChecksProps {
@@ -23,9 +23,8 @@ const TableHeader = () => {
 };
 
 const DataQualityChecks = ({ checksUI }: IDataQualityChecksProps) => {
-  console.log('checks', checksUI);
   if (!checksUI?.quality_dimensions) {
-    return <div>No Checks</div>;
+    return <div className="p-4">No Checks</div>;
   }
 
   return (

@@ -1,4 +1,9 @@
-import { CommentSpec, ColumnBasicModel, ColumnModel } from '../../api';
+import {
+  CommentSpec,
+  ColumnBasicModel,
+  ColumnModel,
+  UIAllChecksModel
+} from '../../api';
 import { COLUMN_ACTION } from '../types';
 
 export interface IColumnState {
@@ -10,6 +15,7 @@ export interface IColumnState {
   isUpdating: boolean;
   comments: CommentSpec[];
   labels: string[];
+  checksUI?: UIAllChecksModel;
 }
 
 const initialState: IColumnState = {
@@ -145,6 +151,24 @@ const columnReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isUpdating: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKS_UI:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checksUI: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKS_UI_ERROR:
+      return {
+        ...state,
+        loading: false,
         error: action.error
       };
     default:

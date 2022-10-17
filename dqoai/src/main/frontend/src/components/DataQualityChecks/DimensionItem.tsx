@@ -2,9 +2,9 @@ import React from 'react';
 import {
   DimensionMappingSpec,
   DimensionMappingSpecSourceEnum
-} from '../../../../api';
-import Select from '../../../Select';
-import Input from '../../../Input';
+} from '../../api';
+import Select from '../Select';
+import Input from '../Input';
 
 interface IDimensionItemProps {
   dimension?: DimensionMappingSpec;

@@ -80,7 +80,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">Length</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={columnBasic?.type_snapshot?.length}
+                value={columnBasic?.type_snapshot?.length || ''}
                 onChange={(value) => handleSnapTypeChange({ length: value })}
               />
             </td>

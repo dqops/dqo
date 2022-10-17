@@ -254,3 +254,39 @@ export const updateColumnLabels =
       dispatch(updateColumnLabelsFailed(err));
     }
   };
+
+export const getColumnChecksUIRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI
+});
+
+export const getColumnChecksUISuccess = (data: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
+  data
+});
+
+export const getColumnChecksUIFailed = (error: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_ERROR,
+  error
+});
+
+export const getColumnChecksUi =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getColumnChecksUIRequest());
+    try {
+      const res = await ColumnApiClient.getColumnChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      );
+      dispatch(getColumnChecksUISuccess(res.data));
+    } catch (err) {
+      dispatch(getColumnChecksUIFailed(err));
+    }
+  };

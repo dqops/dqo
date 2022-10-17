@@ -10,7 +10,7 @@ import TableView from '../../components/Connection/TableView';
 import SchemaView from '../../components/Connection/SchemaView';
 import ColumnView from '../../components/Connection/ColumnView';
 
-const TestPage = () => {
+const ConnectionPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
     useTabs();
 
@@ -45,4 +45,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default ConnectionPage;
