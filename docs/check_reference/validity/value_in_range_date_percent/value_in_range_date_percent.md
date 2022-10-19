@@ -86,10 +86,8 @@ ___
 
 ### Default configuration
 
-Table configuration in YAML file for column check `value_in_range_date_percent` on a column `real_datetime` in 
-`string_dates`table in test_data 
-dataset in dqo-ai project on BigQuery, min_count rule and passed parameters `min_value = "2022-04-01"`, `max_value
-= "2022-04-10"`
+YAML file for `value_in_range_date_percent` check on a column `real_datetime` in 
+`string_dates`table from `test_data` dataset in `dqo-ai` project on BigQuery with `min_count` rule and passed parameters `min_value = "2022-04-01"`, `max_value = "2022-04-10"`, looks like this:
 
 ```yaml hl_lines="21-34" linenums="1"
 --8<-- "docs/check_reference/validity/value_in_range_date_percent/yamls/default_config_on_datetime.yml"
@@ -99,11 +97,152 @@ dataset in dqo-ai project on BigQuery, min_count rule and passed parameters `min
 {{ process_template_request(get_request("docs/check_reference/validity/value_in_range_date_percent/requests/default_config_on_datetime.json")) }}
 ```
 
-### Exclude min and max values
+In order to exclude min and max values, provide `false` to:
+- include_min_value
+
+- include_max_value
+
+Please see lines 26 and 27 below:
+
 ```yaml hl_lines="20-35" linenums="1"
 --8<-- "docs/check_reference/validity/value_in_range_date_percent/yamls/include_bounds_false.yml"
 ```
 
+In that case a rendered query looks like this:
+
 ```SQL
 {{ process_template_request(get_request("docs/check_reference/validity/value_in_range_date_percent/requests/include_bounds_false.json")) }}
 ```
+
+---
+### Walkthrough the example
+
+In order to understand how to use this check, let's walk through the [example](../../../examples/validity/string_length_in_range_percent/string_length_in_range_percent.md) step by step.
+
+Let's have a look at the first five rows from the table used in the example - `bigquery-public-data.austin_311.311_service_requests`
+
+| Row | unique_key  | timestamp_column        | timestamp_column2       |
+|-----|-------------|-------------------------|-------------------------|
+| 1   | 22-00377488 | 2022-10-10 14:59:05 UTC | 2022-10-11 14:59:05 UTC |
+| 2   | 22-00377376 | 2022-10-10 14:17:17 UTC | 2022-10-11 14:17:17 UTC |
+| 3   | 22-00376929 | 2022-10-10 16:10:52 UTC | 2022-10-11 16:10:52 UTC |
+| 4   | 22-00376839 | 2022-10-10 16:46:44 UTC | 2022-10-11 16:46:44 UTC |
+| 5   | 22-00376178 | 2022-10-10 15:40:32 UTC | 2022-10-11 15:40:32 UTC |
+
+#### Check configuration
+Having added connection and imported tables (in the [example](../../../examples/validity/value_in_range_date_percent/value_in_range_date_percent.md)
+connection, table and check are ready) now it is possible to access the table configuration by running:
+
+```
+table edit -c=conn_bq_9 -t=austin_waste.waste_and_diversion
+```
+
+The YAML configuration looks like this:
+
+```yaml hl_lines="29-42" linenums="1"
+--8<-- "docs/check_reference/validity/value_in_range_date_percent/yamls/austin_waste.waste_and_diversion.dqotable.yaml"
+```
+
+Let's review what this configuration means.
+
+#### Sensor
+
+```
+      checks:
+        validity:
+          value_in_range_date_percent:
+            parameters:
+              min_value:  "2017-06-05"
+              max_value:  "2022-05-01"
+```
+
+Sensor for this check is :
+
+- dimension: `validity`
+
+- sensor: `value_in_range_date_percent`
+
+The `min_value` is `2017-06-05` and `max_value` is `2022-05-01`.
+
+As the check is written under the section of `load_time` column, the check will be done on that column.
+
+Then this parameter is passed to the rendered query:
+
+```
+SELECT
+    CASE
+        WHEN COUNT(analyzed_table.`unique_key`) = 0 THEN NULL
+        ELSE
+            100.0 * SUM(
+                        CASE WHEN LENGTH( analyzed_table.`unique_key` ) BETWEEN 11 AND 11 THEN 1
+                                ELSE 0
+                            END
+    ) / COUNT(analyzed_table.`unique_key`) END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
+GROUP BY time_period
+ORDER BY time_period
+```
+
+#### Rule
+To evaluate check results, we have to define a rule:
+
+```
+            rules:
+              min_count:
+                low:
+                  min_value: 60.0
+                medium:
+                  min_value: 40.0
+                high:
+                  min_value: 20.0
+```
+The `min_count` rule configuration says that :
+
+- if actual value is above 60.0 then the result is valid,
+
+- if actual value is below 60.0 and above 40.0 then severity is 1 (low),
+
+- if actual value is below 40.0 and above 20.0 then severity is 2 (medium),
+
+- if actual value is below 20.0 then severity is 3 (high).
+
+Below are the results of our example:
+
+```
++------------------+-----------+
+|actual_value      |time_period|
++------------------+-----------+
+|24.983499196218514|2022-10-19 |
++------------------+-----------+
+```
+
+The actual value is above the lowest threshold (20.0), so it is valid, but it is also below the highest and medium threshold, so the severity in this case is medium.
+
+The table above is the exact same as the one you would see on the provider's platform (in this case BigQuery).
+
+The query returns two columns:
+
+- actual_value which is the percent of records within the passed parameters,
+
+- time_period, configured with time_series. With mode=current_time the goal of time_period is to record a date of check execution.
+
+#### Check summary
+Check evaluation summary briefly informs us about check execution:
+
+```
++----------+--------------------------------+------+--------------+-------------+------------+---------------+-------------+
+|Connection|Table                           |Checks|Sensor results|Valid results|Alerts (low)|Alerts (medium)|Alerts (high)|
++----------+--------------------------------+------+--------------+-------------+------------+---------------+-------------+
+|conn_bq_9 |austin_waste.waste_and_diversion|1     |1             |0            |0           |1              |0            |
++----------+--------------------------------+------+--------------+-------------+------------+---------------+-------------+
+```
+
+There is only one check defined, 1 sensor result, where:
+
+- 0 result is valid
+
+- 0 results with low severity
+
+- 1 results with medium severity
+
+- 0 result with high severity
