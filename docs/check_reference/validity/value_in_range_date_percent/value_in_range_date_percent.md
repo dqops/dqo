@@ -169,18 +169,7 @@ As the check is written under the section of `load_time` column, the check will 
 Then this parameter is passed to the rendered query:
 
 ```
-SELECT
-    CASE
-        WHEN COUNT(analyzed_table.`unique_key`) = 0 THEN NULL
-        ELSE
-            100.0 * SUM(
-                        CASE WHEN LENGTH( analyzed_table.`unique_key` ) BETWEEN 11 AND 11 THEN 1
-                                ELSE 0
-                            END
-    ) / COUNT(analyzed_table.`unique_key`) END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
-FROM `bigquery-public-data`.`austin_311`.`311_service_requests` AS analyzed_table
-GROUP BY time_period
-ORDER BY time_period
+
 ```
 
 #### Rule
