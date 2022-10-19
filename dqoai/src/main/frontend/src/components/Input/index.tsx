@@ -3,6 +3,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 interface IInputProps {
   type?: string;
@@ -18,6 +19,7 @@ interface IInputProps {
   onClear?: () => void;
   info?: boolean;
   dataTestId?: string;
+  tooltipText?: string;
 }
 
 const Input = ({
@@ -32,16 +34,30 @@ const Input = ({
   onChange,
   onBlur,
   onClear,
-  dataTestId
+  dataTestId,
+  tooltipText
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
       {label && (
         <label
           htmlFor={name}
-          className="block font-regular text-gray-700 mb-1 capitalize text-sm"
+          className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1"
         >
-          {label}
+          <span>{label}</span>
+          {!!tooltipText && (
+            <Tooltip
+              content={tooltipText}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="info"
+                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                />
+              </div>
+            </Tooltip>
+          )}
         </label>
       )}
     </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 export interface CheckboxProps {
   type?: string;
@@ -8,9 +9,16 @@ export interface CheckboxProps {
   className?: string;
   checked?: boolean;
   onChange: (value: boolean) => void;
+  tooltipText?: string;
 }
 
-const Checkbox = ({ label, className, checked, onChange }: CheckboxProps) => {
+const Checkbox = ({
+  label,
+  className,
+  checked,
+  onChange,
+  tooltipText
+}: CheckboxProps) => {
   return (
     <label className={`relative cursor-pointer rounded-sm ${className}`}>
       <input
@@ -31,7 +39,24 @@ const Checkbox = ({ label, className, checked, onChange }: CheckboxProps) => {
           />
         )}
       </span>
-      {label && <span className="text-sm pl-5">{label}</span>}
+      {label && (
+        <div className="flex space-x-1 items-center">
+          <span className="text-sm pl-5">{label}</span>
+          {!!tooltipText && (
+            <Tooltip
+              content={tooltipText}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="info"
+                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                />
+              </div>
+            </Tooltip>
+          )}
+        </div>
+      )}
     </label>
   );
 };

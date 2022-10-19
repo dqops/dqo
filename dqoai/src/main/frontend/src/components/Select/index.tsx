@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import usePopup from '../../hooks/usePopup';
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 interface Option {
   label: string;
@@ -18,6 +19,8 @@ interface SelectProps {
   onChange?: (val: any) => void;
   className?: string;
   info?: boolean;
+  triggerClassName?: string;
+  tooltipText?: string;
 }
 
 const Select = ({
@@ -27,7 +30,8 @@ const Select = ({
   value,
   onChange,
   className,
-  info
+  triggerClassName,
+  tooltipText
 }: SelectProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
@@ -50,12 +54,27 @@ const Select = ({
           <div className="block text-sm font-regular text-gray-700 mb-1">
             {label}
           </div>
-          {info && <SvgIcon name="info" />}
+          {!!tooltipText && (
+            <Tooltip
+              content={tooltipText}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="info"
+                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                />
+              </div>
+            </Tooltip>
+          )}
         </div>
       )}
       <div className="relative w-full min-w-40" ref={ref}>
         <div
-          className="cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border border-gray-300"
+          className={clsx(
+            'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border border-gray-300',
+            triggerClassName
+          )}
           onClick={toggleMenu}
         >
           {selectedOption ? selectedOption.label : placeholder}

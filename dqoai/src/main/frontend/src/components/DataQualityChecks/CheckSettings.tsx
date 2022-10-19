@@ -9,6 +9,7 @@ import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
 import SpecRuleSettings from './SpecRuleSettings';
+import FieldControl from './FieldControl';
 
 interface ICheckSettingsProps {
   checks?: any;

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIRuleThresholdsModel } from '../../api';
+import { UICheckModel, UIFieldModel, UIRuleThresholdsModel } from '../../api';
 import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
 import CheckRulesTable from './CheckRulesTable';
 import CheckSettings from './CheckSettings';
+import SensorParameters from './SensorParameters';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -13,6 +14,7 @@ export interface ITab {
   label: string;
   value: string;
   type?: string;
+  field?: UIFieldModel;
 }
 
 const CheckListItem = ({ check }: ICheckListItemProps) => {
@@ -65,10 +67,24 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
     ]);
   };
 
+  const openCheckSensorParameter = (field: UIFieldModel) => {
+    setExpanded(true);
+    setActiveTab(field.definition?.field_name || '');
+
+    setTabs([
+      {
+        label: (field.definition?.field_name || '')?.split('_').join(' '),
+        value: field.definition?.field_name || '',
+        type: 'sensor_parameter',
+        field
+      }
+    ]);
+  };
+
   return (
     <>
       <tr>
-        <td className="py-2 align-top">
+        <td className="py-2 align-top pr-4">
           <div className="flex space-x-2 items-center">
             <Checkbox
               checked={checked}
@@ -83,20 +99,16 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
           </div>
         </td>
         <td className="py-2 align-top">
-          <div className="flex space-x-2 items-center">
-            <div className="text-gray-700 text-sm leading-1.5">
-              {check.sensor_parameters?.length
-                ? 'Sensor parameters'
-                : 'No sensor parameters'}
+          <div className="flex space-x-2">
+            <div className="text-gray-700 text-sm w-full">
+              <SensorParameters
+                parameters={check.sensor_parameters || []}
+                openCheckSensorParameter={openCheckSensorParameter}
+              />
             </div>
-            <SvgIcon
-              name="cog"
-              className="w-4 h-4 text-blue-700 cursor-pointer"
-              onClick={openSensorParameters}
-            />
           </div>
         </td>
-        <td className="py-2">
+        <td className="py-2 align-top">
           <CheckRulesTable
             rules={check?.rules || []}
             openCheckRule={openCheckRule}
