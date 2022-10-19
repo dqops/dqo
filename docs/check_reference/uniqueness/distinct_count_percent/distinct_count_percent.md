@@ -65,16 +65,21 @@ This check takes no parameters.
 
 ### Default configuration
 
-```yaml hl_lines="16-26" linenums="1"
+The default configuration of `distinct_count_percent` check on column `countries` with min_count rule:
+
+```yaml hl_lines="16-28" linenums="1"
 --8<-- "docs/check_reference/uniqueness/distinct_count_percent/yamls/default.yaml"
 ```
-For default check configuration the rendered query is
 
+For default check configuration the rendered query is:
 
+```SQL
+{{ process_template_request(get_request("docs/check_reference/uniqueness/distinct_count_percent/requests/default.json")) }}
+```
+
+### Walkthrough the example
 
 In order to understand how to use this check, let's walk through the [example](../../../examples/uniqueness/distinct_count_percent/distinct_count_percent.md) step by step.
-
-## Walkthrough the example
 
 The table is `bigquery-public-data.austin_311.311_service_requests`, here are the first 5 rows:
 
@@ -86,7 +91,7 @@ The table is `bigquery-public-data.austin_311.311_service_requests`, here are th
 | 4   | 22-00376839 | 2022-10-10 16:46:44 UTC | 2022-10-11 16:46:44 UTC |
 | 5   | 22-00376178 | 2022-10-10 15:40:32 UTC | 2022-10-11 15:40:32 UTC |
 
-### Check configuration
+#### Check configuration
 Having added connection and imported tables (in the [example](../../../examples/uniqueness/distinct_count_percent/distinct_count_percent.md)
 connection, table and check are ready) now it is possible to access the table configuration by running:
 
@@ -102,7 +107,7 @@ The YAML configuration looks like this:
 
 Let's review what this configuration means.
 
-### Sensor
+#### Sensor
 
 ```
       checks:
@@ -128,7 +133,7 @@ GROUP BY time_period
 ORDER BY time_period
 ```
 
-### Rule
+#### Rule
 To evaluate check results, we have to define a rule:
 
 ```

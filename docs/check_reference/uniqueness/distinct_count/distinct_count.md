@@ -63,9 +63,23 @@ This check takes no parameters.
 
 ## How to use
 
-In order to understand how to use this check, let's walk through the [example](../../../examples/uniqueness/distinct_count/distinct_count.md) step by step.
+### Default configuration
+
+The default configuration of `distinct_count` check on column `countries` with min_count rule:
+
+```yaml hl_lines="16-28" linenums="1"
+--8<-- "docs/check_reference/uniqueness/distinct_count/yamls/default.yaml"
+```
+
+For default check configuration the rendered query is:
+
+```SQL
+{{ process_template_request(get_request("docs/check_reference/uniqueness/distinct_count/requests/default.json")) }}
+```
 
 ### Walkthrough the example
+
+In order to understand how to use this check, let's walk through the [example](../../../examples/uniqueness/distinct_count/distinct_count.md) step by step.
 
 The table is `bigquery-public-data.austin_311.311_service_requests`, here are the first 5 rows:
 

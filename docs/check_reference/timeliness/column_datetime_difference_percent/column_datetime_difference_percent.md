@@ -57,9 +57,35 @@ For more information please refer to [Min count](../../../rule_reference/compari
 
 ## How to use
 
-In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md) step by step.
+### Default configuration
+
+The default configuration of `column_datetime_differnece_percent` on columns `reference_datetime`
+and `real_datetime` with `min_count` rule and default `time_scale`:
+
+```yaml hl_lines="11-25" linenums="1"
+--8<-- "docs/check_reference/timeliness/column_datetime_difference_percent/yamls/default.yml"
+```
+The query is rendered with time_scale: `DAY`:
+```SQL
+{{ process_template_request(get_request("docs/check_reference/timeliness/column_datetime_difference_percent/requests/default.json")) }}
+```
+
+The default configuration of `column_datetime_differnece_percent` on columns `reference_datetime`
+and `real_datetime` with `min_count` rule and `time_scale: "HOUR"`:
+
+```yaml hl_lines="11-26" linenums="1"
+--8<-- "docs/check_reference/timeliness/column_datetime_difference_percent/yamls/time_scale_hour.yml"
+```
+
+The query is rendered with time_scale: `HOUR`:
+
+```SQL
+{{ process_template_request(get_request("docs/check_reference/timeliness/column_datetime_difference_percent/requests/time_scale_hour.json")) }}
+```
 
 ### Walkthrough the example
+
+In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md) step by step.
 
 The table is `bigquery-public-data.austin_crime.crime`, here are the first 5 rows:
 

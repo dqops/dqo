@@ -45,9 +45,35 @@ MINUTE, SECOND (default DAY)
 
 ## How to use
 
-In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/current_delay/current_delay.md) step by step.
+### Default configuration
+
+The default configuration of `current_delay` check on column `timestamp_column` with max_count rule and default `time_scale`:
+
+```yaml hl_lines="11-23" linenums="1"
+--8<-- "docs/check_reference/timeliness/current_delay/yamls/default.yml"
+```
+
+The query is rendered with default time_scale: DAY:
+
+```SQL
+{{ process_template_request(get_request("docs/check_reference/timeliness/current_delay/requests/default.json")) }}
+```
+
+The default configuration of `current_delay` check on column `dates` with max_count rule and `time_scale: "HOUR"`:
+
+```yaml hl_lines="11-24" linenums="1"
+--8<-- "docs/check_reference/timeliness/current_delay/yamls/cast_and_hour.yml"
+```
+
+In that case the rendered query is:
+
+```SQL
+{{ process_template_request(get_request("docs/check_reference/timeliness/current_delay/requests/cast_and_hour.json")) }}
+```
 
 ### Walkthrough the example
+
+In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/current_delay/current_delay.md) step by step.
 
 The table is `bigquery-public-data.covid19_italy.national_trends`, here are the first 5 rows:
 

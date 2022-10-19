@@ -1,5 +1,3 @@
-# Value in range date percent
-
 ## Description
 The `valuein_range_date_percent` calculates the percentage of records that are within a certain date range.
 Date range is configurable by the user by defining `min_value` and `max_value` check parameters. It is also possible to
@@ -17,13 +15,56 @@ This sensor is used when you need to confirm that the event took place in a cert
 
 ## Used sensor
 
-[__Value in range date percent__](../../../sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md)
+The query for this check calculates the percent of date values that are within a range provided by the user. The value_in_range_date_percent checks values from column which are within a range of min_value and max_value. The user decides whether to include these values to the range, using optional parameters include_min_value and include_max_value. Default in check min_value and max_value are included in the range.
+
+Successfully classified records are assigned value of 1, and any other values, 0. Those values are then summed (so effectively we perform count of valid values), divided by the number of records, and multiplicated by a 100.0 so that the results is in percent.
+
+Please see [Value in range date percent](../../../sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md) for more information.
 
 ___
 ## Accepted rules
-[__Min count__](../../../rule_reference/comparison/min_count.md)
 
-[__Count equals__](../../../rule_reference/comparison/count_equals.md)
+`Min_count` rule verifies if a data quality check reading is greater or equal a minimum value.
+
+This rule has one parameter that should be configured for each alert :
+
+- `low` :
+  <br/>rule threshold for a low severity (1) alert
+    - `min_value`: float
+    - minimum accepted value for the `actual_value` returned by the sensor (inclusive)
+- `medium` :
+  <br/>rule threshold for a medium severity (2) alert
+    - `min_value`: float
+    - minimum accepted value for the `actual_value` returned by the sensor (inclusive)
+- `high` :
+  <br/>rule threshold for a high severity (3) alert
+    - `min_value`: float
+    - minimum accepted value for the `actual_value` returned by the sensor (inclusive)
+
+`Count_equals` verifies that a data quality check reading equals a given value. A margin of error may be configured.
+
+This check has two parameters that should be configured for each alert:
+
+- `low`:
+  <br/>rule threshold for a low severity (1) alert
+    - `expectedValue`: _float_
+      <br/>expected value for the actual_value returned by the sensor. The sensor value should equal `expected_value +/- the error_margin`.
+    - `errorMargin`: _float_
+      <br/>error margin for comparison.
+- `medium`:
+  <br/>rule threshold for a medium severity (2) alert
+    - `expectedValue`: _float_
+      <br/>expected value for the actual_value returned by the sensor. The sensor value should equal `expected_value +/- the error_margin`.
+    - `errorMargin`: _float_
+      <br/>error margin for comparison.
+- `high`:
+  <br/>rule threshold for a high severity (3) alert
+    - `expectedValue`: _float_
+      <br/>expected value for the actual_value returned by the sensor. The sensor value should equal `expected_value +/- the error_margin`.
+    - `errorMargin`: _float_
+      <br/>error margin for comparison.
+
+For more information please refer to [Min count](../../../rule_reference/comparison/min_count.md) and [Count equals](../../../rule_reference/comparison/count_equals.md)
 
 ___
 ## Parameters

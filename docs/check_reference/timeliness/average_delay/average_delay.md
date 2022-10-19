@@ -56,9 +56,23 @@ MINUTE, SECOND (default DAY)
 
 ## How to use
 
-In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/average_delay/average_delay.md) step by step.
+### Default configuration
+
+The default configuration of `average_delay` check on columns `date1` and `date2` with `moving_average` rule and default time_scale:
+
+```yaml hl_lines="12-28" linenums="1"
+--8<-- "docs/check_reference/timeliness/average_delay/yamls/default.yml"
+```
+
+The query is rendered with time_scale: `DAY`:
+
+```SQL
+{{ process_template_request(get_request("docs/check_reference/timeliness/average_delay/requests/default.json")) }}
+```
 
 ### Walkthrough the example
+
+In order to understand how to use this check, let's walk through the [example](../../../examples/timeliness/average_delay/average_delay.md) step by step.
 
 The table is `bigquery-public-data.austin_crime.crime`, here are the first 5 rows:
 

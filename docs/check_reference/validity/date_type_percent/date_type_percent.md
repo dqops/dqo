@@ -172,23 +172,15 @@ The rendered query is
 {{ process_template_request(get_request("docs/check_reference/validity/date_type_percent/requests/custom_date_format.json")) }}
 ```
 
-``` hl_lines="5"
---8<-- "docs/check_reference/validity/date_type_percent/tables/extracted_data.txt"
-```
-
 ### Walkthrough the example
 
 In order to understand how to use this check, let's walk through the [example](../../../examples/validity/date_type_percent/date_type_percent.md) step by step.
 
 Let's have a look at the first five rows from the table used in the example - `bigquery-public-data.labeled_patents.extracted_data`
 
-| Row | unique_key  | timestamp_column        | timestamp_column2       |
-|-----|-------------|-------------------------|-------------------------|
-| 1   | 22-00377488 | 2022-10-10 14:59:05 UTC | 2022-10-11 14:59:05 UTC |
-| 2   | 22-00377376 | 2022-10-10 14:17:17 UTC | 2022-10-11 14:17:17 UTC |
-| 3   | 22-00376929 | 2022-10-10 16:10:52 UTC | 2022-10-11 16:10:52 UTC |
-| 4   | 22-00376839 | 2022-10-10 16:46:44 UTC | 2022-10-11 16:46:44 UTC |
-| 5   | 22-00376178 | 2022-10-10 15:40:32 UTC | 2022-10-11 15:40:32 UTC |
+``` hl_lines="5"
+--8<-- "docs/check_reference/validity/date_type_percent/tables/extracted_data.txt"
+```
 
 #### Check configuration
 Having added connection and imported tables (in the [example](../../../examples/uniqueness/distinct_count_percent/distinct_count_percent.md)
@@ -201,7 +193,7 @@ table edit -c=conn_bq_1 -t=labeled_patents.extracted_data
 The YAML configuration looks like this:
 
 ```yaml hl_lines="29-41" linenums="1"
---8<-- "docs/check_reference/validity/date_percent/yamls/labeled_patents.extracted_data.dqotable.yaml"
+--8<-- "docs/check_reference/validity/date_type_percent/yamls/labeled_patents.extracted_data.dqotable.yaml"
 ```
 
 Let's review what this configuration means.
