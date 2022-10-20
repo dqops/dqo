@@ -20,7 +20,7 @@ import scipy
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class PercentAboveMovingAverageRuleParametersSpec:
+class PercentMovingAverageRuleParametersSpec:
     max_percent_above: float
     max_percent_below: float
 
@@ -40,7 +40,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: PercentAboveMovingAverageRuleParametersSpec
+    parameters: PercentMovingAverageRuleParametersSpec
     time_period_local: datetime
     previous_readings: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -66,15 +66,11 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readings.sensor_reading for readings in rule_parameters.previous_readings if readings is not None]
     filtered_mean = float(scipy.mean(filtered))
 
-    if rule_parameters.parameters.max_percent_above != -123456.0:
-        threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
-    else:
-        threshold_upper = None
+    threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
 
-    if rule_parameters.parameters.max_percent_below != -123456.0:
-        threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
-    else:
-        threshold_lower = None
+    threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+
 
     if threshold_lower != None and threshold_upper != None:
         passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)

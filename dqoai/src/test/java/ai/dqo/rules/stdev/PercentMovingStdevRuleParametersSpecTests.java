@@ -46,6 +46,7 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
         this.sut.setMultipleStdevAbove(1.0);
+        this.sut.setMultipleStdevBelow(1.0);
 
         for (int i = 0; i < this.sensorReadings.length; i++) {
             if(i % 2 == 0) {
@@ -61,7 +62,7 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(14.811254783372291, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(25.18874521662771, ruleExecutionResult.getUpperBound());
     }
 }
