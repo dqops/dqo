@@ -30,6 +30,10 @@ public class SwaggerConfiguration implements WebFluxConfigurer {
                 Collections.emptyList());
     }
 
+    /**
+     * Exposes the swagger documentation bean.
+     * @return Documentation bean.
+     */
     @Bean
     public Docket api() {
         // this will expose the swagger UI on: http://localhost:8888/swagger-ui/ and the swagger.xml on http://localhost:8888/v2/api-docs
@@ -42,18 +46,16 @@ public class SwaggerConfiguration implements WebFluxConfigurer {
                 .build();
     }
 
+    /**
+     * Configures the url mappings for static resources - the Swagger UI web interface.
+     * @param registry Resource handler registry.
+     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String baseUrl = "";
         registry.
                 addResourceHandler(baseUrl + "/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
-                .resourceChain(false);
-
-        registry.addResourceHandler("")
-                .addResourceLocations("classpath:/static/index.html");
-
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .resourceChain(true);
     }
 }
