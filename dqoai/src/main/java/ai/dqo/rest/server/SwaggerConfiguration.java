@@ -49,5 +49,11 @@ public class SwaggerConfiguration implements WebFluxConfigurer {
                 addResourceHandler(baseUrl + "/swagger-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/")
                 .resourceChain(false);
+
+        registry.addResourceHandler("")
+                .addResourceLocations("classpath:/static/index.html");
+
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
     }
 }
