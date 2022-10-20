@@ -23,9 +23,11 @@ import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleThresholdsSpec;
+import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
 import ai.dqo.rules.comparison.MinValueRuleThresholdsSpec;
 import ai.dqo.sensors.column.validity.BuiltInDateFormats;
 import ai.dqo.sensors.column.validity.ColumnValidityDateTypePercentSensorParametersSpec;
+import ai.dqo.sensors.column.validity.ColumnValidityValueInRangeDatePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -188,7 +190,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     }
 
     @Test
-    void makeFieldInfo_whenSimpleDoubleField_thenReturnsFieldInfo() throws Exception {
+    void makeFieldInfo_whenSimpleDoubleObjectField_thenReturnsFieldInfo() throws Exception {
         Field field = PercentMovingAverageRuleParametersSpec.class.getDeclaredField("maxPercentAbove");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
@@ -201,6 +203,23 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
+    }
+
+    @Test
+    void makeFieldInfo_whenSimpleDoubleValueField_thenReturnsFieldInfo() throws Exception {
+        Field field = MinValueRuleParametersSpec.class.getDeclaredField("minValue");
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
+        Assertions.assertNotNull(fieldInfo);
+        Assertions.assertSame(field.getType(), fieldInfo.getClazz());
+        Assertions.assertEquals(ParameterDataType.double_type, fieldInfo.getDataType());
+        Assertions.assertEquals("minValue", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("min_value", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("min_value", fieldInfo.getDisplayName());
+        Assertions.assertEquals("Minimum accepted value for the actual_value returned by the sensor (inclusive).", fieldInfo.getHelpText());
+        Assertions.assertNotNull(fieldInfo.getGetterMethod());
+        Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(0.0, fieldInfo.getDefaultValue()); // the field is not nullable
         Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 
@@ -235,7 +254,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Map<String, EnumValueInfo> enumValuesByYamlName = fieldInfo.getEnumValuesByName();
         Assertions.assertNotNull(enumValuesByYamlName);
-        Assertions.assertEquals(10, enumValuesByYamlName.size());
+        Assertions.assertEquals(11, enumValuesByYamlName.size());
         Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string_type").getEnumInstance());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());
         Assertions.assertEquals(null, fieldInfo.getConstructor());
@@ -255,5 +274,22 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertNotNull(fieldInfo.getConstructor());
+    }
+
+    @Test
+    void makeFieldInfo_whenFieldIsLocalDate_thenReturnsFieldInfoWithLocalDateType() throws Exception {
+        Field field = ColumnValidityValueInRangeDatePercentSensorParametersSpec.class.getDeclaredField("minValue");
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
+        Assertions.assertNotNull(fieldInfo);
+        Assertions.assertSame(field.getType(), fieldInfo.getClazz());
+        Assertions.assertEquals(ParameterDataType.date_type, fieldInfo.getDataType());
+        Assertions.assertEquals("minValue", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("min_value", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("min_value", fieldInfo.getDisplayName());
+        Assertions.assertEquals("Lower bound range variable.", fieldInfo.getHelpText());
+        Assertions.assertNotNull(fieldInfo.getGetterMethod());
+        Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(null, fieldInfo.getDefaultValue());
+        Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
 }

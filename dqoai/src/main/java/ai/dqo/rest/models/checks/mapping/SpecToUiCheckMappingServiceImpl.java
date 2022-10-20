@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -251,6 +252,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         UIFieldModel fieldModel = new UIFieldModel();
         ParameterDefinitionSpec parameterDefinitionSpec = new ParameterDefinitionSpec();
         // we are using reflection info, but we could also pull the information from the sensor specification
+        assert fieldInfo.getDataType() != null && fieldInfo.getDataType() != ParameterDataType.object_type :
+                fieldInfo.getYamlFieldName() + " on " + parentObject.getClass().getName() + " has an unsupported type " + fieldInfo.getDataType();
         parameterDefinitionSpec.setDataType(fieldInfo.getDataType());
         parameterDefinitionSpec.setFieldName(fieldInfo.getClassFieldName());
         parameterDefinitionSpec.setDisplayName(fieldInfo.getDisplayName());
@@ -294,6 +297,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     break;
                 case string_list_type:
                     fieldModel.setStringListValue((List<String>) fieldValue);
+                    break;
+                case date_type:
+                    fieldModel.setDateValue((LocalDate) fieldValue);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unsupported type: " + fieldInfo.getDataType().toString());

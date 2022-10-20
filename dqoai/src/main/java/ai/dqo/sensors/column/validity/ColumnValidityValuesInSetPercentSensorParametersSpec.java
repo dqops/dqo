@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,7 +44,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
     private BuiltInListFormats valuesType = BuiltInListFormats.STRING;
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private ArrayList valuesList; // TODO: use a List
+    private List<String> valuesList;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -86,7 +87,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
      * Returns given values from user.
      * @return values.
      */
-    public ArrayList getValuesList() {
+    public List<String> getValuesList() {
         return valuesList;
     }
 
@@ -94,7 +95,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
      * Sets a List given from user.
      * @param valuesList values given from user.
      */
-    public void setValuesList(ArrayList valuesList) {
+    public void setValuesList(List<String> valuesList) {
         this.setDirtyIf(!Objects.equals(this.valuesList, valuesList));
         this.valuesList = valuesList;
     }

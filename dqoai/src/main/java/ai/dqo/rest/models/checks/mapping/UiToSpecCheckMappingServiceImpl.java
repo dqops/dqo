@@ -2,6 +2,7 @@ package ai.dqo.rest.models.checks.mapping;
 
 import ai.dqo.checks.AbstractCheckCategoriesSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rest.models.checks.*;
@@ -107,6 +108,8 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getSensorParameters());
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
+        AbstractRuleSetSpec ruleSet = checkSpec.getRuleSet();
+        ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleSet.getClass());
         List<UIRuleThresholdsModel> ruleThresholdsModels = checkModel.getRules();
         if (ruleThresholdsModels == null) {
             return;
@@ -114,15 +117,15 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
         for (UIRuleThresholdsModel ruleThresholdsModel : ruleThresholdsModels) {
             String yamlRuleName = ruleThresholdsModel.getFieldName();
-            FieldInfo ruleThresholdsFieldInfo = checkClassInfo.getFieldByYamlName(yamlRuleName);
-            AbstractRuleThresholdsSpec ruleThresholdsSpec = (AbstractRuleThresholdsSpec) ruleThresholdsFieldInfo.getFieldValueOrNewObject(checkSpec);
+            FieldInfo ruleThresholdsFieldInfo = ruleThresholdsClassInfo.getFieldByYamlName(yamlRuleName);
+            AbstractRuleThresholdsSpec ruleThresholdsSpec = (AbstractRuleThresholdsSpec) ruleThresholdsFieldInfo.getFieldValueOrNewObject(ruleSet);
 
             updateRuleThresholdsSpec(ruleThresholdsModel, ruleThresholdsSpec);
 
             if (ruleThresholdsSpec.isDefault()) {
-                ruleThresholdsFieldInfo.setFieldValue(null, checkSpec);
+                ruleThresholdsFieldInfo.setFieldValue(null, ruleSet);
             } else {
-                ruleThresholdsFieldInfo.setFieldValue(ruleThresholdsSpec, checkSpec);
+                ruleThresholdsFieldInfo.setFieldValue(ruleThresholdsSpec, ruleSet);
             }
         }
     }
@@ -185,8 +188,12 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
         for (UIFieldModel fieldModel : fieldModels) {
             ParameterDefinitionSpec fieldModelDefinition = fieldModel.getDefinition();
-            String yamlFieldName = fieldModelDefinition.getFieldName();
-            FieldInfo fieldInfo = parametersClassInfo.getFieldByYamlName(yamlFieldName);
+            String fieldName = fieldModelDefinition.getFieldName();
+            FieldInfo fieldInfo = parametersClassInfo.getField(fieldName);
+
+            if (fieldInfo == null) {
+                throw new RuntimeException("Field " + fieldName + " was not found on the target class " + targetParametersSpec.getClass().getName());
+            }
 
             switch (fieldInfo.getDataType()) {
                 case string_type:
@@ -215,6 +222,9 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
                     break;
                 case string_list_type:
                     fieldInfo.setFieldValue(fieldModel.getStringListValue(), targetParametersSpec);
+                    break;
+                case date_type:
+                    fieldInfo.setFieldValue(fieldModel.getDateValue(), targetParametersSpec);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unsupported type: " + fieldInfo.getDataType().toString());

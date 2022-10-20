@@ -24,6 +24,9 @@ public enum ParameterDataType {
     @JsonProperty("instant")
     instant_type,
 
+    @JsonProperty("date")
+    date_type,
+
     @JsonProperty("column_name")
     column_name_type, // this is a string, but should match a known column name from the same table
 

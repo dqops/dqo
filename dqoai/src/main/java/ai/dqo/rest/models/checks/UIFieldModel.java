@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -63,4 +64,7 @@ public class UIFieldModel {
 
     @JsonPropertyDescription("Field value for an array (list) of strings.")
     private List<String> stringListValue;
+
+    @JsonPropertyDescription("Field value for an date.")
+    private LocalDate dateValue;
 }

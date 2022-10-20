@@ -26,8 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
-    private SpecToUiCheckMappingServiceImpl sut;
+public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
+    private UiToSpecCheckMappingServiceImpl sut;
+    private SpecToUiCheckMappingServiceImpl specToUiMapper;
 
     /**
      * Called before each test.
@@ -39,24 +40,24 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-        this.sut = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
+        ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+        this.specToUiMapper = new SpecToUiCheckMappingServiceImpl(reflectionService);
+        this.sut = new UiToSpecCheckMappingServiceImpl(reflectionService);
     }
 
     @Test
-    void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
+    void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableCheckCategoriesSpec tableCheckCategoriesSpec = new TableCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec);
 
-        Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getQualityDimensions().size());
+        this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
     }
 
     @Test
-    void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
+    void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec);
 
-        Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getQualityDimensions().size());
+        this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);
     }
 }

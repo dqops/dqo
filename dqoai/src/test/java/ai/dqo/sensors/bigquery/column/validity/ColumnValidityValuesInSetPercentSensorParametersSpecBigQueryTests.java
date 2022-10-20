@@ -73,55 +73,59 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
         Assertions.assertNotNull(providerSensorDefinitionWrapper);
     }
 
-    @Test
-    void renderSensor_whenNoTimeSeriesAndCheckForEmptyDoubleList_thenRendersCorrectSql() {
-        ArrayList<Double> valuesList = new ArrayList<>();
-        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
-        this.sut.setValuesList(valuesList);
-        runParameters.setTimeSeries(null);
+    // TODO: move the test to another sensor that works on numeric values
 
-        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(*) = 0 THEN NULL
-                                        ELSE 
-                                            100.0 * SUM(
-                                                CASE
-                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
-                                                    ELSE 0
-                                                END
-                                            )/COUNT(*)
-                                    END AS actual_value   
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
-    }
+//    @Test
+//    void renderSensor_whenNoTimeSeriesAndCheckForEmptyDoubleList_thenRendersCorrectSql() {
+//        ArrayList<Double> valuesList = new ArrayList<>();
+//        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
+//        this.sut.setValuesList(valuesList);
+//        runParameters.setTimeSeries(null);
+//
+//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+//        Assertions.assertEquals(String.format("""
+//                                SELECT
+//                                    CASE
+//                                        WHEN COUNT(*) = 0 THEN NULL
+//                                        ELSE
+//                                            100.0 * SUM(
+//                                                CASE
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
+//                                                    ELSE 0
+//                                                END
+//                                            )/COUNT(*)
+//                                    END AS actual_value
+//                                FROM %s AS analyzed_table""",
+//                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
+//                renderedTemplate);
+//    }
 
-    @Test
-    void renderSensor_whenNoTimeSeriesAndCheckForEmptyIntegerList_thenRendersCorrectSql() {
-        ArrayList<Integer> valuesList = new ArrayList<>();
-        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
-        this.sut.setValuesList(valuesList);
-        runParameters.setTimeSeries(null);
+    // TODO: move the test to another sensor that works on numeric values
 
-        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(*) = 0 THEN NULL
-                                        ELSE 
-                                            100.0 * SUM(
-                                                CASE
-                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
-                                                    ELSE 0
-                                                END
-                                            )/COUNT(*)
-                                    END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
-    }
+//    @Test
+//    void renderSensor_whenNoTimeSeriesAndCheckForEmptyIntegerList_thenRendersCorrectSql() {
+//        ArrayList<Integer> valuesList = new ArrayList<>();
+//        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
+//        this.sut.setValuesList(valuesList);
+//        runParameters.setTimeSeries(null);
+//
+//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+//        Assertions.assertEquals(String.format("""
+//                                SELECT
+//                                    CASE
+//                                        WHEN COUNT(*) = 0 THEN NULL
+//                                        ELSE
+//                                            100.0 * SUM(
+//                                                CASE
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
+//                                                    ELSE 0
+//                                                END
+//                                            )/COUNT(*)
+//                                    END AS actual_value
+//                                FROM %s AS analyzed_table""",
+//                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
+//                renderedTemplate);
+//    }
 
     @Test
     void renderSensor_whenNoTimeSeriesAndCheckForEmptyStringList_thenRendersCorrectSql() {
@@ -148,32 +152,34 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
                 renderedTemplate);
     }
 
-    @Test
-    void renderSensor_whenNoTimeSeriesAndCheckForNumericalValues_thenRendersCorrectSql() {
-        ArrayList<Integer> valuesList = new ArrayList<>();
-        valuesList.add(123);
-        valuesList.add(1234);
-        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
-        this.sut.setValuesList(valuesList);
-        runParameters.setTimeSeries(null);
+    // TODO: move the test to another sensor that works on numeric values
 
-        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(*) = 0 THEN NULL
-                                        ELSE 
-                                            100.0 * SUM(
-                                                CASE
-                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (123, 1234)) IS TRUE THEN 1
-                                                    ELSE 0
-                                                END
-                                            )/COUNT(*)
-                                    END AS actual_value
-                                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-                renderedTemplate);
-    }
+//    @Test
+//    void renderSensor_whenNoTimeSeriesAndCheckForNumericalValues_thenRendersCorrectSql() {
+//        ArrayList<Integer> valuesList = new ArrayList<>();
+//        valuesList.add(123);
+//        valuesList.add(1234);
+//        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
+//        this.sut.setValuesList(valuesList);
+//        runParameters.setTimeSeries(null);
+//
+//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+//        Assertions.assertEquals(String.format("""
+//                                SELECT
+//                                    CASE
+//                                        WHEN COUNT(*) = 0 THEN NULL
+//                                        ELSE
+//                                            100.0 * SUM(
+//                                                CASE
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (123, 1234)) IS TRUE THEN 1
+//                                                    ELSE 0
+//                                                END
+//                                            )/COUNT(*)
+//                                    END AS actual_value
+//                                FROM %s AS analyzed_table""",
+//                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
+//                renderedTemplate);
+//    }
 
     @Test
     void renderSensor_whenNoTimeSeriesAndCheckForStringValues_thenRendersCorrectSql() {
