@@ -3,16 +3,17 @@ The `valuein_range_date_percent` calculates the percentage of records that are w
 Date range is configurable by the user by defining `min_value` and `max_value` check parameters. It is also possible to
 decide whether to include upper and lower bounds of the range, they are included by default.
 
-!!! warning
+!!! Warning
     There are four acceptable data types: `DATE`, `DATETIME`, `TIMESTAMP`, `STRING`. This check is set to validate
     `date` values, so in the other three cases `CAST()` is performed, so keep in mind that casting is not always
     possible. The safest option is to provide the data in `ISO 8601` format, in other cases formatting might be
     necessary.
 
-
+---
 ## When to use
 This sensor is used when you need to confirm that the event took place in a certain time period.
 
+---
 ## Used sensor
 
 The query for this check calculates the percent of date values that are within a range provided by the user. The value_in_range_date_percent checks values from column which are within a range of min_value and max_value. The user decides whether to include these values to the range, using optional parameters include_min_value and include_max_value. Default in check min_value and max_value are included in the range.
@@ -169,7 +170,16 @@ As the check is written under the section of `load_time` column, the check will 
 Then this parameter is passed to the rendered query:
 
 ```
-
+SELECT
+    100.0 * SUM(
+        CASE
+            WHEN SAFE_CAST(analyzed_table.`load_time` AS DATE) >= '2017-06-05' AND SAFE_CAST(analyzed_table.`load_time` AS DATE) <= '2022-05-01' THEN 1
+            ELSE 0
+        END
+    ) / COUNT(*) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+FROM `bigquery-public-data`.`austin_waste`.`waste_and_diversion` AS analyzed_table
+GROUP BY time_period
+ORDER BY time_period
 ```
 
 #### Rule
