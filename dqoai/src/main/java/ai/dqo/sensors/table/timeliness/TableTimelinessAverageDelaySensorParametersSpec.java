@@ -1,5 +1,7 @@
 package ai.dqo.sensors.table.timeliness;
 
+import ai.dqo.metadata.fields.ControlType;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -25,9 +27,13 @@ public class TableTimelinessAverageDelaySensorParametersSpec extends AbstractCol
     };
 
     @JsonPropertyDescription("The first DateTime column used to calculate the time difference. If a column's format is not datetime, column will be cast to datetime.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column1;
+
     @JsonPropertyDescription("The second DateTime column used to calculate the time difference. If a column's format is not datetime, column will be cast to datetime.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column2;
+
     @JsonPropertyDescription("Field used to set a time scale to measure a datetime difference. A DAY is a default. Accepted scales are the following: SECOND, MINUTE, HOUR, DAY")
     private BuiltInTimeScale timeScale = BuiltInTimeScale.DAY;
 

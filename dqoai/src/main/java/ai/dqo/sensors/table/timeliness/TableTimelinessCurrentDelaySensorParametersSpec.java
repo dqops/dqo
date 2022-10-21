@@ -15,6 +15,8 @@
  */
 package ai.dqo.sensors.table.timeliness;
 
+import ai.dqo.metadata.fields.ControlType;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -39,6 +41,7 @@ public class TableTimelinessCurrentDelaySensorParametersSpec extends AbstractCol
     };
 
     @JsonPropertyDescription("Timestamp column to measure timeliness. Other data types will be cast as Timestamp if possible.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column;
 
     @JsonPropertyDescription("Time scale to measure timestamp difference. The default value is DAY, possible values: MONTH, WEEK, DAY, HOUR, MINUTE, SECOND")
