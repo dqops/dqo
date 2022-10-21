@@ -30,6 +30,12 @@ const ConnectionsTree = () => {
     return 'column';
   };
 
+  const handleToggle = async (e: any, node: ITreeNode) => {
+    e.stopPropagation();
+    e.preventDefault();
+    changeActiveTab(node, true);
+  };
+
   const renderNode = (node: ITreeNode) => {
     if (node.key === 'root') {
       return <div />;
@@ -43,6 +49,7 @@ const ConnectionsTree = () => {
               <SvgIcon
                 className="w-4"
                 name={node.collapsed ? 'arrow-alt-right' : 'arrow-alt-down'}
+                onClick={(e) => handleToggle(e, node)}
               />
             )}
           </div>
