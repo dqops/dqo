@@ -1,9 +1,10 @@
 import React from 'react';
-import { UIAllChecksModel } from '../../api';
+import { UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
+  onChange: (ui: UIAllChecksModel) => void;
 }
 
 const TableHeader = () => {
@@ -22,7 +23,32 @@ const TableHeader = () => {
   );
 };
 
-const DataQualityChecks = ({ checksUI }: IDataQualityChecksProps) => {
+const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
+  const handleChangeDimension = (
+    check: UICheckModel,
+    idx: number,
+    jdx: number
+  ) => {
+    if (!checksUI) return;
+
+    const newChecksUI = {
+      ...checksUI,
+      quality_dimensions: checksUI?.quality_dimensions?.map(
+        (dimension, index) =>
+          index !== idx
+            ? dimension
+            : {
+                ...dimension,
+                checks: dimension?.checks?.map((item, jindex) =>
+                  jindex !== jdx ? item : check
+                )
+              }
+      )
+    };
+
+    onChange(newChecksUI);
+  };
+
   if (!checksUI?.quality_dimensions) {
     return <div className="p-4">No Checks</div>;
   }
@@ -43,7 +69,13 @@ const DataQualityChecks = ({ checksUI }: IDataQualityChecksProps) => {
               <TableHeader />
               {dimension.checks &&
                 dimension.checks.map((check, jIndex) => (
-                  <CheckListItem check={check} key={jIndex} />
+                  <CheckListItem
+                    check={check}
+                    key={jIndex}
+                    onChange={(item) =>
+                      handleChangeDimension(item, index, jIndex)
+                    }
+                  />
                 ))}
             </>
           ))}

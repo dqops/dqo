@@ -391,3 +391,33 @@ export const getTableChecksUI =
       dispatch(getTableChecksUiFailed(err));
     }
   };
+
+export const updateTableChecksUIRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI
+});
+
+export const updateTableChecksUISuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS
+});
+
+export const updateTableChecksUIFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  error
+});
+
+export const updateTableChecksUI =
+  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateTableChecksUIRequest());
+    try {
+      await TableApiClient.updateTableChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        data
+      );
+      dispatch(updateTableChecksUISuccess());
+    } catch (err) {
+      dispatch(updateTableChecksUIFailed(err));
+    }
+  };

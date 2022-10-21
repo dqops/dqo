@@ -12,7 +12,8 @@ import {
   CommentSpec,
   RecurringScheduleSpec,
   TableBasicModel,
-  TimeSeriesConfigurationSpec
+  TimeSeriesConfigurationSpec,
+  UIAllChecksModel
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -23,6 +24,7 @@ import {
   getTableSchedule,
   getTableTime,
   updateTableBasic,
+  updateTableChecksUI,
   updateTableComments,
   updateTableLabels,
   updateTableSchedule,
@@ -31,6 +33,8 @@ import {
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import DataQualityChecks from '../../DataQualityChecks';
+import { useHistory } from 'react-router-dom';
+import qs from 'query-string';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -87,7 +91,9 @@ const TableView = ({ node }: ITableViewProps) => {
     useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     setUpdatedTableBasic(tableBasic);
@@ -109,6 +115,10 @@ const TableView = ({ node }: ITableViewProps) => {
   }, [labels]);
 
   useEffect(() => {
+    setUpdatedChecksUI(checksUI);
+  }, [checksUI]);
+
+  useEffect(() => {
     setUpdatedTableBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
@@ -121,6 +131,14 @@ const TableView = ({ node }: ITableViewProps) => {
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
     dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+
+    const searchQuery = qs.stringify({
+      connection: connectionName,
+      schema: schemaName,
+      table: tableName
+    });
+
+    history.replace(`/connection?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
@@ -174,6 +192,17 @@ const TableView = ({ node }: ITableViewProps) => {
       );
       await dispatch(getTableLabels(connectionName, schemaName, tableName));
     }
+    if (activeTab === 'data-quality-checks') {
+      await dispatch(
+        updateTableChecksUI(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedChecksUI
+        )
+      );
+      await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    }
   };
 
   return (
@@ -213,7 +242,10 @@ const TableView = ({ node }: ITableViewProps) => {
       </div>
       <div>
         {activeTab === 'data-quality-checks' && (
-          <DataQualityChecks checksUI={checksUI} />
+          <DataQualityChecks
+            checksUI={updatedChecksUI}
+            onChange={setUpdatedChecksUI}
+          />
         )}
       </div>
       <div>

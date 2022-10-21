@@ -290,3 +290,40 @@ export const getColumnChecksUi =
       dispatch(getColumnChecksUIFailed(err));
     }
   };
+
+export const updateColumnCheckUIRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS
+});
+
+export const updateColumnCheckUISuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_SUCCESS
+});
+
+export const updateColumnCheckUIFailed = (error: any) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_ERROR,
+  error
+});
+
+export const updateColumnCheckUI =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string,
+    data: any
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateColumnCheckUIRequest());
+    try {
+      await ColumnApiClient.updateColumnChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        data
+      );
+      dispatch(updateColumnCheckUISuccess());
+    } catch (err) {
+      dispatch(updateColumnCheckUIFailed(err));
+    }
+  };

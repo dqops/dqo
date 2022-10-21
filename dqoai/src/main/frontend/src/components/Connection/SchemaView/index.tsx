@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ITreeNode } from '../../../shared/interfaces';
 import { TableApiClient } from '../../../services/apiClient';
 import Tabs from '../../Tabs';
@@ -6,18 +6,23 @@ import { TabOption } from '../../Tabs/tab';
 import TableDetails from '../TableView/TableDetails';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
+import qs from 'query-string';
+import { useHistory } from 'react-router-dom';
 
 interface ISchemaViewProps {
   node: ITreeNode;
 }
 
 const SchemaView = ({ node }: ISchemaViewProps) => {
-  const connectionName = node.key.split('.')[1] || '';
   const [tabs, setTabs] = useState<TabOption[]>([]);
   const [activeTab, setActiveTab] = useState('');
 
+  const connectionName = useMemo(() => node.key.split('.')[1] || '', [node]);
+  const schemaName = useMemo(() => node.module, [node]);
+  const history = useHistory();
+
   useEffect(() => {
-    TableApiClient.getTables(connectionName, node.module).then((res) => {
+    TableApiClient.getTables(connectionName, schemaName).then((res) => {
       setTabs(
         res.data.map((item) => ({
           label: item.target?.table_name || '',
@@ -27,7 +32,14 @@ const SchemaView = ({ node }: ISchemaViewProps) => {
 
       setActiveTab(res.data[0]?.target?.table_name || '');
     });
-  }, [node, connectionName]);
+
+    const searchQuery = qs.stringify({
+      connection: connectionName,
+      schema: schemaName
+    });
+
+    history.replace(`/connection?${searchQuery}`);
+  }, [schemaName, connectionName]);
 
   const renderContent = () => {
     if (!activeTab) {

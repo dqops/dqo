@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import qs from 'query-string';
 import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
-import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -13,6 +15,7 @@ import {
   getColumnComments,
   getColumnLabels,
   updateColumnBasic,
+  updateColumnCheckUI,
   updateColumnComments,
   updateColumnLabels
 } from '../../../redux/actions/column.actions';
@@ -50,6 +53,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
   const { columnBasic, comments, labels, isUpdating, checksUI } = useSelector(
     (state: IRootState) => state.column
   );
+  const history = useHistory();
 
   const { connectionName, schemaName, tableName, columnName } = useMemo(() => {
     const connectionName = node.key.split('.')[1] || '';
@@ -95,6 +99,14 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     dispatch(
       getColumnChecksUi(connectionName, schemaName, tableName, columnName)
     );
+    const searchQuery = qs.stringify({
+      connection: connectionName,
+      schema: schemaName,
+      table: tableName,
+      column: columnName
+    });
+
+    history.replace(`/connection?${searchQuery}`);
   }, [connectionName, schemaName, tableName, columnName]);
 
   const onUpdate = async () => {
@@ -137,6 +149,20 @@ const ColumnView = ({ node }: IColumnViewProps) => {
         getColumnLabels(connectionName, schemaName, tableName, columnName)
       );
     }
+    if (activeTab === 'data-quality-checks') {
+      await dispatch(
+        updateColumnCheckUI(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedComments
+        )
+      );
+      await dispatch(
+        getColumnChecksUi(connectionName, schemaName, tableName, columnName)
+      );
+    }
   };
 
   return (
@@ -167,7 +193,10 @@ const ColumnView = ({ node }: IColumnViewProps) => {
         )}
         <div>
           {activeTab === 'data-quality-checks' && (
-            <DataQualityChecks checksUI={updatedChecksUI} />
+            <DataQualityChecks
+              checksUI={updatedChecksUI}
+              onChange={setUpdatedChecksUI}
+            />
           )}
         </div>
         {activeTab === 'comments' && (

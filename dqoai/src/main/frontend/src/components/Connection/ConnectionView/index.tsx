@@ -32,6 +32,8 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
+import qs from 'query-string';
+import { useHistory } from 'react-router-dom';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -82,6 +84,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const dispatch = useActionDispatch();
   const connectionName = useMemo(() => node.module, [node]);
+  const history = useHistory();
 
   useEffect(() => {
     setUpdatedConnectionBasic(connectionBasic);
@@ -118,6 +121,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     dispatch(getConnectionTime(connectionName));
     dispatch(getConnectionComments(connectionName));
     dispatch(getConnectionLabels(connectionName));
+
+    const searchQuery = qs.stringify({
+      connection: connectionName
+    });
+
+    history.replace(`/connection?${searchQuery}`);
   }, [connectionName]);
 
   useEffect(() => {

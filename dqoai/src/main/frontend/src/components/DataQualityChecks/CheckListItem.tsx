@@ -8,6 +8,7 @@ import SensorParameters from './SensorParameters';
 
 interface ICheckListItemProps {
   check: UICheckModel;
+  onChange: (check: UICheckModel) => void;
 }
 
 export interface ITab {
@@ -17,7 +18,7 @@ export interface ITab {
   field?: UIFieldModel;
 }
 
-const CheckListItem = ({ check }: ICheckListItemProps) => {
+const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const [checked, setChecked] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('dimension');
@@ -45,6 +46,7 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
       }
     ]);
   };
+
   const openSensorParameters = () => {
     setExpanded(true);
     setActiveTab('parameters');
@@ -55,6 +57,7 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
       }
     ]);
   };
+
   const openCheckRule = (rule: UIRuleThresholdsModel) => {
     setExpanded(true);
     setActiveTab(rule.field_name || '');
@@ -81,6 +84,13 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
     ]);
   };
 
+  const handleChange = (obj: any) => {
+    onChange({
+      ...check,
+      ...obj
+    });
+  };
+
   return (
     <>
       <tr>
@@ -103,6 +113,9 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
                 parameters={check.sensor_parameters || []}
+                onChange={(parameters: UIFieldModel[]) =>
+                  handleChange({ sensor_parameters: parameters })
+                }
                 openCheckSensorParameter={openCheckSensorParameter}
               />
             </div>
@@ -120,9 +133,11 @@ const CheckListItem = ({ check }: ICheckListItemProps) => {
           <td colSpan={3}>
             <CheckSettings
               activeTab={activeTab}
-              onChange={setActiveTab}
+              setActiveTab={setActiveTab}
               tabs={tabs}
               onClose={() => setExpanded(false)}
+              onChange={onChange}
+              check={check}
             />
           </td>
         </tr>

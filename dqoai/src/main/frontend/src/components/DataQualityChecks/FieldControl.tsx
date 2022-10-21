@@ -6,12 +6,17 @@ import NumberInput from '../NumberInput';
 import Select from '../Select';
 import ObjectField from '../ObjectField';
 import StringListField from '../StringListField';
+import ColumnSelect from './ColumnSelect';
 
 interface ISensorParametersFieldSettingsProps {
   field: UIFieldModel;
+  onChange: (field: UIFieldModel) => void;
 }
 
-const FieldControl = ({ field }: ISensorParametersFieldSettingsProps) => {
+const FieldControl = ({
+  field,
+  onChange
+}: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
   const tooltip = field?.definition?.help_hext;
@@ -31,7 +36,7 @@ const FieldControl = ({ field }: ISensorParametersFieldSettingsProps) => {
       case ParameterDefinitionSpecDataTypeEnum.long:
         return field.long_value;
       case ParameterDefinitionSpecDataTypeEnum.string_list:
-        return field.string_list_value;
+        return field.string_list_value || [];
       case ParameterDefinitionSpecDataTypeEnum.enum:
         return field.enum_value;
       case ParameterDefinitionSpecDataTypeEnum.instant:
@@ -41,11 +46,18 @@ const FieldControl = ({ field }: ISensorParametersFieldSettingsProps) => {
     }
   }, [field]);
 
+  const handleChange = (obj: any) => {
+    onChange({
+      ...field,
+      ...obj
+    });
+  };
+
   return (
     <div>
       {type === 'boolean' && (
         <Checkbox
-          onChange={() => {}}
+          onChange={(value) => handleChange({ boolean_value: value })}
           checked={value}
           label={label}
           tooltipText={tooltip}
@@ -57,15 +69,32 @@ const FieldControl = ({ field }: ISensorParametersFieldSettingsProps) => {
           value={value}
           tooltipText={tooltip}
           className="!h-8"
+          onChange={(e) => handleChange({ string_value: e.target.value })}
         />
       )}
-      {(type === ParameterDefinitionSpecDataTypeEnum.integer ||
-        type === ParameterDefinitionSpecDataTypeEnum.long ||
-        type === ParameterDefinitionSpecDataTypeEnum.double) && (
+      {type === ParameterDefinitionSpecDataTypeEnum.integer && (
         <NumberInput
           label={label}
           value={value}
-          onChange={() => {}}
+          onChange={(value) => handleChange({ integer_value: value })}
+          tooltipText={tooltip}
+          className="!h-8"
+        />
+      )}
+      {type === ParameterDefinitionSpecDataTypeEnum.long && (
+        <NumberInput
+          label={label}
+          value={value}
+          onChange={(value) => handleChange({ long_value: value })}
+          tooltipText={tooltip}
+          className="!h-8"
+        />
+      )}
+      {type === ParameterDefinitionSpecDataTypeEnum.double && (
+        <NumberInput
+          label={label}
+          value={value}
+          onChange={(value) => handleChange({ double_value: value })}
           tooltipText={tooltip}
           className="!h-8"
         />
@@ -83,15 +112,34 @@ const FieldControl = ({ field }: ISensorParametersFieldSettingsProps) => {
           }
           tooltipText={tooltip}
           triggerClassName="!h-8"
+          onChange={(value) => handleChange({ enum_value: value })}
         />
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.string_list && (
-        <StringListField value={value} label={label} tooltipText={tooltip} />
+        <StringListField
+          value={value}
+          label={label}
+          tooltipText={tooltip}
+          onChange={(value: string[]) =>
+            handleChange({ string_list_value: value })
+          }
+        />
       )}
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.object && (
         <ObjectField label={label} value={value} tooltipText={tooltip} />
+      )}
+      {field?.definition?.data_type ===
+        ParameterDefinitionSpecDataTypeEnum.column_name && (
+        <ColumnSelect
+          label={label}
+          value={value}
+          tooltipText={tooltip}
+          onChange={(value: string) =>
+            handleChange({ column_name_value: value })
+          }
+        />
       )}
     </div>
   );

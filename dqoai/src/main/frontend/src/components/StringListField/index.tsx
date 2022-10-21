@@ -10,12 +10,14 @@ interface IStringListFieldProps {
   label?: string;
   value: string[];
   tooltipText?: string;
+  onChange: (value: string[]) => void;
 }
 
 const StringListField = ({
   label,
   value,
-  tooltipText
+  tooltipText,
+  onChange
 }: IStringListFieldProps) => {
   const [open, setOpen] = useState(false);
 
@@ -23,7 +25,7 @@ const StringListField = ({
     <div>
       <div className="flex space-x-1">
         {label && (
-          <label className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1">
+          <label className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1 py-2">
             <span>{label}</span>
             {!!tooltipText && (
               <Tooltip
@@ -42,7 +44,7 @@ const StringListField = ({
         )}
       </div>
       <div className="flex space-x-2 items-center">
-        <div className="relative text-sm leading-1">{value.join(', ')}</div>
+        <div className="relative text-sm leading-1">{value?.join(', ')}</div>
         <SvgIcon
           name="edit"
           className="w-4 h-4 text-blue-700 cursor-pointer"
@@ -51,7 +53,7 @@ const StringListField = ({
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
-          <LabelsView labels={[]} onChange={() => {}} />
+          <LabelsView labels={value} onChange={onChange} />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
               color="error"

@@ -9,27 +9,61 @@ import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
 import SpecRuleSettings from './SpecRuleSettings';
-import FieldControl from './FieldControl';
+import { DimensionMappingSpec, UICheckModel } from '../../api';
 
 interface ICheckSettingsProps {
-  checks?: any;
+  check?: UICheckModel;
   activeTab: string;
-  onChange: (value: string) => void;
+  setActiveTab: (value: string) => void;
   tabs: ITab[];
   onClose: () => void;
+  onChange: (check: UICheckModel) => void;
 }
 
 const CheckSettings = ({
-  checks,
+  check,
   activeTab,
-  onChange,
+  setActiveTab,
   tabs,
-  onClose
+  onClose,
+  onChange
 }: ICheckSettingsProps) => {
   const tab = useMemo(
     () => tabs.find((item) => item.value === activeTab),
     [tabs, activeTab]
   );
+
+  const getDimension = (index: number) => {
+    if (index === 0) return check?.dimensions_override?.dimension_1;
+    if (index === 1) return check?.dimensions_override?.dimension_2;
+    if (index === 2) return check?.dimensions_override?.dimension_3;
+    if (index === 3) return check?.dimensions_override?.dimension_4;
+    if (index === 4) return check?.dimensions_override?.dimension_5;
+    if (index === 5) return check?.dimensions_override?.dimension_6;
+    if (index === 6) return check?.dimensions_override?.dimension_7;
+    if (index === 7) return check?.dimensions_override?.dimension_8;
+    if (index === 8) return check?.dimensions_override?.dimension_9;
+  };
+
+  const onChangeDimensions = (
+    dimension: DimensionMappingSpec,
+    index: number
+  ) => {
+    onChange({
+      ...check,
+      dimensions_override: {
+        ...check?.dimensions_override,
+        [`dimension_${index + 1}`]: dimension
+      }
+    });
+  };
+
+  const handleChange = (obj: any) => {
+    onChange({
+      ...check,
+      ...obj
+    });
+  };
 
   return (
     <div className="my-4">
@@ -40,29 +74,43 @@ const CheckSettings = ({
         >
           <SvgIcon name="close" />
         </IconButton>
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChange} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="pt-5">
           {activeTab === 'dimension' && (
             <div>
-              {Array(10)
+              {Array(9)
                 .fill(0)
                 .map((item, index) => (
-                  <DimensionItem idx={index} key={index} />
+                  <DimensionItem
+                    idx={index}
+                    key={index}
+                    dimension={getDimension(index)}
+                    onChange={(dimension) =>
+                      onChangeDimensions(dimension, index)
+                    }
+                  />
                 ))}
             </div>
           )}
           {activeTab === 'schedule' && (
             <ScheduleTab
-              schedule={checks?.schedule_override}
-              onChange={() => {}}
+              schedule={check?.schedule_override}
+              onChange={(value) => handleChange({ schedule_override: value })}
             />
           )}
-          {activeTab === 'time' && <TimeSeriesView setTimeSeries={() => {}} />}
+          {activeTab === 'time' && (
+            <TimeSeriesView
+              timeSeries={check?.time_series_override}
+              setTimeSeries={(times) =>
+                handleChange({ time_series_override: times })
+              }
+            />
+          )}
           {activeTab === 'comments' && (
             <div className="max-w-160 overflow-auto">
               <CommentsView
-                comments={checks?.comments || []}
-                onChange={() => {}}
+                comments={check?.comments || []}
+                onChange={(comments) => handleChange({ comments })}
                 className="!mb-3 !mt-0"
               />
             </div>
