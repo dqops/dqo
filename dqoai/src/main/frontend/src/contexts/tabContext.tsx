@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
-
-import { IRootState } from '../redux/reducers';
 import { TREE_LEVEL } from '../shared/enums';
 import { ITab, ITreeNode } from '../shared/interfaces';
 import { findNode } from '../utils/tree';
@@ -32,12 +29,8 @@ function TabProvider(props: any) {
   });
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
-  const { activeConnection } = useSelector(
-    (state: IRootState) => state.connection
-  );
-  const { schemas } = useSelector((state: IRootState) => state.schema);
 
-  const calculateTree = async (node: ITreeNode) => {
+  const calculateTree = async (node: ITreeNode, toggling = false) => {
     const newTreeData = Object.assign({}, treeData);
 
     const treeNode = findNode(newTreeData, node.key);
@@ -85,11 +78,13 @@ function TabProvider(props: any) {
         }));
       }
     }
-    treeNode.collapsed = !treeNode.collapsed;
+    if (toggling) {
+      treeNode.collapsed = !treeNode.collapsed;
+    }
     setTreeData(newTreeData);
   };
 
-  const changeActiveTab = async (node: ITreeNode) => {
+  const changeActiveTab = async (node: ITreeNode, toggling = false) => {
     const existTab = tabs.find((item) => item.value === node.key.toString());
     if (existTab) {
       setActiveTab(node.key.toString());
@@ -109,7 +104,7 @@ function TabProvider(props: any) {
       }
       setActiveTab(node.key.toString());
     }
-    await calculateTree(node);
+    await calculateTree(node, toggling);
   };
 
   const closeTab = (value: string) => {
@@ -161,25 +156,6 @@ function TabProvider(props: any) {
       await getConnections();
     })();
   }, []);
-
-  useEffect(() => {
-    // if (activeConnection) {
-    //   setTreeData(
-    //     treeData.map((item) =>
-    //       item.key.toString() === activeConnection
-    //         ? {
-    //             ...item,
-    //             children: generateTreeNodes(
-    //               schemas,
-    //               ['connectionName', 'schemaName'],
-    //               TREE_LEVEL.SCHEMA
-    //             )
-    //           }
-    //         : item
-    //     )
-    //   );
-    // }
-  }, [activeConnection, schemas]);
 
   return (
     <TabContext.Provider
