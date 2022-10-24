@@ -81,28 +81,30 @@ function TabProvider(props: any) {
     if (toggling) {
       treeNode.collapsed = !treeNode.collapsed;
     }
-    setTreeData(newTreeData);
+    setTreeData(Object.assign({}, newTreeData));
   };
 
   const changeActiveTab = async (node: ITreeNode, toggling = false) => {
-    const existTab = tabs.find((item) => item.value === node.key.toString());
-    if (existTab) {
-      setActiveTab(node.key.toString());
-    } else {
-      const newTab = {
-        label: node.module?.toString() || '',
-        value: node.key.toString()
-      };
-
-      if (activeTab) {
-        const newTabs = tabs.map((item) =>
-          item.value === activeTab ? newTab : item
-        );
-        setTabs(newTabs);
+    if (!toggling) {
+      const existTab = tabs.find((item) => item.value === node.key.toString());
+      if (existTab) {
+        setActiveTab(node.key.toString());
       } else {
-        setTabs([newTab]);
+        const newTab = {
+          label: node.module?.toString() || '',
+          value: node.key.toString()
+        };
+
+        if (activeTab) {
+          const newTabs = tabs.map((item) =>
+            item.value === activeTab ? newTab : item
+          );
+          setTabs(newTabs);
+        } else {
+          setTabs([newTab]);
+        }
+        setActiveTab(node.key.toString());
       }
-      setActiveTab(node.key.toString());
     }
     await calculateTree(node, toggling);
   };

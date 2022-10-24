@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Tree from 'react-ui-tree';
 import { useHistory } from 'react-router-dom';
@@ -14,8 +14,11 @@ import { TREE_LEVEL } from '../../shared/enums';
 const ConnectionsTree = () => {
   const { changeActiveTab, treeData, setTreeData } = useTabs();
   const history = useHistory();
+  const [node, setNode] = useState<ITreeNode>();
 
-  const onClick = (node: ITreeNode) => {
+  const onClick = (e: any, node: ITreeNode) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (history.location.pathname !== '/connection') {
       history.push('/connection');
     }
@@ -33,7 +36,12 @@ const ConnectionsTree = () => {
   const handleToggle = async (e: any, node: ITreeNode) => {
     e.stopPropagation();
     e.preventDefault();
+    setNode(node);
     changeActiveTab(node, true);
+  };
+
+  const onChange = (data: any) => {
+    setTreeData(data);
   };
 
   const renderNode = (node: ITreeNode) => {
@@ -42,7 +50,7 @@ const ConnectionsTree = () => {
     }
 
     return (
-      <div onClick={() => onClick(node)}>
+      <div onClick={(e) => onClick(e, node)}>
         <div className="flex text-black space-x-2 items-center mb-2">
           <div className="w-4 shrink-0">
             {node.level !== TREE_LEVEL.COLUMN && (
@@ -68,12 +76,14 @@ const ConnectionsTree = () => {
 
   return (
     <div className="px-4 text-gray-100">
+      <div className="hidden">{JSON.stringify(node)}</div>
       <div className="-ml-5">
         <Tree
           paddingLeft={20}
           tree={treeData}
-          onChange={setTreeData}
+          onChange={onChange}
           renderNode={renderNode}
+          draggable={false}
         />
       </div>
     </div>
