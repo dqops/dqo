@@ -6,15 +6,12 @@ import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
 import TimeSeriesView from '../TimeSeriesView';
-import { SchemaApiClient } from '../../../services/apiClient';
 import {
   CommentSpec,
   ConnectionBasicModel,
   RecurringScheduleSpec,
-  SchemaModel,
   TimeSeriesConfigurationSpec
 } from '../../../api';
-import SchemaDetail from '../SchemaView/SchemaDetail';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
@@ -34,12 +31,13 @@ import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
+import SchemasView from './SchemasView';
 
 interface IConnectionViewProps {
   node: ITreeNode;
 }
 
-const initTabs = [
+const tabs = [
   {
     label: 'Connection',
     value: 'connection'
@@ -59,13 +57,15 @@ const initTabs = [
   {
     label: 'Labels',
     value: 'labels'
+  },
+  {
+    label: 'Schemas',
+    value: 'schemas'
   }
 ];
 
 const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
-  const [schemas, setSchemas] = useState<SchemaModel[]>([]);
-  const [tabs, setTabs] = useState(initTabs);
   const {
     connectionBasic,
     schedule,
@@ -106,10 +106,6 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   }, [labels]);
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(connectionName).then((res) => {
-      setSchemas(res.data);
-    });
-
     setUpdatedConnectionBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
@@ -128,16 +124,6 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
 
     history.replace(`/connection?${searchQuery}`);
   }, [connectionName]);
-
-  useEffect(() => {
-    setTabs([
-      ...initTabs,
-      ...schemas.map((item) => ({
-        label: item.schema_name || '',
-        value: item.schema_name || ''
-      }))
-    ]);
-  }, [schemas]);
 
   const onUpdate = async () => {
     if (activeTab === 'connection') {
@@ -202,11 +188,10 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     if (activeTab === 'labels') {
       return <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />;
     }
-    return (
-      <SchemaDetail
-        schema={schemas.find((item) => item.schema_name === activeTab)}
-      />
-    );
+    if (activeTab === 'schemas') {
+      return <SchemasView connectionName={connectionName} />;
+    }
+    return null;
   };
 
   return (
