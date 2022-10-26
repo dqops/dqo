@@ -19,8 +19,8 @@ const ConnectionsTree = () => {
   const onClick = (e: any, node: ITreeNode) => {
     e.preventDefault();
     e.stopPropagation();
-    if (history.location.pathname !== '/connection') {
-      history.push('/connection');
+    if (history.location.pathname !== '/') {
+      history.push('/');
     }
     changeActiveTab(node);
   };

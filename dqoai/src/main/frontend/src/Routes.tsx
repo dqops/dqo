@@ -8,8 +8,9 @@ import ConnectionPage from './pages/Connection';
 const Routes = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Dashboard} />
-      <Route exact path="/connection" component={ConnectionPage} />
+      <Route exact path="/create" component={Dashboard} />
+      <Route exact path="/" component={ConnectionPage} />
+      <Route component={ConnectionPage} />
     </Switch>
   );
 };

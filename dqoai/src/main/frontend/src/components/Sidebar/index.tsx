@@ -17,7 +17,7 @@ const Sidebar = () => {
           color="primary"
           className="px-4"
           leftIcon={<SvgIcon name="add" className="mr-2 w-5" />}
-          onClick={() => history.push('/')}
+          onClick={() => history.push('/create')}
         />
       </div>
       <ConnectionsTree />
