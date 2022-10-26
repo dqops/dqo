@@ -68,7 +68,7 @@ const FieldControl = ({
           label={label}
           value={value}
           tooltipText={tooltip}
-          className="!h-8"
+          className="!h-8 !min-w-30 !max-w-30"
           onChange={(e) => handleChange({ string_value: e.target.value })}
         />
       )}
@@ -78,7 +78,7 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ integer_value: value })}
           tooltipText={tooltip}
-          className="!h-8"
+          className="!h-8 !min-w-30 !max-w-30"
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.long && (
@@ -87,7 +87,7 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ long_value: value })}
           tooltipText={tooltip}
-          className="!h-8"
+          className="!h-8 !min-w-30 !max-w-30"
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.double && (
@@ -96,7 +96,7 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ double_value: value })}
           tooltipText={tooltip}
-          className="!h-8"
+          className="!h-8 !min-w-30 !max-w-30"
         />
       )}
       {field?.definition?.data_type ===
@@ -111,6 +111,7 @@ const FieldControl = ({
             })) || []
           }
           tooltipText={tooltip}
+          className="!min-w-30 !max-w-30"
           triggerClassName="!h-8"
           onChange={(value) => handleChange({ enum_value: value })}
         />

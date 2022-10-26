@@ -54,7 +54,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-tab-wrapper overflow-auto">
       <table className="w-full">
         <tbody>
           {checksUI?.quality_dimensions.map((dimension, index) => (
