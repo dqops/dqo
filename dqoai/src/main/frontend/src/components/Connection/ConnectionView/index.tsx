@@ -210,6 +210,14 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     }
   }, [node, tabMap]);
 
+  const isDisabled = useMemo(() => {
+    if (activeTab === 'labels') {
+      return updatedLabels.some((label) => !label);
+    }
+
+    return false;
+  }, [updatedLabels]);
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -223,6 +231,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
           label="Save"
           className="w-40"
           onClick={onUpdate}
+          disabled={isDisabled}
           loading={isUpdating}
         />
       </div>

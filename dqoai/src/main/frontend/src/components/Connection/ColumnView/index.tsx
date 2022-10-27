@@ -173,6 +173,14 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     }
   }, [node, tabMap]);
 
+  const isDisabled = useMemo(() => {
+    if (activeTab === 'labels') {
+      return updatedLabels.some((label) => !label);
+    }
+
+    return false;
+  }, [updatedLabels]);
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -187,6 +195,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
           className="w-40"
           onClick={onUpdate}
           loading={isUpdating}
+          disabled={isDisabled}
         />
       </div>
       <div className="border-b border-gray-300">

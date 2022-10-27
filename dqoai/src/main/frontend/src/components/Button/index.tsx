@@ -21,7 +21,7 @@ interface IButtonProps {
 
 const colorsMap = {
   primary: {
-    contained: 'bg-indigo-700 text-white',
+    contained: 'bg-indigo-700 text-white disabled:bg-gray-500',
     outlined: 'bg-white text-indigo-700 border border-indigo-700',
     text: 'bg-white text-indigo-700'
   },
