@@ -23,6 +23,7 @@ import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import ColumnDetails from './ColumnDetails';
 import DataQualityChecks from '../../DataQualityChecks';
+import { useTabs } from '../../../contexts/tabContext';
 
 interface IColumnViewProps {
   node: ITreeNode;
@@ -54,6 +55,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     (state: IRootState) => state.column
   );
   const history = useHistory();
+  const { tabMap, setTabMap } = useTabs();
 
   const { connectionName, schemaName, tableName, columnName } = useMemo(() => {
     const connectionName = node.key.split('.')[1] || '';
@@ -164,6 +166,12 @@ const ColumnView = ({ node }: IColumnViewProps) => {
       );
     }
   };
+
+  useEffect(() => {
+    if (tabMap[node.module]) {
+      setActiveTab(tabMap[node.module]);
+    }
+  }, [node, tabMap]);
 
   return (
     <div className="">

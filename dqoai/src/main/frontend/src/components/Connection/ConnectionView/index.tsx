@@ -32,6 +32,7 @@ import LabelsView from '../LabelsView';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
+import { useTabs } from '../../../contexts/tabContext';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -85,6 +86,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   const dispatch = useActionDispatch();
   const connectionName = useMemo(() => node.module, [node]);
   const history = useHistory();
+  const { tabMap, setTabMap } = useTabs();
 
   useEffect(() => {
     setUpdatedConnectionBasic(connectionBasic);
@@ -194,6 +196,20 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     return null;
   };
 
+  const onChangeTab = (tab: string) => {
+    setActiveTab(tab);
+    setTabMap({
+      ...tabMap,
+      [node.module]: tab
+    });
+  };
+
+  useEffect(() => {
+    if (tabMap[node.module]) {
+      setActiveTab(tabMap[node.module]);
+    }
+  }, [node, tabMap]);
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -211,7 +227,7 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
         />
       </div>
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {renderTabContent()}
     </div>

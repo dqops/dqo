@@ -35,6 +35,7 @@ import LabelsView from '../LabelsView';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
+import { useTabs } from '../../../contexts/tabContext';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -79,6 +80,7 @@ const TableView = ({ node }: ITableViewProps) => {
     checksUI,
     isUpdating
   } = useSelector((state: IRootState) => state.table);
+  const { tabMap, setTabMap } = useTabs();
 
   const connectionName = node.key.split('.')[1] || '';
   const schemaName = node.key.split('.')[2] || '';
@@ -205,6 +207,20 @@ const TableView = ({ node }: ITableViewProps) => {
     }
   };
 
+  const onChangeTab = (tab: string) => {
+    setActiveTab(tab);
+    setTabMap({
+      ...tabMap,
+      [node.module]: tab
+    });
+  };
+
+  useEffect(() => {
+    if (tabMap[node.module]) {
+      setActiveTab(tabMap[node.module]);
+    }
+  }, [node, tabMap]);
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -222,7 +238,7 @@ const TableView = ({ node }: ITableViewProps) => {
         />
       </div>
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div>
         {activeTab === 'table' && (

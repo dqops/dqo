@@ -111,7 +111,6 @@ const FieldControl = ({
             })) || []
           }
           tooltipText={tooltip}
-          className="!min-w-30 !max-w-30"
           triggerClassName="!h-8"
           onChange={(value) => handleChange({ enum_value: value })}
         />

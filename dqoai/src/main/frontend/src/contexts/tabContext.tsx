@@ -29,6 +29,7 @@ function TabProvider(props: any) {
   });
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
+  const [tabMap, setTabMap] = useState({});
 
   const calculateTree = async (node: ITreeNode, toggling = false) => {
     const newTreeData = Object.assign({}, treeData);
@@ -170,7 +171,9 @@ function TabProvider(props: any) {
         activeTab,
         setActiveTab,
         closeTab,
-        onAddTab
+        onAddTab,
+        tabMap,
+        setTabMap
       }}
       {...props}
     />

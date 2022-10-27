@@ -25,7 +25,7 @@ const SensorParameters = ({
       {parameters.length ? (
         <div className="flex space-x-2">
           {parameters.map((item, index) => (
-            <div key={index} className="mb-3">
+            <div key={index} className="">
               <FieldControl
                 field={item}
                 onChange={(field: UIFieldModel) => handleChange(field, index)}
