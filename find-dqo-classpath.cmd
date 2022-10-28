@@ -24,7 +24,7 @@ if exist "%~dp0dqoai\pom.xml" (
 
     if not exist "%~dp0dqoai\target\dqo-dqoai-%DQO_VERSION%.jar" (
         if exist "%~dp0dqoai" (
-            call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -f "%~dp0\pom.xml"
+            call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "%~dp0\pom.xml"
             if ERRORLEVEL 1 (
                 echo DQO failed to compile
                 exit /b 1
