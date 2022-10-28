@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -117,6 +118,7 @@ public class TableTimelinessCurrentDelaySensorParametersSpec extends AbstractCol
      */
     @Override
     public boolean hasNonNullSimpleFields() {
-        return false;
+        return !Strings.isNullOrEmpty(this.column) ||
+                this.timeScale != null ;
     }
 }
