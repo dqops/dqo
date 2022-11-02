@@ -21,6 +21,7 @@ interface SelectProps {
   info?: boolean;
   triggerClassName?: string;
   tooltipText?: string;
+  disabled?: boolean;
 }
 
 const Select = ({
@@ -31,7 +32,8 @@ const Select = ({
   onChange,
   className,
   triggerClassName,
-  tooltipText
+  tooltipText,
+  disabled
 }: SelectProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
@@ -73,9 +75,10 @@ const Select = ({
         <div
           className={clsx(
             'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border border-gray-300',
-            triggerClassName
+            triggerClassName,
+            disabled ? 'bg-gray-300 cursor-not-allowed' : ''
           )}
-          onClick={toggleMenu}
+          onClick={() => (!disabled ? toggleMenu() : {})}
         >
           {selectedOption ? selectedOption.label : placeholder}
           <SvgIcon

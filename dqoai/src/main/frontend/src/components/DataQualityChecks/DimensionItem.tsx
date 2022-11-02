@@ -3,8 +3,9 @@ import {
   DimensionMappingSpec,
   DimensionMappingSpecSourceEnum
 } from '../../api';
-import Select from '../Select';
 import Input from '../Input';
+import ColumnSelect from './ColumnSelect';
+import RadioButton from '../RadioButton';
 
 interface IDimensionItemProps {
   dimension?: DimensionMappingSpec;
@@ -13,46 +14,71 @@ interface IDimensionItemProps {
 }
 
 const DimensionItem = ({ idx, onChange, dimension }: IDimensionItemProps) => {
-  const options = [
-    {
-      value: DimensionMappingSpecSourceEnum.static_value,
-      label: 'Static Value'
-    },
-    {
-      value: DimensionMappingSpecSourceEnum.dynamic_from_group_by_column,
-      label: 'Column'
-    }
-  ];
-
   return (
     <div className="mb-4 last:mb-0">
-      <div className="text-sm font-semibold mb-2">{`Dimension ${idx + 1}`}</div>
       <div className="flex justify-between items-center space-x-6">
-        <Select
-          options={options}
-          label="Source"
-          value={dimension?.source}
-          onChange={(value) => onChange({ ...dimension, source: value })}
-        />
+        <div className="text-sm font-semibold flex-1">{`Dimension ${idx + 1}`}</div>
+        <div className="flex-1">
+          <RadioButton
+            checked={dimension?.source === undefined}
+            label="None"
+            onClick={() => onChange({ ...dimension, source: undefined })}
+          />
+        </div>
+        <div className="">
+          <RadioButton
+            checked={
+              dimension?.source === DimensionMappingSpecSourceEnum.static_value
+            }
+            label="Static Value"
+            onClick={() =>
+              onChange({
+                ...dimension,
+                source: DimensionMappingSpecSourceEnum.static_value
+              })
+            }
+          />
+        </div>
         <div className="flex-1">
           <Input
-            label="Value"
-            value={
-              dimension?.source === DimensionMappingSpecSourceEnum.static_value
-                ? dimension?.static_value
-                : dimension?.column
-            }
+            className="h-8"
+            value={dimension?.static_value}
             onChange={(e) =>
               onChange({
                 ...dimension,
-                ...(dimension?.source ===
-                DimensionMappingSpecSourceEnum.static_value
-                  ? {
-                      static_value: e.target.value
-                    }
-                  : {
-                      column: e.target.value
-                    })
+                static_value: e.target.value
+              })
+            }
+            disabled={
+              dimension?.source !== DimensionMappingSpecSourceEnum.static_value
+            }
+          />
+        </div>
+        <RadioButton
+          checked={
+            dimension?.source ===
+            DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+          }
+          label="Group by column"
+          onClick={() =>
+            onChange({
+              ...dimension,
+              source:
+                DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+            })
+          }
+        />
+        <div className="flex-1">
+          <ColumnSelect
+            disabled={
+              dimension?.source !==
+              DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+            }
+            value={dimension?.column}
+            onChange={(value) =>
+              onChange({
+                ...dimension,
+                column: value
               })
             }
           />

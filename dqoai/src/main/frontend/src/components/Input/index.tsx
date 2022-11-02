@@ -20,6 +20,7 @@ interface IInputProps {
   info?: boolean;
   dataTestId?: string;
   tooltipText?: string;
+  disabled?: boolean;
 }
 
 const Input = ({
@@ -35,7 +36,8 @@ const Input = ({
   onBlur,
   onClear,
   dataTestId,
-  tooltipText
+  tooltipText,
+  disabled
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
@@ -66,6 +68,7 @@ const Input = ({
         name={name}
         type={type || 'text'}
         placeholder={placeholder}
+        disabled={disabled}
         className={clsx(
           error
             ? 'border border-red-500'

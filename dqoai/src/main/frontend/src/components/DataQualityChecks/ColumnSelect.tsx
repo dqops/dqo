@@ -14,13 +14,15 @@ interface IColumnSelectProps {
   value?: string;
   tooltipText?: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const ColumnSelect = ({
   label,
   value,
   tooltipText,
-  onChange
+  onChange,
+  disabled
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
 
@@ -45,6 +47,7 @@ const ColumnSelect = ({
   return (
     <div>
       <Select
+        disabled={disabled}
         label={label}
         value={value}
         tooltipText={tooltipText}
