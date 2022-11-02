@@ -288,3 +288,57 @@ export const updateConnectionLabels =
       dispatch(updateConnectionLabelsFailed(err));
     }
   };
+
+export const getConnectionDefaultDimensionsRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS
+});
+
+export const getConnectionDefaultDimensionsSuccess = (data: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS,
+  data
+});
+
+export const getConnectionDefaultDimensionsFailed = (error: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+  error
+});
+
+export const getConnectionDefaultDimensions =
+  (connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionDefaultDimensionsRequest());
+    try {
+      const res = await ConnectionApiClient.getConnectionDefaultDimensions(
+        connectionName
+      );
+      dispatch(getConnectionDefaultDimensionsSuccess(res.data));
+    } catch (err) {
+      dispatch(getConnectionDefaultDimensionsFailed(err));
+    }
+  };
+
+export const updateConnectionDefaultDimensionsRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS
+});
+
+export const updateConnectionDefaultDimensionsSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS
+});
+
+export const updateConnectionDefaultDimensionsFailed = (error: any) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+  error
+});
+
+export const updateConnectionDefaultDimensions =
+  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+    dispatch(updateConnectionDefaultDimensionsRequest());
+    try {
+      await ConnectionApiClient.updateConnectionDefaultDimensions(
+        connectionName,
+        data
+      );
+      dispatch(updateConnectionDefaultDimensionsSuccess());
+    } catch (err) {
+      dispatch(updateConnectionDefaultDimensionsFailed(err));
+    }
+  };

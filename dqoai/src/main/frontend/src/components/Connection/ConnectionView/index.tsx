@@ -9,6 +9,7 @@ import TimeSeriesView from '../TimeSeriesView';
 import {
   CommentSpec,
   ConnectionBasicModel,
+  DimensionsConfigurationSpec,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec
 } from '../../../api';
@@ -17,11 +18,13 @@ import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
   getConnectionComments,
+  getConnectionDefaultDimensions,
   getConnectionLabels,
   getConnectionSchedule,
   getConnectionTime,
   updateConnectionBasic,
   updateConnectionComments,
+  updateConnectionDefaultDimensions,
   updateConnectionLabels,
   updateConnectionSchedule,
   updateConnectionTime
@@ -33,6 +36,7 @@ import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
 import { useTabs } from '../../../contexts/tabContext';
+import DimensionsView from '../DimensionsView';
 
 interface IConnectionViewProps {
   node: ITreeNode;
@@ -62,6 +66,10 @@ const tabs = [
   {
     label: 'Schemas',
     value: 'schemas'
+  },
+  {
+    label: 'Dimensions',
+    value: 'dimensions'
   }
 ];
 
@@ -73,7 +81,8 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     timeSeries,
     comments,
     labels,
-    isUpdating
+    isUpdating,
+    defaultDimensions
   } = useSelector((state: IRootState) => state.connection);
   const [updatedConnectionBasic, setUpdatedConnectionBasic] =
     useState<ConnectionBasicModel>();
@@ -83,6 +92,8 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const [updatedDimensions, setUpdatedDimensions] =
+    useState<DimensionsConfigurationSpec>();
   const dispatch = useActionDispatch();
   const connectionName = useMemo(() => node.module, [node]);
   const history = useHistory();
@@ -108,17 +119,23 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   }, [labels]);
 
   useEffect(() => {
+    setUpdatedDimensions(defaultDimensions);
+  }, [defaultDimensions]);
+
+  useEffect(() => {
     setUpdatedConnectionBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
+    setUpdatedDimensions(undefined);
 
     dispatch(getConnectionBasic(connectionName));
     dispatch(getConnectionSchedule(connectionName));
     dispatch(getConnectionTime(connectionName));
     dispatch(getConnectionComments(connectionName));
     dispatch(getConnectionLabels(connectionName));
+    dispatch(getConnectionDefaultDimensions(connectionName));
 
     const searchQuery = qs.stringify({
       connection: connectionName
@@ -149,6 +166,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     if (activeTab === 'labels') {
       await dispatch(updateConnectionLabels(connectionName, updatedLabels));
       await dispatch(getConnectionLabels(connectionName));
+    }
+    if (activeTab === 'dimensions') {
+      await dispatch(
+        updateConnectionDefaultDimensions(connectionName, updatedDimensions)
+      );
+      await dispatch(getConnectionDefaultDimensions(connectionName));
     }
   };
 
@@ -192,6 +215,14 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     }
     if (activeTab === 'schemas') {
       return <SchemasView connectionName={connectionName} />;
+    }
+    if (activeTab === 'dimensions') {
+      return (
+        <DimensionsView
+          dimensions={updatedDimensions}
+          onChange={setUpdatedDimensions}
+        />
+      );
     }
     return null;
   };

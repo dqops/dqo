@@ -2,6 +2,7 @@ import {
   CommentSpec,
   ConnectionBasicModel,
   ConnectionModel,
+  DimensionsConfigurationSpec,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec
 } from '../../api';
@@ -17,6 +18,7 @@ export interface IConnectionState {
   schedule?: RecurringScheduleSpec;
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
+  defaultDimensions?: DimensionsConfigurationSpec;
   labels: string[];
 }
 
@@ -225,6 +227,41 @@ const connectionReducer = (state = initialState, action: any) => {
         error: null
       };
     case CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        defaultDimensions: action.data,
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_ERROR:
       return {
         ...state,
         isUpdating: false,
