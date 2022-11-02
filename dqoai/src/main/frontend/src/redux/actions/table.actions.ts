@@ -421,3 +421,63 @@ export const updateTableChecksUI =
       dispatch(updateTableChecksUIFailed(err));
     }
   };
+
+export const getTableDimensionsRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DIMENSIONS
+});
+
+export const getTableDimensionsSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_SUCCESS,
+  data
+});
+
+export const getTableDimensionsFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_ERROR,
+  error
+});
+
+export const getTableDimensions =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableDimensionsRequest());
+    try {
+      const res = await TableApiClient.getTableDimensions(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableDimensionsSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableDimensionsFailed(err));
+    }
+  };
+
+export const updateTableDimensionsRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS
+});
+
+export const updateTableDimensionsSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_SUCCESS
+});
+
+export const updateTableDimensionsFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_ERROR,
+  error
+});
+
+export const updateTableDimensions =
+  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateTableDimensionsRequest());
+    try {
+      await TableApiClient.updateTableDimensions(
+        connectionName,
+        schemaName,
+        tableName,
+        data
+      );
+      dispatch(updateTableDimensionsSuccess());
+    } catch (err) {
+      dispatch(updateTableDimensionsFailed(err));
+    }
+  };

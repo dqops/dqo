@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   CommentSpec,
+  DimensionsConfigurationSpec,
   RecurringScheduleSpec,
   TableBasicModel,
   TimeSeriesConfigurationSpec,
@@ -20,12 +21,14 @@ import {
   getTableBasic,
   getTableChecksUI,
   getTableComments,
+  getTableDimensions,
   getTableLabels,
   getTableSchedule,
   getTableTime,
   updateTableBasic,
   updateTableChecksUI,
   updateTableComments,
+  updateTableDimensions,
   updateTableLabels,
   updateTableSchedule,
   updateTableTime
@@ -36,6 +39,7 @@ import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
 import { useTabs } from '../../../contexts/tabContext';
+import DimensionsView from '../DimensionsView';
 
 interface ITableViewProps {
   node: ITreeNode;
@@ -65,6 +69,10 @@ const tabs = [
   {
     label: 'Columns',
     value: 'columns'
+  },
+  {
+    label: 'Dimensions',
+    value: 'dimensions'
   }
 ];
 
@@ -78,7 +86,8 @@ const TableView = ({ node }: ITableViewProps) => {
     comments,
     labels,
     checksUI,
-    isUpdating
+    isUpdating,
+    dimensions
   } = useSelector((state: IRootState) => state.table);
   const { tabMap, setTabMap } = useTabs();
 
@@ -94,6 +103,8 @@ const TableView = ({ node }: ITableViewProps) => {
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedDimensions, setUpdatedDimensions] =
+    useState<DimensionsConfigurationSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -121,11 +132,16 @@ const TableView = ({ node }: ITableViewProps) => {
   }, [checksUI]);
 
   useEffect(() => {
+    setUpdatedDimensions(dimensions);
+  }, [dimensions]);
+
+  useEffect(() => {
     setUpdatedTableBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
+    setUpdatedDimensions(undefined);
 
     dispatch(getTableBasic(connectionName, schemaName, tableName));
     dispatch(getTableSchedule(connectionName, schemaName, tableName));
@@ -133,6 +149,7 @@ const TableView = ({ node }: ITableViewProps) => {
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
     dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    dispatch(getTableDimensions(connectionName, schemaName, tableName));
 
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -204,6 +221,17 @@ const TableView = ({ node }: ITableViewProps) => {
         )
       );
       await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'dimensions') {
+      await dispatch(
+        updateTableDimensions(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedDimensions
+        )
+      );
+      await dispatch(getTableDimensions(connectionName, schemaName, tableName));
     }
   };
 
@@ -292,6 +320,14 @@ const TableView = ({ node }: ITableViewProps) => {
             connectionName={connectionName}
             schemaName={schemaName}
             tableName={node.module}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'dimensions' && (
+          <DimensionsView
+            dimensions={updatedDimensions}
+            onChange={setUpdatedDimensions}
           />
         )}
       </div>

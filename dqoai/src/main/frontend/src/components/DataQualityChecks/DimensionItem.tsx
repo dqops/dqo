@@ -11,13 +11,21 @@ interface IDimensionItemProps {
   dimension?: DimensionMappingSpec;
   idx: number;
   onChange: (dimension: DimensionMappingSpec) => void;
+  scope?: string;
 }
 
-const DimensionItem = ({ idx, onChange, dimension }: IDimensionItemProps) => {
+const DimensionItem = ({
+  idx,
+  onChange,
+  dimension,
+  scope
+}: IDimensionItemProps) => {
   return (
     <div className="mb-4 last:mb-0">
       <div className="flex justify-between items-center space-x-6">
-        <div className="text-sm font-semibold flex-1">{`Dimension ${idx + 1}`}</div>
+        <div className="text-sm font-semibold flex-1">{`Dimension ${
+          idx + 1
+        }`}</div>
         <div className="flex-1">
           <RadioButton
             checked={dimension?.source === undefined}
@@ -81,6 +89,7 @@ const DimensionItem = ({ idx, onChange, dimension }: IDimensionItemProps) => {
                 column: value
               })
             }
+            scope={scope}
           />
         </div>
       </div>

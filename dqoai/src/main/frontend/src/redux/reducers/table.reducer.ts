@@ -5,7 +5,8 @@ import {
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec,
   TableCheckCategoriesSpec,
-  UIAllChecksModel
+  UIAllChecksModel,
+  DimensionsConfigurationSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -22,6 +23,7 @@ export interface ITableState {
   labels: string[];
   checks?: TableCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
+  dimensions?: DimensionsConfigurationSpec;
 }
 
 const initialState: ITableState = {
@@ -263,6 +265,41 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_DIMENSIONS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_DIMENSIONS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dimensions: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_DIMENSIONS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
         error: action.error
       };
     default:
