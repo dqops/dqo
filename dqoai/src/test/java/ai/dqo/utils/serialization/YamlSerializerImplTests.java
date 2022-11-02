@@ -65,6 +65,15 @@ public class YamlSerializerImplTests extends BaseTest {
     }
 
     @Test
+    void deserialize_whenYamlGivenAndObjectImplementsDeserializableAware_thenObjectIsNotifiedOfDeserialization() {
+        YamlTestable deserialized = this.sut.deserialize("field1: abc\nint1: 10\n", YamlTestable.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertEquals("abc", deserialized.getField1());
+        Assertions.assertEquals(10, deserialized.getInt1());
+        Assertions.assertTrue(deserialized.wasOnDeserializedCalled);
+    }
+
+    @Test
     void deserialize_whenUndeclaredPropertyInYaml_thenThrowsException() throws Exception {
         YamlSerializationException yamlSerializationException = Assertions.assertThrows(YamlSerializationException.class, () -> {
             YamlTestable deserialized = this.sut.deserialize("field1: abc\nint1: 10\nmissing: 10\n", YamlTestable.class);

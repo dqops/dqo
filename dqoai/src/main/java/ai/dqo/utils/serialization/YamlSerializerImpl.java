@@ -56,6 +56,7 @@ public class YamlSerializerImpl implements YamlSerializer {
 		this.mapper.registerModule(new JavaTimeModule());
         this.mapper.registerModule(new Jdk8Module());
         this.mapper.registerModule(new BlackbirdModule());
+        this.mapper.registerModule(new DeserializationAwareModule());  // our custom module to notify objects that they were deserialized
         this.mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
