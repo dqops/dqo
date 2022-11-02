@@ -61,9 +61,8 @@ public class YamlSerializerImpl implements YamlSerializer {
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
 
-        // Fail fast and reject invalid yamls, we have a validating reader
-		this.mapper.enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		this.mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		this.mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
     }
 

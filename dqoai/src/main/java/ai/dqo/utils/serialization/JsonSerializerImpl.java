@@ -51,9 +51,8 @@ public class JsonSerializerImpl implements JsonSerializer {
 		this.mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 
-        // Fail fast and reject invalid jsons, we have a validating reader
-		this.mapper.enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		this.mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		this.mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
     }
 
