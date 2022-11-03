@@ -36,6 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class ColumnCompletenessMissingDatesCountCheckSpec extends AbstractCheckSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnCompletenessMissingDatesCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {

@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class TableRelevanceMovingWeekAverageSensorParametersSpec extends AbstractTableSensorParametersSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableRelevanceMovingWeekAverageSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {

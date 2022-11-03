@@ -35,6 +35,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated  // needs serious refactoring
 public class TableTimelinessCurrentDelaySensorParametersSpec extends AbstractColumnSensorParametersSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessCurrentDelaySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {

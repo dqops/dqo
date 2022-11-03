@@ -20,6 +20,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated  // needs serious refactoring
 public class TableTimelinessAverageDelaySensorParametersSpec extends AbstractColumnSensorParametersSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessAverageDelaySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {

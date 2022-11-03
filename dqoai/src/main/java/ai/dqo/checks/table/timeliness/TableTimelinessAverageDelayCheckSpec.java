@@ -22,6 +22,7 @@ import java.util.Objects;
  */
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class TableTimelinessAverageDelayCheckSpec extends AbstractCheckSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessAverageDelayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {

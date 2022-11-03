@@ -71,10 +71,12 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
     public abstract R getLow();
 
     @JsonPropertyDescription("Time window configuration for rules that require historic data for evaluation. The time window is configured as the number of previous time periods that are required to evaluate a sensor. The time period granularity (day, hour, etc.) is configured as a time_series configuration on the sensor.")
+    @Deprecated  // only on custom sensors in the future
     private RuleTimeWindowSettingsSpec timeWindow;
 
     @JsonPropertyDescription("Disable the rule at all severity levels.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @Deprecated  // rule must be removed to be disabled
     private boolean disabled;
 
     /**

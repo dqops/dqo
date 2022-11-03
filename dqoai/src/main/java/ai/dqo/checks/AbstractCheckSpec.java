@@ -61,11 +61,13 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
     @JsonPropertyDescription("Data quality dimensions configuration for a sensor query. When a dimension configuration is assigned at a sensor level, it overrides any dimension settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private DimensionsConfigurationSpec dimensionsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
@@ -84,6 +86,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * Returns the time series configuration for this sensor.
      * @return Time series configuration.
      */
+    @Deprecated
     public TimeSeriesConfigurationSpec getTimeSeriesOverride() {
         return timeSeriesOverride;
     }
@@ -92,6 +95,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * Sets a new time series configuration for this sensor.
      * @param timeSeriesOverride New time series configuration.
      */
+    @Deprecated
     public void setTimeSeriesOverride(TimeSeriesConfigurationSpec timeSeriesOverride) {
         setDirtyIf(!Objects.equals(this.timeSeriesOverride, timeSeriesOverride));
         this.timeSeriesOverride = timeSeriesOverride;
@@ -102,6 +106,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * Returns the data quality measure dimensions configuration for the sensor.
      * @return Dimension configuration.
      */
+    @Deprecated
     public DimensionsConfigurationSpec getDimensionsOverride() {
         return dimensionsOverride;
     }
@@ -110,6 +115,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * Returns the dimension configuration for the sensor.
      * @param dimensionsOverride Dimension configuration.
      */
+    @Deprecated
     public void setDimensionsOverride(DimensionsConfigurationSpec dimensionsOverride) {
         setDirtyIf(!Objects.equals(this.dimensionsOverride, dimensionsOverride));
         this.dimensionsOverride = dimensionsOverride;
@@ -176,6 +182,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * @return Rule set.
      */
     @JsonIgnore
+    @Deprecated
     public abstract AbstractRuleSetSpec getRuleSet();
 
     /**
@@ -235,6 +242,7 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * @param minTimePeriod Reference timestamp of the earliest sensor reading that will be evaluated by rules.
      * @return <code>minTimePeriod</code> when no time window is required or a date that is earlier to fill the time window with historic sensor readings.
      */
+    @Deprecated() // the time window will not be taken from the rule, but from the definition of the rule
     public LocalDateTime findEarliestRequiredHistoricReadingDate(TimeSeriesGradient timeSeriesGradient, LocalDateTime minTimePeriod) {
         LocalDateTime minRequiredDateTime = minTimePeriod;
         List<AbstractRuleThresholdsSpec<?>> enabledRules = getRuleSet().getEnabledRules();
