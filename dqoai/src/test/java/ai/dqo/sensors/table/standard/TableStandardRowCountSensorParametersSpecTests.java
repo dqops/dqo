@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.table.validity;
+package ai.dqo.sensors.table.standard;
 
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
+import ai.dqo.sensors.table.validity.TableValidityRowCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@Deprecated
-public class TableValidityRowCountSensorParametersSpecTests extends BaseTest {
-    private TableValidityRowCountSensorParametersSpec sut;
+public class TableStandardRowCountSensorParametersSpecTests extends BaseTest {
+    private TableStandardRowCountSensorParametersSpec sut;
 
     /**
      * Called before each test.
@@ -38,7 +38,7 @@ public class TableValidityRowCountSensorParametersSpecTests extends BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new TableValidityRowCountSensorParametersSpec();
+		this.sut = new TableStandardRowCountSensorParametersSpec();
     }
 
     @Test
@@ -51,6 +51,6 @@ public class TableValidityRowCountSensorParametersSpecTests extends BaseTest {
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/validity/row_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/standard/row_count", this.sut.getSensorDefinitionName());
     }
 }

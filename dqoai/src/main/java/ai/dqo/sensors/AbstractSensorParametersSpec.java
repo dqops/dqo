@@ -120,7 +120,7 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
     }
 
     /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
+     * This method should be overridden in derived classes and should check if there are any simple fields (String, integer, double, etc)
      * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
      * This method should return true if there is at least one field that must be serialized to YAML.
      * It may return false only if:

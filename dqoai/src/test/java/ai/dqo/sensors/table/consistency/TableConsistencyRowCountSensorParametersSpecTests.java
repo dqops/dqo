@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Deprecated
 public class TableConsistencyRowCountSensorParametersSpecTests extends BaseTest {
     private TableConsistencyRowCountSensorParametersSpec sut;
 

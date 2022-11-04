@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Deprecated
 public class TableTimelinessAverageDelaySensorParametersSpecTests extends BaseTest {
     private TableTimelinessAverageDelaySensorParametersSpec sut;
 
