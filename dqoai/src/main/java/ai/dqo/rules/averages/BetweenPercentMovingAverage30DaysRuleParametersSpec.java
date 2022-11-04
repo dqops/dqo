@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenPctMovingAverage30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BetweenPctMovingAverage30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class BetweenPercentMovingAverage30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentMovingAverage30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -42,7 +42,7 @@ public class BetweenPctMovingAverage30DaysRuleParametersSpec extends AbstractRul
     /**
      * Default constructor.
      */
-    public BetweenPctMovingAverage30DaysRuleParametersSpec() {
+    public BetweenPercentMovingAverage30DaysRuleParametersSpec() {
         this.maxPercentAbove = null;
         this.maxPercentBelow = null;
     }
@@ -105,6 +105,6 @@ public class BetweenPctMovingAverage30DaysRuleParametersSpec extends AbstractRul
      */
     @Override
     public String getRuleDefinitionName() {
-        return "averages/between_pct_moving_average_30_days";
+        return "averages/between_percent_moving_average_30_days";
     }
 }

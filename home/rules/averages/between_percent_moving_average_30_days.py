@@ -20,7 +20,7 @@ import scipy
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenPctMovingAverage30DaysRuleParametersSpec:
+class BetweenPercentMovingAverage30DaysRuleParametersSpec:
     max_percent_above: float
     max_percent_below: float
 
@@ -40,7 +40,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenPctMovingAverage30DaysRuleParametersSpec
+    parameters: BetweenPercentMovingAverage30DaysRuleParametersSpec
     time_period_local: datetime
     previous_readings: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
