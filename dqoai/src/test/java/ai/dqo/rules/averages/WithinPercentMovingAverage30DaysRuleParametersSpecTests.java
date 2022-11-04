@@ -36,8 +36,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class WithinPctMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
-    private WithinPctMovingAverage30DaysRuleParametersSpec sut;
+public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
+    private WithinPercentMovingAverage30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readingTimestamp;
     private Double[] sensorReadings;
@@ -56,7 +56,7 @@ public class WithinPctMovingAverage30DaysRuleParametersSpecTests extends BaseTes
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-        this.sut = new WithinPctMovingAverage30DaysRuleParametersSpec();
+        this.sut = new WithinPercentMovingAverage30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
