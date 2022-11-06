@@ -15,7 +15,7 @@
  */
 package ai.dqo.checks.table.timeliness;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -39,8 +39,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @Deprecated
-public class TableTimelinessCurrentDelayCheckSpec extends AbstractCheckSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessCurrentDelayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableTimelinessCurrentDelayCheckSpec extends AbstractCheckDeprecatedSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessCurrentDelayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckDeprecatedSpec.FIELDS) {
         {
             put("parameters", o -> o.parameters);
             put("rules", o -> o.rules);

@@ -16,7 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -42,7 +42,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     TableSpec tableSpec;
     ColumnSpecMap columnSpecMap;
     ColumnSpec columnSpec;
-    AbstractCheckSpec abstractCheckSpec;
+    AbstractCheckDeprecatedSpec abstractCheckSpec;
     CheckSearchFilters checkSearchFilters;
     UserHomeContext userHomeContext;
 

@@ -15,7 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -408,14 +408,14 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of all table level data quality checks on a table", response = TableCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of all table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableAdHocCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableCheckCategoriesSpec>> getTableChecks(
+    public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -435,7 +435,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
 
         return new ResponseEntity<>(Mono.just(checks), HttpStatus.OK); // 200
     }
@@ -475,9 +475,9 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
         if (checks == null) {
-            checks = new TableCheckCategoriesSpec();
+            checks = new TableAdHocCheckCategoriesSpec();
         }
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
 
@@ -968,7 +968,7 @@ public class TablesController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Configuration of table level data quality checks to store or an empty object to remove all data quality checks on the table level (column level checks are preserved).")
-            @RequestBody Optional<TableCheckCategoriesSpec> tableCheckCategoriesSpec) {
+            @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -995,7 +995,7 @@ public class TablesController {
         if (tableCheckCategoriesSpec.isPresent()) {
             tableSpec.setChecks(tableCheckCategoriesSpec.get());
         } else {
-            tableSpec.setChecks(new TableCheckCategoriesSpec()); // it is never empty...
+            tableSpec.setChecks(new TableAdHocCheckCategoriesSpec()); // it is never empty...
         }
         userHomeContext.flush();
 

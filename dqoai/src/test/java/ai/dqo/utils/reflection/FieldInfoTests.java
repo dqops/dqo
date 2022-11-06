@@ -16,7 +16,7 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -118,10 +118,10 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsFilled_thenReturnsExistingValue() throws Exception {
-        Field field = TableCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableCheckCategoriesSpec target = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
         BuiltInTableValidityChecksSpec expected = new BuiltInTableValidityChecksSpec();
         target.setValidity(expected);
 
@@ -132,10 +132,10 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsNull_thenCreatesNewObjectThatIsNotStored() throws Exception {
-        Field field = TableCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableCheckCategoriesSpec target = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
         target.setValidity(null);
         BuiltInTableValidityChecksSpec result = (BuiltInTableValidityChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);

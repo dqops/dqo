@@ -15,7 +15,9 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -52,6 +54,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("checks", o -> o.checks);
+            put("checkpoints", o -> o.checkpoints);
+            put("partitioned_checks", o -> o.partitionedChecks);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -100,7 +104,17 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableCheckCategoriesSpec checks = new TableCheckCategoriesSpec();
+    private TableAdHocCheckCategoriesSpec checks = new TableAdHocCheckCategoriesSpec();
+
+    @JsonPropertyDescription("Configuration of table level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
+
+    @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TablePartitionedChecksRootSpec partitionedChecks = new TablePartitionedChecksRootSpec();
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -249,7 +263,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Returns configuration of enabled table level data quality checks.
      * @return Table level data quality checks.
      */
-    public TableCheckCategoriesSpec getChecks() {
+    public TableAdHocCheckCategoriesSpec getChecks() {
         return checks;
     }
 
@@ -257,10 +271,46 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Sets a new configuration of table level data quality checks.
      * @param checks New checks configuration.
      */
-    public void setChecks(TableCheckCategoriesSpec checks) {
+    public void setChecks(TableAdHocCheckCategoriesSpec checks) {
 		setDirtyIf(!Objects.equals(this.checks, checks));
         this.checks = checks;
 		propagateHierarchyIdToField(checks, "checks");
+    }
+
+    /**
+     * Returns configuration of enabled table level checkpoints.
+     * @return Table level checkpoints.
+     */
+    public TableCheckpointsSpec getCheckpoints() {
+        return checkpoints;
+    }
+
+    /**
+     * Sets a new configuration of table level data quality checkpoints.
+     * @param checkpoints New checkpoints configuration.
+     */
+    public void setCheckpoints(TableCheckpointsSpec checkpoints) {
+        setDirtyIf(!Objects.equals(this.checkpoints, checkpoints));
+        this.checkpoints = checkpoints;
+        propagateHierarchyIdToField(checkpoints, "checkpoints");
+    }
+
+    /**
+     * Returns configuration of enabled table level date/time partitioned checks.
+     * @return Table level date/time partitioned checks.
+     */
+    public TablePartitionedChecksRootSpec getPartitionedChecks() {
+        return partitionedChecks;
+    }
+
+    /**
+     * Sets a new configuration of table level date/time partitioned data quality checkpoints.
+     * @param partitionedChecks New configuration of date/time partitioned checks.
+     */
+    public void setPartitionedChecks(TablePartitionedChecksRootSpec partitionedChecks) {
+        setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
+        this.partitionedChecks = partitionedChecks;
+        propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
     }
 
     /**
@@ -382,6 +432,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.labels = null;
             cloned.owner = null;
@@ -415,6 +467,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
                 cloned.target = cloned.target.clone();
             }
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
             cloned.dimensions = null;
@@ -441,6 +495,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
                 cloned.target = cloned.target.clone();
             }
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
             cloned.dimensions = null;

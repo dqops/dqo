@@ -15,7 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -464,14 +464,14 @@ public class ColumnsController {
      * @return Column level data quality checks on a column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
-    @ApiOperation(value = "getColumnChecks", notes = "Return the configuration of column level data quality checks on a column", response = ColumnCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnChecks", notes = "Return the configuration of column level data quality checks on a column", response = ColumnAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of column level data quality checks on a column returned", response = ColumnCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of column level data quality checks on a column returned", response = ColumnAdHocCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnCheckCategoriesSpec>> getColumnChecks(
+    public ResponseEntity<Mono<ColumnAdHocCheckCategoriesSpec>> getColumnChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
@@ -497,7 +497,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckCategoriesSpec checks = columnSpec.getChecks();
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
 
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
@@ -544,9 +544,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckCategoriesSpec checks = columnSpec.getChecks();
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
         if (checks == null) {
-            checks = new ColumnCheckCategoriesSpec();
+            checks = new ColumnAdHocCheckCategoriesSpec();
         }
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
 
@@ -1103,7 +1103,7 @@ public class ColumnsController {
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
             @Parameter(description = "Configuration of column level data quality checks to configure on a column or an empty object to clear the list of assigned data quality checks on the column")
-            @RequestBody Optional<ColumnCheckCategoriesSpec> columnCheckCategoriesSpec) {
+            @RequestBody Optional<ColumnAdHocCheckCategoriesSpec> columnCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||

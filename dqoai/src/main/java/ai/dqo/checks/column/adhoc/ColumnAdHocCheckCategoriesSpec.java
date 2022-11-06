@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column;
+package ai.dqo.checks.column.adhoc;
 
-import ai.dqo.checks.AbstractCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
@@ -39,10 +39,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategoriesSpec.FIELDS) {
+public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-			put("validity", o -> o.validity);
+            put("nulls", o -> o.nulls);
+            put("validity", o -> o.validity);
 			put("uniqueness", o -> o.uniqueness);
 //            put("completeness", o -> o.completeness);
             put("consistency", o -> o.consistency);
@@ -50,14 +51,21 @@ public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
         }
     };
 
+    @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocNullsChecksSpec nulls;
+
     @JsonPropertyDescription("Configuration of validity checks on a column level. Validity checks verify hard rules on the data using static rules like valid column value ranges.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated  // to be modified
     private BuiltInColumnValidityChecksSpec validity;
 
     @JsonPropertyDescription("Configuration of uniqueness checks on a table level. Uniqueness checks verify that the column values are unique or the percentage of duplicates is acceptable.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private BuiltInColumnUniquenessChecksSpec uniqueness;
 
 //    //TODO add description
@@ -69,14 +77,33 @@ public class ColumnCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
     @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private CustomColumnCheckSpecMap custom;
 
     //TODO add description
     @JsonPropertyDescription("Configuration of consistency checks on a column level. Consistency checks verify...")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private BuiltInColumnConsistencyChecksSpec consistency;
 
+    /**
+     * Returns the nulls check configuration on a column level.
+     * @return Nulls check configuration.
+     */
+    public ColumnAdHocNullsChecksSpec getNulls() {
+        return nulls;
+    }
+
+    /**
+     * Sets the nulls check configuration on a column level.
+     * @param nulls New nulls checks configuration.
+     */
+    public void setNulls(ColumnAdHocNullsChecksSpec nulls) {
+        this.setDirtyIf(!Objects.equals(this.nulls, nulls));
+        this.nulls = nulls;
+        this.propagateHierarchyIdToField(nulls, "nulls");
+    }
 
     /**
      * Returns the validity check configuration on a column level.

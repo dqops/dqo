@@ -1,6 +1,6 @@
 package ai.dqo.rest.models.checks.mapping;
 
-import ai.dqo.checks.AbstractCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 
 /**
@@ -13,5 +13,5 @@ public interface UiToSpecCheckMappingService {
      * @param model               Data quality check UI model with the updates.
      * @param checkCategoriesSpec The target check categories spec object that will be updated.
      */
-    void updateAllChecksSpecs(UIAllChecksModel model, AbstractCheckCategoriesSpec checkCategoriesSpec);
+    void updateAllChecksSpecs(UIAllChecksModel model, AbstractRootChecksContainerSpec checkCategoriesSpec);
 }

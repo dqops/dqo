@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
@@ -180,7 +180,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 									 CheckExecutionProgressListener progressListener,
 									 boolean dummySensorExecution,
 									 CheckExecutionSummary checkExecutionSummary) {
-        Collection<AbstractCheckSpec> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
+        Collection<AbstractCheckDeprecatedSpec> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
             checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
@@ -201,7 +201,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         int mediumSeverityAlerts = 0;
         int highSeverityAlerts = 0;
 
-        for (AbstractCheckSpec checkSpec : checks) {
+        for (AbstractCheckDeprecatedSpec checkSpec : checks) {
             List<AbstractRuleThresholdsSpec<?>> enabledRules = checkSpec.getRuleSet().getEnabledRules();
             if (enabledRules.size() == 0) {
                 // no enabled rules, skipping the check
@@ -290,7 +290,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param checkSpec Check specification.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckSpec checkSpec) {
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckDeprecatedSpec checkSpec) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);

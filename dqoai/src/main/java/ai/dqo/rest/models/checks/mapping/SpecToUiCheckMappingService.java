@@ -15,7 +15,7 @@
  */
 package ai.dqo.rest.models.checks.mapping;
 
-import ai.dqo.checks.AbstractCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 
 /**
@@ -29,5 +29,5 @@ public interface SpecToUiCheckMappingService {
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.
      */
-    UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkCategoriesSpec);
+    UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec);
 }

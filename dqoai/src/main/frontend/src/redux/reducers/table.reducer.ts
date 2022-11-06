@@ -4,7 +4,7 @@ import {
   TableModel,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec,
-  TableCheckCategoriesSpec,
+  TableAdHocCheckCategoriesSpec,
   UIAllChecksModel,
   DimensionsConfigurationSpec
 } from '../../api';
@@ -21,7 +21,7 @@ export interface ITableState {
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
   labels: string[];
-  checks?: TableCheckCategoriesSpec;
+  checks?: TableAdHocCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
   dimensions?: DimensionsConfigurationSpec;
 }

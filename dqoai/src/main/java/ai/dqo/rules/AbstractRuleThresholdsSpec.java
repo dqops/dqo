@@ -136,17 +136,17 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
         }
 
         R high = getHigh();
-        if (high != null && !high.isDisabled()) {
+        if (high != null) {
             return true;
         }
 
         R medium = getMedium();
-        if (medium != null && !medium.isDisabled()) {
+        if (medium != null) {
             return true;
         }
 
         R low = getLow();
-		return low != null && !low.isDisabled();
+		return low != null;
 	}
 
     /**

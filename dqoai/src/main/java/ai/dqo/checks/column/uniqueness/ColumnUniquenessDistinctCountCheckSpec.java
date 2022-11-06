@@ -15,7 +15,7 @@
  */
 package ai.dqo.checks.column.uniqueness;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.checks.column.validity.ColumnValidityNotNullCountRulesSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -40,8 +40,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @Deprecated
-public class ColumnUniquenessDistinctCountCheckSpec extends AbstractCheckSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDistinctCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnUniquenessDistinctCountCheckSpec extends AbstractCheckDeprecatedSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDistinctCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckDeprecatedSpec.FIELDS) {
         {
 			put("parameters", o -> o.parameters);
 			put("rules", o -> o.rules);

@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -38,6 +38,6 @@ public interface SensorExecutionRunParametersFactory {
     SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                         TableSpec table,
                                                         ColumnSpec column,
-                                                        AbstractCheckSpec check,
+                                                        AbstractCheckDeprecatedSpec check,
                                                         ProviderDialectSettings dialectSettings);
 }

@@ -16,7 +16,7 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.validity.TableValidityRowCountCheckSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,7 +132,7 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
-        TableCheckCategoriesSpec defaultChecks = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec defaultChecks = new TableAdHocCheckCategoriesSpec();
         defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
 		this.sut.setChecks(defaultChecks);
         Assertions.assertEquals(this.sut.getChecks(), defaultChecks);
@@ -141,7 +141,7 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
-        TableCheckCategoriesSpec defaultChecks = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec defaultChecks = new TableAdHocCheckCategoriesSpec();
         defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
 		this.sut.setChecks(defaultChecks);
         Assertions.assertTrue(this.sut.isDirty());

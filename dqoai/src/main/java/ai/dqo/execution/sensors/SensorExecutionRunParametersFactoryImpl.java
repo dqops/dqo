@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
@@ -58,14 +58,14 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
 															   TableSpec table,
 															   ColumnSpec column,
-															   AbstractCheckSpec check,
+															   AbstractCheckDeprecatedSpec check,
 															   ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
         HierarchyId checkHierarchyId = check.getHierarchyId();
         AbstractSensorParametersSpec sensorParameters = check.getSensorParameters().expandAndTrim(this.secretValueProvider);
-        AbstractCheckSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
+        AbstractCheckDeprecatedSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
         if (timeSeries == null && expandedColumn != null) {

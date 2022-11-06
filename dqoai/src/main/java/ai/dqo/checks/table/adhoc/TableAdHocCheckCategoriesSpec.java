@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table;
+package ai.dqo.checks.table.adhoc;
 
-import ai.dqo.checks.AbstractCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,9 +38,10 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategoriesSpec.FIELDS) {
+public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
+            put("standard", o -> o.standard);
             put("validity", o -> o.validity);
             put("consistency", o -> o.consistency);
             put("timeliness", o -> o.timeliness);
@@ -49,25 +49,52 @@ public class TableCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
         }
     };
 
+    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAdHocStandardChecksSpec standard;
+
     @JsonPropertyDescription("Configuration of validity checks on a table level. Validity checks verify hard rules on the data using static rules, like a minimum row count.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private BuiltInTableValidityChecksSpec validity = new BuiltInTableValidityChecksSpec();
 
     @JsonPropertyDescription("Configuration of consistency checks on a table level. Consistency checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
 
     @JsonPropertyDescription("Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private BuiltInTableTimelinessChecksSpec timeliness = new BuiltInTableTimelinessChecksSpec();
 
     @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private CustomTableCheckSpecMap custom;
+
+    /**
+     * Returns the standard check configuration on a table level.
+     * @return Standard check configuration.
+     */
+    public TableAdHocStandardChecksSpec getStandard() {
+        return standard;
+    }
+
+    /**
+     * Sets the standard check configuration on a table level.
+     * @param standard New standard checks configuration.
+     */
+    public void setStandard(TableAdHocStandardChecksSpec standard) {
+        this.setDirtyIf(!Objects.equals(this.standard, standard));
+        this.standard = standard;
+        this.propagateHierarchyIdToField(standard, "standard");
+    }
 
     /**
      * Returns the validity check configuration on a table level.
@@ -149,16 +176,5 @@ public class TableCheckCategoriesSpec extends AbstractCheckCategoriesSpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Calls a visitor (using a visitor design pattern) that returns a result.
-     *
-     * @param visitor   Visitor instance.
-     * @param parameter Additional parameter that will be passed back to the visitor.
-     */
-    @Override
-    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return visitor.accept(this, parameter);
     }
 }

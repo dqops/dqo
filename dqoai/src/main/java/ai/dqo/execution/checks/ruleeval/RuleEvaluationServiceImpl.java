@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
@@ -66,7 +66,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      * @return Rule evaluation results as a table.
      */
     public RuleEvaluationResult evaluateRules(CheckExecutionContext checkExecutionContext,
-											  AbstractCheckSpec checkSpec,
+											  AbstractCheckDeprecatedSpec checkSpec,
 											  SensorExecutionRunParameters sensorRunParameters,
 											  SensorNormalizedResult normalizedSensorResults,
 											  SensorReadingsSnapshot sensorReadingsSnapshot,

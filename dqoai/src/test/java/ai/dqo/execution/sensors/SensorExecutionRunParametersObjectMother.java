@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
@@ -58,7 +58,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableAndCheck(
 			UserHome userHome, String connectionName, String schemaName, String tableName,
-			AbstractCheckSpec checkSpec) {
+			AbstractCheckDeprecatedSpec checkSpec) {
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionWrapper.getSpec().getProviderType());
@@ -77,7 +77,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableAndCheck(
 			SampleTableMetadata sampleTableMetadata,
-			AbstractCheckSpec checkSpec) {
+			AbstractCheckDeprecatedSpec checkSpec) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
@@ -100,7 +100,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableColumnAndCheck(
 			UserHome userHome, String connectionName, String schemaName, String tableName, String columnName,
-			AbstractCheckSpec checkSpec) {
+			AbstractCheckDeprecatedSpec checkSpec) {
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
@@ -124,7 +124,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createForTableColumnAndCheck(
 			SampleTableMetadata sampleTableMetadata,
 			String columnName,
-			AbstractCheckSpec checkSpec) {
+			AbstractCheckDeprecatedSpec checkSpec) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();

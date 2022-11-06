@@ -15,7 +15,11 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -52,6 +56,8 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 			put("time_series_override", o -> o.timeSeriesOverride);
 			put("dimensions_override", o -> o.dimensionsOverride);
 			put("checks", o -> o.checks);
+            put("checkpoints", o -> o.checkpoints);
+            put("partitioned_checks", o -> o.partitionedChecks);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -79,7 +85,17 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCheckCategoriesSpec checks;
+    private ColumnAdHocCheckCategoriesSpec checks;
+
+    @JsonPropertyDescription("Configuration of column level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnCheckpointsSpec checkpoints = new ColumnCheckpointsSpec();
+
+    @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPartitionedChecksRootSpec partitionedChecks = new ColumnPartitionedChecksRootSpec();
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -184,7 +200,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Returns configuration of enabled column level data quality checks.
      * @return Column level data quality checks.
      */
-    public ColumnCheckCategoriesSpec getChecks() {
+    public ColumnAdHocCheckCategoriesSpec getChecks() {
         return checks;
     }
 
@@ -192,10 +208,46 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Sets a new configuration of column level data quality checks.
      * @param checks New checks configuration.
      */
-    public void setChecks(ColumnCheckCategoriesSpec checks) {
+    public void setChecks(ColumnAdHocCheckCategoriesSpec checks) {
 		setDirtyIf(!Objects.equals(this.checks, checks));
         this.checks = checks;
 		propagateHierarchyIdToField(checks, "checks");
+    }
+
+    /**
+     * Returns configuration of enabled column level checkpoints.
+     * @return Column level checkpoints.
+     */
+    public ColumnCheckpointsSpec getCheckpoints() {
+        return checkpoints;
+    }
+
+    /**
+     * Sets a new configuration of column level data quality checkpoints.
+     * @param checkpoints New checkpoints configuration.
+     */
+    public void setCheckpoints(ColumnCheckpointsSpec checkpoints) {
+        setDirtyIf(!Objects.equals(this.checkpoints, checkpoints));
+        this.checkpoints = checkpoints;
+        propagateHierarchyIdToField(checkpoints, "checkpoints");
+    }
+
+    /**
+     * Returns configuration of enabled column level date/time partitioned checks.
+     * @return Column level date/time partitioned checks.
+     */
+    public ColumnPartitionedChecksRootSpec getPartitionedChecks() {
+        return partitionedChecks;
+    }
+
+    /**
+     * Sets a new configuration of column level date/time partitioned data quality checkpoints.
+     * @param partitionedChecks New configuration of date/time partitioned checks.
+     */
+    public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
+        setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
+        this.partitionedChecks = partitionedChecks;
+        propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
     }
 
     /**
@@ -309,6 +361,16 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.checks = cloner.deepClone(cloned.checks);
             }
 
+            if (cloned.checkpoints != null) {
+                Cloner cloner = new Cloner();
+                cloned.checkpoints = cloner.deepClone(cloned.checkpoints);
+            }
+
+            if (cloned.partitionedChecks != null) {
+                Cloner cloner = new Cloner();
+                cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
+            }
+
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -341,6 +403,8 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
@@ -374,6 +438,8 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             }
             cloned.comments = null;
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.timeSeriesOverride = null;
             cloned.dimensionsOverride = null;

@@ -1,6 +1,6 @@
 package ai.dqo.execution.checks.scheduled;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
@@ -50,9 +50,9 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
             ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
             scheduledChecksSearchFilters.setEnabled(true);
             scheduledChecksSearchFilters.setSchedule(schedule.getRecurringSchedule());
-            Collection<AbstractCheckSpec> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(scheduleRoot, scheduledChecksSearchFilters);
+            Collection<AbstractCheckDeprecatedSpec> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(scheduleRoot, scheduledChecksSearchFilters);
 
-            for (AbstractCheckSpec targetCheck : scheduledChecks) {
+            for (AbstractCheckDeprecatedSpec targetCheck : scheduledChecks) {
                 TableWrapper targetTableWrapper = userHome.findTableFor(targetCheck.getHierarchyId());
                 ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(targetTableWrapper);
                 tableChecks.addCheck(targetCheck);
