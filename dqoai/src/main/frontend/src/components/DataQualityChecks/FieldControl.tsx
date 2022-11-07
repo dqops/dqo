@@ -43,6 +43,8 @@ const FieldControl = ({
         return field.date_time_value;
       case ParameterDefinitionSpecDataTypeEnum.object:
         return field.integer_value;
+      case ParameterDefinitionSpecDataTypeEnum.date:
+        return field.date_value;
     }
   }, [field]);
 
@@ -140,6 +142,19 @@ const FieldControl = ({
             handleChange({ column_name_value: value })
           }
         />
+      )}
+      {field?.definition?.data_type ===
+        ParameterDefinitionSpecDataTypeEnum.date && (
+        <div>
+          <Input
+            label={label}
+            value={value}
+            type="date"
+            tooltipText={tooltip}
+            className="!h-8 !min-w-40 !max-w-40"
+            onChange={(e) => handleChange({ date_value: e.target.value })}
+          />
+        </div>
       )}
     </div>
   );
