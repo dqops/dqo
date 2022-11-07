@@ -156,7 +156,7 @@ const ColumnView = ({
           schemaName,
           tableName,
           columnName,
-          updatedComments
+          updatedChecksUI
         )
       );
       await dispatch(

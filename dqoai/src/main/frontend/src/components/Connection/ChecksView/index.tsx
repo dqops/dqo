@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
-import TableColumns from '../TableView/TableColumns';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -32,6 +31,10 @@ const ChecksView = ({
   useEffect(() => {
     setUpdatedChecksUI(checksUI);
   }, [checksUI]);
+
+  useEffect(() => {
+    dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+  }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     await dispatch(
