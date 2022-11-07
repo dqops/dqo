@@ -10,20 +10,24 @@ import {
 
 export const ConnectionApiClient = ConnectionsApiFactory(
   new Configuration(),
-  '',
+  'http://localhost:8888',
   axios
 );
 
 export const SchemaApiClient = SchemasApiFactory(
   new Configuration(),
-  '',
+  'http://localhost:8888',
   axios
 );
 
-export const TableApiClient = TablesApiFactory(new Configuration(), '', axios);
+export const TableApiClient = TablesApiFactory(
+  new Configuration(),
+  'http://localhost:8888',
+  axios
+);
 
 export const ColumnApiClient = ColumnsApiFactory(
   new Configuration(),
-  '',
+  'http://localhost:8888',
   axios
 );

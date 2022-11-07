@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
-import TableColumns from './TableColumns';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
@@ -38,11 +36,13 @@ import LabelsView from '../LabelsView';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
-import { useTabs } from '../../../contexts/tabContext';
 import DimensionsView from '../DimensionsView';
+import { useTree } from '../../../contexts/treeContext';
 
 interface ITableViewProps {
-  node: ITreeNode;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
 const tabs = [
@@ -67,16 +67,16 @@ const tabs = [
     value: 'labels'
   },
   {
-    label: 'Columns',
-    value: 'columns'
-  },
-  {
     label: 'Dimensions',
     value: 'dimensions'
   }
 ];
 
-const TableView = ({ node }: ITableViewProps) => {
+const TableView = ({
+  connectionName,
+  schemaName,
+  tableName
+}: ITableViewProps) => {
   const [activeTab, setActiveTab] = useState('table');
 
   const {
@@ -89,11 +89,7 @@ const TableView = ({ node }: ITableViewProps) => {
     isUpdating,
     dimensions
   } = useSelector((state: IRootState) => state.table);
-  const { tabMap, setTabMap } = useTabs();
-
-  const connectionName = node.key.split('.')[1] || '';
-  const schemaName = node.key.split('.')[2] || '';
-  const tableName = node.module;
+  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
   const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
   const [updatedSchedule, setUpdatedSchedule] =
@@ -239,15 +235,17 @@ const TableView = ({ node }: ITableViewProps) => {
     setActiveTab(tab);
     setTabMap({
       ...tabMap,
-      [node.module]: tab
+      [pageTab]: tab
     });
   };
 
   useEffect(() => {
-    if (tabMap[node.module]) {
-      setActiveTab(tabMap[node.module]);
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('table');
     }
-  }, [node, tabMap]);
+  }, [pageTab, tabMap]);
 
   const isDisabled = useMemo(() => {
     if (activeTab === 'labels') {
@@ -262,7 +260,7 @@ const TableView = ({ node }: ITableViewProps) => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color="primary"
@@ -312,15 +310,6 @@ const TableView = ({ node }: ITableViewProps) => {
       <div>
         {activeTab === 'labels' && (
           <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />
-        )}
-      </div>
-      <div>
-        {activeTab === 'columns' && (
-          <TableColumns
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
-          />
         )}
       </div>
       <div>

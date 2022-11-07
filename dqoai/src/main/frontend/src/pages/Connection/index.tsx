@@ -1,20 +1,70 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import MainLayout from '../../components/MainLayout';
 import PageTabs from '../../components/PageTabs';
-import { useTabs } from '../../contexts/tabContext';
-import { findNode } from '../../utils/tree';
+import { findTreeNode } from '../../utils/tree';
 import { TREE_LEVEL } from '../../shared/enums';
 import ConnectionView from '../../components/Connection/ConnectionView';
-import TableView from '../../components/Connection/TableView';
 import SchemaView from '../../components/Connection/SchemaView';
+import { useTree } from '../../contexts/treeContext';
+import TableView from '../../components/Connection/TableView';
+import ColumnsView from '../../components/Connection/ColumnsView';
 import ColumnView from '../../components/Connection/ColumnView';
+import ChecksView from '../../components/Connection/ChecksView';
 
 const ConnectionPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
-    useTabs();
+    useTree();
 
-  const activeNode = findNode(treeData, activeTab);
+  const activeNode = findTreeNode(treeData, activeTab);
+
+  const params = useMemo(() => {
+    if (activeNode?.level === TREE_LEVEL.DATABASE) {
+      return {
+        connectionName: activeNode.level
+      };
+    } else if (activeNode?.level === TREE_LEVEL.SCHEMA) {
+      const connectionNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      return {
+        connectionName: connectionNode?.label ?? '',
+        schemaName: activeNode.label
+      };
+    } else if (activeNode?.level === TREE_LEVEL.TABLE) {
+      const schemaNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      return {
+        connectionName: connectionNode?.label ?? '',
+        schemaName: schemaNode?.label ?? '',
+        tableName: activeNode?.label
+      };
+    } else if (
+      activeNode?.level === TREE_LEVEL.COLUMNS ||
+      activeNode?.level === TREE_LEVEL.CHECKS
+    ) {
+      const tableNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      return {
+        connectionName: connectionNode?.label ?? '',
+        schemaName: schemaNode?.label ?? '',
+        tableName: tableNode?.label ?? ''
+      };
+    } else if (activeNode?.level === TREE_LEVEL.COLUMN) {
+      const parentNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      return {
+        connectionName: connectionNode?.label ?? '',
+        schemaName: schemaNode?.label ?? '',
+        tableName: tableNode?.label ?? '',
+        columnName: activeNode?.label ?? ''
+      };
+    }
+  }, [activeNode]);
 
   return (
     <MainLayout>
@@ -28,16 +78,42 @@ const ConnectionPage = () => {
         />
         <div className="flex-1 bg-white border border-gray-300 flex-auto">
           {activeNode?.level === TREE_LEVEL.DATABASE && (
-            <ConnectionView node={activeNode} />
+            <ConnectionView connectionName={activeNode.label} />
           )}
           {activeNode?.level === TREE_LEVEL.SCHEMA && (
-            <SchemaView node={activeNode} />
+            <SchemaView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+            />
           )}
           {activeNode?.level === TREE_LEVEL.TABLE && (
-            <TableView node={activeNode} />
+            <TableView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.COLUMNS && (
+            <ColumnsView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.CHECKS && (
+            <ChecksView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
           )}
           {activeNode?.level === TREE_LEVEL.COLUMN && (
-            <ColumnView node={activeNode} />
+            <ColumnView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+              columnName={params?.columnName ?? ''}
+            />
           )}
         </div>
       </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
@@ -35,11 +34,11 @@ import LabelsView from '../LabelsView';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
-import { useTabs } from '../../../contexts/tabContext';
 import DimensionsView from '../DimensionsView';
+import { useTree } from '../../../contexts/treeContext';
 
 interface IConnectionViewProps {
-  node: ITreeNode;
+  connectionName: string;
 }
 
 const tabs = [
@@ -73,7 +72,7 @@ const tabs = [
   }
 ];
 
-const ConnectionView = ({ node }: IConnectionViewProps) => {
+const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
   const {
     connectionBasic,
@@ -95,9 +94,8 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   const [updatedDimensions, setUpdatedDimensions] =
     useState<DimensionsConfigurationSpec>();
   const dispatch = useActionDispatch();
-  const connectionName = useMemo(() => node.module, [node]);
   const history = useHistory();
-  const { tabMap, setTabMap } = useTabs();
+  const { tabMap, setTabMap, activeTab: pageTab } = useTree();
 
   useEffect(() => {
     setUpdatedConnectionBasic(connectionBasic);
@@ -231,15 +229,17 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     setActiveTab(tab);
     setTabMap({
       ...tabMap,
-      [node.module]: tab
+      [pageTab]: tab
     });
   };
 
   useEffect(() => {
-    if (tabMap[node.module]) {
-      setActiveTab(tabMap[node.module]);
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('connection');
     }
-  }, [node, tabMap]);
+  }, [pageTab, tabMap]);
 
   const isDisabled = useMemo(() => {
     if (activeTab === 'labels') {

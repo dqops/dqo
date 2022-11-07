@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
+import React, { useEffect, useState } from 'react';
 import { TableApiClient } from '../../../services/apiClient';
 import Tabs from '../../Tabs';
 import SvgIcon from '../../SvgIcon';
@@ -7,9 +6,11 @@ import Button from '../../Button';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import { TableBasicModel } from '../../../api';
+import { useTree } from '../../../contexts/treeContext';
 
 interface ISchemaViewProps {
-  node: ITreeNode;
+  connectionName: string;
+  schemaName: string;
 }
 
 const tabs = [
@@ -19,12 +20,10 @@ const tabs = [
   }
 ];
 
-const SchemaView = ({ node }: ISchemaViewProps) => {
+const SchemaView = ({ connectionName, schemaName }: ISchemaViewProps) => {
   const [activeTab, setActiveTab] = useState('tables');
   const [tables, setTables] = useState<TableBasicModel[]>([]);
 
-  const connectionName = useMemo(() => node.key.split('.')[1] || '', [node]);
-  const schemaName = useMemo(() => node.module, [node]);
   const history = useHistory();
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const SchemaView = ({ node }: ISchemaViewProps) => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="schema" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}`}</div>
         </div>
         <Button
           color="primary"

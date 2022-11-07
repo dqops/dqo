@@ -1,5 +1,6 @@
 import { TREE_LEVEL } from '../shared/enums';
-import { ITreeNode } from '../shared/interfaces';
+import { CustomTreeNode, ITreeNode } from '../shared/interfaces';
+import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 
 export const findNode = (
   treeData: ITreeNode,
@@ -26,4 +27,24 @@ export const generateTreeNodes = (
     title: node[keys[keys.length - 1]] || '',
     level
   }));
+};
+
+export const findTreeNode = (
+  treeData: CustomTreeNode[],
+  id: TreeNodeId
+): CustomTreeNode | undefined => {
+  let node = treeData.find((item) => item.id === id);
+  if (node) return node;
+
+  for (const item of treeData) {
+    if (item.items) {
+      node = findTreeNode(item.items, id);
+
+      if (node) {
+        return node;
+      }
+    }
+  }
+
+  return undefined;
 };

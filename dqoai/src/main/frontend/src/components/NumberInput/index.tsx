@@ -3,7 +3,7 @@ import React, { FocusEvent, useCallback } from 'react';
 import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
-import {Tooltip} from '@material-tailwind/react';
+import { Tooltip } from '@material-tailwind/react';
 
 interface INumberInputProps {
   className?: string;

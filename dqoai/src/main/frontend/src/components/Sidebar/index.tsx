@@ -3,8 +3,8 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../Button';
-import ConnectionsTree from '../ConnectionsTree';
 import SvgIcon from '../SvgIcon';
+import CustomTree from '../CustomTree';
 
 const Sidebar = () => {
   const history = useHistory();
@@ -20,7 +20,7 @@ const Sidebar = () => {
           onClick={() => history.push('/create')}
         />
       </div>
-      <ConnectionsTree />
+      <CustomTree />
     </div>
   );
 };

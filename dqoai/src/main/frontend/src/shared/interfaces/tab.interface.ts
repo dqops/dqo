@@ -6,6 +6,7 @@ export interface ITab {
   label: string;
   value: string;
   type?: string;
+  tooltip?: string;
 }
 
 export interface TDataNode extends DataNode {

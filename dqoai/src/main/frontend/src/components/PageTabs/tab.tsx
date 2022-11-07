@@ -3,10 +3,12 @@ import React from 'react';
 import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 export interface TabOption {
   label: string;
   value: string;
+  tooltip?: string;
 }
 
 export interface TabProps {
@@ -22,7 +24,7 @@ const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
     onRemove();
   };
 
-  return (
+  const content = (
     <div
       className={clsx(
         'text-sm leading-20 text-black px-4 py-2 cursor-pointer flex text-gray-700 font-medium space-x-4 items-center',
@@ -36,6 +38,20 @@ const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
       <SvgIcon name="close" onClick={handleRemove} />
     </div>
   );
+
+  if (tab?.tooltip) {
+    return (
+      <Tooltip
+        content={tab?.tooltip}
+        className="max-w-80 py-4 px-4 bg-gray-800"
+        placement="top-start"
+      >
+        {content}
+      </Tooltip>
+    );
+  }
+
+  return content;
 };
 
 export default Tab;
