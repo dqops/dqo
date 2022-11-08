@@ -119,7 +119,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         for (TableWrapper targetTable :  targetTables) {
             // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
-			executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+			executeLegacyChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     dummySensorExecution, checkExecutionSummary);
         }
 
@@ -152,7 +152,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checkSearchFilters.setEnabled(true);
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+            executeLegacyChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     false, checkExecutionSummary);
         }
 
@@ -172,15 +172,15 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
      */
-    public void executeChecksOnTable(CheckExecutionContext checkExecutionContext,
-									 UserHome userHome,
-									 ConnectionWrapper connectionWrapper,
-									 TableWrapper targetTable,
-									 CheckSearchFilters checkSearchFilters,
-									 CheckExecutionProgressListener progressListener,
-									 boolean dummySensorExecution,
-									 CheckExecutionSummary checkExecutionSummary) {
-        Collection<AbstractCheckDeprecatedSpec> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
+    public void executeLegacyChecksOnTable(CheckExecutionContext checkExecutionContext,
+                                           UserHome userHome,
+                                           ConnectionWrapper connectionWrapper,
+                                           TableWrapper targetTable,
+                                           CheckSearchFilters checkSearchFilters,
+                                           CheckExecutionProgressListener progressListener,
+                                           boolean dummySensorExecution,
+                                           CheckExecutionSummary checkExecutionSummary) {
+        Collection<AbstractCheckDeprecatedSpec> checks = this.hierarchyNodeTreeSearcher.findLegacyChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
             checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0);
             return; // no checks for this table

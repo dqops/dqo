@@ -91,6 +91,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @Deprecated
     private TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
 
     @JsonPropertyDescription("Data quality dimensions configuration. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
@@ -209,6 +210,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Returns the time series configuration for this table.
      * @return Time series configuration.
      */
+    @Deprecated
     public TimeSeriesConfigurationSpec getTimeSeries() {
         return timeSeries;
     }

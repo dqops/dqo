@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
@@ -28,14 +28,14 @@ import java.util.Set;
 /**
  * Visitor for {@link CheckSearchFilters} that finds the correct nodes.
  */
-public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
+public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     private final CheckSearchFilters filters;
 
     /**
      * Creates a visitor for the given filters.
      * @param filters Check search filters.
      */
-    public CheckSearchFiltersVisitor(CheckSearchFilters filters) {
+    public LegacyCheckSearchFiltersVisitor(CheckSearchFilters filters) {
         this.filters = filters;
     }
 
@@ -263,19 +263,19 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
-        boolean checkEnabled = !abstractCheckSpec.isDisabled();
+        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
+        boolean sensorEnabled = sensorParameters != null && !sensorParameters.isDisabled();
         if (enabledFilter != null) {
-            if (enabledFilter && !checkEnabled) {
+            if (enabledFilter && !sensorEnabled) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
-            if (!enabledFilter && checkEnabled) {
+            if (!enabledFilter && sensorEnabled) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -306,7 +306,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        if (!checkEnabled) {
+        if (!sensorEnabled) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

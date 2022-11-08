@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class CheckSearchFiltersVisitorTests extends BaseTest {
-    CheckSearchFiltersVisitor sut;
+public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
+    LegacyCheckSearchFiltersVisitor sut;
     ConnectionList connectionList;
     ConnectionWrapper connectionWrapper;
     TableList tableList;
@@ -61,7 +61,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 		checkSearchFilters.setConnectionName("test");
 		checkSearchFilters.setSchemaTableName("test.test");
 		checkSearchFilters.setColumnName("test");
-		this.sut = new CheckSearchFiltersVisitor(checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(checkSearchFilters);
 		this.connectionList = this.userHomeContext.getUserHome().getConnections();
 		this.connectionWrapper = connectionList.createAndAddNew("test");
 		this.tableList = this.connectionWrapper.getTables();
@@ -76,7 +76,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setConnectionName("test2");
-		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
@@ -90,7 +90,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
 		this.checkSearchFilters.setConnectionName("test2");
-		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
@@ -104,7 +104,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptTableList_whenCalledForTableList_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setSchemaTableName("test2.test2");
-		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
@@ -118,7 +118,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptTableWrapper_whenCalledForTableWrapper_thenReturnsSkipChildren() {
 		this.checkSearchFilters.setSchemaTableName("test2.test2");
-		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
@@ -154,7 +154,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptColumnSpecMap_whenCalledForColumnSpecMap_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setColumnName("test2");
-		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }

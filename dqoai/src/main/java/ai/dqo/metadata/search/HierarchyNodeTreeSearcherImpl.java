@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -55,14 +56,35 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @param checkSearchFilters Search filters.
      * @return Collection of check nodes that passed the filter.
      */
-    public Collection<AbstractCheckDeprecatedSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
+    public Collection<AbstractCheckDeprecatedSpec> findLegacyChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
+        LegacyCheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createLegacyCheckSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject);
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, searchParameterObject));
+
+        return (List<AbstractCheckDeprecatedSpec>)(ArrayList<?>)matchingNodes;
+    }
+
+    /**
+     * Search for checks in the tree.
+     *
+     * @param startNode          Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param checkSearchFilters Search filters.
+     * @return Collection of check nodes that passed the filter.
+     */
+    @Override
+    public Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
         CheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
         DimensionSearcherObject dimensionSearcherObject = new DimensionSearcherObject();
-		this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject)));
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dimensionSearcherObject, labelsSearcherObject);
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
+                searchParameterObject));
 
-        return (List<AbstractCheckDeprecatedSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
     }
 
     /**

@@ -75,11 +75,13 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Time series source configuration for a table. When a time series configuration is assigned at a table level, it overrides any time series settings from the connection or table levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
     @JsonPropertyDescription("Data quality dimensions configuration. When a dimension configuration is assigned at a table level, it overrides any dimension settings from the connection or table levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private DimensionsConfigurationSpec dimensionsOverride;
 
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
@@ -90,12 +92,12 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Configuration of column level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCheckpointsSpec checkpoints = new ColumnCheckpointsSpec();
+    private ColumnCheckpointsSpec checkpoints;
 
     @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPartitionedChecksRootSpec partitionedChecks = new ColumnPartitionedChecksRootSpec();
+    private ColumnPartitionedChecksRootSpec partitionedChecks;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -182,6 +184,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Returns the data quality measure dimensions configuration for the column.
      * @return Dimension configuration.
      */
+    @Deprecated
     public DimensionsConfigurationSpec getDimensionsOverride() {
         return dimensionsOverride;
     }

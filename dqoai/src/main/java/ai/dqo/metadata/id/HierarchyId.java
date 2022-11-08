@@ -19,9 +19,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -103,6 +101,26 @@ public class HierarchyId {
         }
 
         return true;
+    }
+
+    /**
+     * Finds all nodes on path following child node ids in the hierarchy ID, starting from the <code>rootNode</code> node.
+     * @param rootNode Root node (start node).
+     * @return Hierarchy nodes on the path.
+     */
+    public HierarchyNode[] getNodesOnPath(HierarchyNode rootNode) {
+        HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length];
+        HierarchyNode currentNode = rootNode;
+        for (int i = 0; i < this.elements.length; i++) {
+            HierarchyNode childNode = currentNode.getChild(this.elements[i]);
+            if (childNode == null) {
+                throw new NoSuchElementException("Cannot find child named " + this.elements[i] + " on object " + currentNode);
+            }
+            nodesOnPath[i] = childNode;
+            currentNode = childNode;
+        }
+
+        return nodesOnPath;
     }
 
     @Override

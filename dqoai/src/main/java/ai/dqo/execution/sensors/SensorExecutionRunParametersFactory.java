@@ -16,7 +16,9 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -39,5 +41,23 @@ public interface SensorExecutionRunParametersFactory {
                                                         TableSpec table,
                                                         ColumnSpec column,
                                                         AbstractCheckDeprecatedSpec check,
+                                                        ProviderDialectSettings dialectSettings);
+
+    /**
+     * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param check Check specification.
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+                                                        TableSpec table,
+                                                        ColumnSpec column,
+                                                        AbstractCheckSpec check,
+                                                        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                         ProviderDialectSettings dialectSettings);
 }

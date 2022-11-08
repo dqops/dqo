@@ -230,7 +230,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
 		table.setSpec(tableSpec);
         ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(tableConsistencyRowCountCheckSpec);
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -246,7 +246,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
 		table.setSpec(tableSpec);
         ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(tableConsistencyRowCountCheckSpec);
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -262,7 +262,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
 		tableSpec.setChecks(tableCheckCategoriesSpec);
 		table.setSpec(tableSpec);
         ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 

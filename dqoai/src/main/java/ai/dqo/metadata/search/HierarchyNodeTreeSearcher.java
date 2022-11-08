@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -37,7 +38,15 @@ public interface HierarchyNodeTreeSearcher {
      * @param checkSearchFilters Search filters.
      * @return Collection of check nodes that passed the filter.
      */
-    Collection<AbstractCheckDeprecatedSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
+    Collection<AbstractCheckDeprecatedSpec> findLegacyChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
+
+    /**
+     * Search for checks in the tree.
+     * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param checkSearchFilters Search filters.
+     * @return Collection of check nodes that passed the filter.
+     */
+    Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
 
     /**
      * Search for connection in the tree.

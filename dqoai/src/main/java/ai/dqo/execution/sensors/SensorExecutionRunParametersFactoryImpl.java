@@ -16,6 +16,7 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
@@ -80,6 +81,48 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         DimensionsConfigurationSpec dimensions = expandedCheck.getDimensionsOverride();
         if (dimensions == null && column != null) {
+            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
+        }
+        if (dimensions == null) {
+            dimensions = expandedTable.getDimensions();
+        }
+        if (dimensions == null) {
+            dimensions = expandedConnection.getDefaultDimensions();
+        }
+
+        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
+                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+    }
+
+
+    /**
+     * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param check Check specification.
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    @Override
+    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+                                                               TableSpec table,
+                                                               ColumnSpec column,
+                                                               AbstractCheckSpec check,
+                                                               TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+                                                               ProviderDialectSettings dialectSettings) {
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
+        HierarchyId checkHierarchyId = check.getHierarchyId();
+        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
+
+        TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
+
+        DimensionsConfigurationSpec dimensions = null;
+        if (expandedColumn != null) {
             dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
         }
         if (dimensions == null) {
