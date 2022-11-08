@@ -33,13 +33,13 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
 
     const newChecksUI = {
       ...checksUI,
-      quality_dimensions: checksUI?.quality_dimensions?.map(
-        (dimension, index) =>
+      category: checksUI?.categories?.map(
+        (category, index) =>
           index !== idx
-            ? dimension
+            ? category
             : {
-                ...dimension,
-                checks: dimension?.checks?.map((item, jindex) =>
+                ...category,
+                checks: category?.checks?.map((item, jindex) =>
                   jindex !== jdx ? item : check
                 )
               }
@@ -49,7 +49,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
     onChange(newChecksUI);
   };
 
-  if (!checksUI?.quality_dimensions) {
+  if (!checksUI?.categories) {
     return <div className="p-4">No Checks</div>;
   }
 
@@ -57,18 +57,18 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
     <div className="p-4 max-w-tab-wrapper overflow-auto">
       <table className="w-full">
         <tbody>
-          {checksUI?.quality_dimensions.map((dimension, index) => (
+          {checksUI?.categories.map((category, index) => (
             <>
               <tr key={index}>
                 <td className="" colSpan={3}>
                   <div className="text-xl font-semibold text-gray-700 capitalize">
-                    {dimension.quality_dimension}
+                    {category.category}
                   </div>
                 </td>
               </tr>
               <TableHeader />
-              {dimension.checks &&
-                dimension.checks.map((check, jIndex) => (
+              {category.checks &&
+                category.checks.map((check, jIndex) => (
                   <CheckListItem
                     check={check}
                     key={jIndex}

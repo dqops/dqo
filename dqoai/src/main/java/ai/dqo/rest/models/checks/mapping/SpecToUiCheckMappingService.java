@@ -24,7 +24,7 @@ import ai.dqo.rest.models.checks.UIAllChecksModel;
  */
 public interface SpecToUiCheckMappingService {
     /**
-     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into DAMA dimensions.
+     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
      *
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.

@@ -57,7 +57,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     }
 
     /**
-     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into DAMA dimensions.
+     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.
      */
@@ -73,23 +73,23 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             }
 
             Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityDimensionModel dimensionModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
-            uiAllChecksModel.getQualityDimensions().add(dimensionModel);
+            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
+            uiAllChecksModel.getCategories().add(categoryModel);
         }
 
         return uiAllChecksModel;
     }
 
     /**
-     * Creates a UI model for all data quality checks for one dimension.
-     * @param dimensionFieldInfo Field info for the dimension field.
-     * @param checkCategoryParentNode The current dimension specification object instance (an object that has fields for all data quality checks in the dimension).
-     * @return UI model for a dimension with all quality checks.
+     * Creates a UI model for all data quality checks for one category.
+     * @param dimensionFieldInfo Field info for the category field.
+     * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
+     * @return UI model for a category with all quality checks.
      */
-    protected UIQualityDimensionModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode) {
-        UIQualityDimensionModel dimensionModel = new UIQualityDimensionModel();
-        dimensionModel.setQualityDimension(dimensionFieldInfo.getDisplayName());
-        dimensionModel.setHelpText(dimensionFieldInfo.getHelpText());
+    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode) {
+        UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
+        categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
+        categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         List<FieldInfo> checksFields = checkListClassInfo.getFields();
@@ -106,17 +106,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 AbstractCheckDeprecatedSpec checkFieldValue = (AbstractCheckDeprecatedSpec) checkSpecObject;
                 UICheckModel checkModel = createLegacyCheckModel(checkFieldInfo, checkFieldValue);
                 checkModel.setConfigured(checkSpecObjectNullable != null);
-                dimensionModel.getChecks().add(checkModel);
+                categoryModel.getChecks().add(checkModel);
             }
             else {
                 AbstractCheckSpec<?,?> checkFieldValue = (AbstractCheckSpec<?,?>) checkSpecObject;
                 UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue);
                 checkModel.setConfigured(checkSpecObjectNullable != null);
-                dimensionModel.getChecks().add(checkModel);
+                categoryModel.getChecks().add(checkModel);
             }
         }
 
-        return dimensionModel;
+        return categoryModel;
     }
 
     /**

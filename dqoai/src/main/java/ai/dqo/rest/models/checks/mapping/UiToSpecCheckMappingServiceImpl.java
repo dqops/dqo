@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.models.checks.mapping;
 
 import ai.dqo.checks.AbstractCheckSpec;
@@ -43,36 +58,36 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     @Override
     public void updateAllChecksSpecs(UIAllChecksModel model, AbstractRootChecksContainerSpec checkCategoriesSpec) {
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        List<UIQualityDimensionModel> dimensionModelList = model.getQualityDimensions();
-        if (dimensionModelList == null) {
+        List<UIQualityCategoryModel> categoryModelList = model.getCategories();
+        if (categoryModelList == null) {
             return;
         }
 
-        for (UIQualityDimensionModel dimensionModel : dimensionModelList) {
-            String qualityDimension = dimensionModel.getQualityDimension();
-            FieldInfo dimensionFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(qualityDimension);
-            AbstractSpec dimensionSpec = (AbstractSpec) dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+        for (UIQualityCategoryModel categoryModel : categoryModelList) {
+            String qualityDimension = categoryModel.getCategory();
+            FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(qualityDimension);
+            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
 
-            updateDimensionChecksSpec(dimensionModel, dimensionSpec);
+            updateCategoryChecksSpec(categoryModel, categorySpec);
 
-            if (dimensionSpec.isDefault()) {
-                dimensionFieldInfo.setFieldValue(null, checkCategoriesSpec);
+            if (categorySpec.isDefault()) {
+                categoryFieldInfo.setFieldValue(null, checkCategoriesSpec);
             } else {
-                dimensionFieldInfo.setFieldValue(dimensionSpec, checkCategoriesSpec);
+                categoryFieldInfo.setFieldValue(categorySpec, checkCategoriesSpec);
             }
         }
     }
 
     /**
-     * Updates the dimension container specification (an object that contains data quality check specifications) with the changes
+     * Updates the category container specification (an object that contains data quality check specifications) with the changes
      * received from the UI model.
      *
-     * @param dimensionModel Source UI dimension model with the updates.
-     * @param dimensionSpec  Target dimension specification to update.
+     * @param categoryModel Source UI category model with the updates.
+     * @param categorySpec  Target category specification to update.
      */
-    protected void updateDimensionChecksSpec(UIQualityDimensionModel dimensionModel, AbstractSpec dimensionSpec) {
-        ClassInfo checkCategoryClassInfo = reflectionService.getClassInfoForClass(dimensionSpec.getClass());
-        List<UICheckModel> checkModels = dimensionModel.getChecks();
+    protected void updateCategoryChecksSpec(UIQualityCategoryModel categoryModel, AbstractSpec categorySpec) {
+        ClassInfo checkCategoryClassInfo = reflectionService.getClassInfoForClass(categorySpec.getClass());
+        List<UICheckModel> checkModels = categoryModel.getChecks();
         if (checkModels == null) {
             return;
         }
@@ -80,7 +95,14 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         for (UICheckModel checkModel : checkModels) {
             String yamlCheckName = checkModel.getCheckName();
             FieldInfo checkFieldInfo = checkCategoryClassInfo.getFieldByYamlName(yamlCheckName);
-            AbstractSpec checkNodeObject = (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(dimensionSpec);
+
+            if (checkModel.isConfigured()) {
+                // the check was unconfigured (selected to be deleted from YAML)
+                checkFieldInfo.setFieldValue(null, categorySpec);
+                continue;
+            }
+
+            AbstractSpec checkNodeObject = (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(categorySpec);
 
             if (checkNodeObject instanceof AbstractCheckDeprecatedSpec) {
                 AbstractCheckDeprecatedSpec checkSpec = (AbstractCheckDeprecatedSpec) checkNodeObject;
@@ -92,9 +114,9 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
             }
 
             if (checkNodeObject.isDefault()) {
-                checkFieldInfo.setFieldValue(null, dimensionSpec);
+                checkFieldInfo.setFieldValue(null, categorySpec);  // when UI has sent no configuration (all fields nulls or defaults)
             } else {
-                checkFieldInfo.setFieldValue(checkNodeObject, dimensionSpec);
+                checkFieldInfo.setFieldValue(checkNodeObject, categorySpec);
             }
         }
     }

@@ -143,12 +143,12 @@ function TreeProvider(props: any) {
           tableNode?.label ?? ''
         );
         const items: CustomTreeNode[] = [];
-        res.data.quality_dimensions?.forEach((dimension) => {
-          dimension.checks?.forEach((check) => {
+        res.data.categories?.forEach((category) => {
+          category.checks?.forEach((check) => {
             items.push({
-              id: `${node.id}.${dimension.quality_dimension}_${check?.check_name}`,
+              id: `${node.id}.${category.category}_${check?.check_name}`,
               label:
-                `${dimension.quality_dimension} - ${check?.check_name}` || '',
+                `${category.category} - ${check?.check_name}` || '',
               level: TREE_LEVEL.CHECK,
               parentId: node.id,
               items: []

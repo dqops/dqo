@@ -26,19 +26,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit all checks within a single DAMA dimension (category).
+ * UI model that returns the form definition and the form data to edit all checks within a single category.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIQualityDimensionModel", description = "UI model that returns the form definition and the form data to edit all checks within a single DAMA dimension (category).")
-public class UIQualityDimensionModel {
-    @JsonPropertyDescription("Data quality dimension name.")
-    private String qualityDimension;
+@ApiModel(value = "UIQualityCategoryModel", description = "UI model that returns the form definition and the form data to edit all checks within a single category.")
+public class UIQualityCategoryModel {
+    @JsonPropertyDescription("Data quality category name.")
+    private String category;
 
-    @JsonPropertyDescription("Help text that describes the dimension.")
+    @JsonPropertyDescription("Help text that describes the category.")
     private String helpText;
 
-    @JsonPropertyDescription("List of data quality checks within the dimension.")
+    @JsonPropertyDescription("List of data quality checks within the category.")
     private List<UICheckModel> checks = new ArrayList<>();
 }
