@@ -61,7 +61,7 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpec extends Abstract
      * @param maxPercentWithin
      */
     public void setMaxPercentWithin(Double maxPercentWithin) {
-        this.setDirtyIf(this.maxPercentWithin != maxPercentWithin);
+        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
         this.maxPercentWithin = maxPercentWithin;
     }
 
