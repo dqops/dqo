@@ -219,7 +219,9 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
                     return false;
                 }
             }
-            return false; // non default child found
+            else {
+                return false; // non default child found
+            }
         }
 
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();

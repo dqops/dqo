@@ -119,6 +119,6 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, result.getQualityDimensions().size());
+        Assertions.assertEquals(4, result.getQualityDimensions().size());
     }
 }
