@@ -24,7 +24,8 @@ export enum TREE_LEVEL {
   SCHEMA = 'schema',
   TABLE = 'table',
   COLUMNS = 'columns',
-  CHECKS = 'checks',
+  TABLE_CHECKS = 'table_checks',
+  COLUMN_CHECKS = 'column_checks',
   COLUMN = 'column',
   ROOT = 'root',
   CHECK = 'check'

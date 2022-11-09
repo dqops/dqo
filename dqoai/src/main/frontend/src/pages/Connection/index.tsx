@@ -11,6 +11,7 @@ import TableView from '../../components/Connection/TableView';
 import ColumnsView from '../../components/Connection/ColumnsView';
 import ColumnView from '../../components/Connection/ColumnView';
 import ChecksView from '../../components/Connection/ChecksView';
+import ColumnChecksView from '../../components/Connection/ColumnChecksView';
 
 const ConnectionPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
@@ -40,7 +41,7 @@ const ConnectionPage = () => {
       };
     } else if (
       activeNode?.level === TREE_LEVEL.COLUMNS ||
-      activeNode?.level === TREE_LEVEL.CHECKS
+      activeNode?.level === TREE_LEVEL.TABLE_CHECKS
     ) {
       const tableNode = findTreeNode(treeData, activeNode?.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -62,6 +63,19 @@ const ConnectionPage = () => {
         schemaName: schemaNode?.label ?? '',
         tableName: tableNode?.label ?? '',
         columnName: activeNode?.label ?? ''
+      };
+    } else if (activeNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
+      const columnNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      return {
+        connectionName: connectionNode?.label ?? '',
+        schemaName: schemaNode?.label ?? '',
+        tableName: tableNode?.label ?? '',
+        columnName: columnNode?.label ?? ''
       };
     }
   }, [activeNode]);
@@ -100,7 +114,7 @@ const ConnectionPage = () => {
               tableName={params?.tableName ?? ''}
             />
           )}
-          {activeNode?.level === TREE_LEVEL.CHECKS && (
+          {activeNode?.level === TREE_LEVEL.TABLE_CHECKS && (
             <ChecksView
               connectionName={params?.connectionName ?? ''}
               schemaName={params?.schemaName ?? ''}
@@ -109,6 +123,14 @@ const ConnectionPage = () => {
           )}
           {activeNode?.level === TREE_LEVEL.COLUMN && (
             <ColumnView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+              columnName={params?.columnName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.COLUMN_CHECKS && (
+            <ColumnChecksView
               connectionName={params?.connectionName ?? ''}
               schemaName={params?.schemaName ?? ''}
               tableName={params?.tableName ?? ''}

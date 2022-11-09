@@ -5,6 +5,7 @@ import SvgIcon from '../SvgIcon';
 import { TREE_LEVEL } from '../../shared/enums';
 import clsx from 'clsx';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
+import { Tooltip } from '@material-tailwind/react';
 
 const theme: ReactTreeTheme = {
   text: {
@@ -28,10 +29,7 @@ const CustomTree = () => {
   const { changeActiveTab, treeData, openNodes, toggleOpenNode } = useTree();
 
   const renderIcon: TreeRenderFn = (props: any) => {
-    if (
-      props.node.level === TREE_LEVEL.COLUMN ||
-      props.node.level === TREE_LEVEL.CHECK
-    ) {
+    if (props.node.level === TREE_LEVEL.CHECK) {
       return <div className="w-4 h-0" />;
     }
     return (
@@ -65,7 +63,13 @@ const CustomTree = () => {
           name={getIcon(node.level)}
           className={clsx('w-4 shrink-0 min-w-4')}
         />
-        <div className="text-black truncate flex-1">{node.label}</div>
+        <Tooltip
+          content={node.tooltip}
+          className="max-w-120 py-4 px-4 bg-gray-800"
+          placement="top-start"
+        >
+          <div className="text-black truncate flex-1">{node.label}</div>
+        </Tooltip>
       </div>
     );
   };

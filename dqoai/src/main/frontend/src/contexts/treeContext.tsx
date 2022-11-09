@@ -98,7 +98,7 @@ function TreeProvider(props: any) {
           {
             id: `${node.id}.checks`,
             label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${node.label}`,
-            level: TREE_LEVEL.CHECKS,
+            level: TREE_LEVEL.TABLE_CHECKS,
             parentId: node.id,
             items: [],
             tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`
@@ -130,7 +130,7 @@ function TreeProvider(props: any) {
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.CHECKS) {
+      } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
         const tableNode = findTreeNode(treeData, node.parentId ?? '');
         const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
         const connectionNode = findTreeNode(
@@ -147,10 +147,62 @@ function TreeProvider(props: any) {
           category.checks?.forEach((check) => {
             items.push({
               id: `${node.id}.${category.category}_${check?.check_name}`,
-              label:
-                `${category.category} - ${check?.check_name}` || '',
+              label: `${category.category} - ${check?.check_name}` || '',
               level: TREE_LEVEL.CHECK,
               parentId: node.id,
+              tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`,
+              items: []
+            });
+          });
+        });
+        setTreeData([...treeData, ...items]);
+        setOpenNodes(uniq([...openNodes, id]));
+      } else if (node.level === TREE_LEVEL.COLUMN) {
+        const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
+        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(
+          treeData,
+          schemaNode?.parentId ?? ''
+        );
+
+        const items = [
+          {
+            id: `${node.id}.checks`,
+            label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label}`,
+            level: TREE_LEVEL.COLUMN_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`
+          }
+        ];
+
+        setTreeData([...treeData, ...items]);
+        setOpenNodes(uniq([...openNodes, id]));
+      } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
+        const columnNode = findTreeNode(treeData, node.parentId ?? '');
+        const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(
+          treeData,
+          schemaNode?.parentId ?? ''
+        );
+        const res = await ColumnApiClient.getColumnChecksUI(
+          connectionNode?.label ?? '',
+          schemaNode?.label ?? '',
+          tableNode?.label ?? '',
+          columnNode?.label ?? ''
+        );
+        const items: CustomTreeNode[] = [];
+        res.data.categories?.forEach((category) => {
+          category.checks?.forEach((check) => {
+            items.push({
+              id: `${node.id}.${category.category}_${check?.check_name}`,
+              label: `${category.category} - ${check?.check_name}` || '',
+              level: TREE_LEVEL.CHECK,
+              parentId: node.id,
+              tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`,
               items: []
             });
           });

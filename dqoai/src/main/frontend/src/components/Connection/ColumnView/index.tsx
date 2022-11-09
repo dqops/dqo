@@ -6,22 +6,19 @@ import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import { IRootState } from '../../../redux/reducers';
-import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../../api';
+import { ColumnBasicModel, CommentSpec } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnBasic,
-  getColumnChecksUi,
   getColumnComments,
   getColumnLabels,
   updateColumnBasic,
-  updateColumnCheckUI,
   updateColumnComments,
   updateColumnLabels
 } from '../../../redux/actions/column.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import ColumnDetails from './ColumnDetails';
-import DataQualityChecks from '../../DataQualityChecks';
 import { useTree } from '../../../contexts/treeContext';
 
 interface IColumnViewProps {
@@ -35,10 +32,6 @@ const tabs = [
   {
     label: 'Column',
     value: 'column'
-  },
-  {
-    label: 'Data Quality Checks',
-    value: 'data-quality-checks'
   },
   {
     label: 'Comments',
@@ -58,7 +51,7 @@ const ColumnView = ({
 }: IColumnViewProps) => {
   const [activeTab, setActiveTab] = useState('column');
 
-  const { columnBasic, comments, labels, isUpdating, checksUI } = useSelector(
+  const { columnBasic, comments, labels, isUpdating } = useSelector(
     (state: IRootState) => state.column
   );
   const history = useHistory();
@@ -68,7 +61,6 @@ const ColumnView = ({
     useState<ColumnBasicModel>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
 
   useEffect(() => {
@@ -82,10 +74,6 @@ const ColumnView = ({
   }, [columnBasic]);
 
   useEffect(() => {
-    setUpdatedChecksUI(checksUI);
-  }, [checksUI]);
-
-  useEffect(() => {
     setUpdatedComments([]);
     setUpdatedLabels([]);
 
@@ -95,9 +83,6 @@ const ColumnView = ({
     );
     dispatch(
       getColumnLabels(connectionName, schemaName, tableName, columnName)
-    );
-    dispatch(
-      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
     );
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -147,20 +132,6 @@ const ColumnView = ({
       );
       await dispatch(
         getColumnLabels(connectionName, schemaName, tableName, columnName)
-      );
-    }
-    if (activeTab === 'data-quality-checks') {
-      await dispatch(
-        updateColumnCheckUI(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
-          updatedChecksUI
-        )
-      );
-      await dispatch(
-        getColumnChecksUi(connectionName, schemaName, tableName, columnName)
       );
     }
   };
@@ -216,14 +187,6 @@ const ColumnView = ({
             setColumnBasic={setUpdatedColumnBasic}
           />
         )}
-        <div>
-          {activeTab === 'data-quality-checks' && (
-            <DataQualityChecks
-              checksUI={updatedChecksUI}
-              onChange={setUpdatedChecksUI}
-            />
-          )}
-        </div>
         {activeTab === 'comments' && (
           <CommentsView
             comments={updatedComments}
