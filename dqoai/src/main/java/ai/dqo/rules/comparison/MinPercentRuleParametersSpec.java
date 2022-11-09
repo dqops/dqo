@@ -51,7 +51,7 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minPercent;
+    private double minPercent = 100.0;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.

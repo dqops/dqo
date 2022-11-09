@@ -37,7 +37,7 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double maxPercent;
+    private double maxPercent = 100.0;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.
