@@ -124,7 +124,9 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         <td className="py-2 align-top">
           <CheckRulesTable
             rules={check?.rules?.slice(0, 1) || []}
-            openCheckRule={openCheckRule}
+            onChange={(rules: UIRuleThresholdsModel[]) =>
+              handleChange({ rules })
+            }
           />
         </td>
       </tr>

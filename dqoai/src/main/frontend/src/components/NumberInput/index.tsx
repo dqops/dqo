@@ -81,7 +81,7 @@ const NumberInput = ({
           </label>
         )}
       </div>
-      <div className="relative">
+      <div className="relative inline-flex">
         <input
           name={name}
           type="number"

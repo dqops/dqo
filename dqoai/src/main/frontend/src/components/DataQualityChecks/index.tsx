@@ -33,7 +33,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
 
     const newChecksUI = {
       ...checksUI,
-      category: checksUI?.categories?.map((category, index) =>
+      categories: checksUI?.categories?.map((category, index) =>
         index !== idx
           ? category
           : {
