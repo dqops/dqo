@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsNotNullCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsNullCountSensorParametersSpec, MaxCountRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNullsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -45,7 +45,7 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNotNullCountSensorParametersSpec parameters = new ColumnNullsNotNullCountSensorParametersSpec();
+    private ColumnNullsNullCountSensorParametersSpec parameters = new ColumnNullsNullCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -67,7 +67,7 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNotNullCountSensorParametersSpec getParameters() {
+    public ColumnNullsNullCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -75,7 +75,7 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNotNullCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNullCountSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
