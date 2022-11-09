@@ -16,9 +16,11 @@
 package ai.dqo.execution.checks;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshotFactory;
@@ -37,20 +39,26 @@ import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Service that executes data quality checks.
@@ -66,6 +74,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory;
     private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
     private ScheduledTargetChecksFindService scheduledTargetChecksFindService;
+    private UserHomeLockManager userHomeLockManager;
 
     /**
      * Creates a data quality check execution service.
@@ -78,6 +87,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param sensorReadingsSnapshotFactory Sensor reading storage service.
      * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
+     * @param userHomeLockManager User home lock manager - used to ensure synchronized access to data files.
      */
     @Autowired
     public CheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -88,7 +98,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      RuleEvaluationService ruleEvaluationService,
                                      SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory,
                                      RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
-                                     ScheduledTargetChecksFindService scheduledTargetChecksFindService) {
+                                     ScheduledTargetChecksFindService scheduledTargetChecksFindService,
+                                     UserHomeLockManager userHomeLockManager) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -98,6 +109,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.sensorReadingsSnapshotFactory = sensorReadingsSnapshotFactory;
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
+        this.userHomeLockManager = userHomeLockManager;
     }
 
     /**
@@ -235,6 +247,11 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period tha was captured
                 LocalDateTime earliestRequiredReading = checkSpec.findEarliestRequiredHistoricReadingDate(effectiveTimeSeries.getTimeGradient(), minTimePeriod);
+
+                // TODO: get a shared read lock for the time of loading file, must remember the names, modification dates of loaded parquet files,
+                // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
+                // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
+                // so we need to support just optimistic locking and verify the shapshot (parquet file dates - not modified) just before overwritting parquet files,
                 sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
 
                 RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
@@ -282,6 +299,37 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     public Collection<TableWrapper> listTargetTables(UserHome userHome, CheckSearchFilters checkSearchFilters) {
         Collection<TableWrapper> tables = this.hierarchyNodeTreeSearcher.findTables(userHome.getConnections(), checkSearchFilters);
         return tables;
+    }
+
+    /**
+     * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
+     * @param userHome User home with the metadata.
+     * @param checkSpec Check specification.
+     * @return Sensor run parameters.
+     */
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckSpec checkSpec) {
+        HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
+        ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
+        TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
+        ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
+        ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
+        TableSpec tableSpec = tableWrapper.getSpec();
+
+        List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
+        Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> n instanceof TimeSeriesConfigurationProvider)
+                .findFirst();
+        assert timeSeriesProvider.isPresent();
+
+        TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider) timeSeriesProvider.get();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec);
+
+        SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
+                connectionSpec, tableSpec, columnSpec, checkSpec, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorRunParameters;
     }
 
     /**
