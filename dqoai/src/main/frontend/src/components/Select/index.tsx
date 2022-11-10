@@ -22,6 +22,7 @@ interface SelectProps {
   triggerClassName?: string;
   tooltipText?: string;
   disabled?: boolean;
+  error?: boolean;
 }
 
 const Select = ({
@@ -33,7 +34,8 @@ const Select = ({
   className,
   triggerClassName,
   tooltipText,
-  disabled
+  disabled,
+  error
 }: SelectProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
@@ -53,7 +55,12 @@ const Select = ({
     <div className={clsx('', className)}>
       {label && (
         <div className="flex space-x-1">
-          <div className="block text-sm font-regular text-gray-700 mb-1">
+          <div
+            className={clsx(
+              'block text-sm font-regular text-gray-700 mb-1',
+              error ? 'text-red-500' : ''
+            )}
+          >
             {label}
           </div>
           {!!tooltipText && (
@@ -74,9 +81,10 @@ const Select = ({
       <div className="relative w-full min-w-40" ref={ref}>
         <div
           className={clsx(
-            'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border border-gray-300',
+            'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border',
             triggerClassName,
-            disabled ? 'bg-gray-300 cursor-not-allowed' : ''
+            disabled ? 'bg-gray-300 cursor-not-allowed' : '',
+            error ? 'border-red-500' : 'border-gray-300'
           )}
           onClick={() => (!disabled ? toggleMenu() : {})}
         >

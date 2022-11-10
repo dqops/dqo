@@ -2,6 +2,7 @@ import React from 'react';
 
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import clsx from 'clsx';
 
 export interface CheckboxProps {
   type?: string;
@@ -10,6 +11,8 @@ export interface CheckboxProps {
   checked?: boolean;
   onChange: (value: boolean) => void;
   tooltipText?: string;
+  disabled?: boolean;
+  error?: boolean;
 }
 
 const Checkbox = ({
@@ -17,20 +20,25 @@ const Checkbox = ({
   className,
   checked,
   onChange,
-  tooltipText
+  tooltipText,
+  disabled,
+  error
 }: CheckboxProps) => {
   return (
     <label className={`relative cursor-pointer rounded-sm ${className}`}>
       <input
+        disabled={disabled}
         className="absolute opacity-0"
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
       />
       <span
-        className={`absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center border-gray-150 ${
-          checked ? 'bg-blue-600 border-0' : 'border'
-        }`}
+        className={clsx(
+          'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center',
+          checked ? 'bg-blue-600 border-0' : 'border',
+          error ? 'border-red-500' : 'border-gray-150'
+        )}
       >
         {checked && (
           <SvgIcon

@@ -5,6 +5,8 @@ import SvgIcon from '../SvgIcon';
 import CheckRulesTable from './CheckRulesTable';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
+import Switch from '../Switch';
+import clsx from 'clsx';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -93,14 +95,19 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
 
   return (
     <>
-      <tr>
+      <tr className={clsx(check?.configured ? 'text-gray-700' : 'opacity-75')}>
         <td className="py-2 align-top pr-4">
           <div className="flex mt-2 space-x-2 items-center min-w-60">
-            <Checkbox
-              checked={checked}
-              onChange={setChecked}
-              label={check.check_name}
-            />
+            {/*<div className="w-5">*/}
+            {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
+            {/*</div>*/}
+            <div>
+              <Switch
+                checked={!!check?.configured}
+                onChange={(configured) => handleChange({ configured })}
+              />
+            </div>
+            <div>{check.check_name}</div>
             <SvgIcon
               name="cog"
               className="w-4 h-4 text-blue-700 cursor-pointer"
@@ -117,6 +124,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                   handleChange({ sensor_parameters: parameters })
                 }
                 openCheckSensorParameter={openCheckSensorParameter}
+                disabled={!check.configured}
               />
             </div>
           </div>
@@ -127,6 +135,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             onChange={(rules: UIRuleThresholdsModel[]) =>
               handleChange({ rules })
             }
+            disabled={!check.configured}
           />
         </td>
       </tr>
