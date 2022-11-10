@@ -57,6 +57,8 @@ const FieldControl = ({
     });
   };
 
+  const isInvalid = !field.optional && !value && !disabled;
+
   return (
     <div>
       {type === 'boolean' && (
@@ -66,6 +68,7 @@ const FieldControl = ({
           label={label}
           tooltipText={tooltip}
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
@@ -76,6 +79,7 @@ const FieldControl = ({
           className="!h-8 !min-w-30 !max-w-30"
           onChange={(e) => handleChange({ string_value: e.target.value })}
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.integer && (
@@ -86,6 +90,7 @@ const FieldControl = ({
           tooltipText={tooltip}
           className="!h-8 !min-w-30 !max-w-30"
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.long && (
@@ -123,6 +128,7 @@ const FieldControl = ({
           triggerClassName="!h-8"
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {field?.definition?.data_type ===
@@ -150,6 +156,7 @@ const FieldControl = ({
             handleChange({ column_name_value: value })
           }
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {field?.definition?.data_type ===
@@ -163,6 +170,7 @@ const FieldControl = ({
             className="!h-8 !min-w-40 !max-w-40"
             onChange={(e) => handleChange({ date_value: e.target.value })}
             disabled={disabled}
+            error={isInvalid}
           />
         </div>
       )}

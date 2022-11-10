@@ -4,6 +4,7 @@ import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
+import Input from '../Input';
 
 interface INumberInputProps {
   className?: string;
@@ -18,6 +19,7 @@ interface INumberInputProps {
   max?: number;
   tooltipText?: string;
   disabled?: boolean;
+  error?: boolean;
 }
 
 const NumberInput = ({
@@ -32,7 +34,8 @@ const NumberInput = ({
   min,
   max,
   tooltipText,
-  disabled
+  disabled,
+  error
 }: INumberInputProps) => {
   const handleChange = (e: any) => {
     if (onChange) {
@@ -64,7 +67,10 @@ const NumberInput = ({
         {label && (
           <label
             htmlFor={name}
-            className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1"
+            className={clsx(
+              'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+              error ? 'text-red-500' : ''
+            )}
           >
             <span>{label}</span>
             {!!tooltipText && (
@@ -89,7 +95,9 @@ const NumberInput = ({
           type="number"
           placeholder={placeholder}
           className={clsx(
-            'focus:ring-2 focus:ring-blue-400 focus:ring-opacity-80 focus:border-none border-gray-300',
+            error
+              ? 'border border-red-500'
+              : 'focus:ring-2 focus:ring-blue-400 focus:ring-opacity-80 focus:border-none border-gray-300',
             'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block w-full sm:text-base rounded',
             className
           )}
