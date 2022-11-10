@@ -49,8 +49,8 @@ public class UICheckModel {
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
     private List<UIFieldModel> sensorParameters;
 
-    @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
-    private UIRuleThresholdsModel rule;
+    @JsonPropertyDescription("List of threshold (alerting) rules defined for a check.")
+    private List<UIRuleThresholdsModel> rules = new ArrayList<>();
 
     @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @Deprecated

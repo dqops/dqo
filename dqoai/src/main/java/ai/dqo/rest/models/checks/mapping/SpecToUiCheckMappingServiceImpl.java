@@ -37,7 +37,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -144,7 +143,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setSensorParameters(fieldsForParameterSpec);
 
         UIRuleThresholdsModel ruleModel = createRuleThresholdsModel(checkSpec);
-        checkModel.setRule(ruleModel);
+        checkModel.getRules().add(ruleModel);
 
         return checkModel;
     }
@@ -178,12 +177,16 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
         ClassInfo rulesSpecClassInfo = reflectionService.getClassInfoForClass(rulesSpec.getClass());
         List<FieldInfo> rulesFields = rulesSpecClassInfo.getFields();
-        Optional<FieldInfo> firstRuleField = rulesFields.stream().filter(r -> !Objects.equals(r.getClassFieldName(), "custom"))
-                .findFirst();
+        for (FieldInfo ruleFieldInfo : rulesFields) {
+            if (Objects.equals(checkFieldInfo.getClassFieldName(), "custom")) {
+                // skipping custom rules for the moment
+                continue;
+            }
 
-        AbstractRuleThresholdsSpec ruleFieldValue = (AbstractRuleThresholdsSpec)firstRuleField.get().getFieldValueOrNewObject(rulesSpec);
-        UIRuleThresholdsModel ruleModel = createLegacyRuleThresholdsModel(firstRuleField.get(), ruleFieldValue);
-        checkModel.setRule(ruleModel);
+            AbstractRuleThresholdsSpec ruleFieldValue = (AbstractRuleThresholdsSpec)ruleFieldInfo.getFieldValueOrNewObject(rulesSpec);
+            UIRuleThresholdsModel ruleModel = createLegacyRuleThresholdsModel(ruleFieldInfo, ruleFieldValue);
+            checkModel.getRules().add(ruleModel);
+        }
 
         return checkModel;
     }
