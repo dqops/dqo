@@ -23,7 +23,7 @@ const SensorParameters = ({
   };
 
   return (
-    <div className="w-full pr-8 py-2">
+    <div className="w-full pr-8">
       {parameters.length ? (
         <div className="flex space-x-2">
           {parameters.map((item, index) => (

@@ -30,6 +30,7 @@ import ai.dqo.utils.reflection.ReflectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -135,7 +136,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
 
-        UIRuleThresholdsModel ruleThresholdsModel = checkModel.getRules().get(0); // TODO: modify to support only one rule
+        UIRuleThresholdsModel ruleThresholdsModel = checkModel.getRule();
         updateRuleThresholdsSpec(ruleThresholdsModel, checkSpec);
     }
 
@@ -158,7 +159,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         AbstractRuleSetSpec ruleSet = checkSpec.getRuleSet();
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleSet.getClass());
-        List<UIRuleThresholdsModel> ruleThresholdsModels = checkModel.getRules();
+        List<UIRuleThresholdsModel> ruleThresholdsModels = new ArrayList<>() {{ checkModel.getRule(); }};
         if (ruleThresholdsModels == null) {
             return;
         }
