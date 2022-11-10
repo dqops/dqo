@@ -95,7 +95,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     <>
       <tr>
         <td className="py-2 align-top pr-4">
-          <div className="flex space-x-2 items-center min-w-60">
+          <div className="flex mt-2 space-x-2 items-center min-w-60">
             <Checkbox
               checked={checked}
               onChange={setChecked}
