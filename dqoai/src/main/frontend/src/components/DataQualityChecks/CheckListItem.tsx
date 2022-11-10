@@ -123,7 +123,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         </td>
         <td className="py-2 align-top">
           <CheckRulesTable
-            rules={check?.rules?.slice(0, 1) || []}
+            rules={check?.rule}
             onChange={(rules: UIRuleThresholdsModel[]) =>
               handleChange({ rules })
             }
