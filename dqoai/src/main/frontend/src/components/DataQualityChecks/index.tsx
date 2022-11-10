@@ -53,7 +53,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
   }
 
   return (
-    <div className="p-4 max-w-tab-wrapper overflow-auto">
+    <div className="p-4 max-w-table max-h-table overflow-auto">
       <table className="w-full">
         <tbody>
           {checksUI?.categories.map((category, index) => (

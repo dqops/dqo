@@ -10,6 +10,7 @@ export interface CheckboxProps {
   checked?: boolean;
   onChange: (value: boolean) => void;
   tooltipText?: string;
+  disabled?: boolean;
 }
 
 const Checkbox = ({
@@ -17,11 +18,13 @@ const Checkbox = ({
   className,
   checked,
   onChange,
-  tooltipText
+  tooltipText,
+  disabled
 }: CheckboxProps) => {
   return (
     <label className={`relative cursor-pointer rounded-sm ${className}`}>
       <input
+        disabled={disabled}
         className="absolute opacity-0"
         type="checkbox"
         checked={checked}

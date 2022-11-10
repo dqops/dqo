@@ -17,6 +17,7 @@ interface INumberInputProps {
   min?: number;
   max?: number;
   tooltipText?: string;
+  disabled?: boolean;
 }
 
 const NumberInput = ({
@@ -30,7 +31,8 @@ const NumberInput = ({
   dataTestId,
   min,
   max,
-  tooltipText
+  tooltipText,
+  disabled
 }: INumberInputProps) => {
   const handleChange = (e: any) => {
     if (onChange) {
@@ -97,6 +99,7 @@ const NumberInput = ({
           data-testid={dataTestId}
           min={min}
           max={max}
+          disabled={disabled}
         />
         <div className="flex flex-col absolute top-1/2 transform -translate-y-1/2 right-2">
           <SvgIcon

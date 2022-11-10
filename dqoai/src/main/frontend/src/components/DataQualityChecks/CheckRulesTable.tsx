@@ -5,9 +5,10 @@ import FieldControl from './FieldControl';
 interface ICheckRulesTableProps {
   rules: UIRuleThresholdsModel[];
   onChange: (rules: UIRuleThresholdsModel[]) => void;
+  disabled: boolean;
 }
 
-const CheckRulesTable = ({ rules, onChange }: ICheckRulesTableProps) => {
+const CheckRulesTable = ({ rules, onChange, disabled }: ICheckRulesTableProps) => {
   const handleChange = (
     key: 'medium' | 'high' | 'low',
     field: UIFieldModel,
@@ -61,66 +62,70 @@ const CheckRulesTable = ({ rules, onChange }: ICheckRulesTableProps) => {
     <table className="w-full text-sm text-gray-700">
       <thead>
         <tr>
-          <th className="text-left text-gray-700 py-2 border-b">
+          <th className="text-left text-gray-700 py-2">
             <button className="bg-orange-400 px-4 py-2 whitespace-nowrap rounded-full text-white">
               Add Alert
             </button>
           </th>
-          <th className="text-left text-gray-700 py-2 border-b px-4">
+          <th className="text-left text-gray-700 py-2 px-4">
             <button className="bg-red-400 px-4 py-2 whitespace-nowrap rounded-full text-white">
               Add Fatal
             </button>
           </th>
-          <th className="text-left text-gray-700 py-2 border-b">
+          <th className="text-left text-gray-700 py-2">
             <button className="bg-yellow-400 px-4 py-2 whitespace-nowrap rounded-full text-white">
               Add Warning
             </button>
           </th>
         </tr>
-        <tr>
-          <th className="text-left text-gray-700 py-2 border-b">Alert</th>
-          <th className="text-left text-gray-700 py-2 border-b px-4">Fatal</th>
-          <th className="text-left text-gray-700 py-2 border-b">Warning</th>
-        </tr>
       </thead>
       <tbody>
         {rules.map((rule, ruleIndex) => (
           <tr key={ruleIndex}>
-            <td className="text-left text-gray-700 py-2 border-b">
-              {rule.medium?.rule_parameters?.map((item, index) => (
-                <div className="mb-2" key={index}>
-                  <FieldControl
-                    field={item}
-                    onChange={(field: UIFieldModel) =>
-                      handleChange('medium', field, index)
-                    }
-                  />
-                </div>
-              ))}
+            <td className="text-left text-gray-700 py-2">
+              <div className="flex space-x-2">
+                {rule.medium?.rule_parameters?.map((item, index) => (
+                  <div key={index}>
+                    <FieldControl
+                      field={item}
+                      onChange={(field: UIFieldModel) =>
+                        handleChange('medium', field, index)
+                      }
+                      disabled={disabled}
+                    />
+                  </div>
+                ))}
+              </div>
             </td>
-            <td className="text-left text-gray-700 py-2 border-b px-4">
-              {rule.high?.rule_parameters?.map((item, index) => (
-                <div className="mb-2" key={index}>
-                  <FieldControl
-                    field={item}
-                    onChange={(field: UIFieldModel) =>
-                      handleChange('high', field, index)
-                    }
-                  />
-                </div>
-              ))}
+            <td className="text-left text-gray-700 py-2 px-4">
+              <div className="flex space-x-2">
+                {rule.high?.rule_parameters?.map((item, index) => (
+                  <div key={index}>
+                    <FieldControl
+                      field={item}
+                      onChange={(field: UIFieldModel) =>
+                        handleChange('high', field, index)
+                      }
+                      disabled={disabled}
+                    />
+                  </div>
+                ))}
+              </div>
             </td>
-            <td className="text-left text-gray-700 py-2 border-b">
-              {rule.low?.rule_parameters?.map((item, index) => (
-                <div className="mb-2" key={index}>
-                  <FieldControl
-                    field={item}
-                    onChange={(field: UIFieldModel) =>
-                      handleChange('low', field, index)
-                    }
-                  />
-                </div>
-              ))}
+            <td className="text-left text-gray-700 py-2">
+              <div className="flex space-x-2">
+                {rule.low?.rule_parameters?.map((item, index) => (
+                  <div key={index}>
+                    <FieldControl
+                      field={item}
+                      onChange={(field: UIFieldModel) =>
+                        handleChange('low', field, index)
+                      }
+                      disabled={disabled}
+                    />
+                  </div>
+                ))}
+              </div>
             </td>
           </tr>
         ))}

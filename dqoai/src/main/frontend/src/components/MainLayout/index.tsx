@@ -15,7 +15,7 @@ const MainLayout = ({ children }: LayoutProps) => {
       <Sidebar />
       <div className="flex flex-1">
         <Header />
-        <div className="ml-70 mt-16 p-5 flex-1">{children}</div>
+        <div className="ml-70 mt-16 p-5 flex-1 max-h-container max-w-container overflow-auto">{children}</div>
       </div>
     </div>
   );

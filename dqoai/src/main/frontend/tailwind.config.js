@@ -94,11 +94,13 @@ module.exports = withMT({
         gray: {
           50: '#f3f4f6',
           100: '#E1E5E9',
+          150: '#BCBCBC',
           200: '#9CA3AF',
           500: '#617280',
           700: '#2D3748'
         },
         green: {
+          400: '#00D63A',
           500: '#10B981',
         },
         red: {
@@ -128,9 +130,15 @@ module.exports = withMT({
       },
       maxWidth: {
         ...sizes,
-        'tab-wrapper': 'calc(100vw - 340px)'
+        'tab-wrapper': 'calc(100vw - 340px)',
+        'container': 'calc(100vw - 280px)',
+        'table': 'calc(100vw - 320px)'
       },
-      maxHeight: sizes,
+      maxHeight: {
+        ...sizes,
+        'container': 'calc(100vh - 64px)',
+        'table': 'calc(100vh - 220px)'
+      },
       backgroundOpacity: {
         4: '0.04',
         8: '0.08'
