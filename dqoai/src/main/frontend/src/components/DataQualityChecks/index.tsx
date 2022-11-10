@@ -1,6 +1,7 @@
 import React from 'react';
 import { UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
+import { useTree } from '../../contexts/treeContext';
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
@@ -24,6 +25,7 @@ const TableHeader = () => {
 };
 
 const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
+  const { sidebarWidth } = useTree();
   const handleChangeDimension = (
     check: UICheckModel,
     idx: number,
@@ -53,7 +55,10 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
   }
 
   return (
-    <div className="p-4 max-w-table max-h-table overflow-auto">
+    <div
+      className="p-4 overflow-auto"
+      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 60}px` }}
+    >
       <table className="w-full">
         <tbody>
           {checksUI?.categories.map((category, index) => (

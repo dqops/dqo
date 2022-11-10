@@ -78,8 +78,8 @@ const CustomTree = () => {
   const onToggleOpenNodes = (nodes: TreeNodeId[]) => {};
 
   return (
-    <div className="px-4 text-gray-100">
-      <div className="w-60">
+    <div className="text-gray-100">
+      <div className="">
         <ReactTree
           nodes={treeData}
           RenderIcon={renderIcon}
@@ -91,6 +91,9 @@ const CustomTree = () => {
           theme="custom"
           themes={{
             custom: theme
+          }}
+          containerStyles={{
+            paddingRight: 0,
           }}
         />
       </div>
