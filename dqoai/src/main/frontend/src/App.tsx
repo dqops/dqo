@@ -7,18 +7,21 @@ import AppProvider from './contexts/AppProvider';
 import store from './redux/store';
 import Routes from './Routes';
 import { ThemeProvider } from '@material-tailwind/react';
+import { NotificationProvider } from './contexts/notificationContext';
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <AppProvider>
-        <ThemeProvider value={{}}>
-          <Router>
-            <Routes />
-          </Router>
-        </ThemeProvider>
-      </AppProvider>
-    </Provider>
+    <NotificationProvider>
+      <Provider store={store}>
+        <AppProvider>
+          <ThemeProvider value={{}}>
+            <Router>
+              <Routes />
+            </Router>
+          </ThemeProvider>
+        </AppProvider>
+      </Provider>
+    </NotificationProvider>
   );
 };
 
