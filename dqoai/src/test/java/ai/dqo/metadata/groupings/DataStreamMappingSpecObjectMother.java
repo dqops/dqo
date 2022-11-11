@@ -18,17 +18,17 @@ package ai.dqo.metadata.groupings;
 /**
  * Object mother for DimensionsConfigurationSpec.
  */
-public class DimensionsConfigurationSpecObjectMother {
+public class DataStreamConfigurationSpecObjectMother {
     /**
      * Creates a dimension specification with one dimension.
      * @param dimension1 Dimension 1.
      * @return Dimension configuration.
      */
-    public static DimensionsConfigurationSpec create(DimensionMappingSpec dimension1) {
-        DimensionsConfigurationSpec dimensionsConfigurationSpec = new DimensionsConfigurationSpec() {{
-			setDimension1(dimension1);
+    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1) {
+        DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
+			setLevel1(dimension1);
         }};
-        return dimensionsConfigurationSpec;
+        return dataStreamMappingSpec;
     }
 
     /**
@@ -37,12 +37,12 @@ public class DimensionsConfigurationSpecObjectMother {
      * @param dimension2 Dimension 2.
      * @return Dimension configuration.
      */
-    public static DimensionsConfigurationSpec create(DimensionMappingSpec dimension1, DimensionMappingSpec dimension2) {
-        DimensionsConfigurationSpec dimensionsConfigurationSpec = new DimensionsConfigurationSpec() {{
-			setDimension1(dimension1);
-			setDimension2(dimension2);
+    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2) {
+        DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
+			setLevel1(dimension1);
+			setLevel2(dimension2);
         }};
-        return dimensionsConfigurationSpec;
+        return dataStreamMappingSpec;
     }
 
     /**
@@ -52,13 +52,13 @@ public class DimensionsConfigurationSpecObjectMother {
      * @param dimension3 Dimension 3.
      * @return Dimension configuration.
      */
-    public static DimensionsConfigurationSpec create(DimensionMappingSpec dimension1, DimensionMappingSpec dimension2, DimensionMappingSpec dimension3) {
-        DimensionsConfigurationSpec dimensionsConfigurationSpec = new DimensionsConfigurationSpec() {{
-			setDimension1(dimension1);
-			setDimension2(dimension2);
-			setDimension3(dimension3);
+    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2, DataStreamLevelSpec dimension3) {
+        DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
+			setLevel1(dimension1);
+			setLevel2(dimension2);
+			setLevel3(dimension3);
         }};
-        return dimensionsConfigurationSpec;
+        return dataStreamMappingSpec;
     }
 
     /**
@@ -69,13 +69,13 @@ public class DimensionsConfigurationSpecObjectMother {
      * @param dimension4 Dimension 4.
      * @return Dimension configuration.
      */
-    public static DimensionsConfigurationSpec create(DimensionMappingSpec dimension1, DimensionMappingSpec dimension2, DimensionMappingSpec dimension3, DimensionMappingSpec dimension4) {
-        DimensionsConfigurationSpec dimensionsConfigurationSpec = new DimensionsConfigurationSpec() {{
-			setDimension1(dimension1);
-			setDimension2(dimension2);
-			setDimension3(dimension3);
-			setDimension4(dimension4);
+    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2, DataStreamLevelSpec dimension3, DataStreamLevelSpec dimension4) {
+        DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
+			setLevel1(dimension1);
+			setLevel2(dimension2);
+			setLevel3(dimension3);
+			setLevel4(dimension4);
         }};
-        return dimensionsConfigurationSpec;
+        return dataStreamMappingSpec;
     }
 }

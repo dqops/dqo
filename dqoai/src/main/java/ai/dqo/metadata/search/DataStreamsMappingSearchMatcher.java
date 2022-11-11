@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 
 import java.util.Arrays;
 
@@ -29,49 +29,49 @@ public class DimensionSearchMatcher {
 	 * @param dimensions DimensionsConfigurationSpec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	public static boolean matchDimension(String dimension, DimensionsConfigurationSpec dimensions) {
+	public static boolean matchDimension(String dimension, DataStreamMappingSpec dimensions) {
 		if (dimension == null || dimensions == null) {
 			return true;
 		}
-		if(dimensions.getDimension1() == null || dimensions.getDimension2() == null || dimensions.getDimension3() == null ||
-				dimensions.getDimension4() == null || dimensions.getDimension5() == null || dimensions.getDimension6() == null ||
-				dimensions.getDimension7() == null || dimensions.getDimension8() == null || dimensions.getDimension9() == null) {
+		if(dimensions.getLevel1() == null || dimensions.getLevel2() == null || dimensions.getLevel3() == null ||
+				dimensions.getLevel4() == null || dimensions.getLevel5() == null || dimensions.getLevel6() == null ||
+				dimensions.getLevel7() == null || dimensions.getLevel8() == null || dimensions.getLevel9() == null) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension1().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension1().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel1().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel1().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension2().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension2().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel2().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel2().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension3().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension3().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel3().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel3().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension4().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension4().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel4().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel4().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension5().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension5().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel5().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel5().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension6().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension6().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel6().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel6().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension7().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension7().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel7().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel7().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension8().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension8().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel8().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel8().getStaticValue(), dimension)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getDimension9().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getDimension9().getStaticValue(), dimension)) {
+		if (dimension.equals(dimensions.getLevel9().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dimensions.getLevel9().getStaticValue(), dimension)) {
 			return true;
 		}
 		return false;
@@ -83,7 +83,7 @@ public class DimensionSearchMatcher {
 	 * @param dimensionSpec Dimensions configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllConnectionDimensions(ConnectionSearchFilters connectionSearchFilters, DimensionsConfigurationSpec dimensionSpec) {
+	static boolean matchAllConnectionDimensions(ConnectionSearchFilters connectionSearchFilters, DataStreamMappingSpec dimensionSpec) {
 		String[] dimensions = connectionSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
@@ -97,7 +97,7 @@ public class DimensionSearchMatcher {
 	 * @param dimensionSpec Dimensions configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllTableDimensions(TableSearchFilters tableSearchFilters, DimensionsConfigurationSpec dimensionSpec) {
+	static boolean matchAllTableDimensions(TableSearchFilters tableSearchFilters, DataStreamMappingSpec dimensionSpec) {
 		String[] dimensions = tableSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
@@ -111,7 +111,7 @@ public class DimensionSearchMatcher {
 	 * @param dimensionSpec Dimensions configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllColumnDimensions(ColumnSearchFilters columnSearchFilters, DimensionsConfigurationSpec dimensionSpec) {
+	static boolean matchAllColumnDimensions(ColumnSearchFilters columnSearchFilters, DataStreamMappingSpec dimensionSpec) {
 		String[] dimensions = columnSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
@@ -125,7 +125,7 @@ public class DimensionSearchMatcher {
 	 * @param dimensionSpec Dimensions configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllCheckDimensions(CheckSearchFilters checkSearchFilters, DimensionsConfigurationSpec dimensionSpec) {
+	static boolean matchAllCheckDimensions(CheckSearchFilters checkSearchFilters, DataStreamMappingSpec dimensionSpec) {
 		String[] dimensions = checkSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;

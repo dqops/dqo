@@ -15,34 +15,34 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamConfigurationSpec;
 
 public class DimensionSearcherObject {
-	private DimensionsConfigurationSpec connectionDimension;
-	private DimensionsConfigurationSpec tableDimension;
-	private DimensionsConfigurationSpec columnDimension;
+	private DataStreamConfigurationSpec connectionDimension;
+	private DataStreamConfigurationSpec tableDimension;
+	private DataStreamConfigurationSpec columnDimension;
 
-	public DimensionsConfigurationSpec getConnectionDimension() {
+	public DataStreamConfigurationSpec getConnectionDimension() {
 		return this.connectionDimension;
 	}
 
-	public void setConnectionDimension(DimensionsConfigurationSpec connectionDimension) {
+	public void setConnectionDimension(DataStreamConfigurationSpec connectionDimension) {
 		this.connectionDimension = connectionDimension;
 	}
 
-	public DimensionsConfigurationSpec getTableDimension() {
+	public DataStreamConfigurationSpec getTableDimension() {
 		return this.tableDimension;
 	}
 
-	public void setTableDimension(DimensionsConfigurationSpec tableDimension) {
+	public void setTableDimension(DataStreamConfigurationSpec tableDimension) {
 		this.tableDimension = tableDimension;
 	}
 
-	public DimensionsConfigurationSpec getColumnDimension() {
+	public DataStreamConfigurationSpec getColumnDimension() {
 		return this.columnDimension;
 	}
 
-	public void setColumnDimension(DimensionsConfigurationSpec columnDimension) {
+	public void setColumnDimension(DataStreamConfigurationSpec columnDimension) {
 		this.columnDimension = columnDimension;
 	}
 }
