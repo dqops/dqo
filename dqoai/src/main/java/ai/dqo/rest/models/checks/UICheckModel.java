@@ -16,7 +16,7 @@
 package ai.dqo.rest.models.checks;
 
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -56,9 +56,9 @@ public class UICheckModel {
     @Deprecated
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
-    @JsonPropertyDescription("Data quality dimensions configuration for a sensor query. When a dimension configuration is assigned at a sensor level, it overrides any dimension settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @Deprecated
-    private DimensionsConfigurationSpec dimensionsOverride;
+    private DataStreamMappingSpec dataStreamsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     private RecurringScheduleSpec scheduleOverride;

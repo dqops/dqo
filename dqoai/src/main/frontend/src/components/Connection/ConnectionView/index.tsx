@@ -8,7 +8,7 @@ import TimeSeriesView from '../TimeSeriesView';
 import {
   CommentSpec,
   ConnectionBasicModel,
-  DimensionsConfigurationSpec,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec
 } from '../../../api';
@@ -17,13 +17,13 @@ import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
   getConnectionComments,
-  getConnectionDefaultDimensions,
+  getConnectionDefaultDataStreamsMapping,
   getConnectionLabels,
   getConnectionSchedule,
   getConnectionTime,
   updateConnectionBasic,
   updateConnectionComments,
-  updateConnectionDefaultDimensions,
+  updateConnectionDefaultDataStreamsMapping,
   updateConnectionLabels,
   updateConnectionSchedule,
   updateConnectionTime
@@ -34,7 +34,7 @@ import LabelsView from '../LabelsView';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
-import DimensionsView from '../DimensionsView';
+import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
 
 interface IConnectionViewProps {
@@ -67,8 +67,8 @@ const tabs = [
     value: 'schemas'
   },
   {
-    label: 'Dimensions',
-    value: 'dimensions'
+    label: 'Data Streams',
+    value: 'data-streams'
   }
 ];
 
@@ -81,7 +81,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     comments,
     labels,
     isUpdating,
-    defaultDimensions
+    defaultDataStreams
   } = useSelector((state: IRootState) => state.connection);
   const [updatedConnectionBasic, setUpdatedConnectionBasic] =
     useState<ConnectionBasicModel>();
@@ -91,8 +91,8 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
-  const [updatedDimensions, setUpdatedDimensions] =
-    useState<DimensionsConfigurationSpec>();
+  const [updatedDataStreamsMapping, setUpdatedDataStreamsMapping] =
+    useState<DataStreamMappingSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
@@ -117,8 +117,8 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   }, [labels]);
 
   useEffect(() => {
-    setUpdatedDimensions(defaultDimensions);
-  }, [defaultDimensions]);
+    setUpdatedDataStreamsMapping(defaultDataStreams);
+  }, [defaultDataStreams]);
 
   useEffect(() => {
     setUpdatedConnectionBasic(undefined);
@@ -126,14 +126,14 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
-    setUpdatedDimensions(undefined);
+    setUpdatedDataStreamsMapping(undefined);
 
     dispatch(getConnectionBasic(connectionName));
     dispatch(getConnectionSchedule(connectionName));
     dispatch(getConnectionTime(connectionName));
     dispatch(getConnectionComments(connectionName));
     dispatch(getConnectionLabels(connectionName));
-    dispatch(getConnectionDefaultDimensions(connectionName));
+    dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
 
     const searchQuery = qs.stringify({
       connection: connectionName
@@ -165,11 +165,11 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       await dispatch(updateConnectionLabels(connectionName, updatedLabels));
       await dispatch(getConnectionLabels(connectionName));
     }
-    if (activeTab === 'dimensions') {
+    if (activeTab === 'data-streams') {
       await dispatch(
-        updateConnectionDefaultDimensions(connectionName, updatedDimensions)
+        updateConnectionDefaultDataStreamsMapping(connectionName, updatedDataStreamsMapping)
       );
-      await dispatch(getConnectionDefaultDimensions(connectionName));
+      await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
     }
   };
 
@@ -214,11 +214,11 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     if (activeTab === 'schemas') {
       return <SchemasView connectionName={connectionName} />;
     }
-    if (activeTab === 'dimensions') {
+    if (activeTab === 'data-streams') {
       return (
-        <DimensionsView
-          dimensions={updatedDimensions}
-          onChange={setUpdatedDimensions}
+        <DataStreamsMappingView
+          dataStreamsMapping={updatedDataStreamsMapping}
+          onChange={setUpdatedDataStreamsMapping}
         />
       );
     }

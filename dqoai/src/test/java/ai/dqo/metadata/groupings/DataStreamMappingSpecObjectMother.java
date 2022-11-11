@@ -16,65 +16,65 @@
 package ai.dqo.metadata.groupings;
 
 /**
- * Object mother for DimensionsConfigurationSpec.
+ * Object mother for {@link DataStreamMappingSpec}.
  */
-public class DataStreamConfigurationSpecObjectMother {
+public class DataStreamMappingSpecObjectMother {
     /**
-     * Creates a dimension specification with one dimension.
-     * @param dimension1 Dimension 1.
-     * @return Dimension configuration.
+     * Creates a data stream mapping specification with one level.
+     * @param level1 Data stream level 1.
+     * @return Data stream mapping configuration.
      */
-    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1) {
+    public static DataStreamMappingSpec create(DataStreamLevelSpec level1) {
         DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
-			setLevel1(dimension1);
+			setLevel1(level1);
         }};
         return dataStreamMappingSpec;
     }
 
     /**
-     * Creates a dimension specification with two dimensions.
-     * @param dimension1 Dimension 1.
-     * @param dimension2 Dimension 2.
-     * @return Dimension configuration.
+     * Creates a data stream mapping specification with two levels.
+     * @param level1 Level 1.
+     * @param level2 Level 2.
+     * @return Data stream mapping.
      */
-    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2) {
+    public static DataStreamMappingSpec create(DataStreamLevelSpec level1, DataStreamLevelSpec level2) {
         DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
-			setLevel1(dimension1);
-			setLevel2(dimension2);
+			setLevel1(level1);
+			setLevel2(level2);
         }};
         return dataStreamMappingSpec;
     }
 
     /**
-     * Creates a dimension specification with three dimensions.
-     * @param dimension1 Dimension 1.
-     * @param dimension2 Dimension 2.
-     * @param dimension3 Dimension 3.
-     * @return Dimension configuration.
+     * Creates a data stream mapping with three levels.
+     * @param level1 Level 1.
+     * @param level2 Level 2.
+     * @param level3 Level 3.
+     * @return Data stream mapping configuration.
      */
-    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2, DataStreamLevelSpec dimension3) {
+    public static DataStreamMappingSpec create(DataStreamLevelSpec level1, DataStreamLevelSpec level2, DataStreamLevelSpec level3) {
         DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
-			setLevel1(dimension1);
-			setLevel2(dimension2);
-			setLevel3(dimension3);
+			setLevel1(level1);
+			setLevel2(level2);
+			setLevel3(level3);
         }};
         return dataStreamMappingSpec;
     }
 
     /**
-     * Creates a dimension specification with four dimensions.
-     * @param dimension1 Dimension 1.
-     * @param dimension2 Dimension 2.
-     * @param dimension3 Dimension 3.
-     * @param dimension4 Dimension 4.
-     * @return Dimension configuration.
+     * Creates a data stream mapping specification with four levels.
+     * @param level1 Level 1.
+     * @param level2 Level 2.
+     * @param level3 Level 3.
+     * @param level4 Level 4.
+     * @return Data stream mapping configuration.
      */
-    public static DataStreamMappingSpec create(DataStreamLevelSpec dimension1, DataStreamLevelSpec dimension2, DataStreamLevelSpec dimension3, DataStreamLevelSpec dimension4) {
+    public static DataStreamMappingSpec create(DataStreamLevelSpec level1, DataStreamLevelSpec level2, DataStreamLevelSpec level3, DataStreamLevelSpec level4) {
         DataStreamMappingSpec dataStreamMappingSpec = new DataStreamMappingSpec() {{
-			setLevel1(dimension1);
-			setLevel2(dimension2);
-			setLevel3(dimension3);
-			setLevel4(dimension4);
+			setLevel1(level1);
+			setLevel2(level2);
+			setLevel3(level3);
+			setLevel4(level4);
         }};
         return dataStreamMappingSpec;
     }

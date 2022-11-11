@@ -36,8 +36,8 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DimensionMappingSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -338,12 +338,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, P parameter);
 
     /**
-     * Accepts a time series configuration specification on a table level.
-     * @param dimensionsConfigurationSpec Time series specification.
+     * Accepts a data streams mapping specification on a table level.
+     * @param dataStreamMappingSpec Data streams mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DimensionsConfigurationSpec dimensionsConfigurationSpec, P parameter);
+    R accept(DataStreamMappingSpec dataStreamMappingSpec, P parameter);
 
     /**
      * Accepts a table owner specification on a table level.
@@ -371,11 +371,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a configuration of a single dimension.
-     * @param dimensionMappingSpec Dimension mapping specification.
+     * @param dataStreamLevelSpec Dimension mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DimensionMappingSpec dimensionMappingSpec, P parameter);
+    R accept(DataStreamLevelSpec dataStreamLevelSpec, P parameter);
 
     /**
      * Accepts a dictionary of custom rules.

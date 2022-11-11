@@ -36,8 +36,8 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DimensionMappingSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -490,26 +490,26 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     }
 
     /**
-     * Accepts a dimension configuration specification on a table level.
+     * Accepts a data streams mapping configuration specification on a table level.
      *
-     * @param dimensionsConfigurationSpec Dimension specification.
-     * @param parameter                   Additional visitor's parameter.
+     * @param dataStreamMappingSpec Data streams mapping specification.
+     * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionsConfigurationSpec dimensionsConfigurationSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a configuration of a single dimension.
+     * Accepts a configuration of a single data stream level.
      *
-     * @param dimensionMappingSpec Dimension mapping specification.
-     * @param parameter            Additional visitor's parameter.
+     * @param dataStreamLevelSpec Data stream level mapping specification.
+     * @param parameter           Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionMappingSpec dimensionMappingSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

@@ -20,58 +20,58 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import java.util.Arrays;
 
 /**
- * Dimension search matcher for CLI commands.
+ * Data stream search matcher for CLI commands.
  */
-public class DimensionSearchMatcher {
+public class DataStreamsMappingSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
-	 * @param dimension Dimension.
-	 * @param dimensions DimensionsConfigurationSpec.
+	 * @param level Data stream level value.
+	 * @param dataStreams DimensionsConfigurationSpec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	public static boolean matchDimension(String dimension, DataStreamMappingSpec dimensions) {
-		if (dimension == null || dimensions == null) {
+	public static boolean matchDataStreamsMapping(String level, DataStreamMappingSpec dataStreams) {
+		if (level == null || dataStreams == null) {
 			return true;
 		}
-		if(dimensions.getLevel1() == null || dimensions.getLevel2() == null || dimensions.getLevel3() == null ||
-				dimensions.getLevel4() == null || dimensions.getLevel5() == null || dimensions.getLevel6() == null ||
-				dimensions.getLevel7() == null || dimensions.getLevel8() == null || dimensions.getLevel9() == null) {
+		if(dataStreams.getLevel1() == null || dataStreams.getLevel2() == null || dataStreams.getLevel3() == null ||
+				dataStreams.getLevel4() == null || dataStreams.getLevel5() == null || dataStreams.getLevel6() == null ||
+				dataStreams.getLevel7() == null || dataStreams.getLevel8() == null || dataStreams.getLevel9() == null) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel1().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel1().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel1().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel1().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel2().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel2().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel2().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel2().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel3().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel3().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel3().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel3().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel4().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel4().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel4().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel4().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel5().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel5().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel5().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel5().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel6().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel6().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel6().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel6().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel7().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel7().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel7().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel7().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel8().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel8().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel8().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel8().getStaticValue(), level)) {
 			return true;
 		}
-		if (dimension.equals(dimensions.getLevel9().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dimensions.getLevel9().getStaticValue(), dimension)) {
+		if (level.equals(dataStreams.getLevel9().getStaticValue()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel9().getStaticValue(), level)) {
 			return true;
 		}
 		return false;
@@ -80,56 +80,56 @@ public class DimensionSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param connectionSearchFilters Connection search filters.
-	 * @param dimensionSpec Dimensions configuration spec.
+	 * @param dataStreamMappingSpec Data streams mapping spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllConnectionDimensions(ConnectionSearchFilters connectionSearchFilters, DataStreamMappingSpec dimensionSpec) {
+	static boolean matchAllConnectionDataStreamsMapping(ConnectionSearchFilters connectionSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
 		String[] dimensions = connectionSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDimension(dimension, dimensionSpec));
+		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
 	}
 
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param tableSearchFilters Table search filters.
-	 * @param dimensionSpec Dimensions configuration spec.
+	 * @param dataStreamsMappingSpec Data streams configuration spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllTableDimensions(TableSearchFilters tableSearchFilters, DataStreamMappingSpec dimensionSpec) {
+	static boolean matchAllTableDataStreams(TableSearchFilters tableSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
 		String[] dimensions = tableSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDimension(dimension, dimensionSpec));
+		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamsMappingSpec));
 	}
 
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param columnSearchFilters Column search filters.
-	 * @param dimensionSpec Dimensions configuration spec.
+	 * @param dataStreamsMappingSpec Data streams mapping spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllColumnDimensions(ColumnSearchFilters columnSearchFilters, DataStreamMappingSpec dimensionSpec) {
+	static boolean matchAllColumnDataStreams(ColumnSearchFilters columnSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
 		String[] dimensions = columnSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDimension(dimension, dimensionSpec));
+		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamsMappingSpec));
 	}
 
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param checkSearchFilters Check search filters.
-	 * @param dimensionSpec Dimensions configuration spec.
+	 * @param dataStreamMappingSpec Data streams mapping spec.
 	 * @return Boolean value if filters fit spec.
 	 */
-	static boolean matchAllCheckDimensions(CheckSearchFilters checkSearchFilters, DataStreamMappingSpec dimensionSpec) {
+	static boolean matchAllCheckDataStreamsMapping(CheckSearchFilters checkSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
 		String[] dimensions = checkSearchFilters.getDimensions();
 		if (dimensions == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDimension(dimension, dimensionSpec));
+		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
 	}
 }

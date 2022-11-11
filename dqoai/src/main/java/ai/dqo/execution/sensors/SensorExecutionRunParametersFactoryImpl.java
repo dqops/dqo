@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -79,19 +79,19 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             timeSeries = expandedConnection.getDefaultTimeSeries();
         }
 
-        DimensionsConfigurationSpec dimensions = expandedCheck.getDimensionsOverride();
-        if (dimensions == null && column != null) {
-            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
+        DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
+        if (dataStreams == null && column != null) {
+            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
         }
-        if (dimensions == null) {
-            dimensions = expandedTable.getDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedTable.getDataStreams();
         }
-        if (dimensions == null) {
-            dimensions = expandedConnection.getDefaultDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedConnection.getDefaultDataStreams();
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+                checkHierarchyId, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
 
@@ -121,18 +121,18 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
 
-        DimensionsConfigurationSpec dimensions = null;
+        DataStreamMappingSpec dataStreams = null;
         if (expandedColumn != null) {
-            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
+            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
         }
-        if (dimensions == null) {
-            dimensions = expandedTable.getDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedTable.getDataStreams();
         }
-        if (dimensions == null) {
-            dimensions = expandedConnection.getDefaultDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedConnection.getDefaultDataStreams();
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+                checkHierarchyId, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

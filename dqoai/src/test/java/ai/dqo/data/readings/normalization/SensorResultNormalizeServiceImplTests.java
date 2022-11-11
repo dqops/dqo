@@ -78,7 +78,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec.getHierarchyId(),
                 checkSpec.getTimeSeriesOverride(),
-                checkSpec.getDimensionsOverride(),
+                checkSpec.getDataStreamsOverride(),
                 checkSpec.getSensorParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);

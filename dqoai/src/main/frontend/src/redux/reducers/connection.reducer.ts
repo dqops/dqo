@@ -18,7 +18,7 @@ import {
   CommentSpec,
   ConnectionBasicModel,
   ConnectionModel,
-  DimensionsConfigurationSpec,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
   TimeSeriesConfigurationSpec
 } from '../../api';
@@ -34,7 +34,7 @@ export interface IConnectionState {
   schedule?: RecurringScheduleSpec;
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
-  defaultDimensions?: DimensionsConfigurationSpec;
+  defaultDataStreams?: DataStreamMappingSpec;
   labels: string[];
 }
 
@@ -248,36 +248,36 @@ const connectionReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS:
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING:
       return {
         ...state,
         loading: true
       };
-    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS:
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         loading: false,
-        defaultDimensions: action.data,
+        defaultDataStreams: action.data,
         error: null
       };
-    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_ERROR:
+    case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS:
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING:
       return {
         ...state,
         isUpdating: true
       };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS:
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_ERROR:
+    case CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         isUpdating: false,

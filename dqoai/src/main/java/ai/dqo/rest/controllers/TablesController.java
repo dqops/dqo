@@ -17,7 +17,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -241,21 +241,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the dimension's configuration for a table given a connection name and a table names.
+     * Retrieves the data streams configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Dimension's configuration for the requested table.
+     * @return Data streams configuration for the requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/dimensions")
-    @ApiOperation(value = "getTableDimensions", notes = "Return the dimension's configuration for a table", response = DimensionsConfigurationSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
+    @ApiOperation(value = "getTableDataStreamsMapping", notes = "Return the data streams mapping for a table", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table dimension's configuration returned", response = DimensionsConfigurationSpec.class),
+            @ApiResponse(code = 200, message = "Data streams mapping for a table returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DimensionsConfigurationSpec>> getTableDimensions(
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -275,9 +275,9 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        DimensionsConfigurationSpec dimensions = tableSpec.getDimensions();
+        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dimensions), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
     }
 
     /**
@@ -718,29 +718,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the dimension configuration of an existing table.
-     * @param connectionName              Connection name.
-     * @param schemaName                  Schema name.
-     * @param tableName                   Table name.
-     * @param dimensionsConfigurationSpec New dimension configuration or null (an empty optional).
+     * Updates the data streams mapping of an existing table.
+     * @param connectionName         Connection name.
+     * @param schemaName             Schema name.
+     * @param tableName              Table name.
+     * @param dataStreamsMappingSpec New data streams mapping or null (an empty optional).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/dimensions")
-    @ApiOperation(value = "updateTableDimensions", notes = "Updates the dimensions configuration of an existing table.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
+    @ApiOperation(value = "updateTableDataStreamsMapping", notes = "Updates the data streams mapping at a table level.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table dimension's configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's data streams mapping successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDimensions(
+    public ResponseEntity<Mono<?>> updateTableDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Dimension configuration to store or an empty object to clear the dimension configuration")
-            @RequestBody Optional<DimensionsConfigurationSpec> dimensionsConfigurationSpec) {
+            @Parameter(description = "Data streams mapping to store or an empty object to clear the data streams mapping on a table level")
+            @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -764,10 +764,10 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        if (dimensionsConfigurationSpec.isPresent()) {
-            tableSpec.setDimensions(dimensionsConfigurationSpec.get());
+        if (dataStreamsMappingSpec.isPresent()) {
+            tableSpec.setDataStreams(dataStreamsMappingSpec.get());
         } else {
-            tableSpec.setDimensions(new DimensionsConfigurationSpec());
+            tableSpec.setDataStreams(new DataStreamMappingSpec());
         }
         userHomeContext.flush();
 

@@ -23,8 +23,8 @@ import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.metadata.groupings.DimensionMappingSpecObjectMother;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -165,12 +165,12 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
-    void renderSensor_whenDimensionOnColumnAndSecondDimensionIsStaticValue_thenRendersCorrectSqlWithAliasedColumnReference() {
+    void renderSensor_whenLevelOnColumnAndSecondLevelIsStaticValue_thenRendersCorrectSqlWithAliasedColumnReference() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createColumnMapping("country"),
-                        DimensionMappingSpecObjectMother.createStaticValue("UK")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("country"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -183,10 +183,10 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
                                     OR SAFE.PARSE_DATE('%%Y-%%m-%%d', analyzed_table.`date`) IS NOT NULL THEN 1
                                     ELSE 0
                                 END
-                            ) / COUNT(*) AS actual_value, analyzed_table.`country` AS dimension_1, 'UK' AS dimension_2 
+                            ) / COUNT(*) AS actual_value, analyzed_table.`country` AS level_1, 'UK' AS level_2 
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1, dimension_2
-                        ORDER BY dimension_1, dimension_2""",
+                        GROUP BY level_1, level_2
+                        ORDER BY level_1, level_2""",
                         JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }

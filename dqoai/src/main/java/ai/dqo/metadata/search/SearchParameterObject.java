@@ -22,18 +22,18 @@ import java.util.List;
 
 public class SearchParameterObject {
 	private List<HierarchyNode> nodes;
-	private DimensionSearcherObject dimensionSearcherObject;
+	private DataStreamSearcherObject dataStreamSearcherObject;
 	private LabelsSearcherObject labelsSearcherObject;
 
-	public SearchParameterObject(List<HierarchyNode> nodes, DimensionSearcherObject dimensionSearcherObject, LabelsSearcherObject labelsSearcherObject) {
+	public SearchParameterObject(List<HierarchyNode> nodes, DataStreamSearcherObject dataStreamSearcherObject, LabelsSearcherObject labelsSearcherObject) {
 		this.nodes = nodes;
-		this.dimensionSearcherObject = dimensionSearcherObject;
+		this.dataStreamSearcherObject = dataStreamSearcherObject;
 		this.labelsSearcherObject = labelsSearcherObject;
 	}
 
 	public SearchParameterObject(List<HierarchyNode> nodes) {
 		this.nodes = nodes;
-		this.dimensionSearcherObject = new DimensionSearcherObject();
+		this.dataStreamSearcherObject = new DataStreamSearcherObject();
 		this.labelsSearcherObject = new LabelsSearcherObject();
 	}
 
@@ -49,12 +49,12 @@ public class SearchParameterObject {
 		this.nodes = nodes;
 	}
 
-	public DimensionSearcherObject getDimensionSearcherObject() {
-		return dimensionSearcherObject;
+	public DataStreamSearcherObject getDimensionSearcherObject() {
+		return dataStreamSearcherObject;
 	}
 
-	public void setDimensionSearcherObject(DimensionSearcherObject dimensionSearcher) {
-		this.dimensionSearcherObject = dimensionSearcher;
+	public void setDimensionSearcherObject(DataStreamSearcherObject dimensionSearcher) {
+		this.dataStreamSearcherObject = dimensionSearcher;
 	}
 
 	public LabelsSearcherObject getLabelsSearcherObject() {

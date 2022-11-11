@@ -16,7 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -77,11 +77,11 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        dimensionSearcherObject.setConnectionDimension(connectionWrapper.getSpec().getDefaultDimensions());
+        dataStreamSearcherObject.setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -131,11 +131,11 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dimensionSearcherObject.setTableDimension(tableWrapper.getSpec().getDimensions());
+        dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -163,11 +163,11 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
-        dimensionSearcherObject.setTableDimension(tableSpec.getDimensions());
+        dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -224,11 +224,11 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
-        dimensionSearcherObject.setColumnDimension(columnSpec.getDimensionsOverride());
+        dataStreamSearcherObject.setColumnDataStreams(columnSpec.getDataStreamsOverride());
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -266,7 +266,7 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
@@ -280,11 +280,11 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DimensionsConfigurationSpec overridenDimension = dimensionSearcherObject.getColumnDimension() != null
-                ? dimensionSearcherObject.getColumnDimension()
-                : dimensionSearcherObject.getTableDimension() != null
-                ? dimensionSearcherObject.getTableDimension()
-                : dimensionSearcherObject.getConnectionDimension();
+        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
+                ? dataStreamSearcherObject.getColumnDataStreams()
+                : dataStreamSearcherObject.getTableDataStreams() != null
+                ? dataStreamSearcherObject.getTableDataStreams()
+                : dataStreamSearcherObject.getConnectionDataStreams();
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -299,7 +299,7 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DimensionSearchMatcher.matchAllCheckDimensions(this.filters, overridenDimension)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overridenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overridenLabels)) {

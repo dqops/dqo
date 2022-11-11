@@ -95,7 +95,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec.getHierarchyId(),
                 checkSpec.getTimeSeriesOverride(),
-                checkSpec.getDimensionsOverride(),
+                checkSpec.getDataStreamsOverride(),
                 checkSpec.getSensorParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
 		progressListener = new CheckExecutionProgressListenerStub();

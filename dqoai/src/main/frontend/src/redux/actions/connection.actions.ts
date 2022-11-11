@@ -305,56 +305,56 @@ export const updateConnectionLabels =
     }
   };
 
-export const getConnectionDefaultDimensionsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS
+export const getConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const getConnectionDefaultDimensionsSuccess = (data: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS,
+export const getConnectionDefaultDataStreamsMappingSuccess = (data: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getConnectionDefaultDimensionsFailed = (error: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+export const getConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const getConnectionDefaultDimensions =
+export const getConnectionDefaultDataStreamsMapping =
   (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionDefaultDimensionsRequest());
+    dispatch(getConnectionDefaultDataStreamsMappingRequest());
     try {
-      const res = await ConnectionApiClient.getConnectionDefaultDimensions(
+      const res = await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
         connectionName
       );
-      dispatch(getConnectionDefaultDimensionsSuccess(res.data));
+      dispatch(getConnectionDefaultDataStreamsMappingSuccess(res.data));
     } catch (err) {
-      dispatch(getConnectionDefaultDimensionsFailed(err));
+      dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const updateConnectionDefaultDimensionsRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS
+export const updateConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const updateConnectionDefaultDimensionsSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS
+export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateConnectionDefaultDimensionsFailed = (error: any) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+export const updateConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const updateConnectionDefaultDimensions =
+export const updateConnectionDefaultDataStreamsMapping =
   (connectionName: string, data: any) => async (dispatch: Dispatch) => {
-    dispatch(updateConnectionDefaultDimensionsRequest());
+    dispatch(updateConnectionDefaultDataStreamsMappingRequest());
     try {
-      await ConnectionApiClient.updateConnectionDefaultDimensions(
+      await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(
         connectionName,
         data
       );
-      dispatch(updateConnectionDefaultDimensionsSuccess());
+      dispatch(updateConnectionDefaultDataStreamsMappingSuccess());
     } catch (err) {
-      dispatch(updateConnectionDefaultDimensionsFailed(err));
+      dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
     }
   };

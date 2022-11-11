@@ -146,7 +146,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param checkSpec  Target check specification to update.
      */
     protected void updateLegacyCheckSpec(UICheckModel checkModel, AbstractCheckDeprecatedSpec checkSpec) {
-        checkSpec.setDimensionsOverride(checkModel.getDimensionsOverride());
+        checkSpec.setDataStreamsOverride(checkModel.getDataStreamsOverride());
         checkSpec.setTimeSeriesOverride(checkModel.getTimeSeriesOverride());
         checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
         checkSpec.setComments(checkModel.getComments());

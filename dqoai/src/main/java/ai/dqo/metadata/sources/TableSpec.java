@@ -21,7 +21,7 @@ import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -50,7 +50,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         {
 			put("target", o -> o.target);
 			put("time_series", o -> o.timeSeries);
-			put("dimensions", o -> o.dimensions);
+			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("checks", o -> o.checks);
@@ -94,10 +94,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @Deprecated
     private TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
 
-    @JsonPropertyDescription("Data quality dimensions configuration. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Data streams configuration. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec dimensions = new DimensionsConfigurationSpec();
+    private DataStreamMappingSpec dataStreams = new DataStreamMappingSpec();
 
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
@@ -219,6 +219,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Sets a new time series configuration for this table.
      * @param timeSeries New time series configuration.
      */
+    @Deprecated
     public void setTimeSeries(TimeSeriesConfigurationSpec timeSeries) {
 		setDirtyIf(!Objects.equals(this.timeSeries, timeSeries));
         this.timeSeries = timeSeries;
@@ -226,21 +227,21 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for the table.
-     * @return Dimension configuration.
+     * Returns the data streams configuration for the table.
+     * @return Data streams configuration.
      */
-    public DimensionsConfigurationSpec getDimensions() {
-        return dimensions;
+    public DataStreamMappingSpec getDataStreams() {
+        return dataStreams;
     }
 
     /**
-     * Returns the dimension configuration for the table.
-     * @param dimensions Dimension configuration.
+     * Returns the data streams configuration for the table.
+     * @param dataStreams Data streams configuration.
      */
-    public void setDimensions(DimensionsConfigurationSpec dimensions) {
-		setDirtyIf(!Objects.equals(this.dimensions, dimensions));
-        this.dimensions = dimensions;
-		propagateHierarchyIdToField(dimensions, "dimensions");
+    public void setDataStreams(DataStreamMappingSpec dataStreams) {
+		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
+        this.dataStreams = dataStreams;
+		propagateHierarchyIdToField(dataStreams, "data_streams");
     }
 
     /**
@@ -446,8 +447,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.timeSeries != null) {
                 cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
             }
-            if (cloned.dimensions != null) {
-                cloned.dimensions = cloned.dimensions.expandAndTrim(secretValueProvider);
+            if (cloned.dataStreams != null) {
+                cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider);
             return cloned;
@@ -473,7 +474,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
-            cloned.dimensions = null;
+            cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;
@@ -501,7 +502,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
-            cloned.dimensions = null;
+            cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;

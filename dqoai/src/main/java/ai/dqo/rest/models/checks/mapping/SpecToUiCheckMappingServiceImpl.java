@@ -159,7 +159,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
 
-        checkModel.setDimensionsOverride(checkFieldValue.getDimensionsOverride());
+        checkModel.setDataStreamsOverride(checkFieldValue.getDataStreamsOverride());
         checkModel.setTimeSeriesOverride(checkFieldValue.getTimeSeriesOverride());
         checkModel.setScheduleOverride(checkFieldValue.getScheduleOverride());
         checkModel.setComments(checkFieldValue.getComments());

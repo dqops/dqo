@@ -41,8 +41,8 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class DataStreamConfigurationSpec extends AbstractSpec implements Cloneable {
-    private static final ChildHierarchyNodeFieldMapImpl<DataStreamConfigurationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
+    private static final ChildHierarchyNodeFieldMapImpl<DataStreamMappingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("level_1", o -> o.level1);
 			put("level_2", o -> o.level2);
@@ -279,9 +279,9 @@ public class DataStreamConfigurationSpec extends AbstractSpec implements Cloneab
      * Creates and returns a copy of this object.
      */
     @Override
-    public DataStreamConfigurationSpec clone() {
+    public DataStreamMappingSpec clone() {
         try {
-            DataStreamConfigurationSpec cloned = (DataStreamConfigurationSpec) super.clone();
+            DataStreamMappingSpec cloned = (DataStreamMappingSpec) super.clone();
             if (cloned.level1 != null) {
                 cloned.level1 = cloned.level1.clone();
             }
@@ -321,9 +321,9 @@ public class DataStreamConfigurationSpec extends AbstractSpec implements Cloneab
      * @param secretValueProvider Secret value provider.
      * @return Cloned and expanded deep copy of the object.
      */
-    public DataStreamConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataStreamMappingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
-            DataStreamConfigurationSpec cloned = (DataStreamConfigurationSpec) super.clone();
+            DataStreamMappingSpec cloned = (DataStreamMappingSpec) super.clone();
             if (cloned.level1 != null) {
                 cloned.level1 = cloned.level1.expandAndTrim(secretValueProvider);
             }

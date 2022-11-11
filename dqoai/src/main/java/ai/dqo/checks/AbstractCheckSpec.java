@@ -18,17 +18,11 @@ package ai.dqo.checks;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,10 +32,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.parquet.Strings;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 /**

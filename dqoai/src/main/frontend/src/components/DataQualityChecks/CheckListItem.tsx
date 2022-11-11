@@ -23,16 +23,16 @@ export interface ITab {
 const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const [checked, setChecked] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('dimension');
+  const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
 
   const openCheckSettings = () => {
     setExpanded(true);
-    setActiveTab('dimension');
+    setActiveTab('data-streams');
     setTabs([
       {
-        label: 'Dimension override',
-        value: 'dimension'
+        label: 'Data streams override',
+        value: 'data-streams'
       },
       {
         label: 'Schedule override',

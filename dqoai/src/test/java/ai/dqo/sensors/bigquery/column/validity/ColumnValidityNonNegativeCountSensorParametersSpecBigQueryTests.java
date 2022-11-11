@@ -23,8 +23,8 @@ import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.metadata.groupings.DimensionMappingSpecObjectMother;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.sources.ColumnSpecObjectMother;
@@ -538,11 +538,11 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
     }
 
     @Test
-    void renderSensor_whenDimensionOneStaticColumn_thenRendersCorrectSql() {
+    void renderSensor_whenLevelOneStaticColumn_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("FR")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -553,21 +553,21 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'FR' AS dimension_1
+                            ) AS actual_value, 'FR' AS level_1
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1
-                        ORDER BY dimension_1""",
+                        GROUP BY level_1
+                        ORDER BY level_1""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimensionOneStaticValue_thenRendersCorrectSql() {
+    void renderSensor_whenLevelOneStaticValue_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("IT")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("IT")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -578,20 +578,20 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'IT' AS dimension_1
+                            ) AS actual_value, 'IT' AS level_1
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1
-                        ORDER BY dimension_1""",
+                        GROUP BY level_1
+                        ORDER BY level_1""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -602,20 +602,20 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'DE' AS dimension_1
+                            ) AS actual_value, 'DE' AS level_1
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1
-                        ORDER BY dimension_1""",
+                        GROUP BY level_1
+                        ORDER BY level_1""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringWithQuoteAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringWithQuoteAndNoTimeSeries_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE's")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE's")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -626,22 +626,22 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'DE''s' AS dimension_1
+                            ) AS actual_value, 'DE''s' AS level_1
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1
-                        ORDER BY dimension_1""",
+                        GROUP BY level_1
+                        ORDER BY level_1""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringDimension2StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringLevel2StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("DE"),
-                        DimensionMappingSpecObjectMother.createStaticValue("PL")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -652,23 +652,23 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'DE' AS dimension_1, 'PL' AS dimension_2
+                            ) AS actual_value, 'DE' AS level_1, 'PL' AS level_2
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1, dimension_2
-                        ORDER BY dimension_1, dimension_2""",
+                        GROUP BY level_1, level_2
+                        ORDER BY level_1, level_2""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringDimension2StaticStringDimension3StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringLevel2StaticStringLevel3StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("DE"),
-                        DimensionMappingSpecObjectMother.createStaticValue("PL"),
-                        DimensionMappingSpecObjectMother.createStaticValue("UK")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -679,23 +679,23 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'DE' AS dimension_1, 'PL' AS dimension_2, 'UK' AS dimension_3
+                            ) AS actual_value, 'DE' AS level_1, 'PL' AS level_2, 'UK' AS level_3
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1, dimension_2, dimension_3
-                        ORDER BY dimension_1, dimension_2, dimension_3""",
+                        GROUP BY level_1, level_2, level_3
+                        ORDER BY level_1, level_2, level_3""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenMissingDimension1Dimension2StaticStringDimension3StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenMissingLevel1Level2StaticStringLevel3StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
                         null,
-                        DimensionMappingSpecObjectMother.createStaticValue("PL"),
-                        DimensionMappingSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -706,22 +706,22 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'PL' AS dimension_2, 'UK' AS dimension_3
+                            ) AS actual_value, 'PL' AS level_2, 'UK' AS level_3
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_2, dimension_3
-                        ORDER BY dimension_2, dimension_3""",
+                        GROUP BY level_2, level_3
+                        ORDER BY level_2, level_3""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenTimeSeriesDailyAndDimension1StaticAtCheck_thenRendersCorrectSqlWithTimeDimensionAsLastGrouping() {
+    void renderSensor_whenTimeSeriesDailyAndLevel1StaticAtCheck_thenRendersCorrectSqlWithTimeLevelAsLastGrouping() {
         runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createCurrentTimeSeries(TimeSeriesGradient.DAY));
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("US"),
-                        DimensionMappingSpecObjectMother.createStaticValue("PL")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("US"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -732,22 +732,22 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, 'US' AS dimension_1, 'PL' AS dimension_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                            ) AS actual_value, 'US' AS level_1, 'PL' AS level_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1, dimension_2, time_period
-                        ORDER BY dimension_1, dimension_2, time_period""",
+                        GROUP BY level_1, level_2, time_period
+                        ORDER BY level_1, level_2, time_period""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimensionOnColumnAndSecondDimensionIsStaticValue_thenRendersCorrectSqlWithAliasedColumnReference() {
+    void renderSensor_whenLevelOnColumnAndSecondLevelIsStaticValue_thenRendersCorrectSqlWithAliasedColumnReference() {
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createColumnMapping("country"),
-                        DimensionMappingSpecObjectMother.createStaticValue("UK")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("country"),
+                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -758,10 +758,10 @@ public class ColumnValidityNonNegativeCountSensorParametersSpecBigQueryTests ext
                                     WHEN analyzed_table.`id` < 0 THEN 0
                                     ELSE 1
                                 END
-                            ) AS actual_value, analyzed_table.`country` AS dimension_1, 'UK' AS dimension_2
+                            ) AS actual_value, analyzed_table.`country` AS level_1, 'UK' AS level_2
                         FROM %s AS analyzed_table
-                        GROUP BY dimension_1, dimension_2
-                        ORDER BY dimension_1, dimension_2""",
+                        GROUP BY level_1, level_2
+                        ORDER BY level_1, level_2""",
                
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)
         ), renderedTemplate);

@@ -26,7 +26,7 @@ const TableHeader = () => {
 
 const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
   const { sidebarWidth } = useTree();
-  const handleChangeDimension = (
+  const handleChangeDataDataStreams = (
     check: UICheckModel,
     idx: number,
     jdx: number
@@ -77,7 +77,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
                     check={check}
                     key={jIndex}
                     onChange={(item) =>
-                      handleChangeDimension(item, index, jIndex)
+                      handleChangeDataDataStreams(item, index, jIndex)
                     }
                   />
                 ))}
