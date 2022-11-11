@@ -376,4 +376,105 @@ public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
 				this.level8 == null &&
 				this.level9 == null;
     }
+
+    /**
+     * Merges the configuration of this data streams mapping with default mappings retrieved from the base level (connection).
+     * When the default data stream mapping is empty then returns self, otherwise returns a deep clone that returns level mappings
+     * from the default data stream mapping for all levels that are not configured in the current data stream mapping (self).
+     * @param defaultDataStreamMapping Default data stream mapping with default levels.
+     * @return Effective data stream mapping combined with default levels from the default data stream mapping.
+     */
+    public DataStreamMappingSpec getEffectiveDataStreamMapping(DataStreamMappingSpec defaultDataStreamMapping) {
+        if (defaultDataStreamMapping == null) {
+            return this;
+        }
+
+        if (defaultDataStreamMapping.isDefault()) {
+            return this; // no data stream levels configured in the defaults
+        }
+
+        DataStreamMappingSpec effectiveDataStreamMappings = this.clone();
+        if (this.getLevel1() == null && defaultDataStreamMapping.getLevel1() != null) {
+            effectiveDataStreamMappings.setLevel1(defaultDataStreamMapping.getLevel1().clone());
+        }
+
+        if (this.getLevel2() == null && defaultDataStreamMapping.getLevel2() != null) {
+            effectiveDataStreamMappings.setLevel2(defaultDataStreamMapping.getLevel2().clone());
+        }
+
+        if (this.getLevel3() == null && defaultDataStreamMapping.getLevel3() != null) {
+            effectiveDataStreamMappings.setLevel3(defaultDataStreamMapping.getLevel3().clone());
+        }
+
+        if (this.getLevel4() == null && defaultDataStreamMapping.getLevel4() != null) {
+            effectiveDataStreamMappings.setLevel4(defaultDataStreamMapping.getLevel4().clone());
+        }
+
+        if (this.getLevel5() == null && defaultDataStreamMapping.getLevel5() != null) {
+            effectiveDataStreamMappings.setLevel5(defaultDataStreamMapping.getLevel5().clone());
+        }
+
+        if (this.getLevel6() == null && defaultDataStreamMapping.getLevel6() != null) {
+            effectiveDataStreamMappings.setLevel6(defaultDataStreamMapping.getLevel6().clone());
+        }
+
+        if (this.getLevel7() == null && defaultDataStreamMapping.getLevel7() != null) {
+            effectiveDataStreamMappings.setLevel7(defaultDataStreamMapping.getLevel7().clone());
+        }
+
+        if (this.getLevel8() == null && defaultDataStreamMapping.getLevel8() != null) {
+            effectiveDataStreamMappings.setLevel8(defaultDataStreamMapping.getLevel8().clone());
+        }
+
+        if (this.getLevel9() == null && defaultDataStreamMapping.getLevel9() != null) {
+            effectiveDataStreamMappings.setLevel9(defaultDataStreamMapping.getLevel9().clone());
+        }
+
+        return effectiveDataStreamMappings;
+    }
+
+    /**
+     * Finds the index of the last configured data stream level.
+     * @return 0 - no data stream levels are configured, 1 - only level_1 is configured, 2 - level_2 is configured (and maybe also level_1), ...
+     */
+    public int countConfiguredLevels() {
+        int maxConfiguredLevel = 0;
+        if (this.level1 != null) {
+            maxConfiguredLevel = 1;
+        }
+
+        if (this.level2 != null) {
+            maxConfiguredLevel = 2;
+        }
+
+        if (this.level3 != null) {
+            maxConfiguredLevel = 3;
+        }
+
+        if (this.level4 != null) {
+            maxConfiguredLevel = 4;
+        }
+
+        if (this.level5 != null) {
+            maxConfiguredLevel = 5;
+        }
+
+        if (this.level6 != null) {
+            maxConfiguredLevel = 6;
+        }
+
+        if (this.level7 != null) {
+            maxConfiguredLevel = 7;
+        }
+
+        if (this.level8 != null) {
+            maxConfiguredLevel = 8;
+        }
+
+        if (this.level9 != null) {
+            maxConfiguredLevel = 9;
+        }
+
+        return maxConfiguredLevel;
+    }
 }

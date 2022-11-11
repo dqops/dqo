@@ -210,4 +210,25 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
         return super.isDefault();
     }
+
+    /**
+     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
+     * @return Rule definition name (python module name without .py extension) retrieved from the first configured severity level.
+     */
+    @JsonIgnore
+    public String getRuleDefinitionName() {
+        if (this.getAlert() != null) {
+            return this.getAlert().getRuleDefinitionName();
+        }
+
+        if (this.getWarning() != null) {
+            return this.getWarning().getRuleDefinitionName();
+        }
+
+        if (this.getFatal() != null) {
+            return this.getFatal().getRuleDefinitionName();
+        }
+
+        return null;
+    }
 }

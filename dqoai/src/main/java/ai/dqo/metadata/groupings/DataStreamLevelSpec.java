@@ -56,6 +56,9 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
     @ControlType(ParameterDataType.column_name_type)
     private String column;
 
+    @JsonPropertyDescription("Data stream level name.")
+    private String name;
+
     /**
      * Data stream level value source.
      * @return Gets the data stream level value source.
@@ -105,6 +108,23 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
     public void setColumn(String column) {
 		setDirtyIf(!Objects.equals(this.column, column));
         this.column = column;
+    }
+
+    /**
+     * Returns a descriptive name of the data stream level.
+     * @return Data stream level name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets a new data stream level name.
+     * @param name New data stream level name.
+     */
+    public void setName(String name) {
+        setDirtyIf(!Objects.equals(this.name, name));
+        this.name = name;
     }
 
     /**

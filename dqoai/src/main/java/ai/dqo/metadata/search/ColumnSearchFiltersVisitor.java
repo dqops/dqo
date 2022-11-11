@@ -72,7 +72,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
@@ -126,7 +126,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
@@ -158,7 +158,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
@@ -215,7 +215,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());

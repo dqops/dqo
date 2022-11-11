@@ -739,4 +739,16 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
+
+    /**
+     * Accepts a container of timestamp related columns on a table level.
+     *
+     * @param timestampColumnsSpec Configuration of timestamp related columns.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
 }

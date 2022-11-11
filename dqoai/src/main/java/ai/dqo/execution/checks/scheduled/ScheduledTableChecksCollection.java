@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.scheduled;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.TableWrapper;
 
@@ -60,7 +60,7 @@ public class ScheduledTableChecksCollection {
      * A check can be added multiple times, secondary calls are just ignored and the check is added only once.
      * @param checkSpec Check to be added.
      */
-    public void addCheck(AbstractCheckDeprecatedSpec checkSpec) {
+    public void addCheck(AbstractCheckSpec checkSpec) {
         assert this.targetTable.getHierarchyId().isMyDescendant(checkSpec.getHierarchyId());
 
         this.checks.add(checkSpec.getHierarchyId());

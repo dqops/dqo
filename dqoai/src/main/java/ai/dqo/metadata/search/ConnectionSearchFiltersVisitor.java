@@ -72,7 +72,7 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        parameter.getDimensionSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
         if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionWrapper.getSpec().getDefaultDataStreams())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
@@ -102,7 +102,7 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionSpec.getLabels());
-        parameter.getDimensionSearcherObject().setConnectionDataStreams(connectionSpec.getDefaultDataStreams());
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionSpec.getDefaultDataStreams());
         if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreams())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }

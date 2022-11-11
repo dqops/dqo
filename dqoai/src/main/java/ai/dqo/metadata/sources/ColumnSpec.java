@@ -101,6 +101,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.")

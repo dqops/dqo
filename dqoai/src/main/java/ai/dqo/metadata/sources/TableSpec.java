@@ -49,6 +49,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("target", o -> o.target);
+            put("timestamp_columns", o -> o.timestampColumns);
 			put("time_series", o -> o.timeSeries);
 			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
@@ -84,10 +85,17 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     private boolean disabled;
 
     @JsonPropertyDescription("Stage name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
     @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
+
+    @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
 
     @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -204,6 +212,24 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     public void setFilter(String filter) {
 		setDirtyIf(!Objects.equals(this.filter, filter));
         this.filter = filter;
+    }
+
+    /**
+     * Returns the configuration of timestamp columns used for timeliness data quality checks and date/time partitioned checks.
+     * @return Configuration of timestamp columns.
+     */
+    public TimestampColumnsSpec getTimestampColumns() {
+        return timestampColumns;
+    }
+
+    /**
+     * Sets the configuration of timestamp columns used for timeliness checks.
+     * @param timestampColumns Timestamp columns configuration.
+     */
+    public void setTimestampColumns(TimestampColumnsSpec timestampColumns) {
+        setDirtyIf(!Objects.equals(this.timestampColumns, timestampColumns));
+        this.timestampColumns = timestampColumns;
+        propagateHierarchyIdToField(timestampColumns, "timestamp_columns");
     }
 
     /**
@@ -444,6 +470,9 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.target != null) {
                 cloned.target = cloned.target.expandAndTrim(secretValueProvider);
             }
+            if (cloned.timestampColumns != null) {
+                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
+            }
             if (cloned.timeSeries != null) {
                 cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
             }
@@ -474,6 +503,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
+            cloned.timestampColumns = null;
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
@@ -501,6 +531,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
+            cloned.timestampColumns = null;
             cloned.timeSeries = null;
             cloned.dataStreams = null;
             cloned.labels = null;

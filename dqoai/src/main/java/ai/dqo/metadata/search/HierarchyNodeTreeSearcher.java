@@ -114,5 +114,5 @@ public interface HierarchyNodeTreeSearcher {
      * @param scheduledChecksSearchFilters Search filters to find all nested checks that would be included in the schedule.
      * @return Collection of check nodes that passed the filter.
      */
-    Collection<AbstractCheckDeprecatedSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters);
+    Collection<AbstractCheckSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters);
 }

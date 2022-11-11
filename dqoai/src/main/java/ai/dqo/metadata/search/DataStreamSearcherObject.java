@@ -38,10 +38,12 @@ public class DataStreamSearcherObject {
 		this.tableDataStreams = tableDataStreams;
 	}
 
+	@Deprecated
 	public DataStreamMappingSpec getColumnDataStreams() {
 		return this.columnDataStreams;
 	}
 
+	@Deprecated
 	public void setColumnDataStreams(DataStreamMappingSpec columnDataStreams) {
 		this.columnDataStreams = columnDataStreams;
 	}

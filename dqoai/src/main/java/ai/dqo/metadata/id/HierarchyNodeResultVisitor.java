@@ -512,4 +512,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, P parameter);
+
+    /**
+     * Accepts a container of timestamp related columns on a table level.
+     * @param timestampColumnsSpec Configuration of timestamp related columns.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TimestampColumnsSpec timestampColumnsSpec, P parameter);
 }
