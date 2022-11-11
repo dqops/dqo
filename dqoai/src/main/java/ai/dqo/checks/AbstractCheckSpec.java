@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -67,6 +68,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
 
     @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     private boolean disabled;
+
+    @JsonPropertyDescription("Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String qualityDimension;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -119,6 +124,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setDisabled(boolean disabled) {
         this.setDirtyIf(this.disabled != disabled);
         this.disabled = disabled;
+    }
+
+    /**
+     * Returns an overwritten data quality dimension that should be used for reporting the alerts for this data quality check.
+     * @return Overwritten data quality dimension name.
+     */
+    public String getQualityDimension() {
+        return qualityDimension;
+    }
+
+    /**
+     * Sets an overwritten name of the data quality dimension that is used for reporting the alerts of this data quality check.
+     * @param qualityDimension Data quality dimension name.
+     */
+    public void setQualityDimension(String qualityDimension) {
+        setDirtyIf(!Objects.equals(this.qualityDimension, qualityDimension));
+        this.qualityDimension = qualityDimension;
     }
 
     /**
@@ -196,22 +218,6 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
-     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
-     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
-     *
-     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
-     */
-    @Override
-    @JsonIgnore
-    public boolean isDefault() {
-        if (this.disabled) {
-            return false;
-        }
-
-        return super.isDefault();
-    }
-
-    /**
      * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
      * @return Rule definition name (python module name without .py extension) retrieved from the first configured severity level.
      */
@@ -230,5 +236,26 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
         }
 
         return null;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     * @return Default data quality dimension name.
+     */
+    @JsonIgnore
+    public abstract DefaultDataQualityDimensions getDefaultDataQualityDimension();
+
+    /**
+     * Effective data quality dimension used for reporting the alerts of this check. It is the value of {@link AbstractCheckSpec#qualityDimension} when provided
+     * or a result of calling {@link AbstractCheckSpec#getDefaultDataQualityDimension()}.
+     * @return Effective data quality dimension name.
+     */
+    @JsonIgnore
+    public String getEffectiveDataQualityDimension() {
+        if (!Strings.isNullOrEmpty(this.qualityDimension)) {
+            return this.qualityDimension;
+        }
+
+        return this.getDefaultDataQualityDimension().name();
     }
 }

@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checks.nulls;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
@@ -149,5 +150,15 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     *
+     * @return Default data quality dimension name.
+     */
+    @Override
+    public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
+        return DefaultDataQualityDimensions.COMPLETENESS;
     }
 }

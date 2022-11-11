@@ -16,10 +16,10 @@
 package ai.dqo.checks.table.checks.standard;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
-import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -150,5 +150,15 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     *
+     * @return Default data quality dimension name.
+     */
+    @Override
+    public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
+        return DefaultDataQualityDimensions.REASONABLENESS;
     }
 }
