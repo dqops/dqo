@@ -31,6 +31,11 @@ import java.util.Map;
  * API key payload that is stored and signed inside an API key.
  */
 public class DqoCloudApiKeyPayload {
+    public static final long CURRENT_API_KEY_VERSION = 2;
+
+    @JsonProperty("ver")
+    private Long version;
+
     @JsonProperty("tid")
     private String tenantId;
 
@@ -45,7 +50,7 @@ public class DqoCloudApiKeyPayload {
     private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
 
     @JsonProperty("dp")
-    private CloudDqoApiKeyDisposition disposition = CloudDqoApiKeyDisposition.ALL_PURPOSES;
+    private CloudDqoApiKeyDisposition disposition;
 
     @JsonProperty("exp")
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -64,6 +69,22 @@ public class DqoCloudApiKeyPayload {
 
     public DqoCloudApiKeyPayload(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the DQO Cloud API Key version.
+     * @return DQO Cloud API Key version.
+     */
+    public Long getVersion() {
+        return version;
+    }
+
+    /**
+     * Sets the DQO Cloud API Key version.
+     * @param version API Key version.
+     */
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     /**
