@@ -39,6 +39,8 @@
         {%- endif -%}
     {%- elif part == 'hour' -%}
         DATETIME_TRUNC(CAST({{value}} AS datetime), hour)
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS datetime)
     {%- else -%}
         CAST({{value}} AS date)
     {%- endif -%}
@@ -47,8 +49,8 @@
 {% macro render_time_dimension_expression(table_alias_prefix = '') %}
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
-            {%- if time_series.time_gradient is defined -%}
-               {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'TIMESTAMP') }}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+               {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'DATETIME') }}
             {%- else -%}
                CURRENT_TIMESTAMP()
             {%- endif -%}

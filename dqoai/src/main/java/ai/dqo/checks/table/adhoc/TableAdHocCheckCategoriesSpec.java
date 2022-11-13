@@ -22,6 +22,7 @@ import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -193,7 +194,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(null);
+            setTimeGradient(TimeSeriesGradient.MILLISECOND);
         }};
     }
 }

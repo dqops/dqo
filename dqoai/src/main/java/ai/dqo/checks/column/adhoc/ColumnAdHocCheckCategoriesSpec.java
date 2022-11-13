@@ -22,6 +22,7 @@ import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
 import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -212,8 +213,8 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
         return new TimeSeriesConfigurationSpec()
         {{
-           setMode(TimeSeriesMode.current_time);
-           setTimeGradient(null);
+            setMode(TimeSeriesMode.current_time);
+            setTimeGradient(TimeSeriesGradient.MILLISECOND);
         }};
     }
 }
