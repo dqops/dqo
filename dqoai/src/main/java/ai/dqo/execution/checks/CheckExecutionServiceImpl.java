@@ -267,7 +267,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
                     // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
                     // so we need to support just optimistic locking and verify the snapshot (parquet file dates - not modified) just before overwritting parquet files
-                    sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
+                    sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
+
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
                             checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadingsSnapshot, progressListener);
                     progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
@@ -290,12 +291,12 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
-        if (sensorReadingsSnapshot.hasNewReadings() && !dummySensorExecution) {
+        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
             sensorReadingsSnapshot.save();
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
-        if (ruleResultsSnapshot.hasNewAlerts() && !dummySensorExecution) {
+        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
             ruleResultsSnapshot.save();
         }
         progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, checks,
@@ -407,12 +408,12 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
-        if (sensorReadingsSnapshot.hasNewReadings() && !dummySensorExecution) {
+        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
             sensorReadingsSnapshot.save();
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
-        if (ruleResultsSnapshot.hasNewAlerts() && !dummySensorExecution) {
+        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
             ruleResultsSnapshot.save();
         }
         progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, null,

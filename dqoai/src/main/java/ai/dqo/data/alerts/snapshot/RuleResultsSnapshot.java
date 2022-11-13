@@ -35,8 +35,8 @@ import java.time.temporal.ChronoUnit;
 public class RuleResultsSnapshot {
     private final String connection;
     private final PhysicalTableName tableName;
-    private LocalDate firstMonth;
-    private LocalDate lastMonth;
+    private LocalDate firstLoadedMonth;
+    private LocalDate lastLoadedMonth;
     private final RuleResultsFileStorageService storageService;
     private Table historicResults;
     private final Table newResults;
@@ -86,16 +86,16 @@ public class RuleResultsSnapshot {
      * Returns the date of the first day of the first month that is loaded into a snapshot.
      * @return First day of the first month loaded.
      */
-    public LocalDate getFirstMonth() {
-        return firstMonth;
+    public LocalDate getFirstLoadedMonth() {
+        return firstLoadedMonth;
     }
 
     /**
      * Returns the date of the first day of the last month that is loaded into a snapshot. The whole month (until the last day of that month) is loaded.
      * @return First day of the last month loaded.
      */
-    public LocalDate getLastMonth() {
-        return lastMonth;
+    public LocalDate getLastLoadedMonth() {
+        return lastLoadedMonth;
     }
 
     /**
@@ -121,36 +121,36 @@ public class RuleResultsSnapshot {
      * @param endMonth The date fo the end month. It could be any date within the month, because the whole month is always loaded.
      */
     public void ensureMonthsAreLoaded(LocalDate startMonth, LocalDate endMonth) {
-        if (this.firstMonth == null) {
+        if (this.firstLoadedMonth == null) {
             // no data ever loaded
 
-			this.firstMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
-			this.lastMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
-			this.historicResults = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstMonth, this.lastMonth);
+			this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
+			this.lastLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
+			this.historicResults = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth);
 
             return;
         }
 
         assert this.historicResults != null;
 
-        if (startMonth.isBefore(this.firstMonth)) {
+        if (startMonth.isBefore(this.firstLoadedMonth)) {
             // we need to load a few months before
-            LocalDate lastMonthToLoad = this.firstMonth.minus(1, ChronoUnit.MONTHS);
-			this.firstMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
+            LocalDate lastMonthToLoad = this.firstLoadedMonth.minus(1, ChronoUnit.MONTHS);
+			this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
 
-            Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstMonth, lastMonthToLoad);
+            Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstLoadedMonth, lastMonthToLoad);
             if (loadedRows != null) {
 				this.historicResults.append(loadedRows);
             }
         }
 
         LocalDate truncatedEndMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
-        if (truncatedEndMonth.isAfter(this.lastMonth)) {
+        if (truncatedEndMonth.isAfter(this.lastLoadedMonth)) {
             // we need to load a few months after
-            LocalDate firstMonthToLoad = this.lastMonth.plus(1, ChronoUnit.MONTHS);
-			this.lastMonth = truncatedEndMonth;
+            LocalDate firstMonthToLoad = this.lastLoadedMonth.plus(1, ChronoUnit.MONTHS);
+			this.lastLoadedMonth = truncatedEndMonth;
 
-            Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, firstMonthToLoad, this.lastMonth);
+            Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, firstMonthToLoad, this.lastLoadedMonth);
             if (loadedRows != null) {
 				this.historicResults.append(loadedRows);
             }
@@ -169,21 +169,22 @@ public class RuleResultsSnapshot {
 
         if (this.historicResults == null) {
             // no historic data was loaded (or not present)
+
             if (this.newResults.rowCount() == 0) {
                 return; // nothing to write
             }
 
-            // save only the new readings
+            // we need to load old rule results to perform merging
+            this.ensureMonthsAreLoaded(minDateNewResults.toLocalDate(), maxDateNewResults.toLocalDate());
+        }
+
+        if (this.historicResults == null || this.historicResults.rowCount() == 0) {
+            // save only the new readings because the historic results are empty, we don't need to bother about joining
 			this.storageService.saveTableInMonthsRange(this.newResults, this.connection, this.tableName,
                     LocalDateTimeTruncateUtility.truncateMonth(minDateNewResults.toLocalDate()),
                     LocalDateTimeTruncateUtility.truncateMonth(maxDateNewResults.toLocalDate()));
         }
         else {
-            if (this.newResults.rowCount() == 0) {
-                // nothing to save, no new rows, only rows that were already loaded
-                return;
-            }
-
             String[] joinColumns = {
                     SensorNormalizedResult.CHECK_HASH_COLUMN_NAME,
                     SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME,
@@ -201,7 +202,7 @@ public class RuleResultsSnapshot {
      * Checks if the new table has any rows that should be merged into the persistent store.
      * @return True when there are new rows, false when there is no data to be saved.
      */
-    public boolean hasNewAlerts() {
+    public boolean hasNewRuleResults() {
         return this.newResults != null && this.newResults.rowCount() > 0;
     }
 }
