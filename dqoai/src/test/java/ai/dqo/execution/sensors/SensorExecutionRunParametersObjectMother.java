@@ -64,7 +64,7 @@ public class SensorExecutionRunParametersObjectMother {
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionWrapper.getSpec().getProviderType());
         SensorExecutionRunParametersFactory factory = getFactory();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(
                 connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
@@ -83,7 +83,7 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         SensorExecutionRunParametersFactory factory = getFactory();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, null,
                 checkSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
@@ -109,7 +109,7 @@ public class SensorExecutionRunParametersObjectMother {
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, columnSpec,
                 checkSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
@@ -131,7 +131,7 @@ public class SensorExecutionRunParametersObjectMother {
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
 
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, columnSpec,
                 checkSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }

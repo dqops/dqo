@@ -47,7 +47,11 @@
 {% macro render_time_dimension_expression(table_alias_prefix = '') %}
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
-            {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'TIMESTAMP') }}
+            {%- if time_series.time_gradient is defined -%}
+               {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'TIMESTAMP') }}
+            {%- else -%}
+               CURRENT_TIMESTAMP()
+            {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
         {%- else -%}
@@ -72,7 +76,7 @@
                 {%- elif data_stream_level.source == 'column_value' -%}
                     {{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
                 {%- endif -%}
-            {%- endwith %} AS {{ attribute }}
+            {%- endwith %} AS stream_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
 {% endmacro %}
@@ -97,7 +101,7 @@
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
-                {{ attribute }}
+                stream_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
     {%- if time_series is not none -%}

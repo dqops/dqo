@@ -56,11 +56,11 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
-															   TableSpec table,
-															   ColumnSpec column,
-															   AbstractCheckDeprecatedSpec check,
-															   ProviderDialectSettings dialectSettings) {
+    public SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
+                                                                     TableSpec table,
+                                                                     ColumnSpec column,
+                                                                     AbstractCheckDeprecatedSpec check,
+                                                                     ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
@@ -91,7 +91,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
 
@@ -106,7 +106,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    @Override
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
@@ -116,23 +115,30 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        HierarchyId checkHierarchyId = check.getHierarchyId();
         AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
 
-        DataStreamMappingSpec dataStreams = null;
+        DataStreamMappingSpec dataStreams = null;  // TODO: when we add custom checks with a fully configurable data stream mapping (for a single check), we should retrieve it here and merge with defaults
         if (expandedColumn != null) {
-            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
+            dataStreams = expandedColumn.getDataStreamsOverride();
         }
+
         if (dataStreams == null) {
             dataStreams = expandedTable.getDataStreams();
         }
+        else if (expandedTable.getDataStreams() != null){
+            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedTable.getDataStreams());
+        }
+
         if (dataStreams == null) {
             dataStreams = expandedConnection.getDefaultDataStreams();
         }
+        else if (expandedConnection.getDefaultDataStreams() != null){
+            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedConnection.getDefaultDataStreams());
+        }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                check, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

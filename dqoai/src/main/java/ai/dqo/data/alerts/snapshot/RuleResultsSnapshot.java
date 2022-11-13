@@ -18,7 +18,6 @@ package ai.dqo.data.alerts.snapshot;
 import ai.dqo.data.alerts.filestorage.RuleResultsFileStorageService;
 import ai.dqo.data.delta.ChangeDeltaMode;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
-import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
@@ -187,8 +186,7 @@ public class RuleResultsSnapshot {
 
             String[] joinColumns = {
                     SensorNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                    SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME,
-                    RuleEvaluationResult.RULE_HASH_COLUMN_NAME,
+                    SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME,
                     SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME
             };
             Table mergedResults = TableMergeUtility.mergeNewResults(this.historicResults, this.newResults, joinColumns);

@@ -11,9 +11,17 @@ public enum DefaultDataQualityDimensions {
     ACCURACY("Accuracy"),
     VALIDITY("Validity");
 
-    public final String name;
+    private final String displayName;
 
-    DefaultDataQualityDimensions(String name) {
-        this.name = name;
+    DefaultDataQualityDimensions(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * Returns the display name of the data quality dimension that should be stored in parquet.
+     * @return Data quality dimension display name.
+     */
+    public String getDisplayName() {
+        return displayName;
     }
 }

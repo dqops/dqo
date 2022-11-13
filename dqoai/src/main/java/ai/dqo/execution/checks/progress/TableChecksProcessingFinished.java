@@ -32,7 +32,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     private final int sensorResultsCount;
     private final int passedRules;
     private final int warningsCount;
-    private final int alertsCount;
+    private final int errorsCount;
     private final int fatalCount;
 
     /**
@@ -44,7 +44,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      */
     public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec> checks,
                                          int checksCount, int sensorResultsCount, int passedRules,
-                                         int warningsCount, int alertsCount, int fatalCount) {
+                                         int warningsCount, int errorsCount, int fatalCount) {
         this.connectionWrapper = connectionWrapper;
         this.tableSpec = tableSpec;
         this.checks = checks;
@@ -52,7 +52,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
         this.sensorResultsCount = sensorResultsCount;
         this.passedRules = passedRules;
         this.warningsCount = warningsCount;
-        this.alertsCount = alertsCount;
+        this.errorsCount = errorsCount;
         this.fatalCount = fatalCount;
     }
 
@@ -115,11 +115,11 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     }
 
     /**
-     * Count of medium severity alerts (default alerts) that were raised.
-     * @return Normal severity alerts count.
+     * Count of error (medium) severity alerts (default alerts) that were raised.
+     * @return Error severity alerts count.
      */
-    public int getAlertsCount() {
-        return alertsCount;
+    public int getErrorsCount() {
+        return errorsCount;
     }
 
     /**

@@ -134,6 +134,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
+        checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
+        checkModel.setSupportsTimeSeries(false);
+        checkModel.setSupportsDataStreams(false);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
@@ -166,6 +169,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setComments(checkFieldValue.getComments());
         checkModel.setDisabled(checkFieldValue.getSensorParameters().isDisabled());
         checkModel.setFilter(checkFieldValue.getSensorParameters().getFilter());
+        checkModel.setSupportsTimeSeries(true);
+        checkModel.setSupportsDataStreams(true);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkFieldValue.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
@@ -199,15 +204,15 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         ClassInfo abstractCheckClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo warningFieldInfo = abstractCheckClassInfo.getField("warning");
         UIRuleParametersModel warningSeverityParametersModel = createRuleParametersModel(warningFieldInfo, checkSpec);
-        thresholdsModel.setLow(warningSeverityParametersModel);
+        thresholdsModel.setWarning(warningSeverityParametersModel);
 
-        FieldInfo alertFieldInfo = abstractCheckClassInfo.getField("alert");
-        UIRuleParametersModel alertSeverityParametersModel = createRuleParametersModel(alertFieldInfo, checkSpec);
-        thresholdsModel.setMedium(alertSeverityParametersModel);
+        FieldInfo errorFieldInfo = abstractCheckClassInfo.getField("error");
+        UIRuleParametersModel errorSeverityParametersModel = createRuleParametersModel(errorFieldInfo, checkSpec);
+        thresholdsModel.setError(errorSeverityParametersModel);
 
         FieldInfo fatalFieldInfo = abstractCheckClassInfo.getField("fatal");
         UIRuleParametersModel fatalSeverityParametersModel = createRuleParametersModel(fatalFieldInfo, checkSpec);
-        thresholdsModel.setHigh(fatalSeverityParametersModel);
+        thresholdsModel.setFatal(fatalSeverityParametersModel);
 
         return thresholdsModel;
     }
@@ -221,22 +226,22 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     protected UIRuleThresholdsModel createLegacyRuleThresholdsModel(FieldInfo ruleFieldInfo, AbstractRuleThresholdsSpec ruleFieldValue) {
         UIRuleThresholdsModel thresholdsModel = new UIRuleThresholdsModel();
         thresholdsModel.setFieldName(ruleFieldInfo.getDisplayName());
-        thresholdsModel.setDisabled(ruleFieldValue.isDisabled());
+//        thresholdsModel.setDisabled(ruleFieldValue.isDisabled());
         thresholdsModel.setHelpHext(ruleFieldInfo.getHelpText());
-        thresholdsModel.setTimeWindow(ruleFieldValue.getTimeWindow());
+//        thresholdsModel.setTimeWindow(ruleFieldValue.getTimeWindow());
 
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleFieldValue.getClass());
         FieldInfo lowFieldInfo = ruleThresholdsClassInfo.getField("low");
         UIRuleParametersModel lowSeverityParametersModel = createLegacyRuleParametersModel(lowFieldInfo, ruleFieldValue);
-        thresholdsModel.setLow(lowSeverityParametersModel);
+        thresholdsModel.setWarning(lowSeverityParametersModel);
 
         FieldInfo mediumFieldInfo = ruleThresholdsClassInfo.getField("medium");
         UIRuleParametersModel mediumSeverityParametersModel = createLegacyRuleParametersModel(mediumFieldInfo, ruleFieldValue);
-        thresholdsModel.setMedium(mediumSeverityParametersModel);
+        thresholdsModel.setError(mediumSeverityParametersModel);
 
         FieldInfo highFieldInfo = ruleThresholdsClassInfo.getField("high");
         UIRuleParametersModel highSeverityParametersModel = createLegacyRuleParametersModel(highFieldInfo, ruleFieldValue);
-        thresholdsModel.setHigh(highSeverityParametersModel);
+        thresholdsModel.setFatal(highSeverityParametersModel);
 
         return thresholdsModel;
     }

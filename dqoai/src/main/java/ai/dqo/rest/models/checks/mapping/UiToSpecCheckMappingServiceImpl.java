@@ -97,7 +97,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
             String yamlCheckName = checkModel.getCheckName();
             FieldInfo checkFieldInfo = checkCategoryClassInfo.getFieldByYamlName(yamlCheckName);
 
-            if (checkModel.isConfigured()) {
+            if (!checkModel.isConfigured()) {
                 // the check was unconfigured (selected to be deleted from YAML)
                 checkFieldInfo.setFieldValue(null, categorySpec);
                 continue;
@@ -132,6 +132,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
+        checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
 
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
@@ -188,14 +189,14 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      */
     protected void updateRuleThresholdsSpec(UIRuleThresholdsModel ruleThresholdsModel, AbstractCheckSpec<?, ?> checkSpec) {
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
-        FieldInfo alertFieldInfo = ruleThresholdsClassInfo.getField("alert");
-        updateSeveritySpec(ruleThresholdsModel.getLow(), alertFieldInfo, checkSpec);
+        FieldInfo errorFieldInfo = ruleThresholdsClassInfo.getField("error");
+        updateSeveritySpec(ruleThresholdsModel.getError(), errorFieldInfo, checkSpec);
 
         FieldInfo warningFieldInfo = ruleThresholdsClassInfo.getField("warning");
-        updateSeveritySpec(ruleThresholdsModel.getMedium(), warningFieldInfo, checkSpec);
+        updateSeveritySpec(ruleThresholdsModel.getWarning(), warningFieldInfo, checkSpec);
 
         FieldInfo fatalFieldInfo = ruleThresholdsClassInfo.getField("fatal");
-        updateSeveritySpec(ruleThresholdsModel.getHigh(), fatalFieldInfo, checkSpec);
+        updateSeveritySpec(ruleThresholdsModel.getFatal(), fatalFieldInfo, checkSpec);
     }
 
     /**
@@ -205,17 +206,17 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param ruleThresholdsSpec  Target rule thresholds specification to update.
      */
     protected void updateLegacyRuleThresholdsSpec(UIRuleThresholdsModel ruleThresholdsModel, AbstractRuleThresholdsSpec ruleThresholdsSpec) {
-        ruleThresholdsSpec.setTimeWindow(ruleThresholdsModel.getTimeWindow());
+//        ruleThresholdsSpec.setTimeWindow(ruleThresholdsModel.getTimeWindow());
 
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleThresholdsSpec.getClass());
         FieldInfo lowFieldInfo = ruleThresholdsClassInfo.getField("low");
-        updateLegacySeveritySpec(ruleThresholdsModel.getLow(), lowFieldInfo, ruleThresholdsSpec);
+        updateLegacySeveritySpec(ruleThresholdsModel.getWarning(), lowFieldInfo, ruleThresholdsSpec);
 
         FieldInfo mediumFieldInfo = ruleThresholdsClassInfo.getField("medium");
-        updateLegacySeveritySpec(ruleThresholdsModel.getMedium(), mediumFieldInfo, ruleThresholdsSpec);
+        updateLegacySeveritySpec(ruleThresholdsModel.getError(), mediumFieldInfo, ruleThresholdsSpec);
 
         FieldInfo highFieldInfo = ruleThresholdsClassInfo.getField("high");
-        updateLegacySeveritySpec(ruleThresholdsModel.getHigh(), highFieldInfo, ruleThresholdsSpec);
+        updateLegacySeveritySpec(ruleThresholdsModel.getFatal(), highFieldInfo, ruleThresholdsSpec);
     }
 
     /**

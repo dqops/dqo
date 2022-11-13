@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -42,7 +43,8 @@ public class SensorExecutionRunParameters {
     private ConnectionSpec connection;
     private TableSpec table;
     private ColumnSpec column; // may be null
-    private HierarchyId checkHierarchyId;
+    @JsonIgnore
+    private AbstractCheckSpec<?,?> check;
     private TimeSeriesConfigurationSpec timeSeries;
     private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
@@ -57,7 +59,7 @@ public class SensorExecutionRunParameters {
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Column specification.
-     * @param checkHierarchyId Check hierarchy id to identify the check.
+     * @param check Check specification.
      * @param timeSeries Effective time series configuration.
      * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
@@ -67,7 +69,7 @@ public class SensorExecutionRunParameters {
 			ConnectionSpec connection,
 			TableSpec table,
 			ColumnSpec column,
-			HierarchyId checkHierarchyId,
+			AbstractCheckSpec check,
             TimeSeriesConfigurationSpec timeSeries,
             DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
@@ -75,7 +77,7 @@ public class SensorExecutionRunParameters {
         this.connection = connection;
         this.table = table;
         this.column = column;
-        this.checkHierarchyId = checkHierarchyId;
+        this.check = check;
         this.timeSeries = timeSeries;
         this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
@@ -132,19 +134,19 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Check hierarchy id to identify the check.
-     * @return Check id.
+     * Returns the data quality check specification.
+     * @return Data quality check specification.
      */
-    public HierarchyId getCheckHierarchyId() {
-        return checkHierarchyId;
+    public AbstractCheckSpec<?, ?> getCheck() {
+        return check;
     }
 
     /**
-     * Sets the check hierarchy id.
-     * @param checkHierarchyId Check hierarchy id.
+     * Sets the data quality check specification.
+     * @param check Check specification.
      */
-    public void setCheckHierarchyId(HierarchyId checkHierarchyId) {
-        this.checkHierarchyId = checkHierarchyId;
+    public void setCheck(AbstractCheckSpec<?, ?> check) {
+        this.check = check;
     }
 
     /**

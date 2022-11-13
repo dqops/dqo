@@ -193,7 +193,7 @@ public class SensorReadingsSnapshot {
 
             String[] joinColumns = {
                     SensorNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                    SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME,
+                    SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME,
                     SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME
             };
             Table mergedResults = TableMergeUtility.mergeNewResults(this.historicResults, this.newResults, joinColumns);
@@ -224,11 +224,11 @@ public class SensorReadingsSnapshot {
 		this.timeSeriesMap = new SensorReadingsTimeSeriesMap();
 
         if (this.historicResults != null) {
-            TableSliceGroup tableSlices = this.historicResults.splitOn(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME);
+            TableSliceGroup tableSlices = this.historicResults.splitOn(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
             for (TableSlice tableSlice : tableSlices) {
                 Table timeSeriesTable = tableSlice.asTable();
                 LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME);
-                LongColumn dimensionIdColumn = (LongColumn) timeSeriesTable.column(SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME);
+                LongColumn dimensionIdColumn = (LongColumn) timeSeriesTable.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
                 long checkHashId = checkHashColumn.get(0); // the first row has the value
                 long dimensionId = dimensionIdColumn.get(0);
 

@@ -183,10 +183,10 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
                                     OR SAFE.PARSE_DATE('%%Y-%%m-%%d', analyzed_table.`date`) IS NOT NULL THEN 1
                                     ELSE 0
                                 END
-                            ) / COUNT(*) AS actual_value, analyzed_table.`country` AS level_1, 'UK' AS level_2 
+                            ) / COUNT(*) AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2 
                         FROM %s AS analyzed_table
-                        GROUP BY level_1, level_2
-                        ORDER BY level_1, level_2""",
+                        GROUP BY stream_level_1, stream_level_2
+                        ORDER BY stream_level_1, stream_level_2""",
                         JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }

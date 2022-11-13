@@ -14,47 +14,47 @@ const CheckRulesTable = ({
   disabled
 }: ICheckRulesTableProps) => {
   const handleChange = (
-    key: 'medium' | 'high' | 'low',
+    key: 'error' | 'fatal' | 'warning',
     field: UIFieldModel,
     idx: number
   ) => {
-    if (key === 'medium') {
-      const newParameters = rule?.medium?.rule_parameters?.map((item, index) =>
+    if (key === 'error') {
+      const newParameters = rule?.error?.rule_parameters?.map((item, index) =>
         index === idx ? field : item
       );
       onChange([
         {
           ...rule,
-          medium: {
-            ...rule?.medium,
+          error: {
+            ...rule?.error,
             rule_parameters: newParameters
           }
         }
       ]);
     }
-    if (key === 'high') {
-      const newParameters = rule?.high?.rule_parameters?.map((item, index) =>
+    if (key === 'fatal') {
+      const newParameters = rule?.fatal?.rule_parameters?.map((item, index) =>
         index === idx ? field : item
       );
       onChange([
         {
           ...rule,
-          high: {
-            ...rule?.high,
+          fatal: {
+            ...rule?.fatal,
             rule_parameters: newParameters
           }
         }
       ]);
     }
-    if (key === 'low') {
-      const newParameters = rule?.low?.rule_parameters?.map((item, index) =>
+    if (key === 'warning') {
+      const newParameters = rule?.warning?.rule_parameters?.map((item, index) =>
         index === idx ? field : item
       );
       onChange([
         {
           ...rule,
-          low: {
-            ...rule?.low,
+          warning: {
+            ...rule?.warning,
             rule_parameters: newParameters
           }
         }
@@ -87,12 +87,12 @@ const CheckRulesTable = ({
         <tr>
           <td className="text-left text-gray-700 py-2">
             <div className="flex space-x-2">
-              {rule?.medium?.rule_parameters?.map((item, index) => (
+              {rule?.error?.rule_parameters?.map((item, index) => (
                 <div key={index}>
                   <FieldControl
                     field={item}
                     onChange={(field: UIFieldModel) =>
-                      handleChange('medium', field, index)
+                      handleChange('error', field, index)
                     }
                     disabled={disabled}
                   />
@@ -102,12 +102,12 @@ const CheckRulesTable = ({
           </td>
           <td className="text-left text-gray-700 py-2 px-4">
             <div className="flex space-x-2">
-              {rule?.high?.rule_parameters?.map((item, index) => (
+              {rule?.fatal?.rule_parameters?.map((item, index) => (
                 <div key={index}>
                   <FieldControl
                     field={item}
                     onChange={(field: UIFieldModel) =>
-                      handleChange('high', field, index)
+                      handleChange('fatal', field, index)
                     }
                     disabled={disabled}
                   />
@@ -117,12 +117,12 @@ const CheckRulesTable = ({
           </td>
           <td className="text-left text-gray-700 py-2">
             <div className="flex space-x-2">
-              {rule?.low?.rule_parameters?.map((item, index) => (
+              {rule?.warning?.rule_parameters?.map((item, index) => (
                 <div key={index}>
                   <FieldControl
                     field={item}
                     onChange={(field: UIFieldModel) =>
-                      handleChange('low', field, index)
+                      handleChange('warning', field, index)
                     }
                     disabled={disabled}
                   />

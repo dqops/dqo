@@ -554,10 +554,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'FR' AS level_1
+                          END AS actual_value, 'FR' AS stream_level_1
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1
-                        ORDER BY level_1""",
+                        GROUP BY stream_level_1
+                        ORDER BY stream_level_1""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -579,10 +579,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'IT' AS level_1
+                          END AS actual_value, 'IT' AS stream_level_1
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1
-                        ORDER BY level_1""",
+                        GROUP BY stream_level_1
+                        ORDER BY stream_level_1""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -603,10 +603,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'DE' AS level_1
+                          END AS actual_value, 'DE' AS stream_level_1
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1
-                        ORDER BY level_1""",
+                        GROUP BY stream_level_1
+                        ORDER BY stream_level_1""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -627,10 +627,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'DE''s' AS level_1
+                          END AS actual_value, 'DE''s' AS stream_level_1
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1
-                        ORDER BY level_1""",
+                        GROUP BY stream_level_1
+                        ORDER BY stream_level_1""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -653,10 +653,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'DE' AS level_1, 'PL' AS level_2
+                          END AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1, level_2
-                        ORDER BY level_1, level_2""",
+                        GROUP BY stream_level_1, stream_level_2
+                        ORDER BY stream_level_1, stream_level_2""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -680,10 +680,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'DE' AS level_1, 'PL' AS level_2, 'UK' AS level_3
+                          END AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2, 'UK' AS stream_level_3
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1, level_2, level_3
-                        ORDER BY level_1, level_2, level_3""",
+                        GROUP BY stream_level_1, stream_level_2, stream_level_3
+                        ORDER BY stream_level_1, stream_level_2, stream_level_3""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -707,10 +707,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'PL' AS level_2, 'UK' AS level_3
+                          END AS actual_value, 'PL' AS stream_level_2, 'UK' AS stream_level_3
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_2, level_3
-                        ORDER BY level_2, level_3""",
+                        GROUP BY stream_level_2, stream_level_3
+                        ORDER BY stream_level_2, stream_level_3""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -733,10 +733,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'US' AS level_1, 'PL' AS level_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1, level_2, time_period
-                        ORDER BY level_1, level_2, time_period""",
+                        GROUP BY stream_level_1, stream_level_2, time_period
+                        ORDER BY stream_level_1, stream_level_2, time_period""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()
@@ -759,10 +759,10 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, analyzed_table.`country` AS level_1, 'UK' AS level_2
+                          END AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2
                         FROM `%s`.`%s`.`%s` AS analyzed_table
-                        GROUP BY level_1, level_2
-                        ORDER BY level_1, level_2""",
+                        GROUP BY stream_level_1, stream_level_2
+                        ORDER BY stream_level_1, stream_level_2""",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName()

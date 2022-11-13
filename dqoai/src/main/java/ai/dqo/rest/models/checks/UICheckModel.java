@@ -52,12 +52,16 @@ public class UICheckModel {
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;
 
+    @JsonPropertyDescription("The data quality check supports a custom time series configuration.")
+    private boolean supportsTimeSeries;
+
+    @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
+    private boolean supportsDataStreams;
+
     @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @Deprecated
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
     @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
-    @Deprecated
     private DataStreamMappingSpec dataStreamsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
@@ -68,6 +72,9 @@ public class UICheckModel {
 
     @JsonPropertyDescription("Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     private boolean disabled;
+
+    @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
+    private boolean excludeFromKpi;
 
     @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
     private boolean configured;

@@ -81,7 +81,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                                               SensorReadingsSnapshot sensorReadingsSnapshot,
                                               CheckExecutionProgressListener progressListener) {
         Table sensorResultsTable = normalizedSensorResults.getTable();
-        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDimensionIdColumn());
+        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataStreamHashColumn());
         SensorReadingsTimeSeriesMap historicReadingsTimeSeries = sensorReadingsSnapshot.getHistoricReadingsTimeSeries();
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
@@ -95,7 +95,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
             Long timeSeriesDimensionId = dimensionColumn.get(0);
             SensorReadingsTimeSeriesData historicTimeSeriesData = historicReadingsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             TimeSeriesGradient timeGradient = sensorRunParameters.getTimeSeries().getTimeGradient();
@@ -153,10 +153,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Row targetRuleResultRow = result.appendRow();
                 int targetRowIndex = targetRuleResultRow.getRowNumber();
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
-                result.getRuleNameColumn().set(targetRowIndex, ruleDefinitionName);
+                result.getIncludeInKpiColumn().set(targetRowIndex, !checkSpec.isExcludeFromKpi());
 
                 AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
-                AbstractRuleParametersSpec alertRule = checkSpec.getAlert();
+                AbstractRuleParametersSpec errorRule = checkSpec.getError();
                 AbstractRuleParametersSpec warningRule = checkSpec.getWarning();
                 Double expectedValue = null;
 
@@ -173,15 +173,15 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     }
 
                     if (ruleExecutionResultHigh.getLowerBound() != null) {
-                        result.getHighLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
+                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
                     }
                     if (ruleExecutionResultHigh.getUpperBound() != null) {
-                        result.getHighUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
+                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
                     }
                 }
 
-                if (alertRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersMedium = new RuleExecutionRunParameters(actualValue, alertRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                if (errorRule != null) {
+                    RuleExecutionRunParameters ruleRunParametersMedium = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
                     RuleExecutionResult ruleExecutionResultMedium = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersMedium);
 
                     if (highestSeverity == null && !ruleExecutionResultMedium.isPassed()) {
@@ -193,10 +193,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     }
 
                     if (ruleExecutionResultMedium.getLowerBound() != null) {
-                        result.getMediumLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
+                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
                     }
                     if (ruleExecutionResultMedium.getUpperBound() != null) {
-                        result.getMediumUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
+                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
                     }
                 }
 
@@ -213,10 +213,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     }
 
                     if (ruleExecutionResultLow.getLowerBound() != null) {
-                        result.getLowLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
+                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
                     }
                     if (ruleExecutionResultLow.getUpperBound() != null) {
-                        result.getLowUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
+                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
                     }
                 }
 
@@ -252,7 +252,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         AbstractRuleSetSpec ruleSet = checkSpec.getRuleSet();
         List<AbstractRuleThresholdsSpec<?>> enabledRules = ruleSet.getEnabledRules();
         Table sensorResultsTable = normalizedSensorResults.getTable();
-        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDimensionIdColumn());
+        TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataStreamHashColumn());
         SensorReadingsTimeSeriesMap historicReadingsTimeSeries = sensorReadingsSnapshot.getHistoricReadingsTimeSeries();
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
@@ -262,7 +262,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
             Long timeSeriesDimensionId = dimensionColumn.get(0);
             SensorReadingsTimeSeriesData historicTimeSeriesData = historicReadingsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             TimeSeriesGradient timeGradient = sensorRunParameters.getEffectiveTimeSeries().getTimeGradient();
@@ -322,8 +322,6 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     int targetRowIndex = targetRuleResultRow.getRowNumber();
                     result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                     long ruleHash = ruleThresholds.getHierarchyId().hashCode64();
-                    result.getRuleHashColumn().set(targetRowIndex, ruleHash);
-                    result.getRuleNameColumn().set(targetRowIndex, ruleThresholds.getRuleName());
 
                     AbstractRuleParametersSpec highRule = ruleThresholds.getHigh();
                     AbstractRuleParametersSpec mediumRule = ruleThresholds.getMedium();
@@ -343,10 +341,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         }
 
                         if (ruleExecutionResultHigh.getLowerBound() != null) {
-                            result.getHighLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
+                            result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
                         }
                         if (ruleExecutionResultHigh.getUpperBound() != null) {
-                            result.getHighUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
+                            result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
                         }
                     }
 
@@ -363,10 +361,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         }
 
                         if (ruleExecutionResultMedium.getLowerBound() != null) {
-                            result.getMediumLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
+                            result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
                         }
                         if (ruleExecutionResultMedium.getUpperBound() != null) {
-                            result.getMediumUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
+                            result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
                         }
                     }
 
@@ -383,10 +381,10 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         }
 
                         if (ruleExecutionResultLow.getLowerBound() != null) {
-                            result.getLowLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
+                            result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
                         }
                         if (ruleExecutionResultLow.getUpperBound() != null) {
-                            result.getLowUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
+                            result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
                         }
                     }
 

@@ -48,10 +48,10 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsNotNullCountSensorParametersSpec parameters = new ColumnNullsNotNullCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRuleParametersSpec alert;
+    private MaxCountRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -83,23 +83,23 @@ public class ColumnMaxNullsCountCheckSpec extends AbstractCheckSpec<ColumnNullsN
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ALERT" severity alerts for unsatisfied rules.
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      *
-     * @return Default "alert" alerting thresholds.
+     * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRuleParametersSpec getAlert() {
-        return this.alert;
+    public MaxCountRuleParametersSpec getError() {
+        return this.error;
     }
 
     /**
-     * Sets a new alert level alerting threshold.
-     * @param alert Alert alerting threshold to set.
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
      */
-    public void setAlert(MaxCountRuleParametersSpec alert) {
-        this.setDirtyIf(!Objects.equals(this.alert, alert));
-        this.alert = alert;
-        this.propagateHierarchyIdToField(alert, "alert");
+    public void setError(MaxCountRuleParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

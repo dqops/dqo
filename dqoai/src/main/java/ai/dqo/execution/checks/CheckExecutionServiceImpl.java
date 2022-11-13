@@ -219,7 +219,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         int sensorResultsCount = 0;
         int passedRules = 0;
         int warningsCount = 0;
-        int alertsCount = 0;
+        int errorsCount = 0;
         int fatalsCount = 0;
 
         for (AbstractCheckSpec checkSpec : checks) {
@@ -274,9 +274,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
                     allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
 
-                    passedRules += ruleEvaluationResult.getSeverityColumn().isEqualTo(0).size();
+                    passedRules += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
                     warningsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
-                    alertsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
+                    errorsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
                     fatalsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
                 }
             }
@@ -299,10 +299,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             ruleResultsSnapshot.save();
         }
         progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, checks,
-                checksCount, sensorResultsCount, passedRules, warningsCount, alertsCount, fatalsCount));
+                checksCount, sensorResultsCount, passedRules, warningsCount, errorsCount, fatalsCount));
 
         checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
-                passedRules, warningsCount, alertsCount, fatalsCount);
+                passedRules, warningsCount, errorsCount, fatalsCount);
     }
 
     /**
@@ -486,7 +486,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
         TableSpec tableSpec = tableWrapper.getSpec();
 
-        SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
+        SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createLegacySensorParameters(
                 connectionSpec, tableSpec, columnSpec, checkSpec, dialectSettings);
         return sensorRunParameters;
     }

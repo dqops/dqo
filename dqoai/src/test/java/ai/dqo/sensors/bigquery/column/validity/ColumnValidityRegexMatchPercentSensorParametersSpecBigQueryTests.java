@@ -177,10 +177,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS level_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
@@ -208,10 +208,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS level_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
@@ -239,10 +239,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS level_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
@@ -270,10 +270,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS level_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
@@ -301,10 +301,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS level_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
@@ -332,10 +332,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS level_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY level_1
-                ORDER BY level_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);

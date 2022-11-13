@@ -15,11 +15,16 @@
  */
 package ai.dqo.core.dqocloud.apikey;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -45,6 +50,14 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("exp")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Instant expiresAt;
+
+    /**
+     * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
+     * The user has added invalid properties. We only want to know the names of these properties for validation purposes.
+     */
+    @JsonIgnore
+    private Map<String, Object> ignoredProperties;
+
 
     public DqoCloudApiKeyPayload() {
     }
@@ -147,6 +160,19 @@ public class DqoCloudApiKeyPayload {
      */
     public void setExpiresAt(Instant expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (this.ignoredProperties == null) {
+            this.ignoredProperties = new LinkedHashMap<>();
+        }
+        this.ignoredProperties.put(name, value);
     }
 }
 

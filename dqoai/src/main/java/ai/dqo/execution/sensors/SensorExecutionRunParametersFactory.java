@@ -37,11 +37,11 @@ public interface SensorExecutionRunParametersFactory {
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
-                                                        TableSpec table,
-                                                        ColumnSpec column,
-                                                        AbstractCheckDeprecatedSpec check,
-                                                        ProviderDialectSettings dialectSettings);
+    SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
+                                                              TableSpec table,
+                                                              ColumnSpec column,
+                                                              AbstractCheckDeprecatedSpec check,
+                                                              ProviderDialectSettings dialectSettings);
 
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)

@@ -36,6 +36,6 @@ public class SensorReadingTableFactoryObjectMother {
      */
     public static Table createEmptyNormalizedTable(String tableName) {
         SensorReadingsTableFactory factory = createFactory();
-        return factory.createEmptySensorReadingsTable(tableName);
+        return factory.createEmptySensorReadoutsTable(tableName);
     }
 }
