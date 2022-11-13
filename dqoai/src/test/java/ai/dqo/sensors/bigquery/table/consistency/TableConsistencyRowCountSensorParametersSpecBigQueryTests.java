@@ -96,7 +96,7 @@ public class TableConsistencyRowCountSensorParametersSpecBigQueryTests extends B
 
         Assertions.assertEquals(String.format("""
                         SELECT
-                            count(*) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                            count(*) AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -114,7 +114,7 @@ public class TableConsistencyRowCountSensorParametersSpecBigQueryTests extends B
 
         Assertions.assertEquals(String.format("""
                         SELECT
-                            count(*) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                            count(*) AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col1=1
                         GROUP BY time_period
@@ -133,7 +133,7 @@ public class TableConsistencyRowCountSensorParametersSpecBigQueryTests extends B
 
         Assertions.assertEquals(String.format("""
                         SELECT
-                            count(*) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                            count(*) AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col2=2
                         GROUP BY time_period
@@ -153,7 +153,7 @@ public class TableConsistencyRowCountSensorParametersSpecBigQueryTests extends B
 
         Assertions.assertEquals(String.format("""
                         SELECT
-                            count(*) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                            count(*) AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col1=1 AND col2=2
                         GROUP BY time_period

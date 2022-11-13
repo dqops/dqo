@@ -104,7 +104,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -126,7 +126,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col1=1
                         GROUP BY time_period
@@ -149,7 +149,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col2=2
                         GROUP BY time_period
@@ -173,7 +173,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         WHERE col1=1 AND col2=2
                         GROUP BY time_period
