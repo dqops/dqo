@@ -61,7 +61,7 @@ public class SensorReadingsTableFactoryImpl implements SensorReadingsTableFactor
                 StringColumn.create(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME),
                 StringColumn.create(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME),
                 StringColumn.create(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME),
-                LongColumn.create(SensorNormalizedResult.TIME_SERIES_ID_COLUMN_NAME),
+                StringColumn.create(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME),
                 InstantColumn.create(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME),
                 IntColumn.create(SensorNormalizedResult.DURATION_MS_COLUMN_NAME)
         );

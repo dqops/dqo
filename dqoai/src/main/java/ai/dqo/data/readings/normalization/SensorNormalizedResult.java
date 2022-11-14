@@ -128,9 +128,9 @@ public class SensorNormalizedResult {
     public static final String SENSOR_NAME_COLUMN_NAME = "sensor_name";
 
     /**
-     * Column name for a time series hash. Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     * Column name for a time series uuid. Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
      */
-    public static final String TIME_SERIES_ID_COLUMN_NAME = "time_series_id";
+    public static final String TIME_SERIES_UUID_COLUMN_NAME = "time_series_uuid";
 
     /**
      * Column name for a sensor executed at timestamp.
@@ -164,7 +164,7 @@ public class SensorNormalizedResult {
     private final StringColumn checkCategoryColumn;
     private final StringColumn qualityDimensionColumn;
     private final StringColumn sensorNameColumn;
-    private final LongColumn timeSeriesIdColumn;
+    private final StringColumn timeSeriesUuidColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
 
@@ -194,7 +194,7 @@ public class SensorNormalizedResult {
         this.checkCategoryColumn = (StringColumn) table.column(CHECK_CATEGORY_COLUMN_NAME);
         this.qualityDimensionColumn = (StringColumn) table.column(QUALITY_DIMENSION_COLUMN_NAME);
         this.sensorNameColumn = (StringColumn) table.column(SENSOR_NAME_COLUMN_NAME);
-        this.timeSeriesIdColumn = (LongColumn) table.column(TIME_SERIES_ID_COLUMN_NAME);
+        this.timeSeriesUuidColumn = (StringColumn) table.column(TIME_SERIES_UUID_COLUMN_NAME);
         this.executedAtColumn = (InstantColumn) table.column(EXECUTED_AT_COLUMN_NAME);
         this.durationMsColumn = (IntColumn) table.column(DURATION_MS_COLUMN_NAME);
     }
@@ -369,11 +369,11 @@ public class SensorNormalizedResult {
     }
 
     /**
-     * Returns a time series id column.
-     * @return Column that stores a time series id.
+     * Returns a time series uuid column.
+     * @return Column that stores a time series uuid.
      */
-    public LongColumn getTimeSeriesIdColumn() {
-        return timeSeriesIdColumn;
+    public StringColumn getTimeSeriesUuidColumn() {
+        return timeSeriesUuidColumn;
     }
 
     /**

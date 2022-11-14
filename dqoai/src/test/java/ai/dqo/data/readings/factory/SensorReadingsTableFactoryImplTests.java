@@ -81,7 +81,7 @@ public class SensorReadingsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME, table.column(26).name());
         Assertions.assertEquals(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME, table.column(27).name());
         Assertions.assertEquals(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME, table.column(28).name());
-        Assertions.assertEquals(SensorNormalizedResult.TIME_SERIES_ID_COLUMN_NAME, table.column(29).name());
+        Assertions.assertEquals(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, table.column(29).name());
         Assertions.assertEquals(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, table.column(30).name());
         Assertions.assertEquals(SensorNormalizedResult.DURATION_MS_COLUMN_NAME, table.column(31).name());
     }

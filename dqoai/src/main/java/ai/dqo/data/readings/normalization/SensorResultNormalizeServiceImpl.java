@@ -32,6 +32,7 @@ import java.time.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -116,7 +117,8 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         sortedNormalizedTable.addColumns(providerColumn);
 
         LongColumn tableHashColumn = LongColumn.create(SensorNormalizedResult.TABLE_HASH_COLUMN_NAME, resultsTable.rowCount());
-        tableHashColumn.setMissingTo(sensorRunParameters.getTable().getHierarchyId().hashCode64());
+        long tableHash = sensorRunParameters.getTable().getHierarchyId().hashCode64();
+        tableHashColumn.setMissingTo(tableHash);
         sortedNormalizedTable.addColumns(tableHashColumn);
 
         StringColumn schemaNameColumn = StringColumn.create(SensorNormalizedResult.SCHEMA_NAME_COLUMN_NAME, resultsTable.rowCount());
@@ -134,8 +136,10 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         sortedNormalizedTable.addColumns(tableStageColumn);
 
         LongColumn columnHashColumn = LongColumn.create(SensorNormalizedResult.COLUMN_HASH_COLUMN_NAME, resultsTable.rowCount());
+        Long columnHash = null;
         if (sensorRunParameters.getColumn() != null) {
-            columnHashColumn.setMissingTo(sensorRunParameters.getColumn().getHierarchyId().hashCode64());
+            columnHash = sensorRunParameters.getColumn().getHierarchyId().hashCode64();
+            columnHashColumn.setMissingTo(columnHash);
         }
         sortedNormalizedTable.addColumns(columnHashColumn);
 
@@ -171,8 +175,9 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         sortedNormalizedTable.addColumns(sensorNameColumn);
 
         LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
-        LongColumn timeSeriesIdColumn = createTimeSeriesIdColumn(sortedDataStreamHashColumn, checkHash, resultsTable.rowCount());
-        sortedNormalizedTable.addColumns(timeSeriesIdColumn);
+        StringColumn timeSeriesUuidColumn = createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
+                columnHash != null ? columnHash.longValue() : 0L, resultsTable.rowCount());
+        sortedNormalizedTable.addColumns(timeSeriesUuidColumn);
 
         InstantColumn executedAtColumn = InstantColumn.create(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, resultsTable.rowCount());
         executedAtColumn.setMissingTo(sensorRunParameters.getStartedAt());
@@ -526,21 +531,28 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
     }
 
     /**
-     * Creates and populates a time_series_id column that is a hash of the check hash and the data_stream_hash and uniquely identifies a time series.
+     * Creates and populates a time_series_uuid column that is a hash of the check hash and the data_stream_hash and uniquely identifies a time series.
      * @param sortedDataStreamHashColumn Column with data stream hashes for each row.
-     * @param checkHash Check hash that should be hashed into the time_series_id.
+     * @param checkHash Check hash that should be hashed into the time_series_uuid.
+     * @param tableHash Table hash.
+     * @param columnHash Column hash (or 0 when the check is not on a column level).
      * @param rowCount Row count.
-     * @return Time series id column, filled with values.
+     * @return Time series uuid column, filled with values.
      */
-    public LongColumn createTimeSeriesIdColumn(LongColumn sortedDataStreamHashColumn, long checkHash, int rowCount) {
-        LongColumn timeSeriesIdColumn = LongColumn.create(SensorNormalizedResult.TIME_SERIES_ID_COLUMN_NAME, rowCount);
+    public StringColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
+                                                   long checkHash,
+                                                   long tableHash,
+                                                   long columnHash,
+                                                   int rowCount) {
+        StringColumn timeSeriesUuidColumn = StringColumn.create(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
-            long timeSeriesId = dataStreamHash ^ checkHash;
-            timeSeriesIdColumn.set(i, timeSeriesId);
+            UUID uuid = new UUID(checkHash, dataStreamHash ^ tableHash ^ columnHash);
+            String timeSeriesUuidString = uuid.toString();
+            timeSeriesUuidColumn.set(i, timeSeriesUuidString);
         }
 
-        return timeSeriesIdColumn;
+        return timeSeriesUuidColumn;
     }
 }
