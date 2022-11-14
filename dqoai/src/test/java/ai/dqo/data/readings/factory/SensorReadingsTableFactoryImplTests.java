@@ -50,7 +50,7 @@ public class SensorReadingsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadingsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptySensorReadoutsTable("empty");
-        Assertions.assertEquals(32, table.columnCount());
+        Assertions.assertEquals(33, table.columnCount());
 
         Assertions.assertEquals(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, table.column(0).name());
         Assertions.assertEquals(SensorNormalizedResult.EXPECTED_VALUE_COLUMN_NAME, table.column(1).name());
@@ -78,12 +78,13 @@ public class SensorReadingsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(SensorNormalizedResult.COLUMN_NAME_COLUMN_NAME, table.column(23).name());
         Assertions.assertEquals(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, table.column(24).name());
         Assertions.assertEquals(SensorNormalizedResult.CHECK_NAME_COLUMN_NAME, table.column(25).name());
-        Assertions.assertEquals(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME, table.column(26).name());
-        Assertions.assertEquals(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME, table.column(27).name());
-        Assertions.assertEquals(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME, table.column(28).name());
-        Assertions.assertEquals(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, table.column(29).name());
-        Assertions.assertEquals(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, table.column(30).name());
-        Assertions.assertEquals(SensorNormalizedResult.DURATION_MS_COLUMN_NAME, table.column(31).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_TYPE_COLUMN_NAME, table.column(26).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME, table.column(27).name());
+        Assertions.assertEquals(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME, table.column(28).name());
+        Assertions.assertEquals(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME, table.column(29).name());
+        Assertions.assertEquals(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, table.column(30).name());
+        Assertions.assertEquals(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, table.column(31).name());
+        Assertions.assertEquals(SensorNormalizedResult.DURATION_MS_COLUMN_NAME, table.column(32).name());
     }
 
     // This is a special test, it produces an empty sensor readings parquet file in the target/parquet-samples/readings-empty.parquet file

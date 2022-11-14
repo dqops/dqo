@@ -17,6 +17,7 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -91,7 +92,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
 
@@ -102,6 +103,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
@@ -110,6 +112,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                TableSpec table,
                                                                ColumnSpec column,
                                                                AbstractCheckSpec check,
+                                                               CheckType checkType,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
@@ -139,6 +142,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                check, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                check, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

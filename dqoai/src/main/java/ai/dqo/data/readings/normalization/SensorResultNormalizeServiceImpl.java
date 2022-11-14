@@ -159,6 +159,11 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         checkNameColumn.setMissingTo(checkName);
         sortedNormalizedTable.addColumns(checkNameColumn);
 
+        StringColumn checkTypeColumn = StringColumn.create(SensorNormalizedResult.CHECK_TYPE_COLUMN_NAME, resultsTable.rowCount());
+        String checkType = sensorRunParameters.getCheckType().getDisplayName();
+        checkTypeColumn.setMissingTo(checkType);
+        sortedNormalizedTable.addColumns(checkTypeColumn);
+
         StringColumn checkCategoryColumn = StringColumn.create(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME, resultsTable.rowCount());
         String categoryName = sensorRunParameters.getCheck().getCategoryName();
         checkCategoryColumn.setMissingTo(categoryName);

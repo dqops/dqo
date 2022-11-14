@@ -16,6 +16,7 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -43,6 +44,7 @@ public class SensorExecutionRunParameters {
     private ConnectionSpec connection;
     private TableSpec table;
     private ColumnSpec column; // may be null
+    private CheckType checkType;
     @JsonIgnore
     private AbstractCheckSpec<?,?> check;
     private TimeSeriesConfigurationSpec timeSeries;
@@ -60,6 +62,7 @@ public class SensorExecutionRunParameters {
      * @param table Table specification.
      * @param column Column specification.
      * @param check Check specification.
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
@@ -70,6 +73,7 @@ public class SensorExecutionRunParameters {
 			TableSpec table,
 			ColumnSpec column,
 			AbstractCheckSpec check,
+            CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
@@ -78,6 +82,7 @@ public class SensorExecutionRunParameters {
         this.table = table;
         this.column = column;
         this.check = check;
+        this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
@@ -147,6 +152,22 @@ public class SensorExecutionRunParameters {
      */
     public void setCheck(AbstractCheckSpec<?, ?> check) {
         this.check = check;
+    }
+
+    /**
+     * Returns the check type (adhoc, checkpoint, partitioned).
+     * @return Check type.
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the check type (adhoc, checkpoint, partitioned).
+     * @param checkType Check type.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
     }
 
     /**

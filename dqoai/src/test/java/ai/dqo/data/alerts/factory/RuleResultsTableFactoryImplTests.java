@@ -51,7 +51,7 @@ public class RuleResultsTableFactoryImplTests extends BaseTest {
     void createEmptyRuleResultsTable_whenCalled_thenCreatesTableWithRuleRelatedColumns() {
         Table table = this.sut.createEmptyRuleResultsTable("tab");
         Assertions.assertNotNull(table);
-        Assertions.assertEquals(40, table.columnCount());
+        Assertions.assertEquals(41, table.columnCount());
     }
 
     // This is a special test, it produces an empty sensor readings parquet file in the target/parquet-samples/readings-empty.parquet file

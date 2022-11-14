@@ -16,6 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
@@ -28,6 +29,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -196,5 +198,16 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
             setMode(TimeSeriesMode.current_time);
             setTimeGradient(TimeSeriesGradient.MILLISECOND);
         }};
+    }
+
+    /**
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.ADHOC;
     }
 }

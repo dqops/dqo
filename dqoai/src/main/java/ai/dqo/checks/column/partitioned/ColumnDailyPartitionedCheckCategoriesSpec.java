@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -25,6 +26,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -94,5 +96,16 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             setTimeGradient(TimeSeriesGradient.DAY);
             setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
         }};
+    }
+
+    /**
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.PARTITIONED;
     }
 }

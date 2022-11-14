@@ -113,6 +113,11 @@ public class SensorNormalizedResult {
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
+     * Column name for a check type (adhoc, checkpoint, partitioned).
+     */
+    public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
+
+    /**
      * Column name for a check category.
      */
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
@@ -161,6 +166,7 @@ public class SensorNormalizedResult {
     private final StringColumn columnNameColumn;
     private final LongColumn checkHashColumn;
     private final StringColumn checkNameColumn;
+    private final StringColumn checkTypeColumn;
     private final StringColumn checkCategoryColumn;
     private final StringColumn qualityDimensionColumn;
     private final StringColumn sensorNameColumn;
@@ -191,6 +197,7 @@ public class SensorNormalizedResult {
         this.columnNameColumn = (StringColumn) table.column(COLUMN_NAME_COLUMN_NAME);
         this.checkHashColumn = (LongColumn) table.column(CHECK_HASH_COLUMN_NAME);
         this.checkNameColumn = (StringColumn) table.column(CHECK_NAME_COLUMN_NAME);
+        this.checkTypeColumn = (StringColumn) table.column(CHECK_TYPE_COLUMN_NAME);
         this.checkCategoryColumn = (StringColumn) table.column(CHECK_CATEGORY_COLUMN_NAME);
         this.qualityDimensionColumn = (StringColumn) table.column(QUALITY_DIMENSION_COLUMN_NAME);
         this.sensorNameColumn = (StringColumn) table.column(SENSOR_NAME_COLUMN_NAME);
@@ -342,6 +349,14 @@ public class SensorNormalizedResult {
      */
     public StringColumn getCheckNameColumn() {
         return checkNameColumn;
+    }
+
+    /**
+     * Returns a column that stores the check type (adhoc, checkpoint, partitioned).
+     * @return Check type column.
+     */
+    public StringColumn getCheckTypeColumn() {
+        return checkTypeColumn;
     }
 
     /**

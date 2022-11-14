@@ -17,6 +17,8 @@ package ai.dqo.execution.checks;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
@@ -466,8 +468,16 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             throw new CheckExecutionFailed("Data quality check " + checkSpec.getHierarchyId().toString() + " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
         }
 
+        Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> n instanceof AbstractRootChecksContainerSpec)
+                .findFirst();
+        assert checkCategoryRootProvider.isPresent();
+        AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec)checkCategoryRootProvider.get();
+        CheckType checkType = rootChecksContainerSpec.getCheckType();
+
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                connectionSpec, tableSpec, columnSpec, checkSpec, timeSeriesConfigurationSpec, dialectSettings);
+                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
         return sensorRunParameters;
     }
 

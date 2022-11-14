@@ -16,6 +16,7 @@
 package ai.dqo.data.readings.normalization;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
@@ -79,6 +80,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
 		tableSpec.getChecks().getStandard().setMinRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
+                CheckType.ADHOC,
                 null, // time series
                 null, // data stream mapping
                 checkSpec.getParameters(),

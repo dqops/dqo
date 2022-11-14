@@ -17,6 +17,7 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -50,6 +51,7 @@ public interface SensorExecutionRunParametersFactory {
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
@@ -58,6 +60,7 @@ public interface SensorExecutionRunParametersFactory {
                                                         TableSpec table,
                                                         ColumnSpec column,
                                                         AbstractCheckSpec check,
+                                                        CheckType checkType,
                                                         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                         ProviderDialectSettings dialectSettings);
 }

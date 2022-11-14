@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
@@ -93,6 +94,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		tableSpec.getChecks().getStandard().setMinRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
+                CheckType.ADHOC,
                 TimeSeriesConfigurationSpec.createDefault(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
