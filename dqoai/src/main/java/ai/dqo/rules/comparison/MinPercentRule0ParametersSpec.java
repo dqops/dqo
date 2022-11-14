@@ -30,8 +30,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MinPercentRule0ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MinPercentRule0ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -39,19 +39,19 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     /**
      * Default constructor, the minimum accepted value is 0.
      */
-    public MinPercentRuleParametersSpec() {
+    public MinPercentRule0ParametersSpec() {
     }
 
     /**
      * Creates a rule with a given value.
      * @param minPercent Minimum accepted value.
      */
-    public MinPercentRuleParametersSpec(double minPercent) {
+    public MinPercentRule0ParametersSpec(double minPercent) {
         this.minPercent = minPercent;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minPercent;
+    private double minPercent = 0.0;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.
