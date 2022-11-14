@@ -438,62 +438,62 @@ export const updateTableChecksUI =
     }
   };
 
-export const getTableDimensionsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS
+export const getTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING
 });
 
-export const getTableDimensionsSuccess = (data: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_SUCCESS,
+export const getTableDataStreamsMappingSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getTableDimensionsFailed = (error: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_ERROR,
+export const getTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const getTableDimensions =
+export const getTableDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDimensionsRequest());
+    dispatch(getTableDataStreamsMappingRequest());
     try {
-      const res = await TableApiClient.getTableDimensions(
+      const res = await TableApiClient.getTableDataStreamsMapping(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableDimensionsSuccess(res.data));
+      dispatch(getTableDataStreamsMappingSuccess(res.data));
     } catch (err) {
-      dispatch(getTableDimensionsFailed(err));
+      dispatch(getTableDataStreamsMappingFailed(err));
     }
   };
 
-export const updateTableDimensionsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS
+export const updateTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING
 });
 
-export const updateTableDimensionsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_SUCCESS
+export const updateTableDataStreamsSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateTableDimensionsFailed = (error: any) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_ERROR,
+export const updateTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const updateTableDimensions =
+export const updateTableDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string, data: any) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDimensionsRequest());
+    dispatch(updateTableDataStreamsMappingRequest());
     try {
-      await TableApiClient.updateTableDimensions(
+      await TableApiClient.updateTableDataStreamsMapping(
         connectionName,
         schemaName,
         tableName,
         data
       );
-      dispatch(updateTableDimensionsSuccess());
+      dispatch(updateTableDataStreamsSuccess());
     } catch (err) {
-      dispatch(updateTableDimensionsFailed(err));
+      dispatch(updateTableDataStreamsMappingFailed(err));
     }
   };

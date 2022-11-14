@@ -16,10 +16,10 @@
 package ai.dqo.checks.table.checks.standard;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
-import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,10 +48,10 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec alert;
+    private MinCountRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -83,23 +83,23 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ALERT" severity alerts for unsatisfied rules.
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      *
-     * @return Default "alert" alerting thresholds.
+     * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRuleParametersSpec getAlert() {
-        return this.alert;
+    public MinCountRuleParametersSpec getError() {
+        return this.error;
     }
 
     /**
-     * Sets a new alert level alerting threshold.
-     * @param alert Alert alerting threshold to set.
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
      */
-    public void setAlert(MinCountRuleParametersSpec alert) {
-        this.setDirtyIf(!Objects.equals(this.alert, alert));
-        this.alert = alert;
-        this.propagateHierarchyIdToField(alert, "alert");
+    public void setError(MinCountRuleParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**
@@ -150,5 +150,15 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     *
+     * @return Default data quality dimension name.
+     */
+    @Override
+    public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
+        return DefaultDataQualityDimensions.REASONABLENESS;
     }
 }

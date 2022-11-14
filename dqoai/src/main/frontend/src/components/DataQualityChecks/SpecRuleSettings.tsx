@@ -34,7 +34,7 @@ const SpecRuleSettings = ({ rule }: ISpecRuleSettingsProps) => {
           </div>
         </div>
         <div className="mb-3">
-          <div className="font-semibold">Medium</div>
+          <div className="font-semibold">Error</div>
           <div className="flex items-center space-x-4">
             <div>
               <Input value={rule?.medium?.max_value} />

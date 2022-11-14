@@ -1,6 +1,7 @@
 import React from 'react';
 import { UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
+import { useTree } from '../../contexts/treeContext';
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
@@ -24,7 +25,8 @@ const TableHeader = () => {
 };
 
 const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
-  const handleChangeDimension = (
+  const { sidebarWidth } = useTree();
+  const handleChangeDataDataStreams = (
     check: UICheckModel,
     idx: number,
     jdx: number
@@ -33,7 +35,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
 
     const newChecksUI = {
       ...checksUI,
-      category: checksUI?.categories?.map((category, index) =>
+      categories: checksUI?.categories?.map((category, index) =>
         index !== idx
           ? category
           : {
@@ -53,7 +55,10 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
   }
 
   return (
-    <div className="p-4 max-w-tab-wrapper overflow-auto">
+    <div
+      className="p-4 max-h-table overflow-auto"
+      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
+    >
       <table className="w-full">
         <tbody>
           {checksUI?.categories.map((category, index) => (
@@ -72,7 +77,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
                     check={check}
                     key={jIndex}
                     onChange={(item) =>
-                      handleChangeDimension(item, index, jIndex)
+                      handleChangeDataDataStreams(item, index, jIndex)
                     }
                   />
                 ))}

@@ -15,17 +15,27 @@
  */
 package ai.dqo.core.dqocloud.apikey;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * API key payload that is stored and signed inside an API key.
  */
 public class DqoCloudApiKeyPayload {
+    public static final long CURRENT_API_KEY_VERSION = 2;
+
+    @JsonProperty("ver")
+    private Long version;
+
     @JsonProperty("tid")
     private String tenantId;
 
@@ -40,17 +50,41 @@ public class DqoCloudApiKeyPayload {
     private Map<DqoCloudLimit, Integer> limits = new HashMap<>();
 
     @JsonProperty("dp")
-    private CloudDqoApiKeyDisposition disposition = CloudDqoApiKeyDisposition.ALL_PURPOSES;
+    private CloudDqoApiKeyDisposition disposition;
 
     @JsonProperty("exp")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Instant expiresAt;
+
+    /**
+     * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
+     * The user has added invalid properties. We only want to know the names of these properties for validation purposes.
+     */
+    @JsonIgnore
+    private Map<String, Object> ignoredProperties;
+
 
     public DqoCloudApiKeyPayload() {
     }
 
     public DqoCloudApiKeyPayload(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the DQO Cloud API Key version.
+     * @return DQO Cloud API Key version.
+     */
+    public Long getVersion() {
+        return version;
+    }
+
+    /**
+     * Sets the DQO Cloud API Key version.
+     * @param version API Key version.
+     */
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     /**
@@ -147,6 +181,19 @@ public class DqoCloudApiKeyPayload {
      */
     public void setExpiresAt(Instant expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (this.ignoredProperties == null) {
+            this.ignoredProperties = new LinkedHashMap<>();
+        }
+        this.ignoredProperties.put(name, value);
     }
 }
 

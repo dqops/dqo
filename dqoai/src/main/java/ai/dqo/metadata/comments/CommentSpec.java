@@ -152,6 +152,6 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
             return false;
         }
 
-        return super.isDefault();
+        return true;
     }
 }

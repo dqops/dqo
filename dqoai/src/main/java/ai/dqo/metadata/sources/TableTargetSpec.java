@@ -59,9 +59,11 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     }
 
     @JsonPropertyDescription("Physical schema name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String schemaName;
 
     @JsonPropertyDescription("Physical table name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String tableName;
 
     @JsonPropertyDescription("Dictionary of additional properties (key/value) that may be used to identify a target table or could be useful when running sensor queries.")

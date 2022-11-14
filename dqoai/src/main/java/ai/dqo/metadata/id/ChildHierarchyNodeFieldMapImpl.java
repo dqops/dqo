@@ -15,10 +15,7 @@
  */
 package ai.dqo.metadata.id;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Dictionary of key/value map of property names (field names) in the current class and their property accessors.
@@ -41,6 +38,24 @@ public class ChildHierarchyNodeFieldMapImpl<T extends HierarchyNode>
      * NOTE: this method should always be private, always - to avoid missing subclass properties when a field map from a base class was not taken.
      */
     private ChildHierarchyNodeFieldMapImpl() {
+    }
+
+    /**
+     * Associates the specified value with the specified key in this map.
+     * If the map previously contained a mapping for the key, the old
+     * value is replaced.
+     *
+     * @param key   key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @return the previous value associated with {@code key}, or
+     * {@code null} if there was no mapping for {@code key}.
+     * (A {@code null} return can also indicate that the map
+     * previously associated {@code null} with {@code key}.)
+     */
+    @Override
+    public GetHierarchyChildNodeFunc<T> put(String key, GetHierarchyChildNodeFunc<T> value) {
+        assert key != null && key.equals(key.toLowerCase(Locale.ROOT)) : "Do not use upper case (Java property names) in the key names, use snake convention used in YAML";
+        return super.put(key, value);
     }
 
     /**

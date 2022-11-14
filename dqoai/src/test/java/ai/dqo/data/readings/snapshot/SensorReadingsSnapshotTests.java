@@ -171,12 +171,12 @@ public class SensorReadingsSnapshotTests extends BaseTest {
 
     @Test
     void hasNewReadings_whenNoNewRows_thenReturnsFalse() {
-        Assertions.assertFalse(this.sut.hasNewReadings());
+        Assertions.assertFalse(this.sut.hasNewReadouts());
     }
 
     @Test
     void hasNewReadings_whenNewRows_thenReturnsTrue() {
 		this.sut.getNewResults().appendRow();
-        Assertions.assertTrue(this.sut.hasNewReadings());
+        Assertions.assertTrue(this.sut.hasNewReadouts());
     }
 }

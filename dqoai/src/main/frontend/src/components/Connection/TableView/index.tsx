@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   CommentSpec,
-  DimensionsConfigurationSpec,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
   TableBasicModel,
   TimeSeriesConfigurationSpec,
@@ -19,14 +19,14 @@ import {
   getTableBasic,
   getTableChecksUI,
   getTableComments,
-  getTableDimensions,
+  getTableDataStreamMapping,
   getTableLabels,
   getTableSchedule,
   getTableTime,
   updateTableBasic,
   updateTableChecksUI,
   updateTableComments,
-  updateTableDimensions,
+  updateTableDataStreamMapping,
   updateTableLabels,
   updateTableSchedule,
   updateTableTime
@@ -36,7 +36,7 @@ import LabelsView from '../LabelsView';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
-import DimensionsView from '../DimensionsView';
+import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
 
 interface ITableViewProps {
@@ -67,8 +67,8 @@ const tabs = [
     value: 'labels'
   },
   {
-    label: 'Dimensions',
-    value: 'dimensions'
+    label: 'Data Streams',
+    value: 'data-streams'
   }
 ];
 
@@ -87,7 +87,7 @@ const TableView = ({
     labels,
     checksUI,
     isUpdating,
-    dimensions
+    dataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
@@ -99,8 +99,8 @@ const TableView = ({
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  const [updatedDimensions, setUpdatedDimensions] =
-    useState<DimensionsConfigurationSpec>();
+  const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
+    useState<DataStreamMappingSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -128,8 +128,8 @@ const TableView = ({
   }, [checksUI]);
 
   useEffect(() => {
-    setUpdatedDimensions(dimensions);
-  }, [dimensions]);
+    setUpdatedDataStreamMapping(dataStreamsMapping);
+  }, [dataStreamsMapping]);
 
   useEffect(() => {
     setUpdatedTableBasic(undefined);
@@ -137,7 +137,7 @@ const TableView = ({
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
-    setUpdatedDimensions(undefined);
+    setUpdatedDataStreamMapping(undefined);
 
     dispatch(getTableBasic(connectionName, schemaName, tableName));
     dispatch(getTableSchedule(connectionName, schemaName, tableName));
@@ -145,7 +145,7 @@ const TableView = ({
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
     dispatch(getTableChecksUI(connectionName, schemaName, tableName));
-    dispatch(getTableDimensions(connectionName, schemaName, tableName));
+    dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
 
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -218,16 +218,16 @@ const TableView = ({
       );
       await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
     }
-    if (activeTab === 'dimensions') {
+    if (activeTab === 'data-streams') {
       await dispatch(
-        updateTableDimensions(
+        updateTableDataStreamMapping(
           connectionName,
           schemaName,
           tableName,
-          updatedDimensions
+          updatedDataStreamMapping
         )
       );
-      await dispatch(getTableDimensions(connectionName, schemaName, tableName));
+      await dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
     }
   };
 
@@ -313,10 +313,10 @@ const TableView = ({
         )}
       </div>
       <div>
-        {activeTab === 'dimensions' && (
-          <DimensionsView
-            dimensions={updatedDimensions}
-            onChange={setUpdatedDimensions}
+        {activeTab === 'data-streams' && (
+          <DataStreamsMappingView
+            dataStreamsMapping={updatedDataStreamMapping}
+            onChange={setUpdatedDataStreamMapping}
           />
         )}
       </div>

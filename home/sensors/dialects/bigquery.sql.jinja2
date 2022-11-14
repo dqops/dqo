@@ -3,7 +3,7 @@
 {% set macro_table_name = table.target.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
-{% set dimensions = effective_dimensions | default(none, true) -%}
+{% set data_streams = effective_data_streams | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
 
 {% macro quote_identifier(name) -%}
@@ -39,6 +39,8 @@
         {%- endif -%}
     {%- elif part == 'hour' -%}
         DATETIME_TRUNC(CAST({{value}} AS datetime), hour)
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS datetime)
     {%- else -%}
         CAST({{value}} AS date)
     {%- endif -%}
@@ -47,7 +49,11 @@
 {% macro render_time_dimension_expression(table_alias_prefix = '') %}
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
-            {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'TIMESTAMP') }}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+               {{ date_trunc('CURRENT_TIMESTAMP()', time_series.time_gradient, 'DATETIME') }}
+            {%- else -%}
+               CURRENT_TIMESTAMP()
+            {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
         {%- else -%}
@@ -62,17 +68,17 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_dimension_projections(table_alias_prefix = '') %}
-    {%- if dimensions is not none and (dimensions | length()) > 0 -%}
-        {%- for attribute in dimensions -%}
+{% macro render_data_stream_projections(table_alias_prefix = '') %}
+    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
+        {%- for attribute in data_streams -%}
             {{ ', ' }}
-            {%- with dimension = dimensions[attribute] -%}
-                {%- if dimension.source == 'static_value' -%}
-                    {{ make_text_constant(dimension.static_value) }}
-                {%- elif dimension.source == 'dynamic_from_group_by_column' -%}
-                    {{ table_alias_prefix }}.{{ quote_identifier(dimension.column) }}
+            {%- with data_stream_level = data_streams[attribute] -%}
+                {%- if data_stream_level.source == 'static_value' -%}
+                    {{ make_text_constant(data_stream_level.static_value) }}
+                {%- elif data_stream_level.source == 'column_value' -%}
+                    {{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
                 {%- endif -%}
-            {%- endwith %} AS {{ attribute }}
+            {%- endwith %} AS stream_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
 {% endmacro %}
@@ -92,16 +98,16 @@
 {% endmacro %}
 
 {% macro render_grouping_column_names() %}
-    {%- if (dimensions is not none and (dimensions | length()) > 0) -%}
-        {%- for attribute in dimensions -%}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- for attribute in data_streams -%}
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
-                {{ attribute }}
+                stream_{{ attribute }}
         {%- endfor -%}
     {%- endif -%}
     {%- if time_series is not none -%}
-        {%- if (dimensions is not none and (dimensions | length()) > 0) -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
             {{ 'time_period' }}
@@ -109,13 +115,13 @@
 {% endmacro %}
 
 {% macro render_group_by() %}
-    {%- if (dimensions is not none and (dimensions | length()) > 0) or time_series is not none %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
 GROUP BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_order_by() %}
-    {%- if (dimensions is not none and (dimensions | length()) > 0) or time_series is not none %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
 ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}

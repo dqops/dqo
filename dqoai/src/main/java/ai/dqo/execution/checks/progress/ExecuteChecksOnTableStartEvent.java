@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableSpec;
 
@@ -27,7 +27,7 @@ import java.util.Collection;
 public class ExecuteChecksOnTableStartEvent extends CheckExecutionProgressEvent {
     private final ConnectionWrapper connectionWrapper;
     private final TableSpec targetTable;
-    private final Collection<AbstractCheckDeprecatedSpec> checks;
+    private final Collection<AbstractCheckSpec> checks;
 
     /**
      * Creates an event.
@@ -35,7 +35,7 @@ public class ExecuteChecksOnTableStartEvent extends CheckExecutionProgressEvent 
      * @param targetTable Target table.
      * @param checks      Collection of checks.
      */
-    public ExecuteChecksOnTableStartEvent(ConnectionWrapper connectionWrapper, TableSpec targetTable, Collection<AbstractCheckDeprecatedSpec> checks) {
+    public ExecuteChecksOnTableStartEvent(ConnectionWrapper connectionWrapper, TableSpec targetTable, Collection<AbstractCheckSpec> checks) {
         this.connectionWrapper = connectionWrapper;
         this.targetTable = targetTable;
         this.checks = checks;
@@ -63,7 +63,7 @@ public class ExecuteChecksOnTableStartEvent extends CheckExecutionProgressEvent 
      *
      * @return List of checks.
      */
-    public Collection<AbstractCheckDeprecatedSpec> getChecks() {
+    public Collection<AbstractCheckSpec> getChecks() {
         return checks;
     }
 }

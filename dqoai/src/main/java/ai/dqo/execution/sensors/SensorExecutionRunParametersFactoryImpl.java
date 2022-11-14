@@ -17,9 +17,10 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -56,11 +57,11 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
-															   TableSpec table,
-															   ColumnSpec column,
-															   AbstractCheckDeprecatedSpec check,
-															   ProviderDialectSettings dialectSettings) {
+    public SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
+                                                                     TableSpec table,
+                                                                     ColumnSpec column,
+                                                                     AbstractCheckDeprecatedSpec check,
+                                                                     ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
@@ -79,19 +80,19 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             timeSeries = expandedConnection.getDefaultTimeSeries();
         }
 
-        DimensionsConfigurationSpec dimensions = expandedCheck.getDimensionsOverride();
-        if (dimensions == null && column != null) {
-            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
+        DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
+        if (dataStreams == null && column != null) {
+            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
         }
-        if (dimensions == null) {
-            dimensions = expandedTable.getDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedTable.getDataStreams();
         }
-        if (dimensions == null) {
-            dimensions = expandedConnection.getDefaultDimensions();
+        if (dataStreams == null) {
+            dataStreams = expandedConnection.getDefaultDataStreams();
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+                null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
 
@@ -102,37 +103,45 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    @Override
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
                                                                AbstractCheckSpec check,
+                                                               CheckType checkType,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        HierarchyId checkHierarchyId = check.getHierarchyId();
         AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
 
-        DimensionsConfigurationSpec dimensions = null;
+        DataStreamMappingSpec dataStreams = null;  // TODO: when we add custom checks with a fully configurable data stream mapping (for a single check), we should retrieve it here and merge with defaults
         if (expandedColumn != null) {
-            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
+            dataStreams = expandedColumn.getDataStreamsOverride();
         }
-        if (dimensions == null) {
-            dimensions = expandedTable.getDimensions();
+
+        if (dataStreams == null) {
+            dataStreams = expandedTable.getDataStreams();
         }
-        if (dimensions == null) {
-            dimensions = expandedConnection.getDefaultDimensions();
+        else if (expandedTable.getDataStreams() != null){
+            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedTable.getDataStreams());
+        }
+
+        if (dataStreams == null) {
+            dataStreams = expandedConnection.getDefaultDataStreams();
+        }
+        else if (expandedConnection.getDefaultDataStreams() != null){
+            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedConnection.getDefaultDataStreams());
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+                check, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

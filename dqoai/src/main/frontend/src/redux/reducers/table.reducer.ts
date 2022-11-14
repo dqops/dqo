@@ -22,7 +22,7 @@ import {
   TimeSeriesConfigurationSpec,
   TableAdHocCheckCategoriesSpec,
   UIAllChecksModel,
-  DimensionsConfigurationSpec
+  DataStreamMappingSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -39,7 +39,7 @@ export interface ITableState {
   labels: string[];
   checks?: TableAdHocCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
-  dimensions?: DimensionsConfigurationSpec;
+  dataStreamsMapping?: DataStreamMappingSpec;
 }
 
 const initialState: ITableState = {
@@ -283,36 +283,36 @@ const tableReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_DIMENSIONS:
+    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_DIMENSIONS_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         loading: false,
-        dimensions: action.data,
+        dataStreamsMapping: action.data,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_DIMENSIONS_ERROR:
+    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS:
+    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING:
       return {
         ...state,
         isUpdating: true
       };
-    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_SUCCESS:
+    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_ERROR:
+    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         isUpdating: false,
