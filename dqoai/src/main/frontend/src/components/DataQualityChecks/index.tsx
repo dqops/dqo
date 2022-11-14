@@ -56,8 +56,8 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
 
   return (
     <div
-      className="p-4 overflow-auto"
-      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 60}px` }}
+      className="p-4 max-h-table overflow-auto"
+      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
       <table className="w-full">
         <tbody>
