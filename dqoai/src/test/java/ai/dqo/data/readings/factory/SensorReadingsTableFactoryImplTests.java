@@ -49,51 +49,55 @@ public class SensorReadingsTableFactoryImplTests extends BaseTest {
 
     @Test
     void createEmptySensorReadingsTable_whenCalled_thenCreatesTableWithSchema() {
-        Table table = this.sut.createEmptySensorReadingsTable("empty");
-        Assertions.assertEquals(29, table.columnCount());
+        Table table = this.sut.createEmptySensorReadoutsTable("empty");
+        Assertions.assertEquals(33, table.columnCount());
 
         Assertions.assertEquals(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, table.column(0).name());
         Assertions.assertEquals(SensorNormalizedResult.EXPECTED_VALUE_COLUMN_NAME, table.column(1).name());
         Assertions.assertEquals(SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME, table.column(2).name());
         Assertions.assertEquals(SensorNormalizedResult.TIME_GRADIENT_COLUMN_NAME, table.column(3).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "1", table.column(4).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "2", table.column(5).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "3", table.column(6).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "4", table.column(7).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "5", table.column(8).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "6", table.column(9).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "7", table.column(10).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "8", table.column(11).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_COLUMN_NAME_PREFIX + "9", table.column(12).name());
-        Assertions.assertEquals(SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME, table.column(13).name());
-        Assertions.assertEquals(SensorNormalizedResult.CONNECTION_HASH_COLUMN_NAME, table.column(14).name());
-        Assertions.assertEquals(SensorNormalizedResult.CONNECTION_NAME_COLUMN_NAME, table.column(15).name());
-        Assertions.assertEquals(SensorNormalizedResult.PROVIDER_COLUMN_NAME, table.column(16).name());
-        Assertions.assertEquals(SensorNormalizedResult.TABLE_HASH_COLUMN_NAME, table.column(17).name());
-        Assertions.assertEquals(SensorNormalizedResult.SCHEMA_NAME_COLUMN_NAME, table.column(18).name());
-        Assertions.assertEquals(SensorNormalizedResult.TABLE_NAME_COLUMN_NAME, table.column(19).name());
-        Assertions.assertEquals(SensorNormalizedResult.TABLE_STAGE_COLUMN_NAME, table.column(20).name());
-        Assertions.assertEquals(SensorNormalizedResult.COLUMN_HASH_COLUMN_NAME, table.column(21).name());
-        Assertions.assertEquals(SensorNormalizedResult.COLUMN_NAME_COLUMN_NAME, table.column(22).name());
-        Assertions.assertEquals(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, table.column(23).name());
-        Assertions.assertEquals(SensorNormalizedResult.CHECK_NAME_COLUMN_NAME, table.column(24).name());
-        Assertions.assertEquals(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME, table.column(25).name());
-        Assertions.assertEquals(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME, table.column(26).name());
-        Assertions.assertEquals(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, table.column(27).name());
-        Assertions.assertEquals(SensorNormalizedResult.DURATION_MS_COLUMN_NAME, table.column(28).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1", table.column(4).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2", table.column(5).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "3", table.column(6).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "4", table.column(7).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "5", table.column(8).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "6", table.column(9).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "7", table.column(10).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "8", table.column(11).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9", table.column(12).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME, table.column(13).name());
+        Assertions.assertEquals(SensorNormalizedResult.DATA_STREAM_NAME_COLUMN_NAME, table.column(14).name());
+        Assertions.assertEquals(SensorNormalizedResult.CONNECTION_HASH_COLUMN_NAME, table.column(15).name());
+        Assertions.assertEquals(SensorNormalizedResult.CONNECTION_NAME_COLUMN_NAME, table.column(16).name());
+        Assertions.assertEquals(SensorNormalizedResult.PROVIDER_COLUMN_NAME, table.column(17).name());
+        Assertions.assertEquals(SensorNormalizedResult.TABLE_HASH_COLUMN_NAME, table.column(18).name());
+        Assertions.assertEquals(SensorNormalizedResult.SCHEMA_NAME_COLUMN_NAME, table.column(19).name());
+        Assertions.assertEquals(SensorNormalizedResult.TABLE_NAME_COLUMN_NAME, table.column(20).name());
+        Assertions.assertEquals(SensorNormalizedResult.TABLE_STAGE_COLUMN_NAME, table.column(21).name());
+        Assertions.assertEquals(SensorNormalizedResult.COLUMN_HASH_COLUMN_NAME, table.column(22).name());
+        Assertions.assertEquals(SensorNormalizedResult.COLUMN_NAME_COLUMN_NAME, table.column(23).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, table.column(24).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_NAME_COLUMN_NAME, table.column(25).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_TYPE_COLUMN_NAME, table.column(26).name());
+        Assertions.assertEquals(SensorNormalizedResult.CHECK_CATEGORY_COLUMN_NAME, table.column(27).name());
+        Assertions.assertEquals(SensorNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME, table.column(28).name());
+        Assertions.assertEquals(SensorNormalizedResult.SENSOR_NAME_COLUMN_NAME, table.column(29).name());
+        Assertions.assertEquals(SensorNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, table.column(30).name());
+        Assertions.assertEquals(SensorNormalizedResult.EXECUTED_AT_COLUMN_NAME, table.column(31).name());
+        Assertions.assertEquals(SensorNormalizedResult.DURATION_MS_COLUMN_NAME, table.column(32).name());
     }
 
     // This is a special test, it produces an empty sensor readings parquet file in the target/parquet-samples/readings-empty.parquet file
     @Test
     void createEmptySensorReadingsTable_whenEmptyTableWrittenAsParquet_thenWritesParquetFile() throws IOException {
-        Table table = this.sut.createEmptySensorReadingsTable("empty");
+        Table table = this.sut.createEmptySensorReadoutsTable("empty");
         String mavenTargetFolderPath = System.getenv("DQO_TEST_TEMPORARY_FOLDER");
         Path parquetSamplesFolder = Path.of(mavenTargetFolderPath).resolve("parquet-samples");
         if( !parquetSamplesFolder.toFile().exists()) {
             Files.createDirectories(parquetSamplesFolder);
         }
 
-        File targetParquetFile = parquetSamplesFolder.resolve("readings-empty.parquet").toFile();
+        File targetParquetFile = parquetSamplesFolder.resolve("sensor-readouts-empty.parquet").toFile();
 
         TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
                 .builder(targetParquetFile)

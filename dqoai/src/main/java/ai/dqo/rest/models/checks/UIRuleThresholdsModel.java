@@ -15,7 +15,6 @@
  */
 package ai.dqo.rest.models.checks;
 
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -49,23 +48,12 @@ public class UIRuleThresholdsModel {
     @JsonPropertyDescription("Relative path to the rule definition (a python file name) within the rules folder in the DQO Home or User Home.")
     private String rulePath;
 
-    @JsonPropertyDescription("Rule parameters for the medium severity rule.")
-    @Deprecated  // to be renamed to alert
-    private UIRuleParametersModel medium;
+    @JsonPropertyDescription("Rule parameters for the error severity rule.")
+    private UIRuleParametersModel error;
 
-    @JsonPropertyDescription("Rule parameters for the low severity rule.")
-    @Deprecated  // to be renamed to warning
-    private UIRuleParametersModel low;
+    @JsonPropertyDescription("Rule parameters for the warning severity rule.")
+    private UIRuleParametersModel warning;
 
-    @JsonPropertyDescription("Rule parameters for the high severity rule.")
-    @Deprecated  // to be renamed to fatal
-    private UIRuleParametersModel high;
-
-    @JsonPropertyDescription("Time window configuration for rules that require historic data for evaluation. The time window is configured as the number of previous time periods that are required to evaluate a sensor. The time period granularity (day, hour, etc.) is configured as a time_series configuration on the sensor.")
-    @Deprecated
-    private RuleTimeWindowSettingsSpec timeWindow;
-
-    @JsonPropertyDescription("Disable the rule at all severity levels.")
-    @Deprecated
-    private boolean disabled;
+    @JsonPropertyDescription("Rule parameters for the fatal severity rule.")
+    private UIRuleParametersModel fatal;
 }

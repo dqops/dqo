@@ -114,7 +114,7 @@ public class SensorReadingsFileStorageServiceImpl implements SensorReadingsFileS
      */
     public void saveTableMonth(Table data, String connectionName, PhysicalTableName tableName, LocalDate month) {
         try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadingsStoragePath());
+            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadoutsStoragePath());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
@@ -143,7 +143,7 @@ public class SensorReadingsFileStorageServiceImpl implements SensorReadingsFileS
      */
     public Table loadForTableAndMonth(String connectionName, PhysicalTableName tableName, LocalDate month) {
         try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadingsStoragePath());
+            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadoutsStoragePath());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);

@@ -1,48 +1,48 @@
 import React from 'react';
 import {
-  DimensionMappingSpec,
-  DimensionMappingSpecSourceEnum
+  DataStreamLevelSpec,
+  DataStreamLevelSpecSourceEnum
 } from '../../api';
 import Input from '../Input';
 import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
 
-interface IDimensionItemProps {
-  dimension?: DimensionMappingSpec;
+interface IDataStreamLevelItemProps {
+  dataStreamLevel?: DataStreamLevelSpec;
   idx: number;
-  onChange: (dimension: DimensionMappingSpec) => void;
+  onChange: (dataStreamLevel: DataStreamLevelSpec) => void;
   scope?: string;
 }
 
-const DimensionItem = ({
+const DataStreamLevelItem = ({
   idx,
   onChange,
-  dimension,
+  dataStreamLevel,
   scope
-}: IDimensionItemProps) => {
+}: IDataStreamLevelItemProps) => {
   return (
     <div className="mb-4 last:mb-0">
       <div className="flex justify-between items-center space-x-6">
-        <div className="text-sm font-semibold flex-1">{`Dimension ${
+        <div className="text-sm font-semibold flex-1">{`Data stream level ${
           idx + 1
         }`}</div>
         <div className="flex-1">
           <RadioButton
-            checked={dimension?.source === undefined}
+            checked={dataStreamLevel?.source === undefined}
             label="None"
-            onClick={() => onChange({ ...dimension, source: undefined })}
+            onClick={() => onChange({ ...dataStreamLevel, source: undefined })}
           />
         </div>
         <div className="">
           <RadioButton
             checked={
-              dimension?.source === DimensionMappingSpecSourceEnum.static_value
+              dataStreamLevel?.source === DataStreamLevelSpecSourceEnum.static_value
             }
             label="Static Value"
             onClick={() =>
               onChange({
-                ...dimension,
-                source: DimensionMappingSpecSourceEnum.static_value
+                ...dataStreamLevel,
+                source: DataStreamLevelSpecSourceEnum.static_value
               })
             }
           />
@@ -50,42 +50,42 @@ const DimensionItem = ({
         <div className="flex-1">
           <Input
             className="h-8"
-            value={dimension?.static_value}
+            value={dataStreamLevel?.static_value}
             onChange={(e) =>
               onChange({
-                ...dimension,
+                ...dataStreamLevel,
                 static_value: e.target.value
               })
             }
             disabled={
-              dimension?.source !== DimensionMappingSpecSourceEnum.static_value
+              dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.static_value
             }
           />
         </div>
         <RadioButton
           checked={
-            dimension?.source ===
-            DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+            dataStreamLevel?.source ===
+            DataStreamLevelSpecSourceEnum.column_value
           }
           label="Group by column"
           onClick={() =>
             onChange({
-              ...dimension,
+              ...dataStreamLevel,
               source:
-                DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+              DataStreamLevelSpecSourceEnum.column_value
             })
           }
         />
         <div className="flex-1">
           <ColumnSelect
             disabled={
-              dimension?.source !==
-              DimensionMappingSpecSourceEnum.dynamic_from_group_by_column
+              dataStreamLevel?.source !==
+              DataStreamLevelSpecSourceEnum.column_value
             }
-            value={dimension?.column}
+            value={dataStreamLevel?.column}
             onChange={(value) =>
               onChange({
-                ...dimension,
+                ...dataStreamLevel,
                 column: value
               })
             }
@@ -97,4 +97,4 @@ const DimensionItem = ({
   );
 };
 
-export default DimensionItem;
+export default DataStreamLevelItem;

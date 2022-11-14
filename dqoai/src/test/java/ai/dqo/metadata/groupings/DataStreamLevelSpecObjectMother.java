@@ -16,29 +16,29 @@
 package ai.dqo.metadata.groupings;
 
 /**
- * Object mother for DimensionMappingSpec.
+ * Object mother for {@link DataStreamLevelSpec}.
  */
-public class DimensionMappingSpecObjectMother {
+public class DataStreamLevelSpecObjectMother {
     /**
-     * Creates a dimension mapping that uses a static, hardcoded value.
+     * Creates a data stream level mapping that uses a static, hardcoded value.
      * @param value Static value.
-     * @return Dimension mapping.
+     * @return Data stream level mapping.
      */
-    public static DimensionMappingSpec createStaticValue(String value) {
-        return new DimensionMappingSpec() {{
-			setSource(DimensionMappingSource.STATIC_VALUE);
+    public static DataStreamLevelSpec createStaticValue(String value) {
+        return new DataStreamLevelSpec() {{
+			setSource(DataStreamLevelSource.STATIC_VALUE);
 			setStaticValue(value);
         }};
     }
 
     /**
-     * Creates a dimension mapping that uses a column name, so the dimension is dynamic.
+     * Creates a data stream mapping that uses a column name, so the data stream level is dynamic.
      * @param columnName Column name.
-     * @return Dimension mapping.
+     * @return Data stream level mapping.
      */
-    public static DimensionMappingSpec createColumnMapping(String columnName) {
-        return new DimensionMappingSpec() {{
-			setSource(DimensionMappingSource.DYNAMIC_FROM_GROUP_BY_COLUMN);
+    public static DataStreamLevelSpec createColumnMapping(String columnName) {
+        return new DataStreamLevelSpec() {{
+			setSource(DataStreamLevelSource.COLUMN_VALUE);
 			setColumn(columnName);
         }};
     }

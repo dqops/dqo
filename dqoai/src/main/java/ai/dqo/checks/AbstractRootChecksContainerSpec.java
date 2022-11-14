@@ -18,6 +18,7 @@ package ai.dqo.checks;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -45,4 +46,11 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
+    /**
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * @return Check type.
+     */
+    @JsonIgnore
+    public abstract CheckType getCheckType();
 }

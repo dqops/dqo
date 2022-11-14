@@ -16,13 +16,20 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,7 +45,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec {
+public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
@@ -176,5 +183,31 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns time series configuration for the given group of checks.
+     *
+     * @param tableSpec Parent table specification - used to get the details about the time partitioning column.
+     * @return Time series configuration.
+     */
+    @Override
+    public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        return new TimeSeriesConfigurationSpec()
+        {{
+            setMode(TimeSeriesMode.current_time);
+            setTimeGradient(TimeSeriesGradient.MILLISECOND);
+        }};
+    }
+
+    /**
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.ADHOC;
     }
 }

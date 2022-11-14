@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, ConnectionBasicModel, SchemaModel, TableBasicModel } from '../api';
-import { ColumnApiClient, ConnectionApiClient, SchemaApiClient, TableApiClient } from '../services/apiClient';
+import {
+  ColumnBasicModel,
+  ConnectionBasicModel,
+  SchemaModel,
+  TableBasicModel
+} from '../api';
+import {
+  ColumnApiClient,
+  ConnectionApiClient,
+  SchemaApiClient,
+  TableApiClient
+} from '../services/apiClient';
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
@@ -17,6 +27,7 @@ function TreeProvider(props: any) {
   const [tabMap, setTabMap] = useState({});
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
+  const [sidebarWidth, setSidebarWidth] = useState(280);
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -278,7 +289,9 @@ function TreeProvider(props: any) {
         toggleOpenNode,
         tabMap,
         setTabMap,
-        changeActiveTab
+        changeActiveTab,
+        sidebarWidth,
+        setSidebarWidth
       }}
       {...props}
     />

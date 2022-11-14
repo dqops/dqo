@@ -18,7 +18,7 @@ package ai.dqo.checks;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -53,7 +53,7 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckDeprecatedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("time_series_override", o -> o.timeSeriesOverride);
-            put("dimensions_override", o -> o.dimensionsOverride);
+            put("data_streams_override", o -> o.dataStreamsOverride);
             put("schedule_override", o -> o.scheduleOverride);
             put("comments", o -> o.comments);
         }
@@ -65,11 +65,11 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
     @Deprecated
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
-    @JsonPropertyDescription("Data quality dimensions configuration for a sensor query. When a dimension configuration is assigned at a sensor level, it overrides any dimension settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Data stream configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     @Deprecated
-    private DimensionsConfigurationSpec dimensionsOverride;
+    private DataStreamMappingSpec dataStreamsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -104,23 +104,23 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for the sensor.
-     * @return Dimension configuration.
+     * Returns the data stream configuration for the sensor.
+     * @return Data stream configuration.
      */
     @Deprecated
-    public DimensionsConfigurationSpec getDimensionsOverride() {
-        return dimensionsOverride;
+    public DataStreamMappingSpec getDataStreamsOverride() {
+        return dataStreamsOverride;
     }
 
     /**
-     * Returns the dimension configuration for the sensor.
-     * @param dimensionsOverride Dimension configuration.
+     * Returns the data streams configuration for the sensor.
+     * @param dataStreamsOverride Data streams configuration.
      */
     @Deprecated
-    public void setDimensionsOverride(DimensionsConfigurationSpec dimensionsOverride) {
-        setDirtyIf(!Objects.equals(this.dimensionsOverride, dimensionsOverride));
-        this.dimensionsOverride = dimensionsOverride;
-        propagateHierarchyIdToField(dimensionsOverride, "dimensions_override");
+    public void setDataStreamsOverride(DataStreamMappingSpec dataStreamsOverride) {
+        setDirtyIf(!Objects.equals(this.dataStreamsOverride, dataStreamsOverride));
+        this.dataStreamsOverride = dataStreamsOverride;
+        propagateHierarchyIdToField(dataStreamsOverride, "data_streams_override");
     }
 
     /**
@@ -193,8 +193,8 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
     public AbstractCheckDeprecatedSpec clone() {
         try {
             AbstractCheckDeprecatedSpec cloned = (AbstractCheckDeprecatedSpec)super.clone();
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = cloned.dimensionsOverride.clone();
+            if (cloned.dataStreamsOverride != null) {
+                cloned.dataStreamsOverride = cloned.dataStreamsOverride.clone();
             }
             if (cloned.timeSeriesOverride != null) {
                 cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
@@ -221,8 +221,8 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
     public AbstractCheckDeprecatedSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             AbstractCheckDeprecatedSpec cloned = (AbstractCheckDeprecatedSpec)super.clone();
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = dimensionsOverride.expandAndTrim(secretValueProvider);
+            if (cloned.dataStreamsOverride != null) {
+                cloned.dataStreamsOverride = dataStreamsOverride.expandAndTrim(secretValueProvider);
             }
             if (cloned.timeSeriesOverride != null) {
                 cloned.timeSeriesOverride = timeSeriesOverride.expandAndTrim(secretValueProvider);

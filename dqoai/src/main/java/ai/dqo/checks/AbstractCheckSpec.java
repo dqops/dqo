@@ -18,17 +18,12 @@ package ai.dqo.checks;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,12 +31,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.parquet.Strings;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -55,7 +48,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("parameters", o -> o.getParameters());
-            put("alert", o -> o.getAlert());
+            put("error", o -> o.getError());
             put("warning", o -> o.getWarning());
             put("fatal", o -> o.getFatal());
             put("schedule_override", o -> o.scheduleOverride);
@@ -75,7 +68,16 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     private CommentsListSpec comments;
 
     @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
+
+    @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean excludeFromKpi;
+
+    @JsonPropertyDescription("Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String qualityDimension;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -131,6 +133,40 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * True when the check should not be included in the data quality KPI calculation.
+     * @return True - excluded from KPI, false - the data quality check is counted for the data quality KPI calculation.
+     */
+    public boolean isExcludeFromKpi() {
+        return excludeFromKpi;
+    }
+
+    /**
+     * Sets the flag for excluding checks from a data quality KPI calculation.
+     * @param excludeFromKpi true - exclude from the data quality KPI calculation.
+     */
+    public void setExcludeFromKpi(boolean excludeFromKpi) {
+        this.setDirtyIf(this.excludeFromKpi != excludeFromKpi);
+        this.excludeFromKpi = excludeFromKpi;
+    }
+
+    /**
+     * Returns an overwritten data quality dimension that should be used for reporting the alerts for this data quality check.
+     * @return Overwritten data quality dimension name.
+     */
+    public String getQualityDimension() {
+        return qualityDimension;
+    }
+
+    /**
+     * Sets an overwritten name of the data quality dimension that is used for reporting the alerts of this data quality check.
+     * @param qualityDimension Data quality dimension name.
+     */
+    public void setQualityDimension(String qualityDimension) {
+        setDirtyIf(!Objects.equals(this.qualityDimension, qualityDimension));
+        this.qualityDimension = qualityDimension;
+    }
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
@@ -149,10 +185,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public abstract S getParameters();
 
     /**
-     * Alerting threshold configuration that raise a regular "ALERT" severity alerts for unsatisfied rules.
-     * @return Default "alert" alerting thresholds.
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     * @return Default "error" alerting thresholds.
      */
-    public abstract R getAlert();
+    public abstract R getError();
 
     /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
@@ -205,18 +241,82 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
+     * @return Rule definition name (python module name without .py extension) retrieved from the first configured severity level.
+     */
+    @JsonIgnore
+    public String getRuleDefinitionName() {
+        if (this.getError() != null) {
+            return this.getError().getRuleDefinitionName();
+        }
+
+        if (this.getWarning() != null) {
+            return this.getWarning().getRuleDefinitionName();
+        }
+
+        if (this.getFatal() != null) {
+            return this.getFatal().getRuleDefinitionName();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     * @return Default data quality dimension name.
+     */
+    @JsonIgnore
+    public abstract DefaultDataQualityDimensions getDefaultDataQualityDimension();
+
+    /**
+     * Effective data quality dimension used for reporting the alerts of this check. It is the value of {@link AbstractCheckSpec#qualityDimension} when provided
+     * or a result of calling {@link AbstractCheckSpec#getDefaultDataQualityDimension()}.
+     * @return Effective data quality dimension name.
+     */
+    @JsonIgnore
+    public String getEffectiveDataQualityDimension() {
+        if (!Strings.isNullOrEmpty(this.qualityDimension)) {
+            return this.qualityDimension;
+        }
+
+        return this.getDefaultDataQualityDimension().getDisplayName();
+    }
+
+    /**
+     * Returns the data quality category name retrieved from the category field name used to store a container of check categories
+     * in the metadata.
+     * @return Check category name.
+     */
+    @JsonIgnore
+    public String getCategoryName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
+     * @return Check category name, for example "min_row_count", etc.
+     */
+    @JsonIgnore
+    public String getCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
      * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
      * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
      *
      * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
      */
     @Override
-    @JsonIgnore
     public boolean isDefault() {
-        if (this.disabled) {
-            return false;
-        }
-
-        return super.isDefault();
+        return false; // we serialize all checks, even when they have no parameters (because they are too simple to have parameters) and have no alert thresholds (because they are only capturing values)
     }
 }

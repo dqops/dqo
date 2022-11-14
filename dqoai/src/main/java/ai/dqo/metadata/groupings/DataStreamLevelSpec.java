@@ -17,6 +17,8 @@ package ai.dqo.metadata.groupings;
 
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.fields.ControlType;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -32,55 +34,59 @@ import org.apache.parquet.Strings;
 import java.util.Objects;
 
 /**
- * Single dimension configuration. A dimension may be configured as a hardcoded value or a mapping to a column.
+ * Single data stream level configuration. A data stream level may be configured as a hardcoded value or a mapping to a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class DimensionMappingSpec extends AbstractSpec implements Cloneable {
-    private static final ChildHierarchyNodeFieldMapImpl<DimensionMappingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
+    private static final ChildHierarchyNodeFieldMapImpl<DataStreamLevelSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Hardcoded dimension value. Assign a hardcoded (static) dimension value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
-    private DimensionMappingSource source = DimensionMappingSource.STATIC_VALUE;
+    @JsonPropertyDescription("Hardcoded data stream level value. Assign a hardcoded (static) data stream level value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    private DataStreamLevelSource source = DataStreamLevelSource.STATIC_VALUE;
 
-    @JsonPropertyDescription("Hardcoded dimension value. Assign a hardcoded (static) dimension value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    @JsonPropertyDescription("Hardcoded data stream level value. Assign a hardcoded (static) data stream level value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
     private String staticValue;
 
-    @JsonPropertyDescription("Column name that contains the dimension value (for dynamic data-driven dimensions). Sensor queries will be extended with a GROUP BY {dimension colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.")
+    @JsonPropertyDescription("Column name that contains a dynamic data stream level value (for dynamic data-driven data streams). Sensor queries will be extended with a GROUP BY {data stream level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column;
 
+    @JsonPropertyDescription("Data stream level name.")
+    private String name;
+
     /**
-     * Dimension value source.
-     * @return Gets the dimension value source.
+     * Data stream level value source.
+     * @return Gets the data stream level value source.
      */
-    public DimensionMappingSource getSource() {
+    public DataStreamLevelSource getSource() {
         return source;
     }
 
     /**
-     * Sets the source of the dimension values. A dimension could be a static value or a dynamic value, returned from the data.
-     * @param source Dimension mode.
+     * Sets the source of the data stream level values. A data stream level could be a static value or a dynamic value, returned from the data.
+     * @param source Data stream level source type.
      */
-    public void setSource(DimensionMappingSource source) {
+    public void setSource(DataStreamLevelSource source) {
 		setDirtyIf(!Objects.equals(this.source, source));
         this.source = source;
     }
 
     /**
-     * Returns a static value assigned to a dimension.
-     * @return Static dimension value.
+     * Returns a static value assigned to a data stream level.
+     * @return Static data stream level value.
      */
     public String getStaticValue() {
         return staticValue;
     }
 
     /**
-     * Sets a new static value of the dimension.
-     * @param staticValue Static dimension value.
+     * Sets a new static value of the data stream level.
+     * @param staticValue Static data stream level value.
      */
     public void setStaticValue(String staticValue) {
 		setDirtyIf(!Objects.equals(this.staticValue, staticValue));
@@ -89,19 +95,36 @@ public class DimensionMappingSpec extends AbstractSpec implements Cloneable {
 
     /**
      * Gets the column name that is added to the GROUP BY clause. Sensor results retrieved for each grouping (each unique value of the column) is tagged with the value of the column.
-     * @return Column name used to make a dynamic dimension.
+     * @return Column name used to make a dynamic data stream level.
      */
     public String getColumn() {
         return column;
     }
 
     /**
-     * Sets a name of the column used to populate dynamic dimensions.
-     * @param column Dynamic column name.
+     * Sets a name of the column used to populate a dynamic data stream level.
+     * @param column Column name.
      */
     public void setColumn(String column) {
 		setDirtyIf(!Objects.equals(this.column, column));
         this.column = column;
+    }
+
+    /**
+     * Returns a descriptive name of the data stream level.
+     * @return Data stream level name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets a new data stream level name.
+     * @param name New data stream level name.
+     */
+    public void setName(String name) {
+        setDirtyIf(!Objects.equals(this.name, name));
+        this.name = name;
     }
 
     /**
@@ -129,9 +152,9 @@ public class DimensionMappingSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public DimensionMappingSpec clone() {
+    public DataStreamLevelSpec clone() {
         try {
-            DimensionMappingSpec cloned = (DimensionMappingSpec) super.clone();
+            DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.clone();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -144,9 +167,9 @@ public class DimensionMappingSpec extends AbstractSpec implements Cloneable {
      * @param secretValueProvider Secret value provider.
      * @return Cloned and expanded copy of the object.
      */
-    public DimensionMappingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+    public DataStreamLevelSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
-            DimensionMappingSpec cloned = (DimensionMappingSpec) super.clone();
+            DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.clone();
             cloned.staticValue = secretValueProvider.expandValue(cloned.staticValue);
             cloned.column = secretValueProvider.expandValue(cloned.column);
             return cloned;
@@ -154,21 +177,5 @@ public class DimensionMappingSpec extends AbstractSpec implements Cloneable {
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned.");
         }
-    }
-
-    /**
-     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
-     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
-     *
-     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
-     */
-    @Override
-    @JsonIgnore
-    public boolean isDefault() {
-        if (!Strings.isNullOrEmpty(this.staticValue) || this.source != null || !Strings.isNullOrEmpty(this.column) ) {
-            return false;
-        }
-
-        return super.isDefault();
     }
 }

@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableSpec;
 
@@ -27,13 +27,13 @@ import java.util.Collection;
 public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     private final ConnectionWrapper connectionWrapper;
     private final TableSpec tableSpec;
-    private final Collection<AbstractCheckDeprecatedSpec> checks;
+    private final Collection<AbstractCheckSpec> checks;
     private final int checksCount;
     private final int sensorResultsCount;
     private final int passedRules;
-    private final int lowSeverityAlerts;
-    private final int mediumSeverityAlerts;
-    private final int highSeverityAlerts;
+    private final int warningsCount;
+    private final int errorsCount;
+    private final int fatalCount;
 
     /**
      * Creates a progress event.
@@ -42,18 +42,18 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      * @param tableSpec Target table.
      * @param checks    Collection of checks that were executed.
      */
-    public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckDeprecatedSpec> checks,
-										 int checksCount, int sensorResultsCount, int passedRules,
-										 int lowSeverityAlerts, int mediumSeverityAlerts, int highSeverityAlerts) {
+    public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec> checks,
+                                         int checksCount, int sensorResultsCount, int passedRules,
+                                         int warningsCount, int errorsCount, int fatalCount) {
         this.connectionWrapper = connectionWrapper;
         this.tableSpec = tableSpec;
         this.checks = checks;
         this.checksCount = checksCount;
         this.sensorResultsCount = sensorResultsCount;
         this.passedRules = passedRules;
-        this.lowSeverityAlerts = lowSeverityAlerts;
-        this.mediumSeverityAlerts = mediumSeverityAlerts;
-        this.highSeverityAlerts = highSeverityAlerts;
+        this.warningsCount = warningsCount;
+        this.errorsCount = errorsCount;
+        this.fatalCount = fatalCount;
     }
 
     /**
@@ -78,7 +78,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      *
      * @return Collection of checks that were executed.
      */
-    public Collection<AbstractCheckDeprecatedSpec> getChecks() {
+    public Collection<AbstractCheckSpec> getChecks() {
         return checks;
     }
 
@@ -107,26 +107,26 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     }
 
     /**
-     * Count of low severity alerts that were raised.
-     * @return Low severity alerts count.
+     * Count of low severity alerts (warnings) that were raised.
+     * @return Warnings count.
      */
-    public int getLowSeverityAlerts() {
-        return lowSeverityAlerts;
+    public int getWarningsCount() {
+        return warningsCount;
     }
 
     /**
-     * Count of medium severity alerts that were raised.
-     * @return Medium severity alerts count.
+     * Count of error (medium) severity alerts (default alerts) that were raised.
+     * @return Error severity alerts count.
      */
-    public int getMediumSeverityAlerts() {
-        return mediumSeverityAlerts;
+    public int getErrorsCount() {
+        return errorsCount;
     }
 
     /**
-     * Count of high severity alerts that were raised.
-     * @return High severity alerts count.
+     * Count of fatals (high severity alerts) that were raised.
+     * @return High severity alerts (fatal) count.
      */
-    public int getHighSeverityAlerts() {
-        return highSeverityAlerts;
+    public int getFatalCount() {
+        return fatalCount;
     }
 }

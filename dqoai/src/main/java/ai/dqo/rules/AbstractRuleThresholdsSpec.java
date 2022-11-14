@@ -33,6 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParametersSpec> extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {

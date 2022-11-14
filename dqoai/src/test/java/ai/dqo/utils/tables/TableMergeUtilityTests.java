@@ -45,7 +45,7 @@ public class TableMergeUtilityTests extends BaseTest {
 		this.newTable = SensorReadingTableFactoryObjectMother.createEmptyNormalizedTable("new");
 		this.joinColumnNames = new String[] {
                 SensorNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME
+                SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME
         };
     }
 
@@ -53,7 +53,7 @@ public class TableMergeUtilityTests extends BaseTest {
         Row row = targetTable.appendRow();
         row.setDouble(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, actualValue);
         row.setLong(SensorNormalizedResult.CHECK_HASH_COLUMN_NAME, checkId);
-        row.setLong(SensorNormalizedResult.DIMENSION_ID_COLUMN_NAME, dimensionId);
+        row.setLong(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME, dimensionId);
     }
 
     @Test

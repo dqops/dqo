@@ -68,41 +68,6 @@ const TimeSeriesView: React.FC<IConnectionDetailProps> = ({
           />
         </td>
       </tr>
-      <tr>
-        <td className="px-4 py-2">
-          <div>Time Window Periods:</div>
-        </td>
-        <td className="px-4 py-2">
-          <NumberInput
-            value={timeSeries?.time_window_periods}
-            onChange={(value) => onChange({ time_window_periods: value })}
-          />
-        </td>
-      </tr>
-      <tr>
-        <td className="px-4 py-2">
-          <div>Incremental time window periods:</div>
-        </td>
-        <td className="px-4 py-2">
-          <NumberInput
-            value={timeSeries?.incremental_time_window_periods}
-            onChange={(value) =>
-              onChange({ incremental_time_window_periods: value })
-            }
-          />
-        </td>
-      </tr>
-      <tr>
-        <td className="px-4 py-2">
-          <div>Excluded recent periods:</div>
-        </td>
-        <td className="px-4 py-2">
-          <NumberInput
-            value={timeSeries?.excluded_recent_periods}
-            onChange={(value) => onChange({ excluded_recent_periods: value })}
-          />
-        </td>
-      </tr>
     </table>
   );
 };

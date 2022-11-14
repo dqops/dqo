@@ -16,10 +16,17 @@
 package ai.dqo.checks.table.checkpoints;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,7 +42,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContainerSpec {
+public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("standard", o -> o.standard);
@@ -73,5 +80,31 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns time series configuration for the given group of checks.
+     *
+     * @param tableSpec Parent table specification - used to get the details about the time partitioning column.
+     * @return Time series configuration.
+     */
+    @Override
+    public TimeSeriesConfigurationSpec getTimeSeriesConfiguration(TableSpec tableSpec) {
+        return new TimeSeriesConfigurationSpec()
+        {{
+            setMode(TimeSeriesMode.current_time);
+            setTimeGradient(TimeSeriesGradient.DAY);
+        }};
+    }
+
+    /**
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     *
+     * @return Check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.CHECKPOINT;
     }
 }

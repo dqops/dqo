@@ -41,15 +41,15 @@ public class DqoStorageConfigurationPropertiesTest extends BaseTest {
 
     @Test
     void getSensorResultsStoragePath_whenRetrieved_thenReturnsFolderInsideUserHome() {
-        String sensorResultsStoragePath = this.sut.getSensorReadingsStoragePath();
-        String expected = ".data/readings";
+        String sensorResultsStoragePath = this.sut.getSensorReadoutsStoragePath();
+        String expected = ".data/sensor_readouts";
         Assertions.assertEquals(expected, sensorResultsStoragePath);
     }
 
     @Test
     void getAlertsStoragePath_whenRetrieved_thenReturnsFolderInsideUserHome() {
-        String alertsStoragePath = this.sut.getAlertsStoragePath();
-        String expected = ".data/alerts";
+        String alertsStoragePath = this.sut.getRuleResultsStoragePath();
+        String expected = ".data/rule_results";
         Assertions.assertEquals(expected, alertsStoragePath);
     }
 }
