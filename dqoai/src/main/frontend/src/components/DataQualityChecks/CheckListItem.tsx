@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UICheckModel, UIFieldModel, UIRuleThresholdsModel } from '../../api';
 import Checkbox from '../Checkbox';
 import SvgIcon from '../SvgIcon';
-import CheckRulesTable from './CheckRulesTable';
+import CheckRulesView from './CheckRulesView';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
 import Switch from '../Switch';
@@ -45,29 +45,6 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       {
         label: 'Comments',
         value: 'comments'
-      }
-    ]);
-  };
-
-  const openSensorParameters = () => {
-    setExpanded(true);
-    setActiveTab('parameters');
-    setTabs([
-      {
-        label: 'Sensor Parameters',
-        value: 'parameters'
-      }
-    ]);
-  };
-
-  const openCheckRule = (rule: UIRuleThresholdsModel) => {
-    setExpanded(true);
-    setActiveTab(rule.field_name || '');
-    setTabs([
-      {
-        label: (rule.field_name || '')?.split('_').join(' '),
-        value: rule.field_name || '',
-        type: 'rule'
       }
     ]);
   };
@@ -130,11 +107,9 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
           </div>
         </td>
         <td className="py-2 align-top">
-          <CheckRulesTable
+          <CheckRulesView
             rule={check?.rule}
-            onChange={(rules: UIRuleThresholdsModel[]) =>
-              handleChange({ rules })
-            }
+            onChange={(rule: UIRuleThresholdsModel) => handleChange({ rule })}
             disabled={!check.configured}
           />
         </td>
