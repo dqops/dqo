@@ -34,7 +34,7 @@ public class MaxPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMaxPercent(1);
+        this.sut.setMaxPercent(1.0);
         Assertions.assertEquals(1, this.sut.getMaxPercent());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -43,11 +43,11 @@ public class MaxPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMaxPercent(1);
+        this.sut.setMaxPercent(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMaxPercent(1);
+        this.sut.setMaxPercent(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }

@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies if a data quality check reading is less or equal a maximum value.
  */
@@ -36,23 +38,38 @@ public class MaxPercentRule0ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    /**
+     * Default constructor, the minimum accepted value is 0.
+     */
+    public MaxPercentRule0ParametersSpec() {
+    }
+
+    /**
+     * Creates a rule with a given value.
+     * @param maxPercent Minimum accepted value.
+     */
+    public MaxPercentRule0ParametersSpec(Double maxPercent) {
+        this.maxPercent = maxPercent;
+    }
+
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double maxPercent = 0.0;
+    private Double maxPercent = 0.0;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.
      * @return Maximum value for a data quality check reading.
      */
-    public double getMaxPercent() {
+    public Double getMaxPercent() {
         return maxPercent;
     }
+
 
     /**
      * Sets a maximum data quality check reading that is accepted, for example a maximum row count.
      * @param maxPercent Maximum value that is accepted.
      */
-    public void setMaxPercent(double maxPercent) {
-        this.setDirtyIf(this.maxPercent != maxPercent);
+    public void setMaxPercent(Double maxPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
         this.maxPercent = maxPercent;
     }
 

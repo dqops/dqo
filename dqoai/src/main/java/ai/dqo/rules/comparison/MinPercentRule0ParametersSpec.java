@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies if a data quality check reading is greater or equal a minimum value.
  */
@@ -46,18 +48,18 @@ public class MinPercentRule0ParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minPercent Minimum accepted value.
      */
-    public MinPercentRule0ParametersSpec(double minPercent) {
+    public MinPercentRule0ParametersSpec(Double minPercent) {
         this.minPercent = minPercent;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minPercent = 0.0;
+    private Double minPercent = 0.0;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.
      * @return Minimum value for a data quality check reading.
      */
-    public double getMinPercent() {
+    public Double getMinPercent() {
         return minPercent;
     }
 
@@ -65,8 +67,8 @@ public class MinPercentRule0ParametersSpec extends AbstractRuleParametersSpec {
      * Changes the minimum value (threshold) for a data quality reading.
      * @param minPercent Minimum value.
      */
-    public void setMinPercent(double minPercent) {
-        this.setDirtyIf(this.minPercent != minPercent);
+    public void setMinPercent(Double minPercent) {
+        this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
         this.minPercent = minPercent;
     }
 
