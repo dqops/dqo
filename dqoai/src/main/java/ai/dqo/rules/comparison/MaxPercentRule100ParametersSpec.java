@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxPercentRule100ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRule100ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -41,19 +41,19 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     /**
      * Default constructor, the minimum accepted value is 0.
      */
-    public MaxPercentRuleParametersSpec() {
+    public MaxPercentRule100ParametersSpec() {
     }
 
     /**
      * Creates a rule with a given value.
      * @param maxPercent Minimum accepted value.
      */
-    public MaxPercentRuleParametersSpec(Double maxPercent) {
+    public MaxPercentRule100ParametersSpec(Double maxPercent) {
         this.maxPercent = maxPercent;
     }
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxPercent;
+    private Double maxPercent = 100.0;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.

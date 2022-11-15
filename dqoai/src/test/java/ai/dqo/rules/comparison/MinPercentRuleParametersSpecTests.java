@@ -66,7 +66,7 @@ public class MinPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMinPercent(1);
+        this.sut.setMinPercent(1.0);
         Assertions.assertEquals(1, this.sut.getMinPercent());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -75,11 +75,11 @@ public class MinPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMinPercent(1);
+        this.sut.setMinPercent(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMinPercent(1);
+        this.sut.setMinPercent(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }
