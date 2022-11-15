@@ -89,7 +89,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * is in the range (expectedValue - errorValue) <= quality check reading value <= (expectedValue + errorValue)
      * @return Error value.
      */
-    public Double getErrorMargin() {
+    public double getErrorMargin() {
         return errorMargin;
     }
 

@@ -39,20 +39,20 @@ public class BelowPercentPopulationStdev7DaysRuleParametersSpec extends Abstract
     };
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private Double percentPopulationBelow;
+    private double percentPopulationBelow;
 
     /**
      * Default constructor.
      */
     public BelowPercentPopulationStdev7DaysRuleParametersSpec() {
-        this.percentPopulationBelow = null;
+        this.percentPopulationBelow = Double.parseDouble(null);
     }
 
     /**
      * Multipled factor used to calculate a multipled stdev.
      * @return Multiple factor used to calculate a multipled stdev.
      */
-    public Double getPercentPopulationBelow() {
+    public double getPercentPopulationBelow() {
         return percentPopulationBelow;
     }
 
@@ -60,7 +60,7 @@ public class BelowPercentPopulationStdev7DaysRuleParametersSpec extends Abstract
      * Sets multiple factor to caulculate multipled stdev.
      * @param percentPopulationBelow Multiple factor.
      */
-    public void setPercentPopulationBelow(Double percentPopulationBelow) {
+    public void setPercentPopulationBelow(double percentPopulationBelow) {
         this.setDirtyIf(!Objects.equals(this.percentPopulationBelow, percentPopulationBelow));
         this.percentPopulationBelow = percentPopulationBelow;
     }

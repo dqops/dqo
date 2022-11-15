@@ -48,18 +48,18 @@ public class MinPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      * Creates a rule with a given value.
      * @param minPercent Minimum accepted value.
      */
-    public MinPercentRule100ParametersSpec(Double minPercent) {
+    public MinPercentRule100ParametersSpec(double minPercent) {
         this.minPercent = minPercent;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double minPercent = 100.0;
+    private double minPercent = 100.0;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.
      * @return Minimum value for a data quality check reading.
      */
-    public Double getMinPercent() {
+    public double getMinPercent() {
         return minPercent;
     }
 
@@ -67,7 +67,7 @@ public class MinPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      * Changes the minimum value (threshold) for a data quality reading.
      * @param minPercent Minimum value.
      */
-    public void setMinPercent(Double minPercent) {
+    public void setMinPercent(double minPercent) {
         this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
         this.minPercent = minPercent;
     }
