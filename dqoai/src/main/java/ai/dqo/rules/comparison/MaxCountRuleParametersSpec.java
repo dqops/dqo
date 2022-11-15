@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies if a data quality check reading is less or equal a maximum value.
  */
@@ -37,13 +39,13 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double maxCount;
+    private Long maxCount;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.
      * @return Maximum value for a data quality check reading.
      */
-    public double getMaxCount() {
+    public Long getMaxCount() {
         return maxCount;
     }
 
@@ -51,8 +53,8 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets a maximum data quality check reading that is accepted, for example a maximum row count.
      * @param maxCount Maximum value that is accepted.
      */
-    public void setMaxCount(double maxCount) {
-        this.setDirtyIf(this.maxCount != maxCount);
+    public void setMaxCount(Long maxCount) {
+        this.setDirtyIf(!Objects.equals(this.maxCount, maxCount));
         this.maxCount = maxCount;
     }
 
