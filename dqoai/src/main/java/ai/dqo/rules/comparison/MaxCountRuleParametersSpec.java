@@ -37,13 +37,13 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double maxCount;
+    private Double maxCount;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.
      * @return Maximum value for a data quality check reading.
      */
-    public double getMaxCount() {
+    public Double getMaxCount() {
         return maxCount;
     }
 
@@ -51,7 +51,7 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets a maximum data quality check reading that is accepted, for example a maximum row count.
      * @param maxCount Maximum value that is accepted.
      */
-    public void setMaxCount(double maxCount) {
+    public void setMaxCount(Double maxCount) {
         this.setDirtyIf(this.maxCount != maxCount);
         this.maxCount = maxCount;
     }

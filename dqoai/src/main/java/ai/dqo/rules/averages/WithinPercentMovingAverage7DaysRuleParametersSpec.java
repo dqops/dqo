@@ -43,19 +43,19 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpec extends AbstractR
      * Default constructor.
      */
     public WithinPercentMovingAverage7DaysRuleParametersSpec() {
-        this.maxPercentWithin = Double.parseDouble(null);
+        this.maxPercentWithin = null;
     }
 
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private double maxPercentWithin;
+    private Double maxPercentWithin;
 
 
     /**
      * Max percent value for a data quality check reading, for example a minimum row count.
      * @return A percent that is used to calculate lower and upper limit.
      */
-    public double getMaxPercentWithin() {
+    public Double getMaxPercentWithin() {
         return maxPercentWithin;
     }
 
@@ -63,7 +63,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpec extends AbstractR
      * Changes the maximum value (threshold) for a data quality reading.
      * @param maxPercentWithin Maximum value.
      */
-    public void setMaxPercentWithin(double maxPercentWithin) {
+    public void setMaxPercentWithin(Double maxPercentWithin) {
         this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
         this.maxPercentWithin = maxPercentWithin;
     }

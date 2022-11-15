@@ -40,24 +40,24 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
 
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private double multipleStdevAbove;
+    private Double multipleStdevAbove;
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private double multipleStdevBelow;
+    private Double multipleStdevBelow;
 
     /**
      * Default constructor.
      */
     public PercentMovingStdevRuleParametersSpec() {
-        this.multipleStdevBelow = Double.parseDouble(null);
-        this.multipleStdevAbove = Double.parseDouble(null);
+        this.multipleStdevBelow = null;
+        this.multipleStdevAbove = null;
     }
 
     /**
      *
      * @return Multiple factor to calculate multipled stdev.
      */
-    public double getMultipleStdevAbove() {
+    public Double getMultipleStdevAbove() {
         return multipleStdevAbove;
     }
 
@@ -65,7 +65,7 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
      *  Sets a multiple factor to calculate multipled stdev.
      * @param multipleStdevAbove Multiple factor.
      */
-    public void setMultipleStdevAbove(double multipleStdevAbove) {
+    public void setMultipleStdevAbove(Double multipleStdevAbove) {
         this.setDirtyIf(!Objects.equals(this.multipleStdevAbove, multipleStdevAbove));
         this.multipleStdevAbove = multipleStdevAbove;
     }
@@ -74,7 +74,7 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
      * Multipled factor used to calculate a multipled stdev.
      * @return Multiple factor used to calculate a multipled stdev.
      */
-    public double getMultipleStdevBelow() {
+    public Double getMultipleStdevBelow() {
         return multipleStdevBelow;
     }
 
@@ -82,7 +82,7 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
      * Sets multiple factor to caulculate multipled stdev.
      * @param multipleStdevBelow Multiple factor.
      */
-    public void setMultipleStdevBelow(double multipleStdevBelow) {
+    public void setMultipleStdevBelow(Double multipleStdevBelow) {
         this.setDirtyIf(!Objects.equals(this.multipleStdevBelow, multipleStdevBelow));
         this.multipleStdevBelow = multipleStdevBelow;
     }

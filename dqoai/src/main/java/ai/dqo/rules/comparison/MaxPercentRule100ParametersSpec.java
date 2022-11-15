@@ -48,18 +48,18 @@ public class MaxPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      * Creates a rule with a given value.
      * @param maxPercent Minimum accepted value.
      */
-    public MaxPercentRule100ParametersSpec(double maxPercent) {
+    public MaxPercentRule100ParametersSpec(Double maxPercent) {
         this.maxPercent = maxPercent;
     }
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double maxPercent = 100.0;
+    private Double maxPercent = 100.0;
 
     /**
      * Returns a maximum value for a data quality check reading, for example a maximum row count.
      * @return Maximum value for a data quality check reading.
      */
-    public double getMaxPercent() {
+    public Double getMaxPercent() {
         return maxPercent;
     }
 
@@ -67,7 +67,7 @@ public class MaxPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      * Sets a maximum data quality check reading that is accepted, for example a maximum row count.
      * @param maxPercent Maximum value that is accepted.
      */
-    public void setMaxPercent(double maxPercent) {
+    public void setMaxPercent(Double maxPercent) {
         this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
         this.maxPercent = maxPercent;
     }

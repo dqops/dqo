@@ -39,20 +39,20 @@ public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRulePara
     };
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readings must exist to run the calculation.")
-    private double stdevMultiplierBelow;
+    private Double stdevMultiplierBelow;
 
     /**
      * Default constructor.
      */
     public BelowStdevMultiply30DaysRuleParametersSpec() {
-        this.stdevMultiplierBelow = Double.parseDouble(null);
+        this.stdevMultiplierBelow = null;
     }
 
     /**
      * Multipled factor used to calculate a multipled stdev.
      * @return Multiple factor used to calculate a multipled stdev.
      */
-    public double getStdevMultiplierBelow() {
+    public Double getStdevMultiplierBelow() {
         return stdevMultiplierBelow;
     }
 
@@ -60,7 +60,7 @@ public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRulePara
      * Sets multiple factor to caulculate multipled stdev.
      * @param stdevMultiplierBelow Multiple factor.
      */
-    public void setStdevMultiplierBelow(double stdevMultiplierBelow) {
+    public void setStdevMultiplierBelow(Double stdevMultiplierBelow) {
         this.setDirtyIf(!Objects.equals(this.stdevMultiplierBelow, stdevMultiplierBelow));
         this.stdevMultiplierBelow = stdevMultiplierBelow;
     }

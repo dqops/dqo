@@ -47,7 +47,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates an equals rule parameter given an expected value.
      * @param expectedValue Expected value.
      */
-    public ValueEqualsRuleParametersSpec(double expectedValue) {
+    public ValueEqualsRuleParametersSpec(Double expectedValue) {
         this.expectedValue = expectedValue;
     }
 
@@ -56,22 +56,22 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param expectedValue Expected value.
      * @param errorMargin Error margin.
      */
-    public ValueEqualsRuleParametersSpec(double expectedValue, double errorMargin) {
+    public ValueEqualsRuleParametersSpec(Double expectedValue, Double errorMargin) {
         this.expectedValue = expectedValue;
         this.errorMargin = errorMargin;
     }
 
     @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.")
-    private double expectedValue;
+    private Double expectedValue;
 
     @JsonPropertyDescription("Error margin for comparison.")
-    private double errorMargin;
+    private Double errorMargin;
 
     /**
      * Returns the expected value for the sensor reading.
      * @return Expected value.
      */
-    public double getExpectedValue() {
+    public Double getExpectedValue() {
         return expectedValue;
     }
 
@@ -79,7 +79,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets the expected value.
      * @param expectedValue New expected value.
      */
-    public void setExpectedValue(double expectedValue) {
+    public void setExpectedValue(Double expectedValue) {
 		this.setDirtyIf(this.expectedValue != expectedValue);
         this.expectedValue = expectedValue;
     }
@@ -89,7 +89,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * is in the range (expectedValue - errorValue) <= quality check reading value <= (expectedValue + errorValue)
      * @return Error value.
      */
-    public double getErrorMargin() {
+    public Double getErrorMargin() {
         return errorMargin;
     }
 
@@ -97,7 +97,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets an error margin.
      * @param errorMargin New error margin.
      */
-    public void setErrorMargin(double errorMargin) {
+    public void setErrorMargin(Double errorMargin) {
 		this.setDirtyIf(this.errorMargin != errorMargin);
         this.errorMargin = errorMargin;
     }

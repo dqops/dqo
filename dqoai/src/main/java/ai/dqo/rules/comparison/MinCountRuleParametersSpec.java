@@ -46,18 +46,18 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minCount Minimum accepted value.
      */
-    public MinCountRuleParametersSpec(double minCount) {
+    public MinCountRuleParametersSpec(Double minCount) {
         this.minCount = minCount;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minCount;
+    private Double minCount;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.
      * @return Minimum value for a data quality check reading.
      */
-    public double getMinCount() {
+    public Double getMinCount() {
         return minCount;
     }
 
@@ -65,7 +65,7 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
      * Changes the minimum value (threshold) for a data quality reading.
      * @param minCount Minimum value.
      */
-    public void setMinCount(double minCount) {
+    public void setMinCount(Double minCount) {
         this.setDirtyIf(this.minCount != minCount);
         this.minCount = minCount;
     }
