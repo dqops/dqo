@@ -20,7 +20,7 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class MaxCountRuleParametersSpec:
-    max_count: float
+    max_count: int
 
 
 class HistoricDataPoint:
