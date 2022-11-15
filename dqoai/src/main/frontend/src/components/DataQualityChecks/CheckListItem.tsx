@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIFieldModel, UIRuleThresholdsModel } from '../../api';
-import Checkbox from '../Checkbox';
+import { UICheckModel, UIFieldModel } from '../../api';
 import SvgIcon from '../SvgIcon';
-import CheckRulesView from './CheckRulesView';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
 import Switch from '../Switch';
 import clsx from 'clsx';
+import CheckRuleItem from './CheckRuleItem';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -69,10 +68,14 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       ...obj
     });
   };
-
   return (
     <>
-      <tr className={clsx(' border-b border-gray-100', check?.configured ? 'text-gray-700' : 'opacity-75')}>
+      <tr
+        className={clsx(
+          ' border-b border-gray-100',
+          check?.configured ? 'text-gray-700' : 'opacity-75'
+        )}
+      >
         <td className="py-2 px-4 align-top pr-4">
           <div className="flex space-x-2 items-center min-w-60">
             {/*<div className="w-5">*/}
@@ -106,11 +109,46 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 align-top">
-          <CheckRulesView
-            rule={check?.rule}
-            onChange={(rule: UIRuleThresholdsModel) => handleChange({ rule })}
-            disabled={!check.configured}
+        <td className="py-2 px-4 align-bottom bg-orange-100">
+          <CheckRuleItem
+            parameters={check?.rule?.error}
+            onChange={(error) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  error
+                }
+              })
+            }
+            type="error"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-yellow-100">
+          <CheckRuleItem
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-red-100">
+          <CheckRuleItem
+            parameters={check?.rule?.fatal}
+            onChange={(fatal) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  fatal
+                }
+              })
+            }
+            type="fatal"
           />
         </td>
       </tr>
