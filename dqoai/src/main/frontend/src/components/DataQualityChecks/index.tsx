@@ -11,13 +11,13 @@ interface IDataQualityChecksProps {
 const TableHeader = () => {
   return (
     <tr>
-      <td className="text-left text-gray-700 py-2 border-b font-semibold">
+      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
         Data quality check
       </td>
-      <td className="text-left text-gray-700 py-2 border-b font-semibold">
+      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
         Sensor parameters
       </td>
-      <td className="text-left text-gray-700 py-2 border-b font-semibold">
+      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
         Data quality rules
       </td>
     </tr>
@@ -60,17 +60,20 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
       <table className="w-full">
+        <TableHeader />
         <tbody>
           {checksUI?.categories.map((category, index) => (
             <>
               <tr key={index}>
-                <td className="" colSpan={3}>
-                  <div className="text-xl font-semibold text-gray-700 capitalize">
+                <td
+                  className="py-2 px-4 bg-gray-50 border-b border-t"
+                  colSpan={3}
+                >
+                  <div className="text-lg font-semibold text-gray-700 capitalize">
                     {category.category}
                   </div>
                 </td>
               </tr>
-              <TableHeader />
               {category.checks &&
                 category.checks.map((check, jIndex) => (
                   <CheckListItem

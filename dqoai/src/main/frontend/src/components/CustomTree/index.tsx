@@ -65,7 +65,7 @@ const CustomTree = () => {
         />
         <Tooltip
           content={node.tooltip}
-          className="max-w-120 py-4 px-4 bg-gray-800"
+          className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
           placement="top-start"
         >
           <div className="text-black truncate flex-1">{node.label}</div>

@@ -43,7 +43,7 @@ const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
     return (
       <Tooltip
         content={tab?.tooltip}
-        className="max-w-80 py-4 px-4 bg-gray-800"
+        className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
         placement="top-start"
       >
         {content}
