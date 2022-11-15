@@ -72,9 +72,9 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
 
   return (
     <>
-      <tr className={clsx(check?.configured ? 'text-gray-700' : 'opacity-75')}>
-        <td className="py-2 align-top pr-4">
-          <div className="flex mt-2 space-x-2 items-center min-w-60">
+      <tr className={clsx(' border-b border-gray-100', check?.configured ? 'text-gray-700' : 'opacity-75')}>
+        <td className="py-2 px-4 align-top pr-4">
+          <div className="flex space-x-2 items-center min-w-60">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
             {/*</div>*/}
@@ -92,7 +92,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             />
           </div>
         </td>
-        <td className="py-2 align-top">
+        <td className="py-2 px-4 align-top">
           <div className="flex space-x-2">
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
@@ -106,7 +106,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             </div>
           </div>
         </td>
-        <td className="py-2 align-top">
+        <td className="py-2 px-4 align-top">
           <CheckRulesView
             rule={check?.rule}
             onChange={(rule: UIRuleThresholdsModel) => handleChange({ rule })}
