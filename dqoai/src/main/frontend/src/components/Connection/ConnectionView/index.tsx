@@ -139,7 +139,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       connection: connectionName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [connectionName]);
 
   const onUpdate = async () => {

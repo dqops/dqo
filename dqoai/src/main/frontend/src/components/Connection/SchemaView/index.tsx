@@ -6,7 +6,6 @@ import Button from '../../Button';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import { TableBasicModel } from '../../../api';
-import { useTree } from '../../../contexts/treeContext';
 
 interface ISchemaViewProps {
   connectionName: string;
@@ -36,7 +35,7 @@ const SchemaView = ({ connectionName, schemaName }: ISchemaViewProps) => {
       schema: schemaName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [schemaName, connectionName]);
 
   return (
