@@ -42,6 +42,7 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
 
     @JsonPropertyDescription("Disables the data quality sensor. Only enabled sensors are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     @Deprecated  // we will disable the check, not the sensor
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
     @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
@@ -120,45 +121,5 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Cannot clone the object.");
         }
-    }
-
-    /**
-     * This method should be overridden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     *         false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @JsonIgnore
-    public abstract boolean hasNonNullSimpleFields();
-
-    /**
-     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
-     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
-     *
-     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
-     */
-    @Override
-    @JsonIgnore
-    public boolean isDefault() {
-        if (!Strings.isNullOrEmpty(this.filter) || this.disabled) {
-            return false;
-        }
-
-        boolean isDefault = super.isDefault();
-        if (!isDefault) {
-            return false;
-        }
-
-        if (hasNonNullSimpleFields()) {
-            return false;
-        }
-
-        return true;  // the parameters does not need to be serialized
     }
 }
