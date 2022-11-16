@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.numeric;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
@@ -36,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnValidityNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnValidityNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNegativeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -64,6 +65,7 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
 
     /**
      * Returns the parameters of the sensor.
+     *
      * @return Sensor parameters.
      */
     @Override
@@ -73,6 +75,7 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
 
     /**
      * Sets a new row count sensor parameter object.
+     *
      * @param parameters Row count parameters.
      */
     public void setParameters(ColumnValidityNegativeCountSensorParametersSpec parameters) {
@@ -93,6 +96,7 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
 
     /**
      * Sets a new error level alerting threshold.
+     *
      * @param error Error alerting threshold to set.
      */
     public void setError(MaxCountRuleParametersSpec error) {
@@ -113,6 +117,7 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
 
     /**
      * Sets a new warning level alerting threshold.
+     *
      * @param warning Warning alerting threshold to set.
      */
     public void setWarning(MaxCountRuleParametersSpec warning) {
@@ -133,6 +138,7 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
 
     /**
      * Sets a new fatal level alerting threshold.
+     *
      * @param fatal Fatal alerting threshold to set.
      */
     public void setFatal(MaxCountRuleParametersSpec fatal) {
@@ -149,5 +155,15 @@ public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     *
+     * @return Default data quality dimension name.
+     */
+    @Override
+    public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
+        return DefaultDataQualityDimensions.COMPLETENESS;
     }
 }
