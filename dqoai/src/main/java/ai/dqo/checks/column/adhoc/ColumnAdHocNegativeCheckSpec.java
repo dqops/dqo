@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNumericsCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,32 +33,32 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAdHocNumericCheckSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNumericCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnAdHocNegativeCheckSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNegativeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("max_numerics_count", o -> o.maxNumericsCount);
+            put("max_negative_count", o -> o.maxNegativeCount);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of numerics in a column does not exceed the maximum accepted count.")
-    private ColumnMaxNumericsCountCheckSpec maxNumericsCount;
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
+    private ColumnMaxNegativeCountCheckSpec maxNegativeCount;
 
     /**
-     * Returns a maximum numerics count check.
-     * @return Maximum numerics count check.
+     * Returns a maximum negative count check.
+     * @return Maximum negative count check.
      */
-    public ColumnMaxNumericsCountCheckSpec getMaxNumericsCount() {
-        return maxNumericsCount;
+    public ColumnMaxNegativeCountCheckSpec getMaxNegativeCount() {
+        return maxNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum numerics count check.
-     * @param maxNumericsCount Maximum numerics count check.
+     * Sets a new definition of a maximum negative count check.
+     * @param maxNegativeCount Maximum negative count check.
      */
-    public void setMaxNumericsCount(ColumnMaxNumericsCountCheckSpec maxNumericsCount) {
-        this.setDirtyIf(!Objects.equals(this.maxNumericsCount, maxNumericsCount));
-        this.maxNumericsCount = maxNumericsCount;
-        propagateHierarchyIdToField(maxNumericsCount, "max_numerics_count");
+    public void setMaxNegativeCount(ColumnMaxNegativeCountCheckSpec maxNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.maxNegativeCount, maxNegativeCount));
+        this.maxNegativeCount = maxNegativeCount;
+        propagateHierarchyIdToField(maxNegativeCount, "max_negative_count");
     }
 
     /**

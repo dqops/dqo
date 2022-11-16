@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of numerics in a monitored column.
+ * Column level check that ensures that there are no more than a maximum number of negative values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class ColumnMaxNumericsCountCheckSpec extends AbstractCheckSpec<ColumnValidityNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNumericsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public abstract class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnValidityNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNegativeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,7 +47,7 @@ public abstract class ColumnMaxNumericsCountCheckSpec extends AbstractCheckSpec<
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnValidityNegativeCountSensorParametersSpec parameters = new ColumnValidityNegativeCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with numeric in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRuleParametersSpec error;
