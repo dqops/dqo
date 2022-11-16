@@ -91,7 +91,7 @@ const ColumnView = ({
       column: columnName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName, columnName]);
 
   const onUpdate = async () => {
