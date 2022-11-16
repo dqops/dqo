@@ -37,30 +37,30 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
     @Test
     void executeRule_whenActualValueIsAboveMinValue_thenReturnsPassed() {
         this.sut.setMinCount(20L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRule_whenActualValueIsEqualMinValue_thenReturnsPassed() {
         this.sut.setMinCount(20L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.5, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMinValue_thenReturnsFailed() {
         this.sut.setMinCount(20L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
