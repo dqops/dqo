@@ -9,6 +9,7 @@ interface CheckRuleItemProps {
   parameters?: UIRuleParametersModel;
   onChange: (parameters: UIRuleParametersModel) => void;
   type: 'error' | 'warning' | 'fatal';
+  disabled?: boolean;
 }
 
 const buttonLabelMap = {
@@ -23,7 +24,12 @@ const classesMap = {
   fatal: 'bg-red-900'
 };
 
-const CheckRuleItem = ({ parameters, onChange, type }: CheckRuleItemProps) => {
+const CheckRuleItem = ({
+  parameters,
+  onChange,
+  type,
+  disabled
+}: CheckRuleItemProps) => {
   const handleRuleParameterChange = (field: UIFieldModel, idx: number) => {
     const newParameters = parameters?.rule_parameters?.map((item, index) =>
       index === idx ? field : item
@@ -73,6 +79,7 @@ const CheckRuleItem = ({ parameters, onChange, type }: CheckRuleItemProps) => {
                 onChange={(field: UIFieldModel) =>
                   handleRuleParameterChange(field, index)
                 }
+                disabled={disabled}
               />
             </div>
           ))}
