@@ -171,12 +171,12 @@ public class RuleResultsSnapshotTests extends BaseTest {
 
     @Test
     void hasNewAlerts_whenNoNewRows_thenReturnsFalse() {
-        Assertions.assertFalse(this.sut.hasNewAlerts());
+        Assertions.assertFalse(this.sut.hasNewRuleResults());
     }
 
     @Test
     void hasNewAlerts_whenNewRows_thenReturnsTrue() {
 		this.sut.getNewResults().appendRow();
-        Assertions.assertTrue(this.sut.hasNewAlerts());
+        Assertions.assertTrue(this.sut.hasNewRuleResults());
     }
 }

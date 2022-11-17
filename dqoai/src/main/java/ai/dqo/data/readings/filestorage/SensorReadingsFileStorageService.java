@@ -25,7 +25,7 @@ import java.time.LocalDate;
  * Service that provides access to sensor results.
  */
 public interface SensorReadingsFileStorageService {
-    String PARQUET_FILE_NAME = "readings.0.parquet";
+    String PARQUET_FILE_NAME = "sensor_readout.0.parquet";
 
     /**
      * Returns a supported delta mode.

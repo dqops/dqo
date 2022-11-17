@@ -1,16 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
-import TableColumns from './TableColumns';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   CommentSpec,
-  DimensionsConfigurationSpec,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
   TableBasicModel,
   TimeSeriesConfigurationSpec,
@@ -21,14 +19,14 @@ import {
   getTableBasic,
   getTableChecksUI,
   getTableComments,
-  getTableDimensions,
+  getTableDataStreamMapping,
   getTableLabels,
   getTableSchedule,
   getTableTime,
   updateTableBasic,
   updateTableChecksUI,
   updateTableComments,
-  updateTableDimensions,
+  updateTableDataStreamMapping,
   updateTableLabels,
   updateTableSchedule,
   updateTableTime
@@ -38,11 +36,14 @@ import LabelsView from '../LabelsView';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
-import { useTabs } from '../../../contexts/tabContext';
-import DimensionsView from '../DimensionsView';
+import DataStreamsMappingView from '../DataStreamsMappingView';
+import { useTree } from '../../../contexts/treeContext';
+import TimestampsView from './TimestampsView';
 
 interface ITableViewProps {
-  node: ITreeNode;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
 const tabs = [
@@ -67,16 +68,20 @@ const tabs = [
     value: 'labels'
   },
   {
-    label: 'Columns',
-    value: 'columns'
+    label: 'Data Streams',
+    value: 'data-streams'
   },
   {
-    label: 'Dimensions',
-    value: 'dimensions'
+    label: 'Timestamps',
+    value: 'timestamps'
   }
 ];
 
-const TableView = ({ node }: ITableViewProps) => {
+const TableView = ({
+  connectionName,
+  schemaName,
+  tableName
+}: ITableViewProps) => {
   const [activeTab, setActiveTab] = useState('table');
 
   const {
@@ -87,13 +92,9 @@ const TableView = ({ node }: ITableViewProps) => {
     labels,
     checksUI,
     isUpdating,
-    dimensions
+    dataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const { tabMap, setTabMap } = useTabs();
-
-  const connectionName = node.key.split('.')[1] || '';
-  const schemaName = node.key.split('.')[2] || '';
-  const tableName = node.module;
+  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
   const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
   const [updatedSchedule, setUpdatedSchedule] =
@@ -103,8 +104,8 @@ const TableView = ({ node }: ITableViewProps) => {
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  const [updatedDimensions, setUpdatedDimensions] =
-    useState<DimensionsConfigurationSpec>();
+  const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
+    useState<DataStreamMappingSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -132,8 +133,8 @@ const TableView = ({ node }: ITableViewProps) => {
   }, [checksUI]);
 
   useEffect(() => {
-    setUpdatedDimensions(dimensions);
-  }, [dimensions]);
+    setUpdatedDataStreamMapping(dataStreamsMapping);
+  }, [dataStreamsMapping]);
 
   useEffect(() => {
     setUpdatedTableBasic(undefined);
@@ -141,7 +142,7 @@ const TableView = ({ node }: ITableViewProps) => {
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
-    setUpdatedDimensions(undefined);
+    setUpdatedDataStreamMapping(undefined);
 
     dispatch(getTableBasic(connectionName, schemaName, tableName));
     dispatch(getTableSchedule(connectionName, schemaName, tableName));
@@ -149,7 +150,7 @@ const TableView = ({ node }: ITableViewProps) => {
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
     dispatch(getTableChecksUI(connectionName, schemaName, tableName));
-    dispatch(getTableDimensions(connectionName, schemaName, tableName));
+    dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
 
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -157,11 +158,11 @@ const TableView = ({ node }: ITableViewProps) => {
       table: tableName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (activeTab === 'table') {
+    if (activeTab === 'table' || activeTab === 'timestamps') {
       await dispatch(
         updateTableBasic(
           connectionName,
@@ -222,16 +223,18 @@ const TableView = ({ node }: ITableViewProps) => {
       );
       await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
     }
-    if (activeTab === 'dimensions') {
+    if (activeTab === 'data-streams') {
       await dispatch(
-        updateTableDimensions(
+        updateTableDataStreamMapping(
           connectionName,
           schemaName,
           tableName,
-          updatedDimensions
+          updatedDataStreamMapping
         )
       );
-      await dispatch(getTableDimensions(connectionName, schemaName, tableName));
+      await dispatch(
+        getTableDataStreamMapping(connectionName, schemaName, tableName)
+      );
     }
   };
 
@@ -239,15 +242,17 @@ const TableView = ({ node }: ITableViewProps) => {
     setActiveTab(tab);
     setTabMap({
       ...tabMap,
-      [node.module]: tab
+      [pageTab]: tab
     });
   };
 
   useEffect(() => {
-    if (tabMap[node.module]) {
-      setActiveTab(tabMap[node.module]);
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('table');
     }
-  }, [node, tabMap]);
+  }, [pageTab, tabMap]);
 
   const isDisabled = useMemo(() => {
     if (activeTab === 'labels') {
@@ -262,7 +267,7 @@ const TableView = ({ node }: ITableViewProps) => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color="primary"
@@ -315,19 +320,23 @@ const TableView = ({ node }: ITableViewProps) => {
         )}
       </div>
       <div>
-        {activeTab === 'columns' && (
-          <TableColumns
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
+        {activeTab === 'data-streams' && (
+          <DataStreamsMappingView
+            dataStreamsMapping={updatedDataStreamMapping}
+            onChange={setUpdatedDataStreamMapping}
           />
         )}
       </div>
       <div>
-        {activeTab === 'dimensions' && (
-          <DimensionsView
-            dimensions={updatedDimensions}
-            onChange={setUpdatedDimensions}
+        {activeTab === 'timestamps' && (
+          <TimestampsView
+            columnsSpec={updatedTableBasic?.timestamp_columns}
+            onChange={(columns) =>
+              setUpdatedTableBasic({
+                ...updatedTableBasic,
+                timestamp_columns: columns
+              })
+            }
           />
         )}
       </div>

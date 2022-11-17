@@ -15,7 +15,12 @@
  */
 package ai.dqo.metadata.basespecs;
 
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.*;
+import ai.dqo.utils.reflection.ClassInfo;
+import ai.dqo.utils.reflection.FieldInfo;
+import ai.dqo.utils.reflection.ReflectionService;
+import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import ai.dqo.utils.serialization.DeserializationAware;
 import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -24,7 +29,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Base class for all spec classes in the tree. Provides basic dirty checking.
@@ -212,7 +219,27 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
                     return false;
                 }
             }
-            return false; // non default child found
+            else {
+                return false; // non default child found
+            }
+        }
+
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+        List<FieldInfo> fields = myClassInfo.getFields();
+        for (FieldInfo fieldInfo : fields) {
+            ParameterDataType dataType = fieldInfo.getDataType();
+            if (dataType == ParameterDataType.object_type) {
+                continue;
+            }
+
+            Object fieldValue = fieldInfo.getRawFieldValue(this);
+            Object defaultValue = fieldInfo.getDefaultValue();
+
+            if (!Objects.equals(fieldValue, defaultValue)) {
+                return false;
+            }
         }
 
         return true;

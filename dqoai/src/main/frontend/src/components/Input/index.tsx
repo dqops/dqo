@@ -44,7 +44,10 @@ const Input = ({
       {label && (
         <label
           htmlFor={name}
-          className="block font-regular text-gray-700 mb-1 text-sm flex space-x-1"
+          className={clsx(
+            'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+            error ? 'text-red-500' : ''
+          )}
         >
           <span>{label}</span>
           {!!tooltipText && (

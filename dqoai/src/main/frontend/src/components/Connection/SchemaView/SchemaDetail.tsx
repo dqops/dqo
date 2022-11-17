@@ -5,7 +5,7 @@ interface ISchemaDetailProps {
   schema?: SchemaModel;
 }
 
-const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema}) => {
+const SchemaDetail: React.FC<ISchemaDetailProps> = ({ schema }) => {
   return (
     <div className="p-4">
       <table className="mb-6">

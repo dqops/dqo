@@ -26,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit all data quality checks divided by dimensions.
+ * UI model that returns the form definition and the form data to edit all data quality checks divided by categories.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by dimensions.")
+@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by categories.")
 public class UIAllChecksModel {
-    @JsonPropertyDescription("List of all data quality dimensions that contain data quality checks inside.")
-    private List<UIQualityDimensionModel> qualityDimensions = new ArrayList<>();
+    @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
+    private List<UIQualityCategoryModel> categories = new ArrayList<>();
 }

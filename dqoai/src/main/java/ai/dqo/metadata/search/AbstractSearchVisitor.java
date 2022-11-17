@@ -15,20 +15,15 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
-import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
-import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
+import ai.dqo.checks.*;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
-import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
-import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
-import ai.dqo.checks.table.relevance.BuiltInTableRelevanceChecksSpec;
-import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
-import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
@@ -41,8 +36,8 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DimensionMappingSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -238,7 +233,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableCheckCategoriesSpec tableCheckCategoriesSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -250,7 +245,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnCheckCategoriesSpec columnCheckCategoriesSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -286,7 +281,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -347,102 +342,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a container of table level consistency data quality checks.
-     *
-     * @param builtInTableConsistencyChecksSpec Consistency checks.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a table level.
-     *
-     * @param builtInTableValidityChecksSpec Built-in validity sensors on a table level.
-     * @param parameter                      Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableValidityChecksSpec builtInTableValidityChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in timeliness sensors on a column level.
-     *
-     * @param builtInTableTimelinessChecksSpec Built-in timeliness sensors on a table level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableTimelinessChecksSpec builtInTableTimelinessChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a column level.
-     *
-     * @param builtInColumnValidityChecksSpec Built-in validity sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnValidityChecksSpec builtInColumnValidityChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a container of column level consistency data quality checks.
-     *
-     * @param builtInColumnConsistencyChecksSpec Consistency checks.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnConsistencyChecksSpec builtInColumnConsistencyChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in relevance sensors on a table level.
-     *
-     * @param builtInTableRelevanceChecksSpec Built-in relevance sensors on a table level.
-     * @param parameter                      Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableRelevanceChecksSpec builtInTableRelevanceChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in uniqueness sensors on a column level.
-     *
-     * @param builtInColumnUniquenessChecksSpec Built-in validity sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnUniquenessChecksSpec builtInColumnUniquenessChecksSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in completeness sensors on a column level.
-     *
-     * @param builtInColumnCompletenessChecksSpec Built-in completeness sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnCompletenessChecksSpec builtInColumnCompletenessChecksSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -591,26 +490,26 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     }
 
     /**
-     * Accepts a dimension configuration specification on a table level.
+     * Accepts a data streams mapping configuration specification on a table level.
      *
-     * @param dimensionsConfigurationSpec Dimension specification.
-     * @param parameter                   Additional visitor's parameter.
+     * @param dataStreamMappingSpec Data streams mapping specification.
+     * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionsConfigurationSpec dimensionsConfigurationSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a configuration of a single dimension.
+     * Accepts a configuration of a single data stream level.
      *
-     * @param dimensionMappingSpec Dimension mapping specification.
-     * @param parameter            Additional visitor's parameter.
+     * @param dataStreamLevelSpec Data stream level mapping specification.
+     * @param parameter           Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionMappingSpec dimensionMappingSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -754,6 +653,102 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a base class for all data quality checks.
+     *
+     * @param checkSpec Data quality check instance.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckSpec checkSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of data quality checks for a single category.
+     *
+     * @param abstractCheckCategorySpec Container of data quality checks for a single category.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of table level checkpoints (daily, monthly, etc.)
+     *
+     * @param tableCheckpointsSpec Table level checkpoints container.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableCheckpointsSpec tableCheckpointsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of table level partitioned checks (daily, monthly, etc.)
+     *
+     * @param tablePartitionedChecksRootSpec Table level partitioned checks container.
+     * @param parameter                      Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of column level checkpoints (daily, monthly, etc.)
+     *
+     * @param columnCheckpointsSpec Column level checkpoints container.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnCheckpointsSpec columnCheckpointsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of column level partitioned checks (daily, monthly, etc.)
+     *
+     * @param columnPartitionedChecksRootSpec Column level partitioned checks container.
+     * @param parameter                       Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of timestamp related columns on a table level.
+     *
+     * @param timestampColumnsSpec Configuration of timestamp related columns.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

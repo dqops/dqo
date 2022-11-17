@@ -1,3 +1,19 @@
+///
+/// Copyright © 2021 DQO.ai (support@dqo.ai)
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
+
 import { Dispatch } from 'redux';
 
 import { TableApiClient } from '../../services/apiClient';
@@ -422,62 +438,62 @@ export const updateTableChecksUI =
     }
   };
 
-export const getTableDimensionsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS
+export const getTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING
 });
 
-export const getTableDimensionsSuccess = (data: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_SUCCESS,
+export const getTableDataStreamsMappingSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getTableDimensionsFailed = (error: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DIMENSIONS_ERROR,
+export const getTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const getTableDimensions =
+export const getTableDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDimensionsRequest());
+    dispatch(getTableDataStreamsMappingRequest());
     try {
-      const res = await TableApiClient.getTableDimensions(
+      const res = await TableApiClient.getTableDataStreamsMapping(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableDimensionsSuccess(res.data));
+      dispatch(getTableDataStreamsMappingSuccess(res.data));
     } catch (err) {
-      dispatch(getTableDimensionsFailed(err));
+      dispatch(getTableDataStreamsMappingFailed(err));
     }
   };
 
-export const updateTableDimensionsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS
+export const updateTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING
 });
 
-export const updateTableDimensionsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_SUCCESS
+export const updateTableDataStreamsSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateTableDimensionsFailed = (error: any) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DIMENSIONS_ERROR,
+export const updateTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const updateTableDimensions =
+export const updateTableDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string, data: any) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDimensionsRequest());
+    dispatch(updateTableDataStreamsMappingRequest());
     try {
-      await TableApiClient.updateTableDimensions(
+      await TableApiClient.updateTableDataStreamsMapping(
         connectionName,
         schemaName,
         tableName,
         data
       );
-      dispatch(updateTableDimensionsSuccess());
+      dispatch(updateTableDataStreamsSuccess());
     } catch (err) {
-      dispatch(updateTableDimensionsFailed(err));
+      dispatch(updateTableDataStreamsMappingFailed(err));
     }
   };

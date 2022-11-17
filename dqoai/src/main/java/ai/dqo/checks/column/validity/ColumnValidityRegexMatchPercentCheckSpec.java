@@ -15,7 +15,7 @@
  */
 package ai.dqo.checks.column.validity;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -38,8 +38,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnValidityRegexMatchPercentCheckSpec extends AbstractCheckSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnValidityRegexMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+@Deprecated
+public class ColumnValidityRegexMatchPercentCheckSpec extends AbstractCheckDeprecatedSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnValidityRegexMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckDeprecatedSpec.FIELDS) {
         {
 			put("parameters", o -> o.parameters);
 			put("rules", o -> o.rules);

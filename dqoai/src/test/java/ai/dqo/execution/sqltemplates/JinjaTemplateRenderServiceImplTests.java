@@ -22,7 +22,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -64,7 +64,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 null,
                 new TableConsistencyRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createDefault(),
-                new DimensionsConfigurationSpec(),
+                new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery)

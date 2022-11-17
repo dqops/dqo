@@ -38,6 +38,7 @@ TODO min should be replaced with max
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class TableTimelinessColumnDatetimeDifferencePercentRulesSpec extends AbstractRuleSetSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessColumnDatetimeDifferencePercentRulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleSetSpec.FIELDS) {
         {

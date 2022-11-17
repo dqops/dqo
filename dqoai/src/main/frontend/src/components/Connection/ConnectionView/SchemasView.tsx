@@ -17,9 +17,13 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
 
   return (
     <div className="py-4 px-8">
-      <div className="font-semibold pb-2 mb-2 border-b border-gray-300">Schema Name</div>
+      <div className="font-semibold pb-2 mb-2 border-b border-gray-300">
+        Schema Name
+      </div>
       {schemas.map((item) => (
-        <div key={item.schema_name} className="mb-3">{item.schema_name}</div>
+        <div key={item.schema_name} className="mb-3">
+          {item.schema_name}
+        </div>
       ))}
     </div>
   );
