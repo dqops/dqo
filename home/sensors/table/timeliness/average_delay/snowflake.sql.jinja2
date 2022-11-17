@@ -1,7 +1,7 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 SELECT
     AVG(ABS(TIMESTAMPDIFF({{ lib.render_average_delay(parameters.column1, parameters.column2, parameters.time_scale) }}))) AS actual_value
-    {{- lib.render_dimension_projections('analyzed_table') }}
+    {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
 {{- lib.render_where_clause() -}}

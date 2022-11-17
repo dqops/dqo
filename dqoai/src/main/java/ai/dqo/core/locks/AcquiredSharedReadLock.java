@@ -15,22 +15,21 @@
  */
 package ai.dqo.core.locks;
 
-import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Acquired shared read lock that must be returned.
  */
 public class AcquiredSharedReadLock implements AutoCloseable {
-    private final List<ReentrantReadWriteLock.ReadLock> readLocks;
     private boolean released;
+    private ReentrantReadWriteLock.ReadLock readLock;
 
     /**
      * Creates a shared read lock that is already in a "locked" status.
-     * @param readLocks List of read locks in the order from the parent to the deepest child.
+     * @param readLock Read lock that was locked.
      */
-    public AcquiredSharedReadLock(List<ReentrantReadWriteLock.ReadLock> readLocks) {
-        this.readLocks = readLocks;
+    public AcquiredSharedReadLock(ReentrantReadWriteLock.ReadLock readLock) {
+        this.readLock = readLock;
     }
 
     /**
@@ -42,11 +41,7 @@ public class AcquiredSharedReadLock implements AutoCloseable {
             return;
         }
 
-        for (int i = this.readLocks.size() - 1; i >= 0 ; i--) {
-            ReentrantReadWriteLock.ReadLock readLock = this.readLocks.get(i);
-            readLock.unlock();
-        }
-
+        this.readLock.unlock();
         this.released = true;
     }
 }

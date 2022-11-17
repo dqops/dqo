@@ -96,7 +96,7 @@ public class TableTimelinessCurrentDelaySensorParametersSpecBigQueryTests extend
                         SELECT
                             TIMESTAMP_DIFF(CURRENT_TIMESTAMP(),
                                            SAFE_CAST(MAX(analyzed_table.datetime_col) AS TIMESTAMP),
-                                           HOUR) AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                                           HOUR) AS actual_value, CURRENT_TIMESTAMP() AS time_period
                         FROM %s AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",

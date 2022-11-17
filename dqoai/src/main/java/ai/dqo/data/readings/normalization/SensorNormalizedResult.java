@@ -18,7 +18,7 @@ package ai.dqo.data.readings.normalization;
 import tech.tablesaw.api.*;
 
 /**
- * Describes the dataset (dataframe) returned from the sensor. Identifies the time series column, dimension columns, etc.
+ * Describes the dataset (dataframe) returned from the sensor. Identifies the time series column, data stream columns, etc.
  * The columns are normalized.
  */
 public class SensorNormalizedResult {
@@ -43,14 +43,19 @@ public class SensorNormalizedResult {
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
     /**
-     * Column name prefix for dimension columns: dimension_.
+     * Column name prefix for the data stream columns: stream_level_.
      */
-    public static final String DIMENSION_COLUMN_NAME_PREFIX = "dimension_";
+    public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = "stream_level_";
 
     /**
-     * Column name for a dimension id, it is a hash of the dimension names.
+     * Column name for a data stream hash, it is a hash of the data stream level names.
      */
-    public static final String DIMENSION_ID_COLUMN_NAME = "dimension_id";
+    public static final String DATA_STREAM_HASH_COLUMN_NAME = "data_stream_hash";
+
+    /**
+     * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     */
+    public static final String DATA_STREAM_NAME_COLUMN_NAME = "data_stream_name";
 
     /**
      * Column name for a connection hash.
@@ -108,7 +113,17 @@ public class SensorNormalizedResult {
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
-     * Column name for a quality dimension.
+     * Column name for a check type (adhoc, checkpoint, partitioned).
+     */
+    public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
+
+    /**
+     * Column name for a check category.
+     */
+    public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
+
+    /**
+     * Column name for a data quality dimension.
      */
     public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
 
@@ -116,6 +131,11 @@ public class SensorNormalizedResult {
      * Column name for a sensor name.
      */
     public static final String SENSOR_NAME_COLUMN_NAME = "sensor_name";
+
+    /**
+     * Column name for a time series uuid. Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     */
+    public static final String TIME_SERIES_UUID_COLUMN_NAME = "time_series_uuid";
 
     /**
      * Column name for a sensor executed at timestamp.
@@ -133,7 +153,8 @@ public class SensorNormalizedResult {
     private final DoubleColumn expectedValueColumn;
     private final DateTimeColumn timePeriodColumn;
     private final StringColumn timeGradientColumn;
-    private final LongColumn dimensionIdColumn;
+    private final LongColumn dataStreamHashColumn;
+    private final StringColumn dataStreamNameColumn;
     private final LongColumn connectionHashColumn;
     private final StringColumn connectionNameColumn;
     private final StringColumn providerColumn;
@@ -145,8 +166,11 @@ public class SensorNormalizedResult {
     private final StringColumn columnNameColumn;
     private final LongColumn checkHashColumn;
     private final StringColumn checkNameColumn;
+    private final StringColumn checkTypeColumn;
+    private final StringColumn checkCategoryColumn;
     private final StringColumn qualityDimensionColumn;
     private final StringColumn sensorNameColumn;
+    private final StringColumn timeSeriesUuidColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
 
@@ -156,26 +180,30 @@ public class SensorNormalizedResult {
      */
     public SensorNormalizedResult(Table table) {
         this.table = table;
-		this.actualValueColumn = (DoubleColumn) table.column(ACTUAL_VALUE_COLUMN_NAME);
-		this.expectedValueColumn = (DoubleColumn) table.column(EXPECTED_VALUE_COLUMN_NAME);
-		this.timePeriodColumn = (DateTimeColumn) table.column(TIME_PERIOD_COLUMN_NAME);
-		this.timeGradientColumn = (StringColumn) table.column(TIME_GRADIENT_COLUMN_NAME);
-		this.dimensionIdColumn = (LongColumn) table.column(DIMENSION_ID_COLUMN_NAME);
-		this.connectionHashColumn = (LongColumn) table.column(CONNECTION_HASH_COLUMN_NAME);
+        this.actualValueColumn = (DoubleColumn) table.column(ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = (DoubleColumn) table.column(EXPECTED_VALUE_COLUMN_NAME);
+        this.timePeriodColumn = (DateTimeColumn) table.column(TIME_PERIOD_COLUMN_NAME);
+        this.timeGradientColumn = (StringColumn) table.column(TIME_GRADIENT_COLUMN_NAME);
+        this.dataStreamHashColumn = (LongColumn) table.column(DATA_STREAM_HASH_COLUMN_NAME);
+        this.dataStreamNameColumn = (StringColumn) table.column(DATA_STREAM_NAME_COLUMN_NAME);
+        this.connectionHashColumn = (LongColumn) table.column(CONNECTION_HASH_COLUMN_NAME);
         this.connectionNameColumn = (StringColumn) table.column(CONNECTION_NAME_COLUMN_NAME);
         this.providerColumn = (StringColumn) table.column(PROVIDER_COLUMN_NAME);
-		this.tableHashColumn = (LongColumn) table.column(TABLE_HASH_COLUMN_NAME);
+        this.tableHashColumn = (LongColumn) table.column(TABLE_HASH_COLUMN_NAME);
         this.schemaNameColumn = (StringColumn) table.column(SCHEMA_NAME_COLUMN_NAME);
         this.tableNameColumn = (StringColumn) table.column(TABLE_NAME_COLUMN_NAME);
         this.tableStageColumn = (StringColumn) table.column(TABLE_STAGE_COLUMN_NAME);
-		this.columnHashColumn = (LongColumn) table.column(COLUMN_HASH_COLUMN_NAME);
+        this.columnHashColumn = (LongColumn) table.column(COLUMN_HASH_COLUMN_NAME);
         this.columnNameColumn = (StringColumn) table.column(COLUMN_NAME_COLUMN_NAME);
-		this.checkHashColumn = (LongColumn) table.column(CHECK_HASH_COLUMN_NAME);
+        this.checkHashColumn = (LongColumn) table.column(CHECK_HASH_COLUMN_NAME);
         this.checkNameColumn = (StringColumn) table.column(CHECK_NAME_COLUMN_NAME);
+        this.checkTypeColumn = (StringColumn) table.column(CHECK_TYPE_COLUMN_NAME);
+        this.checkCategoryColumn = (StringColumn) table.column(CHECK_CATEGORY_COLUMN_NAME);
         this.qualityDimensionColumn = (StringColumn) table.column(QUALITY_DIMENSION_COLUMN_NAME);
         this.sensorNameColumn = (StringColumn) table.column(SENSOR_NAME_COLUMN_NAME);
-		this.executedAtColumn = (InstantColumn) table.column(EXECUTED_AT_COLUMN_NAME);
-		this.durationMsColumn = (IntColumn) table.column(DURATION_MS_COLUMN_NAME);
+        this.timeSeriesUuidColumn = (StringColumn) table.column(TIME_SERIES_UUID_COLUMN_NAME);
+        this.executedAtColumn = (InstantColumn) table.column(EXECUTED_AT_COLUMN_NAME);
+        this.durationMsColumn = (IntColumn) table.column(DURATION_MS_COLUMN_NAME);
     }
 
     /**
@@ -220,11 +248,19 @@ public class SensorNormalizedResult {
     }
 
     /**
-     * Dimension id column.
-     * @return Dimension id column.
+     * Data stream hash column.
+     * @return Data stream hash column.
      */
-    public LongColumn getDimensionIdColumn() {
-        return dimensionIdColumn;
+    public LongColumn getDataStreamHashColumn() {
+        return dataStreamHashColumn;
+    }
+
+    /**
+     * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
+     * @return Data stream name column.
+     */
+    public StringColumn getDataStreamNameColumn() {
+        return dataStreamNameColumn;
     }
 
     /**
@@ -316,6 +352,22 @@ public class SensorNormalizedResult {
     }
 
     /**
+     * Returns a column that stores the check type (adhoc, checkpoint, partitioned).
+     * @return Check type column.
+     */
+    public StringColumn getCheckTypeColumn() {
+        return checkTypeColumn;
+    }
+
+    /**
+     * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
+     * @return Quality check category name column.
+     */
+    public StringColumn getCheckCategoryColumn() {
+        return checkCategoryColumn;
+    }
+
+    /**
      * Returns a tablesaw column with the parent quality dimension of a check.
      * @return Quality dimension of a check.
      */
@@ -329,6 +381,14 @@ public class SensorNormalizedResult {
      */
     public StringColumn getSensorNameColumn() {
         return sensorNameColumn;
+    }
+
+    /**
+     * Returns a time series uuid column.
+     * @return Column that stores a time series uuid.
+     */
+    public StringColumn getTimeSeriesUuidColumn() {
+        return timeSeriesUuidColumn;
     }
 
     /**

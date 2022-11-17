@@ -15,7 +15,6 @@
  */
 package ai.dqo.core.locks;
 
-import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -23,18 +22,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * locked in shared read mode.
  */
 public class AcquiredExclusiveWriteLock implements AutoCloseable {
-    private final List<ReentrantReadWriteLock.ReadLock> readLocks;
     private final ReentrantReadWriteLock.WriteLock writeLock;
     private boolean released;
 
     /**
      * Creates an exclusive read lock that is already in a "locked" status.
-     * @param readLocks List of read locks in the order from the parent to the deepest child.
      * @param writeLock Exclusive write lock on the deepest level (the child only).
      */
-    public AcquiredExclusiveWriteLock(List<ReentrantReadWriteLock.ReadLock> readLocks,
-                                      ReentrantReadWriteLock.WriteLock writeLock) {
-        this.readLocks = readLocks;
+    public AcquiredExclusiveWriteLock(ReentrantReadWriteLock.WriteLock writeLock) {
         this.writeLock = writeLock;
     }
 
@@ -48,12 +43,6 @@ public class AcquiredExclusiveWriteLock implements AutoCloseable {
         }
 
         this.writeLock.unlock();
-
-        for (int i = this.readLocks.size() - 1; i >= 0 ; i--) {
-            ReentrantReadWriteLock.ReadLock readLock = this.readLocks.get(i);
-            readLock.unlock();
-        }
-
         this.released = true;
     }
 }

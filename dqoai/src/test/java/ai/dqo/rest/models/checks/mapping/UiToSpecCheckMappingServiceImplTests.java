@@ -16,11 +16,10 @@
 package ai.dqo.rest.models.checks.mapping;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -47,7 +46,7 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
-        TableCheckCategoriesSpec tableCheckCategoriesSpec = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
         UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec);
 
         this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
@@ -55,7 +54,7 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
-        ColumnCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnCheckCategoriesSpec();
+        ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
         UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec);
 
         this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);

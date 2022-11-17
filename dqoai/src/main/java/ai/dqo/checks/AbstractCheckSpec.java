@@ -18,16 +18,12 @@ package ai.dqo.checks;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,38 +31,30 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * Base class for a data quality check. A check is a pair of a sensor (that reads a value by querying the data) and a rule that validates the value returned by the sensor.
+ * @param <R> Alerting threshold rule parameters type.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneable {
+public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, R extends AbstractRuleParametersSpec> extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("time_series_override", o -> o.timeSeriesOverride);
-            put("dimensions_override", o -> o.dimensionsOverride);
+            put("parameters", o -> o.getParameters());
+            put("error", o -> o.getError());
+            put("warning", o -> o.getWarning());
+            put("fatal", o -> o.getFatal());
             put("schedule_override", o -> o.scheduleOverride);
             put("comments", o -> o.comments);
         }
     };
-
-    @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TimeSeriesConfigurationSpec timeSeriesOverride;
-
-    @JsonPropertyDescription("Data quality dimensions configuration for a sensor query. When a dimension configuration is assigned at a sensor level, it overrides any dimension settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec dimensionsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -79,42 +67,17 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
+    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean disabled;
 
-    /**
-     * Returns the time series configuration for this sensor.
-     * @return Time series configuration.
-     */
-    public TimeSeriesConfigurationSpec getTimeSeriesOverride() {
-        return timeSeriesOverride;
-    }
+    @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean excludeFromKpi;
 
-    /**
-     * Sets a new time series configuration for this sensor.
-     * @param timeSeriesOverride New time series configuration.
-     */
-    public void setTimeSeriesOverride(TimeSeriesConfigurationSpec timeSeriesOverride) {
-        setDirtyIf(!Objects.equals(this.timeSeriesOverride, timeSeriesOverride));
-        this.timeSeriesOverride = timeSeriesOverride;
-        propagateHierarchyIdToField(timeSeriesOverride, "time_series_override");
-    }
-
-    /**
-     * Returns the data quality measure dimensions configuration for the sensor.
-     * @return Dimension configuration.
-     */
-    public DimensionsConfigurationSpec getDimensionsOverride() {
-        return dimensionsOverride;
-    }
-
-    /**
-     * Returns the dimension configuration for the sensor.
-     * @param dimensionsOverride Dimension configuration.
-     */
-    public void setDimensionsOverride(DimensionsConfigurationSpec dimensionsOverride) {
-        setDirtyIf(!Objects.equals(this.dimensionsOverride, dimensionsOverride));
-        this.dimensionsOverride = dimensionsOverride;
-        propagateHierarchyIdToField(dimensionsOverride, "dimensions_override");
-    }
+    @JsonPropertyDescription("Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String qualityDimension;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -153,6 +116,57 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     }
 
     /**
+     * Checks if the data quality check (or checkpoint) is disabled.
+     * @return True when the check is disabled.
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * Sets the disabled flag on a check.
+     * @param disabled Disabled flag.
+     */
+    public void setDisabled(boolean disabled) {
+        this.setDirtyIf(this.disabled != disabled);
+        this.disabled = disabled;
+    }
+
+    /**
+     * True when the check should not be included in the data quality KPI calculation.
+     * @return True - excluded from KPI, false - the data quality check is counted for the data quality KPI calculation.
+     */
+    public boolean isExcludeFromKpi() {
+        return excludeFromKpi;
+    }
+
+    /**
+     * Sets the flag for excluding checks from a data quality KPI calculation.
+     * @param excludeFromKpi true - exclude from the data quality KPI calculation.
+     */
+    public void setExcludeFromKpi(boolean excludeFromKpi) {
+        this.setDirtyIf(this.excludeFromKpi != excludeFromKpi);
+        this.excludeFromKpi = excludeFromKpi;
+    }
+
+    /**
+     * Returns an overwritten data quality dimension that should be used for reporting the alerts for this data quality check.
+     * @return Overwritten data quality dimension name.
+     */
+    public String getQualityDimension() {
+        return qualityDimension;
+    }
+
+    /**
+     * Sets an overwritten name of the data quality dimension that is used for reporting the alerts of this data quality check.
+     * @param qualityDimension Data quality dimension name.
+     */
+    public void setQualityDimension(String qualityDimension) {
+        setDirtyIf(!Objects.equals(this.qualityDimension, qualityDimension));
+        this.qualityDimension = qualityDimension;
+    }
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
@@ -168,15 +182,25 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
      * Returns the sensor parameters spec object that identifies the sensor definition to use and contains parameters.
      * @return Sensor parameters.
      */
-    @JsonIgnore
-    public abstract AbstractSensorParametersSpec getSensorParameters();
+    public abstract S getParameters();
 
     /**
-     * Returns a rule set for this check.
-     * @return Rule set.
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     * @return Default "error" alerting thresholds.
      */
-    @JsonIgnore
-    public abstract AbstractRuleSetSpec getRuleSet();
+    public abstract R getError();
+
+    /**
+     * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
+     * @return Warning severity rule parameters.
+     */
+    public abstract R getWarning();
+
+    /**
+     * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
+     * @return Fatal severity rule parameters.
+     */
+    public abstract R getFatal();
 
     /**
      * Creates and returns a copy of this object.
@@ -185,12 +209,6 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     public AbstractCheckSpec clone() {
         try {
             AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = cloned.dimensionsOverride.clone();
-            }
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
-            }
             if (cloned.scheduleOverride != null) {
                 cloned.scheduleOverride = cloned.scheduleOverride.clone();
             }
@@ -213,12 +231,6 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     public AbstractCheckSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = dimensionsOverride.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = timeSeriesOverride.expandAndTrim(secretValueProvider);
-            }
             cloned.scheduleOverride = null;
             cloned.comments = null;
             return cloned;
@@ -229,29 +241,82 @@ public abstract class AbstractCheckSpec extends AbstractSpec implements Cloneabl
     }
 
     /**
-     * Reviews time windows for enabled rules that require historic data. Calculates the date before the <code>minTimePeriod</code>
-     * that must be loaded to satisfy all the rules.
-     * @param timeSeriesGradient Effective time series gradient that will be used for the calculation.
-     * @param minTimePeriod Reference timestamp of the earliest sensor reading that will be evaluated by rules.
-     * @return <code>minTimePeriod</code> when no time window is required or a date that is earlier to fill the time window with historic sensor readings.
+     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
+     * @return Rule definition name (python module name without .py extension) retrieved from the first configured severity level.
      */
-    public LocalDateTime findEarliestRequiredHistoricReadingDate(TimeSeriesGradient timeSeriesGradient, LocalDateTime minTimePeriod) {
-        LocalDateTime minRequiredDateTime = minTimePeriod;
-        List<AbstractRuleThresholdsSpec<?>> enabledRules = getRuleSet().getEnabledRules();
-
-        for (AbstractRuleThresholdsSpec<?> ruleThresholdsSpec : enabledRules) {
-            RuleTimeWindowSettingsSpec timeWindow = ruleThresholdsSpec.getTimeWindow();
-            if (timeWindow == null) {
-                continue;
-            }
-
-            LocalDateTime earliestRequiredReading = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
-                    minTimePeriod, timeWindow.getPredictionTimeWindow(), timeSeriesGradient);
-            if (earliestRequiredReading.isBefore(minRequiredDateTime)) {
-                minRequiredDateTime = earliestRequiredReading;
-            }
+    @JsonIgnore
+    public String getRuleDefinitionName() {
+        if (this.getError() != null) {
+            return this.getError().getRuleDefinitionName();
         }
 
-        return minRequiredDateTime;
+        if (this.getWarning() != null) {
+            return this.getWarning().getRuleDefinitionName();
+        }
+
+        if (this.getFatal() != null) {
+            return this.getFatal().getRuleDefinitionName();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     * @return Default data quality dimension name.
+     */
+    @JsonIgnore
+    public abstract DefaultDataQualityDimensions getDefaultDataQualityDimension();
+
+    /**
+     * Effective data quality dimension used for reporting the alerts of this check. It is the value of {@link AbstractCheckSpec#qualityDimension} when provided
+     * or a result of calling {@link AbstractCheckSpec#getDefaultDataQualityDimension()}.
+     * @return Effective data quality dimension name.
+     */
+    @JsonIgnore
+    public String getEffectiveDataQualityDimension() {
+        if (!Strings.isNullOrEmpty(this.qualityDimension)) {
+            return this.qualityDimension;
+        }
+
+        return this.getDefaultDataQualityDimension().getDisplayName();
+    }
+
+    /**
+     * Returns the data quality category name retrieved from the category field name used to store a container of check categories
+     * in the metadata.
+     * @return Check category name.
+     */
+    @JsonIgnore
+    public String getCategoryName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns the data quality check name (YAML compliant) that is used as a field name on a check category class.
+     * @return Check category name, for example "min_row_count", etc.
+     */
+    @JsonIgnore
+    public String getCheckName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    public boolean isDefault() {
+        return false; // we serialize all checks, even when they have no parameters (because they are too simple to have parameters) and have no alert thresholds (because they are only capturing values)
     }
 }

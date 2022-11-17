@@ -15,36 +15,23 @@
  */
 package ai.dqo.core.locks;
 
-import ai.dqo.metadata.sources.PhysicalTableName;
-
 /**
  * Lock manager that controls access to the user home in a parallel environment.
  */
 public interface UserHomeLockManager {
     /**
-     * Acquires an exclusive write lock on the whole user home.
-     *
-     * @return Exclusive write lock on the user home.
+     * Obtains a shared read lock on a whole folder.
+     * @param scope Lock scope that identifies a folder in the user home that is locked.
+     * @return Shared read lock that must be released by calling the {@link AcquiredSharedReadLock#close()}
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
-    AcquiredExclusiveWriteLock lockUserHomeForWrite();
+    AcquiredSharedReadLock lockSharedRead(LockFolderScope scope);
 
     /**
-     * Acquires an exclusive write lock on a source level.
-     *
-     * @param sourceName Source (connection) name.
-     * @return Exclusive write lock for all data relevant for the connection.
+     * Obtains an exclusive lock on a whole folder.
+     * @param scope Lock scope that identifies a folder in the user home that is locked.
+     * @return Exclusive write lock that must be released by calling the {@link AcquiredExclusiveWriteLock#close()}
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
-    AcquiredExclusiveWriteLock lockSourceForWrite(String sourceName);
-
-    /**
-     * Acquires an exclusive write lock on a table level.
-     *
-     * @param sourceName        Source name (connection name).
-     * @param physicalTableName Physical table name.
-     * @return Acquired exclusive write lock on a table level.
-     * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
-     */
-    AcquiredExclusiveWriteLock lockTableForWrite(String sourceName, PhysicalTableName physicalTableName);
+    AcquiredExclusiveWriteLock lockExclusiveWrite(LockFolderScope scope);
 }

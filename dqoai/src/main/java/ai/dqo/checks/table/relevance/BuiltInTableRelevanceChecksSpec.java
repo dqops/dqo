@@ -15,6 +15,7 @@
  */
 package ai.dqo.checks.table.relevance;
 
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -33,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BuiltInTableRelevanceChecksSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableRelevanceChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class BuiltInTableRelevanceChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableRelevanceChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("moving_week_average", o -> o.movingWeekAverage);
         }
@@ -55,7 +56,7 @@ public class BuiltInTableRelevanceChecksSpec extends AbstractSpec {
      * Sets a new definition of a moving week average check.
      * @param movingWeekAverage Moving week average check.
      */
-    public void setmovingWeekAverage(TableRelevanceMovingWeekAverageCheckSpec movingWeekAverage) {
+    public void setMovingWeekAverage(TableRelevanceMovingWeekAverageCheckSpec movingWeekAverage) {
         this.setDirtyIf(!Objects.equals(this.movingWeekAverage, movingWeekAverage));
         this.movingWeekAverage = movingWeekAverage;
         propagateHierarchyIdToField(movingWeekAverage, "moving_week_average");
@@ -69,16 +70,5 @@ public class BuiltInTableRelevanceChecksSpec extends AbstractSpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Calls a visitor (using a visitor design pattern) that returns a result.
-     *
-     * @param visitor   Visitor instance.
-     * @param parameter Additional parameter that will be passed back to the visitor.
-     */
-    @Override
-    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return visitor.accept(this, parameter);
     }
 }

@@ -115,7 +115,7 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      */
     public void saveTableMonth(Table data, String connectionName, PhysicalTableName tableName, LocalDate month) {
         try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getAlertsStoragePath());
+            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getRuleResultsStoragePath());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
@@ -144,7 +144,7 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      */
     public Table loadForTableAndMonth(String connectionName, PhysicalTableName tableName, LocalDate month) {
         try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getAlertsStoragePath());
+            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getRuleResultsStoragePath());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);

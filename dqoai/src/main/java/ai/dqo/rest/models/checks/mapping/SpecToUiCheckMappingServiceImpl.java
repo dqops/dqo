@@ -15,9 +15,11 @@
  */
 package ai.dqo.rest.models.checks.mapping;
 
-import ai.dqo.checks.AbstractCheckCategoriesSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
+import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rest.models.checks.*;
@@ -35,6 +37,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -55,12 +58,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     }
 
     /**
-     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into DAMA dimensions.
+     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @return Checks data quality container.
      */
     @Override
-    public UIAllChecksModel createUiModel(AbstractCheckCategoriesSpec checkCategoriesSpec) {
+    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
@@ -71,25 +74,25 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             }
 
             Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityDimensionModel dimensionModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
-            uiAllChecksModel.getQualityDimensions().add(dimensionModel);
+            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
+            uiAllChecksModel.getCategories().add(categoryModel);
         }
 
         return uiAllChecksModel;
     }
 
     /**
-     * Creates a UI model for all data quality checks for one dimension.
-     * @param dimensionFieldInfo Field info for the dimension field.
-     * @param categoryFieldValue The current dimension specification object instance (an object that has fields for all data quality checks in the dimension).
-     * @return UI model for a dimension with all quality checks.
+     * Creates a UI model for all data quality checks for one category.
+     * @param dimensionFieldInfo Field info for the category field.
+     * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
+     * @return UI model for a category with all quality checks.
      */
-    protected UIQualityDimensionModel createCategoryModel(FieldInfo dimensionFieldInfo, Object categoryFieldValue) {
-        UIQualityDimensionModel dimensionModel = new UIQualityDimensionModel();
-        dimensionModel.setQualityDimension(dimensionFieldInfo.getDisplayName());
-        dimensionModel.setHelpText(dimensionFieldInfo.getHelpText());
+    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode) {
+        UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
+        categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
+        categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
 
-        ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(categoryFieldValue.getClass());
+        ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         List<FieldInfo> checksFields = checkListClassInfo.getFields();
         for (FieldInfo checkFieldInfo : checksFields) {
             if (Objects.equals(checkFieldInfo.getClassFieldName(), "custom")) {
@@ -97,12 +100,56 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 continue;
             }
 
-            AbstractCheckSpec checkFieldValue = (AbstractCheckSpec)checkFieldInfo.getFieldValueOrNewObject(categoryFieldValue);
-            UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue);
-            dimensionModel.getChecks().add(checkModel);
+            AbstractSpec checkSpecObjectNullable = (AbstractSpec)checkFieldInfo.getFieldValue(checkCategoryParentNode);
+            AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
+                    (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
+            if (checkSpecObject instanceof AbstractCheckDeprecatedSpec) {
+                AbstractCheckDeprecatedSpec checkFieldValue = (AbstractCheckDeprecatedSpec) checkSpecObject;
+                UICheckModel checkModel = createLegacyCheckModel(checkFieldInfo, checkFieldValue);
+                checkModel.setConfigured(checkSpecObjectNullable != null);
+                categoryModel.getChecks().add(checkModel);
+            }
+            else {
+                AbstractCheckSpec<?,?> checkFieldValue = (AbstractCheckSpec<?,?>) checkSpecObject;
+                UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue);
+                checkModel.setConfigured(checkSpecObjectNullable != null);
+                categoryModel.getChecks().add(checkModel);
+            }
         }
 
-        return dimensionModel;
+        return categoryModel;
+    }
+
+    /**
+     * Creates a UI model for a single data quality check.
+     * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
+     * @param checkSpec Check specification instance retrieved from the object.
+     * @return Check model.
+     */
+    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?> checkSpec) {
+        UICheckModel checkModel = new UICheckModel();
+        checkModel.setCheckName(checkFieldInfo.getDisplayName());
+        checkModel.setHelpText(checkFieldInfo.getHelpText());
+
+        checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
+        checkModel.setComments(checkSpec.getComments());
+        checkModel.setDisabled(checkSpec.isDisabled());
+        checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
+        checkModel.setSupportsTimeSeries(false);
+        checkModel.setSupportsDataStreams(false);
+
+        ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
+        FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
+        AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
+        checkModel.setFilter(parametersSpec.getFilter());
+
+        List<UIFieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
+        checkModel.setSensorParameters(fieldsForParameterSpec);
+
+        UIRuleThresholdsModel ruleModel = createRuleThresholdsModel(checkSpec);
+        checkModel.setRule(ruleModel);
+
+        return checkModel;
     }
 
     /**
@@ -111,17 +158,19 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param checkFieldValue Check specification instance retrieved from the object.
      * @return Check model.
      */
-    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec checkFieldValue) {
+    protected UICheckModel createLegacyCheckModel(FieldInfo checkFieldInfo, AbstractCheckDeprecatedSpec checkFieldValue) {
         UICheckModel checkModel = new UICheckModel();
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
 
-        checkModel.setDimensionsOverride(checkFieldValue.getDimensionsOverride());
+        checkModel.setDataStreamsOverride(checkFieldValue.getDataStreamsOverride());
         checkModel.setTimeSeriesOverride(checkFieldValue.getTimeSeriesOverride());
         checkModel.setScheduleOverride(checkFieldValue.getScheduleOverride());
         checkModel.setComments(checkFieldValue.getComments());
         checkModel.setDisabled(checkFieldValue.getSensorParameters().isDisabled());
         checkModel.setFilter(checkFieldValue.getSensorParameters().getFilter());
+        checkModel.setSupportsTimeSeries(true);
+        checkModel.setSupportsDataStreams(true);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkFieldValue.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
@@ -134,47 +183,87 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
         ClassInfo rulesSpecClassInfo = reflectionService.getClassInfoForClass(rulesSpec.getClass());
         List<FieldInfo> rulesFields = rulesSpecClassInfo.getFields();
-        for (FieldInfo ruleFieldInfo : rulesFields) {
-            if (Objects.equals(checkFieldInfo.getClassFieldName(), "custom")) {
-                // skipping custom rules for the moment
-                continue;
-            }
+        Optional<FieldInfo> firstRuleField = rulesFields.stream().filter(r -> !Objects.equals(r.getClassFieldName(), "custom"))
+                .findFirst();
 
-            AbstractRuleThresholdsSpec ruleFieldValue = (AbstractRuleThresholdsSpec)ruleFieldInfo.getFieldValueOrNewObject(rulesSpec);
-            UIRuleThresholdsModel ruleModel = createRuleThresholdsModel(ruleFieldInfo, ruleFieldValue);
-            checkModel.getRules().add(ruleModel);
-        }
+        AbstractRuleThresholdsSpec ruleFieldValue = (AbstractRuleThresholdsSpec)firstRuleField.get().getFieldValueOrNewObject(rulesSpec);
+        UIRuleThresholdsModel ruleModel = createLegacyRuleThresholdsModel(firstRuleField.get(), ruleFieldValue);
+        checkModel.setRule(ruleModel);
 
         return checkModel;
     }
 
     /**
+     * Create a rule threshold model that describes the rule thresholds (alert, warning, fatal) and their parameters.
+     * @param checkSpec Rule threshold object with the alert/warning/fatal thresholds.
+     * @return Rule threshold model.
+     */
+    protected UIRuleThresholdsModel createRuleThresholdsModel(AbstractCheckSpec<?,?> checkSpec) {
+        UIRuleThresholdsModel thresholdsModel = new UIRuleThresholdsModel();
+
+        ClassInfo abstractCheckClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
+        FieldInfo warningFieldInfo = abstractCheckClassInfo.getField("warning");
+        UIRuleParametersModel warningSeverityParametersModel = createRuleParametersModel(warningFieldInfo, checkSpec);
+        thresholdsModel.setWarning(warningSeverityParametersModel);
+
+        FieldInfo errorFieldInfo = abstractCheckClassInfo.getField("error");
+        UIRuleParametersModel errorSeverityParametersModel = createRuleParametersModel(errorFieldInfo, checkSpec);
+        thresholdsModel.setError(errorSeverityParametersModel);
+
+        FieldInfo fatalFieldInfo = abstractCheckClassInfo.getField("fatal");
+        UIRuleParametersModel fatalSeverityParametersModel = createRuleParametersModel(fatalFieldInfo, checkSpec);
+        thresholdsModel.setFatal(fatalSeverityParametersModel);
+
+        return thresholdsModel;
+    }
+
+    /**
      * Create a rule threshold model that describes the rule thresholds (low, medium, high) and their parameters.
-     * @param ruleFieldInfo Rule field relection info - used to get the rule name.
+     * @param ruleFieldInfo Rule field reflection info - used to get the rule name.
      * @param ruleFieldValue Rule threshold object with the low/medium/high values.
      * @return Rule threshold model.
      */
-    protected UIRuleThresholdsModel createRuleThresholdsModel(FieldInfo ruleFieldInfo, AbstractRuleThresholdsSpec ruleFieldValue) {
+    protected UIRuleThresholdsModel createLegacyRuleThresholdsModel(FieldInfo ruleFieldInfo, AbstractRuleThresholdsSpec ruleFieldValue) {
         UIRuleThresholdsModel thresholdsModel = new UIRuleThresholdsModel();
         thresholdsModel.setFieldName(ruleFieldInfo.getDisplayName());
-        thresholdsModel.setDisabled(ruleFieldValue.isDisabled());
+//        thresholdsModel.setDisabled(ruleFieldValue.isDisabled());
         thresholdsModel.setHelpHext(ruleFieldInfo.getHelpText());
-        thresholdsModel.setTimeWindow(ruleFieldValue.getTimeWindow());
+//        thresholdsModel.setTimeWindow(ruleFieldValue.getTimeWindow());
 
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleFieldValue.getClass());
         FieldInfo lowFieldInfo = ruleThresholdsClassInfo.getField("low");
-        UIRuleParametersModel lowSeverityParametersModel = createRuleParametersModel(lowFieldInfo, ruleFieldValue);
-        thresholdsModel.setLow(lowSeverityParametersModel);
+        UIRuleParametersModel lowSeverityParametersModel = createLegacyRuleParametersModel(lowFieldInfo, ruleFieldValue);
+        thresholdsModel.setWarning(lowSeverityParametersModel);
 
         FieldInfo mediumFieldInfo = ruleThresholdsClassInfo.getField("medium");
-        UIRuleParametersModel mediumSeverityParametersModel = createRuleParametersModel(mediumFieldInfo, ruleFieldValue);
-        thresholdsModel.setMedium(mediumSeverityParametersModel);
+        UIRuleParametersModel mediumSeverityParametersModel = createLegacyRuleParametersModel(mediumFieldInfo, ruleFieldValue);
+        thresholdsModel.setError(mediumSeverityParametersModel);
 
         FieldInfo highFieldInfo = ruleThresholdsClassInfo.getField("high");
-        UIRuleParametersModel highSeverityParametersModel = createRuleParametersModel(highFieldInfo, ruleFieldValue);
-        thresholdsModel.setHigh(highSeverityParametersModel);
+        UIRuleParametersModel highSeverityParametersModel = createLegacyRuleParametersModel(highFieldInfo, ruleFieldValue);
+        thresholdsModel.setFatal(highSeverityParametersModel);
 
         return thresholdsModel;
+    }
+
+    /**
+     * Creates a list of fields used to edit a single rule severity level.
+     * @param severityFieldInfo Reflection info of the field - used to retrieve the help text.
+     * @param abstractCheckSpec Rule thresholds specification object (parent object).
+     * @return Rule parameters.
+     */
+    protected UIRuleParametersModel createRuleParametersModel(FieldInfo severityFieldInfo, AbstractCheckSpec<?,?> abstractCheckSpec) {
+        UIRuleParametersModel parametersModel = new UIRuleParametersModel();
+        AbstractRuleParametersSpec parametersValueNullable = (AbstractRuleParametersSpec)severityFieldInfo.getFieldValue(abstractCheckSpec);
+        AbstractRuleParametersSpec parametersSpecNotNull = parametersValueNullable != null ? parametersValueNullable :
+                (AbstractRuleParametersSpec)severityFieldInfo.getFieldValueOrNewObject(abstractCheckSpec);
+
+        parametersModel.setConfigured(parametersValueNullable != null);
+
+        List<UIFieldModel> uiFieldModels = createFieldsForRuleParameters(parametersSpecNotNull);
+        parametersModel.setRuleParameters(uiFieldModels);
+
+        return parametersModel;
     }
 
     /**
@@ -183,14 +272,14 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param ruleThresholdsSpec Rule thresholds specification object (parent object).
      * @return Rule parameters.
      */
-    protected UIRuleParametersModel createRuleParametersModel(FieldInfo severityFieldInfo, AbstractRuleThresholdsSpec ruleThresholdsSpec) {
+    protected UIRuleParametersModel createLegacyRuleParametersModel(FieldInfo severityFieldInfo, AbstractRuleThresholdsSpec ruleThresholdsSpec) {
         UIRuleParametersModel parametersModel = new UIRuleParametersModel();
         AbstractRuleParametersSpec parametersValueNullable = (AbstractRuleParametersSpec)severityFieldInfo.getFieldValue(ruleThresholdsSpec);
         AbstractRuleParametersSpec parametersSpecNotNull = parametersValueNullable != null ? parametersValueNullable :
                 (AbstractRuleParametersSpec)severityFieldInfo.getFieldValueOrNewObject(ruleThresholdsSpec);
 
         parametersModel.setConfigured(parametersValueNullable != null);
-        parametersModel.setDisabled(parametersSpecNotNull.isDisabled());
+//        parametersModel.setDisabled(parametersSpecNotNull.isDisabled());
 
         List<UIFieldModel> uiFieldModels = createFieldsForRuleParameters(parametersSpecNotNull);
         parametersModel.setRuleParameters(uiFieldModels);

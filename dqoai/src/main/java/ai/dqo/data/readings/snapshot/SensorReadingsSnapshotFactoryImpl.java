@@ -49,7 +49,7 @@ public class SensorReadingsSnapshotFactoryImpl implements SensorReadingsSnapshot
      * @return Sensor readings snapshot connected to a storage service.
      */
     public SensorReadingsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
-        Table newSensorReadings = this.sensorReadingsTableFactory.createEmptySensorReadingsTable("new_sensor_readings");
+        Table newSensorReadings = this.sensorReadingsTableFactory.createEmptySensorReadoutsTable("new_sensor_readouts");
         return new SensorReadingsSnapshot(connectionName, physicalTableName, this.storageService, newSensorReadings);
     }
 }

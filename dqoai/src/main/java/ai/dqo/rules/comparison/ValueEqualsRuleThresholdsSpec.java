@@ -34,6 +34,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class ValueEqualsRuleThresholdsSpec extends AbstractRuleThresholdsSpec<ValueEqualsRuleParametersSpec> {
     private static final ChildHierarchyNodeFieldMapImpl<ValueEqualsRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleThresholdsSpec.FIELDS) {
         {

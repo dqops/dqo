@@ -20,6 +20,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.cloud.rest.api.ApiKeyRequestApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
 import ai.dqo.metadata.sources.SettingsSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -79,7 +80,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             ApiKeyRequestApi apiKeyRequestApi = new ApiKeyRequestApi(apiClient);
             Random random = new Random();
             String challenge = Integer.toString(Math.abs(random.nextInt()));
-            String apiKeyRequest = apiKeyRequestApi.requestApiKey(challenge);
+            String apiKeyRequest = apiKeyRequestApi.requestApiKeyVersion(DqoCloudApiKeyPayload.CURRENT_API_KEY_VERSION, challenge);
             String apiKeyRequestUrl = this.dqoCloudConfigurationProperties.getApiKeyRequestUrl() + apiKeyRequest;
 
             terminalWriter.writeLine("Opening the DQO Cloud API Key request, please log in or create your DQO Cloud account.");

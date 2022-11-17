@@ -46,9 +46,11 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpec extends A
     private LocalDate maxValue;
 
     @JsonPropertyDescription("The variable deciding whether to include the lower limit of the range. It does not include it by default.")
+    @Deprecated // do not use it, always inclusive
     private Boolean includeMinValue = true;
 
     @JsonPropertyDescription("The variable deciding whether to include the upper limit of the range. It does not include it by default.")
+    @Deprecated // do not use it, always inclusive
     private Boolean includeMaxValue = true;
 
     /**
@@ -135,26 +137,5 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpec extends A
     public void setIncludeMaxValue(Boolean includeMaxValue) {
         this.setDirtyIf(!Objects.equals(this.includeMaxValue,includeMaxValue));
         this.includeMaxValue = includeMaxValue;
-    }
-
-    /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     *
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     * false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @Override
-    public boolean hasNonNullSimpleFields() {
-        return this.includeMinValue != null ||
-                this.includeMaxValue != null ||
-                this.minValue != null ||
-                this.maxValue != null;
     }
 }
