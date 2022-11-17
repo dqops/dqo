@@ -18,7 +18,7 @@ package ai.dqo.metadata.groupings;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).
+ * Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly or none - when no truncation should be applied).
  */
 public enum TimeSeriesGradient {
     @JsonProperty("year")
@@ -37,5 +37,8 @@ public enum TimeSeriesGradient {
     DAY,
 
     @JsonProperty("hour")
-    HOUR
+    HOUR,
+
+    @JsonProperty("millisecond")
+    MILLISECOND
 }

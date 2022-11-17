@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 const sizes = {
   0: '0rem',
   '0.25': '0.0625rem',
@@ -19,6 +34,7 @@ const sizes = {
   11: '2.75rem',
   12: '3rem',
   '13.5': '3.375rem',
+  14: '3.5rem',
   15: '3.75rem',
   16: '4rem',
   17: '4.25rem',
@@ -78,11 +94,13 @@ module.exports = withMT({
         gray: {
           50: '#f3f4f6',
           100: '#E1E5E9',
+          150: '#BCBCBC',
           200: '#9CA3AF',
           500: '#617280',
           700: '#2D3748'
         },
         green: {
+          400: '#00D63A',
           500: '#10B981',
         },
         red: {
@@ -112,9 +130,15 @@ module.exports = withMT({
       },
       maxWidth: {
         ...sizes,
-        'tab-wrapper': 'calc(100vw - 340px)'
+        'tab-wrapper': 'calc(100vw - 340px)',
+        'container': 'calc(100vw - 280px)',
+        'table': 'calc(100vw - 320px)'
       },
-      maxHeight: sizes,
+      maxHeight: {
+        ...sizes,
+        'container': 'calc(100vh - 64px)',
+        'table': 'calc(100vh - 220px)'
+      },
       backgroundOpacity: {
         4: '0.04',
         8: '0.08'

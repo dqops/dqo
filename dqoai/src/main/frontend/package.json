@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-tailwind/react": "^1.2.4",
+    "@naisutech/react-tree": "^3.1.0",
     "@openapitools/openapi-generator-cli": "^2.5.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
@@ -17,8 +18,10 @@
     "axios": "^0.27.2",
     "clsx": "^1.2.1",
     "http-proxy-middleware": "^2.0.6",
+    "install": "^0.13.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "npm": "^8.19.3",
     "postcss": "^8.4.16",
     "postcss-cli": "^9.1.0",
     "postcss-preset-env": "^7.8.0",
@@ -34,6 +37,7 @@
     "react-ui-tree": "^4.0.0",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
+    "styled-components": "^5.3.6",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.8.2"
   },

@@ -1,3 +1,19 @@
+///
+/// Copyright © 2021 DQO.ai (support@dqo.ai)
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
+
 import { Dispatch } from 'redux';
 
 import { ConnectionApiClient } from '../../services/apiClient';
@@ -289,56 +305,56 @@ export const updateConnectionLabels =
     }
   };
 
-export const getConnectionDefaultDimensionsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS
+export const getConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const getConnectionDefaultDimensionsSuccess = (data: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS,
+export const getConnectionDefaultDataStreamsMappingSuccess = (data: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getConnectionDefaultDimensionsFailed = (error: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+export const getConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const getConnectionDefaultDimensions =
+export const getConnectionDefaultDataStreamsMapping =
   (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionDefaultDimensionsRequest());
+    dispatch(getConnectionDefaultDataStreamsMappingRequest());
     try {
-      const res = await ConnectionApiClient.getConnectionDefaultDimensions(
+      const res = await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
         connectionName
       );
-      dispatch(getConnectionDefaultDimensionsSuccess(res.data));
+      dispatch(getConnectionDefaultDataStreamsMappingSuccess(res.data));
     } catch (err) {
-      dispatch(getConnectionDefaultDimensionsFailed(err));
+      dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const updateConnectionDefaultDimensionsRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS
+export const updateConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const updateConnectionDefaultDimensionsSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_SUCCESS
+export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateConnectionDefaultDimensionsFailed = (error: any) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DIMENSIONS_ERROR,
+export const updateConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const updateConnectionDefaultDimensions =
+export const updateConnectionDefaultDataStreamsMapping =
   (connectionName: string, data: any) => async (dispatch: Dispatch) => {
-    dispatch(updateConnectionDefaultDimensionsRequest());
+    dispatch(updateConnectionDefaultDataStreamsMappingRequest());
     try {
-      await ConnectionApiClient.updateConnectionDefaultDimensions(
+      await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(
         connectionName,
         data
       );
-      dispatch(updateConnectionDefaultDimensionsSuccess());
+      dispatch(updateConnectionDefaultDataStreamsMappingSuccess());
     } catch (err) {
-      dispatch(updateConnectionDefaultDimensionsFailed(err));
+      dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
     }
   };

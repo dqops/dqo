@@ -37,6 +37,7 @@
 		<license.licenseName>apache_v2</license.licenseName>
 	</properties>
 
+	<!--
 	<reporting>
 		<plugins>
 			<plugin>
@@ -60,6 +61,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	-->
 
 	<licenses>
 		<license>
@@ -217,7 +219,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.1.0</version>
 						<configuration>
 							<executable>gsutil</executable>
 							<mainClass>none</mainClass>
@@ -624,11 +626,6 @@
 						</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.6.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

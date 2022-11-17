@@ -15,20 +15,15 @@
  */
 package ai.dqo.metadata.id;
 
-import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
-import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
-import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
+import ai.dqo.checks.*;
+import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
-import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
-import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
-import ai.dqo.checks.table.relevance.BuiltInTableRelevanceChecksSpec;
-import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
-import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
@@ -41,8 +36,8 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DimensionMappingSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -172,7 +167,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(TableCheckCategoriesSpec tableCheckCategoriesSpec, P parameter);
+    R accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a configuration of built-in column level checks.
@@ -180,7 +175,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(ColumnCheckCategoriesSpec columnCheckCategoriesSpec, P parameter);
+    R accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts a collection (dictionary) of custom table level data quality checks.
@@ -204,7 +199,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(AbstractCheckSpec abstractCheckSpec, P parameter);
+    R accept(AbstractCheckDeprecatedSpec abstractCheckSpec, P parameter);
 
     /**
      * Accepts a container object with all possible built-in table level data quality sensors.
@@ -237,70 +232,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, P parameter);
-
-    /**
-     * Accepts a container of table level consistency data quality checks.
-     * @param builtInTableConsistencyChecksSpec Consistency checks.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a table level.
-     * @param builtInTableValidityChecksSpec Built-in validity sensors on a table level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInTableValidityChecksSpec builtInTableValidityChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in relevance sensors on a table level.
-     * @param builtInTableRelevanceChecksSpec Built-in relevance sensors on a table level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInTableRelevanceChecksSpec builtInTableRelevanceChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a column level.
-     * @param builtInColumnValidityChecksSpec Built-in validity sensors on a column level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInColumnValidityChecksSpec builtInColumnValidityChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a column level.
-     * @param builtInTableTimelinessChecksSpec Built-in validity sensors on a column level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInTableTimelinessChecksSpec builtInTableTimelinessChecksSpec, P parameter);
-
-    /*
-     * Accepts a configuration of built-in uniqueness sensors on a column level.
-     * @param builtInColumnUniquenessChecksSpec Built-in uniqueness sensors on a column level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInColumnUniquenessChecksSpec builtInColumnUniquenessChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in completeness sensors on a column level.
-     * @param builtInColumnCompletenessChecksSpec Built-in completeness sensors on a column level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInColumnCompletenessChecksSpec builtInColumnCompletenessChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in consistency sensors on a column level.
-     * @param builtInColumnConsistencyChecksSpec Built-in consistency sensors on a column level.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(BuiltInColumnConsistencyChecksSpec builtInColumnConsistencyChecksSpec, P parameter);
 
     /**
      * Accepts a list of sensor definitions.
@@ -407,12 +338,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, P parameter);
 
     /**
-     * Accepts a time series configuration specification on a table level.
-     * @param dimensionsConfigurationSpec Time series specification.
+     * Accepts a data streams mapping specification on a table level.
+     * @param dataStreamMappingSpec Data streams mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DimensionsConfigurationSpec dimensionsConfigurationSpec, P parameter);
+    R accept(DataStreamMappingSpec dataStreamMappingSpec, P parameter);
 
     /**
      * Accepts a table owner specification on a table level.
@@ -440,11 +371,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a configuration of a single dimension.
-     * @param dimensionMappingSpec Dimension mapping specification.
+     * @param dataStreamLevelSpec Dimension mapping specification.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(DimensionMappingSpec dimensionMappingSpec, P parameter);
+    R accept(DataStreamLevelSpec dataStreamLevelSpec, P parameter);
 
     /**
      * Accepts a dictionary of custom rules.
@@ -525,4 +456,68 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, P parameter);
+
+    /**
+     * Accepts a base class for all data quality checks.
+     * @param checkSpec Data quality check instance.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractCheckSpec checkSpec, P parameter);
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractRootChecksContainerSpec checksContainerSpec, P parameter);
+
+    /**
+     * Accepts a container of data quality checks for a single category.
+     * @param abstractCheckCategorySpec Container of data quality checks for a single category.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractCheckCategorySpec abstractCheckCategorySpec, P parameter);
+
+    /**
+     * Accepts a container of table level checkpoints (daily, monthly, etc.)
+     * @param tableCheckpointsSpec Table level checkpoints container.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TableCheckpointsSpec tableCheckpointsSpec, P parameter);
+
+    /**
+     * Accepts a container of table level partitioned checks (daily, monthly, etc.)
+     * @param tablePartitionedChecksRootSpec Table level partitioned checks container.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, P parameter);
+
+    /**
+     * Accepts a container of column level checkpoints (daily, monthly, etc.)
+     * @param columnCheckpointsSpec Column level checkpoints container.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnCheckpointsSpec columnCheckpointsSpec, P parameter);
+
+    /**
+     * Accepts a container of column level partitioned checks (daily, monthly, etc.)
+     * @param columnPartitionedChecksRootSpec Column level partitioned checks container.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, P parameter);
+
+    /**
+     * Accepts a container of timestamp related columns on a table level.
+     * @param timestampColumnsSpec Configuration of timestamp related columns.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TimestampColumnsSpec timestampColumnsSpec, P parameter);
 }

@@ -26,39 +26,39 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dqo.storage")
 @EqualsAndHashCode(callSuper = false)
 public class DqoStorageConfigurationProperties implements Cloneable {
-    private String sensorReadingsStoragePath;
-    private String alertsStoragePath;
+    private String sensorReadoutsStoragePath;
+    private String ruleResultsStoragePath;
 
     /**
-     * Sensor readings storage path.
-     * @return Sensor readings storage path.
+     * Sensor readouts storage path.
+     * @return Sensor readouts storage path.
      */
-    public String getSensorReadingsStoragePath() {
-        return sensorReadingsStoragePath;
+    public String getSensorReadoutsStoragePath() {
+        return sensorReadoutsStoragePath;
     }
 
     /**
-     * Sets the path where the sensor readings are stored.
-     * @param sensorReadingsStoragePath Sensor results storage path.
+     * Sets the path where the sensor readouts are stored.
+     * @param sensorReadoutsStoragePath Sensor readouts storage path.
      */
-    public void setSensorReadingsStoragePath(String sensorReadingsStoragePath) {
-        this.sensorReadingsStoragePath = sensorReadingsStoragePath;
+    public void setSensorReadoutsStoragePath(String sensorReadoutsStoragePath) {
+        this.sensorReadoutsStoragePath = sensorReadoutsStoragePath;
     }
 
     /**
      * Rule evaluation results (alerts) storage path.
      * @return Rule evaluation storage path.
      */
-    public String getAlertsStoragePath() {
-        return alertsStoragePath;
+    public String getRuleResultsStoragePath() {
+        return ruleResultsStoragePath;
     }
 
     /**
      * Sets the alert storage path.
-     * @param alertsStoragePath Alerts storage path.
+     * @param ruleResultsStoragePath Alerts storage path.
      */
-    public void setAlertsStoragePath(String alertsStoragePath) {
-        this.alertsStoragePath = alertsStoragePath;
+    public void setRuleResultsStoragePath(String ruleResultsStoragePath) {
+        this.ruleResultsStoragePath = ruleResultsStoragePath;
     }
 
     /**

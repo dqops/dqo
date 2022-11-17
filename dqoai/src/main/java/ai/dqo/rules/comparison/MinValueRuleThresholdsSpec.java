@@ -34,6 +34,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class MinValueRuleThresholdsSpec extends AbstractRuleThresholdsSpec<MinValueRuleParametersSpec> {
     private static final ChildHierarchyNodeFieldMapImpl<MinValueRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleThresholdsSpec.FIELDS) {
         {

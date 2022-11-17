@@ -81,12 +81,12 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
             return synchronizeSensorsResult;
         }
 
-        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_READINGS, this.mode, this.isHeadless());
-        if (synchronizeReadingsResult < 0) {
-            return synchronizeReadingsResult;
+        int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless());
+        if (synchronizeReadoutsResult < 0) {
+            return synchronizeReadoutsResult;
         }
 
-        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_ALERTS, this.mode, this.isHeadless());
-        return synchronizeAlertsResult;
+        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless());
+        return synchronizeRuleResultsResult;
     }
 }

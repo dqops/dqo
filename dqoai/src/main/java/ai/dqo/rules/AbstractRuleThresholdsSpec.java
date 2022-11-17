@@ -33,6 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParametersSpec> extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -71,10 +72,12 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
     public abstract R getLow();
 
     @JsonPropertyDescription("Time window configuration for rules that require historic data for evaluation. The time window is configured as the number of previous time periods that are required to evaluate a sensor. The time period granularity (day, hour, etc.) is configured as a time_series configuration on the sensor.")
+    @Deprecated  // only on custom sensors in the future
     private RuleTimeWindowSettingsSpec timeWindow;
 
     @JsonPropertyDescription("Disable the rule at all severity levels.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @Deprecated  // rule must be removed to be disabled
     private boolean disabled;
 
     /**
@@ -134,17 +137,17 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
         }
 
         R high = getHigh();
-        if (high != null && !high.isDisabled()) {
+        if (high != null) {
             return true;
         }
 
         R medium = getMedium();
-        if (medium != null && !medium.isDisabled()) {
+        if (medium != null) {
             return true;
         }
 
         R low = getLow();
-		return low != null && !low.isDisabled();
+		return low != null;
 	}
 
     /**

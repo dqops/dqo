@@ -41,8 +41,8 @@ public class DqoConfigurationPropertiesObjectMother {
         DqoUserConfigurationProperties userConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(recreateHomeDirectory);
         defaultCloned.setUser(userConfigurationProperties);
         DqoStorageConfigurationProperties storageConfigurationProperties = defaultCloned.getStorage();
-        storageConfigurationProperties.setSensorReadingsStoragePath(userConfigurationProperties.getHome() + "/.data/readings");
-        storageConfigurationProperties.setAlertsStoragePath(userConfigurationProperties.getHome() + "/.data/alerts");
+        storageConfigurationProperties.setSensorReadoutsStoragePath(userConfigurationProperties.getHome() + "/.data/readings");
+        storageConfigurationProperties.setRuleResultsStoragePath(userConfigurationProperties.getHome() + "/.data/alerts");
 
         return defaultCloned;
     }

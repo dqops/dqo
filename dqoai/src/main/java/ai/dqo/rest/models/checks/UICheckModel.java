@@ -16,7 +16,7 @@
 package ai.dqo.rest.models.checks;
 
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -49,14 +49,20 @@ public class UICheckModel {
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
     private List<UIFieldModel> sensorParameters;
 
-    @JsonPropertyDescription("List of threshold (alerting) rules defined for a check.")
-    private List<UIRuleThresholdsModel> rules = new ArrayList<>();
+    @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
+    private UIRuleThresholdsModel rule;
+
+    @JsonPropertyDescription("The data quality check supports a custom time series configuration.")
+    private boolean supportsTimeSeries;
+
+    @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
+    private boolean supportsDataStreams;
 
     @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     private TimeSeriesConfigurationSpec timeSeriesOverride;
 
-    @JsonPropertyDescription("Data quality dimensions configuration for a sensor query. When a dimension configuration is assigned at a sensor level, it overrides any dimension settings from the connection, table or column levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
-    private DimensionsConfigurationSpec dimensionsOverride;
+    @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    private DataStreamMappingSpec dataStreamsOverride;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     private RecurringScheduleSpec scheduleOverride;
@@ -64,8 +70,14 @@ public class UICheckModel {
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     private CommentsListSpec comments;
 
-    @JsonPropertyDescription("Disables the data quality sensor. Only enabled sensors are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonPropertyDescription("Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     private boolean disabled;
+
+    @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
+    private boolean excludeFromKpi;
+
+    @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
+    private boolean configured;
 
     @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
     private String filter;

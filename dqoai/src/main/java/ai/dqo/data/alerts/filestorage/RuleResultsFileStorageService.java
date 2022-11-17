@@ -25,7 +25,7 @@ import java.time.LocalDate;
  * Service that provides access to stored rule evaluation results (alerts).
  */
 public interface RuleResultsFileStorageService {
-    String PARQUET_FILE_NAME = "alerts.0.parquet";
+    String PARQUET_FILE_NAME = "rule_results.0.parquet";
 
     /**
      * Returns a supported delta mode.

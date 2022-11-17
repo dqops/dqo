@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { TabProvider } from './tabContext';
+import { TreeProvider } from './treeContext';
 
 function AppProvider({ children }: { children: any }) {
-  return <TabProvider>{children}</TabProvider>;
+  return <TreeProvider>{children}</TreeProvider>;
 }
 
 export default AppProvider;

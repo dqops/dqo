@@ -19,5 +19,6 @@ package ai.dqo.rules;
  * Marker interface implemented by rule threshold classes when the rule requires a time window and the default time window
  * should be assigned (allocated) for the rule, even if the user has not configured it directly in YAML.
  */
+@Deprecated
 public interface TimeWindowedRule {
 }
