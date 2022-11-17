@@ -15,5 +15,9 @@
 @REM limitations under the License.
 @REM
 
-call "%~dp0\mvnw.cmd" clean -f "%~dp0\pom.xml"
-call "%~dp0\mvnw.cmd" package -DskipTests -Pbuild-with-jdk-11 -Prun-npm -f "%~dp0\pom.xml"
+pushd "%~dp0"
+
+call mvnw.cmd clean -f pom.xml
+call mvnw.cmd package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+
+popd
