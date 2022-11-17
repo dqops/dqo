@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
@@ -72,7 +72,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        parameter.getDimensionSearcherObject().setConnectionDimension(connectionWrapper.getSpec().getDefaultDimensions());
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -122,20 +122,20 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DimensionSearcherObject dimensionSearcherObject = parameter.getDimensionSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         if (labelsSearcherObject != null) {
             labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
         }
 
-        if (dimensionSearcherObject != null) {
-            dimensionSearcherObject.setTableDimension(tableWrapper.getSpec().getDimensions());
+        if (dataStreamSearcherObject != null) {
+            dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
         }
 
-        DimensionsConfigurationSpec overridenDimension = dimensionSearcherObject.getTableDimension() != null
-                ? dimensionSearcherObject.getTableDimension()
-                : dimensionSearcherObject.getConnectionDimension();
+        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getTableDataStreams() != null
+                ? dataStreamSearcherObject.getTableDataStreams()
+                : dataStreamSearcherObject.getConnectionDataStreams();
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getTableLabels() != null) {
@@ -146,7 +146,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DimensionSearchMatcher.matchAllTableDimensions(this.filters, overridenDimension)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllTableDataStreams(this.filters, overridenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchTableLabels(this.filters, overridenLabels)) {

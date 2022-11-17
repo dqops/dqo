@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import DimensionItem from './DimensionItem';
+import DataStreamLevelItem from './DataStreamLevelItem';
 import ScheduleTab from './ScheduleTab';
 import TimeSeriesView from '../Connection/TimeSeriesView';
 import CommentsView from '../Connection/CommentsView';
@@ -9,7 +9,7 @@ import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
 import SpecRuleSettings from './SpecRuleSettings';
-import { DimensionMappingSpec, UICheckModel } from '../../api';
+import { DataStreamLevelSpec, UICheckModel } from '../../api';
 
 interface ICheckSettingsProps {
   check?: UICheckModel;
@@ -33,27 +33,27 @@ const CheckSettings = ({
     [tabs, activeTab]
   );
 
-  const getDimension = (index: number) => {
-    if (index === 0) return check?.dimensions_override?.dimension_1;
-    if (index === 1) return check?.dimensions_override?.dimension_2;
-    if (index === 2) return check?.dimensions_override?.dimension_3;
-    if (index === 3) return check?.dimensions_override?.dimension_4;
-    if (index === 4) return check?.dimensions_override?.dimension_5;
-    if (index === 5) return check?.dimensions_override?.dimension_6;
-    if (index === 6) return check?.dimensions_override?.dimension_7;
-    if (index === 7) return check?.dimensions_override?.dimension_8;
-    if (index === 8) return check?.dimensions_override?.dimension_9;
+  const getDataStreamLevel = (index: number) => {
+    if (index === 0) return check?.data_streams_override?.level_1;
+    if (index === 1) return check?.data_streams_override?.level_2;
+    if (index === 2) return check?.data_streams_override?.level_3;
+    if (index === 3) return check?.data_streams_override?.level_4;
+    if (index === 4) return check?.data_streams_override?.level_5;
+    if (index === 5) return check?.data_streams_override?.level_6;
+    if (index === 6) return check?.data_streams_override?.level_7;
+    if (index === 7) return check?.data_streams_override?.level_8;
+    if (index === 8) return check?.data_streams_override?.level_9;
   };
 
-  const onChangeDimensions = (
-    dimension: DimensionMappingSpec,
+  const onChangeDataStreamLevel = (
+    dataStreamLevel: DataStreamLevelSpec,
     index: number
   ) => {
     onChange({
       ...check,
-      dimensions_override: {
-        ...check?.dimensions_override,
-        [`dimension_${index + 1}`]: dimension
+      data_streams_override: {
+        ...check?.data_streams_override,
+        [`level${index + 1}`]: dataStreamLevel
       }
     });
   };
@@ -76,17 +76,17 @@ const CheckSettings = ({
         </IconButton>
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="pt-5">
-          {activeTab === 'dimension' && (
+          {activeTab === 'data-streams' && (
             <div>
               {Array(9)
                 .fill(0)
                 .map((item, index) => (
-                  <DimensionItem
+                  <DataStreamLevelItem
                     idx={index}
                     key={index}
-                    dimension={getDimension(index)}
-                    onChange={(dimension) =>
-                      onChangeDimensions(dimension, index)
+                    dataStreamLevel={getDataStreamLevel(index)}
+                    onChange={(dataStreamsLevel) =>
+                      onChangeDataStreamLevel(dataStreamsLevel, index)
                     }
                   />
                 ))}

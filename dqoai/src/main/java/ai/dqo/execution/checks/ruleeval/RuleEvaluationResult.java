@@ -31,57 +31,51 @@ public class RuleEvaluationResult {
     public static final String SEVERITY_COLUMN_NAME = "severity";
 
     /**
-     * Column name that stores the rule, identified by a hash.
+     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
-    public static final String RULE_HASH_COLUMN_NAME = "rule_hash";
+    public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";
 
     /**
-     * Rule name.
+     * Column name for the warning lower bound, returned by the fatal severity rule.
      */
-    public static final String RULE_NAME_COLUMN_NAME = "rule_name";
+    public static final String FATAL_LOWER_BOUND_COLUMN_NAME = "fatal_lower_bound";
 
     /**
-     * Column name for the lower bound, returned by the high severity rule.
+     * Column name for the fatal upper bound, returned by the fatal severity rule.
      */
-    public static final String HIGH_LOWER_BOUND_COLUMN_NAME = "high_lower_bound";
+    public static final String FATAL_UPPER_BOUND_COLUMN_NAME = "fatal_upper_bound";
 
     /**
-     * Column name for the upper bound, returned by the high severity rule.
+     * Column name for the error lower bound, returned by the error (medium) severity rule.
      */
-    public static final String HIGH_UPPER_BOUND_COLUMN_NAME = "high_upper_bound";
+    public static final String ERROR_LOWER_BOUND_COLUMN_NAME = "error_lower_bound";
 
     /**
-     * Column name for the lower bound, returned by the medium severity rule.
+     * Column name for the error upper bound, returned by the error severity rule.
      */
-    public static final String MEDIUM_LOWER_BOUND_COLUMN_NAME = "medium_lower_bound";
+    public static final String ERROR_UPPER_BOUND_COLUMN_NAME = "error_upper_bound";
 
     /**
-     * Column name for the upper bound, returned by the medium severity rule.
+     * Column name for the warning lower bound, returned by the warning severity rule.
      */
-    public static final String MEDIUM_UPPER_BOUND_COLUMN_NAME = "medium_upper_bound";
+    public static final String WARNING_LOWER_BOUND_COLUMN_NAME = "warning_lower_bound";
 
     /**
-     * Column name for the lower bound, returned by the low severity rule.
+     * Column name for the warning upper bound, returned by the warning severity rule.
      */
-    public static final String LOW_LOWER_BOUND_COLUMN_NAME = "low_lower_bound";
-
-    /**
-     * Column name for the upper bound, returned by the low severity rule.
-     */
-    public static final String LOW_UPPER_BOUND_COLUMN_NAME = "low_upper_bound";
+    public static final String WARNING_UPPER_BOUND_COLUMN_NAME = "warning_upper_bound";
 
     private final Table ruleResultsTable;
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
-    private final LongColumn ruleHashColumn;
-    private final StringColumn ruleNameColumn;
-    private final DoubleColumn highLowerBoundColumn;
-    private final DoubleColumn highUpperBoundColumn;
-    private final DoubleColumn mediumLowerBoundColumn;
-    private final DoubleColumn mediumUpperBoundColumn;
-    private final DoubleColumn lowLowerBoundColumn;
-    private final DoubleColumn lowUpperBoundColumn;
+    private final BooleanColumn includeInKpiColumn;
+    private final DoubleColumn fatalLowerBoundColumn;
+    private final DoubleColumn fatalUpperBoundColumn;
+    private final DoubleColumn errorLowerBoundColumn;
+    private final DoubleColumn errorUpperBoundColumn;
+    private final DoubleColumn warningLowerBoundColumn;
+    private final DoubleColumn warningUpperBoundColumn;
 
     /**
      * Creates a rule evaluation result table.
@@ -92,24 +86,23 @@ public class RuleEvaluationResult {
         this.actualValueColumn = (DoubleColumn) ruleResultsTable.column(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = getOrAddDoubleColumn(ruleResultsTable, SensorNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
 		this.severityColumn = getOrAddIntColumn(ruleResultsTable, SEVERITY_COLUMN_NAME);
-		this.ruleHashColumn = getOrAddLongColumn(ruleResultsTable, RULE_HASH_COLUMN_NAME);
-        this.ruleNameColumn = getOrAddStringColumn(ruleResultsTable, RULE_NAME_COLUMN_NAME);
-		this.highLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, HIGH_LOWER_BOUND_COLUMN_NAME);
-		this.highUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, HIGH_UPPER_BOUND_COLUMN_NAME);
-		this.mediumLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, MEDIUM_LOWER_BOUND_COLUMN_NAME);
-		this.mediumUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, MEDIUM_UPPER_BOUND_COLUMN_NAME);
-		this.lowLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, LOW_LOWER_BOUND_COLUMN_NAME);
-		this.lowUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, LOW_UPPER_BOUND_COLUMN_NAME);
+        this.includeInKpiColumn = getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_KPI_COLUMN_NAME);
+		this.fatalLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, FATAL_LOWER_BOUND_COLUMN_NAME);
+		this.fatalUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, FATAL_UPPER_BOUND_COLUMN_NAME);
+		this.errorLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, ERROR_LOWER_BOUND_COLUMN_NAME);
+		this.errorUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, ERROR_UPPER_BOUND_COLUMN_NAME);
+		this.warningLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, WARNING_LOWER_BOUND_COLUMN_NAME);
+		this.warningUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, WARNING_UPPER_BOUND_COLUMN_NAME);
     }
 
     /**
-     * Create an empty rule evaluation result table, adding all additional required columns (severity, expected_value, high_lower_bound, etc.)
+     * Create an empty rule evaluation result table, adding all additional required columns (severity, expected_value, fatal_lower_bound, etc.)
      * @param normalizedSensorResults Normalized results from a sensor execution.
      * @return Empty table to be populated with the rule evaluation results.
      */
     public static RuleEvaluationResult makeEmptyFromSensorResults(SensorNormalizedResult normalizedSensorResults) {
         Table emptyTable = normalizedSensorResults.getTable().emptyCopy();
-        emptyTable.setName("sensor_rule_evaluation_results");
+        emptyTable.setName("rule_evaluation_results");
 
         return new RuleEvaluationResult(emptyTable);
     }
@@ -123,19 +116,19 @@ public class RuleEvaluationResult {
     }
 
     /**
-     * Returns a column name that stores the rule name.
-     * @return Rule name column.
-     */
-    public StringColumn getRuleNameColumn() {
-        return ruleNameColumn;
-    }
-
-    /**
-     * Returns the severity column with the output severity level of an alert.
+     * Returns the severity column with the output severity level of an alert (data quality rule result).
      * @return Severity column.
      */
     public IntColumn getSeverityColumn() {
         return severityColumn;
+    }
+
+    /**
+     * Returns the include_in_kpi boolean column that should have a 'true' value for rule results that should be included in the KPI calculation.
+     * @return Include in KPI column.
+     */
+    public BooleanColumn getIncludeInKpiColumn() {
+        return includeInKpiColumn;
     }
 
     /**
@@ -155,59 +148,51 @@ public class RuleEvaluationResult {
     }
 
     /**
-     * Rule hash column.
-     * @return Rule hash column.
+     * Lower bound column for the fatal severity rule.
+     * @return Fatal severity rule lower bound column.
      */
-    public LongColumn getRuleHashColumn() {
-        return ruleHashColumn;
+    public DoubleColumn getFatalLowerBoundColumn() {
+        return fatalLowerBoundColumn;
     }
 
     /**
-     * Lower bound column for the high severity rule.
-     * @return High severity rule lower bound column.
+     * Upper bound column for the fatal severity rule.
+     * @return Fatal severity rule upper bound column.
      */
-    public DoubleColumn getHighLowerBoundColumn() {
-        return highLowerBoundColumn;
+    public DoubleColumn getFatalUpperBoundColumn() {
+        return fatalUpperBoundColumn;
     }
 
     /**
-     * Upper bound column for the high severity rule.
-     * @return High severity rule upper bound column.
+     * Lower bound column for the error severity rule.
+     * @return Error severity rule lower bound column.
      */
-    public DoubleColumn getHighUpperBoundColumn() {
-        return highUpperBoundColumn;
+    public DoubleColumn getErrorLowerBoundColumn() {
+        return errorLowerBoundColumn;
     }
 
     /**
-     * Lower bound column for the medium severity rule.
-     * @return Medium severity rule lower bound column.
+     * Upper bound column for the error severity rule.
+     * @return Error severity rule upper bound column.
      */
-    public DoubleColumn getMediumLowerBoundColumn() {
-        return mediumLowerBoundColumn;
+    public DoubleColumn getErrorUpperBoundColumn() {
+        return errorUpperBoundColumn;
     }
 
     /**
-     * Upper bound column for the medium severity rule.
-     * @return Medium severity rule upper bound column.
+     * Lower bound column for the warning severity rule.
+     * @return Warning severity rule lower bound column.
      */
-    public DoubleColumn getMediumUpperBoundColumn() {
-        return mediumUpperBoundColumn;
+    public DoubleColumn getWarningLowerBoundColumn() {
+        return warningLowerBoundColumn;
     }
 
     /**
-     * Lower bound column for the low severity rule.
-     * @return Low severity rule lower bound column.
+     * Upper bound column for the warning severity rule.
+     * @return Warning severity rule upper bound column.
      */
-    public DoubleColumn getLowLowerBoundColumn() {
-        return lowLowerBoundColumn;
-    }
-
-    /**
-     * Upper bound column for the low severity rule.
-     * @return Low severity rule upper bound column.
-     */
-    public DoubleColumn getLowUpperBoundColumn() {
-        return lowUpperBoundColumn;
+    public DoubleColumn getWarningUpperBoundColumn() {
+        return warningUpperBoundColumn;
     }
 
     /**
@@ -254,6 +239,22 @@ public class RuleEvaluationResult {
         }
 
         DoubleColumn newColumn = DoubleColumn.create(columnName);
+        targetTable.addColumns(newColumn);
+        return newColumn;
+    }
+
+    /**
+     * Retrieves or adds a new boolean column. Used to access/create the include_in_kpi column.
+     * @param targetTable Target table to get/add the column.
+     * @param columnName Column name.
+     * @return Boolean column that was found or added.
+     */
+    public BooleanColumn getOrAddBooleanColumn(Table targetTable, String columnName) {
+        if (targetTable.containsColumn(columnName)) {
+            return (BooleanColumn) targetTable.column(columnName);
+        }
+
+        BooleanColumn newColumn = BooleanColumn.create(columnName);
         targetTable.addColumns(newColumn);
         return newColumn;
     }

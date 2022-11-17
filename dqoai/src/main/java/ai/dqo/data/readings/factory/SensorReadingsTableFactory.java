@@ -18,13 +18,13 @@ package ai.dqo.data.readings.factory;
 import tech.tablesaw.api.Table;
 
 /**
- * Factory that creates an empty tablesaw table for storing the sensor readings. The table schema is configured.
+ * Factory that creates an empty tablesaw table for storing the sensor readouts. The table schema is configured.
  */
 public interface SensorReadingsTableFactory {
     /**
-     * Creates an empty normalized sensor readings table that has the right schema.
+     * Creates an empty normalized sensor readouts table that has the right schema.
      * @param tableName Table name.
-     * @return Empty sensor readings table.
+     * @return Empty sensor readouts table.
      */
-    Table createEmptySensorReadingsTable(String tableName);
+    Table createEmptySensorReadoutsTable(String tableName);
 }

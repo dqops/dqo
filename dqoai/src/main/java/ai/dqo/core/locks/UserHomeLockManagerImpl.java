@@ -16,14 +16,13 @@
 package ai.dqo.core.locks;
 
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Lock manager that controls access to the user home in a parallel environment.
@@ -32,7 +31,7 @@ import java.nio.charset.StandardCharsets;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class UserHomeLockManagerImpl implements UserHomeLockManager {
     private final DqoCoreConfigurationProperties coreConfigurationProperties;
-    private final ReaderWriterLockHolder rootLockHolder;
+    private final Map<LockFolderScope, ReaderWriterLockHolder> locks;
 
     /**
      * Creates an instance of the lock manager.
@@ -41,46 +40,39 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     @Autowired
     public UserHomeLockManagerImpl(DqoCoreConfigurationProperties coreConfigurationProperties) {
         this.coreConfigurationProperties = coreConfigurationProperties;
-        this.rootLockHolder = new ReaderWriterLockHolder(0L, null, coreConfigurationProperties.getLockWaitTimeoutSeconds());
+        long lockWaitTimeoutSeconds = coreConfigurationProperties.getLockWaitTimeoutSeconds();
+        this.locks = new LinkedHashMap<>() {{
+            put(LockFolderScope.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(LockFolderScope.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(LockFolderScope.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(LockFolderScope.READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(LockFolderScope.RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+        }};
     }
 
     /**
-     * Acquires an exclusive write lock on the whole user home.
-     * @return Exclusive write lock on the user home.
-     * @exception LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
+     * Obtains a shared read lock on a whole folder.
+     *
+     * @param scope Lock scope that identifies a folder in the user home that is locked.
+     * @return Shared read lock that must be released by calling the {@link AcquiredSharedReadLock#close()}
+     * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
     @Override
-    public AcquiredExclusiveWriteLock lockUserHomeForWrite() {
-        return this.rootLockHolder.lockExclusiveWrite();
+    public AcquiredSharedReadLock lockSharedRead(LockFolderScope scope) {
+        ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
+        return readerWriterLockHolder.lockSharedRead();
     }
 
     /**
-     * Acquires an exclusive write lock on a source level.
-     * @param sourceName Source (connection) name.
-     * @return Exclusive write lock for all data relevant for the connection.
-     * @exception LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
+     * Obtains an exclusive lock on a whole folder.
+     *
+     * @param scope Lock scope that identifies a folder in the user home that is locked.
+     * @return Exclusive write lock that must be released by calling the {@link AcquiredExclusiveWriteLock#close()}
+     * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
     @Override
-    public AcquiredExclusiveWriteLock lockSourceForWrite(String sourceName) {
-        long sourceHash = Hashing.farmHashFingerprint64().hashString(sourceName, StandardCharsets.UTF_8).asLong();
-        ReaderWriterLockHolder connectionLockHolder = this.rootLockHolder.getChildLock(sourceHash);
-        return connectionLockHolder.lockExclusiveWrite();
-    }
-
-    /**
-     * Acquires an exclusive write lock on a table level.
-     * @param sourceName Source name (connection name).
-     * @param physicalTableName Physical table name.
-     * @return Acquired exclusive write lock on a table level.
-     * @exception LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
-     */
-    @Override
-    public AcquiredExclusiveWriteLock lockTableForWrite(String sourceName, PhysicalTableName physicalTableName) {
-        long sourceHash = Hashing.farmHashFingerprint64().hashString(sourceName, StandardCharsets.UTF_8).asLong();
-        ReaderWriterLockHolder connectionLockHolder = this.rootLockHolder.getChildLock(sourceHash);
-
-        long tableHash = Hashing.farmHashFingerprint64().hashString(physicalTableName.toString(), StandardCharsets.UTF_8).asLong();
-        ReaderWriterLockHolder tableLockHolder = connectionLockHolder.getChildLock(tableHash);
-        return tableLockHolder.lockExclusiveWrite();
+    public AcquiredExclusiveWriteLock lockExclusiveWrite(LockFolderScope scope) {
+        ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
+        return readerWriterLockHolder.lockExclusiveWrite();
     }
 }

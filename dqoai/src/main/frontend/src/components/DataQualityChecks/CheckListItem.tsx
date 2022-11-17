@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIFieldModel, UIRuleThresholdsModel } from '../../api';
-import Checkbox from '../Checkbox';
+import { UICheckModel, UIFieldModel } from '../../api';
 import SvgIcon from '../SvgIcon';
-import CheckRulesTable from './CheckRulesTable';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
+import Switch from '../Switch';
+import clsx from 'clsx';
+import CheckRuleItem from './CheckRuleItem';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -21,16 +22,16 @@ export interface ITab {
 const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const [checked, setChecked] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('dimension');
+  const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
 
   const openCheckSettings = () => {
     setExpanded(true);
-    setActiveTab('dimension');
+    setActiveTab('data-streams');
     setTabs([
       {
-        label: 'Dimension override',
-        value: 'dimension'
+        label: 'Data streams override',
+        value: 'data-streams'
       },
       {
         label: 'Schedule override',
@@ -47,60 +48,32 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     ]);
   };
 
-  const openSensorParameters = () => {
-    setExpanded(true);
-    setActiveTab('parameters');
-    setTabs([
-      {
-        label: 'Sensor Parameters',
-        value: 'parameters'
-      }
-    ]);
-  };
-
-  const openCheckRule = (rule: UIRuleThresholdsModel) => {
-    setExpanded(true);
-    setActiveTab(rule.field_name || '');
-    setTabs([
-      {
-        label: (rule.field_name || '')?.split('_').join(' '),
-        value: rule.field_name || '',
-        type: 'rule'
-      }
-    ]);
-  };
-
-  const openCheckSensorParameter = (field: UIFieldModel) => {
-    setExpanded(true);
-    setActiveTab(field.definition?.field_name || '');
-
-    setTabs([
-      {
-        label: (field.definition?.field_name || '')?.split('_').join(' '),
-        value: field.definition?.field_name || '',
-        type: 'sensor_parameter',
-        field
-      }
-    ]);
-  };
-
   const handleChange = (obj: any) => {
     onChange({
       ...check,
       ...obj
     });
   };
-
   return (
     <>
-      <tr>
-        <td className="py-2 align-top pr-4">
+      <tr
+        className={clsx(
+          ' border-b border-gray-100',
+          check?.configured ? 'text-gray-700' : 'opacity-75'
+        )}
+      >
+        <td className="py-2 px-4 align-top pr-4">
           <div className="flex space-x-2 items-center min-w-60">
-            <Checkbox
-              checked={checked}
-              onChange={setChecked}
-              label={check.check_name}
-            />
+            {/*<div className="w-5">*/}
+            {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
+            {/*</div>*/}
+            <div>
+              <Switch
+                checked={!!check?.configured}
+                onChange={(configured) => handleChange({ configured })}
+              />
+            </div>
+            <div>{check.check_name}</div>
             <SvgIcon
               name="cog"
               className="w-4 h-4 text-blue-700 cursor-pointer"
@@ -108,7 +81,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             />
           </div>
         </td>
-        <td className="py-2 align-top">
+        <td className="py-2 px-4 align-top">
           <div className="flex space-x-2">
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
@@ -116,15 +89,54 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 onChange={(parameters: UIFieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
-                openCheckSensorParameter={openCheckSensorParameter}
+                disabled={!check.configured}
               />
             </div>
           </div>
         </td>
-        <td className="py-2 align-top">
-          <CheckRulesTable
-            rules={check?.rules?.slice(0, 1) || []}
-            openCheckRule={openCheckRule}
+        <td className="py-2 px-4 align-bottom bg-orange-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.error}
+            onChange={(error) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  error
+                }
+              })
+            }
+            type="error"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-yellow-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-red-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.fatal}
+            onChange={(fatal) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  fatal
+                }
+              })
+            }
+            type="fatal"
           />
         </td>
       </tr>

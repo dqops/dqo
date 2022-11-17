@@ -23,8 +23,8 @@ import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.metadata.groupings.DimensionMappingSpecObjectMother;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
@@ -155,12 +155,12 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenSetCustomRegexAndDimensionOneStaticColumnAndNoTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenSetCustomRegexAndLevelOneStaticColumnAndNoTimeSeries_thenRendersCorrectSql() {
         this.sut.setCustomRegex("\\d{5,5}"); //We set a test regex "test_custom_regex_defined_by_user" - just to check that correct sql is rendered.
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("FR")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother
             .renderBuiltInTemplate(runParameters);
@@ -177,22 +177,22 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS dimension_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenSetEmailRegexAndDimensionWithoutTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenSetEmailRegexAndLevelWithoutTimeSeries_thenRendersCorrectSql() {
         this.sut.setNamedRegex(BuiltInRegex.email); //We set a test regex "test_custom_regex_defined_by_user" - just to check that correct sql is rendered.
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("FR")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -208,22 +208,22 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS dimension_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenSetPhoneNumberRegexAndDimensionOneStaticColumnWithoutTimeSeries_thenRendersCorrectSql() {
+    void renderSensor_whenSetPhoneNumberRegexAndLevelOneStaticColumnWithoutTimeSeries_thenRendersCorrectSql() {
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber); //We set a test regex "test_custom_regex_defined_by_user" - just to check that correct sql is rendered.
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(
-                        DimensionMappingSpecObjectMother.createStaticValue("FR")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -239,22 +239,22 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'FR' AS dimension_1
+                    END AS actual_value, 'FR' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringAndNoTimeSeriesAndSetCustomRegex_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringAndNoTimeSeriesAndSetCustomRegex_thenRendersCorrectSql() {
         this.sut.setCustomRegex("\\d{5,5}");
 
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -270,22 +270,22 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS dimension_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenConnectionDimension1StaticStringAndNoTimeSeriesAndSetEmailRegex_thenRendersCorrectSql() {
+    void renderSensor_whenConnectionLevel1StaticStringAndNoTimeSeriesAndSetEmailRegex_thenRendersCorrectSql() {
         this.sut.setNamedRegex(BuiltInRegex.email);
 
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -301,22 +301,22 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS dimension_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenDimension1StaticStringAndNoTimeSeriesAndSetPhoneNumberRegex_thenRendersCorrectSql() {
+    void renderSensor_whenLevel1StaticStringAndNoTimeSeriesAndSetPhoneNumberRegex_thenRendersCorrectSql() {
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber);
 
         runParameters.setTimeSeries(null);
-        runParameters.setDimensions(
-                DimensionsConfigurationSpecObjectMother.create(DimensionMappingSpecObjectMother.createStaticValue("DE")));
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -332,10 +332,10 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
                                 ELSE 0
                             END
                         ) / COUNT(analyzed_table.`id`)
-                    END AS actual_value, 'DE' AS dimension_1
+                    END AS actual_value, 'DE' AS stream_level_1
                 FROM %s AS analyzed_table
-                GROUP BY dimension_1
-                ORDER BY dimension_1""",
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""",
             JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters));
 
         Assertions.assertEquals(expectedQuery, renderedTemplate);

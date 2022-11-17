@@ -2,41 +2,36 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import qs from 'query-string';
-import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import { IRootState } from '../../../redux/reducers';
-import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../../api';
+import { ColumnBasicModel, CommentSpec } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnBasic,
-  getColumnChecksUi,
   getColumnComments,
   getColumnLabels,
   updateColumnBasic,
-  updateColumnCheckUI,
   updateColumnComments,
   updateColumnLabels
 } from '../../../redux/actions/column.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
 import ColumnDetails from './ColumnDetails';
-import DataQualityChecks from '../../DataQualityChecks';
-import { useTabs } from '../../../contexts/tabContext';
+import { useTree } from '../../../contexts/treeContext';
 
 interface IColumnViewProps {
-  node: ITreeNode;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
+  columnName: string;
 }
 
 const tabs = [
   {
     label: 'Column',
     value: 'column'
-  },
-  {
-    label: 'Data Quality Checks',
-    value: 'data-quality-checks'
   },
   {
     label: 'Comments',
@@ -48,29 +43,24 @@ const tabs = [
   }
 ];
 
-const ColumnView = ({ node }: IColumnViewProps) => {
+const ColumnView = ({
+  connectionName,
+  schemaName,
+  tableName,
+  columnName
+}: IColumnViewProps) => {
   const [activeTab, setActiveTab] = useState('column');
 
-  const { columnBasic, comments, labels, isUpdating, checksUI } = useSelector(
+  const { columnBasic, comments, labels, isUpdating } = useSelector(
     (state: IRootState) => state.column
   );
   const history = useHistory();
-  const { tabMap, setTabMap } = useTabs();
-
-  const { connectionName, schemaName, tableName, columnName } = useMemo(() => {
-    const connectionName = node.key.split('.')[1] || '';
-    const schemaName = node.key.split('.')[2] || '';
-    const tableName = node.key.split('.')[3] || '';
-    const columnName = node.module;
-
-    return { connectionName, schemaName, tableName, columnName };
-  }, [node]);
+  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
   const [updatedColumnBasic, setUpdatedColumnBasic] =
     useState<ColumnBasicModel>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
 
   useEffect(() => {
@@ -84,10 +74,6 @@ const ColumnView = ({ node }: IColumnViewProps) => {
   }, [columnBasic]);
 
   useEffect(() => {
-    setUpdatedChecksUI(checksUI);
-  }, [checksUI]);
-
-  useEffect(() => {
     setUpdatedComments([]);
     setUpdatedLabels([]);
 
@@ -98,9 +84,6 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     dispatch(
       getColumnLabels(connectionName, schemaName, tableName, columnName)
     );
-    dispatch(
-      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
-    );
     const searchQuery = qs.stringify({
       connection: connectionName,
       schema: schemaName,
@@ -108,7 +91,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
       column: columnName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName, columnName]);
 
   const onUpdate = async () => {
@@ -151,27 +134,15 @@ const ColumnView = ({ node }: IColumnViewProps) => {
         getColumnLabels(connectionName, schemaName, tableName, columnName)
       );
     }
-    if (activeTab === 'data-quality-checks') {
-      await dispatch(
-        updateColumnCheckUI(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
-          updatedComments
-        )
-      );
-      await dispatch(
-        getColumnChecksUi(connectionName, schemaName, tableName, columnName)
-      );
-    }
   };
 
   useEffect(() => {
-    if (tabMap[node.module]) {
-      setActiveTab(tabMap[node.module]);
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('column');
     }
-  }, [node, tabMap]);
+  }, [pageTab, tabMap]);
 
   const isDisabled = useMemo(() => {
     if (activeTab === 'labels') {
@@ -181,12 +152,20 @@ const ColumnView = ({ node }: IColumnViewProps) => {
     return false;
   }, [updatedLabels]);
 
+  const onChangeTab = (tab: string) => {
+    setActiveTab(tab);
+    setTabMap({
+      ...tabMap,
+      [pageTab]: tab
+    });
+  };
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="column" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color="primary"
@@ -199,7 +178,7 @@ const ColumnView = ({ node }: IColumnViewProps) => {
         />
       </div>
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div>
         {activeTab === 'column' && (
@@ -208,14 +187,6 @@ const ColumnView = ({ node }: IColumnViewProps) => {
             setColumnBasic={setUpdatedColumnBasic}
           />
         )}
-        <div>
-          {activeTab === 'data-quality-checks' && (
-            <DataQualityChecks
-              checksUI={updatedChecksUI}
-              onChange={setUpdatedChecksUI}
-            />
-          )}
-        </div>
         {activeTab === 'comments' && (
           <CommentsView
             comments={updatedComments}

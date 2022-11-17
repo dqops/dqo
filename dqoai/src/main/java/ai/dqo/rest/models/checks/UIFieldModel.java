@@ -38,6 +38,9 @@ public class UIFieldModel {
     @JsonPropertyDescription("Field name that matches the field name (snake_case) used in the YAML specification.")
     private ParameterDefinitionSpec definition;
 
+    @JsonPropertyDescription("Field value is optional and may be null, when false - the field is required and must be filled.")
+    private boolean optional;
+
     @JsonPropertyDescription("Field value for a string field.")
     private String stringValue;
 
