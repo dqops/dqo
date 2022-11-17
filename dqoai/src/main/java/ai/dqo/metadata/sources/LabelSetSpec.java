@@ -15,7 +15,6 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.metadata.basespecs.DirtyStatus;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -183,7 +182,6 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

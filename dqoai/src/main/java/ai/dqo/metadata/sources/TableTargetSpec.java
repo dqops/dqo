@@ -59,9 +59,11 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     }
 
     @JsonPropertyDescription("Physical schema name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String schemaName;
 
     @JsonPropertyDescription("Physical table name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String tableName;
 
     @JsonPropertyDescription("Dictionary of additional properties (key/value) that may be used to identify a target table or could be useful when running sensor queries.")
@@ -190,7 +192,6 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

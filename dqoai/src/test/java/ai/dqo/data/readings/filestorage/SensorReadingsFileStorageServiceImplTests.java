@@ -24,13 +24,13 @@ import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.data.readings.normalization.SensorNormalizedResultObjectMother;
-
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

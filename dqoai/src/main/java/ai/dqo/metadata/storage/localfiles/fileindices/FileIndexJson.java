@@ -17,7 +17,6 @@ package ai.dqo.metadata.storage.localfiles.fileindices;
 
 import ai.dqo.core.filesystem.ApiVersion;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
-import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.SpecificationKind;
 
 /**

@@ -18,6 +18,7 @@ package ai.dqo.metadata.sources;
 import ai.dqo.core.filesystem.virtual.FileNameSanitizer;
 import ai.dqo.metadata.search.StringPatternComparer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.google.common.base.Strings;
 
 import java.util.Objects;
@@ -26,7 +27,10 @@ import java.util.Objects;
  * Physical table name that is a combination of a schema name and a physical table name (without any quoting or escaping).
  */
 public class PhysicalTableName implements Cloneable {
+    @JsonPropertyDescription("Schema name")
     private String schemaName;
+
+    @JsonPropertyDescription("Table name")
     private String tableName;
 
     /**

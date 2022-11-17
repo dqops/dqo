@@ -20,17 +20,21 @@ import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.rule.RuleCliCommand;
 import ai.dqo.cli.commands.run.RunCliCommand;
 import ai.dqo.cli.commands.scheduler.SchedulerCliCommand;
 import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
+import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
+
+import java.util.List;
 
 /**
  * DQO root CLI command.
@@ -54,23 +58,119 @@ import picocli.CommandLine;
             CloudCliCommand.class,
             SensorCliCommand.class,
             SchedulerCliCommand.class,
-            RunCliCommand.class
+            RunCliCommand.class,
+            RuleCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private final BeanFactory beanFactory;
     private JobSchedulerService jobSchedulerService;
+    private TerminalWriter terminalWriter;
 
     /**
      * Creates a default root CLI command.
      * @param beanFactory Bean factory - used to delay the creation of the shell runner.
      * @param jobSchedulerService Job scheduler - stops the scheduler on exit.
+     * @param terminalWriter Terminal writer.
      */
     @Autowired
     public DqoRootCliCommand(BeanFactory beanFactory,
-                             JobSchedulerService jobSchedulerService) {
+                             JobSchedulerService jobSchedulerService,
+                             TerminalWriter terminalWriter) {
         this.beanFactory = beanFactory;
         this.jobSchedulerService = jobSchedulerService;
+        this.terminalWriter = terminalWriter;
+    }
+
+    @CommandLine.Option(names = {"--dqo.cloud.api-key"},
+            description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key. " +
+                    "This parameter is effective only in CLI mode.")
+    private String dqoCloudApiKey;
+
+    @CommandLine.Option(names = {"--server.port"},
+            description = "Sets the web server port to host the DQO local web UI. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "8888")
+    private Integer serverPort;
+
+    @CommandLine.Option(names = {"--logging.level.root"},
+            description = "Default logging level at the root level of the logging hierarchy. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "WARN")
+    private org.slf4j.event.Level loggingLevelRoot;
+
+    @CommandLine.Option(names = {"--logging.level.ai.dqo"},
+            description = "Default logging level for the DQO runtime. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "WARN")
+    private org.slf4j.event.Level loggingLevelAiDqo;
+
+    @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},
+            description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "120")
+    private Integer dqoPythonPythonScriptTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.python.interpreter"},
+            description = "Python interpreter command line name, like 'python' or 'python3'. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "python")
+    private String dqoPythonInterpreter;
+
+    @CommandLine.Option(names = {"--dqo.user.home"},
+            description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.). " +
+                    "This parameter is effective only in CLI mode.", defaultValue = ".")
+    private String dqoUserHome;
+
+    @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
+            description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+    private Boolean dqoSecretsEnableGcpSecretManager;
+
+    @CommandLine.Option(names = {"--dqo.secrets.gcp-project-id"},
+            description = "GCP project name with a GCP secret manager enabled to pull the secrets. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+    private Boolean dqoSecretsGcpProjectId;
+
+    @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
+            description = "Prints a full stack trace for errors on the console. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+    private Boolean dqoCorePrintStackTrace;
+
+    @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
+            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "900")
+    private Long lockWaitTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
+            description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+    private Boolean dqoSchedulerEnableCloudSync;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.scan-metadata-cron-schedule"},
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "*/10 * * * *")
+    private String dqoSchedulerScanMetadataCronSchedule;
+
+    /**
+     * This field will capture all remaining parameters that could be also in the form "--name" and should be captured by Spring to update the configuration parameters.
+     */
+    @CommandLine.Unmatched
+    private List<String> remainingUnmatchedArguments;
+
+    /**
+     * Analyses the argument list and detects those that do not look like "--paramname", so they will not be picked up by Spring Boot Externalized configuration
+     * to update the application configuration.
+     * @param arguments List of arguments.
+     * @return null when all arguments are valid, or the first invalid argument that was found
+     */
+    public String findFirstInvalidNonConfigurationArgument(List<String> arguments) {
+        if (arguments == null || arguments.size() == 0) {
+            return null;
+        }
+
+        for (String argument : arguments) {
+            if (!argument.startsWith("--") || argument.length() < 8) {
+                return argument;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -82,6 +182,13 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         DqoShellRunnerService shellRunnerService = this.beanFactory.getBean(DqoShellRunnerService.class);
+
+        String firstInvalidNonConfigurationArgument = findFirstInvalidNonConfigurationArgument(this.remainingUnmatchedArguments);
+        if (firstInvalidNonConfigurationArgument != null) {
+            this.terminalWriter.writeLine("Invalid argument found: " + firstInvalidNonConfigurationArgument);
+            return -1;
+        }
+
         try {
             return shellRunnerService.call();
         }

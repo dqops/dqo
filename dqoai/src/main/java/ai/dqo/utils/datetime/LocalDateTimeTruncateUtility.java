@@ -50,6 +50,8 @@ public class LocalDateTimeTruncateUtility {
                 return dateTime.truncatedTo(ChronoUnit.DAYS);
             case HOUR:
                 return dateTime.truncatedTo(ChronoUnit.HOURS);
+            case MILLISECOND:
+                return dateTime; // no truncation
             default:
                 throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timeSeriesGradient);
         }

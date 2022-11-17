@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli.commands.settings.impl;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 
 /**
  * Settings management service.

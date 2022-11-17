@@ -15,35 +15,49 @@
  */
 package ai.dqo.execution.checks;
 
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.alerts.snapshot.RuleResultsSnapshotFactory;
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshotFactory;
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
-import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.data.readings.normalization.SensorResultNormalizeService;
+import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
+import ai.dqo.data.readings.snapshot.SensorReadingsSnapshotFactory;
+import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
 import ai.dqo.execution.checks.scheduled.ScheduledChecksCollection;
 import ai.dqo.execution.checks.scheduled.ScheduledTableChecksCollection;
 import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindService;
+import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
+import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
+import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
@@ -51,6 +65,7 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service that executes data quality checks.
@@ -65,7 +80,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final RuleEvaluationService ruleEvaluationService;
     private final SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory;
     private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
-    private ScheduledTargetChecksFindService scheduledTargetChecksFindService;
+    private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
+    private final UserHomeLockManager userHomeLockManager;
+    private final RuleDefinitionFindService ruleDefinitionFindService;
 
     /**
      * Creates a data quality check execution service.
@@ -78,6 +95,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param sensorReadingsSnapshotFactory Sensor reading storage service.
      * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
+     * @param userHomeLockManager User home lock manager - used to ensure synchronized access to data files.
+     * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
      */
     @Autowired
     public CheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -88,7 +107,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      RuleEvaluationService ruleEvaluationService,
                                      SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory,
                                      RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
-                                     ScheduledTargetChecksFindService scheduledTargetChecksFindService) {
+                                     ScheduledTargetChecksFindService scheduledTargetChecksFindService,
+                                     UserHomeLockManager userHomeLockManager,
+                                     RuleDefinitionFindService ruleDefinitionFindService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -98,6 +119,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.sensorReadingsSnapshotFactory = sensorReadingsSnapshotFactory;
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
+        this.userHomeLockManager = userHomeLockManager;
+        this.ruleDefinitionFindService = ruleDefinitionFindService;
     }
 
     /**
@@ -122,6 +145,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 			executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     dummySensorExecution, checkExecutionSummary);
         }
+
+        progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
 
         return checkExecutionSummary;
     }
@@ -154,6 +179,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     false, checkExecutionSummary);
         }
 
+        progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
+
         return checkExecutionSummary;
     }
 
@@ -169,13 +196,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
      */
     public void executeChecksOnTable(CheckExecutionContext checkExecutionContext,
-									 UserHome userHome,
-									 ConnectionWrapper connectionWrapper,
-									 TableWrapper targetTable,
-									 CheckSearchFilters checkSearchFilters,
-									 CheckExecutionProgressListener progressListener,
-									 boolean dummySensorExecution,
-									 CheckExecutionSummary checkExecutionSummary) {
+                                     UserHome userHome,
+                                     ConnectionWrapper connectionWrapper,
+                                     TableWrapper targetTable,
+                                     CheckSearchFilters checkSearchFilters,
+                                     CheckExecutionProgressListener progressListener,
+                                     boolean dummySensorExecution,
+                                     CheckExecutionSummary checkExecutionSummary) {
         Collection<AbstractCheckSpec> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
             checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0);
@@ -193,11 +220,135 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         int checksCount = 0;
         int sensorResultsCount = 0;
         int passedRules = 0;
+        int warningsCount = 0;
+        int errorsCount = 0;
+        int fatalsCount = 0;
+
+        for (AbstractCheckSpec checkSpec : checks) {
+            checksCount++;
+
+            try {
+                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec);
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
+
+                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(checkExecutionContext,
+                        sensorRunParameters, progressListener, dummySensorExecution);
+                progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
+                if (sensorResult.getResultTable().rowCount() == 0) {
+                    continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
+                }
+                sensorResultsCount += sensorResult.getResultTable().rowCount();
+
+                TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
+
+                // TODO: normalization service must support empty time gradient that will not truncate the time (for ad-hoc checks)
+                SensorNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
+                        sensorResult, effectiveTimeSeries.getTimeGradient(), sensorRunParameters);
+                progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
+                        tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
+                allNormalizedSensorResultsTable.append(normalizedSensorResults.getTable()); // TODO: move to the bottom, we will append an error...
+
+                LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
+                LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period that was captured
+
+                String ruleDefinitionName = checkSpec.getRuleDefinitionName();
+
+                if (ruleDefinitionName == null) {
+                    // no rule to run, just the sensor...
+                    sensorReadingsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
+                }
+                else {
+                    RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleDefinitionName);
+                    RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
+                    RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
+                    LocalDateTime earliestRequiredReading = ruleTimeWindowSettings == null ? minTimePeriod :
+                            LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
+                                    minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), effectiveTimeSeries.getTimeGradient());
+
+                    // TODO: get a shared read lock for the time of loading file, must remember the names, modification dates of loaded parquet files,
+                    // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
+                    // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
+                    // so we need to support just optimistic locking and verify the snapshot (parquet file dates - not modified) just before overwritting parquet files
+                    sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
+
+                    RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
+                            checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadingsSnapshot, progressListener);
+                    progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
+
+                    allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
+
+                    passedRules += ruleEvaluationResult.getSeverityColumn().isLessThanOrEqualTo(1).size();  // passed checks are severity 0 (passed) and 1 (warnings)
+                    warningsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(1).size();
+                    errorsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
+                    fatalsCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
+                }
+            }
+            catch (Exception ex) {
+                // TODO: append a special error row instead of appending the reading row...
+
+                throw new CheckExecutionFailed("Check failed to execute", ex);
+            }
+
+            // TODO: we can consider flushing results here if we run out of memory (too many results)
+        }
+
+        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
+        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
+            sensorReadingsSnapshot.save();
+        }
+
+        progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
+        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
+            ruleResultsSnapshot.save();
+        }
+        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, checks,
+                checksCount, sensorResultsCount, passedRules, warningsCount, errorsCount, fatalsCount));
+
+        checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
+                passedRules, warningsCount, errorsCount, fatalsCount);
+    }
+
+    /**
+     * Execute checks on a single table.
+     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param userHome User home with all metadata and checks.
+     * @param connectionWrapper  Target connection.
+     * @param targetTable Target table.
+     * @param checkSearchFilters Check search filters.
+     * @param progressListener Progress listener.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
+     */
+    public void executeLegacyChecksOnTable(CheckExecutionContext checkExecutionContext,
+                                           UserHome userHome,
+                                           ConnectionWrapper connectionWrapper,
+                                           TableWrapper targetTable,
+                                           CheckSearchFilters checkSearchFilters,
+                                           CheckExecutionProgressListener progressListener,
+                                           boolean dummySensorExecution,
+                                           CheckExecutionSummary checkExecutionSummary) {
+        Collection<AbstractCheckDeprecatedSpec> checks = this.hierarchyNodeTreeSearcher.findLegacyChecks(targetTable, checkSearchFilters);
+        if (checks.size() == 0) {
+            checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0);
+            return; // no checks for this table
+        }
+
+        TableSpec tableSpec = targetTable.getSpec();
+        progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, null));
+        String connectionName = connectionWrapper.getName();
+        PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
+        SensorReadingsSnapshot sensorReadingsSnapshot = this.sensorReadingsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        Table allNormalizedSensorResultsTable = sensorReadingsSnapshot.getNewResults();
+        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getNewResults();
+        int checksCount = 0;
+        int sensorResultsCount = 0;
+        int passedRules = 0;
         int lowSeverityAlerts = 0;
         int mediumSeverityAlerts = 0;
         int highSeverityAlerts = 0;
 
-        for (AbstractCheckSpec checkSpec : checks) {
+        for (AbstractCheckDeprecatedSpec checkSpec : checks) {
             List<AbstractRuleThresholdsSpec<?>> enabledRules = checkSpec.getRuleSet().getEnabledRules();
             if (enabledRules.size() == 0) {
                 // no enabled rules, skipping the check
@@ -231,9 +382,14 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period tha was captured
                 LocalDateTime earliestRequiredReading = checkSpec.findEarliestRequiredHistoricReadingDate(effectiveTimeSeries.getTimeGradient(), minTimePeriod);
+
+                // TODO: get a shared read lock for the time of loading file, must remember the names, modification dates of loaded parquet files,
+                // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
+                // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
+                // so we need to support just optimistic locking and verify the shapshot (parquet file dates - not modified) just before overwritting parquet files,
                 sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
 
-                RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
+                RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateLegacyRules(
                         checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadingsSnapshot, progressListener);
                 progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
@@ -247,22 +403,22 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             catch (Exception ex) {
                 // TODO: append a special error row instead of appending the reading row...
 
-                throw new RuntimeException("Check failed to execute", ex);
+                throw new CheckExecutionFailed("Check failed to execute", ex);
             }
 
             // TODO: we can consider flushing results here if we run out of memory (too many results)
         }
 
         progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
-        if (sensorReadingsSnapshot.hasNewReadings() && !dummySensorExecution) {
+        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
             sensorReadingsSnapshot.save();
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
-        if (ruleResultsSnapshot.hasNewAlerts() && !dummySensorExecution) {
+        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
             ruleResultsSnapshot.save();
         }
-        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, checks,
+        progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, null,
                 checksCount, sensorResultsCount, passedRules, lowSeverityAlerts, mediumSeverityAlerts, highSeverityAlerts));
 
         checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
@@ -296,7 +452,52 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
         TableSpec tableSpec = tableWrapper.getSpec();
 
+        List<HierarchyNode> nodesOnPath = List.of(checkHierarchyId.getNodesOnPath(userHome));
+        Optional<HierarchyNode> timeSeriesProvider = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> n instanceof TimeSeriesConfigurationProvider)
+                .findFirst();
+        assert timeSeriesProvider.isPresent();
+
+        TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider) timeSeriesProvider.get();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec);
+
+        if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column &&
+                Strings.isNullOrEmpty(timeSeriesConfigurationSpec.getTimestampColumn())) {
+            // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
+            throw new CheckExecutionFailed("Data quality check " + checkSpec.getHierarchyId().toString() + " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
+        }
+
+        Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)
+                .stream()
+                .filter(n -> n instanceof AbstractRootChecksContainerSpec)
+                .findFirst();
+        assert checkCategoryRootProvider.isPresent();
+        AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec)checkCategoryRootProvider.get();
+        CheckType checkType = rootChecksContainerSpec.getCheckType();
+
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
+                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
+     * @param userHome User home with the metadata.
+     * @param checkSpec Check specification.
+     * @return Sensor run parameters.
+     */
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckDeprecatedSpec checkSpec) {
+        HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
+        ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
+        TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
+        ColumnSpec columnSpec = userHome.findColumnFor(checkHierarchyId); // may be null
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
+        ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
+        TableSpec tableSpec = tableWrapper.getSpec();
+
+        SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createLegacySensorParameters(
                 connectionSpec, tableSpec, columnSpec, checkSpec, dialectSettings);
         return sensorRunParameters;
     }

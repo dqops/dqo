@@ -19,7 +19,13 @@ import ai.dqo.data.ParquetSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * CLI entry point class.
@@ -29,19 +35,50 @@ public class CliApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
 
 	/**
+	 * Parse the command line parameters and check if the command will require a web server to start, or it is just a single shot command
+	 * that we don't want to delay by starting a web server (that will be shutdown instantly).
+	 * @param args Command line arguments.
+	 * @return true when the web server should be started, false otherwise.
+	 */
+	public static boolean isCommandThatRequiresWebServer(String[] args) {
+		if (args == null || args.length == 0) {
+			// starting just "dqo" in the shell mode, we are starting the web server because we have time
+			return true;
+		}
+
+		List<String> nonParameterArguments = Arrays.stream(args)
+				.filter(a -> !a.startsWith("-"))
+				.collect(Collectors.toList());
+
+		if (nonParameterArguments.size() > 0) {
+			// possibly some commands
+			if (!Objects.equals(nonParameterArguments.get(0), "run")) {
+				return false; // it is any other command than "run", so it is a one shot command, we don't want delay it by starting the web server
+			}
+		}
+
+		return true; // no parameters, just the shell mode, so we start the web server
+	}
+
+	/**
 	 * Main entry method for the DQO CLI application.
 	 * @param args Arguments.
 	 */
 	public static void main(String[] args) {
 		try {
 			ParquetSupport.ensureInitialized();
+
+			boolean commandThatRequiresWebServer = isCommandThatRequiresWebServer(args);
+
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
+			springApplication.setWebApplicationType(commandThatRequiresWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 
 			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now
 		}
 	    catch (Throwable t) {
+			LOG.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}

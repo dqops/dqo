@@ -16,21 +16,21 @@
 package ai.dqo.cli.commands.check;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.check.impl.CheckService;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
-import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
@@ -105,6 +105,13 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
+
+    @CommandLine.Option(names = {"-ad", "--dimension"}, description = "Dimension filter",
+            required = false)
+    private String[] dimensions;
+
+    @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+    private String[] labels;
 
     /**
      * Gets the connection name.
@@ -249,8 +256,10 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setEnabled(this.enabled);
+        filters.setDimensions(this.dimensions);
+        filters.setLabels(this.labels);
 
-        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode);
+        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {

@@ -16,11 +16,10 @@
 package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.FormattedTableDto;
@@ -35,8 +34,6 @@ import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import java.util.List;
 
 /**
  * "connection list" 2nd level cli command.
@@ -67,6 +64,28 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
     private String name;
 
+    @CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter", required = false)
+    private String[] dimensions;
+
+    @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+    private String[] labels;
+
+    /**
+     * Returns the dimensions filter.
+     * @return Dimensions filter.
+     */
+    public String[] getDimensions() {
+        return dimensions;
+    }
+
+    /**
+     * Sets the dimensions filter.
+     * @param dimensions Dimensions filter.
+     */
+    public void setDimensions(String[] dimensions) {
+        this.dimensions = dimensions;
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -78,7 +97,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
         if (Strings.isNullOrEmpty(name)) {
             name = "*";
         }
-        FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
+        FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name, dimensions, labels);
         switch(this.getOutputFormat()) {
             case CSV: {
                 String csvContent = this.outputFormatService.tableToCsv(formattedTable);

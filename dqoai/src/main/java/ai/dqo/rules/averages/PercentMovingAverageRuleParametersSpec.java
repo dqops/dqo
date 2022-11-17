@@ -43,8 +43,8 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
      * Default constructor.
      */
     public PercentMovingAverageRuleParametersSpec() {
-        this.maxPercentAbove = -123456.0;
-        this.maxPercentBelow = -123456.0;
+        this.maxPercentAbove = null;
+        this.maxPercentBelow = null;
     }
 
 
@@ -58,7 +58,7 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
      * Minimum percent value for a data quality check reading, for example a minimum row count.
      * @return A percent that is used to calculate lower limit.
      */
-    public double getMaxPercentBelow() {
+    public Double getMaxPercentBelow() {
         return maxPercentBelow;
     }
 

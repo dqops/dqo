@@ -37,33 +37,11 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean disable;
-
-    /**
-     * Disable the quality check and prevent it from executing.
-     * @return Quality check is disabled.
-     */
-    public boolean isDisable() {
-        return disable;
-    }
-
-    /**
-     * Changes the disabled flag of a quality test.
-     * @param disable When true, the test will be disabled and will not be executed.
-     */
-    public void setDisable(boolean disable) {
-		this.setDirtyIf(this.disable != disable);
-        this.disable = disable;
-    }
-
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

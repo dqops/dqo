@@ -15,15 +15,14 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import com.google.common.base.Strings;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -48,7 +47,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject foundNodes) {
         RecurringScheduleSpec connectionSchedule = connectionSpec.getSchedule();
         assert this.filters.getSchedule() != null;
         assert this.filters.getSchedule().getRecurringSchedule() != null;
@@ -63,7 +62,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
                 return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
             }
 
-            foundNodes.add(connectionSpec);
+            foundNodes.getNodes().add(connectionSpec);
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -78,7 +77,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean tableIsEnabled = !tableSpec.isDisabled();
@@ -96,7 +95,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
                 return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
             }
 
-            foundNodes.add(tableSpec);
+            foundNodes.getNodes().add(tableSpec);
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -110,7 +109,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean columnIsEnabled = !columnSpec.isDisabled();
@@ -127,7 +126,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
                 return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
             }
 
-            foundNodes.add(columnSpec);
+            foundNodes.getNodes().add(columnSpec);
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -141,7 +140,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
 
@@ -160,7 +159,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
                 return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
             }
 
-            foundNodes.add(abstractCheckSpec);
+            foundNodes.getNodes().add(abstractCheckSpec);
         }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper

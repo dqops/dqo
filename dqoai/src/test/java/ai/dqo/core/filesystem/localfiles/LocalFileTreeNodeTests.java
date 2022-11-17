@@ -16,7 +16,7 @@
 package ai.dqo.core.filesystem.localfiles;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.filesystem.*;
+import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FileTreeNodeStatus;

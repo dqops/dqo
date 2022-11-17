@@ -16,7 +16,6 @@
 package ai.dqo.connectors;
 
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.search.StringPatternComparer;
 import ai.dqo.metadata.sources.*;
 import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;

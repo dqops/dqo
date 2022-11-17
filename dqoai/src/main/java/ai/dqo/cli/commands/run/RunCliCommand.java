@@ -51,8 +51,8 @@ public class RunCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "summary")
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "info")
-    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.info;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "summary")
+    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.summary;
 
     /**
      * Returns the synchronization logging mode.

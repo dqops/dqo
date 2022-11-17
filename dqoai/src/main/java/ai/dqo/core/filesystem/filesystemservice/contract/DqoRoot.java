@@ -20,14 +20,14 @@ package ai.dqo.core.filesystem.filesystemservice.contract;
  */
 public enum DqoRoot {
     /**
-     * Parquet files with the sensor readings.
+     * Parquet files with the sensor readouts.
      */
-    DATA_READINGS,
+    DATA_SENSOR_READOUTS,
 
     /**
-     * Parquet files with the alerts.
+     * Parquet files with the rule evaluation results (alerts and passed data quality checks).
      */
-    DATA_ALERTS,
+    DATA_RULE_RESULTS,
 
     /**
      * Source metadata files (connections, tables).

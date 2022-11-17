@@ -45,17 +45,16 @@ public class RuleResultsTableFactoryImpl implements RuleResultsTableFactory {
      * @return Empty rule evaluation results (alerts) table.
      */
     public Table createEmptyRuleResultsTable(String tableName) {
-        Table table = this.sensorReadingsTableFactory.createEmptySensorReadingsTable(tableName);
+        Table table = this.sensorReadingsTableFactory.createEmptySensorReadoutsTable(tableName);
         table.addColumns(
                 IntColumn.create(RuleEvaluationResult.SEVERITY_COLUMN_NAME),
-                LongColumn.create(RuleEvaluationResult.RULE_HASH_COLUMN_NAME),
-                StringColumn.create(RuleEvaluationResult.RULE_NAME_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.HIGH_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.HIGH_UPPER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.MEDIUM_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.MEDIUM_UPPER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.LOW_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.LOW_UPPER_BOUND_COLUMN_NAME)
+                BooleanColumn.create(RuleEvaluationResult.INCLUDE_IN_KPI_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.FATAL_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.FATAL_UPPER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.ERROR_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.ERROR_UPPER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.WARNING_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleEvaluationResult.WARNING_UPPER_BOUND_COLUMN_NAME)
         );
 
         return table;

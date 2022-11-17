@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Deprecated
 public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpecTests extends BaseTest {
     private TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec sut;
 

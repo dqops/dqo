@@ -37,6 +37,7 @@
 		<license.licenseName>apache_v2</license.licenseName>
 	</properties>
 
+	<!--
 	<reporting>
 		<plugins>
 			<plugin>
@@ -60,6 +61,7 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	-->
 
 	<licenses>
 		<license>
@@ -78,6 +80,104 @@
 	<inceptionYear>2021</inceptionYear>
 
 	<profiles>
+		<profile>
+			<id>run-npm</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.12.1</version>
+						<configuration>
+							<workingDirectory>src/main/frontend</workingDirectory>
+							<nodeVersion>v16.13.0</nodeVersion>
+							<npmVersion>8.19.2</npmVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<arguments>install --legacy-peer-deps</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm test</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>test</phase>
+								<configuration>
+									<arguments>test</arguments>
+									<environmentVariables>
+										<CI>true</CI>
+									</environmentVariables>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<arguments>run-script build</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/frontend/build</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-swagger-json</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.basedir}/target/swagger</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>integration-tests</id>
 			<activation>
@@ -119,7 +219,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.1.0</version>
 						<configuration>
 							<executable>gsutil</executable>
 							<mainClass>none</mainClass>
@@ -187,39 +287,55 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<!-- Exclude the Tomcat dependency -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-batch</artifactId>
-		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.google.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-gcp-starter-secretmanager</artifactId>-->
-<!--			<version>3.1.0</version>-->
-<!--		</dependency>-->
-		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-blackbird</artifactId>
-			<version>2.13.3</version>
+			<version>2.13.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -284,22 +400,22 @@
 		<dependency>
 			<groupId>com.google.api</groupId>
 			<artifactId>gax</artifactId>
-			<version>2.18.6</version>
+			<version>2.19.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-bigquery</artifactId>
-			<version>2.14.1</version>
+			<version>2.15.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
-			<version>2.10.0</version>
+			<version>2.11.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-secretmanager</artifactId>
-			<version>2.3.0</version>
+			<version>2.3.3</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
@@ -309,12 +425,57 @@
 		<dependency>
 			<groupId>net.tlabs-data</groupId>
 			<artifactId>tablesaw_${tablesaw.version}-parquet</artifactId>
-			<version>0.10.0</version>
+			<version>0.10.1</version>
+			<!-- Exclusions used to limit some useless hadoop dependencies that take the space, following the documentation at: https://github.com/tlabs-data/tablesaw-parquet/blob/master/docs/hadoop_dependency.md -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.curator</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.zookeeper</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.kerby</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.protobuf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+
+				<!-- and additional exclusion -->
+				<exclusion>
+					<groupId>ch.qos.reload4j</groupId>
+					<artifactId>reload4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-reload4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.avro</groupId>
+					<artifactId>avro</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.victools</groupId>
 			<artifactId>jsonschema-module-jackson</artifactId>
-			<version>4.25.0</version>
+			<version>4.26.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.kostaskougios</groupId>
@@ -331,16 +492,6 @@
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 			<version>5.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.36</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.parquet</groupId>
@@ -363,14 +514,13 @@
 			<version>1.12.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-1.2-api</artifactId>
-			<version>2.18.0</version>
-		</dependency>
-		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
 			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
@@ -393,7 +543,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.29</version>
+			<version>8.0.30</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -405,7 +555,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.3.6</version>
+			<version>42.5.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -417,13 +567,13 @@
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
-			<version>10.2.1.jre11</version>
+			<version>11.2.1.jre11</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.snowflake</groupId>
 			<artifactId>snowflake-jdbc</artifactId>
-			<version>3.13.21</version>
+			<version>3.13.22</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -441,13 +591,24 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>4.6.1</version>
+			<version>4.8.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
-			<version>1.12.12</version>
+			<version>1.12.16</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<version>3.4.23</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -457,7 +618,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.6.2</version>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -557,6 +725,53 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>com.github.kongchen</groupId>
+				<artifactId>swagger-maven-plugin</artifactId>
+				<version>3.1.8</version>
+				<configuration>
+					<apiSources>
+						<apiSource>
+							<springmvc>true</springmvc>
+							<locations>ai.dqo.rest.controllers</locations>
+							<schemes>http</schemes>
+							<host>localhost:8888</host>
+							<basePath>/</basePath>
+							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
+							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
+							<outputFormats>JSON,YAML</outputFormats>
+							<info>
+								<title>DQO.ai</title>
+								<version>v1</version>
+								<description>DQO.AI REST API</description>
+								<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
+								<contact>
+									<email>support@dqo.ai</email>
+									<name>DQO.ai Support</name>
+									<url>https://dqo.ai</url>
+								</contact>
+								<license>
+									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+									<name>Apache 2.0</name>
+								</license>
+							</info>
+							<securityDefinitions>
+								<securityDefinition>
+									<json>/securityDefinitions.json</json>
+								</securityDefinition>
+							</securityDefinitions>
+						</apiSource>
+					</apiSources>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
 				<version>4.22.0</version>
@@ -612,6 +827,47 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>6.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+							<generatorName>typescript-axios</generatorName>
+							<output>${project.basedir}/src/main/frontend/src/api</output>
+							<configOptions>
+								<supportsES6>true</supportsES6>
+								<withInterfaces>true</withInterfaces>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
+							<arguments>
+								<argument>${project.basedir}/src/main/frontend/src/api</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

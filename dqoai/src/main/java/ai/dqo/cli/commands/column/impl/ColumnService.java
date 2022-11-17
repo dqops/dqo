@@ -15,10 +15,9 @@
  */
 package ai.dqo.cli.commands.column.impl;
 
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.metadata.sources.ColumnSpec;
-import tech.tablesaw.api.Table;
 
 /**
  * Service that performs column operations.
@@ -30,9 +29,11 @@ public interface ColumnService {
 	 * @param tableName Table name.
 	 * @param columnName Column name.
 	 * @param tabularOutputFormat Tabular output format.
+	 * @param dimensions Dimensions filter.
+	 * @param labels Labels filter.
 	 * @return Table with the results.
 	 */
-	CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat);
+	CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels);
 
 	/**
 	 * Add a column from a given connection, table and column.

@@ -55,7 +55,9 @@ public class FileFileIndexListImpl extends FileIndexListImpl {
             }
             String baseFileName = truncateFileExtension(fileTreeNode.getFilePath().getFileName());
             FileIndexName fileIndexName = FileIndexName.fromBaseFileName(baseFileName);
-            this.addWithoutFullLoad(new FileFileIndexWrapperImpl(this.indicesFolder, fileIndexName, this.jsonSerializer));
+            if (fileIndexName != null) {
+                this.addWithoutFullLoad(new FileFileIndexWrapperImpl(this.indicesFolder, fileIndexName, this.jsonSerializer));
+            }
         }
     }
 

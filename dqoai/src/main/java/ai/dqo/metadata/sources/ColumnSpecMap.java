@@ -30,7 +30,6 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

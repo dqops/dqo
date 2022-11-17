@@ -15,14 +15,10 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Visitor for {@link TableSearchFilters} that finds the correct nodes.
@@ -42,11 +38,11 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a list of connections.
      *
      * @param connectionList List of connections.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter      Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -69,12 +65,14 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionWrapper Connection wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
+        parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -90,11 +88,11 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a collection of tables inside a connection.
      *
      * @param tableList Table list.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableList tableList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -117,12 +115,43 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a table wrapper (lazy loader).
      *
      * @param tableWrapper Table wrapper.
-     * @param parameter    Target list where found hierarchy nodes should be added.
+     * @param parameter    Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
+
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        if (labelsSearcherObject != null) {
+            labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
+        }
+
+        if (dataStreamSearcherObject != null) {
+            dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
+        }
+
+        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getTableDataStreams() != null
+                ? dataStreamSearcherObject.getTableDataStreams()
+                : dataStreamSearcherObject.getConnectionDataStreams();
+        LabelSetSpec overridenLabels = new LabelSetSpec();
+
+        if (labelsSearcherObject.getTableLabels() != null) {
+            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+        }
+
+        if (labelsSearcherObject.getConnectionLabels() != null) {
+            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+        }
+
+        if (!DataStreamsMappingSearchMatcher.matchAllTableDataStreams(this.filters, overridenDataStreams)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+        if (!LabelsSearchMatcher.matchTableLabels(this.filters, overridenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
 
         if (!Strings.isNullOrEmpty(schemaTableName)) {
             PhysicalTableName physicalTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
@@ -132,7 +161,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
         else {
-            parameter.add(tableWrapper);
+            parameter.getNodes().add(tableWrapper);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -151,7 +180,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        parameter.add(tableWrapper);
+        parameter.getNodes().add(tableWrapper);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }

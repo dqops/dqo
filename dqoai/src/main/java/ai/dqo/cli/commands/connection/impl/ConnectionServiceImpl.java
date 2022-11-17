@@ -15,19 +15,16 @@
  */
 package ai.dqo.cli.commands.connection.impl;
 
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FormattedTableDto;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.connectors.*;
-import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.search.*;
-import ai.dqo.metadata.sources.*;
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.search.ConnectionSearchFilters;
@@ -46,7 +43,6 @@ import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.api.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,6 +62,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private SecretValueProvider secretValueProvider;
     private final OutputFormatService outputFormatService;
+    private final EditorLaunchService editorLaunchService;
 
     @Autowired
     public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -74,7 +71,8 @@ public class ConnectionServiceImpl implements ConnectionService {
                                  TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWritter,
                                  SecretValueProvider secretValueProvider,
-                                 OutputFormatService outputFormatService) {
+                                 OutputFormatService outputFormatService,
+                                 EditorLaunchService editorLaunchService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
@@ -82,6 +80,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         this.terminalTableWritter = terminalTableWritter;
         this.secretValueProvider = secretValueProvider;
         this.outputFormatService = outputFormatService;
+        this.editorLaunchService = editorLaunchService;
     }
 
     private TableWrapper findTableFromNameAndSchema(String tableName, Collection<TableWrapper> tableWrappers) {
@@ -178,10 +177,13 @@ public class ConnectionServiceImpl implements ConnectionService {
      * @param schemaName Schema name.
      * @param tableName Table name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Cli operation status.
      */
     @Override
-    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat) {
+    public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
+                                            String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -209,6 +211,8 @@ public class ConnectionServiceImpl implements ConnectionService {
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
             tableSearchFilters.setSchemaTableName(schemaName + ".*");
+            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
             HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -259,9 +263,11 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Returns a schemas of local connections.
      * @param connectionName Connection name.
      * @param tabularOutputFormat Tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Schema list.
      */
-    public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat) {
+    public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -289,6 +295,8 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
+            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
             HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -332,14 +340,18 @@ public class ConnectionServiceImpl implements ConnectionService {
 
     /**
      * Returns a table of local connections.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Connection list.
      */
-    public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter) {
+    public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter, String[] dimensions, String[] labels) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(connectionNameFilter);
+        connectionSearchFilters.setDimensions(dimensions);
+        connectionSearchFilters.setLabels(labels);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -426,7 +438,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             return cliOperationStatus;
         }
 
-        FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName);
+        FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName, null, null);
         this.terminalTableWritter.writeTable(connectionTables, true);
         this.terminalWriter.writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
@@ -532,5 +544,24 @@ public class ConnectionServiceImpl implements ConnectionService {
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         connectionProvider.promptForConnectionParameters(connectionSpec, isHeadless, terminalReader, terminalWriter);
+    }
+
+    /**
+     * Finds a connection and opens the default text editor to edit the yaml file.
+     * @param connectionName Connection name.
+     * @return Error code: 0 when the table was found, -1 when the connection was not found.
+     */
+    @Override
+    public int launchEditorForConnection(String connectionName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            this.terminalWriter.writeLine(String.format("Connection '%s' not found", connectionName));
+            return -1;
+        }
+        this.editorLaunchService.openEditorForConnection(connectionWrapper);
+
+        return 0;
     }
 }

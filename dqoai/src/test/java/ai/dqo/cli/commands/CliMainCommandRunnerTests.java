@@ -27,6 +27,8 @@ public class CliMainCommandRunnerTests extends BaseTest {
     void run_whenConnectionsList_thenCallsCommand() throws Exception {
         ConnectionListCliCommand command = CommandLineObjectMother.parseCommand(ConnectionListCliCommand.class,
                 "connection", "list");
+        String value = "\"aome-name\"";
+        String replaced = value.substring(1, value.length() - 1).replace("-", "_HYPHEN_").replace("/", "_HYPHEN_").replace("\\", "_BACKSLASH_");
 
         Assertions.assertInstanceOf(ConnectionListCliCommand.class, command);
     }

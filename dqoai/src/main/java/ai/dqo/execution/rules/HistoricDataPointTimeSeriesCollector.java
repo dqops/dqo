@@ -15,10 +15,10 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
+import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;

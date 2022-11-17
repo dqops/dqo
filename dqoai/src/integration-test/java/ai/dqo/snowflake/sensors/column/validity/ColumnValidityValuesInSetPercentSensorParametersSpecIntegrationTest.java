@@ -82,22 +82,23 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
-    @Test
-    void runSensor_whenSensorExecutedOnColumnWithNumericalValues_thenReturnsValues() {
-
-        ArrayList<Integer> valuesList = new ArrayList<>();
-        valuesList.add(123);
-        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
-        this.sut.setValuesList(valuesList);
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_int", this.checkSpec);
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20.0F, resultTable.column(0).get(0));
-    }
+    // TODO: move the test to another sensor that works on numeric values
+//    @Test
+//    void runSensor_whenSensorExecutedOnColumnWithNumericalValues_thenReturnsValues() {
+//
+//        ArrayList<Integer> valuesList = new ArrayList<>();
+//        valuesList.add(123);
+//        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
+//        this.sut.setValuesList(valuesList);
+//
+//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_int", this.checkSpec);
+//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+//
+//        Table resultTable = sensorResult.getResultTable();
+//        Assertions.assertEquals(1, resultTable.rowCount());
+//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+//        Assertions.assertEquals(20.0F, resultTable.column(0).get(0));
+//    }
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithStringValues_thenReturnsValues() {
@@ -120,20 +121,22 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
-    @Test
-    void runSensor_whenSensorExecutedOnColumnWithDateValues_thenReturnsValues() {
+    // TODO: move the test to another sensor that works on date values
 
-        ArrayList<LocalDate> valuesList = new ArrayList<>();
-        valuesList.add(LocalDate.of(2022,2,1));
-        this.sut.setValuesType(BuiltInListFormats.DATE);
-        this.sut.setValuesList(valuesList);
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20.0F, resultTable.column(0).get(0));
-    }
+//    @Test
+//    void runSensor_whenSensorExecutedOnColumnWithDateValues_thenReturnsValues() {
+//
+//        ArrayList<LocalDate> valuesList = new ArrayList<>();
+//        valuesList.add(LocalDate.of(2022,2,1));
+//        this.sut.setValuesType(BuiltInListFormats.DATE);
+//        this.sut.setValuesList(valuesList);
+//
+//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
+//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+//
+//        Table resultTable = sensorResult.getResultTable();
+//        Assertions.assertEquals(1, resultTable.rowCount());
+//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+//        Assertions.assertEquals(20.0F, resultTable.column(0).get(0));
+//    }
 }

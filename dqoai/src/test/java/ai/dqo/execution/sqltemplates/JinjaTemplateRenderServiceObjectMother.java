@@ -50,10 +50,10 @@ public class JinjaTemplateRenderServiceObjectMother {
 //        Assertions.assertNull(runParameters.getTable().getTimeSeries());
 //        Assertions.assertNull(runParameters.getTable().getDimensions());
         Assertions.assertNull(runParameters.getConnection().getDefaultTimeSeries());
-        Assertions.assertNull(runParameters.getConnection().getDefaultDimensions());
+        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreams());
         if (runParameters.getColumn() != null) {
             Assertions.assertNull(runParameters.getColumn().getTimeSeriesOverride());
-            Assertions.assertNull(runParameters.getColumn().getDimensionsOverride());
+            Assertions.assertNull(runParameters.getColumn().getDataStreamsOverride());
         }
         JinjaTemplateRenderParameters renderParameters = JinjaTemplateRenderParametersObjectMother.createForRunParameters(runParameters);
         return renderBuiltInTemplate(renderParameters);

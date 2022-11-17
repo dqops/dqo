@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 package ai.dqo.bigquery.sensors.table.timeliness;
+
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.table.timeliness.TableTimelinessCurrentDelayCheckSpec;
 import ai.dqo.connectors.ProviderType;
-
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;

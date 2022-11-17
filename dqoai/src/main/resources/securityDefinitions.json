@@ -1,0 +1,10 @@
+{
+  "basic": {
+    "type": "basic"
+  },
+  "api_key": {
+    "type": "apiKey",
+    "name": "APIKey",
+    "in": "header"
+  }
+}

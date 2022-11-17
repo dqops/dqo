@@ -16,8 +16,8 @@
 package ai.dqo.cli.commands.table.impl;
 
 
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
@@ -243,9 +243,11 @@ public class TableServiceImpl implements TableService {
      * @param connectionName Connection name.
      * @param tableName Table name filter.
      * @param tabularOutputFormat tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Cli operation status.
      */
-    public CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat) {
+    public CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -254,6 +256,8 @@ public class TableServiceImpl implements TableService {
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
         tableSearchFilters.setConnectionName(connectionName);
         tableSearchFilters.setSchemaTableName(tableName);
+        tableSearchFilters.setDimensions(dimensions);
+        tableSearchFilters.setLabels(labels);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
@@ -361,7 +365,7 @@ public class TableServiceImpl implements TableService {
             return cliOperationStatus;
         }
 
-        CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE);
+        CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE, null, null);
         this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
         this.terminalWriter.writeLine("Do You want to remove these " + tableWrappers.size() + " tables?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);

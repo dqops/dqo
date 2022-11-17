@@ -1,6 +1,21 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.cli.terminal;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;
@@ -28,6 +43,36 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.fileWritter = fileWritter;
+	}
+
+	/**
+	 * Shows a tablesaw table and asks the user to pick one row.
+	 * @param question Question that is shown before the table.
+	 * @param table Table (tablesaw) data.
+	 * @return 0-based row index that was selected or the default value (may be null).
+	 */
+	public Integer pickTableRowWithPaging(String question, Table table) {
+		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
+
+		this.terminalWriter.writeLine(question);
+		this.writeTable(tableModel, false);
+
+		while (true) {
+			String line = this.terminalReader.prompt("Please enter one of the [] values: ", "", false);
+
+			int rowCount = table.rowCount();
+			try {
+				int pickedNumber = Integer.parseInt(line.trim());
+				if (pickedNumber <= 0 || pickedNumber > rowCount) {
+					this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+				}
+				else {
+					return pickedNumber - 1;  // WATCH OUT: the user picks a 1-based row index, so the user picks [1] to get the very first row, but rows are 0-based indexed and we will return 0 as the selected row index
+				}
+			} catch (NumberFormatException nfe) {
+				this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+			}
+		}
 	}
 
 	@Override
@@ -76,6 +121,9 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
 		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		if( height == 0) {
+			height = 1;
+		}
 		int rowsLeft = tableData.getRows().size();
 		int index = 0;
 
@@ -112,13 +160,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 
@@ -130,6 +182,9 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
 		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		if( height == 0) {
+			height = 1;
+		}
 		int rowsLeft = table.rowCount();
 		int index = 0;
 
@@ -166,13 +221,17 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
+					else if (response == 'y' || response == 'Y') {
+						rowsLeft -= height;
+						index++;
+					}
 				} catch (Exception e) {
 					return;
 				}
 			}
-
-			rowsLeft -= height;
-			index++;
+			else {
+				return;
+			}
 		}
 	}
 
