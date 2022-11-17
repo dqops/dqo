@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: covid19_italy
+    table_name: data_by_region
+  filter: region_name='Sicilia'
+  time_series:
+    mode: current_time
+    time_gradient: day
+  columns:
+    date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    country:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    region_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    region_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    latitude:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    longitude:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    location_geom:
+      type_snapshot:
+        column_type: GEOGRAPHY
+        nullable: true
+    hospitalized_patients_symptoms:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    hospitalized_patients_intensive_care:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_hospitalized_patients:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    home_confinement_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_current_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    new_current_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      checks:
+        validity:
+          non_negative_percent:
+            rules:
+              min_count:
+                low:
+                  min_value: 90.0
+                medium:
+                  min_value: 80.0
+                high:
+                  min_value: 70.0
+    new_total_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    recovered:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    deaths:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    tests_performed:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    note:
+      type_snapshot:
+        column_type: STRING
+        nullable: true

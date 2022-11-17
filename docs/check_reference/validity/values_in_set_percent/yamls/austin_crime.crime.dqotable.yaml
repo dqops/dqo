@@ -6,31 +6,8 @@ spec:
     schema_name: austin_crime
     table_name: crime
   time_series:
-    mode: timestamp_column
+    mode: current_time
     time_gradient: day
-    timestamp_column: timestamp
-  checks:
-    timeliness:
-      average_delay:
-        parameters:
-          disabled: false
-          column1: clearance_date
-          column2: timestamp
-          time_scale: DAY
-        rules:
-          moving_average:
-            time_window:
-              prediction_time_window: 14
-              min_periods_with_reading: 7
-            high:
-              max_percent_above: 15.0
-              max_percent_below: 15.0
-            low:
-              max_percent_above: 5.0
-              max_percent_below: 5.0
-            medium:
-              max_percent_above: 10.0
-              max_percent_below: 10.0
   columns:
     unique_key:
       type_snapshot:
@@ -64,6 +41,19 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
+      checks:
+        validity:
+          values_in_set_percent:
+            parameters:
+              values_list: [ "UK","A","B","C","D" ]
+            rules:
+              min_count:
+                low:
+                  min_value: 80.0
+                medium:
+                  min_value: 40.0
+                high:
+                  min_value: 30.0
     latitude:
       type_snapshot:
         column_type: FLOAT64
