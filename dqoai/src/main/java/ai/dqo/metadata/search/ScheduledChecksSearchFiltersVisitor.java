@@ -15,8 +15,8 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -24,7 +24,6 @@ import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,7 +48,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject foundNodes) {
         RecurringScheduleSpec connectionSchedule = connectionSpec.getSchedule();
         assert this.filters.getSchedule() != null;
 
@@ -71,7 +70,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean tableIsEnabled = !tableSpec.isDisabled();
@@ -100,7 +99,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean columnIsEnabled = !columnSpec.isDisabled();
@@ -129,12 +128,12 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, List<HierarchyNode> foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
+        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
 
         if (enabledFilter != null) {
-            boolean checkIsEnabled = !sensorParameters.isDisabled();
+            boolean checkIsEnabled = !abstractCheckSpec.isDisabled();
             if (enabledFilter != checkIsEnabled) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
@@ -149,7 +148,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        foundNodes.add(abstractCheckSpec);
+        foundNodes.getNodes().add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
     }

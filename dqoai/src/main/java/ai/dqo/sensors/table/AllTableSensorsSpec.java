@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 package ai.dqo.sensors.table;
 
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -40,6 +40,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class AllTableSensorsSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AllTableSensorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -170,7 +171,6 @@ public class AllTableSensorsSpec extends AbstractSpec {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

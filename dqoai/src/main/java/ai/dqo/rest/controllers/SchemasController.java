@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.controllers;
 
 import ai.dqo.metadata.sources.ConnectionList;
@@ -5,10 +20,12 @@ import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.ConnectionModel;
-import ai.dqo.rest.models.SchemaModel;
+import ai.dqo.rest.models.metadata.SchemaModel;
+import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +58,13 @@ public class SchemasController {
      * @return List of schemas inside a connection.
      */
     @GetMapping("/{connectionName}/schemas")
-    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection")
+    @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SchemaModel[].class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
             @Parameter(description = "Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();

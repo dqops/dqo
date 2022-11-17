@@ -1,10 +1,14 @@
-import React from "react";
+import React from 'react';
+
 import clsx from 'clsx';
+
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 export interface TabOption {
   label: string;
   value: string;
+  tooltip?: string;
 }
 
 export interface TabProps {
@@ -14,22 +18,19 @@ export interface TabProps {
   onRemove: () => void;
 }
 
-const Tab = ({
-  tab,
-  active,
-  onChange,
-  onRemove,
-}: TabProps) => {
+const Tab = ({ tab, active, onChange, onRemove }: TabProps) => {
   const handleRemove = (e: any) => {
     e.stopPropagation();
     onRemove();
   };
 
-  return (
+  const content = (
     <div
       className={clsx(
         'text-sm leading-20 text-black px-4 py-2 cursor-pointer flex text-gray-700 font-medium space-x-4 items-center',
-        active ? 'font-semibold relative bg-white border-b-2 border-blue-600 text-blue-700 rounded-t-md shadow-sm' : '',
+        active
+          ? 'font-semibold relative bg-white border-b-2 border-blue-600 text-blue-700 rounded-t-md shadow-sm border-t border-l border-r'
+          : ''
       )}
       onClick={() => onChange && onChange(tab)}
     >
@@ -37,6 +38,20 @@ const Tab = ({
       <SvgIcon name="close" onClick={handleRemove} />
     </div>
   );
+
+  if (tab?.tooltip) {
+    return (
+      <Tooltip
+        content={tab?.tooltip}
+        className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+        placement="top-start"
+      >
+        {content}
+      </Tooltip>
+    );
+  }
+
+  return content;
 };
 
 export default Tab;

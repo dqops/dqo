@@ -17,15 +17,12 @@ package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.utils.serialization.JsonSerializer;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
 /**
  * Check execution progress listener that is reporting all operations to the console, performing a debug mode reporting.
  */
-@Component
 public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionProgressListener {
     /**
      * Creates a CLI progress listener using a terminal writer to print out the results.
@@ -60,7 +57,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     public void onExecutingSensor(ExecutingSensorEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheckHierarchyId().getLast().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
         this.terminalWriter.writeLine(String.format("Executing a sensor for a check %s on the table %s using a sensor definition %s",
                 checkName, tableName, sensorDefinitionName));
@@ -95,7 +92,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     public void onRulesExecuted(RulesExecutedEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheckHierarchyId().getLast().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
         int evaluatedRulesCount = ruleResultsTable.rowCount();
         this.terminalWriter.writeLine(String.format("Finished executing rules (thresholds) for a check %s on the table %s, verified rules count: %d",
@@ -149,7 +146,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
      * @param event Log event.
      */
     @Override
-    public void onSqlTemplateRendered(SqlTemplateRenderedRendered event) {
+    public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
     }
 
     /**

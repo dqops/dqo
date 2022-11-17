@@ -19,11 +19,11 @@ import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ai.dqo.sampledata.SampleTableMetadata;
 
 @SpringBootTest
 public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseIntegrationTest {

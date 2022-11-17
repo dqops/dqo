@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoCoreConfigurationProperties {
     private boolean printStackTrace;
+    private long lockWaitTimeoutSeconds = 15 * 60;
 
     /**
      * Prints the stack trace.
@@ -42,5 +43,21 @@ public class DqoCoreConfigurationProperties {
      */
     public void setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+    }
+
+    /**
+     * Returns the timeout in seconds to acquire a lock on shared resources.
+     * @return Timeout in seconds.
+     */
+    public long getLockWaitTimeoutSeconds() {
+        return lockWaitTimeoutSeconds;
+    }
+
+    /**
+     * Sets the timeout in seconds for waiting to acquire a shared read lock or an exclusive write lock.
+     * @param lockWaitTimeoutSeconds Timeout in seconds.
+     */
+    public void setLockWaitTimeoutSeconds(long lockWaitTimeoutSeconds) {
+        this.lockWaitTimeoutSeconds = lockWaitTimeoutSeconds;
     }
 }

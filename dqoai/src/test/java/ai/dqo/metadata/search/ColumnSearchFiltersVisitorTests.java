@@ -72,13 +72,13 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
 		this.columnSearchFilters.setConnectionName("test2");
 		this.sut = new ColumnSearchFiltersVisitor(this.columnSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptConnectionList_whenCalledForConnectionListWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject(null));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -86,13 +86,13 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
 		this.columnSearchFilters.setConnectionName("test2");
 		this.sut = new ColumnSearchFiltersVisitor(this.columnSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapperWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -100,13 +100,13 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptTableList_whenCalledForTableList_thenReturnsTraverseChildren() {
 		this.columnSearchFilters.setSchemaTableName("test2.test2");
 		this.sut = new ColumnSearchFiltersVisitor(this.columnSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptTableList_whenCalledForTableListWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject(null));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -114,27 +114,27 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptTableWrapper_whenCalledForTableWrapper_thenReturnsSkipChildren() {
 		this.columnSearchFilters.setSchemaTableName("test2.test2");
 		this.sut = new ColumnSearchFiltersVisitor(this.columnSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptTableWrapper_whenCalledForTableWrapperWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptTableSpec_whenCalledForTableSpecDisabled_thenReturnSkipChildren() {
 		this.tableSpec.setDisabled(true);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptTableSpec_whenCalledForTableSpecWithEnabled_thenReturnTraverseChildren() {
 		this.columnSearchFilters.setEnabled(true);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -142,7 +142,7 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptTableSpec_whenCalledForTableSpecWithoutEnabledAndDisabled_thenReturnSkipChildren() {
 		this.columnSearchFilters.setEnabled(false);
 		this.tableSpec.setDisabled(false);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
@@ -150,20 +150,20 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptColumnSpecMap_whenCalledForColumnSpecMap_thenReturnsTraverseChildren() {
 		this.columnSearchFilters.setColumnName("test2");
 		this.sut = new ColumnSearchFiltersVisitor(this.columnSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptColumnSpecMap_whenCalledForColumnSpecMapWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, new SearchParameterObject(null));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptColumnSpec_whenCalledForColumnSpecDisabled_thenReturnSkipChildren() {
 		this.columnSpec.setDisabled(true);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
@@ -174,7 +174,7 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
         HierarchyId hierarchyId = new HierarchyId(arr);
 		this.columnSpec.setHierarchyId(hierarchyId);
         ArrayList<HierarchyNode>list = new ArrayList<>();
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, list);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, new SearchParameterObject(list));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
@@ -182,7 +182,7 @@ public class ColumnSearchFiltersVisitorTests extends BaseTest {
     void acceptColumnSpec_whenCalledForColumnSpecWithoutEnabledAndDisabled_thenReturnSkipChildren() {
 		this.columnSearchFilters.setEnabled(false);
 		this.columnSpec.setDisabled(false);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, null);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, new SearchParameterObject(null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 }

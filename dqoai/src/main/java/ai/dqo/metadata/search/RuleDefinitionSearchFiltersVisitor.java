@@ -18,11 +18,8 @@ package ai.dqo.metadata.search;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link RuleDefinitionSearchFilters} that finds the correct nodes.
@@ -42,11 +39,11 @@ public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a list of rules.
      *
      * @param ruleDefinitionList List of rules.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter      Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, SearchParameterObject parameter) {
         String ruleNameFilter = this.filters.getRuleName();
         if (Strings.isNullOrEmpty(ruleNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -69,22 +66,22 @@ public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a rule definition wrapper (lazy loader).
      *
      * @param ruleDefinitionWrapper Rule definition wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, SearchParameterObject parameter) {
         String ruleNameFilter = this.filters.getRuleName();
         if(!this.filters.getEnabled()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (Strings.isNullOrEmpty(ruleNameFilter)) {
-            parameter.add(ruleDefinitionWrapper.getSpec());
+            parameter.getNodes().add(ruleDefinitionWrapper.getSpec());
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (StringPatternComparer.matchSearchPattern(ruleDefinitionWrapper.getRuleName(), ruleNameFilter)) {
-            parameter.add(ruleDefinitionWrapper.getSpec());
+            parameter.getNodes().add(ruleDefinitionWrapper.getSpec());
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -95,12 +92,12 @@ public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a rule definition spec (lazy loader).
      *
      * @param ruleDefinitionSpec Rule definition wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, List<HierarchyNode> parameter) {
-        parameter.add(ruleDefinitionSpec);
+    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, SearchParameterObject parameter) {
+        parameter.getNodes().add(ruleDefinitionSpec);
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

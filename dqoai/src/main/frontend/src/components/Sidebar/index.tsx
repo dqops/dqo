@@ -1,25 +1,71 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import ConnectionsTree from '../ConnectionsTree';
+import { useHistory } from 'react-router-dom';
+
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
-import { useHistory } from 'react-router-dom';
+import CustomTree from '../CustomTree';
+import { useTree } from '../../contexts/treeContext';
 
 const Sidebar = () => {
   const history = useHistory();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [isResizing, setIsResizing] = useState(false);
+  const { sidebarWidth, setSidebarWidth } = useTree();
+
+  const startResizing = useCallback(() => {
+    setIsResizing(true);
+  }, []);
+
+  const stopResizing = useCallback(() => {
+    setIsResizing(false);
+  }, []);
+
+  const resize = useCallback(
+    (mouseMoveEvent: MouseEvent) => {
+      if (isResizing) {
+        const newWidth =
+          mouseMoveEvent.clientX -
+          (sidebarRef.current as HTMLDivElement).getBoundingClientRect().left;
+        if (newWidth < 240 || newWidth > 700) return;
+
+        setSidebarWidth(newWidth);
+      }
+    },
+    [isResizing]
+  );
+
+  useEffect(() => {
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resize, stopResizing]);
 
   return (
-    <div className="fixed top-0 left-0 border-r border-gray-300 h-screen overflow-auto w-70 flex flex-col bg-white py-4">
-      <div className="px-4 flex justify-end mb-4">
+    <div
+      className="fixed top-0 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
+      ref={sidebarRef}
+      onMouseDown={(e) => e.preventDefault()}
+      style={{ width: sidebarWidth }}
+    >
+      <div className="px-4 flex mb-0">
         <Button
           label="Create new connection"
           color="primary"
           className="px-4"
           leftIcon={<SvgIcon name="add" className="mr-2 w-5" />}
-          onClick={() => history.push('/')}
+          onClick={() => history.push('/create')}
         />
       </div>
-      <ConnectionsTree />
+      <CustomTree />
+      <div
+        className="cursor-ew-resize fixed top-0 bottom-0 w-2 transform -translate-x-1/2 z-50"
+        onMouseDown={startResizing}
+        style={{ left: sidebarWidth }}
+      />
     </div>
   );
 };

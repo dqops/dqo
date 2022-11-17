@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.data.readings.factory.SensorReadingTableFactoryObjectMother;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.Table;
 
 /**
  * Object mother for SensorExecutionResult.

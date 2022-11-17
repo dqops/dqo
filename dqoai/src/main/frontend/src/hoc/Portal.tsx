@@ -15,7 +15,9 @@ const Portal = ({ children }: IPortalProps) => {
     return () => setMounted(false);
   }, []);
 
-  return mounted ? createPortal(children, document.querySelector('#modal-root') as any) : null;
+  return mounted
+    ? createPortal(children, document.querySelector('#modal-root') as any)
+    : null;
 };
 
 export default Portal;

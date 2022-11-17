@@ -18,7 +18,6 @@ package ai.dqo.execution.rules;
 import ai.dqo.BaseTest;
 import ai.dqo.data.readings.factory.SensorReadingTableFactoryObjectMother;
 import ai.dqo.data.readings.normalization.SensorNormalizedResult;
-import ai.dqo.execution.sensors.SensorExecutionResultObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

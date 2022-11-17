@@ -16,11 +16,8 @@
 package ai.dqo.core.filesystem.metadata;
 
 import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 

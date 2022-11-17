@@ -34,6 +34,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class MaxValueRuleThresholdsSpec extends AbstractRuleThresholdsSpec<MaxValueRuleParametersSpec> {
     private static final ChildHierarchyNodeFieldMapImpl<MaxValueRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleThresholdsSpec.FIELDS) {
         {

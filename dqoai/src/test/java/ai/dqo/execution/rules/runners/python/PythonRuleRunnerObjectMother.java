@@ -17,7 +17,6 @@ package ai.dqo.execution.rules.runners.python;
 
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
@@ -27,6 +26,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.BeanFactory;
 
 import java.time.LocalDateTime;

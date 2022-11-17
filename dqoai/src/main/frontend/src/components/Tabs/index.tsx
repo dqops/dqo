@@ -1,5 +1,7 @@
-import React from "react";
-import Tab, { TabOption } from "./tab";
+import React from 'react';
+
+import Tab, { TabOption } from './tab';
+import { useTree } from '../../contexts/treeContext';
 
 export interface TabsProps {
   tabs: TabOption[];
@@ -14,26 +16,28 @@ const Tabs = ({
   className,
   activeTab,
   onChange,
-  onCloseTab,
+  onCloseTab
 }: TabsProps) => {
+  const { sidebarWidth } = useTree();
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
   };
 
   return (
-    <div className={`flex ${className}`}>
-      {
-        tabs.map((tab) => (
-          <Tab
-            key={tab.value}
-            tab={tab}
-            active={activeTab === tab.value}
-            onChange={onChangeTab}
-            closable={!!onCloseTab}
-            onClose={() => onCloseTab && onCloseTab(tab.value)}
-          />
-        ))
-      }
+    <div
+      className={`flex overflow-auto pb-2 ${className}`}
+      style={{ maxWidth: `calc(100vw - ${sidebarWidth + 40}px` }}
+    >
+      {tabs.map((tab) => (
+        <Tab
+          key={tab.value}
+          tab={tab}
+          active={activeTab === tab.value}
+          onChange={onChangeTab}
+          closable={!!onCloseTab}
+          onClose={() => onCloseTab && onCloseTab(tab.value)}
+        />
+      ))}
     </div>
   );
 };

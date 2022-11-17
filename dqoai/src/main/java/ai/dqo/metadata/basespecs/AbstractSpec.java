@@ -15,26 +15,59 @@
  */
 package ai.dqo.metadata.basespecs;
 
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.*;
+import ai.dqo.utils.reflection.ClassInfo;
+import ai.dqo.utils.reflection.FieldInfo;
+import ai.dqo.utils.reflection.ReflectionService;
+import ai.dqo.utils.reflection.ReflectionServiceSingleton;
+import ai.dqo.utils.serialization.DeserializationAware;
 import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Base class for all spec classes in the tree. Provides basic dirty checking.
  */
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements HierarchyNode, YamlNotRenderWhenDefault {
+public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware {
     /**
      * Default empty field map.
      */
     public static final ChildHierarchyNodeFieldMapImpl<AbstractSpec> FIELDS = (ChildHierarchyNodeFieldMapImpl<AbstractSpec>) ChildHierarchyNodeFieldMap.empty();
 
+    /**
+     * Node hierarchy id that identifies the node within the node tree.
+     */
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private HierarchyId hierarchyId;
+
+    /**
+     * Set to true when the object was created as a result of deserialization from YAML.
+     * We can detect that the object was not simply created by a constructor, but was created by jackson.
+     */
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private boolean wasDeserialized;
+
+    /**
+     * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
+     * The user has added invalid properties. We only want to know the names of these properties for validation purposes.
+     */
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Map<String, Object> ignoredProperties;
 
     /**
      * Returns the hierarchy ID of this node.
@@ -56,6 +89,23 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
         assert hierarchyId != null;
         this.hierarchyId = hierarchyId;
 		propagateHierarchyIdToFields(hierarchyId);
+    }
+
+    /**
+     * Returns true if the object instance was created as a result of deserialization from YAML.
+     * @return True when this object instance was created by the jackson deserializer. False when it was created using the constructor.
+     */
+    public boolean isWasDeserialized() {
+        return wasDeserialized;
+    }
+
+    /**
+     * Returns a dictionary of invalid properties that were present in the YAML specification file, but were not declared in the class.
+     * Returns null when all properties were valid.
+     * @return True when undefined properties were present in the YAML file that failed the deserialization. Null when all properties were valid (declared).
+     */
+    public Map<String, Object> getIgnoredProperties() {
+        return ignoredProperties;
     }
 
     /**
@@ -169,9 +219,50 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
                     return false;
                 }
             }
-            return false; // non default child found
+            else {
+                return false; // non default child found
+            }
+        }
+
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+        List<FieldInfo> fields = myClassInfo.getFields();
+        for (FieldInfo fieldInfo : fields) {
+            ParameterDataType dataType = fieldInfo.getDataType();
+            if (dataType == ParameterDataType.object_type) {
+                continue;
+            }
+
+            Object fieldValue = fieldInfo.getRawFieldValue(this);
+            Object defaultValue = fieldInfo.getDefaultValue();
+
+            if (!Objects.equals(fieldValue, defaultValue)) {
+                return false;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Called after the object was deserialized from JSON or YAML.
+     */
+    @Override
+    public void onDeserialized() {
+        this.wasDeserialized = true;
+    }
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (this.ignoredProperties == null) {
+            this.ignoredProperties = new LinkedHashMap<>();
+        }
+        this.ignoredProperties.put(name, value);
     }
 }

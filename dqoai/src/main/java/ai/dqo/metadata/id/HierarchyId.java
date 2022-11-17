@@ -19,9 +19,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -105,6 +103,26 @@ public class HierarchyId {
         return true;
     }
 
+    /**
+     * Finds all nodes on path following child node ids in the hierarchy ID, starting from the <code>rootNode</code> node.
+     * @param rootNode Root node (start node).
+     * @return Hierarchy nodes on the path.
+     */
+    public HierarchyNode[] getNodesOnPath(HierarchyNode rootNode) {
+        HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length];
+        HierarchyNode currentNode = rootNode;
+        for (int i = 0; i < this.elements.length; i++) {
+            HierarchyNode childNode = currentNode.getChild(this.elements[i]);
+            if (childNode == null) {
+                throw new NoSuchElementException("Cannot find child named " + this.elements[i] + " on object " + currentNode);
+            }
+            nodesOnPath[i] = childNode;
+            currentNode = childNode;
+        }
+
+        return nodesOnPath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,8 +132,8 @@ public class HierarchyId {
     }
 
     /**
-     * Returns a regular 32 bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
-     * @return 32 bit hash.
+     * Returns a regular 32-bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
+     * @return 32-bit hash.
      */
     @Override
     public int hashCode() {
@@ -123,8 +141,8 @@ public class HierarchyId {
     }
 
     /**
-     * Calculate a 64 bit hash of the path.
-     * @return 64 bit hash.
+     * Calculate a 64-bit hash of the path.
+     * @return 64-bit hash.
      */
     public long hashCode64() {
         List<HashCode> elementHashes = Arrays.stream(this.elements)

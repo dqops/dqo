@@ -107,7 +107,12 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             if (streamingPythonProcess == null) {
                 String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
                 PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-                String commandLineText = virtualEnv.getPythonInterpreterPath() + " -u \"" + absolutePythonPath + "\"";
+                // TODO: DRY
+                String commandLineText = String.format(
+                        "\"%s\" -u \"%s\"",
+                        virtualEnv.getPythonInterpreterPath(),
+                        absolutePythonPath
+                );
                 streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.configurationProperties.getPython().getPythonScriptTimeoutSeconds());
                 streamingPythonProcess.startProcess(virtualEnv);
 				this.pythonModuleProcesses.put(pythonFilePathInHome, streamingPythonProcess);
@@ -143,7 +148,12 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             String fullInputText = serializeInputs(inputs);
             String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-            String commandLineText = virtualEnv.getPythonInterpreterPath() + " \"" + absolutePythonPath + "\"";
+            // TODO: Change string format with clumsy \" additions to some builder.
+            String commandLineText = String.format(
+                    "\"%s\" -u \"%s\"",
+                    virtualEnv.getPythonInterpreterPath(),
+                    absolutePythonPath
+            );
             CommandLine cmdLine = CommandLine.parse(commandLineText);
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(fullInputText.getBytes(StandardCharsets.UTF_8));

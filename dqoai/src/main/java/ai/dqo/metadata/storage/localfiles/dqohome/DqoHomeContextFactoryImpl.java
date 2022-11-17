@@ -17,8 +17,6 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
 
 import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
-import ai.dqo.metadata.storage.localfiles.userhome.FileUserHomeImpl;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.utils.serialization.YamlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -31,7 +31,8 @@ import picocli.CommandLine;
         ConnectionRemoveCliCommand.class,
         ConnectionUpdateCliCommand.class,
 		ConnectionSchemaCliCommand.class,
-		ConnectionTableCliCommand.class
+		ConnectionTableCliCommand.class,
+		ConnectionEditCliCommand.class
 })
 public class ConnectionCliCommand extends BaseCommand {
 }

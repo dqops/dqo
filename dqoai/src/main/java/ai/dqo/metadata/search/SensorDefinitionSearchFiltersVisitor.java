@@ -18,11 +18,8 @@ package ai.dqo.metadata.search;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link SensorDefinitionSearchFilters} that finds the correct nodes.
@@ -42,11 +39,11 @@ public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor 
      * Accepts a list of rules.
      *
      * @param sensorDefinitionList List of sensors.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionList, SearchParameterObject parameter) {
         String sensorNameFilter = this.filters.getSensorName();
         if (Strings.isNullOrEmpty(sensorNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -69,21 +66,21 @@ public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor 
      * Accepts a sensor definition wrapper (lazy loader).
      *
      * @param sensorDefinitionWrapper Rule definition wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, SearchParameterObject parameter) {
         String sensorNameFilter = this.filters.getSensorName();
         if(!this.filters.getEnabled()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (Strings.isNullOrEmpty(sensorNameFilter)) {
-            parameter.add(sensorDefinitionWrapper.getSpec());
+            parameter.getNodes().add(sensorDefinitionWrapper.getSpec());
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (StringPatternComparer.matchSearchPattern(sensorDefinitionWrapper.getName(), sensorNameFilter)) {
-            parameter.add(sensorDefinitionWrapper.getSpec());
+            parameter.getNodes().add(sensorDefinitionWrapper.getSpec());
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -94,12 +91,12 @@ public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor 
      * Accepts a sensor definition wrapper (lazy loader).
      *
      * @param sensorDefinitionSpec Rule definition wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, List<HierarchyNode> parameter) {
-        parameter.add(sensorDefinitionSpec);
+    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, SearchParameterObject parameter) {
+        parameter.getNodes().add(sensorDefinitionSpec);
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

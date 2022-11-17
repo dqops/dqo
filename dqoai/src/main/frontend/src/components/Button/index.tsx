@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 
 import clsx from 'clsx';
-import Loader from "../Loader";
+
+import Loader from '../Loader';
 
 interface IButtonProps {
   label?: string;
@@ -20,7 +21,7 @@ interface IButtonProps {
 
 const colorsMap = {
   primary: {
-    contained: 'bg-indigo-700 text-white',
+    contained: 'bg-indigo-700 text-white disabled:bg-gray-500',
     outlined: 'bg-white text-indigo-700 border border-indigo-700',
     text: 'bg-white text-indigo-700'
   },
@@ -43,8 +44,8 @@ const colorsMap = {
     contained: 'bg-red-500 text-white',
     outlined: 'bg-white text-red-500 border border-red-500',
     text: 'bg-white text-red-500'
-  },
-}
+  }
+};
 
 const Button = ({
   label,
@@ -58,9 +59,9 @@ const Button = ({
   color,
   variant = 'contained',
   textSize,
-  dataTestId,
+  dataTestId
 }: IButtonProps) => {
-  const classes = color ? colorsMap[color][variant] : ''
+  const classes = color ? colorsMap[color][variant] : '';
 
   return (
     <button
@@ -73,13 +74,13 @@ const Button = ({
         'rounded-lg focus:outline-none flex items-center justify-center',
         (!className || className.indexOf('py-') === -1) && 'py-2',
         (!className || className.indexOf('px-') === -1) && 'px-6',
-        { 'cursor-not-allowed': disabled },
+        { 'cursor-not-allowed': disabled }
       )}
       disabled={disabled}
       data-testid={dataTestId}
     >
       {loading ? (
-        <Loader className="w-6 h-6" />
+        <Loader className="w-6 h-6" isFull={false} />
       ) : (
         <>
           {leftIcon}
@@ -89,6 +90,6 @@ const Button = ({
       )}
     </button>
   );
-}
+};
 
 export default Button;

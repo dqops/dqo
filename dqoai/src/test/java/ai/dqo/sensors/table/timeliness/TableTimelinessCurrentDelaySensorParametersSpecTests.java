@@ -15,7 +15,6 @@
  */
 package ai.dqo.sensors.table.timeliness;
 
-import ai.dqo.sensors.table.timeliness.TableTimelinessCurrentDelaySensorParametersSpec;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
@@ -25,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Deprecated
 public class TableTimelinessCurrentDelaySensorParametersSpecTests extends BaseTest {
     private TableTimelinessCurrentDelaySensorParametersSpec sut;
 

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,7 +44,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
     private BuiltInListFormats valuesType = BuiltInListFormats.STRING;
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private ArrayList valuesList; // TODO: use a List
+    private List<String> valuesList;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -86,7 +87,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
      * Returns given values from user.
      * @return values.
      */
-    public ArrayList getValuesList() {
+    public List<String> getValuesList() {
         return valuesList;
     }
 
@@ -94,27 +95,8 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpec extends Abstra
      * Sets a List given from user.
      * @param valuesList values given from user.
      */
-    public void setValuesList(ArrayList valuesList) {
+    public void setValuesList(List<String> valuesList) {
         this.setDirtyIf(!Objects.equals(this.valuesList, valuesList));
         this.valuesList = valuesList;
-    }
-
-    /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     *
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     * false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @Override
-    public boolean hasNonNullSimpleFields() {
-        return this.valuesType != null ||
-                this.valuesList != null;
     }
 }

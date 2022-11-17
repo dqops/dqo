@@ -15,7 +15,12 @@
  */
 package ai.dqo.utils.serialization;
 
-public class YamlTestable {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public class YamlTestable implements DeserializationAware {
+    @JsonIgnore
+    public boolean wasOnDeserializedCalled;
+
     private String field1;
     private int int1;
 
@@ -33,5 +38,13 @@ public class YamlTestable {
 
     public void setInt1(int int1) {
         this.int1 = int1;
+    }
+
+    /**
+     * Called after the object was deserialized from JSON or YAML.
+     */
+    @Override
+    public void onDeserialized() {
+        this.wasOnDeserializedCalled = true;
     }
 }

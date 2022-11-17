@@ -15,8 +15,8 @@
  */
 package ai.dqo.cli.commands.table.impl;
 
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import tech.tablesaw.api.Table;
 
 /**
@@ -45,9 +45,11 @@ public interface TableService {
      * @param connectionName Connection name.
      * @param tableName Table name filter.
      * @param tabularOutputFormat tabular output format.
+     * @param dimensions Dimensions filter.
+     * @param labels Labels filter.
      * @return Cli operation status.
      */
-	CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat);
+	CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels);
 
     /**
      * Adds a table to the connection from a given schema and table name.

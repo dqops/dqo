@@ -101,20 +101,20 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		this.sut.getSpec().getParams().put("p1", "val");
+		this.sut.getSpec().getParameters().put("p1", "val");
 		this.sut.flush();
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
         FileSensorDefinitionWrapperImpl sut2 = new FileSensorDefinitionWrapperImpl(fileCheckFolder, this.yamlSerializer);
         SensorDefinitionSpec spec2 = sut2.getSpec();
-        Assertions.assertEquals("val", spec2.getParams().get("p1"));
+        Assertions.assertEquals("val", spec2.getParameters().get("p1"));
     }
 
     @Test
     void flush_whenExistingWasMarkedForDeletion_thenDeletesConnectionFromDisk() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -133,7 +133,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -147,7 +147,7 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        spec.getParameters().put("param1", "val1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();

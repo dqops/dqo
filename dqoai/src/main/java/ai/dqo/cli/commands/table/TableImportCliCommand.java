@@ -16,14 +16,15 @@
 package ai.dqo.cli.commands.table;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.commands.table.impl.TableImportFailedException;
 import ai.dqo.cli.commands.table.impl.TableService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.SchemaNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.StringPatternComparer;
 import com.google.common.base.Strings;
@@ -42,14 +43,17 @@ import tech.tablesaw.api.Table;
 public class TableImportCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
+    private final TerminalTableWritter terminalTableWriter;
     private final TableService tableImportService;
 
     @Autowired
     public TableImportCliCommand(TerminalReader terminalReader,
 								 TerminalWriter terminalWriter,
+                                 TerminalTableWritter terminalTableWriter,
 								 TableService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
+        this.terminalTableWriter = terminalTableWriter;
         this.tableImportService = tableImportService;
     }
 
@@ -147,8 +151,8 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
                 return -1;
             }
 
-            Integer schemaIndex = this.terminalReader.pickTableRow("Select the schema (database, etc.) from which tables will be imported:",
-                    schemaTable, null, false);
+            Integer schemaIndex = this.terminalTableWriter.pickTableRowWithPaging("Select the schema (database, etc.) from which tables will be imported:",
+                    schemaTable);
             if (schemaIndex == null) {
 				this.terminalWriter.writeLine("No schema was selected.");
                 return -1;

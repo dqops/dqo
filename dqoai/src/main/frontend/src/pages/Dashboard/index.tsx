@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import MainLayout from "../../components/MainLayout";
-import SelectDatabase from '../../components/Dashboard/SelectDatabase';
+import React, { useState } from 'react';
+
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
-import {DATABASE_TYPE} from '../../shared/enums';
+import SelectDatabase from '../../components/Dashboard/SelectDatabase';
+import MainLayout from '../../components/MainLayout';
+import { DATABASE_TYPE } from '../../shared/enums';
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);
@@ -11,14 +12,14 @@ const Dashboard = () => {
   const onSelect = (db: DATABASE_TYPE) => {
     setDatabase(db);
     setStep(1);
-  }
+  };
 
   const onPrev = () => {
     if (step > 0) {
       setStep(step - 1);
     }
   };
-  
+
   const onNext = () => {
     if (step < 1) {
       setStep(step + 1);
@@ -27,16 +28,10 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      {
-        step === 0 && (
-          <SelectDatabase onSelect={onSelect} />
-        )
-      }
-      {
-        step === 1 && (
-          <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
-        )
-      }
+      {step === 0 && <SelectDatabase onSelect={onSelect} />}
+      {step === 1 && (
+        <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
+      )}
     </MainLayout>
   );
 };

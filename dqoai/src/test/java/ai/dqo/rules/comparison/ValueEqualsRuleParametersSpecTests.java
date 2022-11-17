@@ -101,25 +101,6 @@ public class ValueEqualsRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
-    void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void isDirty_whenExpectedValueSet_thenIsDirtyIsTrue() {
 		this.sut.setExpectedValue(1);
         Assertions.assertEquals(1, this.sut.getExpectedValue());

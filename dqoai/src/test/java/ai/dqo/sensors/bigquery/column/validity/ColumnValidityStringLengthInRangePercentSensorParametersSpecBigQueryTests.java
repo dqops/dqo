@@ -16,6 +16,7 @@
 package ai.dqo.sensors.bigquery.column.validity;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.column.validity.ColumnValidityStringLengthInRangePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -28,7 +29,6 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.validity.ColumnValidityStringLengthInRangePercentSensorParametersSpec;
-import ai.dqo.checks.column.validity.ColumnValidityStringLengthInRangePercentCheckSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -50,27 +50,27 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> params = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
 
     @JsonIgnore
-    private LinkedHashMap<String, String> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
 
     /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParams() {
-        return params;
+    public LinkedHashMap<String, String> getParameters() {
+        return parameters;
     }
 
     /**
      * Sets a dictionary of parameters passed to the rule.
-     * @param params Key/value dictionary with extra parameters.
+     * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParams(LinkedHashMap<String, String> params) {
-		setDirtyIf(!Objects.equals(this.params, params));
-        this.params = params;
-		this.originalParams = (LinkedHashMap<String, String>) params.clone();
+    public void setParameters(LinkedHashMap<String, String> parameters) {
+		setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters;
+		this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
     }
 
     /**
@@ -114,7 +114,7 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      */
     @Override
     public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.params, this.originalParams);
+        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
     }
 
     /**
@@ -124,7 +124,7 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     @Override
     public void clearDirty(boolean propagateToChildren) {
         super.clearDirty(propagateToChildren);
-		this.originalParams = (LinkedHashMap<String, String>) this.params.clone();
+		this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
     }
 
     /**
@@ -142,7 +142,6 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

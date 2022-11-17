@@ -16,16 +16,15 @@
 package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ConnectionSpec;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
