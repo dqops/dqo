@@ -20,8 +20,6 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -61,9 +59,11 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     }
 
     @JsonPropertyDescription("Physical schema name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String schemaName;
 
     @JsonPropertyDescription("Physical table name in the target database.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String tableName;
 
     @JsonPropertyDescription("Dictionary of additional properties (key/value) that may be used to identify a target table or could be useful when running sensor queries.")

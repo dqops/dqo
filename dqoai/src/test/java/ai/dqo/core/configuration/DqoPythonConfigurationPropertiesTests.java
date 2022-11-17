@@ -40,8 +40,8 @@ public class DqoPythonConfigurationPropertiesTests extends BaseTest {
     }
 
     @Test
-    void getInterpreter_whenRetrieved_defaultIsPython() {
-        Assertions.assertEquals("python", this.sut.getInterpreter());
+    void getInterpreter_whenRetrieved_thenReturnsAllExpectedPythonInterpreterNames() {
+        Assertions.assertEquals("python3,python3.exe,python,python.exe", this.sut.getInterpreter());
     }
 
     @Test

@@ -19,11 +19,13 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.Date;
 import java.util.Objects;
@@ -133,5 +135,23 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned.");
         }
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isDefault() {
+        if (!Strings.isNullOrEmpty(this.comment) ||
+                this.date != null ||
+                !Strings.isNullOrEmpty(this.commentBy)) {
+            return false;
+        }
+
+        return true;
     }
 }

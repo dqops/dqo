@@ -15,12 +15,11 @@
  */
 package ai.dqo.checks.column.uniqueness;
 
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,8 +36,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BuiltInColumnUniquenessChecksSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+@Deprecated
+public class BuiltInColumnUniquenessChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
 			put("distinct_count", o -> o.distinctCount);
 			put("distinct_count_percent", o -> o.distinctCountPercent);
@@ -97,16 +97,5 @@ public class BuiltInColumnUniquenessChecksSpec extends AbstractSpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Calls a visitor (using a visitor design pattern) that returns a result.
-     *
-     * @param visitor   Visitor instance.
-     * @param parameter Additional parameter that will be passed back to the visitor.
-     */
-    @Override
-    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return visitor.accept(this, parameter);
     }
 }

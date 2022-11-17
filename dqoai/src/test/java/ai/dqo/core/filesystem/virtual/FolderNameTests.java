@@ -16,7 +16,6 @@
 package ai.dqo.core.filesystem.virtual;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.filesystem.virtual.FolderName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

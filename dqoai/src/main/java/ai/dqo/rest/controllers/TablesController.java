@@ -1,17 +1,35 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
+import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
-import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.metadata.TableModel;
+import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,10 +59,22 @@ import java.util.stream.Stream;
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
     private UserHomeContextFactory userHomeContextFactory;
+    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
 
+    /**
+     * Creates an instance of a controller by injecting dependencies.
+     * @param userHomeContextFactory      User home context factory.
+     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
+     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
+     */
     @Autowired
-    public TablesController(UserHomeContextFactory userHomeContextFactory) {
+    public TablesController(UserHomeContextFactory userHomeContextFactory,
+                            SpecToUiCheckMappingService specToUiCheckMappingService,
+                            UiToSpecCheckMappingService uiToSpecCheckMappingService) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
     }
 
     /**
@@ -211,21 +241,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the dimension's configuration for a table given a connection name and a table names.
+     * Retrieves the data streams configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Dimension's configuration for the requested table.
+     * @return Data streams configuration for the requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/dimensions")
-    @ApiOperation(value = "getTableDimensions", notes = "Return the dimension's configuration for a table", response = DimensionsConfigurationSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
+    @ApiOperation(value = "getTableDataStreamsMapping", notes = "Return the data streams mapping for a table", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table dimension's configuration returned", response = DimensionsConfigurationSpec.class),
+            @ApiResponse(code = 200, message = "Data streams mapping for a table returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DimensionsConfigurationSpec>> getTableDimensions(
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -245,9 +275,9 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        DimensionsConfigurationSpec dimensions = tableSpec.getDimensions();
+        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dimensions), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
     }
 
     /**
@@ -378,14 +408,14 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of all table level data quality checks on a table", response = TableCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of all table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableAdHocCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableCheckCategoriesSpec>> getTableChecks(
+    public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -405,9 +435,53 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
 
         return new ResponseEntity<>(Mono.just(checks), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality checks for a UI friendly mode on a table given a connection name and a table names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return UI friendly data quality check list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
+    @ApiOperation(value = "getTableChecksUI", notes = "Return a UI friendly model of all table level data quality checks on a table", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
+        if (checks == null) {
+            checks = new TableAdHocCheckCategoriesSpec();
+        }
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -644,29 +718,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the dimension configuration of an existing table.
-     * @param connectionName              Connection name.
-     * @param schemaName                  Schema name.
-     * @param tableName                   Table name.
-     * @param dimensionsConfigurationSpec New dimension configuration or null (an empty optional).
+     * Updates the data streams mapping of an existing table.
+     * @param connectionName         Connection name.
+     * @param schemaName             Schema name.
+     * @param tableName              Table name.
+     * @param dataStreamsMappingSpec New data streams mapping or null (an empty optional).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/dimensions")
-    @ApiOperation(value = "updateTableDimensions", notes = "Updates the dimensions configuration of an existing table.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
+    @ApiOperation(value = "updateTableDataStreamsMapping", notes = "Updates the data streams mapping at a table level.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table dimension's configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Table's data streams mapping successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDimensions(
+    public ResponseEntity<Mono<?>> updateTableDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Dimension configuration to store or an empty object to clear the dimension configuration")
-            @RequestBody Optional<DimensionsConfigurationSpec> dimensionsConfigurationSpec) {
+            @Parameter(description = "Data streams mapping to store or an empty object to clear the data streams mapping on a table level")
+            @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -690,10 +764,10 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        if (dimensionsConfigurationSpec.isPresent()) {
-            tableSpec.setDimensions(dimensionsConfigurationSpec.get());
+        if (dataStreamsMappingSpec.isPresent()) {
+            tableSpec.setDataStreams(dataStreamsMappingSpec.get());
         } else {
-            tableSpec.setDimensions(new DimensionsConfigurationSpec());
+            tableSpec.setDataStreams(new DataStreamMappingSpec());
         }
         userHomeContext.flush();
 
@@ -894,7 +968,7 @@ public class TablesController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Configuration of table level data quality checks to store or an empty object to remove all data quality checks on the table level (column level checks are preserved).")
-            @RequestBody Optional<TableCheckCategoriesSpec> tableCheckCategoriesSpec) {
+            @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -921,7 +995,63 @@ public class TablesController {
         if (tableCheckCategoriesSpec.isPresent()) {
             tableSpec.setChecks(tableCheckCategoriesSpec.get());
         } else {
-            tableSpec.setChecks(new TableCheckCategoriesSpec()); // it is never empty...
+            tableSpec.setChecks(new TableAdHocCheckCategoriesSpec()); // it is never empty...
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the data quality check specification on an existing table from a check UI model with a patch of changes.
+     * @param connectionName           Connection name.
+     * @param schemaName               Schema name.
+     * @param tableName                Table name.
+     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
+    @ApiOperation(value = "updateTableChecksUI", notes = "Updates the data quality checks from a UI model that contains a patch with changes.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality checks successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTableChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "UI model with the changes to be applied to the data quality checks configuration.")
+            @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (uiAllChecksModel.isPresent()) {
+            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableSpec.getChecks());
+        } else {
+            // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }
         userHomeContext.flush();
 

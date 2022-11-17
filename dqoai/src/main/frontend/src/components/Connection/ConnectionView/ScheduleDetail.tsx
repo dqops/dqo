@@ -1,35 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
-import { ConnectionApiClient } from '../../../services/apiClient';
-import { AxiosResponse } from 'axios';
 
 interface IScheduleDetailProps {
-  connectionName: string;
+  schedule?: RecurringScheduleSpec;
+  setSchedule: (value: RecurringScheduleSpec) => void;
 }
 
-const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
+const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
+  schedule,
+  setSchedule
+}) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const [schedule, setSchedule] = useState<RecurringScheduleSpec>();
-
-  const fetchSchedule = async () => {
-    try {
-      const res: AxiosResponse<RecurringScheduleSpec> =
-        await ConnectionApiClient.getConnectionSchedule(connectionName);
-      setSchedule(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchSchedule().then();
-  }, []);
 
   const handleChange = (obj: any) => {
     setSchedule({
@@ -38,17 +25,40 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
     });
   };
 
-  useEffect(() => {
-    if (mode === 'minutes') {
+  const onChangeMode = (e: any) => {
+    setMode(e.target.value);
+
+    if (e.target.value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
     }
-    if (mode === 'hour') {
+    if (e.target.value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
     }
-    if (mode === 'day') {
+    if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
     }
-  }, [minutes, hour, mode]);
+  };
+
+  const onChangeMinutes = (val: number) => {
+    if (mode === 'minutes') {
+      handleChange({ cron_expression: `*/${val} * * * *` });
+    }
+    if (mode === 'hour') {
+      handleChange({ cron_expression: `${val} * * * *` });
+    }
+    if (mode === 'day') {
+      handleChange({ cron_expression: `${hour} ${val} * * *` });
+    }
+    setMinutes(val);
+  };
+
+  const onChangeHour = (val: number) => {
+    if (mode === 'day') {
+      handleChange({ cron_expression: `${val} ${minutes} * * *` });
+    }
+    setHour(val);
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6">
@@ -71,8 +81,8 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={schedule?.disable}
-              onChange={(value) => handleChange({ disable: value })}
+              checked={schedule?.disabled}
+              onChange={(value) => handleChange({ disabled: value })}
             />
           </td>
         </tr>
@@ -84,7 +94,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           value="minutes"
           label="Run every X minutes"
           checked={mode === 'minutes'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'minutes' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -93,7 +103,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
             <div>minutes</div>
           </div>
@@ -104,7 +114,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           label="Run every hour"
           value="hour"
           checked={mode === 'hour'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'hour' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -113,7 +123,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
             <div>minutes past hour</div>
           </div>
@@ -124,18 +134,23 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           label="Run every day"
           value="day"
           checked={mode === 'day'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={onChangeMode}
         />
         {mode === 'day' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
             <div>At</div>
-            <NumberInput min={0} max={60} value={hour} onChange={setHour} />
+            <NumberInput
+              min={0}
+              max={60}
+              value={hour}
+              onChange={onChangeHour}
+            />
             <div>:</div>
             <NumberInput
               min={0}
               max={60}
               value={minutes}
-              onChange={setMinutes}
+              onChange={onChangeMinutes}
             />
           </div>
         )}

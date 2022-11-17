@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -82,24 +83,5 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpec extends Abstrac
     public void setCustomRegex(String customRegex) {
         this.setDirtyIf(!Objects.equals(this.customRegex, customRegex));
         this.customRegex = customRegex;
-    }
-
-    /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     *
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     * false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @Override
-    public boolean hasNonNullSimpleFields() {
-        return this.namedRegex != null ||
-                this.customRegex != null;
     }
 }

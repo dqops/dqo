@@ -37,6 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class TableValidityRowCountRulesSpec extends AbstractRuleSetSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableValidityRowCountRulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleSetSpec.FIELDS) {
         {

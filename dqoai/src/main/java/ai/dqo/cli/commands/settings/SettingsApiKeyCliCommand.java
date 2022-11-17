@@ -16,8 +16,8 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
-import ai.dqo.cli.commands.settings.apikey.SettingsApiKeySetCliCommand;
 import ai.dqo.cli.commands.settings.apikey.SettingsApiKeyRemoveCliCommand;
+import ai.dqo.cli.commands.settings.apikey.SettingsApiKeySetCliCommand;
 import ai.dqo.cli.commands.settings.apikey.SettingsApiKeyShowCliCommand;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

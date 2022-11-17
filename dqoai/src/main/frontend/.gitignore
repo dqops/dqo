@@ -25,3 +25,6 @@ yarn-error.log*
 # Tailwind processed CSS 
 index.css
 /node
+
+# npm
+package-lock.json

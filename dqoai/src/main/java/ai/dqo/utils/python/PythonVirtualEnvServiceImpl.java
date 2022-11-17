@@ -19,13 +19,16 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -86,10 +89,16 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      * Initializes a python environment.
      */
     public void initializePythonVirtualEnv() {
+        String absolutePythonPath = findAbsolutePythonPath();
+        if (absolutePythonPath == null) {
+            throw new PythonExecutionException("Failed to initialize Python venv: cannot find python interpreter on the PATH");
+        }
+
         try {
             String virtualEnvPath = this.getVEnvPath().toAbsolutePath().toString();
             Runtime runtime = Runtime.getRuntime();
-            String[] arguments = {this.pythonConfigurationProperties.getInterpreter(), "-m", "venv", virtualEnvPath};
+
+            String[] arguments = {absolutePythonPath, "-m", "venv", virtualEnvPath};
             Process envProcess = runtime.exec(arguments);
             if (!envProcess.waitFor(30000, TimeUnit.MILLISECONDS)) {
                 throw new PythonExecutionException("Command has not finished: " + String.join(" ", arguments));
@@ -126,17 +135,20 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
         PythonVirtualEnv pythonVirtualEnv = new PythonVirtualEnv();
         pythonVirtualEnv.setVirtualEnvPath(vEnvPath);
         HashMap<String, String> environmentVariables = pythonVirtualEnv.getEnvironmentVariables();
+
         if (SystemUtils.IS_OS_WINDOWS) {
             environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
             Path binPath = vEnvPath.resolve("Scripts");
             environmentVariables.put("PATH", binPath + ";" + System.getenv("PATH"));
-            pythonVirtualEnv.setPythonInterpreterPath(binPath.resolve("python.exe").toString());
+            Path interpreterPath = findInterpreterPath(binPath);
+            pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
         }
         else {
             environmentVariables.put("VIRTUAL_ENV", vEnvPath.toString());
             Path binPath = vEnvPath.resolve("bin");
             environmentVariables.put("PATH", binPath + ":" + System.getenv("PATH"));
-            pythonVirtualEnv.setPythonInterpreterPath(binPath.resolve("python").toString());
+            Path interpreterPath = findInterpreterPath(binPath);
+            pythonVirtualEnv.setPythonInterpreterPath(interpreterPath.toString());
         }
 
 		installDqoHomePipRequirements(pythonVirtualEnv);
@@ -144,6 +156,43 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
 
         this.pythonVirtualEnv = pythonVirtualEnv;
         return pythonVirtualEnv;
+    }
+
+    /**
+     * Returns a python's directory path.
+     * @param directoryPath
+     * @return Python's directory path
+     */
+    public Path findInterpreterPath(Path directoryPath) {
+        String[] pythonInterpreters = StringUtils.split(pythonConfigurationProperties.getInterpreter(), ',');
+
+        for (String pythonInterpreter: pythonInterpreters) {
+            Path pythonPath = directoryPath.resolve(pythonInterpreter);
+            File pythonInterpreterFile = pythonPath.toFile();
+
+            if (pythonInterpreterFile.exists() && pythonInterpreterFile.canExecute()) {
+                return pythonPath;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns an absolute python's interpreter path.
+     * @return Python's interpreter absolute path
+     */
+    public String findAbsolutePythonPath() {
+        String pathEnv = System.getenv("PATH");
+        String[] pathDirectories = StringUtils.split(pathEnv, File.pathSeparatorChar);
+        for (String pathDirectory: pathDirectories) {
+            Path dirPath = Path.of(pathDirectory);
+            Path interpreterPath = findInterpreterPath(dirPath);
+
+            if (interpreterPath != null) {
+                return interpreterPath.toString();
+            }
+        }
+        return null;
     }
 
     /**

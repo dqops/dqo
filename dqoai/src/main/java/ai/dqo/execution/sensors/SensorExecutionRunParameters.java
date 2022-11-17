@@ -15,8 +15,10 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -42,9 +44,11 @@ public class SensorExecutionRunParameters {
     private ConnectionSpec connection;
     private TableSpec table;
     private ColumnSpec column; // may be null
-    private HierarchyId checkHierarchyId;
+    private CheckType checkType;
+    @JsonIgnore
+    private AbstractCheckSpec<?,?> check;
     private TimeSeriesConfigurationSpec timeSeries;
-    private DimensionsConfigurationSpec dimensions;
+    private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
@@ -57,9 +61,10 @@ public class SensorExecutionRunParameters {
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Column specification.
-     * @param checkHierarchyId Check hierarchy id to identify the check.
+     * @param check Check specification.
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeries Effective time series configuration.
-     * @param dimensions Effective dimensions configuration.
+     * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      */
@@ -67,17 +72,19 @@ public class SensorExecutionRunParameters {
 			ConnectionSpec connection,
 			TableSpec table,
 			ColumnSpec column,
-			HierarchyId checkHierarchyId,
+			AbstractCheckSpec check,
+            CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
-            DimensionsConfigurationSpec dimensions,
+            DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings) {
         this.connection = connection;
         this.table = table;
         this.column = column;
-        this.checkHierarchyId = checkHierarchyId;
+        this.check = check;
+        this.checkType = checkType;
         this.timeSeries = timeSeries;
-        this.dimensions = dimensions;
+        this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
         this.connectionTimeZoneId = connection.getJavaTimeZoneId();
@@ -132,19 +139,35 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Check hierarchy id to identify the check.
-     * @return Check id.
+     * Returns the data quality check specification.
+     * @return Data quality check specification.
      */
-    public HierarchyId getCheckHierarchyId() {
-        return checkHierarchyId;
+    public AbstractCheckSpec<?, ?> getCheck() {
+        return check;
     }
 
     /**
-     * Sets the check hierarchy id.
-     * @param checkHierarchyId Check hierarchy id.
+     * Sets the data quality check specification.
+     * @param check Check specification.
      */
-    public void setCheckHierarchyId(HierarchyId checkHierarchyId) {
-        this.checkHierarchyId = checkHierarchyId;
+    public void setCheck(AbstractCheckSpec<?, ?> check) {
+        this.check = check;
+    }
+
+    /**
+     * Returns the check type (adhoc, checkpoint, partitioned).
+     * @return Check type.
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the check type (adhoc, checkpoint, partitioned).
+     * @param checkType Check type.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
     }
 
     /**
@@ -164,19 +187,19 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the effective dimensions configuration.
-     * @return Effective dimensions configuration.
+     * Returns the effective data streams configuration.
+     * @return Effective data streams configuration.
      */
-    public DimensionsConfigurationSpec getDimensions() {
-        return dimensions;
+    public DataStreamMappingSpec getDataStreams() {
+        return dataStreams;
     }
 
     /**
-     * Sets the effective time series configuration.
-     * @param dimensions Effective time series configuration.
+     * Sets the effective data streams configuration.
+     * @param dataStreams Effective data streams configuration.
      */
-    public void setDimensions(DimensionsConfigurationSpec dimensions) {
-        this.dimensions = dimensions;
+    public void setDataStreams(DataStreamMappingSpec dataStreams) {
+        this.dataStreams = dataStreams;
     }
 
     /**

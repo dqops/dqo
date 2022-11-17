@@ -1,14 +1,32 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
+import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
@@ -39,10 +57,22 @@ import java.util.stream.Stream;
 @Api(value = "Columns", description = "Manages columns inside a table")
 public class ColumnsController {
     private UserHomeContextFactory userHomeContextFactory;
+    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
 
+    /**
+     * Creates a columns rest controller.
+     * @param userHomeContextFactory      User home context factory.
+     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
+     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
+     */
     @Autowired
-    public ColumnsController(UserHomeContextFactory userHomeContextFactory) {
+    public ColumnsController(UserHomeContextFactory userHomeContextFactory,
+                             SpecToUiCheckMappingService specToUiCheckMappingService,
+                             UiToSpecCheckMappingService uiToSpecCheckMappingService) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
     }
 
     /**
@@ -379,22 +409,23 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves the configuration of an overridden dimension on a column given a connection, table add column names.
+     * Retrieves the configuration of an overridden data streams mapping on a column given a connection, table add column names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Overridden dimension configuration on a column.
+     * @return Overridden data streams configuration on a column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/dimensionoverride")
-    @ApiOperation(value = "getColumnDimensionsOverride", notes = "Return the configuration of overridden dimensions on a column", response = DimensionsConfigurationSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/datastreamsoverride")
+    @ApiOperation(value = "getColumnDataStreamsOverride", notes = "Return the configuration of overridden data streams on a column", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of overridden dimensions on a column returned", response = DimensionsConfigurationSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of overridden data streams on a column returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DimensionsConfigurationSpec>> getColumnDimensionsOverride(
+    @Deprecated
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getColumnDataStreamsOverride(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
@@ -420,9 +451,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        DimensionsConfigurationSpec dimensionsOverride = columnSpec.getDimensionsOverride();
+        DataStreamMappingSpec dataStreamsOverride = columnSpec.getDataStreamsOverride();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dimensionsOverride), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsOverride), HttpStatus.OK); // 200
     }
 
     /**
@@ -434,14 +465,14 @@ public class ColumnsController {
      * @return Column level data quality checks on a column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
-    @ApiOperation(value = "getColumnChecks", notes = "Return the configuration of column level data quality checks on a column", response = ColumnCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnChecks", notes = "Return the configuration of column level data quality checks on a column", response = ColumnAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of column level data quality checks on a column returned", response = ColumnCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of column level data quality checks on a column returned", response = ColumnAdHocCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnCheckCategoriesSpec>> getColumnChecks(
+    public ResponseEntity<Mono<ColumnAdHocCheckCategoriesSpec>> getColumnChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
@@ -467,9 +498,60 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckCategoriesSpec checks = columnSpec.getChecks();
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
 
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a UI friendly model of column level data quality checks on a column given a connection, table add column names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return UI friendly data quality check list on a requested column.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checksui")
+    @ApiOperation(value = "getColumnChecksUI", notes = "Return a UI friendly model of column level data quality checks on a column", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UI model of column level data quality checks on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getColumnChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Column name") @PathVariable String columnName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
+        if (checks == null) {
+            checks = new ColumnAdHocCheckCategoriesSpec();
+        }
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
+
+        return new ResponseEntity<>(Mono.justOrEmpty(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -728,36 +810,38 @@ public class ColumnsController {
         } else {
             columnSpec.setScheduleOverride(null);
         }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
-     * Updates the configuration of the overridden dimensions on a column.
+     * Updates the configuration of the overridden data streams configuration on a column.
      * @param connectionName              Connection name.
      * @param schemaName                  Schema name.
      * @param tableName                   Table name.
      * @param columnName                  Column name.
-     * @param dimensionsConfigurationSpec Overridden dimension's configuration to store or an empty optional to clear the dimension's configuration on a column.
+     * @param dataStreamsConfigurationSpec Overridden data streams configuration to store or an empty optional to clear the data streams configuration on a column.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/dimensionsoverride")
-    @ApiOperation(value = "updateColumnDimensionsOverride", notes = "Updates the overridden dimension's configuration on a column.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/datastreamsoverride")
+    @ApiOperation(value = "updateColumnDataStreamsOverride", notes = "Updates the overridden data streams configuration on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column's overridden dimension's configuration successfully updated"),
+            @ApiResponse(code = 204, message = "Column's overridden data streams configuration successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnDimensionsOverride(
+    @Deprecated
+    public ResponseEntity<Mono<?>> updateColumnDataStreamsOverride(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
-            @Parameter(description = "Overridden dimension's configuration or an empty object to clear the customized dimensions from the column level")
-            @RequestBody Optional<DimensionsConfigurationSpec> dimensionsConfigurationSpec) {
+            @Parameter(description = "Overridden data streams configuration or an empty object to clear the customized data streams configuration from the column level")
+            @RequestBody Optional<DataStreamMappingSpec> dataStreamsConfigurationSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -788,11 +872,12 @@ public class ColumnsController {
         }
 
         // TODO: validate the columnSpec
-        if (dimensionsConfigurationSpec.isPresent()) {
-            columnSpec.setDimensionsOverride(dimensionsConfigurationSpec.get());
+        if (dataStreamsConfigurationSpec.isPresent()) {
+            columnSpec.setDataStreamsOverride(dataStreamsConfigurationSpec.get());
         } else {
-            columnSpec.setDimensionsOverride(null);
+            columnSpec.setDataStreamsOverride(null);
         }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
@@ -858,6 +943,7 @@ public class ColumnsController {
         } else {
             columnSpec.setTimeSeriesOverride(null);
         }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
@@ -923,6 +1009,7 @@ public class ColumnsController {
         } else {
             columnSpec.setLabels(null);
         }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
@@ -988,6 +1075,7 @@ public class ColumnsController {
         } else {
             columnSpec.setComments(null);
         }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
@@ -1017,7 +1105,7 @@ public class ColumnsController {
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
             @Parameter(description = "Configuration of column level data quality checks to configure on a column or an empty object to clear the list of assigned data quality checks on the column")
-            @RequestBody Optional<ColumnCheckCategoriesSpec> columnCheckCategoriesSpec) {
+            @RequestBody Optional<ColumnAdHocCheckCategoriesSpec> columnCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1053,6 +1141,81 @@ public class ColumnsController {
         } else {
             columnSpec.setChecks(null);
         }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the configuration of column level data quality checks configured on a column from a UI friendly model.
+     * @param connectionName            Connection name.
+     * @param schemaName                Schema name.
+     * @param tableName                 Table name.
+     * @param columnName                Column name.
+     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checksui")
+    @ApiOperation(value = "updateColumnChecksUI", notes = "Updates configuration of column level data quality checks on a column from a UI friendly model.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Column level data quality checks successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateColumnChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Column name") @PathVariable String columnName,
+            @Parameter(description = "UI model with the changes to be applied to the data quality checks configuration")
+            @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName) ||
+                Strings.isNullOrEmpty(columnName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpecMap columns = tableSpec.getColumns();
+        ColumnSpec columnSpec = columns.get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
+        }
+
+        // TODO: validate the columnSpec
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
+        if (checks == null) {
+            checks = new ColumnAdHocCheckCategoriesSpec();
+        }
+
+        if (uiAllChecksModel.isPresent()) {
+            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checks);
+            if (!checks.isDefault()) {
+                columnSpec.setChecks(checks);
+            }
+        } else {
+            // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
+        }
+        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }

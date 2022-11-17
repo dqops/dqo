@@ -33,25 +33,6 @@ public class AbstractRuleParametersSpecTests extends BaseTest {
 		this.sut = new TestableAbstractRuleParametersSpec();
     }
 
-    @Test
-    void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
     public class TestableAbstractRuleParametersSpec extends AbstractRuleParametersSpec {
 
         /**

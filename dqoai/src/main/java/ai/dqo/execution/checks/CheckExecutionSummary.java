@@ -28,12 +28,11 @@ import tech.tablesaw.api.Table;
 public class CheckExecutionSummary {
     private final StringColumn connectionColumn;
     private final StringColumn tableColumn;
-//    private final LongColumn tableHashIdColumn;
     private final IntColumn checksExecutedColumn;
     private final IntColumn validResultsColumn;
-    private final IntColumn lowSeverityAlertsColumn;
-    private final IntColumn mediumSeverityAlertsColumn;
-    private final IntColumn highSeverityAlertsColumn;
+    private final IntColumn warningsCountColumn;
+    private final IntColumn errorsCountColumn;
+    private final IntColumn fatalErrorsCountColumn;
     private final IntColumn sensorResultsColumn;
     private final Table summaryTable;
 
@@ -46,20 +45,18 @@ public class CheckExecutionSummary {
 		this.summaryTable.addColumns(connectionColumn);
 		tableColumn = StringColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
-//        tableHashIdColumn = LongColumn.create("Table hash id");
-//        this.summaryTable.addColumns(tableHashIdColumn);
 		checksExecutedColumn = IntColumn.create("Checks");
 		this.summaryTable.addColumns(checksExecutedColumn);
 		sensorResultsColumn = IntColumn.create("Sensor results");
 		this.summaryTable.addColumns(sensorResultsColumn);
 		validResultsColumn = IntColumn.create("Valid results");
 		this.summaryTable.addColumns(validResultsColumn);
-		lowSeverityAlertsColumn = IntColumn.create("Alerts (low)");
-		this.summaryTable.addColumns(lowSeverityAlertsColumn);
-		mediumSeverityAlertsColumn = IntColumn.create("Alerts (medium)");
-		this.summaryTable.addColumns(mediumSeverityAlertsColumn);
-		highSeverityAlertsColumn = IntColumn.create("Alerts (high)");
-		this.summaryTable.addColumns(highSeverityAlertsColumn);
+		warningsCountColumn = IntColumn.create("Warnings");
+		this.summaryTable.addColumns(warningsCountColumn);
+		errorsCountColumn = IntColumn.create("Errors");
+		this.summaryTable.addColumns(errorsCountColumn);
+		fatalErrorsCountColumn = IntColumn.create("Fatal errors");
+		this.summaryTable.addColumns(fatalErrorsCountColumn);
     }
 
     /**
@@ -86,14 +83,6 @@ public class CheckExecutionSummary {
         return tableColumn;
     }
 
-//    /**
-//     * Table hash id column.
-//     * @return Column.
-//     */
-//    public LongColumn getTableHashIdColumn() {
-//        return tableHashIdColumn;
-//    }
-
     /**
      * Column with the count of executed checks.
      * @return Count of executed checks.
@@ -119,27 +108,27 @@ public class CheckExecutionSummary {
     }
 
     /**
-     * Count of low severity alerts column.
+     * Count of warning severity alerts column.
      * @return Column.
      */
-    public IntColumn getLowSeverityAlertsColumn() {
-        return lowSeverityAlertsColumn;
+    public IntColumn getWarningsCountColumn() {
+        return warningsCountColumn;
     }
 
     /**
-     * Count of medium severity alerts column.
+     * Count of errors (alert) - medium severity alerts column.
      * @return Column.
      */
-    public IntColumn getMediumSeverityAlertsColumn() {
-        return mediumSeverityAlertsColumn;
+    public IntColumn getErrorsCountColumn() {
+        return errorsCountColumn;
     }
 
     /**
-     * Count of high severity alerts column.
+     * Count of fatal (high) severity errors column.
      * @return Column.
      */
-    public IntColumn getHighSeverityAlertsColumn() {
-        return highSeverityAlertsColumn;
+    public IntColumn getFatalErrorsCountColumn() {
+        return fatalErrorsCountColumn;
     }
 
     /**
@@ -149,22 +138,21 @@ public class CheckExecutionSummary {
      * @param checksExecuted Number of checks that were executed.
      * @param sensorResults Number of sensor results returned from sensors.
      * @param validResults Number of valid results that passed the rules.
-     * @param lowSeverityAlerts Count of low severity alerts.
-     * @param mediumSeverityAlerts Count of medium severity alerts.
-     * @param highSeverityAlerts Count of high severity alerts.
+     * @param warningsCount Count of warning severity alerts.
+     * @param errorsCount Count of errors (normal, medium) severity alerts.
+     * @param fatalErrorsCount Count of fatal (high) severity alerts.
      */
     public void reportTableStats(ConnectionWrapper connection, TableSpec tableSpec, int checksExecuted, int sensorResults, int validResults,
-								 int lowSeverityAlerts, int mediumSeverityAlerts, int highSeverityAlerts) {
+								 int warningsCount, int errorsCount, int fatalErrorsCount) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
 		this.tableColumn.set(row.getRowNumber(), tableSpec.getTarget().toPhysicalTableName().toString());
-//        this.tableHashIdColumn.set(row.getRowNumber(), tableSpec.getHierarchyId().hashCode64());
 		this.checksExecutedColumn.set(row.getRowNumber(), checksExecuted);
 		this.sensorResultsColumn.set(row.getRowNumber(), sensorResults);
 		this.validResultsColumn.set(row.getRowNumber(), validResults);
-		this.lowSeverityAlertsColumn.set(row.getRowNumber(), lowSeverityAlerts);
-		this.mediumSeverityAlertsColumn.set(row.getRowNumber(), mediumSeverityAlerts);
-		this.highSeverityAlertsColumn.set(row.getRowNumber(), highSeverityAlerts);
+		this.warningsCountColumn.set(row.getRowNumber(), warningsCount);
+		this.errorsCountColumn.set(row.getRowNumber(), errorsCount);
+		this.fatalErrorsCountColumn.set(row.getRowNumber(), fatalErrorsCount);
     }
 
     /**
@@ -176,26 +164,26 @@ public class CheckExecutionSummary {
     }
 
     /**
-     * Counts the number of low severity alerts that were raised.
-     * @return Number of low severity alerts.
+     * Counts the number of warnings that were raised.
+     * @return Number of warnings.
      */
     public int getLowSeverityAlertsCount() {
-        return this.lowSeverityAlertsColumn.isGreaterThan(0).size();
+        return this.warningsCountColumn.isGreaterThan(0).size();
     }
 
     /**
-     * Counts the number of medium severity alerts that were raised.
-     * @return Number of medium severity alerts.
+     * Counts the number of errors (normal severity) that were raised.
+     * @return Number of error severity alerts (default alerts).
      */
     public int getMediumSeverityAlertsCount() {
-        return this.mediumSeverityAlertsColumn.isGreaterThan(0).size();
+        return this.errorsCountColumn.isGreaterThan(0).size();
     }
 
     /**
-     * Counts the number of high severity alerts that were raised.
-     * @return Number of high severity alerts.
+     * Counts the number of fatal (high) severity errors that were raised.
+     * @return Number of fatal severity errors.
      */
     public int getHighSeverityAlertsCount() {
-        return this.highSeverityAlertsColumn.isGreaterThan(0).size();
+        return this.fatalErrorsCountColumn.isGreaterThan(0).size();
     }
 }

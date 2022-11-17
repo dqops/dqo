@@ -1,7 +1,22 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.rest.controllers;
 
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -251,19 +266,19 @@ public class ConnectionsController {
     }
 
     /**
-     * Retrieves the default dimensions of a connection for a requested connection identified by the connection name.
+     * Retrieves the default data streams configuration of a connection for a requested connection identified by the connection name.
      * @param connectionName Connection name.
-     * @return Connection's dimensions specification.
+     * @return Connection's default data streams configuration.
      */
-    @GetMapping("/{connectionName}/defaultdimensions")
-    @ApiOperation(value = "getConnectionDefaultDimensions", notes = "Return the default dimensions for a connection", response = DimensionsConfigurationSpec.class)
+    @GetMapping("/{connectionName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "getConnectionDefaultDataStreamsMapping", notes = "Return the default data streams mapping for a connection", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's default dimensions returned", response = DimensionsConfigurationSpec.class),
+            @ApiResponse(code = 200, message = "Connection's default data streams mapping returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DimensionsConfigurationSpec>> getConnectionDefaultDimensions(
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getConnectionDefaultDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -275,9 +290,9 @@ public class ConnectionsController {
         }
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        DimensionsConfigurationSpec dimensions = connectionSpec.getDefaultDimensions();
+        DataStreamMappingSpec dataStreamsSpec = connectionSpec.getDefaultDataStreams();
 
-        return new ResponseEntity<>(Mono.justOrEmpty(dimensions), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
     }
 
     /**
@@ -458,7 +473,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionSchedule(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Connection basic details") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+            @Parameter(description = "Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -535,7 +550,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionComments(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "List of labels") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @Parameter(description = "List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -597,24 +612,24 @@ public class ConnectionsController {
     }
 
     /**
-     * Updates the default dimension configuration of an existing connection.
-     * @param connectionName              Connection name.
-     * @param dimensionsConfigurationSpec New dimension configuration for a connection.
+     * Updates the default data streams mapping of an existing connection.
+     * @param connectionName         Connection name.
+     * @param dataStreamsMappingSpec New default data streams mapping for a connection.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/defaultdimensions")
-    @ApiOperation(value = "updateConnectionDefaultDimensions", notes = "Updates default dimensions configuration of a connection")
+    @PutMapping("/{connectionName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "updateConnectionDefaultDataStreamsMapping", notes = "Updates the default data streams mapping of a connection")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's default dimensions successfully updated"),
+            @ApiResponse(code = 204, message = "Connection's default data streams mapping successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateConnectionDefaultDimensions(
+    public ResponseEntity<Mono<?>> updateConnectionDefaultDataStreamsMapping(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Default dimension configuration to be assigned to a connection")
-                @RequestBody Optional<DimensionsConfigurationSpec> dimensionsConfigurationSpec) {
+            @Parameter(description = "Default data streams mapping to be assigned to a connection")
+                @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -625,11 +640,11 @@ public class ConnectionsController {
         }
 
         ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (dimensionsConfigurationSpec.isPresent()) {
-            existingConnectionSpec.setDefaultDimensions(dimensionsConfigurationSpec.get());
+        if (dataStreamsMappingSpec.isPresent()) {
+            existingConnectionSpec.setDefaultDataStreams(dataStreamsMappingSpec.get());
         }
         else {
-            existingConnectionSpec.setDefaultDimensions(null);
+            existingConnectionSpec.setDefaultDataStreams(null);
         }
         userHomeContext.flush();
 

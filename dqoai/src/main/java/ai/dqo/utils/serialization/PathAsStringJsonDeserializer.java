@@ -32,5 +32,4 @@ public class PathAsStringJsonDeserializer extends JsonDeserializer<Path> {
         String text = jsonParser.getText();
         return Path.of(text);
     }
-
 }

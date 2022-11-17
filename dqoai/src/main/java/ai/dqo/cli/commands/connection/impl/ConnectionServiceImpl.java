@@ -15,9 +15,9 @@
  */
 package ai.dqo.cli.commands.connection.impl;
 
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.output.OutputFormatService;
@@ -27,10 +27,10 @@ import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.search.ConnectionSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.search.TableSearchFilters;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;

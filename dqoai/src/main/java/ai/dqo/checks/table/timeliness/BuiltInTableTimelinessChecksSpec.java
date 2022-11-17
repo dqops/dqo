@@ -15,18 +15,17 @@
  */
 package ai.dqo.checks.table.timeliness;
 
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -37,8 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BuiltInTableTimelinessChecksSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableTimelinessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class BuiltInTableTimelinessChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableTimelinessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("current_delay", o -> o.currentDelay);
             put("column_datetime_difference_percent", o -> o.columnDatetimeDifferencePercent);
@@ -123,16 +122,5 @@ public class BuiltInTableTimelinessChecksSpec extends AbstractSpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Calls a visitor (using a visitor design pattern) that returns a result.
-     *
-     * @param visitor   Visitor instance.
-     * @param parameter Additional parameter that will be passed back to the visitor.
-     */
-    @Override
-    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return visitor.accept(this, parameter);
     }
 }

@@ -17,8 +17,6 @@ package ai.dqo.metadata.fileindices;
 
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 
 import java.util.List;
 

@@ -36,6 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class ColumnValidityDateTypePercentRulesSpec extends AbstractRuleSetSpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValidityDateTypePercentRulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleSetSpec.FIELDS) {
         {

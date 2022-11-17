@@ -15,8 +15,8 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -24,7 +24,6 @@ import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -131,10 +130,10 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
+        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
 
         if (enabledFilter != null) {
-            boolean checkIsEnabled = !sensorParameters.isDisabled();
+            boolean checkIsEnabled = !abstractCheckSpec.isDisabled();
             if (enabledFilter != checkIsEnabled) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }

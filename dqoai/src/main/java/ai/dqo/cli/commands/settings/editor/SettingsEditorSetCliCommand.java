@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.settings.editor;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.IEditorNameCommand;
 import ai.dqo.cli.completion.completers.EditorNameCompleter;
 import ai.dqo.cli.completion.completers.EditorPathCompleter;

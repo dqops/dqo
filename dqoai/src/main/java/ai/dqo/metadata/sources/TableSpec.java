@@ -15,11 +15,13 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,11 +49,14 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("target", o -> o.target);
+            put("timestamp_columns", o -> o.timestampColumns);
 			put("time_series", o -> o.timeSeries);
-			put("dimensions", o -> o.dimensions);
+			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("checks", o -> o.checks);
+            put("checkpoints", o -> o.checkpoints);
+            put("partitioned_checks", o -> o.partitionedChecks);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -80,19 +85,27 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     private boolean disabled;
 
     @JsonPropertyDescription("Stage name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
     @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
 
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
-
-    @JsonPropertyDescription("Data quality dimensions configuration. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec dimensions = new DimensionsConfigurationSpec();
+    private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+
+    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @Deprecated
+    private TimeSeriesConfigurationSpec timeSeries;
+
+    @JsonPropertyDescription("Data streams configuration. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DataStreamMappingSpec dataStreams = new DataStreamMappingSpec();
 
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
@@ -100,7 +113,17 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableCheckCategoriesSpec checks = new TableCheckCategoriesSpec();
+    private TableAdHocCheckCategoriesSpec checks = new TableAdHocCheckCategoriesSpec();
+
+    @JsonPropertyDescription("Configuration of table level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
+
+    @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TablePartitionedChecksRootSpec partitionedChecks = new TablePartitionedChecksRootSpec();
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -192,9 +215,28 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the configuration of timestamp columns used for timeliness data quality checks and date/time partitioned checks.
+     * @return Configuration of timestamp columns.
+     */
+    public TimestampColumnsSpec getTimestampColumns() {
+        return timestampColumns;
+    }
+
+    /**
+     * Sets the configuration of timestamp columns used for timeliness checks.
+     * @param timestampColumns Timestamp columns configuration.
+     */
+    public void setTimestampColumns(TimestampColumnsSpec timestampColumns) {
+        setDirtyIf(!Objects.equals(this.timestampColumns, timestampColumns));
+        this.timestampColumns = timestampColumns;
+        propagateHierarchyIdToField(timestampColumns, "timestamp_columns");
+    }
+
+    /**
      * Returns the time series configuration for this table.
      * @return Time series configuration.
      */
+    @Deprecated
     public TimeSeriesConfigurationSpec getTimeSeries() {
         return timeSeries;
     }
@@ -203,6 +245,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Sets a new time series configuration for this table.
      * @param timeSeries New time series configuration.
      */
+    @Deprecated
     public void setTimeSeries(TimeSeriesConfigurationSpec timeSeries) {
 		setDirtyIf(!Objects.equals(this.timeSeries, timeSeries));
         this.timeSeries = timeSeries;
@@ -210,21 +253,21 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for the table.
-     * @return Dimension configuration.
+     * Returns the data streams configuration for the table.
+     * @return Data streams configuration.
      */
-    public DimensionsConfigurationSpec getDimensions() {
-        return dimensions;
+    public DataStreamMappingSpec getDataStreams() {
+        return dataStreams;
     }
 
     /**
-     * Returns the dimension configuration for the table.
-     * @param dimensions Dimension configuration.
+     * Returns the data streams configuration for the table.
+     * @param dataStreams Data streams configuration.
      */
-    public void setDimensions(DimensionsConfigurationSpec dimensions) {
-		setDirtyIf(!Objects.equals(this.dimensions, dimensions));
-        this.dimensions = dimensions;
-		propagateHierarchyIdToField(dimensions, "dimensions");
+    public void setDataStreams(DataStreamMappingSpec dataStreams) {
+		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
+        this.dataStreams = dataStreams;
+		propagateHierarchyIdToField(dataStreams, "data_streams");
     }
 
     /**
@@ -249,7 +292,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Returns configuration of enabled table level data quality checks.
      * @return Table level data quality checks.
      */
-    public TableCheckCategoriesSpec getChecks() {
+    public TableAdHocCheckCategoriesSpec getChecks() {
         return checks;
     }
 
@@ -257,10 +300,46 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Sets a new configuration of table level data quality checks.
      * @param checks New checks configuration.
      */
-    public void setChecks(TableCheckCategoriesSpec checks) {
+    public void setChecks(TableAdHocCheckCategoriesSpec checks) {
 		setDirtyIf(!Objects.equals(this.checks, checks));
         this.checks = checks;
 		propagateHierarchyIdToField(checks, "checks");
+    }
+
+    /**
+     * Returns configuration of enabled table level checkpoints.
+     * @return Table level checkpoints.
+     */
+    public TableCheckpointsSpec getCheckpoints() {
+        return checkpoints;
+    }
+
+    /**
+     * Sets a new configuration of table level data quality checkpoints.
+     * @param checkpoints New checkpoints configuration.
+     */
+    public void setCheckpoints(TableCheckpointsSpec checkpoints) {
+        setDirtyIf(!Objects.equals(this.checkpoints, checkpoints));
+        this.checkpoints = checkpoints;
+        propagateHierarchyIdToField(checkpoints, "checkpoints");
+    }
+
+    /**
+     * Returns configuration of enabled table level date/time partitioned checks.
+     * @return Table level date/time partitioned checks.
+     */
+    public TablePartitionedChecksRootSpec getPartitionedChecks() {
+        return partitionedChecks;
+    }
+
+    /**
+     * Sets a new configuration of table level date/time partitioned data quality checkpoints.
+     * @param partitionedChecks New configuration of date/time partitioned checks.
+     */
+    public void setPartitionedChecks(TablePartitionedChecksRootSpec partitionedChecks) {
+        setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
+        this.partitionedChecks = partitionedChecks;
+        propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
     }
 
     /**
@@ -382,6 +461,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.labels = null;
             cloned.owner = null;
@@ -389,11 +470,14 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.target != null) {
                 cloned.target = cloned.target.expandAndTrim(secretValueProvider);
             }
+            if (cloned.timestampColumns != null) {
+                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
+            }
             if (cloned.timeSeries != null) {
                 cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
             }
-            if (cloned.dimensions != null) {
-                cloned.dimensions = cloned.dimensions.expandAndTrim(secretValueProvider);
+            if (cloned.dataStreams != null) {
+                cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider);
             return cloned;
@@ -415,9 +499,12 @@ public class TableSpec extends AbstractSpec implements Cloneable {
                 cloned.target = cloned.target.clone();
             }
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timeSeries = null;
-            cloned.dimensions = null;
+            cloned.timestampColumns = null;
+            cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;
@@ -441,9 +528,12 @@ public class TableSpec extends AbstractSpec implements Cloneable {
                 cloned.target = cloned.target.clone();
             }
             cloned.checks = null;
+            cloned.checkpoints = null;
+            cloned.partitionedChecks = null;
             cloned.owner = null;
+            cloned.timestampColumns = null;
             cloned.timeSeries = null;
-            cloned.dimensions = null;
+            cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;

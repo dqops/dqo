@@ -21,7 +21,7 @@ interface IButtonProps {
 
 const colorsMap = {
   primary: {
-    contained: 'bg-indigo-700 text-white',
+    contained: 'bg-indigo-700 text-white disabled:bg-gray-500',
     outlined: 'bg-white text-indigo-700 border border-indigo-700',
     text: 'bg-white text-indigo-700'
   },
@@ -80,7 +80,7 @@ const Button = ({
       data-testid={dataTestId}
     >
       {loading ? (
-        <Loader className="w-6 h-6" />
+        <Loader className="w-6 h-6" isFull={false} />
       ) : (
         <>
           {leftIcon}

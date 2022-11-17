@@ -36,7 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -82,23 +81,25 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
-    @Test
-    void runSensor_whenSensorExecutedOnColumnWithNumericalValues_thenReturnsValues() {
+    // TODO: move the test to another sensor that works on numeric values
 
-        ArrayList<Integer> valuesList = new ArrayList<>();
-        valuesList.add(123);
-        valuesList.add(1234);
-        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
-        this.sut.setValuesList(valuesList);
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_int", this.checkSpec);
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
-    }
+//    @Test
+//    void runSensor_whenSensorExecutedOnColumnWithNumericalValues_thenReturnsValues() {
+//
+//        ArrayList<Integer> valuesList = new ArrayList<>();
+//        valuesList.add(123);
+//        valuesList.add(1234);
+//        this.sut.setValuesType(BuiltInListFormats.NUMERIC);
+//        this.sut.setValuesList(valuesList);
+//
+//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_int", this.checkSpec);
+//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+//
+//        Table resultTable = sensorResult.getResultTable();
+//        Assertions.assertEquals(1, resultTable.rowCount());
+//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+//        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+//    }
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithStringValues_thenReturnsValues() {

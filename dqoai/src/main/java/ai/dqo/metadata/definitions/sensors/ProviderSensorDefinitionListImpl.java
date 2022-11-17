@@ -18,8 +18,6 @@ package ai.dqo.metadata.definitions.sensors;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 
 import java.util.List;
 

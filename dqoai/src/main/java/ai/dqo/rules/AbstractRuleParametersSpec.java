@@ -18,8 +18,6 @@ package ai.dqo.rules;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,27 +36,6 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec {
         {
         }
     };
-
-    @JsonPropertyDescription("Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean disable;
-
-    /**
-     * Disable the quality check and prevent it from executing.
-     * @return Quality check is disabled.
-     */
-    public boolean isDisable() {
-        return disable;
-    }
-
-    /**
-     * Changes the disabled flag of a quality test.
-     * @param disable When true, the test will be disabled and will not be executed.
-     */
-    public void setDisable(boolean disable) {
-		this.setDirtyIf(this.disable != disable);
-        this.disable = disable;
-    }
 
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.

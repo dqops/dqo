@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.sensors.table.timeliness;
 
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.table.timeliness.TableTimelinessColumnDatetimeDifferencePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -29,6 +28,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.timeliness.TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

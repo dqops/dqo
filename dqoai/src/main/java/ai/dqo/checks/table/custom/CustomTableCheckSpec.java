@@ -15,7 +15,7 @@
  */
 package ai.dqo.checks.table.custom;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.InvalidSpecificationException;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -43,8 +43,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class CustomTableCheckSpec extends AbstractCheckSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<CustomTableCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class CustomTableCheckSpec extends AbstractCheckDeprecatedSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<CustomTableCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckDeprecatedSpec.FIELDS) {
         {
 			put("builtin", o -> o.builtin);
 			put("custom", o -> o.custom);

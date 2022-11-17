@@ -35,6 +35,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class PercentMovingAverageRuleThresholdsSpec extends
         AbstractRuleThresholdsSpec<PercentMovingAverageRuleParametersSpec> implements TimeWindowedRule {
     private static final ChildHierarchyNodeFieldMapImpl<PercentMovingAverageRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleThresholdsSpec.FIELDS) {

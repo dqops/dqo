@@ -18,7 +18,7 @@ package ai.dqo.metadata.storage.localfiles.settings;
 import ai.dqo.BaseTest;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.basespecs.InstanceStatus;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.SettingsSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.utils.serialization.YamlSerializer;

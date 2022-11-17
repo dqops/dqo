@@ -17,8 +17,6 @@ package ai.dqo.rules.custom;
 
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 
 /**
  * Dictionary of custom rules that are enabled for a custom check.

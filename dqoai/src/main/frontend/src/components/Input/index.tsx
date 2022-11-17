@@ -3,6 +3,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 interface IInputProps {
   type?: string;
@@ -18,6 +19,8 @@ interface IInputProps {
   onClear?: () => void;
   info?: boolean;
   dataTestId?: string;
+  tooltipText?: string;
+  disabled?: boolean;
 }
 
 const Input = ({
@@ -32,16 +35,34 @@ const Input = ({
   onChange,
   onBlur,
   onClear,
-  dataTestId
+  dataTestId,
+  tooltipText,
+  disabled
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
       {label && (
         <label
           htmlFor={name}
-          className="block text-base font-regular text-gray-700 mb-2 capitalize text-sm"
+          className={clsx(
+            'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+            error ? 'text-red-500' : ''
+          )}
         >
-          {label}
+          <span>{label}</span>
+          {!!tooltipText && (
+            <Tooltip
+              content={tooltipText}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="info"
+                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                />
+              </div>
+            </Tooltip>
+          )}
         </label>
       )}
     </div>
@@ -50,6 +71,7 @@ const Input = ({
         name={name}
         type={type || 'text'}
         placeholder={placeholder}
+        disabled={disabled}
         className={clsx(
           error
             ? 'border border-red-500'
@@ -57,7 +79,7 @@ const Input = ({
           'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full sm:text-base rounded',
           className
         )}
-        value={value}
+        value={value || ''}
         onChange={onChange}
         onBlur={onBlur}
         data-testid={dataTestId}

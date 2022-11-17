@@ -18,8 +18,6 @@ package ai.dqo.rules;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,6 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParametersSpec> extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleThresholdsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -73,27 +72,29 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
     public abstract R getLow();
 
     @JsonPropertyDescription("Time window configuration for rules that require historic data for evaluation. The time window is configured as the number of previous time periods that are required to evaluate a sensor. The time period granularity (day, hour, etc.) is configured as a time_series configuration on the sensor.")
+    @Deprecated  // only on custom sensors in the future
     private RuleTimeWindowSettingsSpec timeWindow;
 
     @JsonPropertyDescription("Disable the rule at all severity levels.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean disable;
+    @Deprecated  // rule must be removed to be disabled
+    private boolean disabled;
 
     /**
      * Disable the quality rule and prevent it from executing.
      * @return Rule is disabled.
      */
-    public boolean isDisable() {
-        return disable;
+    public boolean isDisabled() {
+        return disabled;
     }
 
     /**
      * Changes the disabled flag of a quality rule.
-     * @param disable When true, the test will be disabled and will not be executed.
+     * @param disabled When true, the test will be disabled and will not be executed.
      */
-    public void setDisable(boolean disable) {
-		this.setDirtyIf(this.disable != disable);
-        this.disable = disable;
+    public void setDisabled(boolean disabled) {
+		this.setDirtyIf(this.disabled != disabled);
+        this.disabled = disabled;
     }
 
     /**
@@ -131,22 +132,22 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
      */
     @JsonIgnore
     public boolean isEnabled() {
-        if (this.disable) {
+        if (this.disabled) {
             return false;
         }
 
         R high = getHigh();
-        if (high != null && !high.isDisable()) {
+        if (high != null) {
             return true;
         }
 
         R medium = getMedium();
-        if (medium != null && !medium.isDisable()) {
+        if (medium != null) {
             return true;
         }
 
         R low = getLow();
-		return low != null && !low.isDisable();
+		return low != null;
 	}
 
     /**
@@ -162,7 +163,7 @@ public abstract class AbstractRuleThresholdsSpec<R extends AbstractRuleParameter
             return false;
         }
 
-        return !this.disable;
+        return !this.disabled;
     }
 
     /**

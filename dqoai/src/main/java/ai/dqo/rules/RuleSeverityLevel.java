@@ -16,12 +16,12 @@
 package ai.dqo.rules;
 
 /**
- * Rule severity levels. Matches the severity level name (fatal, error, warning, debug, info) with a numeric level.
+ * Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
  */
 public enum RuleSeverityLevel {
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+    WARNING(1),
+    ALERT(2),
+    FATAL(3);
 
     /**
      * Numeric severity level.

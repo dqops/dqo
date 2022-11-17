@@ -15,6 +15,8 @@
  */
 package ai.dqo.sensors.table.timeliness;
 
+import ai.dqo.metadata.fields.ControlType;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -33,6 +35,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated  // needs serious refactoring
 public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
@@ -40,11 +43,16 @@ public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec 
     };
 
     @JsonPropertyDescription("The first DateTime column used to calculate the time difference. If a column's format is not datetime, column will be cast to datetime.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column1;
+
     @JsonPropertyDescription("The second DateTime column used to calculate the time difference. If a column's format is not datetime, column will be cast to datetime.")
+    @ControlType(ParameterDataType.column_name_type)
     private String column2;
+
     @JsonPropertyDescription("Field used to set a time scale to measure a datetime difference. A DAY is a default. Accepted scales are the following: SECOND, MINUTE, HOUR, DAY")
     private String timeScale;
+
     @JsonPropertyDescription("Maximal acceptable time difference between two selected columns. Anything above this threshold is considered as delayed.")
     private Integer maxDifference;
 
@@ -143,26 +151,5 @@ public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec 
     public void setMaxDifference(Integer maxDifference) {
         this.setDirtyIf(!Objects.equals(this.maxDifference, maxDifference));
         this.maxDifference = maxDifference;
-    }
-
-    /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     *
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     * false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @Override
-    public boolean hasNonNullSimpleFields() {
-        return !Strings.isNullOrEmpty(this.column1) ||
-                !Strings.isNullOrEmpty(this.column2) ||
-                !Strings.isNullOrEmpty(this.timeScale) ||
-                this.maxDifference != null;
     }
 }

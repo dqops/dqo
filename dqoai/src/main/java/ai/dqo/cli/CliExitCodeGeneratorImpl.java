@@ -15,7 +15,6 @@
  */
 package ai.dqo.cli;
 
-import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

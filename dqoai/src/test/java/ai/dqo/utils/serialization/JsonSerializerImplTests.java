@@ -65,6 +65,15 @@ public class JsonSerializerImplTests extends BaseTest {
     }
 
     @Test
+    void deserialize_whenJsonGivenAndObjectImplementsDeserializableAware_thenObjectIsNotifiedOfDeserialization() {
+        YamlTestable deserialized = this.sut.deserialize("{\"field1\":\"aaa\",\"int1\":10}", YamlTestable.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertEquals("aaa", deserialized.getField1());
+        Assertions.assertEquals(10, deserialized.getInt1());
+        Assertions.assertTrue(deserialized.wasOnDeserializedCalled);
+    }
+
+    @Test
     void deserializeMultiple_whenOneJsonGiven_thenReturnsThisOneJson() {
         byte[] dataBytes = "{\"field1\":\"aaa\",\"int1\":10}".getBytes(StandardCharsets.UTF_8);
         InputStreamReader inputStreamReader = new InputStreamReader(new ByteArrayInputStream(dataBytes));

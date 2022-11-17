@@ -20,9 +20,6 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 /**
  * Check execution progress listener that is reporting just the summary information about the progress of running the data quality checks.

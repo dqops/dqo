@@ -16,8 +16,6 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderInput;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderOutput;
 
 /**
  * Progress event raised after checks were executed. Returns the summary.
