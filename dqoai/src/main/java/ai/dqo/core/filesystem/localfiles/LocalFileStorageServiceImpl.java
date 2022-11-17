@@ -215,10 +215,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 return null;
             }
 
-
-            Stream<Path> fileList = Files.list(absolutePath);
-
-            try {
+            try(Stream<Path> fileList = Files.list(absolutePath)) {
                 List<HomeFolderPath> folders = fileList
                         .filter(path -> Files.isDirectory(path))
                         .map(path -> {
@@ -229,9 +226,6 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                         .collect(Collectors.toList());
 
                 return folders;
-            }
-            finally {
-                fileList.close();  // file descriptor leak in JAVA!!! cannot use java streams over a stream returned from Files.list
             }
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot list a folder: " + folderPath.toString(), ex);
@@ -255,9 +249,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 return null;
             }
 
-            Stream<Path> pathStream = Files.list(absolutePath);
-
-            try {
+            try (Stream<Path> pathStream = Files.list(absolutePath)) {
                 List<HomeFilePath> filePathsList = pathStream
                         .filter(path -> !Files.isDirectory(path))
                         .map(path -> {
@@ -267,9 +259,6 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                         .collect(Collectors.toList());
 
                 return filePathsList;
-            }
-            finally {
-                pathStream.close();  // file descriptor in JAVA!!! cannot use java streams over a stream returned from Files.list
             }
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot list a folder: " + folderPath.toString(), ex);
