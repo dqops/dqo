@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Local folder access service, manages files in a given folder. Manages files in the on the disk in the given file system folder.
@@ -214,16 +215,24 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 return null;
             }
 
-            List<HomeFolderPath> folders = Files.list(absolutePath)
-                    .filter(path -> Files.isDirectory(path))
-                    .map(path -> {
-                        String fileSystemName = path.getFileName().toString();
-                        FolderName subFolder = FolderName.fromFileSystemName(fileSystemName);
-                        return folderPath.resolveSubfolder(subFolder);
-                    })
-                    .collect(Collectors.toList());
 
-            return folders;
+            Stream<Path> fileList = Files.list(absolutePath);
+
+            try {
+                List<HomeFolderPath> folders = fileList
+                        .filter(path -> Files.isDirectory(path))
+                        .map(path -> {
+                            String fileSystemName = path.getFileName().toString();
+                            FolderName subFolder = FolderName.fromFileSystemName(fileSystemName);
+                            return folderPath.resolveSubfolder(subFolder);
+                        })
+                        .collect(Collectors.toList());
+
+                return folders;
+            }
+            finally {
+                fileList.close();  // file descriptor leak in JAVA!!! cannot use java streams over a stream returned from Files.list
+            }
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot list a folder: " + folderPath.toString(), ex);
         }
@@ -246,15 +255,22 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
                 return null;
             }
 
-            List<HomeFilePath> folders = Files.list(absolutePath)
-                    .filter(path -> !Files.isDirectory(path))
-                    .map(path -> {
-                        String fileSystemName = path.getFileName().toString();
-                        return folderPath.resolveFile(fileSystemName);
-                    })
-                    .collect(Collectors.toList());
+            Stream<Path> pathStream = Files.list(absolutePath);
 
-            return folders;
+            try {
+                List<HomeFilePath> filePathsList = pathStream
+                        .filter(path -> !Files.isDirectory(path))
+                        .map(path -> {
+                            String fileSystemName = path.getFileName().toString();
+                            return folderPath.resolveFile(fileSystemName);
+                        })
+                        .collect(Collectors.toList());
+
+                return filePathsList;
+            }
+            finally {
+                pathStream.close();  // file descriptor in JAVA!!! cannot use java streams over a stream returned from Files.list
+            }
         } catch (Exception ex) {
             throw new LocalFileSystemException("Cannot list a folder: " + folderPath.toString(), ex);
         }
