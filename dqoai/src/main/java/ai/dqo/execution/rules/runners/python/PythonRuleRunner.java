@@ -16,8 +16,8 @@
 package ai.dqo.execution.rules.runners.python;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
+import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;

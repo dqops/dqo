@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -36,6 +37,9 @@ import java.util.List;
 public class UIFieldModel {
     @JsonPropertyDescription("Field name that matches the field name (snake_case) used in the YAML specification.")
     private ParameterDefinitionSpec definition;
+
+    @JsonPropertyDescription("Field value is optional and may be null, when false - the field is required and must be filled.")
+    private boolean optional;
 
     @JsonPropertyDescription("Field value for a string field.")
     private String stringValue;
@@ -63,4 +67,7 @@ public class UIFieldModel {
 
     @JsonPropertyDescription("Field value for an array (list) of strings.")
     private List<String> stringListValue;
+
+    @JsonPropertyDescription("Field value for an date.")
+    private LocalDate dateValue;
 }

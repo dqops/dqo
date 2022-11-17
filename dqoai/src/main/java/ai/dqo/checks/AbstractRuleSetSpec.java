@@ -20,8 +20,6 @@ import ai.dqo.metadata.id.ChildFieldEntry;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.rules.custom.CustomRuleThresholdsSpec;
@@ -42,6 +40,7 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public abstract class AbstractRuleSetSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleSetSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {

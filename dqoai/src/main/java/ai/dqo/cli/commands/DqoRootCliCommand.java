@@ -27,7 +27,6 @@ import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
-import ai.dqo.cli.completion.completers.SensorExtensionCompleter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.BeanFactory;
@@ -132,6 +131,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Prints a full stack trace for errors on the console. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "true")
     private Boolean dqoCorePrintStackTrace;
+
+    @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
+            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
+                    "This parameter is effective only in CLI mode.", defaultValue = "900")
+    private Long lockWaitTimeoutSeconds;
 
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
             description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +

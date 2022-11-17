@@ -16,10 +16,10 @@
 package ai.dqo.cli.commands.connection.schema;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;

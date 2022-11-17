@@ -18,10 +18,9 @@ package ai.dqo.utils.serialization;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.deser.BeanDeserializerModifier;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
@@ -48,12 +47,12 @@ public class JsonSerializerImpl implements JsonSerializer {
 		this.mapper.registerModule(new JavaTimeModule());
         this.mapper.registerModule(new Jdk8Module());
         this.mapper.registerModule(new BlackbirdModule());
+        this.mapper.registerModule(new DeserializationAwareModule());  // our custom module to notify objects that they were deserialized
 		this.mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 
-        // Fail fast and reject invalid jsons, we have a validating reader
-		this.mapper.enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		this.mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		this.mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
     }
 

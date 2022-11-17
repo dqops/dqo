@@ -235,6 +235,31 @@ public class FieldInfo {
     }
 
     /**
+     * Retrieves the raw field value. Enum fields are not converted to strings.
+     * @param parentObject Parent object to read the field using the getter method.
+     * @return Field value.
+     */
+    public Object getRawFieldValue(Object parentObject) {
+        if (this.getterMethod == null) {
+            throw new NullPointerException("Field " + this.classFieldName + " on class " + parentObject.getClass().getName() + " has no getter.");
+        }
+
+        try {
+            Object result = this.getterMethod.invoke(parentObject);
+            if (result == null) {
+                return null;
+            }
+
+            return result;
+        }
+        catch (InvocationTargetException e) {
+            throw new FieldAccessException("Invocation exception", e);
+        } catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception", e);
+        }
+    }
+
+    /**
      * Retrieves the field value. Enum fields are converted to the name (string).
      * @param parentObject Parent object to read the field using the getter method.
      * @return Field value.

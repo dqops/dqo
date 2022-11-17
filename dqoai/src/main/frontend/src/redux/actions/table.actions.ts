@@ -1,3 +1,19 @@
+///
+/// Copyright © 2021 DQO.ai (support@dqo.ai)
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
+
 import { Dispatch } from 'redux';
 
 import { TableApiClient } from '../../services/apiClient';
@@ -329,5 +345,155 @@ export const updateTableLabels =
       dispatch(updateTableLabelsSuccess());
     } catch (err) {
       dispatch(updateTableLabelsFailed(err));
+    }
+  };
+
+export const getTableChecksRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
+});
+
+export const getTableChecksSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
+  data
+});
+
+export const getTableChecksFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR,
+  error
+});
+
+export const getTableChecks =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableChecksRequest());
+    try {
+      const res = await TableApiClient.getTableChecks(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableChecksFailed(err));
+    }
+  };
+
+export const getTableChecksUiRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI
+});
+
+export const getTableChecksUiSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
+  data
+});
+
+export const getTableChecksUiFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  error
+});
+
+export const getTableChecksUI =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableChecksUiRequest());
+    try {
+      const res = await TableApiClient.getTableChecksUI(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableChecksUiSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableChecksUiFailed(err));
+    }
+  };
+
+export const updateTableChecksUIRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI
+});
+
+export const updateTableChecksUISuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS
+});
+
+export const updateTableChecksUIFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  error
+});
+
+export const updateTableChecksUI =
+  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateTableChecksUIRequest());
+    try {
+      await TableApiClient.updateTableChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        data
+      );
+      dispatch(updateTableChecksUISuccess());
+    } catch (err) {
+      dispatch(updateTableChecksUIFailed(err));
+    }
+  };
+
+export const getTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING
+});
+
+export const getTableDataStreamsMappingSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS,
+  data
+});
+
+export const getTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR,
+  error
+});
+
+export const getTableDataStreamMapping =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableDataStreamsMappingRequest());
+    try {
+      const res = await TableApiClient.getTableDataStreamsMapping(
+        connectionName,
+        schemaName,
+        tableName
+      );
+      dispatch(getTableDataStreamsMappingSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableDataStreamsMappingFailed(err));
+    }
+  };
+
+export const updateTableDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING
+});
+
+export const updateTableDataStreamsSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS
+});
+
+export const updateTableDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR,
+  error
+});
+
+export const updateTableDataStreamMapping =
+  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateTableDataStreamsMappingRequest());
+    try {
+      await TableApiClient.updateTableDataStreamsMapping(
+        connectionName,
+        schemaName,
+        tableName,
+        data
+      );
+      dispatch(updateTableDataStreamsSuccess());
+    } catch (err) {
+      dispatch(updateTableDataStreamsMappingFailed(err));
     }
   };

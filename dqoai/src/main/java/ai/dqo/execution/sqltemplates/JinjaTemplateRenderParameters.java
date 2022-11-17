@@ -20,7 +20,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -44,7 +44,7 @@ public class JinjaTemplateRenderParameters {
     private String columnName; // may be null
     private AbstractSensorParametersSpec parameters;
     private TimeSeriesConfigurationSpec effectiveTimeSeries;
-    private DimensionsConfigurationSpec effectiveDimensions;
+    private DataStreamMappingSpec effectiveDataStreams;
     private SensorDefinitionSpec sensorDefinition;
     private ProviderSensorDefinitionSpec providerSensorDefinition;
     private ProviderDialectSettings dialectSettings;
@@ -63,7 +63,7 @@ public class JinjaTemplateRenderParameters {
      * @param columnName Column name.
      * @param parameters Sensor parameters spec.
      * @param effectiveTimeSeries Effective time series configuration.
-     * @param effectiveDimensions Effective dimensions configuration.
+     * @param effectiveDataStreams Effective data streams configuration.
      * @param sensorDefinition Sensor definition spec.
      * @param providerSensorDefinition Provider sensor definition spec.
      * @param dialectSettings Dialect settings with configuration of the dialect.
@@ -74,7 +74,7 @@ public class JinjaTemplateRenderParameters {
 										 String columnName,
 										 AbstractSensorParametersSpec parameters,
                                          TimeSeriesConfigurationSpec effectiveTimeSeries,
-                                         DimensionsConfigurationSpec effectiveDimensions,
+                                         DataStreamMappingSpec effectiveDataStreams,
 										 SensorDefinitionSpec sensorDefinition,
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
 										 ProviderDialectSettings dialectSettings) {
@@ -84,7 +84,7 @@ public class JinjaTemplateRenderParameters {
         this.columnName = columnName;
         this.parameters = parameters;
         this.effectiveTimeSeries = effectiveTimeSeries;
-        this.effectiveDimensions = effectiveDimensions;
+        this.effectiveDataStreams = effectiveDataStreams;
         this.sensorDefinition = sensorDefinition;
         this.providerSensorDefinition = providerSensorDefinition;
         this.dialectSettings = dialectSettings;
@@ -107,7 +107,7 @@ public class JinjaTemplateRenderParameters {
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
             setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
-            setEffectiveDimensions(sensorRunParameters.getDimensions());
+            setEffectiveDataStreams(sensorRunParameters.getDataStreams());
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());
@@ -213,19 +213,19 @@ public class JinjaTemplateRenderParameters {
     }
 
     /**
-     * Returns the effective dimensions configuration.
-     * @return Effective dimensions configuration.
+     * Returns the effective data streams configuration.
+     * @return Effective data streams configuration.
      */
-    public DimensionsConfigurationSpec getEffectiveDimensions() {
-        return effectiveDimensions;
+    public DataStreamMappingSpec getEffectiveDataStreams() {
+        return effectiveDataStreams;
     }
 
     /**
-     * Sets the effective dimensions configuration.
-     * @param effectiveDimensions Effective dimensions configuration.
+     * Sets the effective data streams configuration.
+     * @param effectiveDataStreams Effective data streams configuration.
      */
-    public void setEffectiveDimensions(DimensionsConfigurationSpec effectiveDimensions) {
-        this.effectiveDimensions = effectiveDimensions;
+    public void setEffectiveDataStreams(DataStreamMappingSpec effectiveDataStreams) {
+        this.effectiveDataStreams = effectiveDataStreams;
     }
 
     /**

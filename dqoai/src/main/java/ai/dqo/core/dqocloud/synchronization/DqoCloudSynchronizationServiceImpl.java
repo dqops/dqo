@@ -19,10 +19,10 @@ import ai.dqo.core.dqocloud.filesystem.DqoCloudRemoteFileSystemServiceFactory;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.filesystemservice.localfiles.DqoUserHomeFileSystemFactory;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.FileSystemChangeSet;
 import ai.dqo.core.filesystem.synchronization.FileSystemSynchronizationService;
 import ai.dqo.core.filesystem.synchronization.SynchronizationResult;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
 import ai.dqo.metadata.fileindices.FileLocation;
@@ -113,8 +113,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.SOURCES, synchronizationListener);
         synchronizeFolder(DqoRoot.SENSORS, synchronizationListener);
         synchronizeFolder(DqoRoot.RULES, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_READINGS, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_ALERTS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationListener);
     }
 
     /**
@@ -124,7 +124,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      */
     @Override
     public void synchronizeData(FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.DATA_READINGS, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_ALERTS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationListener);
     }
 }

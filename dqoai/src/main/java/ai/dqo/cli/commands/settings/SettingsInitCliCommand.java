@@ -16,11 +16,11 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.EditorFinderService;
 import ai.dqo.cli.commands.settings.impl.EditorInformation;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;

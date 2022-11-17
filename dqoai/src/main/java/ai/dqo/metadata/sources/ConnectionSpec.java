@@ -21,7 +21,7 @@ import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -55,7 +55,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
         {
 			put("comments", o -> o.comments);
 			put("default_time_series", o -> o.defaultTimeSeries);
-			put("default_dimensions", o -> o.defaultDimensions);
+			put("default_data_streams", o -> o.defaultDataStreams);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("labels", o -> o.labels);
@@ -91,13 +91,14 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    @Deprecated
     private TimeSeriesConfigurationSpec defaultTimeSeries;
 
-    @JsonPropertyDescription("Default data quality dimensions configuration for all tables. The configuration may be overridden on table, column and check level. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec defaultDimensions;
+    private DataStreamMappingSpec defaultDataStreams;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -357,6 +358,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Returns the time series configuration for all tables on the connection.
      * @return Time series configuration.
      */
+    @Deprecated
     public TimeSeriesConfigurationSpec getDefaultTimeSeries() {
         return defaultTimeSeries;
     }
@@ -365,6 +367,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Sets a new time series configuration for all tables on the connection.
      * @param defaultTimeSeries New time series configuration.
      */
+    @Deprecated
     public void setDefaultTimeSeries(TimeSeriesConfigurationSpec defaultTimeSeries) {
 		setDirtyIf(!Objects.equals(this.defaultTimeSeries, defaultTimeSeries));
         this.defaultTimeSeries = defaultTimeSeries;
@@ -372,21 +375,21 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for all tables on the connection.
-     * @return Dimension configuration.
+     * Returns the default data streams configuration for all tables on the connection.
+     * @return Default data streams configuration.
      */
-    public DimensionsConfigurationSpec getDefaultDimensions() {
-        return defaultDimensions;
+    public DataStreamMappingSpec getDefaultDataStreams() {
+        return defaultDataStreams;
     }
 
     /**
-     * Returns the dimension configuration for all tables on this connection.
-     * @param defaultDimensions Dimension configuration.
+     * Returns the default data streams configuration for all tables on this connection.
+     * @param defaultDataStreams Data streams configuration.
      */
-    public void setDefaultDimensions(DimensionsConfigurationSpec defaultDimensions) {
-		setDirtyIf(!Objects.equals(this.defaultDimensions, defaultDimensions));
-        this.defaultDimensions = defaultDimensions;
-		propagateHierarchyIdToField(defaultDimensions, "default_dimensions");
+    public void setDefaultDataStreams(DataStreamMappingSpec defaultDataStreams) {
+		setDirtyIf(!Objects.equals(this.defaultDataStreams, defaultDataStreams));
+        this.defaultDataStreams = defaultDataStreams;
+		propagateHierarchyIdToField(defaultDataStreams, "default_data_streams");
     }
 
     /**
@@ -461,8 +464,8 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.clone();
             }
-            if (cloned.defaultDimensions != null) {
-                cloned.defaultDimensions = cloned.defaultDimensions.clone();
+            if (cloned.defaultDataStreams != null) {
+                cloned.defaultDataStreams = cloned.defaultDataStreams.clone();
             }
             if (cloned.defaultTimeSeries != null) {
                 cloned.defaultTimeSeries = cloned.defaultTimeSeries.clone();
@@ -502,8 +505,8 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.defaultTimeSeries != null) {
                 cloned.defaultTimeSeries = cloned.defaultTimeSeries.expandAndTrim(secretValueProvider);
             }
-            if (cloned.defaultDimensions != null) {
-                cloned.defaultDimensions = cloned.defaultDimensions.expandAndTrim(secretValueProvider);
+            if (cloned.defaultDataStreams != null) {
+                cloned.defaultDataStreams = cloned.defaultDataStreams.expandAndTrim(secretValueProvider);
             }
             if (cloned.bigquery != null) {
                 cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider);
@@ -530,7 +533,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
             cloned.defaultTimeSeries = null;
-            cloned.defaultDimensions = null;
+            cloned.defaultDataStreams = null;
             cloned.comments = null;
             cloned.schedule = null;
             cloned.originalProperties = null;

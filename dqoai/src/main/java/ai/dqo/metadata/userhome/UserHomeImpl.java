@@ -21,8 +21,6 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.id.*;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

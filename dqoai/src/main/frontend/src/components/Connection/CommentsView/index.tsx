@@ -4,13 +4,19 @@ import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import { CommentSpec } from '../../../api';
+import clsx from 'clsx';
 
 interface ICommentsViewProps {
   comments: CommentSpec[];
   onChange: (comments: CommentSpec[]) => void;
+  className?: string;
 }
 
-const CommentsView = ({ comments, onChange }: ICommentsViewProps) => {
+const CommentsView = ({
+  comments,
+  onChange,
+  className
+}: ICommentsViewProps) => {
   const [text, setText] = useState('');
 
   const onAdd = () => {
@@ -44,12 +50,12 @@ const CommentsView = ({ comments, onChange }: ICommentsViewProps) => {
 
   return (
     <div className="p-4">
-      <table className="my-6 w-full">
+      <table className={clsx('my-6 w-full', className)}>
         <thead>
-          <th className="text-left min-w-40 w-full pr-4 py-2">Comment</th>
-          <th className="text-left min-w-60 px-8 py-2">Author</th>
-          <th className="text-left min-w-60 px-8 py-2">Date</th>
-          <th className="px-8 min-w-40 py-2">Action</th>
+          <th className="text-left w-full pr-4 py-2">Comment</th>
+          <th className="text-left px-8 py-2">Author</th>
+          <th className="text-left px-8 py-2">Date</th>
+          <th className="px-8 py-2">Action</th>
         </thead>
         <tbody>
           {comments &&

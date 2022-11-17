@@ -18,8 +18,6 @@ package ai.dqo.metadata.sources;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecMap;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 
 import java.util.Map;
 

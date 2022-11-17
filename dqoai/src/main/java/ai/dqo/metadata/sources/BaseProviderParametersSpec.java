@@ -18,8 +18,6 @@ package ai.dqo.metadata.sources;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import lombok.EqualsAndHashCode;
 
 /**

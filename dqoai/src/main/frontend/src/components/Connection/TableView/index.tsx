@@ -1,37 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
+import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
-import TableColumns from './TableColumns';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   CommentSpec,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
   TableBasicModel,
-  TimeSeriesConfigurationSpec
+  TimeSeriesConfigurationSpec,
+  UIAllChecksModel
 } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
+  getTableChecksUI,
   getTableComments,
+  getTableDataStreamMapping,
   getTableLabels,
   getTableSchedule,
   getTableTime,
   updateTableBasic,
+  updateTableChecksUI,
   updateTableComments,
+  updateTableDataStreamMapping,
   updateTableLabels,
   updateTableSchedule,
   updateTableTime
 } from '../../../redux/actions/table.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
+import DataQualityChecks from '../../DataQualityChecks';
+import { useHistory } from 'react-router-dom';
+import qs from 'query-string';
+import DataStreamsMappingView from '../DataStreamsMappingView';
+import { useTree } from '../../../contexts/treeContext';
+import TimestampsView from './TimestampsView';
 
 interface ITableViewProps {
-  node: ITreeNode;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
 const tabs = [
@@ -44,6 +56,10 @@ const tabs = [
     value: 'schedule'
   },
   {
+    label: 'Data Quality Checks',
+    value: 'data-quality-checks'
+  },
+  {
     label: 'Comments',
     value: 'comments'
   },
@@ -52,20 +68,33 @@ const tabs = [
     value: 'labels'
   },
   {
-    label: 'Columns',
-    value: 'columns'
+    label: 'Data Streams',
+    value: 'data-streams'
+  },
+  {
+    label: 'Timestamps',
+    value: 'timestamps'
   }
 ];
 
-const TableView = ({ node }: ITableViewProps) => {
+const TableView = ({
+  connectionName,
+  schemaName,
+  tableName
+}: ITableViewProps) => {
   const [activeTab, setActiveTab] = useState('table');
 
-  const { tableBasic, schedule, timeSeries, comments, labels, isUpdating } =
-    useSelector((state: IRootState) => state.table);
-
-  const connectionName = node.key.split('.')[1] || '';
-  const schemaName = node.key.split('.')[2] || '';
-  const tableName = node.module;
+  const {
+    tableBasic,
+    schedule,
+    timeSeries,
+    comments,
+    labels,
+    checksUI,
+    isUpdating,
+    dataStreamsMapping
+  } = useSelector((state: IRootState) => state.table);
+  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
   const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
   const [updatedSchedule, setUpdatedSchedule] =
@@ -74,7 +103,11 @@ const TableView = ({ node }: ITableViewProps) => {
     useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
+    useState<DataStreamMappingSpec>();
   const dispatch = useActionDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     setUpdatedTableBasic(tableBasic);
@@ -96,21 +129,40 @@ const TableView = ({ node }: ITableViewProps) => {
   }, [labels]);
 
   useEffect(() => {
+    setUpdatedChecksUI(checksUI);
+  }, [checksUI]);
+
+  useEffect(() => {
+    setUpdatedDataStreamMapping(dataStreamsMapping);
+  }, [dataStreamsMapping]);
+
+  useEffect(() => {
     setUpdatedTableBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
+    setUpdatedDataStreamMapping(undefined);
 
     dispatch(getTableBasic(connectionName, schemaName, tableName));
     dispatch(getTableSchedule(connectionName, schemaName, tableName));
     dispatch(getTableTime(connectionName, schemaName, tableName));
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
+    dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
+
+    const searchQuery = qs.stringify({
+      connection: connectionName,
+      schema: schemaName,
+      table: tableName
+    });
+
+    history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (activeTab === 'table') {
+    if (activeTab === 'table' || activeTab === 'timestamps') {
       await dispatch(
         updateTableBasic(
           connectionName,
@@ -160,14 +212,62 @@ const TableView = ({ node }: ITableViewProps) => {
       );
       await dispatch(getTableLabels(connectionName, schemaName, tableName));
     }
+    if (activeTab === 'data-quality-checks') {
+      await dispatch(
+        updateTableChecksUI(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedChecksUI
+        )
+      );
+      await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    }
+    if (activeTab === 'data-streams') {
+      await dispatch(
+        updateTableDataStreamMapping(
+          connectionName,
+          schemaName,
+          tableName,
+          updatedDataStreamMapping
+        )
+      );
+      await dispatch(
+        getTableDataStreamMapping(connectionName, schemaName, tableName)
+      );
+    }
   };
+
+  const onChangeTab = (tab: string) => {
+    setActiveTab(tab);
+    setTabMap({
+      ...tabMap,
+      [pageTab]: tab
+    });
+  };
+
+  useEffect(() => {
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('table');
+    }
+  }, [pageTab, tabMap]);
+
+  const isDisabled = useMemo(() => {
+    if (activeTab === 'labels') {
+      return updatedLabels.some((label) => !label);
+    }
+
+    return false;
+  }, [updatedLabels]);
 
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{node.module}</div>
+          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color="primary"
@@ -176,10 +276,11 @@ const TableView = ({ node }: ITableViewProps) => {
           className="w-40"
           onClick={onUpdate}
           loading={isUpdating}
+          disabled={isDisabled}
         />
       </div>
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       <div>
         {activeTab === 'table' && (
@@ -198,6 +299,14 @@ const TableView = ({ node }: ITableViewProps) => {
         )}
       </div>
       <div>
+        {activeTab === 'data-quality-checks' && (
+          <DataQualityChecks
+            checksUI={updatedChecksUI}
+            onChange={setUpdatedChecksUI}
+          />
+        )}
+      </div>
+      <div>
         {activeTab === 'comments' && (
           <CommentsView
             comments={updatedComments}
@@ -211,11 +320,23 @@ const TableView = ({ node }: ITableViewProps) => {
         )}
       </div>
       <div>
-        {activeTab === 'columns' && (
-          <TableColumns
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={node.module}
+        {activeTab === 'data-streams' && (
+          <DataStreamsMappingView
+            dataStreamsMapping={updatedDataStreamMapping}
+            onChange={setUpdatedDataStreamMapping}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'timestamps' && (
+          <TimestampsView
+            columnsSpec={updatedTableBasic?.timestamp_columns}
+            onChange={(columns) =>
+              setUpdatedTableBasic({
+                ...updatedTableBasic,
+                timestamp_columns: columns
+              })
+            }
           />
         )}
       </div>

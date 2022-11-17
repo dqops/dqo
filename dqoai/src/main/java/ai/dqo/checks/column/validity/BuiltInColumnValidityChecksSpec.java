@@ -15,12 +15,11 @@
  */
 package ai.dqo.checks.column.validity;
 
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.DimensionSearcherObject;
-import ai.dqo.metadata.search.LabelsSearcherObject;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,8 +36,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnValidityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+@Deprecated
+public class BuiltInColumnValidityChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnValidityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
 			put("not_null_count", o -> o.notNullCount);
 			put("non_negative_percent", o -> o.nonNegativePercent);
@@ -195,8 +195,6 @@ public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
         this.setDirtyIf(!Objects.equals(this.valueInRangeNumericalPercent, valueInRangeNumericalPercent));
         this.valueInRangeNumericalPercent = valueInRangeNumericalPercent;
         propagateHierarchyIdToField(valueInRangeNumericalPercent, "value_in_range_numerical_percent");
-
-        this.valueInRangeNumericalPercent = valueInRangeNumericalPercent;
     }
 
     /**
@@ -268,6 +266,14 @@ public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the column validity values in set percent check.
+     * @return Column validity values in set percent check.
+     */
+    public ColumnValidityValuesInSetPercentCheckSpec getValuesInSetPercent() {
+        return valuesInSetPercent;
+    }
+
+    /**
      * Sets a new definition of a date type percent check.
      * @param valuesInSetPercent Percent of values agree with given list.
      */
@@ -285,16 +291,5 @@ public class BuiltInColumnValidityChecksSpec extends AbstractSpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Calls a visitor (using a visitor design pattern) that returns a result.
-     *
-     * @param visitor   Visitor instance.
-     * @param parameter Additional parameter that will be passed back to the visitor.
-     */
-    @Override
-    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
-        return visitor.accept(this, parameter);
     }
 }

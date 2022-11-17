@@ -4,29 +4,16 @@ import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
-import Tabs from '../../Tabs';
 
 interface IScheduleDetailProps {
   schedule?: RecurringScheduleSpec;
   setSchedule: (value: RecurringScheduleSpec) => void;
 }
 
-const tabs = [
-  {
-    label: 'Schedule override',
-    value: 'schedule'
-  },
-  {
-    label: 'Effective schedule',
-    value: 'effective'
-  }
-];
-
 const ScheduleDetail = ({ schedule, setSchedule }: IScheduleDetailProps) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const [activeTab, setActiveTab] = useState('schedule');
 
   const handleChange = (obj: any) => {
     setSchedule({
@@ -71,19 +58,7 @@ const ScheduleDetail = ({ schedule, setSchedule }: IScheduleDetailProps) => {
 
   return (
     <div className="p-4">
-      <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      </div>
-
-      <table className="mb-6 mt-8">
-        {activeTab === 'effective' && (
-          <tr>
-            <td className="px-4 py-2">Time zone</td>
-            <td className="px-4 py-2">
-              <Input />
-            </td>
-          </tr>
-        )}
+      <table className="mb-6">
         <tr>
           <td className="px-4 py-2">
             <div>Unix cron expression:</div>

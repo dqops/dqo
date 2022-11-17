@@ -66,11 +66,11 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_READINGS, this.mode, this.isHeadless());
+        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless());
         if (synchronizeReadingsResult < 0) {
             return synchronizeReadingsResult;
         }
-        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_ALERTS, this.mode, this.isHeadless());
+        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless());
         return synchronizeAlertsResult;
     }
 }

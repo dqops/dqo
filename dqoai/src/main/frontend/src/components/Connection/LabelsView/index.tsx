@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LabelItem from './LabelItem';
-import Input from '../../Input';
-import { IconButton } from '@material-tailwind/react';
-import SvgIcon from '../../SvgIcon';
 
 interface ILabelsViewProps {
   labels: string[];
@@ -12,18 +9,26 @@ interface ILabelsViewProps {
 const LabelsView = ({ labels, onChange }: ILabelsViewProps) => {
   const [text, setText] = useState('');
 
-  const onAdd = () => {
-    onChange([...labels, text]);
-    setText('');
-  };
+  useEffect(() => {
+    if (text.length) {
+      onChange([...labels, text]);
+      setText('');
+    }
+  }, [text]);
 
   const onChangeLabel = (key: number, value: string) => {
-    onChange(labels.map((label, index) => (key === index ? value : label)));
+    if (key === labels.length) {
+      onChange([...labels, value]);
+    } else {
+      onChange(labels.map((label, index) => (key === index ? value : label)));
+    }
   };
 
   const onRemoveLabel = (key: number) => {
     onChange(labels.filter((item, index) => index !== key));
   };
+
+  const data = [...(labels || []), ''];
 
   return (
     <div className="p-4">
@@ -33,30 +38,18 @@ const LabelsView = ({ labels, onChange }: ILabelsViewProps) => {
           <th className="px-8 min-w-40 py-2">Action</th>
         </thead>
         <tbody>
-          {labels &&
-            labels.map((label, index) => (
-              <LabelItem
-                label={label}
-                key={index}
-                idx={index}
-                onChange={onChangeLabel}
-                onRemove={onRemoveLabel}
-              />
-            ))}
+          {data.map((label, index) => (
+            <LabelItem
+              label={label}
+              key={index}
+              idx={index}
+              isLast={index === labels.length}
+              onChange={onChangeLabel}
+              onRemove={onRemoveLabel}
+            />
+          ))}
         </tbody>
       </table>
-      <div className="flex items-center space-x-4">
-        <div className="flex-1">
-          <Input
-            className="h-10"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-        </div>
-        <IconButton className="w-10 h-10" onClick={onAdd}>
-          <SvgIcon name="add" className="w-6" />
-        </IconButton>
-      </div>
     </div>
   );
 };

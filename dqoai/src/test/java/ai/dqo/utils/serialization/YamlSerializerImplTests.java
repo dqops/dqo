@@ -18,7 +18,7 @@ package ai.dqo.utils.serialization;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import ai.dqo.metadata.sources.TableSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,11 +66,29 @@ public class YamlSerializerImplTests extends BaseTest {
     }
 
     @Test
-    void deserialize_whenUndeclaredPropertyInYaml_thenThrowsException() throws Exception {
-        YamlSerializationException yamlSerializationException = Assertions.assertThrows(YamlSerializationException.class, () -> {
-            YamlTestable deserialized = this.sut.deserialize("field1: abc\nint1: 10\nmissing: 10\n", YamlTestable.class);
-        });
+    void deserialize_whenYamlGivenAndObjectImplementsDeserializableAware_thenObjectIsNotifiedOfDeserialization() {
+        YamlTestable deserialized = this.sut.deserialize("field1: abc\nint1: 10\n", YamlTestable.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertEquals("abc", deserialized.getField1());
+        Assertions.assertEquals(10, deserialized.getInt1());
+        Assertions.assertTrue(deserialized.wasOnDeserializedCalled);
+    }
 
-        Assertions.assertEquals("Unrecognized field \"missing\" (class ai.dqo.utils.serialization.YamlTestable), not marked as ignorable at line 3, column 12", yamlSerializationException.getMessage());
+    @Test
+    void deserialize_whenUndeclaredPropertyInYaml_thenIgnoresIssue() {
+        YamlTestable deserialized = this.sut.deserialize("field1: abc\nint1: 10\nmissing: 10\n", YamlTestable.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertEquals("abc", deserialized.getField1());
+        Assertions.assertEquals(10, deserialized.getInt1());
+    }
+
+    @Test
+    void deserialize_whenUndeclaredPropertyInObjectExtendingAbstractSpec_thenIgnoredPropertiesAddedToMap() {
+        TableSpec deserialized = this.sut.deserialize("missing_field1: abc\nmissing_field2: 10\n", TableSpec.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertNotNull(deserialized.getIgnoredProperties());
+        Assertions.assertEquals(2, deserialized.getIgnoredProperties().size());
+        Assertions.assertTrue(deserialized.getIgnoredProperties().containsKey("missing_field1"));
+        Assertions.assertTrue(deserialized.getIgnoredProperties().containsKey("missing_field2"));
     }
 }

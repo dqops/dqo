@@ -17,7 +17,6 @@ package ai.dqo.execution.checks;
 
 
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
-import ai.dqo.execution.checks.scheduled.ScheduledChecksCollection;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;

@@ -16,7 +16,7 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -77,7 +77,7 @@ public class FieldInfoTests extends BaseTest {
         target.setDataType(ParameterDataType.double_type);
 
         Object fieldValue = sut.getFieldValue(target);
-        Assertions.assertEquals("double_type", fieldValue);
+        Assertions.assertEquals("double", fieldValue);
     }
 
     @Test
@@ -112,16 +112,16 @@ public class FieldInfoTests extends BaseTest {
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
         target.setDataType(ParameterDataType.double_type);
 
-        sut.setFieldValue("string_type", target);
+        sut.setFieldValue("string", target);
         Assertions.assertEquals(ParameterDataType.string_type, target.getDataType());
     }
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsFilled_thenReturnsExistingValue() throws Exception {
-        Field field = TableCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableCheckCategoriesSpec target = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
         BuiltInTableValidityChecksSpec expected = new BuiltInTableValidityChecksSpec();
         target.setValidity(expected);
 
@@ -132,10 +132,10 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsNull_thenCreatesNewObjectThatIsNotStored() throws Exception {
-        Field field = TableCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableCheckCategoriesSpec target = new TableCheckCategoriesSpec();
+        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
         target.setValidity(null);
         BuiltInTableValidityChecksSpec result = (BuiltInTableValidityChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);

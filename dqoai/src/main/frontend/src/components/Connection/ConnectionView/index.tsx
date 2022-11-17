@@ -1,30 +1,29 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ITreeNode } from '../../../shared/interfaces';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import TimeSeriesTab from './TimeSeriesTab';
-import { SchemaApiClient } from '../../../services/apiClient';
+import TimeSeriesView from '../TimeSeriesView';
 import {
   CommentSpec,
   ConnectionBasicModel,
+  DataStreamMappingSpec,
   RecurringScheduleSpec,
-  SchemaModel,
   TimeSeriesConfigurationSpec
 } from '../../../api';
-import SchemaDetail from '../SchemaView/SchemaDetail';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
   getConnectionComments,
+  getConnectionDefaultDataStreamsMapping,
   getConnectionLabels,
   getConnectionSchedule,
   getConnectionTime,
   updateConnectionBasic,
   updateConnectionComments,
+  updateConnectionDefaultDataStreamsMapping,
   updateConnectionLabels,
   updateConnectionSchedule,
   updateConnectionTime
@@ -32,12 +31,17 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
+import qs from 'query-string';
+import { useHistory } from 'react-router-dom';
+import SchemasView from './SchemasView';
+import DataStreamsMappingView from '../DataStreamsMappingView';
+import { useTree } from '../../../contexts/treeContext';
 
 interface IConnectionViewProps {
-  node: ITreeNode;
+  connectionName: string;
 }
 
-const initTabs = [
+const tabs = [
   {
     label: 'Connection',
     value: 'connection'
@@ -57,20 +61,27 @@ const initTabs = [
   {
     label: 'Labels',
     value: 'labels'
+  },
+  {
+    label: 'Schemas',
+    value: 'schemas'
+  },
+  {
+    label: 'Data Streams',
+    value: 'data-streams'
   }
 ];
 
-const ConnectionView = ({ node }: IConnectionViewProps) => {
+const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
-  const [schemas, setSchemas] = useState<SchemaModel[]>([]);
-  const [tabs, setTabs] = useState(initTabs);
   const {
     connectionBasic,
     schedule,
     timeSeries,
     comments,
     labels,
-    isUpdating
+    isUpdating,
+    defaultDataStreams
   } = useSelector((state: IRootState) => state.connection);
   const [updatedConnectionBasic, setUpdatedConnectionBasic] =
     useState<ConnectionBasicModel>();
@@ -80,8 +91,11 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
+  const [updatedDataStreamsMapping, setUpdatedDataStreamsMapping] =
+    useState<DataStreamMappingSpec>();
   const dispatch = useActionDispatch();
-  const connectionName = useMemo(() => node.module, [node]);
+  const history = useHistory();
+  const { tabMap, setTabMap, activeTab: pageTab } = useTree();
 
   useEffect(() => {
     setUpdatedConnectionBasic(connectionBasic);
@@ -103,32 +117,30 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
   }, [labels]);
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(connectionName).then((res) => {
-      setSchemas(res.data);
-    });
+    setUpdatedDataStreamsMapping(defaultDataStreams);
+  }, [defaultDataStreams]);
 
+  useEffect(() => {
     setUpdatedConnectionBasic(undefined);
     setUpdatedSchedule(undefined);
     setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
+    setUpdatedDataStreamsMapping(undefined);
 
     dispatch(getConnectionBasic(connectionName));
     dispatch(getConnectionSchedule(connectionName));
     dispatch(getConnectionTime(connectionName));
     dispatch(getConnectionComments(connectionName));
     dispatch(getConnectionLabels(connectionName));
-  }, [connectionName]);
+    dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
 
-  useEffect(() => {
-    setTabs([
-      ...initTabs,
-      ...schemas.map((item) => ({
-        label: item.schema_name || '',
-        value: item.schema_name || ''
-      }))
-    ]);
-  }, [schemas]);
+    const searchQuery = qs.stringify({
+      connection: connectionName
+    });
+
+    history.replace(`/?${searchQuery}`);
+  }, [connectionName]);
 
   const onUpdate = async () => {
     if (activeTab === 'connection') {
@@ -153,6 +165,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
       await dispatch(updateConnectionLabels(connectionName, updatedLabels));
       await dispatch(getConnectionLabels(connectionName));
     }
+    if (activeTab === 'data-streams') {
+      await dispatch(
+        updateConnectionDefaultDataStreamsMapping(connectionName, updatedDataStreamsMapping)
+      );
+      await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
+    }
   };
 
   const renderTabContent = () => {
@@ -174,10 +192,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     }
     if (activeTab === 'time') {
       return (
-        <TimeSeriesTab
-          timeSeries={updatedTimeSeries}
-          setTimeSeries={setUpdatedTimeSeries}
-        />
+        <div className="p-4">
+          <TimeSeriesView
+            timeSeries={updatedTimeSeries}
+            setTimeSeries={setUpdatedTimeSeries}
+          />
+        </div>
       );
     }
     if (activeTab === 'comments') {
@@ -191,12 +211,43 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
     if (activeTab === 'labels') {
       return <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />;
     }
-    return (
-      <SchemaDetail
-        schema={schemas.find((item) => item.schema_name === activeTab)}
-      />
-    );
+    if (activeTab === 'schemas') {
+      return <SchemasView connectionName={connectionName} />;
+    }
+    if (activeTab === 'data-streams') {
+      return (
+        <DataStreamsMappingView
+          dataStreamsMapping={updatedDataStreamsMapping}
+          onChange={setUpdatedDataStreamsMapping}
+        />
+      );
+    }
+    return null;
   };
+
+  const onChangeTab = (tab: string) => {
+    setActiveTab(tab);
+    setTabMap({
+      ...tabMap,
+      [pageTab]: tab
+    });
+  };
+
+  useEffect(() => {
+    if (tabMap[pageTab]) {
+      setActiveTab(tabMap[pageTab]);
+    } else {
+      setActiveTab('connection');
+    }
+  }, [pageTab, tabMap]);
+
+  const isDisabled = useMemo(() => {
+    if (activeTab === 'labels') {
+      return updatedLabels.some((label) => !label);
+    }
+
+    return false;
+  }, [updatedLabels]);
 
   return (
     <div className="">
@@ -211,11 +262,12 @@ const ConnectionView = ({ node }: IConnectionViewProps) => {
           label="Save"
           className="w-40"
           onClick={onUpdate}
+          disabled={isDisabled}
           loading={isUpdating}
         />
       </div>
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {renderTabContent()}
     </div>

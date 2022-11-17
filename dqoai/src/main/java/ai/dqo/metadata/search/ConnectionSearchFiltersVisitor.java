@@ -15,12 +15,11 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link ConnectionSearchFilters} that finds the correct nodes.
@@ -73,8 +72,8 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        parameter.getDimensionSearcherObject().setConnectionDimension(connectionWrapper.getSpec().getDefaultDimensions());
-        if (!DimensionSearchMatcher.matchAllConnectionDimensions(this.filters, connectionWrapper.getSpec().getDefaultDimensions())) {
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionWrapper.getSpec().getDefaultDataStreams())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionWrapper.getSpec().getLabels())) {
@@ -103,8 +102,8 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionSpec.getLabels());
-        parameter.getDimensionSearcherObject().setConnectionDimension(connectionSpec.getDefaultDimensions());
-        if (!DimensionSearchMatcher.matchAllConnectionDimensions(this.filters, connectionSpec.getDefaultDimensions())) {
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionSpec.getDefaultDataStreams());
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreams())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionSpec.getLabels())) {
@@ -113,7 +112,7 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
         if(!this.filters.getEnabled()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
-        if (!DimensionSearchMatcher.matchAllConnectionDimensions(this.filters, connectionSpec.getDefaultDimensions())) {
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreams())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionSpec.getLabels())) {

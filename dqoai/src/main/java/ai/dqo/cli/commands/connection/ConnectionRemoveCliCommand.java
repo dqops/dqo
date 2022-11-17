@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
-import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;

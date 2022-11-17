@@ -15,10 +15,10 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
-import ai.dqo.core.filesystem.virtual.FolderTreeNode;
-import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
+import ai.dqo.core.filesystem.virtual.FolderTreeNode;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.sampledata.SampleTableMetadata;

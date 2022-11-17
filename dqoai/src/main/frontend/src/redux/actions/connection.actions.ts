@@ -1,3 +1,19 @@
+///
+/// Copyright © 2021 DQO.ai (support@dqo.ai)
+///
+/// Licensed under the Apache License, Version 2.0 (the "License");
+/// you may not use this file except in compliance with the License.
+/// You may obtain a copy of the License at
+///
+///     http://www.apache.org/licenses/LICENSE-2.0
+///
+/// Unless required by applicable law or agreed to in writing, software
+/// distributed under the License is distributed on an "AS IS" BASIS,
+/// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+/// See the License for the specific language governing permissions and
+/// limitations under the License.
+///
+
 import { Dispatch } from 'redux';
 
 import { ConnectionApiClient } from '../../services/apiClient';
@@ -286,5 +302,59 @@ export const updateConnectionLabels =
       dispatch(updateConnectionLabelsSuccess());
     } catch (err) {
       dispatch(updateConnectionLabelsFailed(err));
+    }
+  };
+
+export const getConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
+});
+
+export const getConnectionDefaultDataStreamsMappingSuccess = (data: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  data
+});
+
+export const getConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  error
+});
+
+export const getConnectionDefaultDataStreamsMapping =
+  (connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionDefaultDataStreamsMappingRequest());
+    try {
+      const res = await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
+        connectionName
+      );
+      dispatch(getConnectionDefaultDataStreamsMappingSuccess(res.data));
+    } catch (err) {
+      dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
+    }
+  };
+
+export const updateConnectionDefaultDataStreamsMappingRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
+});
+
+export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
+});
+
+export const updateConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  error
+});
+
+export const updateConnectionDefaultDataStreamsMapping =
+  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+    dispatch(updateConnectionDefaultDataStreamsMappingRequest());
+    try {
+      await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(
+        connectionName,
+        data
+      );
+      dispatch(updateConnectionDefaultDataStreamsMappingSuccess());
+    } catch (err) {
+      dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
     }
   };

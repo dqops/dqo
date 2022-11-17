@@ -48,7 +48,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     public void onSensorExecuted(SensorExecutedEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheckHierarchyId().getLast().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
         Table resultTable = event.getSensorResult().getResultTable();
         int sensorResultCount = resultTable.rowCount();
@@ -82,7 +82,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     public void onRulesExecuted(RulesExecutedEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheckHierarchyId().getLast().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
         int evaluatedRulesCount = ruleResultsTable.rowCount();
         this.terminalWriter.writeLine(String.format("Finished executing rules (thresholds) for a check %s on the table %s, verified rules count: %d",
