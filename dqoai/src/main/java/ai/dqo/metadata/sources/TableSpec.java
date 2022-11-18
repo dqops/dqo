@@ -450,6 +450,25 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.checks != null && this.checks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * Creates an expanded and trimmed (no checks for columns, no comments) deep copy of the table.

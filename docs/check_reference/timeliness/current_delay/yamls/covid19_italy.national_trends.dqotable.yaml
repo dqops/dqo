@@ -1,0 +1,81 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: covid19_italy
+    table_name: national_trends
+  time_series:
+    mode: current_time
+    time_gradient: day
+  checks:
+    timeliness:
+      current_delay:
+        parameters:
+          column: "date"
+          time_scale: "HOUR"
+        rules:
+          max_count:
+            low:
+              max_value: 24.0
+            medium:
+              max_value: 26.0
+            high:
+              max_value: 30.0
+  columns:
+    date:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+    country:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    hospitalized_patients_symptoms:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    hospitalized_patients_intensive_care:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_hospitalized_patients:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    home_confinement_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_current_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    new_current_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    new_total_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    recovered:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    deaths:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    total_confirmed_cases:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    tests_performed:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    note:
+      type_snapshot:
+        column_type: STRING
+        nullable: true

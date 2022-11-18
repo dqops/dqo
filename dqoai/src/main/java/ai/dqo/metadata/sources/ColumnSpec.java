@@ -452,4 +452,24 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             return this;
         }
     }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.checks != null && this.checks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
+    }
 }
