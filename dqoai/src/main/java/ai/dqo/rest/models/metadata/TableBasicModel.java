@@ -61,6 +61,10 @@ public class TableBasicModel {
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
 
+    @JsonPropertyDescription("True when the table has any checks configured.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hasAnyConfiguredChecks;
+
     /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
@@ -77,6 +81,7 @@ public class TableBasicModel {
             setStage(tableSpec.getStage());
             setFilter(tableSpec.getFilter());
             setOwner(tableSpec.getOwner());
+            setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
         }};
     }
 

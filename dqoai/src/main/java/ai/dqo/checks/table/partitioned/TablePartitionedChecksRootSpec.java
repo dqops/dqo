@@ -15,10 +15,9 @@
  */
 package ai.dqo.checks.table.partitioned;
 
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.id.*;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -110,5 +109,25 @@ public class TablePartitionedChecksRootSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Checks if there are any configured checks (not null) in any check category.
+     *
+     * @return True when there are some checks configured, false when all checks are nulls.
+     */
+    public boolean hasAnyConfiguredChecks() {
+        for (ChildFieldEntry childFieldEntry : this.getChildMap().getChildEntries()) {
+            HierarchyNode childNode = childFieldEntry.getGetChildFunc().apply(this);
+
+            if (childNode instanceof AbstractRootChecksContainerSpec) {
+                AbstractRootChecksContainerSpec checksRootSpec = (AbstractRootChecksContainerSpec) childNode;
+                if (checksRootSpec.hasAnyConfiguredChecks()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

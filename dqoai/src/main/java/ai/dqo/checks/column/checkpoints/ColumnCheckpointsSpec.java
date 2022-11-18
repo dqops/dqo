@@ -15,10 +15,10 @@
  */
 package ai.dqo.checks.column.checkpoints;
 
+import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.id.*;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -57,6 +57,7 @@ public class ColumnCheckpointsSpec extends AbstractSpec {
 
     /**
      * Returns daily checkpoints.
+     *
      * @return Daily checkpoints.
      */
     public ColumnDailyCheckpointCategoriesSpec getDaily() {
@@ -65,16 +66,18 @@ public class ColumnCheckpointsSpec extends AbstractSpec {
 
     /**
      * Sets the daily check points container.
+     *
      * @param daily New daily check points container.
      */
     public void setDaily(ColumnDailyCheckpointCategoriesSpec daily) {
-		this.setDirtyIf(!Objects.equals(this.daily, daily));
+        this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
-		this.propagateHierarchyIdToField(daily, "daily");
+        this.propagateHierarchyIdToField(daily, "daily");
     }
 
     /**
      * Returns monthly checkpoints.
+     *
      * @return Monthly checkpoints.
      */
     public ColumnMonthlyCheckpointCategoriesSpec getMonthly() {
@@ -83,6 +86,7 @@ public class ColumnCheckpointsSpec extends AbstractSpec {
 
     /**
      * Sets the monthly check points container.
+     *
      * @param monthly New monthly check points container.
      */
     public void setMonthly(ColumnMonthlyCheckpointCategoriesSpec monthly) {
@@ -110,5 +114,25 @@ public class ColumnCheckpointsSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Checks if there are any configured checks (not null) in any check category.
+     *
+     * @return True when there are some checks configured, false when all checks are nulls.
+     */
+    public boolean hasAnyConfiguredChecks() {
+        for (ChildFieldEntry childFieldEntry : this.getChildMap().getChildEntries()) {
+            HierarchyNode childNode = childFieldEntry.getGetChildFunc().apply(this);
+
+            if (childNode instanceof AbstractRootChecksContainerSpec) {
+                AbstractRootChecksContainerSpec checksRootSpec = (AbstractRootChecksContainerSpec) childNode;
+                if (checksRootSpec.hasAnyConfiguredChecks()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

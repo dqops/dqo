@@ -101,19 +101,6 @@ const TimestampsView = ({ columnsSpec, onChange }: TimestampsViewProps) => {
           }
         />
       </div>
-      <div>
-        <SelectInput
-          label="Effective Partitioning Column"
-          options={options}
-          value={columnsSpec?.effective_partitioning_column}
-          onChange={(column) =>
-            onChange({
-              ...columnsSpec,
-              effective_partitioning_column: column
-            })
-          }
-        />
-      </div>
     </div>
   );
 };
