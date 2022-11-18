@@ -49,6 +49,10 @@ public class ColumnBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
+    @JsonPropertyDescription("True when the column has any checks configured.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hasAnyConfiguredChecks;
+
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
@@ -72,6 +76,7 @@ public class ColumnBasicModel {
             setColumnName(columnName);
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
+            setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
         }};
     }
 
