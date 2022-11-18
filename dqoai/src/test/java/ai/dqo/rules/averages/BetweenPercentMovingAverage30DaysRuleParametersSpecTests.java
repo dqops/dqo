@@ -59,6 +59,7 @@ public class BetweenPercentMovingAverage30DaysRuleParametersSpecTests extends Ba
         this.sut = new BetweenPercentMovingAverage30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
         this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
         this.readingTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
         this.sensorReadings = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
@@ -88,7 +89,6 @@ public class BetweenPercentMovingAverage30DaysRuleParametersSpecTests extends Ba
     void executeRule_whenActualValueIsEqualMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
         this.sut.setMaxPercentAbove(5.0);
         this.sut.setMaxPercentBelow(5.0);
-
         for (int i = 0; i < this.sensorReadings.length; i++) {
             this.sensorReadings[i] = 20.0;
         }
@@ -107,7 +107,6 @@ public class BetweenPercentMovingAverage30DaysRuleParametersSpecTests extends Ba
     void executeRule_whenActualValueIsAboveMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsFailed() {
         this.sut.setMaxPercentAbove(5.0);
         this.sut.setMaxPercentBelow(5.0);
-
         for (int i = 0; i < this.sensorReadings.length; i++) {
             this.sensorReadings[i] = 20.0;
         }
