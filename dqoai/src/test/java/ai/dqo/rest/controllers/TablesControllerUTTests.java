@@ -18,6 +18,7 @@ package ai.dqo.rest.controllers;
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
@@ -27,6 +28,8 @@ import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
+import ai.dqo.rest.models.metadata.TableBasicModel;
+import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -44,8 +47,8 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @SpringBootTest
-public class ColumnsControllerUTTests extends BaseTest {
-    private ColumnsController sut;
+public class TablesControllerUTTests extends BaseTest {
+    private TablesController sut;
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
@@ -64,75 +67,74 @@ public class ColumnsControllerUTTests extends BaseTest {
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService);
         UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new ColumnsController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
+        this.sut = new TablesController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 
     @Test
-    void getColumns_whenSampleTableRequested_thenReturnsListOfColumns() {
+    void getTables_whenSampleConnectionRequested_thenReturnsListOfTables() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<ColumnBasicModel>> responseEntity = this.sut.getColumns(
+        ResponseEntity<Flux<TableBasicModel>> responseEntity = this.sut.getTables(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName());
+
+        List<TableBasicModel> result = responseEntity.getBody().collectList().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+
+        Assertions.assertEquals(this.sampleTable.getTableSpec().getHierarchyId().hashCode64(), result.get(0).getTableHash());
+    }
+
+    @Test
+    void getTable_whenSampleConnectionRequested_thenReturnsRequestedTable() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
+
+        ResponseEntity<Mono<TableModel>> responseEntity = this.sut.getTable(
+                this.sampleTable.getConnectionName(),
+                tableSpec.getTarget().getSchemaName(),
+                tableSpec.getTarget().getTableName());
+
+        TableModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(tableSpec.getTarget().getTableName(), result.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
+        Assertions.assertEquals(
+                tableSpec.getTarget().toPhysicalTableName(),
+                result.getSpec().getTarget().toPhysicalTableName());
+        Assertions.assertEquals(tableSpec.getHierarchyId().hashCode64(), result.getSpec().getHierarchyId().hashCode64());
+        Assertions.assertSame(tableSpec, result.getSpec());
+    }
+
+    @Test
+    void getTableBasic_whenTableRequested_thenReturnsRequestedTable() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
+
+        ResponseEntity<Mono<TableBasicModel>> responseEntity = this.sut.getTableBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName());
 
-        List<ColumnBasicModel> result = responseEntity.getBody().collectList().block();
+        TableBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, result.size());
-    }
-
-    @Test
-    void getColumn_whenColumnFromSampleTableRequested_thenReturnsRequestedColumn() {
-        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
-
-        ResponseEntity<Mono<ColumnModel>> responseEntity = this.sut.getColumn(
-                this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName());
-
-        ColumnModel result = responseEntity.getBody().block();
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(columnSpec.getColumnName(), result.getColumnName());
+        Assertions.assertEquals(tableSpec.getTarget().getTableName(), result.getTarget().getTableName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
-        Assertions.assertEquals(this.sampleTable.getTableSpec().getTarget().toPhysicalTableName(), result.getTable());
-        Assertions.assertEquals(columnSpec.getHierarchyId().hashCode64(), result.getColumnHash());
-        Assertions.assertSame(columnSpec, result.getSpec());
+        Assertions.assertEquals(tableSpec.getTarget().toPhysicalTableName(), result.getTarget().toPhysicalTableName());
+        Assertions.assertEquals(tableSpec.getHierarchyId().hashCode64(), result.getTableHash());
     }
 
     @Test
-    void getColumnBasic_whenColumnFromSampleTableRequested_thenReturnsRequestedColumn() {
+    void getTableAdHocChecksUI_whenTableRequested_thenReturnsAdHocChecksUi() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<ColumnBasicModel>> responseEntity = this.sut.getColumnBasic(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableAdHocChecksUI(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName());
-
-        ColumnBasicModel result = responseEntity.getBody().block();
-        Assertions.assertNotNull(result);
-        Assertions.assertEquals(columnSpec.getColumnName(), result.getColumnName());
-        Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
-        Assertions.assertEquals(this.sampleTable.getTableSpec().getTarget().toPhysicalTableName(), result.getTable());
-        Assertions.assertEquals(columnSpec.getHierarchyId().hashCode64(), result.getColumnHash());
-        Assertions.assertEquals(columnSpec.getTypeSnapshot(), result.getTypeSnapshot());
-    }
-
-    @Test
-    void getColumnAdHocChecksUI_whenColumnFromSampleTableRequested_thenReturnsAdHocChecksUi() {
-        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
-
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnAdHocChecksUI(
-                this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName());
+                tableSpec.getTarget().getSchemaName(),
+                tableSpec.getTarget().getTableName());
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -141,15 +143,14 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"daily", "monthly"})
-    void getColumnCheckpointsUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(String timePartition) {
+    void getTableCheckpointsUI_whenTableRequested_thenReturnsCheckpointsUi(String timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnCheckpointsUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableCheckpointsUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName(),
                 timePartition);
 
         UIAllChecksModel result = responseEntity.getBody().block();
@@ -159,15 +160,14 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"daily", "monthly"})
-    void getColumnPartitionedChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(String timePartition) {
+    void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(String timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnPartitionedChecksUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName(),
                 timePartition);
 
         UIAllChecksModel result = responseEntity.getBody().block();
