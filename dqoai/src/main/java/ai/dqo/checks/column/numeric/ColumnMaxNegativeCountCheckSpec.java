@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnValidityNegativeCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNegativeCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnValidityNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnNumericNegativeCountSensorParametersSpec, MaxCountRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNegativeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -46,7 +46,7 @@ public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnVal
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityNegativeCountSensorParametersSpec parameters = new ColumnValidityNegativeCountSensorParametersSpec();
+    private ColumnNumericNegativeCountSensorParametersSpec parameters = new ColumnNumericNegativeCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnVal
      * @return Sensor parameters.
      */
     @Override
-    public ColumnValidityNegativeCountSensorParametersSpec getParameters() {
+    public ColumnNumericNegativeCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnMaxNegativeCountCheckSpec extends AbstractCheckSpec<ColumnVal
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnValidityNegativeCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericNegativeCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
