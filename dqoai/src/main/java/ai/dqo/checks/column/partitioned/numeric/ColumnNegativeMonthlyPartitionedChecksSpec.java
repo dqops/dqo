@@ -27,37 +27,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.
+ * Container of built-in preconfigured data quality check points on a column level that are checking at a monthly level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNegativesDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativesDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnNegativeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_max_numerics_count", o -> o.dailyPartitionMaxNumericsCount);
+            put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of numerics in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNumericsCount;
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount;
 
     /**
-     * Returns a maximum numerics count check.
-     * @return Maximum numerics count check.
+     * Returns a maximum negative values count check.
+     * @return Maximum negative values count check.
      */
-    public ColumnMaxNegativeCountCheckSpec getDailyPartitionMaxNumericsCount() {
-        return dailyPartitionMaxNumericsCount;
+    public ColumnMaxNegativeCountCheckSpec getMonthlyPartitionMaxNegativeCount() {
+        return monthlyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum numerics count check.
-     * @param dailyPartitionMaxNumericsCount Maximum numerics count check.
+     * Sets a new definition of a maximum negative values count check.
+     * @param monthlyPartitionMaxNegativeCount Maximum negative values count check.
      */
-    public void setDailyPartitionMaxNumericsCount(ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNumericsCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNumericsCount, dailyPartitionMaxNumericsCount));
-        this.dailyPartitionMaxNumericsCount = dailyPartitionMaxNumericsCount;
-        propagateHierarchyIdToField(dailyPartitionMaxNumericsCount, "daily_partition_max_numerics_count");
+    public void setMonthlyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativeCount, monthlyPartitionMaxNegativeCount));
+        this.monthlyPartitionMaxNegativeCount = monthlyPartitionMaxNegativeCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxNegativeCount, "monthly_partition_max_negative_count");
     }
 
     /**

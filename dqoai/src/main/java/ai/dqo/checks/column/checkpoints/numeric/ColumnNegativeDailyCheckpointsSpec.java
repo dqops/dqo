@@ -35,7 +35,7 @@ import java.util.Objects;
 public class ColumnNegativeDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_max_negatives_count", o -> o.dailyCheckpointMaxNegativeCount);
+            put("daily_checkpoint_max_negative_count", o -> o.dailyCheckpointMaxNegativeCount);
         }
     };
 
@@ -43,21 +43,21 @@ public class ColumnNegativeDailyCheckpointsSpec extends AbstractCheckCategorySpe
     private ColumnMaxNegativeCountCheckSpec dailyCheckpointMaxNegativeCount;
 
     /**
-     * Returns a maximum numerics count check.
-     * @return Maximum numerics count check.
+     * Returns a maximum negative values count check.
+     * @return Maximum negative values count check.
      */
     public ColumnMaxNegativeCountCheckSpec getDailyCheckpointMaxNegativeCount() {
         return dailyCheckpointMaxNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum numerics count check.
-     * @param dailyCheckpointMaxNegativeCount Maximum numerics count check.
+     * Sets a new definition of a maximum negative values count check.
+     * @param dailyCheckpointMaxNegativeCount Maximum negative values count check.
      */
     public void setDailyCheckpointMaxNegativeCount(ColumnMaxNegativeCountCheckSpec dailyCheckpointMaxNegativeCount) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNegativeCount, dailyCheckpointMaxNegativeCount));
         this.dailyCheckpointMaxNegativeCount = dailyCheckpointMaxNegativeCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxNegativeCount, "daily_checkpoint_max_negatives_count");
+        propagateHierarchyIdToField(dailyCheckpointMaxNegativeCount, "daily_checkpoint_max_negative_count");
     }
 
     /**

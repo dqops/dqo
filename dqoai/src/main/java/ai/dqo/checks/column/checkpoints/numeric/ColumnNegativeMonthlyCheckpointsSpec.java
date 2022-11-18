@@ -35,7 +35,7 @@ import java.util.Objects;
 public class ColumnNegativeMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_max_negatives_count", o -> o.monthlyCheckpointMaxNegativeCount);
+            put("monthly_checkpoint_max_negative_count", o -> o.monthlyCheckpointMaxNegativeCount);
         }
     };
 
@@ -43,21 +43,21 @@ public class ColumnNegativeMonthlyCheckpointsSpec extends AbstractCheckCategoryS
     private ColumnMaxNegativeCountCheckSpec monthlyCheckpointMaxNegativeCount;
 
     /**
-     * Returns a maximum numerics count check.
-     * @return Maximum numerics count check.
+     * Returns a maximum negative values count check.
+     * @return Maximum negative values count check.
      */
     public ColumnMaxNegativeCountCheckSpec getMonthlyCheckpointMaxNegativeCount() {
         return monthlyCheckpointMaxNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum numerics count check.
-     * @param monthlyCheckpointMaxNegativeCount Maximum numerics count check.
+     * Sets a new definition of a maximum negative values count check.
+     * @param monthlyCheckpointMaxNegativeCount Maximum negative values count check.
      */
     public void setMonthlyCheckpointMaxNegativeCount(ColumnMaxNegativeCountCheckSpec monthlyCheckpointMaxNegativeCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNegativeCount, monthlyCheckpointMaxNegativeCount));
         this.monthlyCheckpointMaxNegativeCount = monthlyCheckpointMaxNegativeCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxNegativeCount, "monthly_checkpoint_max_negatives_count");
+        propagateHierarchyIdToField(monthlyCheckpointMaxNegativeCount, "monthly_checkpoint_max_negative_count");
     }
 
     /**
