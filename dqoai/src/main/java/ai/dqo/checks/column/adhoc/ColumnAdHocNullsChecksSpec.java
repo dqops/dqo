@@ -17,7 +17,6 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
-import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,15 +37,11 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNullsChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_nulls_count", o -> o.maxNullsCount);
-            put("max_nulls_percent", o -> o.maxNullsPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count.")
     private ColumnMaxNullsCountCheckSpec maxNullsCount;
-
-    @JsonPropertyDescription("Verifies that the percent of nulls in a column does not exceed the maximum accepted percentage.")
-    private ColumnMaxNullsPercentCheckSpec maxNullsPercent;
 
     /**
      * Returns a maximum nulls count check.
@@ -57,14 +52,6 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a maximum nulls percent check.
-     * @return Maximum nulls percent check.
-     */
-    public ColumnMaxNullsPercentCheckSpec getMaxNullsPercent() {
-        return maxNullsPercent;
-    }
-
-    /**
      * Sets a new definition of a maximum nulls count check.
      * @param maxNullsCount Maximum nulls count check.
      */
@@ -72,16 +59,6 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxNullsCount, maxNullsCount));
         this.maxNullsCount = maxNullsCount;
         propagateHierarchyIdToField(maxNullsCount, "max_nulls_count");
-    }
-
-    /**
-     * Sets a new definition of a maximum nulls percent check.
-     * @param maxNullsPercent Maximum nulls percent check.
-     */
-    public void setMaxNullsPercent(ColumnMaxNullsPercentCheckSpec maxNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.maxNullsPercent, maxNullsPercent));
-        this.maxNullsPercent = maxNullsPercent;
-        propagateHierarchyIdToField(maxNullsPercent, "max_nulls_percent");
     }
 
     /**

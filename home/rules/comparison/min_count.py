@@ -20,7 +20,7 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class MinCountRuleParametersSpec:
-    min_count: int
+    min_count: float
 
 
 class HistoricDataPoint:

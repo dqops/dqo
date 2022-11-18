@@ -110,7 +110,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(11L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -135,7 +135,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-        this.checkSpec.setWarning(new MinCountRuleParametersSpec(11L));
+        this.checkSpec.setWarning(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -160,7 +160,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setError(new MinCountRuleParametersSpec(11L));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -185,7 +185,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setError(new MinCountRuleParametersSpec(11L));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -210,7 +210,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11L));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -235,7 +235,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 10.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11L));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -260,9 +260,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 15.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12L));
-		this.checkSpec.setError(new MinCountRuleParametersSpec(11L));
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(11));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -287,9 +287,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 9.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12L));
-		this.checkSpec.setError(new MinCountRuleParametersSpec(11L));
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(11));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -314,9 +314,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(13L));
-		this.checkSpec.setError(new MinCountRuleParametersSpec(12L));
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(13));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(12));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -341,9 +341,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(13L));
-		this.checkSpec.setError(new MinCountRuleParametersSpec(11L));
-		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(13));
+		this.checkSpec.setError(new MinCountRuleParametersSpec(11));
+		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -368,7 +368,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 12.0));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(14L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(14));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);
@@ -405,7 +405,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.table.addColumns(StringColumn.create("stream_level_1", "one", "two"));
         SensorNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
-		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12L));
+		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12));
 
         RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadingsSnapshot, progressListener);

@@ -46,18 +46,18 @@ public class MinValueRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minValue Minimum accepted value.
      */
-    public MinValueRuleParametersSpec(double minValue) {
+    public MinValueRuleParametersSpec(Double minValue) {
         this.minValue = minValue;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minValue;
+    private Double minValue;
 
     /**
      * Minimum value for a data quality check reading, for example a minimum row count.
      * @return Minimum value for a data quality check reading.
      */
-    public double getMinValue() {
+    public Double getMinValue() {
         return minValue;
     }
 
@@ -65,7 +65,7 @@ public class MinValueRuleParametersSpec extends AbstractRuleParametersSpec {
      * Changes the minimum value (threshold) for a data quality reading.
      * @param minValue Minimum value.
      */
-    public void setMinValue(double minValue) {
+    public void setMinValue(Double minValue) {
 		this.setDirtyIf(this.minValue != minValue);
         this.minValue = minValue;
     }

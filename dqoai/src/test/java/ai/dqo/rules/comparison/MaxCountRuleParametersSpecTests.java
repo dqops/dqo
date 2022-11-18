@@ -34,7 +34,7 @@ public class MaxCountRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMaxCount(1L);
+        this.sut.setMaxCount(1);
         Assertions.assertEquals(1, this.sut.getMaxCount());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -43,11 +43,11 @@ public class MaxCountRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMaxCount(1L);
+        this.sut.setMaxCount(1);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMaxCount(1L);
+        this.sut.setMaxCount(1);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }

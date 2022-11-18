@@ -15,7 +15,6 @@
  */
 package ai.dqo.connectors.bigquery;
 
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
 
@@ -44,7 +43,6 @@ public class BigQueryTableSpecObjectMother {
      */
     public static TableSpec create_bq_data_types_test() {
         TableSpec table = new TableSpec(new TableTargetSpec(DATASET_NAME, TableNames.bq_data_types_test.name()));
-        table.setTimeSeries(new TimeSeriesConfigurationSpec());
         // TODO: we can also add columns
 
         return table;
@@ -57,7 +55,6 @@ public class BigQueryTableSpecObjectMother {
      */
     public static TableSpec create_numerical_datetime_average_week() {
         TableSpec table = new TableSpec(new TableTargetSpec(DATASET_NAME, TableNames.numerical_datetime_average_week.name()));
-        table.setTimeSeries(new TimeSeriesConfigurationSpec());
         // TODO: we can also add columns
 
         return table;
