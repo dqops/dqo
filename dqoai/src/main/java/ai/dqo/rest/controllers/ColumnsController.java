@@ -1202,8 +1202,16 @@ public class ColumnsController {
         }
 
         // TODO: validate the columnSpec
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
+        if (checks == null) {
+            checks = new ColumnAdHocCheckCategoriesSpec();
+        }
+
         if (uiAllChecksModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), columnSpec.getChecks());
+            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checks);
+            if (!checks.isDefault()) {
+                columnSpec.setChecks(checks);
+            }
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }

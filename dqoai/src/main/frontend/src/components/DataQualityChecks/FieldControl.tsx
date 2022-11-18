@@ -57,7 +57,8 @@ const FieldControl = ({
     });
   };
 
-  const isInvalid = !field.optional && !value && !disabled;
+  const isInvalid = !field.optional && !value && value !== 0 && !disabled;
+
 
   return (
     <div>
@@ -101,6 +102,7 @@ const FieldControl = ({
           tooltipText={tooltip}
           className="!h-8 !min-w-30 !max-w-30"
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.double && (
@@ -111,6 +113,7 @@ const FieldControl = ({
           tooltipText={tooltip}
           className="!h-8 !min-w-30 !max-w-30"
           disabled={disabled}
+          error={isInvalid}
         />
       )}
       {field?.definition?.data_type ===

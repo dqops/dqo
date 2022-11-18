@@ -10,7 +10,7 @@ import {
 import { AxiosResponse } from 'axios';
 import { ColumnBasicModel, CommonColumnModel } from '../../api';
 
-interface Option {
+export interface Option {
   label: string;
   value: string;
 }

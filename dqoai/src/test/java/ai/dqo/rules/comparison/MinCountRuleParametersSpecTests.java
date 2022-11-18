@@ -36,37 +36,37 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsAboveMinValue_thenReturnsPassed() {
-        this.sut.setMinCount(20.5);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8, this.sut);
+        this.sut.setMinCount(20L);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRule_whenActualValueIsEqualMinValue_thenReturnsPassed() {
-        this.sut.setMinCount(20.5);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.5, this.sut);
+        this.sut.setMinCount(20L);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMinValue_thenReturnsFailed() {
-        this.sut.setMinCount(20.5);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4, this.sut);
+        this.sut.setMinCount(20L);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(20.5, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMinCount(1);
+        this.sut.setMinCount(1L);
         Assertions.assertEquals(1, this.sut.getMinCount());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -75,11 +75,11 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMinCount(1);
+        this.sut.setMinCount(1L);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMinCount(1);
+        this.sut.setMinCount(1L);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }
