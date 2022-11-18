@@ -7,6 +7,7 @@ import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -148,6 +149,7 @@ public class TimestampColumnsSpec extends AbstractSpec implements Cloneable {
      * Returns the effective name of a column used for time partitioned checks.
      * @return Column name used for grouping rows for date/time partitioned checks.
      */
+    @JsonIgnore
     public String getEffectivePartitioningColumn() {
         switch (this.partitionedChecksTimestampSource) {
             case event_timestamp:
