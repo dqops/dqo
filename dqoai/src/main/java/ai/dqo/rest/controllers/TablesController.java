@@ -1413,7 +1413,8 @@ public class TablesController {
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
+                Strings.isNullOrEmpty(tableName) ||
+                Strings.isNullOrEmpty(timePartition)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -1487,7 +1488,8 @@ public class TablesController {
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
+                Strings.isNullOrEmpty(tableName) ||
+                Strings.isNullOrEmpty(timePartition)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
