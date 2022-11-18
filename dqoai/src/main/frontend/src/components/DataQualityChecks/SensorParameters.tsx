@@ -4,14 +4,12 @@ import FieldControl from './FieldControl';
 
 interface ISensorParametersProps {
   parameters: UIFieldModel[];
-  openCheckSensorParameter: (field: UIFieldModel) => void;
   onChange: (parameters: UIFieldModel[]) => void;
   disabled?: boolean;
 }
 
 const SensorParameters = ({
   parameters,
-  openCheckSensorParameter,
   onChange,
   disabled
 }: ISensorParametersProps) => {

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package ai.dqo.sensors.column.consistency;
+
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -21,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
 /**
  * Column level sensor that calculates the count of not null values in a column.
  */
@@ -32,6 +34,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpec extends Abstrac
         {
         }
     };
+
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -41,6 +44,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpec extends Abstrac
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
     }
+
     /**
      * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
      *
@@ -50,22 +54,6 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpec extends Abstrac
     public String getSensorDefinitionName() {
         return "column/consistency/not_null_percent";
     }
-    /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     *
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     * false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @Override
-    public boolean hasNonNullSimpleFields() {
-        return false;
-    }
+
 }
 
