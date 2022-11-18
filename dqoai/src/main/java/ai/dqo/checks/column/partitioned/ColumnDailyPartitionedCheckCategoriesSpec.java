@@ -45,31 +45,31 @@ import java.util.Objects;
 public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("daily_partition_max_negatives_count", o -> o.dailyPartitionMaxNegativesCount);
+           put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
         }
     };
 
     @JsonPropertyDescription("Daily partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativesCount;
+    private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnMaxNegativeCountCheckSpec getdailyPartitionMaxNegativesCount() {
-        return dailyPartitionMaxNegativesCount;
+    public ColumnMaxNegativeCountCheckSpec getdailyPartitionMaxNegativeCount() {
+        return dailyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets the container of negatives data quality checks (checkpoints).
-     * @param dailyPartitionMaxNegativesCount New negatives checks.
+     * Sets the container of negative data quality checks (checkpoints).
+     * @param dailyPartitionMaxNegativeCount New negative checks.
      */
-    public void setDailyPartitionMaxNegativesCount(ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativesCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativesCount, dailyPartitionMaxNegativesCount));
-        this.dailyPartitionMaxNegativesCount = dailyPartitionMaxNegativesCount;
-        propagateHierarchyIdToField(dailyPartitionMaxNegativesCount, "daily_partition_max_negatives_count");
+    public void setDailyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativeCount, dailyPartitionMaxNegativeCount));
+        this.dailyPartitionMaxNegativeCount = dailyPartitionMaxNegativeCount;
+        propagateHierarchyIdToField(dailyPartitionMaxNegativeCount, "daily_partition_max_negative_count");
     }
 
     /**

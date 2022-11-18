@@ -45,31 +45,31 @@ import java.util.Objects;
 public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("monthly_partition_max_negatives_count", o -> o.monthlyPartitionMaxNegativesCount);
+            put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
         }
     };
 
     @JsonPropertyDescription("Monthly partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativesCount;
+    private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnMaxNegativeCountCheckSpec getmonthlyPartitionMaxNegativesCount() {
-        return monthlyPartitionMaxNegativesCount;
+    public ColumnMaxNegativeCountCheckSpec getmonthlyPartitionMaxNegativeCount() {
+        return monthlyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets the container of negatives data quality checks (checkpoints).
-     * @param monthlyPartitionMaxNegativesCount New negatives checks.
+     * Sets the container of negative data quality checks (checkpoints).
+     * @param monthlyPartitionMaxNegativeCount New negative checks.
      */
-    public void setMonthlyPartitionMaxNegativesCount(ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativesCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativesCount, monthlyPartitionMaxNegativesCount));
-        this.monthlyPartitionMaxNegativesCount = monthlyPartitionMaxNegativesCount;
-        propagateHierarchyIdToField(monthlyPartitionMaxNegativesCount, "monthly_partition_max_negatives_count");
+    public void setMonthlyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativeCount, monthlyPartitionMaxNegativeCount));
+        this.monthlyPartitionMaxNegativeCount = monthlyPartitionMaxNegativeCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxNegativeCount, "monthly_partition_max_negative_count");
     }
 
     /**
