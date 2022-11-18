@@ -45,6 +45,4 @@ public abstract class AbstractColumnSensorParametersSpec extends AbstractSensorP
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
-
-    public abstract boolean hasNonNullSimpleFields();
 }
