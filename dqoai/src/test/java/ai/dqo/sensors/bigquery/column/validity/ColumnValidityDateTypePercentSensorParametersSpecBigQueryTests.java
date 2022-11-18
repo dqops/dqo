@@ -36,6 +36,7 @@ import ai.dqo.sensors.column.validity.BuiltInDateFormats;
 import ai.dqo.sensors.column.validity.ColumnValidityDateTypePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -75,6 +76,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenNoTimeSeriesAndDefaultDateFormat_thenRendersCorrectSql() {
         runParameters.setTimeSeries(null);
 
@@ -96,6 +98,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenNoTimeSeriesAndDateFomratIsMonthDayYear_thenRendersCorrectSql() {
 
         this.sut.setNamedDateFormat(BuiltInDateFormats.MonthDayYear);
@@ -119,6 +122,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenNoTimeSeriesAndDateFormatIsYearMonthDay_thenRendersCorrectSql() {
 
         this.sut.setNamedDateFormat(BuiltInDateFormats.YearMonthDay);
@@ -142,6 +146,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenNoTimeSeriesAndDateFormatIsMonthNameDayYear_thenRendersCorrectSql() {
 
         this.sut.setNamedDateFormat(BuiltInDateFormats.MonthNameDayYear);
@@ -165,6 +170,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenLevelOnColumnAndSecondLevelIsStaticValue_thenRendersCorrectSqlWithAliasedColumnReference() {
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
@@ -192,6 +198,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
     }
 
     @Test
+    @Disabled()
     void renderSensor_whenTimeSeriesSetOnDateColumn_thenRendersCorrectSql() {
         runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimestampColumnTimeSeries("date", TimeSeriesGradient.MONTH));
 

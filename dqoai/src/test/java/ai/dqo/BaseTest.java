@@ -26,6 +26,9 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+
 /**
  * Base class for unit tests. All test classes must extend this class DIRECTLY (with no intermediate classes in the class hierarchy).
  */
@@ -47,6 +50,9 @@ public abstract class BaseTest {
         ParquetSupport.ensureInitialized();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         // to be extended in the future when the need appears
+
+        OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
+        double systemLoadAverage = os.getSystemLoadAverage();
     }
 
     /**

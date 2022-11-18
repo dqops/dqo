@@ -16,7 +16,9 @@
 package ai.dqo.checks;
 
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.id.ChildFieldEntry;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,4 +55,23 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      */
     @JsonIgnore
     public abstract CheckType getCheckType();
+
+    /**
+     * Checks if there are any configured checks (not null) in any check category.
+     * @return True when there are some checks configured, false when all checks are nulls.
+     */
+    public boolean hasAnyConfiguredChecks() {
+        for (ChildFieldEntry childFieldEntry : this.getChildMap().getChildEntries()) {
+            HierarchyNode childNode = childFieldEntry.getGetChildFunc().apply(this);
+
+            if (childNode instanceof AbstractCheckCategorySpec) {
+                AbstractCheckCategorySpec checkCategorySpec = (AbstractCheckCategorySpec)childNode;
+                if (checkCategorySpec.hasAnyConfiguredChecks()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
