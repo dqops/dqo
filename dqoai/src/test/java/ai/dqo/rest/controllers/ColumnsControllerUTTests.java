@@ -126,7 +126,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnChecksUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnAdHocChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),

@@ -415,14 +415,14 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableAdHocChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableAdHocCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableChecks(
+    public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableAdHocChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -537,14 +537,14 @@ public class TablesController {
      * @return UI friendly data quality ad-hoc check list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "getTableChecksUI", notes = "Return a UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getTableChecksUI(
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableAdHocChecksUI(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
@@ -1390,6 +1390,7 @@ public class TablesController {
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
+     * @param timePartition            Time partition (daily, monthly, etc.).
      * @param uiAllChecksModel         New configuration of the data quality checkpoints on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checkpoints that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
@@ -1431,22 +1432,22 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table hasn't been found
         }
 
-        TableCheckpointsSpec tableCheckpointsSpec = tableWrapper.getSpec().getCheckpoints();
+        TableCheckpointsSpec checkpoints = tableWrapper.getSpec().getCheckpoints();
         
         if (uiAllChecksModel.isPresent()) {
             // TODO: Enum for time partitions
             if (timePartition.equals("daily")) {
-                if (tableCheckpointsSpec.getDaily() == null) {
-                    tableCheckpointsSpec.setDaily(new TableDailyCheckpointCategoriesSpec());
+                if (checkpoints.getDaily() == null) {
+                    checkpoints.setDaily(new TableDailyCheckpointCategoriesSpec());
                 }
 
-                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableCheckpointsSpec.getDaily());
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checkpoints.getDaily());
             } else if (timePartition.equals("monthly")) {
-                if (tableCheckpointsSpec.getMonthly() == null) {
-                    tableCheckpointsSpec.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
+                if (checkpoints.getMonthly() == null) {
+                    checkpoints.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
                 }
 
-                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableCheckpointsSpec.getMonthly());
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checkpoints.getMonthly());
             } else {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the time partition is invalid
             }
@@ -1463,6 +1464,7 @@ public class TablesController {
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
+     * @param timePartition            Time partition (daily, monthly, etc.).
      * @param uiAllChecksModel         New configuration of the data quality partitioned checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those partitioned checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
@@ -1504,22 +1506,22 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table hasn't been found
         }
 
-        TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec = tableWrapper.getSpec().getPartitionedChecks();
+        TablePartitionedChecksRootSpec partitionedChecks = tableWrapper.getSpec().getPartitionedChecks();
 
         if (uiAllChecksModel.isPresent()) {
             // TODO: Enum for time partitions
             if (timePartition.equals("daily")) {
-                if (tablePartitionedChecksRootSpec.getDaily() == null) {
-                    tablePartitionedChecksRootSpec.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
+                if (partitionedChecks.getDaily() == null) {
+                    partitionedChecks.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
                 }
 
-                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tablePartitionedChecksRootSpec.getDaily());
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), partitionedChecks.getDaily());
             } else if (timePartition.equals("monthly")) {
-                if (tablePartitionedChecksRootSpec.getMonthly() == null) {
-                    tablePartitionedChecksRootSpec.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
+                if (partitionedChecks.getMonthly() == null) {
+                    partitionedChecks.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
                 }
 
-                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tablePartitionedChecksRootSpec.getMonthly());
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), partitionedChecks.getMonthly());
             } else {
                 return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the time partition is invalid
             }
