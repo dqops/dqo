@@ -34,6 +34,8 @@ import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
@@ -122,7 +124,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getColumnChecksUI_whenColumnFromSampleTableRequested_thenReturnsCheckUi() {
+    void getColumnChecksUI_whenColumnFromSampleTableRequested_thenReturnsAdHocChecksUi() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -135,5 +137,41 @@ public class ColumnsControllerUTTests extends BaseTest {
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(4, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"daily", "monthly"})
+    void getColumnChecksUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(String timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnCheckpointsUI(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                timePartition);
+
+        UIAllChecksModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"daily", "monthly"})
+    void getColumnChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(String timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnPartitionedChecksUI(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                timePartition);
+
+        UIAllChecksModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.getCategories().size());
     }
 }
