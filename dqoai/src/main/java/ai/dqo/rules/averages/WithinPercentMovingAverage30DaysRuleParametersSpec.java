@@ -43,16 +43,16 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpec extends Abstract
      * Default constructor.
      */
     public WithinPercentMovingAverage30DaysRuleParametersSpec() {
-        this.maxPercentAbove = Double.parseDouble(null);
-        this.maxPercentBelow = Double.parseDouble(null);
+        this.maxPercentAbove = null;
+        this.maxPercentBelow = null;
     }
 
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private double maxPercentAbove;
+    private Double maxPercentAbove;
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
-    private double maxPercentBelow;
+    private Double maxPercentBelow;
 
     /**
      * Minimum percent value for a data quality check reading, for example a minimum row count.
