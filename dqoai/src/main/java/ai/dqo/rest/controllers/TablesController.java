@@ -15,7 +15,14 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -408,7 +415,7 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of all table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableAdHocCheckCategoriesSpec.class),
@@ -441,14 +448,96 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality checks for a UI friendly mode on a table given a connection name and a table names.
+     * Retrieves the configuration of data quality checkpoints on a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return UI friendly data quality check list on a requested table.
+     * @return Data quality checkpoints on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
-    @ApiOperation(value = "getTableChecksUI", notes = "Return a UI friendly model of all table level data quality checks on a table", response = UIAllChecksModel.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints")
+    @ApiOperation(value = "getTableCheckpoints", notes = "Return the configuration of table level data quality checkpoints on a table", response = TableCheckpointsSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checkpoints on a table returned", response = TableCheckpointsSpec.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableCheckpointsSpec>> getTableCheckpoints(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
+
+        return new ResponseEntity<>(Mono.just(checkpoints), HttpStatus.OK); // 200
+    }
+    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}"
+
+    /**
+     * Retrieves the configuration of data quality partitioned checks on a table given a connection name and a table names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Data quality partitioned checks on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks")
+    @ApiOperation(value = "getTablePartitionedChecks", notes = "Return the configuration of table level data quality partitioned checks on a table", response = TablePartitionedChecksRootSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TablePartitionedChecksRootSpec.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TablePartitionedChecksRootSpec>> getTablePartitionedChecks(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+
+        return new ResponseEntity<>(Mono.just(partitionedChecks), HttpStatus.OK); // 200
+    }
+    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}"
+
+    /**
+     * Retrieves the configuration of data quality ad-hoc checks for a UI friendly mode on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return UI friendly data quality ad-hoc check list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
+    @ApiOperation(value = "getTableChecksUI", notes = "Return a UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
@@ -480,6 +569,130 @@ public class TablesController {
             checks = new TableAdHocCheckCategoriesSpec();
         }
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checks);
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality checkpoints for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition (daily, monthly, etc.).
+     * @return UI friendly data quality ad-hoc check list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui")
+    @ApiOperation(value = "getTableCheckpointsUI", notes = "Return a UI friendly model of table level data quality checkpoints on a table for a given time partition", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableCheckpointsUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
+        if (checkpoints == null) {
+            checkpoints = new TableCheckpointsSpec();
+        }
+
+        // TODO: Enum for allowed time partitions
+        AbstractRootChecksContainerSpec checkpointsPartition;
+        
+        if (timePartition.equals("daily")) {
+            TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
+            checkpointsPartition =
+                    (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
+        } else if (timePartition.equals("monthly")) {
+            TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
+            checkpointsPartition =
+                    (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
+        } else {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checkpointsPartition);
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality partitioned checks for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition (daily, monthly, etc.).
+     * @return UI friendly data quality ad-hoc check list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}/ui")
+    @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned check on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTablePartitionedChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+        if (partitionedChecks == null) {
+            partitionedChecks = new TablePartitionedChecksRootSpec();
+        }
+
+        // TODO: Enum for allowed time partitions
+        AbstractRootChecksContainerSpec partitionedChecksPartition;
+
+        if (timePartition.equals("daily")) {
+            TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
+            partitionedChecksPartition =
+                    (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
+        } else if (timePartition.equals("monthly")) {
+            TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
+            partitionedChecksPartition =
+                    (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
+        } else {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(partitionedChecksPartition);
 
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
@@ -946,29 +1159,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the full configuration of table level data quality checks of an existing table.
-     * @param connectionName           Connection name.
-     * @param schemaName               Schema name.
-     * @param tableName                Table name.
-     * @param tableCheckCategoriesSpec New configuration of the data quality checks on the table level.
+     * Updates the configuration of table level data quality ad-hoc checks of an existing table.
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name.
+     * @param tableAdHocCheckCategoriesSpec New configuration of the data quality ad-hoc checks on the table level.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "updateTableChecks", notes = "Updates the full list of table level data quality checks on an existing table.")
+    @ApiOperation(value = "updateTableAdHocChecks", notes = "Updates the list of table level data quality ad-hoc checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableChecks(
+    public ResponseEntity<Mono<?>> updateTableAdHocChecks(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of table level data quality checks to store or an empty object to remove all data quality checks on the table level (column level checks are preserved).")
-            @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableCheckCategoriesSpec) {
+            @Parameter(description = "Configuration of table level data quality ad-hoc checks to store or an empty object to remove all data quality ad-hoc checks on the table level (column level ad-hoc checks are preserved).")
+            @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableAdHocCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -992,8 +1205,8 @@ public class TablesController {
 
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
-        if (tableCheckCategoriesSpec.isPresent()) {
-            tableSpec.setChecks(tableCheckCategoriesSpec.get());
+        if (tableAdHocCheckCategoriesSpec.isPresent()) {
+            tableSpec.setChecks(tableAdHocCheckCategoriesSpec.get());
         } else {
             tableSpec.setChecks(new TableAdHocCheckCategoriesSpec()); // it is never empty...
         }
@@ -1003,28 +1216,142 @@ public class TablesController {
     }
 
     /**
-     * Updates the data quality check specification on an existing table from a check UI model with a patch of changes.
-     * @param connectionName           Connection name.
-     * @param schemaName               Schema name.
-     * @param tableName                Table name.
-     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checks that are present in the UI model are updated, the others are preserved without any changes.
+     * Updates the configuration of table level data quality checkpoints of an existing table.
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name.
+     * @param tableCheckpointsSpec          New configuration of the data quality checkpoints on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checksui")
-    @ApiOperation(value = "updateTableChecksUI", notes = "Updates the data quality checks from a UI model that contains a patch with changes.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints")
+    @ApiOperation(value = "updateTableCheckpoints", notes = "Updates the list of table level data quality checkpoints on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality checkpoints successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableChecksUI(
+    public ResponseEntity<Mono<?>> updateTableCheckpoints(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "UI model with the changes to be applied to the data quality checks configuration.")
+            @Parameter(description = "Configuration of table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
+            @RequestBody Optional<TableCheckpointsSpec> tableCheckpointsSpec) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        // TODO: validate the tableSpec
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableCheckpointsSpec.isPresent()) {
+            tableSpec.setCheckpoints(tableCheckpointsSpec.get());
+        } else {
+            tableSpec.setCheckpoints(new TableCheckpointsSpec());
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the configuration of table level data quality partitioned checks of an existing table.
+     * @param connectionName                 Connection name.
+     * @param schemaName                     Schema name.
+     * @param tableName                      Table name.
+     * @param tablePartitionedChecksRootSpec New configuration of the data quality partitioned checks on the table level.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks")
+    @ApiOperation(value = "updateTablePartitionedChecks", notes = "Updates the list of table level data quality partitioned checks on an existing table.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTablePartitionedChecks(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Configuration of table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
+            @RequestBody Optional<TablePartitionedChecksRootSpec> tablePartitionedChecksRootSpec) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        // TODO: validate the tableSpec
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tablePartitionedChecksRootSpec.isPresent()) {
+            tableSpec.setPartitionedChecks(tablePartitionedChecksRootSpec.get());
+        } else {
+            tableSpec.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the data quality ad-hoc check specification on an existing table from a check UI model with a patch of changes.
+     * @param connectionName           Connection name.
+     * @param schemaName               Schema name.
+     * @param tableName                Table name.
+     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those ad-hoc checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
+    @ApiOperation(value = "updateTableAdHocChecksUI", notes = "Updates the data quality ad-hoc checks from an UI model that contains a patch with changes.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTableAdHocChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "UI model with the changes to be applied to the data quality ad-hoc checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1050,6 +1377,152 @@ public class TablesController {
         TableSpec tableSpec = tableWrapper.getSpec();
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableSpec.getChecks());
+        } else {
+            // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the data quality checkpoints specification on an existing table for a given time partition from a check UI model with a patch of changes.
+     * @param connectionName           Connection name.
+     * @param schemaName               Schema name.
+     * @param tableName                Table name.
+     * @param uiAllChecksModel         New configuration of the data quality checkpoints on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checkpoints that are present in the UI model are updated, the others are preserved without any changes.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui")
+    @ApiOperation(value = "updateTableCheckpointsUI", notes = "Updates the data quality checkpoints from an UI model that contains a patch with changes.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found or invalid time partition"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTableCheckpointsUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition,
+            @Parameter(description = "UI model with the changes to be applied to the data quality checkpoints configuration.")
+            @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table hasn't been found
+        }
+
+        TableCheckpointsSpec tableCheckpointsSpec = tableWrapper.getSpec().getCheckpoints();
+        
+        if (uiAllChecksModel.isPresent()) {
+            // TODO: Enum for time partitions
+            if (timePartition.equals("daily")) {
+                if (tableCheckpointsSpec.getDaily() == null) {
+                    tableCheckpointsSpec.setDaily(new TableDailyCheckpointCategoriesSpec());
+                }
+
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableCheckpointsSpec.getDaily());
+            } else if (timePartition.equals("monthly")) {
+                if (tableCheckpointsSpec.getMonthly() == null) {
+                    tableCheckpointsSpec.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
+                }
+
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tableCheckpointsSpec.getMonthly());
+            } else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the time partition is invalid
+            }
+        } else {
+            // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the data quality partitioned checks specification on an existing table for a given time partition from a check UI model with a patch of changes.
+     * @param connectionName           Connection name.
+     * @param schemaName               Schema name.
+     * @param tableName                Table name.
+     * @param uiAllChecksModel         New configuration of the data quality partitioned checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those partitioned checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}/ui")
+    @ApiOperation(value = "updateTablePartitionedChecksUI", notes = "Updates the data quality partitioned checks from an UI model that contains a patch with changes.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found or invalid time partition"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTablePartitionedChecksUI(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition,
+            @Parameter(description = "UI model with the changes to be applied to the data quality partitioned checks configuration.")
+            @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table hasn't been found
+        }
+
+        TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec = tableWrapper.getSpec().getPartitionedChecks();
+
+        if (uiAllChecksModel.isPresent()) {
+            // TODO: Enum for time partitions
+            if (timePartition.equals("daily")) {
+                if (tablePartitionedChecksRootSpec.getDaily() == null) {
+                    tablePartitionedChecksRootSpec.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
+                }
+
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tablePartitionedChecksRootSpec.getDaily());
+            } else if (timePartition.equals("monthly")) {
+                if (tablePartitionedChecksRootSpec.getMonthly() == null) {
+                    tablePartitionedChecksRootSpec.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
+                }
+
+                this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), tablePartitionedChecksRootSpec.getMonthly());
+            } else {
+                return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the time partition is invalid
+            }
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }
