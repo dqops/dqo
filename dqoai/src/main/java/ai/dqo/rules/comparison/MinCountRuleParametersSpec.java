@@ -52,6 +52,14 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
         this.minCount = minCount;
     }
 
+    /**
+     * Creates a rule with a given value.
+     * @param minCount Minimum accepted value.
+     */
+    public MinCountRuleParametersSpec(int minCount) {
+        this.minCount = (long)minCount;
+    }
+
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
     private Long minCount;
 

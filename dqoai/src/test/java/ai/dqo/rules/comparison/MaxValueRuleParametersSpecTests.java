@@ -34,7 +34,7 @@ public class MaxValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueSet_thenIsDirtyIsTrue() {
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertEquals(1, this.sut.getMaxValue());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -43,11 +43,11 @@ public class MaxValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }
