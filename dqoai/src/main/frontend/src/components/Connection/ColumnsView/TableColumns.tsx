@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { ColumnApiClient } from '../../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import { ColumnBasicModel } from '../../../api';
+import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../../SvgIcon';
+import ConfirmDialog from './ConfirmDialog';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -15,6 +18,8 @@ const TableColumns = ({
   tableName
 }: ITableColumnsProps) => {
   const [columns, setColumns] = useState<ColumnBasicModel[]>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedColumn, setSelectedColumn] = useState<ColumnBasicModel>();
 
   const fetchColumns = async () => {
     try {
@@ -30,6 +35,23 @@ const TableColumns = ({
     fetchColumns().then();
   }, []);
 
+  const onRemoveColumn = (column: ColumnBasicModel) => {
+    setIsOpen(true);
+    setSelectedColumn(column);
+  };
+
+  const removeColumn = async () => {
+    if (selectedColumn?.column_name) {
+      await ColumnApiClient.deleteColumn(
+        connectionName,
+        schemaName,
+        tableName,
+        selectedColumn?.column_name
+      );
+      await fetchColumns();
+    }
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -42,6 +64,9 @@ const TableColumns = ({
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Scale
+          </th>
+          <th className="border-b border-gray-100 text-left px-4 py-2">
+            Action
           </th>
         </thead>
         {columns &&
@@ -62,9 +87,23 @@ const TableColumns = ({
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.scale}
               </td>
+              <td className="border-b border-gray-100 text-left px-4 py-2">
+                <IconButton
+                  className="bg-red-500"
+                  onClick={() => onRemoveColumn(column)}
+                >
+                  <SvgIcon name="delete" className="w-4" />
+                </IconButton>
+              </td>
             </tr>
           ))}
       </table>
+      <ConfirmDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        column={selectedColumn}
+        onConfirm={removeColumn}
+      />
     </div>
   );
 };
