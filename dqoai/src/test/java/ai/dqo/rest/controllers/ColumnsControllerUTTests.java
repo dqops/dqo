@@ -16,6 +16,24 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
+import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
+import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -27,6 +45,8 @@ import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
+import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
+import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -42,6 +62,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 public class ColumnsControllerUTTests extends BaseTest {
@@ -49,6 +70,9 @@ public class ColumnsControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private ColumnAdHocCheckCategoriesSpec sampleAdHocCheck;
+    private ColumnCheckpointsSpec sampleCheckpoint;
+    private ColumnPartitionedChecksRootSpec samplePartitionedCheck;
 
     /**
      * Called before each test.
@@ -67,6 +91,38 @@ public class ColumnsControllerUTTests extends BaseTest {
         this.sut = new ColumnsController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
+
+
+        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        maxCountRule1.setMaxCount(10L);
+        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        maxCountRule2.setMaxCount(20L);
+        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        maxCountRule3.setMaxCount(30L);
+
+        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
+        nullsChecksSpec.setWarning(maxCountRule1);
+        nullsChecksSpec.setError(maxCountRule2);
+        nullsChecksSpec.setFatal(maxCountRule3);
+        
+        ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
+        nullChecks.setMaxNullsCount(nullsChecksSpec);
+        this.sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
+        this.sampleAdHocCheck.setNulls(nullChecks);
+
+        ColumnNullsDailyCheckpointsSpec nullDailyCheckpoints = new ColumnNullsDailyCheckpointsSpec();
+        nullDailyCheckpoints.setDailyCheckpointMaxNullsCount(nullsChecksSpec);
+        ColumnDailyCheckpointCategoriesSpec dailyCheckpoint = new ColumnDailyCheckpointCategoriesSpec();
+        dailyCheckpoint.setNulls(nullDailyCheckpoints);
+        this.sampleCheckpoint = new ColumnCheckpointsSpec();
+        this.sampleCheckpoint.setDaily(dailyCheckpoint);
+
+        ColumnNullsDailyPartitionedChecksSpec nullDailyPartitionedChecks = new ColumnNullsDailyPartitionedChecksSpec();
+        nullDailyPartitionedChecks.setDailyPartitionMaxNullsCount(nullsChecksSpec);
+        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new ColumnDailyPartitionedCheckCategoriesSpec();
+        dailyPartitionedCheck.setNulls(nullDailyPartitionedChecks);
+        this.samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
+        this.samplePartitionedCheck.setDaily(dailyPartitionedCheck);
     }
 
     @Test
@@ -174,4 +230,57 @@ public class ColumnsControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
         Assertions.assertEquals(1, result.getCategories().size());
     }
+
+    @Test
+    void updateColumnAdHocChecks_whenColumnAndAdHocChecksRequested_updatesAdHocChecks() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnAdHocChecks(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                Optional.of(this.sampleAdHocCheck));
+
+        Object result = responseEntity.getBody().block();
+        Assertions.assertNull(result);
+        Assertions.assertSame(columnSpec.getChecks(), this.sampleAdHocCheck);
+    }
+
+    @Test
+    void updateColumnCheckpoints_whenColumnAndCheckpointsRequested_updatesCheckpoints() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnCheckpoints(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                Optional.of(this.sampleCheckpoint));
+
+        Object result = responseEntity.getBody().block();
+        Assertions.assertNull(result);
+        Assertions.assertSame(columnSpec.getCheckpoints(), this.sampleCheckpoint);
+    }
+
+    @Test
+    void updateColumnPartitionedChecks_whenColumnAndPartitionedChecksRequested_updatesPartitionedChecks() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecks(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                Optional.of(this.samplePartitionedCheck));
+
+        Object result = responseEntity.getBody().block();
+        Assertions.assertNull(result);
+        Assertions.assertSame(columnSpec.getPartitionedChecks(), this.samplePartitionedCheck);
+    }
+
+    // TODO: updateTableAdHocChecksUI, and the following check types.
 }
