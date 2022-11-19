@@ -39,80 +39,80 @@ import java.util.Objects;
 public class BuiltInTableTimelinessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableTimelinessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("current_delay", o -> o.currentDelay);
-            put("column_datetime_difference_percent", o -> o.columnDatetimeDifferencePercent);
-            put("average_delay", o -> o.averageDelay);
+//            put("current_delay", o -> o.currentDelay);
+//            put("column_datetime_difference_percent", o -> o.columnDatetimeDifferencePercent);
+//            put("average_delay", o -> o.averageDelay);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the difference between current timestamp and latest record in a column meets the required rules, like a minimum count.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessCurrentDelayCheckSpec currentDelay;
-
-    @JsonPropertyDescription("Verifies that the time difference between two datetime columns meets the required rules, like a minimum count.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessColumnDatetimeDifferencePercentCheckSpec columnDatetimeDifferencePercent;
-
-    @JsonPropertyDescription("Verifies that the timestamp difference between two columns meets the required rules, like a moving average.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessAverageDelayCheckSpec averageDelay;
-
-    /**
-     * Returns a minimum current delay check.
-     * @return Minimum current delay check.
-     */
-    public TableTimelinessCurrentDelayCheckSpec getCurrentDelay() {
-        return currentDelay;
-    }
-
-    /**
-     * Sets a new definition of a current delay check.
-     * @param currentDelay Row count check.
-     */
-    public void setCurrentDelay(TableTimelinessCurrentDelayCheckSpec currentDelay) {
-        this.setDirtyIf(!Objects.equals(this.currentDelay, currentDelay));
-        this.currentDelay = currentDelay;
-        propagateHierarchyIdToField(currentDelay, "current_delay");
-    }
-
-    /**
-     * Returns a column datetime difference percent check.
-     * @return Column datetime difference percent check.
-     */
-    public TableTimelinessColumnDatetimeDifferencePercentCheckSpec getColumnDatetimeDifferencePercent() {
-        return columnDatetimeDifferencePercent;
-    }
-
-    /**
-     * Sets a new definition of a column datetime difference check.
-     * @param columnDatetimeDifferencePercent Column datetime difference percent check.
-     */
-    public void setColumnDatetimeDifferencePercent(TableTimelinessColumnDatetimeDifferencePercentCheckSpec columnDatetimeDifferencePercent) {
-        this.setDirtyIf(!Objects.equals(this.columnDatetimeDifferencePercent, columnDatetimeDifferencePercent));
-        this.columnDatetimeDifferencePercent = columnDatetimeDifferencePercent;
-        propagateHierarchyIdToField(columnDatetimeDifferencePercent, "column_datetime_difference_percent");
-    }
-
-    /**
-     * Returns average delay check.
-     * @return Average delay check.
-     */
-    public TableTimelinessAverageDelayCheckSpec getAverageDelay() {
-        return averageDelay;
-    }
-
-    /**
-     * Sets a new definition of average delay check.
-     * @param averageDelay Average delay check.
-     */
-    public void setAverageDelay(TableTimelinessAverageDelayCheckSpec averageDelay) {
-        this.setDirtyIf(!Objects.equals(this.averageDelay, averageDelay));
-        this.averageDelay = averageDelay;
-        propagateHierarchyIdToField(averageDelay, "average_delay");
-    }
+//
+//    @JsonPropertyDescription("Verifies that the difference between current timestamp and latest record in a column meets the required rules, like a minimum count.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private TableTimelinessCurrentDelayCheckSpec currentDelay;
+//
+//    @JsonPropertyDescription("Verifies that the time difference between two datetime columns meets the required rules, like a minimum count.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private TableTimelinessColumnDatetimeDifferencePercentCheckSpec columnDatetimeDifferencePercent;
+//
+//    @JsonPropertyDescription("Verifies that the timestamp difference between two columns meets the required rules, like a moving average.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private TableTimelinessAverageDelayCheckSpec averageDelay;
+//
+//    /**
+//     * Returns a minimum current delay check.
+//     * @return Minimum current delay check.
+//     */
+//    public TableTimelinessCurrentDelayCheckSpec getCurrentDelay() {
+//        return currentDelay;
+//    }
+//
+//    /**
+//     * Sets a new definition of a current delay check.
+//     * @param currentDelay Row count check.
+//     */
+//    public void setCurrentDelay(TableTimelinessCurrentDelayCheckSpec currentDelay) {
+//        this.setDirtyIf(!Objects.equals(this.currentDelay, currentDelay));
+//        this.currentDelay = currentDelay;
+//        propagateHierarchyIdToField(currentDelay, "current_delay");
+//    }
+//
+//    /**
+//     * Returns a column datetime difference percent check.
+//     * @return Column datetime difference percent check.
+//     */
+//    public TableTimelinessColumnDatetimeDifferencePercentCheckSpec getColumnDatetimeDifferencePercent() {
+//        return columnDatetimeDifferencePercent;
+//    }
+//
+//    /**
+//     * Sets a new definition of a column datetime difference check.
+//     * @param columnDatetimeDifferencePercent Column datetime difference percent check.
+//     */
+//    public void setColumnDatetimeDifferencePercent(TableTimelinessColumnDatetimeDifferencePercentCheckSpec columnDatetimeDifferencePercent) {
+//        this.setDirtyIf(!Objects.equals(this.columnDatetimeDifferencePercent, columnDatetimeDifferencePercent));
+//        this.columnDatetimeDifferencePercent = columnDatetimeDifferencePercent;
+//        propagateHierarchyIdToField(columnDatetimeDifferencePercent, "column_datetime_difference_percent");
+//    }
+//
+//    /**
+//     * Returns average delay check.
+//     * @return Average delay check.
+//     */
+//    public TableTimelinessAverageDelayCheckSpec getAverageDelay() {
+//        return averageDelay;
+//    }
+//
+//    /**
+//     * Sets a new definition of average delay check.
+//     * @param averageDelay Average delay check.
+//     */
+//    public void setAverageDelay(TableTimelinessAverageDelayCheckSpec averageDelay) {
+//        this.setDirtyIf(!Objects.equals(this.averageDelay, averageDelay));
+//        this.averageDelay = averageDelay;
+//        propagateHierarchyIdToField(averageDelay, "average_delay");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.

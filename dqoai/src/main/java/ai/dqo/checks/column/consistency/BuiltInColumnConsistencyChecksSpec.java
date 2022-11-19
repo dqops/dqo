@@ -40,32 +40,32 @@ import java.util.Objects;
 public class BuiltInColumnConsistencyChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnConsistencyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-			put("not_null_percent", o -> o.notNullPercent);
+//			put("not_null_percent", o -> o.notNullPercent);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the not null percent.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyNotNullPercentCheckSpec notNullPercent;
-
-    /**
-     * Returns a not null percent check.
-     * @return Not null percent check.
-     */
-    public ColumnConsistencyNotNullPercentCheckSpec getNotNullPercent() {
-        return notNullPercent;
-    }
-
-    /**
-     * Sets a new definition of not null percent check.
-     * @param notNullPercent not null percent check.
-     */
-    public void setNotNullPercent(ColumnConsistencyNotNullPercentCheckSpec notNullPercent) {
-		this.setDirtyIf(!Objects.equals(this.notNullPercent, notNullPercent));
-        this.notNullPercent = notNullPercent;
-		propagateHierarchyIdToField(notNullPercent, "not_null_percent");
-    }
+//
+//    @JsonPropertyDescription("Verifies that the not null percent.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private ColumnConsistencyNotNullPercentCheckSpec notNullPercent;
+//
+//    /**
+//     * Returns a not null percent check.
+//     * @return Not null percent check.
+//     */
+//    public ColumnConsistencyNotNullPercentCheckSpec getNotNullPercent() {
+//        return notNullPercent;
+//    }
+//
+//    /**
+//     * Sets a new definition of not null percent check.
+//     * @param notNullPercent not null percent check.
+//     */
+//    public void setNotNullPercent(ColumnConsistencyNotNullPercentCheckSpec notNullPercent) {
+//		this.setDirtyIf(!Objects.equals(this.notNullPercent, notNullPercent));
+//        this.notNullPercent = notNullPercent;
+//		propagateHierarchyIdToField(notNullPercent, "not_null_percent");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.
