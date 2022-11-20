@@ -154,6 +154,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 int targetRowIndex = targetRuleResultRow.getRowNumber();
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                 result.getIncludeInKpiColumn().set(targetRowIndex, !checkSpec.isExcludeFromKpi());
+                result.getIncludeInSlaColumn().set(targetRowIndex, checkSpec.isIncludeInSla());
 
                 AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
                 AbstractRuleParametersSpec errorRule = checkSpec.getError();
@@ -161,62 +162,62 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Double expectedValue = null;
 
                 if (fatalRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersHigh = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultHigh = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersHigh);
+                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersFatal);
 
-                    if (!ruleExecutionResultHigh.isPassed()) {
+                    if (!ruleExecutionResultFatal.isPassed()) {
                         highestSeverity = 3;
                     }
 
-                    if (ruleExecutionResultHigh.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultHigh.getExpectedValue();
+                    if (ruleExecutionResultFatal.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultFatal.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultHigh.getLowerBound() != null) {
-                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
+                    if (ruleExecutionResultFatal.getLowerBound() != null) {
+                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getLowerBound());
                     }
-                    if (ruleExecutionResultHigh.getUpperBound() != null) {
-                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
+                    if (ruleExecutionResultFatal.getUpperBound() != null) {
+                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getUpperBound());
                     }
                 }
 
                 if (errorRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersMedium = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultMedium = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersMedium);
+                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersError);
 
-                    if (highestSeverity == null && !ruleExecutionResultMedium.isPassed()) {
+                    if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
                         highestSeverity = 2;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultMedium.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultMedium.getExpectedValue();
+                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultMedium.getLowerBound() != null) {
-                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
+                    if (ruleExecutionResultError.getLowerBound() != null) {
+                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultError.getLowerBound());
                     }
-                    if (ruleExecutionResultMedium.getUpperBound() != null) {
-                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
+                    if (ruleExecutionResultError.getUpperBound() != null) {
+                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultError.getUpperBound());
                     }
                 }
 
                 if (warningRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersLow = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultLow = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersLow);
+                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersWarning);
 
-                    if (highestSeverity == null && !ruleExecutionResultLow.isPassed()) {
+                    if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
                         highestSeverity = 1;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultLow.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultLow.getExpectedValue();
+                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultWarning.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultLow.getLowerBound() != null) {
-                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
+                    if (ruleExecutionResultWarning.getLowerBound() != null) {
+                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getLowerBound());
                     }
-                    if (ruleExecutionResultLow.getUpperBound() != null) {
-                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
+                    if (ruleExecutionResultWarning.getUpperBound() != null) {
+                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getUpperBound());
                     }
                 }
 

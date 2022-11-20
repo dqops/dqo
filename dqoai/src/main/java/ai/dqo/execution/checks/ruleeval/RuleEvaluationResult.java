@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
@@ -34,6 +35,11 @@ public class RuleEvaluationResult {
      * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";
+
+    /**
+     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality SLA.
+     */
+    public static final String INCLUDE_IN_SLA_COLUMN_NAME = "include_in_sla";
 
     /**
      * Column name for the warning lower bound, returned by the fatal severity rule.
@@ -70,6 +76,8 @@ public class RuleEvaluationResult {
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
     private final BooleanColumn includeInKpiColumn;
+    private final BooleanColumn includeInSlaColumn;
+
     private final DoubleColumn fatalLowerBoundColumn;
     private final DoubleColumn fatalUpperBoundColumn;
     private final DoubleColumn errorLowerBoundColumn;
@@ -83,16 +91,17 @@ public class RuleEvaluationResult {
      */
     private RuleEvaluationResult(Table ruleResultsTable) {
         this.ruleResultsTable = ruleResultsTable;
-        this.actualValueColumn = (DoubleColumn) ruleResultsTable.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
-        this.expectedValueColumn = getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
-		this.severityColumn = getOrAddIntColumn(ruleResultsTable, SEVERITY_COLUMN_NAME);
-        this.includeInKpiColumn = getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_KPI_COLUMN_NAME);
-		this.fatalLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, FATAL_LOWER_BOUND_COLUMN_NAME);
-		this.fatalUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, FATAL_UPPER_BOUND_COLUMN_NAME);
-		this.errorLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, ERROR_LOWER_BOUND_COLUMN_NAME);
-		this.errorUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, ERROR_UPPER_BOUND_COLUMN_NAME);
-		this.warningLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, WARNING_LOWER_BOUND_COLUMN_NAME);
-		this.warningUpperBoundColumn = getOrAddDoubleColumn(ruleResultsTable, WARNING_UPPER_BOUND_COLUMN_NAME);
+        this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
+		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, SEVERITY_COLUMN_NAME);
+        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_KPI_COLUMN_NAME);
+        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_SLA_COLUMN_NAME);
+		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, FATAL_LOWER_BOUND_COLUMN_NAME);
+		this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, FATAL_UPPER_BOUND_COLUMN_NAME);
+		this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, ERROR_LOWER_BOUND_COLUMN_NAME);
+		this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, ERROR_UPPER_BOUND_COLUMN_NAME);
+		this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, WARNING_LOWER_BOUND_COLUMN_NAME);
+		this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, WARNING_UPPER_BOUND_COLUMN_NAME);
     }
 
     /**
@@ -129,6 +138,14 @@ public class RuleEvaluationResult {
      */
     public BooleanColumn getIncludeInKpiColumn() {
         return includeInKpiColumn;
+    }
+
+    /**
+     * Returns the include_in_sla boolean column that should have a 'true' value for rule results that should be included in the data quality SLA (the data contract).
+     * @return Include in the data quality SLA (the data contract) column.
+     */
+    public BooleanColumn getIncludeInSlaColumn() {
+        return includeInSlaColumn;
     }
 
     /**
@@ -193,86 +210,6 @@ public class RuleEvaluationResult {
      */
     public DoubleColumn getWarningUpperBoundColumn() {
         return warningUpperBoundColumn;
-    }
-
-    /**
-     * Retrieves or adds a new integer column. Used to access/create the severity column.
-     * @param targetTable Target table to get/add the column.
-     * @param columnName Column name.
-     * @return Integer column that was found or added.
-     */
-    public IntColumn getOrAddIntColumn(Table targetTable, String columnName) {
-        if (targetTable.containsColumn(columnName)) {
-            return (IntColumn) targetTable.column(columnName);
-        }
-
-        IntColumn newColumn = IntColumn.create(columnName);
-        targetTable.addColumns(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Retrieves or adds a new long column. Used to access/create the severity column.
-     * @param targetTable Target table to get/add the column.
-     * @param columnName Column name.
-     * @return Long column that was found or added.
-     */
-    public LongColumn getOrAddLongColumn(Table targetTable, String columnName) {
-        if (targetTable.containsColumn(columnName)) {
-            return (LongColumn) targetTable.column(columnName);
-        }
-
-        LongColumn newColumn = LongColumn.create(columnName);
-        targetTable.addColumns(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Retrieves or adds a new double column. Used to access/create the expected value column, lower and upper bound columns.
-     * @param targetTable Target table to get/add the column.
-     * @param columnName Column name.
-     * @return Double column that was found or added.
-     */
-    public DoubleColumn getOrAddDoubleColumn(Table targetTable, String columnName) {
-        if (targetTable.containsColumn(columnName)) {
-            return (DoubleColumn) targetTable.column(columnName);
-        }
-
-        DoubleColumn newColumn = DoubleColumn.create(columnName);
-        targetTable.addColumns(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Retrieves or adds a new boolean column. Used to access/create the include_in_kpi column.
-     * @param targetTable Target table to get/add the column.
-     * @param columnName Column name.
-     * @return Boolean column that was found or added.
-     */
-    public BooleanColumn getOrAddBooleanColumn(Table targetTable, String columnName) {
-        if (targetTable.containsColumn(columnName)) {
-            return (BooleanColumn) targetTable.column(columnName);
-        }
-
-        BooleanColumn newColumn = BooleanColumn.create(columnName);
-        targetTable.addColumns(newColumn);
-        return newColumn;
-    }
-
-    /**
-     * Retrieves or adds a new String column. Used to access/create additional columns, like the rule name.
-     * @param targetTable Target table to get/add the column.
-     * @param columnName Column name.
-     * @return String column that was found or added.
-     */
-    public StringColumn getOrAddStringColumn(Table targetTable, String columnName) {
-        if (targetTable.containsColumn(columnName)) {
-            return (StringColumn) targetTable.column(columnName);
-        }
-
-        StringColumn newColumn = StringColumn.create(columnName);
-        targetTable.addColumns(newColumn);
-        return newColumn;
     }
 
     /**

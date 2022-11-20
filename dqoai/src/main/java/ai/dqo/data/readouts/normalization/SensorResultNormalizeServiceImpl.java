@@ -164,6 +164,11 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         checkNameColumn.setMissingTo(checkName);
         sortedNormalizedTable.addColumns(checkNameColumn);
 
+        StringColumn checkDisplayNameColumn = StringColumn.create(SensorReadoutsNormalizedResult.CHECK_DISPLAY_NAME_COLUMN_NAME, resultsTable.rowCount());
+        String checkDisplayName = sensorRunParameters.getCheck().getDisplayName();
+        checkDisplayNameColumn.setMissingTo(checkDisplayName != null ? checkDisplayName : checkName); // we store the check name if there is no display name (a fallback value)
+        sortedNormalizedTable.addColumns(checkDisplayNameColumn);
+
         StringColumn checkTypeColumn = StringColumn.create(SensorReadoutsNormalizedResult.CHECK_TYPE_COLUMN_NAME, resultsTable.rowCount());
         String checkType = sensorRunParameters.getCheckType().getDisplayName();
         checkTypeColumn.setMissingTo(checkType);
@@ -196,6 +201,11 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         IntColumn durationMsColumn = IntColumn.create(SensorReadoutsNormalizedResult.DURATION_MS_COLUMN_NAME, resultsTable.rowCount());
         durationMsColumn.setMissingTo(sensorExecutionResult.getSensorDurationMs());
         sortedNormalizedTable.addColumns(durationMsColumn);
+
+        DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME);
+        StringColumn idColumn = createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+                columnHash != null ? columnHash.longValue() : 0L, resultsTable.rowCount());
+        sortedNormalizedTable.insertColumn(0, idColumn);
 
         SensorReadoutsNormalizedResult datasetMetadata = new SensorReadoutsNormalizedResult(sortedNormalizedTable);
         return datasetMetadata;
@@ -545,7 +555,7 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
      * @param sortedDataStreamHashColumn Column with data stream hashes for each row.
      * @param checkHash Check hash that should be hashed into the time_series_uuid.
      * @param tableHash Table hash.
-     * @param columnHash Column hash (or 0 when the check is not on a column level).
+     * @param columnHash Column hash (or 0L when the check is not on a column level).
      * @param rowCount Row count.
      * @return Time series uuid column, filled with values.
      */
@@ -554,7 +564,7 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
                                                    long tableHash,
                                                    long columnHash,
                                                    int rowCount) {
-        StringColumn timeSeriesUuidColumn = StringColumn.create(SensorReadoutsNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME, rowCount);
+        StringColumn timeSeriesUuidColumn = StringColumn.create(SensorReadoutsNormalizedResult.TIME_SERIES_ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
@@ -564,5 +574,35 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         }
 
         return timeSeriesUuidColumn;
+    }
+
+    /**
+     * Creates and fills the "id" column by combining hashes.
+     * @param sortedDataStreamHashColumn Data stream hashes column.
+     * @param sortedTimePeriodColumn Time period column.
+     * @param checkHash Check hash value.
+     * @param tableHash Table hash value.
+     * @param columnHash Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount Row count.
+     * @return ID column, filled with values.
+     */
+    public StringColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
+                                          DateTimeColumn sortedTimePeriodColumn,
+                                          long checkHash,
+                                          long tableHash,
+                                          long columnHash,
+                                          int rowCount) {
+        StringColumn idColumn = StringColumn.create(SensorReadoutsNormalizedResult.ID_COLUMN_NAME, rowCount);
+
+        for (int i = 0; i < rowCount ; i++) {
+            Long dataStreamHash = sortedDataStreamHashColumn.get(i);
+            long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
+            long timePeriodHashed = Hashing.sipHash24().hashLong(timePeriodLong).asLong();
+            UUID uuid = new UUID(checkHash ^ timePeriodHashed, dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed);
+            String idString = uuid.toString();
+            idColumn.set(i, idString);
+        }
+
+        return idColumn;
     }
 }

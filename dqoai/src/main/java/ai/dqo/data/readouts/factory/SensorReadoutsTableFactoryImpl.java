@@ -32,6 +32,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
     public Table createEmptySensorReadoutsTable(String tableName) {
         Table table = Table.create(tableName);
         table.addColumns(
+                StringColumn.create(SensorReadoutsNormalizedResult.ID_COLUMN_NAME),
                 DoubleColumn.create(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME),
                 DoubleColumn.create(SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME),
                 DateTimeColumn.create(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME),
@@ -58,11 +59,12 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 StringColumn.create(SensorReadoutsNormalizedResult.COLUMN_NAME_COLUMN_NAME),
                 LongColumn.create(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsNormalizedResult.CHECK_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsNormalizedResult.CHECK_DISPLAY_NAME_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsNormalizedResult.CHECK_TYPE_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsNormalizedResult.CHECK_CATEGORY_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsNormalizedResult.SENSOR_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.TIME_SERIES_UUID_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsNormalizedResult.TIME_SERIES_ID_COLUMN_NAME),
                 InstantColumn.create(SensorReadoutsNormalizedResult.EXECUTED_AT_COLUMN_NAME),
                 IntColumn.create(SensorReadoutsNormalizedResult.DURATION_MS_COLUMN_NAME)
         );

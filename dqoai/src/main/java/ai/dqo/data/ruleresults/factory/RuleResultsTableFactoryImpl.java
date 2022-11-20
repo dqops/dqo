@@ -49,6 +49,7 @@ public class RuleResultsTableFactoryImpl implements RuleResultsTableFactory {
         table.addColumns(
                 IntColumn.create(RuleEvaluationResult.SEVERITY_COLUMN_NAME),
                 BooleanColumn.create(RuleEvaluationResult.INCLUDE_IN_KPI_COLUMN_NAME),
+                BooleanColumn.create(RuleEvaluationResult.INCLUDE_IN_SLA_COLUMN_NAME),
                 DoubleColumn.create(RuleEvaluationResult.FATAL_LOWER_BOUND_COLUMN_NAME),
                 DoubleColumn.create(RuleEvaluationResult.FATAL_UPPER_BOUND_COLUMN_NAME),
                 DoubleColumn.create(RuleEvaluationResult.ERROR_LOWER_BOUND_COLUMN_NAME),

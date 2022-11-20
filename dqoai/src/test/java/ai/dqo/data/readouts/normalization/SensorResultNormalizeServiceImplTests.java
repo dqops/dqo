@@ -177,7 +177,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
     @Test
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodPresentButGradientNone_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHash0() {
         this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
-        LocalDateTime expectedTimePeriod = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime expectedTimePeriod = LocalDateTime.of(2022, 11, 21, 15, 16, 17);
         this.table.addColumns(DateTimeColumn.create("time_period", expectedTimePeriod));
         SensorReadoutsNormalizedResult results = this.sut.normalizeResults(this.sensorExecutionResult, null, this.sensorExecutionRunParameters);
         Assertions.assertNotNull(results.getTable());
@@ -189,6 +189,8 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
         Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("7a8c2b10-e072-a57f-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
+        Assertions.assertEquals("0d60392a-f71b-35f1-ff52-a61c0648323f", results.getIdColumn().get(0));
     }
 
     @Test

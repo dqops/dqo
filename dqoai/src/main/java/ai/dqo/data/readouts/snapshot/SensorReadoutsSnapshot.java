@@ -192,9 +192,7 @@ public class SensorReadoutsSnapshot {
             }
 
             String[] joinColumns = {
-                    SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                    SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME,
-                    SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME
+                    SensorReadoutsNormalizedResult.ID_COLUMN_NAME
             };
             Table mergedResults = TableMergeUtility.mergeNewResults(this.historicResults, this.newResults, joinColumns);
 
