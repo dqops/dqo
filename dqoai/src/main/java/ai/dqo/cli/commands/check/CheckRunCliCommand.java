@@ -106,7 +106,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-d", "--data-stream-level"}, description = "Data stream level filter",
+    @CommandLine.Option(names = {"-ds", "--data-stream-level"}, description = "Data stream level filter",
             required = false)
     private String[] dimensions;
 

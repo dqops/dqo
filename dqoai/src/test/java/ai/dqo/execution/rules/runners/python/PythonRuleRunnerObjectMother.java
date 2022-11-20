@@ -66,19 +66,19 @@ public class PythonRuleRunnerObjectMother {
      * Executes a built-in rule for a single value.
      * @param actualValue Actual sensor value.
      * @param ruleParameters Rule parameters, also used to find the rule definition.
-     * @param readingTimestamp Reading timestamp.
-     * @param previousReadings Array of previous readings.
+     * @param readoutTimestamp Reading timestamp.
+     * @param previousReadouts Array of previous readouts.
      * @param timeWindowSettingsSpec Time window settings.
      * @return Rule evaluation result.
      */
     public static RuleExecutionResult executeBuiltInRule(double actualValue,
 														 AbstractRuleParametersSpec ruleParameters,
-														 LocalDateTime readingTimestamp,
-														 HistoricDataPoint[] previousReadings,
+														 LocalDateTime readoutTimestamp,
+														 HistoricDataPoint[] previousReadouts,
 														 RuleTimeWindowSettingsSpec timeWindowSettingsSpec) {
         PythonRuleRunner ruleRunner = getDefault();
         CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, readingTimestamp, previousReadings, timeWindowSettingsSpec);
+        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec);
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
         RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleDefinitionFindResult);

@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check reading is less or equal a maximum value.
+ * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,15 +42,15 @@ public class MaxCountRuleParametersSpec extends AbstractRuleParametersSpec {
     private Long maxCount;
 
     /**
-     * Returns a maximum value for a data quality check reading, for example a maximum row count.
-     * @return Maximum value for a data quality check reading.
+     * Returns a maximum value for a data quality check readout, for example a maximum row count.
+     * @return Maximum value for a data quality check readout.
      */
     public Long getMaxCount() {
         return maxCount;
     }
 
     /**
-     * Sets a maximum data quality check reading that is accepted, for example a maximum row count.
+     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
      * @param maxCount Maximum value that is accepted.
      */
     public void setMaxCount(Long maxCount) {

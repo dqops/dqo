@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor reading value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -39,10 +39,10 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
     };
 
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
     private Double multipleStdevAbove;
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
     private Double multipleStdevBelow;
 
     /**
@@ -55,14 +55,14 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
 
     /**
      *
-     * @return Multiple factor to calculate multipled stdev.
+     * @return Multiple factor to calculate multiplied stdev.
      */
     public Double getMultipleStdevAbove() {
         return multipleStdevAbove;
     }
 
     /**
-     *  Sets a multiple factor to calculate multipled stdev.
+     *  Sets a multiple factor to calculate multiplied stdev.
      * @param multipleStdevAbove Multiple factor.
      */
     public void setMultipleStdevAbove(Double multipleStdevAbove) {
@@ -71,15 +71,15 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
     }
 
     /**
-     * Multipled factor used to calculate a multipled stdev.
-     * @return Multiple factor used to calculate a multipled stdev.
+     * Multiplied factor used to calculate a multiplied stdev.
+     * @return Multiple factor used to calculate a multiplied stdev.
      */
     public Double getMultipleStdevBelow() {
         return multipleStdevBelow;
     }
 
     /**
-     * Sets multiple factor to caulculate multipled stdev.
+     * Sets multiple factor to calculate multiplied stdev.
      * @param multipleStdevBelow Multiple factor.
      */
     public void setMultipleStdevBelow(Double multipleStdevBelow) {

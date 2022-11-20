@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.metadata.sources.TableSpec;
 
 /**
@@ -23,17 +23,17 @@ import ai.dqo.metadata.sources.TableSpec;
  */
 public class SavingSensorResultsEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
-    private final SensorReadingsSnapshot sensorReadingsSnapshot;
+    private final SensorReadoutsSnapshot sensorReadoutsSnapshot;
 
     /**
      * Creates a progress event.
      *
      * @param tableSpec                       Target table.
-     * @param sensorReadingsSnapshot          Sensor results for the given table.
+     * @param sensorReadoutsSnapshot          Sensor results for the given table.
      */
-    public SavingSensorResultsEvent(TableSpec tableSpec, SensorReadingsSnapshot sensorReadingsSnapshot) {
+    public SavingSensorResultsEvent(TableSpec tableSpec, SensorReadoutsSnapshot sensorReadoutsSnapshot) {
         this.tableSpec = tableSpec;
-        this.sensorReadingsSnapshot = sensorReadingsSnapshot;
+        this.sensorReadoutsSnapshot = sensorReadoutsSnapshot;
     }
 
     /**
@@ -50,7 +50,7 @@ public class SavingSensorResultsEvent extends CheckExecutionProgressEvent {
      *
      * @return Sensor results for the given table.
      */
-    public SensorReadingsSnapshot getSensorReadings() {
-        return sensorReadingsSnapshot;
+    public SensorReadoutsSnapshot getSensorReadouts() {
+        return sensorReadoutsSnapshot;
     }
 }

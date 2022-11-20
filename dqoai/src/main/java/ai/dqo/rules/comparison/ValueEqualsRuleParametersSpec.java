@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Data quality rule that verifies that a data quality check reading equals a given value. A margin of error may be configured.
+ * Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -68,7 +68,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
     private Double errorMargin;
 
     /**
-     * Returns the expected value for the sensor reading.
+     * Returns the expected value for the sensor readout.
      * @return Expected value.
      */
     public Double getExpectedValue() {
@@ -85,8 +85,8 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
     }
 
     /**
-     * Returns a fixed error margin for an accepted value. A data quality reading value is accepted when it
-     * is in the range (expectedValue - errorValue) <= quality check reading value <= (expectedValue + errorValue)
+     * Returns a fixed error margin for an accepted value. A data quality sensor readout value is accepted when it
+     * is in the range (expectedValue - errorValue) <= quality check readout ue <= (expectedValue + errorValue)
      * @return Error value.
      */
     public Double getErrorMargin() {

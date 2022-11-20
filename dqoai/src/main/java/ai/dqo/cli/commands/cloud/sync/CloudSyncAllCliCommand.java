@@ -30,7 +30,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "all", description = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readings and alerts)")
+@CommandLine.Command(name = "all", description = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)")
 public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
 

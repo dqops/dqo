@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.sources.TableSpec;
@@ -27,7 +27,7 @@ public class SensorResultsNormalizedEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
     private final SensorExecutionRunParameters sensorRunParameters;
     private final SensorExecutionResult sensorResult;
-    private final SensorNormalizedResult normalizedSensorResults;
+    private final SensorReadoutsNormalizedResult normalizedSensorResults;
 
     /**
      * Creates a progress event.
@@ -40,7 +40,7 @@ public class SensorResultsNormalizedEvent extends CheckExecutionProgressEvent {
     public SensorResultsNormalizedEvent(TableSpec tableSpec,
 										SensorExecutionRunParameters sensorRunParameters,
 										SensorExecutionResult sensorResult,
-										SensorNormalizedResult normalizedSensorResults) {
+										SensorReadoutsNormalizedResult normalizedSensorResults) {
         this.tableSpec = tableSpec;
         this.sensorRunParameters = sensorRunParameters;
         this.sensorResult = sensorResult;
@@ -79,7 +79,7 @@ public class SensorResultsNormalizedEvent extends CheckExecutionProgressEvent {
      *
      * @return Normalized sensor results.
      */
-    public SensorNormalizedResult getNormalizedSensorResults() {
+    public SensorReadoutsNormalizedResult getNormalizedSensorResults() {
         return normalizedSensorResults;
     }
 }

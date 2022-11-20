@@ -191,7 +191,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("predictionTimeWindow", fieldInfo.getClassFieldName());
         Assertions.assertEquals("prediction_time_window", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("prediction_time_window", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor reading timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor reading. The default is 14 (days).", fieldInfo.getHelpText());
+        Assertions.assertEquals("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor readout timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor readout. The default is 14 (days).", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(0, fieldInfo.getDefaultValue());
@@ -208,7 +208,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("maxPercentAbove", fieldInfo.getClassFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.", fieldInfo.getHelpText());
+        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
@@ -257,15 +257,15 @@ public class ReflectionServiceImplTests extends BaseTest {
         private double minPercent = 100.0;
 
         /**
-         * Minimum value for a data quality check reading, for example a minimum row count.
-         * @return Minimum value for a data quality check reading.
+         * Minimum value for a data quality check readout, for example a minimum row count.
+         * @return Minimum value for a data quality check readout.
          */
         public double getMinPercent() {
             return minPercent;
         }
 
         /**
-         * Changes the minimum value (threshold) for a data quality reading.
+         * Changes the minimum value (threshold) for a data quality readout.
          * @param minPercent Minimum value.
          */
         public void setMinPercent(double minPercent) {
@@ -341,7 +341,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("high", fieldInfo.getClassFieldName());
         Assertions.assertEquals("high", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("high", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Rule threshold for a high severity (3) alert.", fieldInfo.getHelpText());
+        Assertions.assertEquals("Rule threshold for a fatal severity (3) alert.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertNotNull(fieldInfo.getConstructor());

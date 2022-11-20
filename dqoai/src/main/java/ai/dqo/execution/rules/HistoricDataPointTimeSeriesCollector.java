@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
@@ -52,20 +52,20 @@ public class HistoricDataPointTimeSeriesCollector {
 												TimeSeriesGradient gradient,
 												ZoneId timeZoneId) {
         this.timeSeriesData = timeSeriesData;
-		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME);
-		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
+		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME);
+		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
         this.gradient = gradient;
         this.timeZoneId = timeZoneId;
     }
 
     /**
      * Returns an array of historic data points. Data points are ordered by the time period timestamp and are before
-     * the <code>readingTimestamp</code>. The array may contain null entries if there is no value for a past data point.
-     * @param readingTimestamp Sensor reading data point.
+     * the <code>readoutTimestamp</code>. The array may contain null entries if there is no value for a past data point.
+     * @param readoutTimestamp Sensor reading data point.
      * @param timePeriodsCount Time periods count to return.
      * @return An array of time periods within the given range.
      */
-    public HistoricDataPoint[] getHistoricDataPointsBefore(LocalDateTime readingTimestamp, int timePeriodsCount) {
+    public HistoricDataPoint[] getHistoricDataPointsBefore(LocalDateTime readoutTimestamp, int timePeriodsCount) {
         assert timePeriodsCount >= 0;
         HistoricDataPoint[] historicDataPoints = new HistoricDataPoint[timePeriodsCount];
         if (timePeriodsCount == 0) {
@@ -76,18 +76,18 @@ public class HistoricDataPointTimeSeriesCollector {
 			this.timePeriodIndex = new LongIndex(this.timePeriodColumn);
         }
 
-        LocalDateTime startTimePeriod = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(readingTimestamp, timePeriodsCount, this.gradient);
-        Selection readingsSinceStartTime = this.timePeriodIndex.atLeast(startTimePeriod);  // inclusive
-        Selection readingsBeforeReadingTimestamp = this.timePeriodIndex.lessThan(readingTimestamp); // exclusive
-        Selection readingsInRange = readingsSinceStartTime.and(readingsBeforeReadingTimestamp);
-        int[] rowIndexes = readingsInRange.toArray();
+        LocalDateTime startTimePeriod = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(readoutTimestamp, timePeriodsCount, this.gradient);
+        Selection readoutsSinceStartTime = this.timePeriodIndex.atLeast(startTimePeriod);  // inclusive
+        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(readoutTimestamp); // exclusive
+        Selection readoutsInRange = readoutsSinceStartTime.and(readoutBeforeReadoutTimestamp);
+        int[] rowIndexes = readoutsInRange.toArray();
         Arrays.sort(rowIndexes); // just in case...
 
         for (int rowIndex : rowIndexes) {
             LocalDateTime rowTimePeriod = this.timePeriodColumn.get(rowIndex);
             LocalDateTime rowTruncatedTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(rowTimePeriod, this.gradient);
             Double rowActualValue = this.actualValueColumn.get(rowIndex);
-            int timePeriodsDifference = (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(rowTruncatedTimePeriod, readingTimestamp, this.gradient);
+            int timePeriodsDifference = (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(rowTruncatedTimePeriod, readoutTimestamp, this.gradient);
             Instant rowTimePeriodInstant = rowTruncatedTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTruncatedTimePeriod));
 
             HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTruncatedTimePeriod, -timePeriodsDifference, rowActualValue);

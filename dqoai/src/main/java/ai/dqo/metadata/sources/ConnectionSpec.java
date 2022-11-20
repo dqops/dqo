@@ -87,7 +87,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
 
-    @JsonPropertyDescription("Default time series source configuration for all tables. Chooses the source for the time series for all tables. The configuration may be overridden on table, column and check levels. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonPropertyDescription("Default time series source configuration for all tables. Chooses the source for the time series for all tables. The configuration may be overridden on table, column and check levels. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)

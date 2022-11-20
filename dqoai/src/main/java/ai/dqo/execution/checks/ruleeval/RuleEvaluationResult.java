@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
@@ -83,8 +83,8 @@ public class RuleEvaluationResult {
      */
     private RuleEvaluationResult(Table ruleResultsTable) {
         this.ruleResultsTable = ruleResultsTable;
-        this.actualValueColumn = (DoubleColumn) ruleResultsTable.column(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
-        this.expectedValueColumn = getOrAddDoubleColumn(ruleResultsTable, SensorNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
+        this.actualValueColumn = (DoubleColumn) ruleResultsTable.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
 		this.severityColumn = getOrAddIntColumn(ruleResultsTable, SEVERITY_COLUMN_NAME);
         this.includeInKpiColumn = getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_KPI_COLUMN_NAME);
 		this.fatalLowerBoundColumn = getOrAddDoubleColumn(ruleResultsTable, FATAL_LOWER_BOUND_COLUMN_NAME);
@@ -100,7 +100,7 @@ public class RuleEvaluationResult {
      * @param normalizedSensorResults Normalized results from a sensor execution.
      * @return Empty table to be populated with the rule evaluation results.
      */
-    public static RuleEvaluationResult makeEmptyFromSensorResults(SensorNormalizedResult normalizedSensorResults) {
+    public static RuleEvaluationResult makeEmptyFromSensorResults(SensorReadoutsNormalizedResult normalizedSensorResults) {
         Table emptyTable = normalizedSensorResults.getTable().emptyCopy();
         emptyTable.setName("rule_evaluation_results");
 

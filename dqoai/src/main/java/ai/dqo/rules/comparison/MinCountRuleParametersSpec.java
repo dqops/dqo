@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check reading is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -64,15 +64,15 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
     private Long minCount;
 
     /**
-     * Minimum value for a data quality check reading, for example a minimum row count.
-     * @return Minimum value for a data quality check reading.
+     * Minimum value for a data quality check readout, for example a minimum row count.
+     * @return Minimum value for a data quality check readout.
      */
     public Long getMinCount() {
         return minCount;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality reading.
+     * Changes the minimum value (threshold) for a data quality readout.
      * @param minCount Minimum value.
      */
     public void setMinCount(Long minCount) {
