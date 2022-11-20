@@ -42,6 +42,11 @@ import java.util.stream.Collectors;
 @Service
 public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeService {
     /**
+     * The data stream name that covers the whole table, without dividing the table into named data streams.
+     */
+    public static final String WHOLE_TABLE_DATA_STREAM_NAME = "whole table";
+
+    /**
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
@@ -493,8 +498,8 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         }
 
         if (notNullColumnCount == 0) {
-            // when no data stream columns are used, we return data_stream_name as "default"
-            return "default";
+            // when no data stream columns are used, we return data_stream_name as "whole table"
+            return WHOLE_TABLE_DATA_STREAM_NAME;
         }
 
         StringBuilder sb = new StringBuilder();

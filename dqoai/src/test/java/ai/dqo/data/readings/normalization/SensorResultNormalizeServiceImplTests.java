@@ -154,7 +154,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("default", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
@@ -171,7 +171,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("default", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataStreamHashColumn());
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("default", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
@@ -205,7 +205,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("default", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
