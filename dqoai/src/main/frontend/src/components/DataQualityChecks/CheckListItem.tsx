@@ -73,12 +73,23 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 onChange={(configured) => handleChange({ configured })}
               />
             </div>
-            <div>{check.check_name}</div>
+            <SvgIcon
+              name={check?.configured ? 'stop' : 'disable'}
+              className={clsx(
+                'w-5 h-5',
+                check?.configured ? 'text-blue-700' : 'text-red-700'
+              )}
+            />
             <SvgIcon
               name="cog"
-              className="w-4 h-4 text-blue-700 cursor-pointer"
+              className="w-5 h-5 text-blue-700 cursor-pointer"
               onClick={openCheckSettings}
             />
+            <SvgIcon
+              name="clock"
+              className="w-5 h-5 text-blue-700 cursor-pointer"
+            />
+            <div>{check.check_name}</div>
           </div>
         </td>
         <td className="py-2 px-4 align-top">
@@ -142,7 +153,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       </tr>
       {expanded && (
         <tr>
-          <td colSpan={3}>
+          <td colSpan={5}>
             <CheckSettings
               activeTab={activeTab}
               setActiveTab={setActiveTab}
