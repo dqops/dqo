@@ -17,6 +17,8 @@ package ai.dqo.core.scheduler.runcheck;
 
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.jobqueue.DelegateDqoQueueJob;
+import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobDataMapAdapter;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
@@ -28,6 +30,7 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -41,8 +44,9 @@ import org.springframework.stereotype.Component;
  * Quartz job implementation that executes data quality checks for a given schedule.
  */
 @Component
-@DisallowConcurrentExecution
+//@DisallowConcurrentExecution
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Slf4j
 public class RunChecksSchedulerJob implements Job {
     private JobDataMapAdapter jobDataMapAdapter;
     private JobSchedulerService jobSchedulerService;
@@ -51,6 +55,7 @@ public class RunChecksSchedulerJob implements Job {
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
     private TerminalTableWritter terminalTableWritter;
+    private DqoJobQueue dqoJobQueue;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
@@ -61,6 +66,7 @@ public class RunChecksSchedulerJob implements Job {
      * @param checkExecutionProgressListenerProvider Check execution progress listener used to get the correct logger.
      * @param schedulerFileSynchronizationService Scheduler file synchronization service.
      * @param terminalTableWritter Terminal table writer - used to write the summary information about the progress to the console.
+     * @param dqoJobQueue DQO job runner where the actual operation is executed.
      */
     @Autowired
     public RunChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
@@ -69,7 +75,8 @@ public class RunChecksSchedulerJob implements Job {
                                  CheckExecutionContextFactory checkExecutionContextFactory,
                                  CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                                  SchedulerFileSynchronizationService schedulerFileSynchronizationService,
-                                 TerminalTableWritter terminalTableWritter) {
+                                 TerminalTableWritter terminalTableWritter,
+                                 DqoJobQueue dqoJobQueue) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionService = checkExecutionService;
@@ -77,6 +84,7 @@ public class RunChecksSchedulerJob implements Job {
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.schedulerFileSynchronizationService = schedulerFileSynchronizationService;
         this.terminalTableWritter = terminalTableWritter;
+        this.dqoJobQueue = dqoJobQueue;
     }
 
     /**
@@ -86,24 +94,38 @@ public class RunChecksSchedulerJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        final RunChecksSchedule runChecksSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
+
         try {
-            FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
-            CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
+            DelegateDqoQueueJob<Void> dqoQueueJob = new DelegateDqoQueueJob<>(() -> runJobOperation(runChecksSchedule));
+            this.dqoJobQueue.pushJob(dqoQueueJob);
 
-            this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // synchronize the data before running the checks, just in case that the files were removed remotely
-
-            RunChecksSchedule runChecksSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
-            CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
-
-            CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
-                    checkRunReportingMode, true);
-            CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
-                    checkExecutionContext, runChecksSchedule, progressListener);
-
-            this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
+            dqoQueueJob.waitForFinish(); // waits for the result, hanging the current thread
         }
         catch (Exception ex) {
+            log.error("Failed to execute a job that runs the data quality checks on a job scheduler, error: " + ex.getMessage(), ex);
             throw new JobExecutionException(ex);
         }
+    }
+
+    /**
+     * The core implementation of the operation performed by the scheduled job.
+     */
+    public Void runJobOperation(RunChecksSchedule runChecksSchedule) {
+        FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
+        CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
+
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // synchronize the data before running the checks, just in case that the files were removed remotely
+
+        CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
+
+        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
+                checkRunReportingMode, true);
+        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
+                checkExecutionContext, runChecksSchedule, progressListener);
+
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
+
+        return null;
     }
 }

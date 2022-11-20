@@ -90,12 +90,10 @@ public class TerminalReaderImpl implements TerminalReader {
      *
      * @param question       Prompt (question)
      * @param defaultValue Default value that is returned when the answer is empty.
-     * @param acceptNullDefault When true and the <code>defaultValue</code> is null then a null value is accepted.
-     *                          When false and the <code>defaultValue</code> is null then asks the user again until a response is given.
      * @return User entered response.
      */
     @Override
-    public Boolean promptBoolean(String question, boolean defaultValue, boolean acceptNullDefault) {
+    public Boolean promptBoolean(String question, boolean defaultValue) {
         StringBuilder sb = new StringBuilder();
         sb.append(question);
         sb.append(' ');
@@ -135,16 +133,16 @@ public class TerminalReaderImpl implements TerminalReader {
      * @return User entered response.
      */
     @Override
-    public char promptChar(String question, char defaultValue, boolean acceptNullDefault) {
-
+    public Character promptChar(String question, Character defaultValue, boolean acceptNullDefault) {
         while (true) {
             String line = lineReader.readLine(question);
-            if (Strings.isNullOrEmpty(line) && acceptNullDefault) {
-                return defaultValue;
-            }
-
             if (Strings.isNullOrEmpty(line)) {
-                continue;
+                if (defaultValue != null || acceptNullDefault) {
+                    return defaultValue;
+                }
+                else {
+                    continue;
+                }
             }
 
             return line.charAt(0);
@@ -315,7 +313,7 @@ public class TerminalReaderImpl implements TerminalReader {
         while (true) {
             Character character = this.tryReadChar(1000);
             if (character != null) {
-                if (this.promptBoolean("Exit the application", false, false)) {
+                if (this.promptBoolean("Exit the application", false)) {
                     return;
                 }
             }

@@ -60,7 +60,7 @@ public class FileWritterImpl implements FileWritter {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 		Path userHomeFolderPath = this.userHomeContextFactory.openLocalUserHome().getHomeRoot().getPhysicalAbsolutePath();
 
-		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true, false);
+		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true);
 		try {
 			if (response) {
 				String newTableFileName = getISO8601StringForCurrentDate(new Date()).replaceAll("\\s+","")

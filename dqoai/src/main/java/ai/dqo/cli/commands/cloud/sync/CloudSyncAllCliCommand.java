@@ -66,27 +66,27 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeSourcesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SOURCES, this.mode, this.isHeadless());
+        int synchronizeSourcesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SOURCES, this.mode, this.isHeadless(), true);
         if (synchronizeSourcesResult < 0) {
             return synchronizeSourcesResult;
         }
 
-        int synchronizeRulesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.RULES, this.mode, this.isHeadless());
+        int synchronizeRulesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.RULES, this.mode, this.isHeadless(), true);
         if (synchronizeRulesResult < 0) {
             return synchronizeRulesResult;
         }
 
-        int synchronizeSensorsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SENSORS, this.mode, this.isHeadless());
+        int synchronizeSensorsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SENSORS, this.mode, this.isHeadless(), true);
         if (synchronizeSensorsResult < 0) {
             return synchronizeSensorsResult;
         }
 
-        int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless());
+        int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless(), true);
         if (synchronizeReadoutsResult < 0) {
             return synchronizeReadoutsResult;
         }
 
-        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless());
+        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless(), true);
         return synchronizeRuleResultsResult;
     }
 }

@@ -186,7 +186,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             this.initializeDefaultDqoUserHome();
         }
         else {
-            if (this.terminalReader.promptBoolean("Initialize a DQO user home at " + userHomePathString, true, false)) {
+            if (this.terminalReader.promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
                 this.initializeDefaultDqoUserHome();
                 return;
             }

@@ -368,7 +368,7 @@ public class TableServiceImpl implements TableService {
         CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE, null, null);
         this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
         this.terminalWriter.writeLine("Do You want to remove these " + tableWrappers.size() + " tables?");
-        boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
+        boolean response = this.terminalReader.promptBoolean("Yes or No", false);
         if (!response) {
             cliOperationStatus.setFailedMessage("You deleted 0 tables");
             return cliOperationStatus;
