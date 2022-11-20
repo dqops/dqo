@@ -59,7 +59,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       <tr
         className={clsx(
           ' border-b border-gray-100',
-          check?.configured ? 'text-gray-700' : 'opacity-75'
+          check?.configured ? 'text-gray-700' : 'opacity-75 line-through'
         )}
       >
         <td className="py-2 px-4 align-top pr-4">
