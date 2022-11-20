@@ -91,7 +91,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             completionCandidates = ColumnNameCompleter.class)
     private String column;
 
-    @CommandLine.Option(names = {"-k", "--check"}, description = "Data quality check name, supports patterns like '*_id'")
+    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'")
     private String check;
 
     @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'")
@@ -106,12 +106,15 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-ad", "--dimension"}, description = "Dimension filter",
+    @CommandLine.Option(names = {"-d", "--data-stream-level"}, description = "Data stream level filter",
             required = false)
     private String[] dimensions;
 
     @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
     private String[] labels;
+
+    @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
+    private CheckRunCommandFailThreshold failAt;
 
     /**
      * Gets the connection name.
@@ -305,17 +308,32 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             }
         }
 
-        if (checkExecutionSummary.getHighSeverityAlertsCount() > 0) {
-            return 3;
-        }
-        else if (checkExecutionSummary.getMediumSeverityAlertsCount() > 0) {
-            return 2;
-        }
-        else if (checkExecutionSummary.getLowSeverityAlertsCount() > 0) {
-            return 1;
-        }
-        else {
-            return 0; // no alerts
+        int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();
+        int errorIssuesCount = checkExecutionSummary.getErrorSeverityIssuesCount();
+        int warningIssuesCount = checkExecutionSummary.getWarningSeverityIssuesCount();
+
+        CheckRunCommandFailThreshold checkRunCommandFailThreshold = this.failAt != null ? this.failAt : CheckRunCommandFailThreshold.error;
+        switch (checkRunCommandFailThreshold) {
+            case warning:
+                if (warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
+                    return 1;
+                }
+                // move to the next level...
+
+            case error:
+                if (errorIssuesCount > 0 && fatalIssuesCount == 0) {
+                    return 2;
+                }
+                // move to the next level...
+
+            case fatal:
+                if (fatalIssuesCount > 0) {
+                    return 3;
+                }
+                // move to the next level...
+
+            default:
+                return 0;
         }
     }
 }
