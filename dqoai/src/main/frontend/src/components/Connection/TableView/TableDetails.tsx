@@ -72,12 +72,7 @@ const TableDetails = ({ tableBasic, setTableBasic }: ITableDetailsProps) => {
           </tr>
           <tr>
             <td className="px-4 py-2">Table Hash</td>
-            <td className="px-4 py-2">
-              <Input
-                value={tableBasic?.table_hash}
-                onChange={(e) => handleChange({ table_hash: e.target.value })}
-              />
-            </td>
+            <td className="px-4 py-2">{tableBasic?.table_hash}</td>
           </tr>
           {tableBasic?.target?.properties && (
             <>
