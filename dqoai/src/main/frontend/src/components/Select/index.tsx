@@ -59,7 +59,7 @@ const Select = ({
   }, []);
 
   return (
-    <div className={clsx('', className)}>
+    <div className={clsx('relative', className)}>
       {label && (
         <div className="flex space-x-1">
           <div
@@ -89,7 +89,7 @@ const Select = ({
         <MenuHandler ref={ref}>
           <div
             className={clsx(
-              'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border whitespace-nowrap',
+              'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border whitespace-nowrap relative',
               triggerClassName,
               disabled ? 'bg-gray-300 cursor-not-allowed' : '',
               error ? 'border-red-500' : 'border-gray-300'
