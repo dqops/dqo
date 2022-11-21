@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import clsx from 'clsx';
 
@@ -51,6 +51,13 @@ const SelectInput = ({
     closeMenu();
   };
 
+  const filteredOptions = useMemo(() => {
+    return options.filter(
+      (option) =>
+        option.label.toLowerCase().indexOf((value || '').toLowerCase()) > -1
+    );
+  }, [value, options]);
+
   return (
     <div className={clsx('', className)}>
       {label && (
@@ -81,7 +88,7 @@ const SelectInput = ({
       <div className="relative w-full min-w-40" ref={ref}>
         <div
           className={clsx(
-            'cursor-pointer text-gray-900 h-9 pr-10 text-black rounded flex items-center text-sm border',
+            'cursor-pointer text-gray-900 h-9 pr-8 text-black rounded flex items-center text-sm border overflow-hidden',
             triggerClassName,
             disabled ? 'bg-gray-300 cursor-not-allowed' : '',
             error ? 'border-red-500' : 'border-gray-300'
@@ -89,7 +96,7 @@ const SelectInput = ({
           onClick={() => (!disabled ? toggleMenu() : {})}
         >
           <input
-            className="py-2 px-4 focus:outline-none"
+            className="h-full pl-4 focus:outline-none w-full"
             value={value}
             onChange={(e) => onChange && onChange(e.target.value)}
             placeholder={placeholder}
@@ -110,7 +117,7 @@ const SelectInput = ({
               : 'opacity-0 max-h-0 overflow-hidden py-0'
           )}
         >
-          {options.map((option, index) => (
+          {filteredOptions.map((option, index) => (
             <div
               data-testid="select-option"
               key={index}
