@@ -16,6 +16,9 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimePartition;
+import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
@@ -51,10 +54,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -410,7 +410,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
     }
 
-    private <T extends AbstractSpec> T getTableGenericChecks(
+    protected <T extends AbstractSpec> T getTableGenericChecks(
             Function<TableSpec, T> extractorFromSpec,
             String connectionName,
             String schemaName,
@@ -500,7 +500,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Data quality partitioned checks on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks")
     @ApiOperation(value = "getTablePartitionedChecks", notes = "Return the configuration of table level data quality partitioned checks on a table", response = TablePartitionedChecksRootSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -521,9 +521,9 @@ public class TablesController {
             return new ResponseEntity<>(Mono.just(partitionedChecks), HttpStatus.OK); // 200
         }
     }
-    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}"
+    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/{timePartition}"
 
-    private <T extends AbstractRootChecksContainerSpec> UIAllChecksModel getTableGenericChecksUI(
+    protected <T extends AbstractRootChecksContainerSpec> UIAllChecksModel getTableGenericChecksUI(
             Function<TableSpec, T> tableSpecToRootCheck,
             String connectionName,
             String schemaName,
@@ -594,7 +594,7 @@ public class TablesController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param timePartition  Time partition (daily, monthly, etc.).
+     * @param timePartition  Time partition.
      * @return UI friendly data quality ad-hoc check list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui")
@@ -609,7 +609,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
         UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
                 spec -> {
                     TableCheckpointsSpec checkpoints = spec.getCheckpoints();
@@ -617,19 +617,19 @@ public class TablesController {
                         checkpoints = new TableCheckpointsSpec();
                     }
 
-                    // TODO: Enum for allowed time partitions
-                    AbstractRootChecksContainerSpec checkpointsPartition;
+                    AbstractRootChecksContainerSpec checkpointsPartition = null;
 
-                    if (timePartition.equals("daily")) {
-                        TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
-                        checkpointsPartition =
-                                (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
-                    } else if (timePartition.equals("monthly")) {
-                        TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
-                        checkpointsPartition =
-                                (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
-                    } else {
-                        return null;
+                    switch (timePartition) {
+                        case DAILY -> {
+                            TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
+                            checkpointsPartition =
+                                    (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
+                        }
+                        case MONTHLY -> {
+                            TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
+                            checkpointsPartition =
+                                    (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
+                        }
                     }
                     return checkpointsPartition;
                 },
@@ -651,10 +651,10 @@ public class TablesController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @param timePartition  Time partition (daily, monthly, etc.).
+     * @param timePartition  Time partition.
      * @return UI friendly data quality ad-hoc check list on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/{timePartition}/ui")
     @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -666,7 +666,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
         UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
                 spec -> {
                     TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
@@ -674,19 +674,19 @@ public class TablesController {
                         partitionedChecks = new TablePartitionedChecksRootSpec();
                     }
 
-                    // TODO: Enum for allowed time partitions
-                    AbstractRootChecksContainerSpec partitionedChecksPartition;
+                    AbstractRootChecksContainerSpec partitionedChecksPartition = null;
 
-                    if (timePartition.equals("daily")) {
-                        TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
-                        partitionedChecksPartition =
-                                (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
-                    } else if (timePartition.equals("monthly")) {
-                        TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
-                        partitionedChecksPartition =
-                                (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
-                    } else {
-                        return null;
+                    switch (timePartition) {
+                        case DAILY -> {
+                            TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
+                            partitionedChecksPartition =
+                                    (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
+                        }
+                        case MONTHLY -> {
+                            TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
+                            partitionedChecksPartition =
+                                    (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
+                        }
                     }
                     return partitionedChecksPartition;
                 },
@@ -1164,7 +1164,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
-    private <T extends AbstractSpec> boolean updateTableGenericChecks(
+    protected <T extends AbstractSpec> boolean updateTableGenericChecks(
             Consumer<TableSpec> tableSpecUpdater,
             String connectionName,
             String schemaName,
@@ -1300,7 +1300,7 @@ public class TablesController {
      * @param tablePartitionedChecksRootSpec New configuration of the data quality partitioned checks on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks")
     @ApiOperation(value = "updateTablePartitionedChecks", notes = "Updates the list of table level data quality partitioned checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1342,7 +1342,7 @@ public class TablesController {
         }
     }
 
-    private <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecksUI(
+    protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecksUI(
             Function<TableSpec, T> tableSpecToRootCheck,
             String connectionName,
             String schemaName,
@@ -1430,7 +1430,7 @@ public class TablesController {
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
-     * @param timePartition            Time partition (daily, monthly, etc.).
+     * @param timePartition            Time partition.
      * @param uiAllChecksModel         New configuration of the data quality checkpoints on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those checkpoints that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
@@ -1448,13 +1448,12 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition,
+            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality checkpoints configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(timePartition)) {
+                Strings.isNullOrEmpty(tableName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -1462,21 +1461,22 @@ public class TablesController {
                 spec -> {
                     TableCheckpointsSpec checkpoints = spec.getCheckpoints();
 
-                    // TODO: Enum for time partitions
-                    if (timePartition.equals("daily")) {
-                        if (checkpoints.getDaily() == null) {
-                            checkpoints.setDaily(new TableDailyCheckpointCategoriesSpec());
+                    switch (timePartition) {
+                        case DAILY -> {
+                            if (checkpoints.getDaily() == null) {
+                                checkpoints.setDaily(new TableDailyCheckpointCategoriesSpec());
+                            }
+                            return checkpoints.getDaily();
                         }
-
-                        return checkpoints.getDaily();
-                    } else if (timePartition.equals("monthly")) {
-                        if (checkpoints.getMonthly() == null) {
-                            checkpoints.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
+                        case MONTHLY -> {
+                            if (checkpoints.getMonthly() == null) {
+                                checkpoints.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
+                            }
+                            return checkpoints.getMonthly();
                         }
-
-                        return checkpoints.getMonthly();
-                    } else {
-                        return null; // invalid time partition
+                        default -> {
+                            return null;
+                        }
                     }
                 },
                 connectionName,
@@ -1498,11 +1498,11 @@ public class TablesController {
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
-     * @param timePartition            Time partition (daily, monthly, etc.).
+     * @param timePartition            Time partition.
      * @param uiAllChecksModel         New configuration of the data quality partitioned checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those partitioned checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedChecks/{timePartition}/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/{timePartition}/ui")
     @ApiOperation(value = "updateTablePartitionedChecksUI", notes = "Updates the data quality partitioned checks from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1516,13 +1516,12 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition (eg. daily)") @PathVariable String timePartition,
+            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality partitioned checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(timePartition)) {
+                Strings.isNullOrEmpty(tableName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -1530,21 +1529,22 @@ public class TablesController {
                 spec -> {
                     TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
 
-                    // TODO: Enum for time partitions
-                    if (timePartition.equals("daily")) {
-                        if (partitionedChecks.getDaily() == null) {
-                            partitionedChecks.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
+                    switch (timePartition) {
+                        case DAILY -> {
+                            if (partitionedChecks.getDaily() == null) {
+                                partitionedChecks.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
+                            }
+                            return partitionedChecks.getDaily();
                         }
-
-                        return partitionedChecks.getDaily();
-                    } else if (timePartition.equals("monthly")) {
-                        if (partitionedChecks.getMonthly() == null) {
-                            partitionedChecks.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
+                        case MONTHLY -> {
+                            if (partitionedChecks.getMonthly() == null) {
+                                partitionedChecks.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
+                            }
+                            return partitionedChecks.getMonthly();
                         }
-
-                        return partitionedChecks.getMonthly();
-                    } else {
-                        return null; // invalid time partition
+                        default -> {
+                            return null;
+                        }
                     }
                 },
                 connectionName,

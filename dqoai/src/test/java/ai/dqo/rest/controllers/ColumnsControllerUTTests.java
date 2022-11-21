@@ -16,15 +16,18 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckTimePartition;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
@@ -55,6 +58,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -104,7 +108,12 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setWarning(maxCountRule1);
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
-        
+
+        ColumnMaxNegativeCountCheckSpec negativeChecksSpec = new ColumnMaxNegativeCountCheckSpec();
+        negativeChecksSpec.setWarning(maxCountRule1);
+        negativeChecksSpec.setError(maxCountRule2);
+        negativeChecksSpec.setFatal(maxCountRule3);
+
         ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
         nullChecks.setMaxNullsCount(nullsChecksSpec);
         this.sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
@@ -117,10 +126,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         this.sampleCheckpoint = new ColumnCheckpointsSpec();
         this.sampleCheckpoint.setDaily(dailyCheckpoint);
 
-        ColumnNullsDailyPartitionedChecksSpec nullDailyPartitionedChecks = new ColumnNullsDailyPartitionedChecksSpec();
-        nullDailyPartitionedChecks.setDailyPartitionMaxNullsCount(nullsChecksSpec);
+        // What's the purpose of negative check if I can't assign it in this context?
+        // I guess, constricting the dependency path on this check,
+        // causes improper behavior of SpecToUiCheckMappingService.createUiModel(genericChecks).
+//        ColumnNegativeDailyPartitionedChecksSpec negativeDailyPartitionedChecks = new ColumnNegativeDailyPartitionedChecksSpec();
+//        negativeDailyPartitionedChecks.setDailyPartitionMaxNegativeCount(negativeChecksSpec);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new ColumnDailyPartitionedCheckCategoriesSpec();
-        dailyPartitionedCheck.setNulls(nullDailyPartitionedChecks);
+        dailyPartitionedCheck.setDailyPartitionMaxNegativeCount(negativeChecksSpec);
         this.samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
         this.samplePartitionedCheck.setDaily(dailyPartitionedCheck);
     }
@@ -196,8 +208,8 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"daily", "monthly"})
-    void getColumnCheckpointsUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(String timePartition) {
+    @EnumSource(CheckTimePartition.class)
+    void getColumnCheckpointsUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(CheckTimePartition timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -214,8 +226,8 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"daily", "monthly"})
-    void getColumnPartitionedChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(String timePartition) {
+    @EnumSource(CheckTimePartition.class)
+    void getColumnPartitionedChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(CheckTimePartition timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 

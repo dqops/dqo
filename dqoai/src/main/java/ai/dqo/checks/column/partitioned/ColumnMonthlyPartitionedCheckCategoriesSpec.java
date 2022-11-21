@@ -59,7 +59,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnMaxNegativeCountCheckSpec getmonthlyPartitionMaxNegativeCount() {
+    public ColumnMaxNegativeCountCheckSpec getMonthlyPartitionMaxNegativeCount() {
         return monthlyPartitionMaxNegativeCount;
     }
 

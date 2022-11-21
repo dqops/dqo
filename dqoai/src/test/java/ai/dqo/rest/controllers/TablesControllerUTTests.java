@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckTimePartition;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
@@ -49,6 +50,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
@@ -231,8 +233,8 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"daily", "monthly"})
-    void getTableCheckpointsUI_whenTableRequested_thenReturnsCheckpointsUi(String timePartition) {
+    @EnumSource(CheckTimePartition.class)
+    void getTableCheckpointsUI_whenTableRequested_thenReturnsCheckpointsUi(CheckTimePartition timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
@@ -248,10 +250,9 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"daily", "monthly"})
-    void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(String timePartition) {
+    @EnumSource(CheckTimePartition.class)
+    void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimePartition timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        TableSpec tableSpec = this.sampleTable.getTableSpec();
 
         ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
                 this.sampleTable.getConnectionName(),

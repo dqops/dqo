@@ -59,7 +59,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnMaxNegativeCountCheckSpec getdailyPartitionMaxNegativeCount() {
+    public ColumnMaxNegativeCountCheckSpec getDailyPartitionMaxNegativeCount() {
         return dailyPartitionMaxNegativeCount;
     }
 
