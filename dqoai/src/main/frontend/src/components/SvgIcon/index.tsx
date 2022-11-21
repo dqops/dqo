@@ -11,6 +11,7 @@ import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
+import { ReactComponent as ClockOffSvg } from './svg/clock-off.svg';
 import { ReactComponent as CloseSvg } from './svg/close.svg';
 import { ReactComponent as CogSvg } from './svg/cog.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
@@ -81,13 +82,15 @@ const iconsMap: any = {
   delete: DeleteSvg,
   save: SaveSvg,
   stop: StopSvg,
-  disable: DisableSvg
+  disable: DisableSvg,
+  'clock-off': ClockOffSvg
 };
 
 interface SvgIconProps {
   className?: string;
   name: string;
   onClick?: (e: any) => void;
+  strokeWidth?: number;
 }
 
 const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
