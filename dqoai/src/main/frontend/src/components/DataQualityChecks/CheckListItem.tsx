@@ -120,21 +120,6 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             type="error"
           />
         </td>
-        <td className="py-2 px-4 align-bottom bg-yellow-100">
-          <CheckRuleItem
-            disabled={!check.configured}
-            parameters={check?.rule?.warning}
-            onChange={(warning) =>
-              handleChange({
-                rule: {
-                  ...check?.rule,
-                  warning
-                }
-              })
-            }
-            type="warning"
-          />
-        </td>
         <td className="py-2 px-4 align-bottom bg-red-100">
           <CheckRuleItem
             disabled={!check.configured}
@@ -150,10 +135,26 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             type="fatal"
           />
         </td>
+        <td className="min-w-5 max-w-5 border-b" />
+        <td className="py-2 px-4 align-bottom bg-yellow-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
+        </td>
       </tr>
       {expanded && (
         <tr>
-          <td colSpan={5}>
+          <td colSpan={6}>
             <CheckSettings
               activeTab={activeTab}
               setActiveTab={setActiveTab}
