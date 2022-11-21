@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
@@ -229,5 +230,17 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonIgnore
     public CheckType getCheckType() {
         return CheckType.ADHOC;
+    }
+
+    /**
+     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Adhoc checks do not have a time range and return null.
+     *
+     * @return Time range (daily, monthly, ...).
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return null;
     }
 }

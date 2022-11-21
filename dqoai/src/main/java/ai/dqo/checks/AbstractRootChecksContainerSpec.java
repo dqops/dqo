@@ -57,6 +57,14 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     public abstract CheckType getCheckType();
 
     /**
+     * Returns the time scale for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Adhoc checks do not have a time scale and return null.
+     * @return Time scale (daily, monthly, ...).
+     */
+    @JsonIgnore
+    public abstract CheckTimeScale getCheckTimeScale();
+
+    /**
      * Checks if there are any configured checks (not null) in any check category.
      * @return True when there are some checks configured, false when all checks are nulls.
      */

@@ -173,6 +173,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
             CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
             checkSearchFilters.setEnabled(true);
+            checkSearchFilters.setConnectionName(connectionWrapper.getName());
+            checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toString());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
             executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
