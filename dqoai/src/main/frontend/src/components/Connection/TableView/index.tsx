@@ -17,14 +17,14 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
-  getTableChecksUI,
+  getTableAdHocChecksUI,
   getTableComments,
   getTableDataStreamMapping,
   getTableLabels,
   getTableSchedule,
   getTableTime,
   updateTableBasic,
-  updateTableChecksUI,
+  updateTableAdHocChecksUI,
   updateTableComments,
   updateTableDataStreamMapping,
   updateTableLabels,
@@ -149,7 +149,7 @@ const TableView = ({
     dispatch(getTableTime(connectionName, schemaName, tableName));
     dispatch(getTableComments(connectionName, schemaName, tableName));
     dispatch(getTableLabels(connectionName, schemaName, tableName));
-    dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
     dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
 
     const searchQuery = qs.stringify({
@@ -214,14 +214,14 @@ const TableView = ({
     }
     if (activeTab === 'data-quality-checks') {
       await dispatch(
-        updateTableChecksUI(
+        updateTableAdHocChecksUI(
           connectionName,
           schemaName,
           tableName,
           updatedChecksUI
         )
       );
-      await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+      await dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
     }
     if (activeTab === 'data-streams') {
       await dispatch(
