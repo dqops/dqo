@@ -16,7 +16,7 @@
 package ai.dqo.execution.checks;
 
 
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -46,6 +46,6 @@ public interface CheckExecutionService {
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
-                                        RunChecksSchedule targetSchedule,
+                                        RunChecksCronSchedule targetSchedule,
                                         CheckExecutionProgressListener progressListener);
 }

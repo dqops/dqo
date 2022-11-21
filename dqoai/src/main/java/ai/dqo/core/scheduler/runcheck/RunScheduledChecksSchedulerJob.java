@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.scheduler.scan;
+package ai.dqo.core.scheduler.runcheck;
 
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.scheduler.quartz.JobDataMapAdapter;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -28,44 +29,50 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Quartz job implementation that scans the metadata and activates new schedules or stops unused schedules.
+ * Quartz job implementation that executes data quality checks for a given schedule. This is a Quartz job.
  */
 @Component
-@DisallowConcurrentExecution
+//@DisallowConcurrentExecution
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class SynchronizeMetadataSchedulerJob implements Job {
-    private DqoJobQueue dqoJobQueue;
+public class RunScheduledChecksSchedulerJob implements Job {
+    private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoJobQueue dqoJobQueue;
 
     /**
-     * Creates a schedule metadata job instance using dependencies.
+     * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
+     * @param jobDataMapAdapter Quartz job data adapter that extracts the original schedule definition from the job data.
      * @param dqoQueueJobFactory DQO job factory.
-     * @param dqoJobQueue DQO job queue to push the actual job to execute.
+     * @param dqoJobQueue DQO job runner where the actual operation is executed.
      */
     @Autowired
-    public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
-                                           DqoJobQueue dqoJobQueue) {
+    public RunScheduledChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
+                                          DqoQueueJobFactory dqoQueueJobFactory,
+                                          DqoJobQueue dqoJobQueue) {
+        this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
 
     /**
-     * Executes a job that detects new schedules and manages Quartz triggers.
+     * Executes a job that runs data quality checks for a given schedule.
      * @param jobExecutionContext Job execution context.
      * @throws JobExecutionException Exception with the error if the job execution fails.
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        try {
-            RunPeriodicMetadataSynchronizationDqoJob runPeriodicMetadataSynchronizationJob =
-                    this.dqoQueueJobFactory.createRunPeriodicMetadataSynchronizationJob();
-            this.dqoJobQueue.pushJob(runPeriodicMetadataSynchronizationJob);
+        final RunChecksCronSchedule runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
-            runPeriodicMetadataSynchronizationJob.waitForFinish(); // waits for the result, hanging the current thread, but we can consider returning instantly...
+        try {
+            RunScheduledChecksDqoJob runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();
+            runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
+            this.dqoJobQueue.pushJob(runScheduledChecksJob);
+
+            runScheduledChecksJob.waitForFinish(); // waits for the result, hanging the current thread... but we can release the thread...
         }
         catch (Exception ex) {
-            log.error("Failed to execute a metadata synchronization job", ex);
+            log.error("Failed to execute a job that runs the data quality checks on a job scheduler, error: " + ex.getMessage(), ex);
             throw new JobExecutionException(ex);
         }
     }

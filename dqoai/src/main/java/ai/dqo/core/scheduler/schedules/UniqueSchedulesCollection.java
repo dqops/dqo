@@ -24,15 +24,15 @@ import java.util.Set;
  * Collection (hash set) of unique schedule configurations that were detected for running the data quality checks.
  */
 public class UniqueSchedulesCollection {
-    private Set<RunChecksSchedule> uniqueSchedules = new LinkedHashSet<>();
+    private Set<RunChecksCronSchedule> uniqueSchedules = new LinkedHashSet<>();
 
     /**
      * Adds a recurring schedule to the collection. Only unique schedules are added.
      * @param recurringSchedule Recurring schedule specification that was found in the metadata.
      */
-    public void add(RunChecksSchedule recurringSchedule) {
+    public void add(RunChecksCronSchedule recurringSchedule) {
         if (!uniqueSchedules.contains(recurringSchedule)) {
-            RunChecksSchedule detachedSchedule = recurringSchedule.clone();
+            RunChecksCronSchedule detachedSchedule = recurringSchedule.clone();
             uniqueSchedules.add(detachedSchedule);
         }
     }
@@ -41,7 +41,7 @@ public class UniqueSchedulesCollection {
      * Returns a collection of unique schedules for iteration.
      * @return Unique schedules that were detected.
      */
-    public Collection<RunChecksSchedule> getUniqueSchedules() {
+    public Collection<RunChecksCronSchedule> getUniqueSchedules() {
         return Collections.unmodifiableCollection(this.uniqueSchedules);
     }
 
@@ -53,7 +53,7 @@ public class UniqueSchedulesCollection {
      */
     public UniqueSchedulesCollection minus(UniqueSchedulesCollection other) {
         UniqueSchedulesCollection missingInMine = new UniqueSchedulesCollection();
-        for (RunChecksSchedule mySchedule : uniqueSchedules) {
+        for (RunChecksCronSchedule mySchedule : uniqueSchedules) {
             if (!other.uniqueSchedules.contains(mySchedule)) {
                 missingInMine.add(mySchedule);
             }
@@ -66,8 +66,8 @@ public class UniqueSchedulesCollection {
      * Adds all unique schedules from the given collection.
      * @param schedules Collection of non unique schedules.
      */
-    public void addAll(Collection<RunChecksSchedule> schedules) {
-        for (RunChecksSchedule recurringSchedule : schedules) {
+    public void addAll(Collection<RunChecksCronSchedule> schedules) {
+        for (RunChecksCronSchedule recurringSchedule : schedules) {
             this.add(recurringSchedule);
         }
     }
@@ -77,7 +77,7 @@ public class UniqueSchedulesCollection {
      * @param schedule Schedule to match (using equals and hashcode).
      * @return True when this schedule is present, false when it is not.
      */
-    public boolean contains(RunChecksSchedule schedule) {
+    public boolean contains(RunChecksCronSchedule schedule) {
         return this.uniqueSchedules.contains(schedule);
     }
 }

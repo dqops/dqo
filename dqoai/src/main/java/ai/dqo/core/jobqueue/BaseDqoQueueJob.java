@@ -31,6 +31,12 @@ public abstract class BaseDqoQueueJob<T> {
     public abstract T onExecute();
 
     /**
+     * Returns a job type that this job class is running. Used to identify jobs.
+     * @return Job type.
+     */
+    public abstract DqoJobType getJobType();
+
+    /**
      * Returns a unique job ID that was assigned to the job.
      * @return Unique job id.
      */

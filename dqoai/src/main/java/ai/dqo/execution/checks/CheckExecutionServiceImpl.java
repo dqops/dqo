@@ -23,7 +23,7 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
@@ -161,7 +161,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
-                                               RunChecksSchedule targetSchedule,
+                                               RunChecksCronSchedule targetSchedule,
                                                CheckExecutionProgressListener progressListener) {
         UserHome userHome = checkExecutionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);

@@ -16,7 +16,7 @@
 package ai.dqo.core.scheduler.quartz;
 
 import ai.dqo.core.scheduler.JobSchedulerException;
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import com.cronutils.mapper.CronMapper;
 import com.cronutils.model.Cron;
@@ -72,7 +72,7 @@ public class TriggerFactoryImpl implements TriggerFactory {
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(RunChecksSchedule schedule, JobKey jobKey) {
+    public Trigger createTrigger(RunChecksCronSchedule schedule, JobKey jobKey) {
         JobDataMap triggerJobData = new JobDataMap();
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
 

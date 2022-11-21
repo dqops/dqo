@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.scheduler.quartz;
 
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import org.quartz.JobDataMap;
 
 /**
@@ -28,12 +28,12 @@ public interface JobDataMapAdapter {
      * @param dataMap Target data map to store the schedule.
      * @param recurringSchedule Schedule specification to store.
      */
-    void setSchedule(JobDataMap dataMap, RunChecksSchedule recurringSchedule);
+    void setSchedule(JobDataMap dataMap, RunChecksCronSchedule recurringSchedule);
 
     /**
      * Retrieves a serialized schedule specification from the job data map.
      * @param jobDataMap Job data map to read.
      * @return Deserialized recurring schedule specification.
      */
-    RunChecksSchedule getSchedule(JobDataMap jobDataMap);
+    RunChecksCronSchedule getSchedule(JobDataMap jobDataMap);
 }

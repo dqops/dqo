@@ -34,14 +34,14 @@ import java.util.TimeZone;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = false)
-public class RunChecksSchedule implements Cloneable {
+public class RunChecksCronSchedule implements Cloneable {
     private RecurringScheduleSpec recurringSchedule;
     private String timeZone;
 
-    public RunChecksSchedule() {
+    public RunChecksCronSchedule() {
     }
 
-    public RunChecksSchedule(RecurringScheduleSpec recurringSchedule, String timeZone) {
+    public RunChecksCronSchedule(RecurringScheduleSpec recurringSchedule, String timeZone) {
         this.recurringSchedule = recurringSchedule;
         this.timeZone = timeZone;
     }
@@ -97,9 +97,9 @@ public class RunChecksSchedule implements Cloneable {
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public RunChecksSchedule clone() {
+    public RunChecksCronSchedule clone() {
         try {
-            RunChecksSchedule cloned = (RunChecksSchedule) super.clone();
+            RunChecksCronSchedule cloned = (RunChecksCronSchedule) super.clone();
             if (cloned.recurringSchedule != null) {
                 cloned.recurringSchedule = cloned.recurringSchedule.clone();
             }

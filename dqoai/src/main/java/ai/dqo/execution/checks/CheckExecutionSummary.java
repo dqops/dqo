@@ -156,11 +156,11 @@ public class CheckExecutionSummary {
     }
 
     /**
-     * Counts the number of checks that were executed.
+     * Counts the number of checks that were executed with rules evaluated.
      * @return Total number of checks that were executed.
      */
     public int getTotalChecksExecutedCount() {
-        return this.checksExecutedColumn.isGreaterThan(0).size();
+        return this.checksExecutedColumn.isGreaterThanOrEqualTo(0).size();
     }
 
     /**

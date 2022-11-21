@@ -48,7 +48,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "run", description = "Run checks matching specified filters")
+@CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private final TerminalWriter terminalWriter;
     private final TerminalTableWritter terminalTableWritter;
@@ -105,7 +105,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (adhoc, checkpoint, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-s", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")

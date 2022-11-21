@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.scheduler.scan;
 
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
@@ -67,8 +67,8 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
             RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.clone();
             clonedRecurringSchedule.setHierarchyId(null);
 
-            RunChecksSchedule runChecksSchedule = new RunChecksSchedule(clonedRecurringSchedule, parentConnectionWrapper.getSpec().getTimeZone());
-            uniqueSchedulesCollection.add(runChecksSchedule);
+            RunChecksCronSchedule runChecksCronSchedule = new RunChecksCronSchedule(clonedRecurringSchedule, parentConnectionWrapper.getSpec().getTimeZone());
+            uniqueSchedulesCollection.add(runChecksCronSchedule);
         }
 
         return uniqueSchedulesCollection;
