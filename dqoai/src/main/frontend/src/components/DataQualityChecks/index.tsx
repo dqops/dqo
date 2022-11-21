@@ -11,14 +11,20 @@ interface IDataQualityChecksProps {
 const TableHeader = () => {
   return (
     <tr>
-      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
+      <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
         Data quality check
       </td>
-      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
+      <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
         Sensor parameters
       </td>
-      <td className="text-left text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-xl">
-        Data quality rules
+      <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100 text-xl">
+        Error threshold
+      </td>
+      <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100 text-xl">
+        Warning threshold
+      </td>
+      <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100 text-xl">
+        Fatal threshold
       </td>
     </tr>
   );
@@ -67,12 +73,15 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
               <tr key={index}>
                 <td
                   className="py-2 px-4 bg-gray-50 border-b border-t"
-                  colSpan={3}
+                  colSpan={2}
                 >
                   <div className="text-lg font-semibold text-gray-700 capitalize">
                     {category.category}
                   </div>
                 </td>
+                <td className="py-2 px-4 bg-gray-50 border-b border-t bg-orange-100" />
+                <td className="py-2 px-4 bg-gray-50 border-b border-t bg-yellow-100" />
+                <td className="py-2 px-4 bg-gray-50 border-b border-t bg-red-100" />
               </tr>
               {category.checks &&
                 category.checks.map((check, jIndex) => (

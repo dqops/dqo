@@ -34,7 +34,7 @@ public class RuleExecutionRunParameters {
     private Double actualValue;
     private AbstractRuleParametersSpec parameters;
     private LocalDateTime timePeriodLocal;
-    private HistoricDataPoint[] previousReadings;
+    private HistoricDataPoint[] previousReadouts;
     private RuleTimeWindowSettingsSpec timeWindow;
 
     /**
@@ -47,19 +47,19 @@ public class RuleExecutionRunParameters {
      * Constructor that fills the actual sensor value and the rule parameters.
      * @param actualValue Sensor actual value.
      * @param parameters Rule parameters.
-     * @param timePeriodLocal Time period of the reading as a local date time.
-     * @param previousReadings Array of previous sensor readings (could be null).
+     * @param timePeriodLocal Time period of the readouts as a local date time.
+     * @param previousReadouts Array of previous sensor readouts (could be null).
      * @param timeWindow Rule threshold time window configuration.
      */
     public RuleExecutionRunParameters(Double actualValue,
 									  AbstractRuleParametersSpec parameters,
 									  LocalDateTime timePeriodLocal,
-									  HistoricDataPoint[] previousReadings,
+									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow) {
         this.actualValue = actualValue;
         this.parameters = parameters;
         this.timePeriodLocal = timePeriodLocal;
-        this.previousReadings = previousReadings;
+        this.previousReadouts = previousReadouts;
         this.timeWindow = timeWindow;
     }
 
@@ -96,35 +96,35 @@ public class RuleExecutionRunParameters {
     }
 
     /**
-     * Returns the time period of the reading.
-     * @return Timestamp (in the local time zone) of the reading.
+     * Returns the time period of the readout.
+     * @return Timestamp (in the local time zone) of the readout.
      */
     public LocalDateTime getTimePeriodLocal() {
         return timePeriodLocal;
     }
 
     /**
-     * Sets the local date time of the reading (without the time zone).
-     * @param timePeriodLocal Local date time of the reading.
+     * Sets the local date time of the readout (without the time zone).
+     * @param timePeriodLocal Local date time of the readout.
      */
     public void setTimePeriodLocal(LocalDateTime timePeriodLocal) {
         this.timePeriodLocal = timePeriodLocal;
     }
 
     /**
-     * Array of historic sensor readings for rules that require historic values for a number of past time periods to perform prediction.
-     * @return Previous readings.
+     * Array of historic sensor readouts for rules that require historic values for a number of past time periods to perform prediction.
+     * @return Previous readouts.
      */
-    public HistoricDataPoint[] getPreviousReadings() {
-        return previousReadings;
+    public HistoricDataPoint[] getPreviousReadouts() {
+        return previousReadouts;
     }
 
     /**
-     * Sets the array of historic sensor readings for predictive rules.
-     * @param previousReadings Array of previous readings.
+     * Sets the array of historic sensor readouts for predictive rules.
+     * @param previousReadouts Array of previous readouts.
      */
-    public void setPreviousReadings(HistoricDataPoint[] previousReadings) {
-        this.previousReadings = previousReadings;
+    public void setPreviousReadouts(HistoricDataPoint[] previousReadouts) {
+        this.previousReadouts = previousReadouts;
     }
 
     /**

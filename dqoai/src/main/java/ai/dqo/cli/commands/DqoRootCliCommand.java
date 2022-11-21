@@ -82,6 +82,13 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
         this.terminalWriter = terminalWriter;
     }
 
+    /**
+     * Add fake parameters here to support overriding configuration parameters from application.yaml.
+     * When user starts the application and passes a parameter that starts with "--" followed by a dot separated configuration property name,
+     * Spring Boot will override the given parameter. However, we want to show the list of these parameters when the user runs "dqo --help" and we also don't want
+     * picocli to fail because a parameter is unknown, so we make all these overridable parameters known to picocli.
+     */
+
     @CommandLine.Option(names = {"--dqo.cloud.api-key"},
             description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key. " +
                     "This parameter is effective only in CLI mode.")
@@ -136,6 +143,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "900")
     private Long lockWaitTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.queue.threads"},
+            description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")
+    private Long queueThreads;
+
 
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
             description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +

@@ -16,6 +16,8 @@
 package ai.dqo.metadata.fileindices;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import com.google.common.base.Enums;
+import com.google.common.base.Optional;
 
 import java.util.Locale;
 
@@ -48,11 +50,15 @@ public class FileIndexName {
             throw new IllegalArgumentException("Index file name is invalid");
         }
 
-        String indexName = baseFileName.substring(0, indexOfDot);
-        DqoRoot dqoRoot = DqoRoot.valueOf(indexName.toUpperCase(Locale.ROOT));
+        String indexName = baseFileName.substring(0, indexOfDot).toUpperCase(Locale.ROOT);
+        Optional<DqoRoot> dqoRootOptional = Enums.getIfPresent(DqoRoot.class, indexName);
+        if (!dqoRootOptional.isPresent()) {
+            return null;
+        }
+
         String locationName = baseFileName.substring(indexOfDot + 1);
         FileLocation fileLocation = FileLocation.valueOf(locationName);
-        return new FileIndexName(dqoRoot, fileLocation);
+        return new FileIndexName(dqoRootOptional.get(), fileLocation);
     }
 
     /**
@@ -64,7 +70,7 @@ public class FileIndexName {
     }
 
     /**
-     * Returns the root folder type. Roots are: sources, custom rules, custom sensors, readings and alerts.
+     * Returns the root folder type. Roots are: sources, custom rules, custom sensors, sensor readouts and rule results.
      * @return Root folder type.
      */
     public DqoRoot getDqoRoot() {

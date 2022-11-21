@@ -7,8 +7,8 @@ It performed by using SQL function:
 These functions return true if data matching with given regex, else functions return false.
 
 Successfully classified records are assigned value of 1, and any other values, 0.
-Those values are then summed (so effectively we perform count of valid values), divided by the number of records,
-and multiplicated by a 100.0 so that the results is in percent.
+Those values are then summed (so the counting of valid values is effectively performed), divided by the number of records,
+and multiplicated by a 100.0 so that the result is in percent.
 
 ___
 ## Jinja Template

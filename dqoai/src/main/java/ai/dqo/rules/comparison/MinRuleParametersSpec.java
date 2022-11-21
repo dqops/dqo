@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Data quality rule that verifies if a data quality check reading is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -46,26 +46,26 @@ public class MinRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minValue Minimum accepted value.
      */
-    public MinRuleParametersSpec(double minValue) {
+    public MinRuleParametersSpec(Double minValue) {
         this.minValue = minValue;
     }
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minValue;
+    private Double minValue;
 
     /**
-     * Minimum value for a data quality check reading, for example a minimum row count.
-     * @return Minimum value for a data quality check reading.
+     * Minimum value for a data quality check readout, for example a minimum row count.
+     * @return Minimum value for a data quality check readout.
      */
-    public double getMinValue() {
+    public Double getMinValue() {
         return minValue;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality reading.
+     * Changes the minimum value (threshold) for a data quality readout.
      * @param minValue Minimum value.
      */
-    public void setMinValue(double minValue) {
+    public void setMinValue(Double minValue) {
         this.setDirtyIf(this.minValue != minValue);
         this.minValue = minValue;
     }

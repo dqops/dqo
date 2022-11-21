@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIFieldModel, UIRuleThresholdsModel } from '../../api';
-import Checkbox from '../Checkbox';
+import { UICheckModel, UIFieldModel } from '../../api';
 import SvgIcon from '../SvgIcon';
-import CheckRulesView from './CheckRulesView';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
 import Switch from '../Switch';
 import clsx from 'clsx';
+import CheckRuleItem from './CheckRuleItem';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -49,30 +48,20 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     ]);
   };
 
-  const openCheckSensorParameter = (field: UIFieldModel) => {
-    setExpanded(true);
-    setActiveTab(field.definition?.field_name || '');
-
-    setTabs([
-      {
-        label: (field.definition?.field_name || '')?.split('_').join(' '),
-        value: field.definition?.field_name || '',
-        type: 'sensor_parameter',
-        field
-      }
-    ]);
-  };
-
   const handleChange = (obj: any) => {
     onChange({
       ...check,
       ...obj
     });
   };
-
   return (
     <>
-      <tr className={clsx(' border-b border-gray-100', check?.configured ? 'text-gray-700' : 'opacity-75')}>
+      <tr
+        className={clsx(
+          ' border-b border-gray-100',
+          check?.configured ? 'text-gray-700' : 'opacity-75'
+        )}
+      >
         <td className="py-2 px-4 align-top pr-4">
           <div className="flex space-x-2 items-center min-w-60">
             {/*<div className="w-5">*/}
@@ -100,17 +89,54 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 onChange={(parameters: UIFieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
-                openCheckSensorParameter={openCheckSensorParameter}
                 disabled={!check.configured}
               />
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 align-top">
-          <CheckRulesView
-            rule={check?.rule}
-            onChange={(rule: UIRuleThresholdsModel) => handleChange({ rule })}
+        <td className="py-2 px-4 align-bottom bg-orange-100">
+          <CheckRuleItem
             disabled={!check.configured}
+            parameters={check?.rule?.error}
+            onChange={(error) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  error
+                }
+              })
+            }
+            type="error"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-yellow-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
+        </td>
+        <td className="py-2 px-4 align-bottom bg-red-100">
+          <CheckRuleItem
+            disabled={!check.configured}
+            parameters={check?.rule?.fatal}
+            onChange={(fatal) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  fatal
+                }
+              })
+            }
+            type="fatal"
           />
         </td>
       </tr>

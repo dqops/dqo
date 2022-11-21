@@ -39,32 +39,32 @@ import java.util.Objects;
 public class BuiltInTableValidityChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<BuiltInTableValidityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-			put("row_count", o -> o.rowCount);
+//			put("row_count", o -> o.rowCount);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the row count (select count(*) from <table>) meets the required rules, like a minimum row count.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableValidityRowCountCheckSpec rowCount;
-
-    /**
-     * Returns a minimum row count check.
-     * @return Minimum row count check.
-     */
-    public TableValidityRowCountCheckSpec getRowCount() {
-        return rowCount;
-    }
-
-    /**
-     * Sets a new definition of a row count check.
-     * @param rowCount Row count check.
-     */
-    public void setRowCount(TableValidityRowCountCheckSpec rowCount) {
-		this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-		propagateHierarchyIdToField(rowCount, "row_count");
-    }
+//
+//    @JsonPropertyDescription("Verifies that the row count (select count(*) from <table>) meets the required rules, like a minimum row count.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private TableValidityRowCountCheckSpec rowCount;
+//
+//    /**
+//     * Returns a minimum row count check.
+//     * @return Minimum row count check.
+//     */
+//    public TableValidityRowCountCheckSpec getRowCount() {
+//        return rowCount;
+//    }
+//
+//    /**
+//     * Sets a new definition of a row count check.
+//     * @param rowCount Row count check.
+//     */
+//    public void setRowCount(TableValidityRowCountCheckSpec rowCount) {
+//		this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
+//        this.rowCount = rowCount;
+//		propagateHierarchyIdToField(rowCount, "row_count");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.

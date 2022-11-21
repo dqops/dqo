@@ -22,7 +22,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 
 /**
- * Interface implemented by file system service that are reading and writing files, listing files, etc.
+ * Interface implemented by file system service that are sensor readouts and writing files, listing files, etc.
  */
 public interface FileSystemService {
     /**

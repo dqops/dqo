@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Data quality rule that verifies that a data quality check reading equals a given value. A margin of error may be configured.
+ * Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -47,7 +47,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates an equals rule parameter given an expected value.
      * @param expectedValue Expected value.
      */
-    public ValueEqualsRuleParametersSpec(double expectedValue) {
+    public ValueEqualsRuleParametersSpec(Double expectedValue) {
         this.expectedValue = expectedValue;
     }
 
@@ -56,22 +56,22 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param expectedValue Expected value.
      * @param errorMargin Error margin.
      */
-    public ValueEqualsRuleParametersSpec(double expectedValue, double errorMargin) {
+    public ValueEqualsRuleParametersSpec(Double expectedValue, Double errorMargin) {
         this.expectedValue = expectedValue;
         this.errorMargin = errorMargin;
     }
 
     @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.")
-    private double expectedValue;
+    private Double expectedValue;
 
     @JsonPropertyDescription("Error margin for comparison.")
-    private double errorMargin;
+    private Double errorMargin;
 
     /**
-     * Returns the expected value for the sensor reading.
+     * Returns the expected value for the sensor readout.
      * @return Expected value.
      */
-    public double getExpectedValue() {
+    public Double getExpectedValue() {
         return expectedValue;
     }
 
@@ -79,14 +79,14 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets the expected value.
      * @param expectedValue New expected value.
      */
-    public void setExpectedValue(double expectedValue) {
+    public void setExpectedValue(Double expectedValue) {
 		this.setDirtyIf(this.expectedValue != expectedValue);
         this.expectedValue = expectedValue;
     }
 
     /**
-     * Returns a fixed error margin for an accepted value. A data quality reading value is accepted when it
-     * is in the range (expectedValue - errorValue) <= quality check reading value <= (expectedValue + errorValue)
+     * Returns a fixed error margin for an accepted value. A data quality sensor readout value is accepted when it
+     * is in the range (expectedValue - errorValue) <= quality check readout ue <= (expectedValue + errorValue)
      * @return Error value.
      */
     public Double getErrorMargin() {
@@ -97,7 +97,7 @@ public class ValueEqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * Sets an error margin.
      * @param errorMargin New error margin.
      */
-    public void setErrorMargin(double errorMargin) {
+    public void setErrorMargin(Double errorMargin) {
 		this.setDirtyIf(this.errorMargin != errorMargin);
         this.errorMargin = errorMargin;
     }

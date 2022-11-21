@@ -1,10 +1,15 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
-import usePopup from '../../hooks/usePopup';
 import SvgIcon from '../SvgIcon';
-import { Tooltip } from '@material-tailwind/react';
+import {
+  Menu,
+  MenuList,
+  Tooltip,
+  MenuItem,
+  MenuHandler
+} from '@material-tailwind/react';
 
 interface Option {
   label: string;
@@ -37,9 +42,8 @@ const Select = ({
   disabled,
   error
 }: SelectProps) => {
-  const ref = useRef(null);
-  const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
-
+  const [menuWidth, setMenuWidth] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
   const selectedOption = useMemo(() => {
     return options.find((item) => item.value === value);
   }, [options, value]);
@@ -48,8 +52,11 @@ const Select = ({
     if (onChange) {
       onChange(option.value);
     }
-    closeMenu();
   };
+
+  useEffect(() => {
+    setMenuWidth(ref.current?.offsetWidth || 0);
+  }, []);
 
   return (
     <div className={clsx('', className)}>
@@ -78,45 +85,39 @@ const Select = ({
           )}
         </div>
       )}
-      <div className="relative w-full min-w-40" ref={ref}>
-        <div
-          className={clsx(
-            'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border',
-            triggerClassName,
-            disabled ? 'bg-gray-300 cursor-not-allowed' : '',
-            error ? 'border-red-500' : 'border-gray-300'
-          )}
-          onClick={() => (!disabled ? toggleMenu() : {})}
-        >
-          {selectedOption ? selectedOption.label : placeholder}
-          <SvgIcon
-            name="chevron-down"
+      <Menu placement="bottom-end">
+        <MenuHandler ref={ref}>
+          <div
             className={clsx(
-              'absolute transform top-1/2 -translate-y-2/4 right-2 text-black w-4',
-              isOpen ? 'transform rotate-180' : ''
+              'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border whitespace-nowrap',
+              triggerClassName,
+              disabled ? 'bg-gray-300 cursor-not-allowed' : '',
+              error ? 'border-red-500' : 'border-gray-300'
             )}
-          />
-        </div>
-        <div
-          className={clsx(
-            'absolute top-10 bg-gray-50 left-0 min-w-full z-10 shadow-lg border border-gray-300 text-left rounded transition-all duration-150 ease-in',
-            isOpen
-              ? 'max-h-80 overflow-auto py-3'
-              : 'opacity-0 max-h-0 overflow-hidden py-0'
-          )}
-        >
-          {options.map((option, index) => (
-            <div
-              data-testid="select-option"
-              key={index}
-              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
-              onClick={() => handleClick(option)}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      </div>
+          >
+            {selectedOption ? selectedOption.label : placeholder}
+            <SvgIcon
+              name="chevron-down"
+              className="absolute transform top-1/2 -translate-y-2/4 right-2 text-black w-4"
+            />
+          </div>
+        </MenuHandler>
+        {!disabled && (
+          <MenuList className="z-50 min-w-40 bg-gray-50 !p-0 max-h-80 overflow-auto">
+            {options.map((option, index) => (
+              <MenuItem
+                data-testid="select-option"
+                key={index}
+                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
+                onClick={() => handleClick(option)}
+                style={{ minWidth: menuWidth }}
+              >
+                {option.label}
+              </MenuItem>
+            ))}
+          </MenuList>
+        )}
+      </Menu>
     </div>
   );
 };

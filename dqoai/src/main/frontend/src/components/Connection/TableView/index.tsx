@@ -38,6 +38,7 @@ import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
+import TimestampsView from './TimestampsView';
 
 interface ITableViewProps {
   connectionName: string;
@@ -69,6 +70,10 @@ const tabs = [
   {
     label: 'Data Streams',
     value: 'data-streams'
+  },
+  {
+    label: 'Timestamps',
+    value: 'timestamps'
   }
 ];
 
@@ -153,11 +158,11 @@ const TableView = ({
       table: tableName
     });
 
-    history.replace(`/connection?${searchQuery}`);
+    history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
-    if (activeTab === 'table') {
+    if (activeTab === 'table' || activeTab === 'timestamps') {
       await dispatch(
         updateTableBasic(
           connectionName,
@@ -227,7 +232,9 @@ const TableView = ({
           updatedDataStreamMapping
         )
       );
-      await dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
+      await dispatch(
+        getTableDataStreamMapping(connectionName, schemaName, tableName)
+      );
     }
   };
 
@@ -317,6 +324,19 @@ const TableView = ({
           <DataStreamsMappingView
             dataStreamsMapping={updatedDataStreamMapping}
             onChange={setUpdatedDataStreamMapping}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'timestamps' && (
+          <TimestampsView
+            columnsSpec={updatedTableBasic?.timestamp_columns}
+            onChange={(columns) =>
+              setUpdatedTableBasic({
+                ...updatedTableBasic,
+                timestamp_columns: columns
+              })
+            }
           />
         )}
       </div>

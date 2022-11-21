@@ -42,7 +42,7 @@ public class DqoCloudRemoteBucket {
     }
 
     /**
-     * Returns the bucket type (readings, alerts, etc.)
+     * Returns the bucket type (sensor readouts, rule results, etc.)
      * @return Bucket type.
      */
     public DqoRoot getRootType() {

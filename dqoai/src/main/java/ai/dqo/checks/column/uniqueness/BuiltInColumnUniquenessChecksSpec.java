@@ -40,54 +40,54 @@ import java.util.Objects;
 public class BuiltInColumnUniquenessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<BuiltInColumnUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-			put("distinct_count", o -> o.distinctCount);
-			put("distinct_count_percent", o -> o.distinctCountPercent);
+//			put("distinct_count", o -> o.distinctCount);
+//			put("distinct_count_percent", o -> o.distinctCountPercent);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the count of unique values in a column (select count(distinct <column_name>) from <table>) meets the required rules, like a minimum count.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctCountCheckSpec distinctCount;
-
-    @JsonPropertyDescription("Verifies that the percent of unique values in a column (select (count(distinct <column_name>) / count(<column_name>)) * 100 from <table> ...) meets the required rules, like a minimum count.")
-    private ColumnUniquenessDistinctCountPercentCheckSpec distinctCountPercent;
-
-    /**
-     * Returns a minimum distinct count check.
-     * @return Distinct count check.
-     */
-    public ColumnUniquenessDistinctCountCheckSpec getDistinctCount() {
-        return distinctCount;
-    }
-
-    /**
-     * Returns a minimum distinct count percent check.
-     * @return Distinct count percent check.
-     */
-    public ColumnUniquenessDistinctCountPercentCheckSpec getDistinctCountPercent() {
-        return distinctCountPercent;
-    }
-
-    /**
-     * Sets a new definition of a row count check.
-     * @param distinctCount Row count check.
-     */
-    public void setDistinctCount(ColumnUniquenessDistinctCountCheckSpec distinctCount) {
-		this.setDirtyIf(!Objects.equals(this.distinctCount, distinctCount));
-        this.distinctCount = distinctCount;
-		propagateHierarchyIdToField(distinctCount, "distinct_count");
-    }
-
-    /**
-     * Sets a new definition of a row count percent check.
-     * @param distinctCountPercent Row count percent check.
-     */
-    public void setDistinctCountPercent(ColumnUniquenessDistinctCountPercentCheckSpec distinctCountPercent) {
-		this.setDirtyIf(!Objects.equals(this.distinctCountPercent, distinctCountPercent));
-        this.distinctCountPercent = distinctCountPercent;
-		propagateHierarchyIdToField(distinctCountPercent, "distinct_count_percent");
-    }
+//
+//    @JsonPropertyDescription("Verifies that the count of unique values in a column (select count(distinct <column_name>) from <table>) meets the required rules, like a minimum count.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private ColumnUniquenessDistinctCountCheckSpec distinctCount;
+//
+//    @JsonPropertyDescription("Verifies that the percent of unique values in a column (select (count(distinct <column_name>) / count(<column_name>)) * 100 from <table> ...) meets the required rules, like a minimum count.")
+//    private ColumnUniquenessDistinctCountPercentCheckSpec distinctCountPercent;
+//
+//    /**
+//     * Returns a minimum distinct count check.
+//     * @return Distinct count check.
+//     */
+//    public ColumnUniquenessDistinctCountCheckSpec getDistinctCount() {
+//        return distinctCount;
+//    }
+//
+//    /**
+//     * Returns a minimum distinct count percent check.
+//     * @return Distinct count percent check.
+//     */
+//    public ColumnUniquenessDistinctCountPercentCheckSpec getDistinctCountPercent() {
+//        return distinctCountPercent;
+//    }
+//
+//    /**
+//     * Sets a new definition of a row count check.
+//     * @param distinctCount Row count check.
+//     */
+//    public void setDistinctCount(ColumnUniquenessDistinctCountCheckSpec distinctCount) {
+//		this.setDirtyIf(!Objects.equals(this.distinctCount, distinctCount));
+//        this.distinctCount = distinctCount;
+//		propagateHierarchyIdToField(distinctCount, "distinct_count");
+//    }
+//
+//    /**
+//     * Sets a new definition of a row count percent check.
+//     * @param distinctCountPercent Row count percent check.
+//     */
+//    public void setDistinctCountPercent(ColumnUniquenessDistinctCountPercentCheckSpec distinctCountPercent) {
+//		this.setDirtyIf(!Objects.equals(this.distinctCountPercent, distinctCountPercent));
+//        this.distinctCountPercent = distinctCountPercent;
+//		propagateHierarchyIdToField(distinctCountPercent, "distinct_count_percent");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.

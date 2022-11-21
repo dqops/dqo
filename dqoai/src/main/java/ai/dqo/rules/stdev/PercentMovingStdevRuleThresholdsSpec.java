@@ -43,17 +43,17 @@ public class PercentMovingStdevRuleThresholdsSpec extends AbstractRuleThresholds
         }
     };
 
-    @JsonPropertyDescription("Rule threshold for a high severity (3) alert.")
+    @JsonPropertyDescription("Rule threshold for a fatal severity (3) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PercentMovingStdevRuleParametersSpec high;
 
-    @JsonPropertyDescription("Rule threshold for a medium severity (2) alert.")
+    @JsonPropertyDescription("Rule threshold for a error severity (2) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PercentMovingStdevRuleParametersSpec medium;
 
-    @JsonPropertyDescription("Rule threshold for a medium severity (1) alert.")
+    @JsonPropertyDescription("Rule threshold for a warning severity (1) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PercentMovingStdevRuleParametersSpec low;

@@ -167,7 +167,7 @@ public class CheckExecutionSummary {
      * Counts the number of warnings that were raised.
      * @return Number of warnings.
      */
-    public int getLowSeverityAlertsCount() {
+    public int getWarningSeverityIssuesCount() {
         return this.warningsCountColumn.isGreaterThan(0).size();
     }
 
@@ -175,7 +175,7 @@ public class CheckExecutionSummary {
      * Counts the number of errors (normal severity) that were raised.
      * @return Number of error severity alerts (default alerts).
      */
-    public int getMediumSeverityAlertsCount() {
+    public int getErrorSeverityIssuesCount() {
         return this.errorsCountColumn.isGreaterThan(0).size();
     }
 
@@ -183,7 +183,7 @@ public class CheckExecutionSummary {
      * Counts the number of fatal (high) severity errors that were raised.
      * @return Number of fatal severity errors.
      */
-    public int getHighSeverityAlertsCount() {
+    public int getFatalSeverityIssuesCount() {
         return this.fatalErrorsCountColumn.isGreaterThan(0).size();
     }
 }

@@ -31,14 +31,14 @@ public class HistoricDataPointObjectMother {
      * Creates an array of historic data points for a given time window.
      * @param timeWindowSettingsSpec Time window settings, the default is 14 days.
      * @param gradient Time gradient, for example a DAY.
-     * @param readingTimestamp Timestamp of the current sensor reading. The historic values will be before it.
-     * @param values Array of sensor readings to fill as historic readings. Nulls are accepted and will generate a missing reading.
+     * @param readoutTimestamp Timestamp of the current sensor readout. The historic values will be before it.
+     * @param values Array of sensor readouts to fill as historic readouts. Nulls are accepted and will generate a missing readouts.
      * @return Array of historic data points.
      */
-    public static HistoricDataPoint[] fillHistoricReadings(RuleTimeWindowSettingsSpec timeWindowSettingsSpec,
-														   TimeSeriesGradient gradient,
-														   LocalDateTime readingTimestamp,
-														   Double... values) {
+    public static HistoricDataPoint[] fillHistoricReadouts(RuleTimeWindowSettingsSpec timeWindowSettingsSpec,
+                                                           TimeSeriesGradient gradient,
+                                                           LocalDateTime readoutTimestamp,
+                                                           Double... values) {
         HistoricDataPoint[] historicDataPoints = new HistoricDataPoint[timeWindowSettingsSpec.getPredictionTimeWindow()];
 
         for( int i = values.length - 1; i >= 0; i--) {
@@ -48,7 +48,7 @@ public class HistoricDataPointObjectMother {
 
             int dataPointBackIndex = -(values.length - i);
             LocalDateTime dataPointLocalDateTime = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
-                    readingTimestamp, dataPointBackIndex, gradient);
+                    readoutTimestamp, dataPointBackIndex, gradient);
             Instant dataPointInstant = dataPointLocalDateTime.toInstant(ZoneOffset.UTC);
             HistoricDataPoint dataPoint = new HistoricDataPoint(dataPointInstant, dataPointLocalDateTime, dataPointBackIndex, values[i]);
             historicDataPoints[historicDataPoints.length - values.length + i] = dataPoint;

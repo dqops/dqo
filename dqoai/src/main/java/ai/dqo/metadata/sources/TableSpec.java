@@ -97,10 +97,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
 
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Deprecated
-    private TimeSeriesConfigurationSpec timeSeries;
+    private TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
 
     @JsonPropertyDescription("Data streams configuration. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -449,6 +449,25 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.checks != null && this.checks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

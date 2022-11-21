@@ -177,7 +177,7 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             String billingProjectId = tryGetCurrentGcpProject();
             if (billingProjectId == null) {
                 // the credentials are not present, we can ask the user to perform a login
-                if (terminalReader.promptBoolean("Default GCP credentials are not available, run 'gcloud auth application-default login' to log in to GCP?", true, true)) {
+                if (terminalReader.promptBoolean("Default GCP credentials are not available, run 'gcloud auth application-default login' to log in to GCP?", true)) {
                     GCloudLoginService gCloudLoginService = this.beanFactory.getBean(GCloudLoginService.class);
                     gCloudLoginService.authenticateUserForApplicationDefaultCredentials();
                 }

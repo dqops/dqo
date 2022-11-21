@@ -52,10 +52,10 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Java class name for a rule runner that will execute the sensor. The \"type\" must be \"java_class\".")
     private String javaClassName = PythonRuleRunner.CLASS_NAME;
 
-    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor reading or use sensor readings from past periods to perform prediction. The number of time windows is configured in the time_window setting.")
+    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.")
     private RuleTimeWindowMode mode = RuleTimeWindowMode.current_value;
 
-    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readings. Configures the number of past time windows (sensor readings) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
+    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
     private RuleTimeWindowSettingsSpec timeWindow;
 
     @JsonPropertyDescription("List of fields that are parameters of a custom rule. Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
@@ -104,7 +104,7 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Gets the mode how the rule uses historic data (previous sensor readings).
+     * Gets the mode how the rule uses historic data (previous sensor readouts).
      * @return Time window mode.
      */
     public RuleTimeWindowMode getMode() {

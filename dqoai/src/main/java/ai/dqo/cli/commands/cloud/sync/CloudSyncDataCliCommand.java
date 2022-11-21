@@ -26,11 +26,11 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readings and alerts in the DQO user home.
+ * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQO user home.
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "data", description = "Synchronize local \"data\" folder with sensor readings and alerts with DQO Cloud")
+@CommandLine.Command(name = "data", description = "Synchronize local \"data\" folder with sensor readouts and rule results with DQO Cloud")
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
 
@@ -66,11 +66,11 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless());
-        if (synchronizeReadingsResult < 0) {
-            return synchronizeReadingsResult;
+        int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_SENSOR_READOUTS, this.mode, this.isHeadless(), true);
+        if (synchronizeReadoutsResult < 0) {
+            return synchronizeReadoutsResult;
         }
-        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless());
-        return synchronizeAlertsResult;
+        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_RULE_RESULTS, this.mode, this.isHeadless(), true);
+        return synchronizeRuleResultsResult;
     }
 }

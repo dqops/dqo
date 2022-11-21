@@ -59,7 +59,7 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
         }
     };
 
-    @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     @Deprecated
@@ -241,10 +241,10 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
      * that must be loaded to satisfy all the rules.
      * @param timeSeriesGradient Effective time series gradient that will be used for the calculation.
      * @param minTimePeriod Reference timestamp of the earliest sensor reading that will be evaluated by rules.
-     * @return <code>minTimePeriod</code> when no time window is required or a date that is earlier to fill the time window with historic sensor readings.
+     * @return <code>minTimePeriod</code> when no time window is required or a date that is earlier to fill the time window with historic sensor readouts.
      */
     @Deprecated() // the time window will not be taken from the rule, but from the definition of the rule
-    public LocalDateTime findEarliestRequiredHistoricReadingDate(TimeSeriesGradient timeSeriesGradient, LocalDateTime minTimePeriod) {
+    public LocalDateTime findEarliestRequiredHistoricReadoutDate(TimeSeriesGradient timeSeriesGradient, LocalDateTime minTimePeriod) {
         LocalDateTime minRequiredDateTime = minTimePeriod;
         List<AbstractRuleThresholdsSpec<?>> enabledRules = getRuleSet().getEnabledRules();
 
@@ -254,10 +254,10 @@ public abstract class AbstractCheckDeprecatedSpec extends AbstractSpec implement
                 continue;
             }
 
-            LocalDateTime earliestRequiredReading = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
+            LocalDateTime earliestRequiredReadout = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                     minTimePeriod, timeWindow.getPredictionTimeWindow(), timeSeriesGradient);
-            if (earliestRequiredReading.isBefore(minRequiredDateTime)) {
-                minRequiredDateTime = earliestRequiredReading;
+            if (earliestRequiredReadout.isBefore(minRequiredDateTime)) {
+                minRequiredDateTime = earliestRequiredReadout;
             }
         }
 

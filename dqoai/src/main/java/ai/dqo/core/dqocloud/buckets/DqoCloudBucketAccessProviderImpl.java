@@ -45,7 +45,7 @@ public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessPro
 
     /**
      * Creates a configured Google storage client to access a tenant' folder in a DQO Cloud bucket.
-     * @param rootType Bucket type (readings, alerts, etc.)
+     * @param rootType Bucket type (sensor readouts, rule results, etc.)
      * @return Configured bucket access with a {@link Storage} client to access the data with downscoped credentials.
      */
     public DqoCloudRemoteBucket getRemoteBucketClientRW(DqoRoot rootType) {

@@ -70,7 +70,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
-    @JsonPropertyDescription("Time series source configuration for a table. When a time series configuration is assigned at a table level, it overrides any time series settings from the connection or table levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonPropertyDescription("Time series source configuration for a table. When a time series configuration is assigned at a table level, it overrides any time series settings from the connection or table levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     @Deprecated
@@ -451,5 +451,25 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
         catch (CloneNotSupportedException ex) {
             return this;
         }
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.checks != null && this.checks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
     }
 }

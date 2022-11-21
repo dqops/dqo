@@ -11,17 +11,17 @@ This works that to avoid problem with `DATE` types in databases.
 
 In the case, when `values_list` length is equal to zero (it's mean empty list), function IN takes `NULL` as parameter.
 
-Furthermore, when user specifying a different data type than the represented by the column, sensor tries to cast column values to specified type. 
-For e.g. column in databases represent `NUMERIC` values, but `values_type: STRING`, sensor will cast column values to `STRING`.
+Furthermore, when specifying a different data type than the represented by the column, the sensor tries to cast column
+values to a specified type.
 
-Successfully matched records are assigned value of 1, and any other values, 0.
-Those values are then summed (so effectively we perform count of valid values), divided by the number of records,
-and multiplicated by a 100.0 so that the results is in percent.
+Successfully matched records are assigned values of 1, and any other values, 0. Those values are then summed
+(so the counting of valid values is effectively performed), divided by the number of records, and multiplicated by a
+100.0 so that the result is in percent.
 
 !!! Warning
     Running this check defining the wrong data type for the column might result with an error.
-    This is because casting some types to another is impossible, for e.g. `DATE` to `NUMERIC`. That is why we
-    recommend using this query on `STRING` types, where such errors do not occur.
+    This is because casting some types to another is impossible, for e.g. `DATE` to `NUMERIC`. Therefore, it is
+    recommended to use this query on STRING types, where such errors do not occur.
 
 ___
 ## Jinja Template
