@@ -59,7 +59,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       <tr
         className={clsx(
           ' border-b border-gray-100',
-          check?.configured ? 'text-gray-700' : 'opacity-75 line-through'
+          check?.disabled ? 'text-gray-700' : 'opacity-75 line-through'
         )}
       >
         <td className="py-2 px-4 align-top pr-4">
@@ -74,10 +74,10 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
               />
             </div>
             <SvgIcon
-              name={check?.configured ? 'stop' : 'disable'}
+              name={check?.disabled ? 'stop' : 'disable'}
               className={clsx(
                 'w-5 h-5',
-                check?.configured ? 'text-blue-700' : 'text-red-700'
+                check?.disabled ? 'text-blue-700' : 'text-red-700'
               )}
             />
             <SvgIcon
@@ -86,8 +86,15 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
               onClick={openCheckSettings}
             />
             <SvgIcon
-              name="clock"
-              className="w-5 h-5 text-blue-700 cursor-pointer"
+              name={check?.schedule_override?.disabled ? 'clock-off' : 'clock'}
+              className={clsx(
+                'w-5 h-5 cursor-pointer',
+                check?.schedule_override
+                  ? 'text-gray-700'
+                  : 'text-black font-bold',
+                check?.schedule_override?.disabled ? 'line-through' : ''
+              )}
+              strokeWidth={check?.schedule_override ? 4 : 2}
             />
             <div>{check.check_name}</div>
           </div>
@@ -100,14 +107,14 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 onChange={(parameters: UIFieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
-                disabled={!check.configured}
+                disabled={check.disabled}
               />
             </div>
           </div>
         </td>
         <td className="py-2 px-4 align-bottom bg-orange-100">
           <CheckRuleItem
-            disabled={!check.configured}
+            disabled={check.disabled}
             parameters={check?.rule?.error}
             onChange={(error) =>
               handleChange({
@@ -122,7 +129,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         </td>
         <td className="py-2 px-4 align-bottom bg-red-100">
           <CheckRuleItem
-            disabled={!check.configured}
+            disabled={check.disabled}
             parameters={check?.rule?.fatal}
             onChange={(fatal) =>
               handleChange({
@@ -138,7 +145,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         <td className="min-w-5 max-w-5 border-b" />
         <td className="py-2 px-4 align-bottom bg-yellow-100">
           <CheckRuleItem
-            disabled={!check.configured}
+            disabled={check.disabled}
             parameters={check?.rule?.warning}
             onChange={(warning) =>
               handleChange({
