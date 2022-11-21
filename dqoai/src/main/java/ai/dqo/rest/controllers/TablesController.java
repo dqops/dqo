@@ -17,8 +17,6 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimePartition;
-import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
@@ -26,7 +24,6 @@ import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -410,7 +407,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
     }
 
-    protected <T extends AbstractSpec> T getTableGenericChecks(
+    protected <T extends AbstractRootChecksContainerSpec> T getTableGenericChecks(
             Function<TableSpec, T> extractorFromSpec,
             String connectionName,
             String schemaName,
@@ -464,65 +461,139 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality checkpoints on a table given a connection name and a table names.
+     * Retrieves the configuration of daily data quality checkpoints on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Data quality checkpoints on a requested table.
+     * @return Daily data quality checkpoints on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints")
-    @ApiOperation(value = "getTableCheckpoints", notes = "Return the configuration of table level data quality checkpoints on a table", response = TableCheckpointsSpec.class)
+    // TODO: I think it's a little bit too "magic values"-like,
+    //       but I don't see another way to ensure the proper return type.
+    //       Probably best to leave it in here and do
+    //       a structural refactoring when we isolate the logic.
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/daily")
+    @ApiOperation(value = "getTableCheckpointsDaily", notes = "Return the configuration of daily table level data quality checkpoints on a table", response = TableDailyCheckpointCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checkpoints on a table returned", response = TableCheckpointsSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily table level data quality checkpoints on a table returned", response = TableDailyCheckpointCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableCheckpointsSpec>> getTableCheckpoints(
+    public ResponseEntity<Mono<TableDailyCheckpointCategoriesSpec>> getTableCheckpointsDaily(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
-        TableCheckpointsSpec checkpoints =
-                this.getTableGenericChecks(TableSpec::getCheckpoints, connectionName, schemaName, tableName);
 
-        if (checkpoints == null) {
+        TableDailyCheckpointCategoriesSpec dailyCheckpoints =
+                this.getTableGenericChecks(
+                        spec -> spec.getCheckpoints().getDaily(),
+                        connectionName,
+                        schemaName,
+                        tableName);
+
+        if (dailyCheckpoints == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         } else {
-            return new ResponseEntity<>(Mono.just(checkpoints), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(dailyCheckpoints), HttpStatus.OK); // 200
         }
     }
-    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}"
 
     /**
-     * Retrieves the configuration of data quality partitioned checks on a table given a connection name and a table names.
+     * Retrieves the configuration of monthly data quality checkpoints on a table given a connection name and table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Data quality partitioned checks on a requested table.
+     * @return Monthly data quality checkpoints on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks")
-    @ApiOperation(value = "getTablePartitionedChecks", notes = "Return the configuration of table level data quality partitioned checks on a table", response = TablePartitionedChecksRootSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/monthly")
+    @ApiOperation(value = "getTableCheckpointsMonthly", notes = "Return the configuration of monthly table level data quality checkpoints on a table", response = TableMonthlyCheckpointCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TablePartitionedChecksRootSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality checkpoints on a table returned", response = TableMonthlyCheckpointCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TablePartitionedChecksRootSpec>> getTablePartitionedChecks(
+    public ResponseEntity<Mono<TableMonthlyCheckpointCategoriesSpec>> getTableCheckpointsMonthly(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName) {
-        TablePartitionedChecksRootSpec partitionedChecks =
-                this.getTableGenericChecks(TableSpec::getPartitionedChecks, connectionName, schemaName, tableName);
 
-        if (partitionedChecks == null) {
+        TableMonthlyCheckpointCategoriesSpec monthlyCheckpoints =
+                this.getTableGenericChecks(
+                        spec -> spec.getCheckpoints().getMonthly(),
+                        connectionName,
+                        schemaName,
+                        tableName);
+
+        if (monthlyCheckpoints == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         } else {
-            return new ResponseEntity<>(Mono.just(partitionedChecks), HttpStatus.OK); // 200
+            return new ResponseEntity<>(Mono.just(monthlyCheckpoints), HttpStatus.OK); // 200
         }
     }
-    // TODO: Implement GET "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/{timePartition}"
+    
+    /**
+     * Retrieves the configuration of daily data quality partitioned checks on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Daily data quality partitioned checks on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/daily")
+    @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table", response = TableDailyPartitionedCheckCategoriesSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableDailyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksDaily(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks =
+                this.getTableGenericChecks(
+                        spec -> spec.getPartitionedChecks().getDaily(),
+                        connectionName, schemaName, tableName);
 
+        if (dailyPartitionedChecks == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        } else {
+            return new ResponseEntity<>(Mono.just(dailyPartitionedChecks), HttpStatus.OK); // 200
+        }
+    }
+
+    /**
+     * Retrieves the configuration of monthly data quality partitioned checks on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Monthly data quality partitioned checks on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/monthly")
+    @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table", response = TableMonthlyPartitionedCheckCategoriesSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality partitioned checks on a table returned", response = TableMonthlyPartitionedCheckCategoriesSpec.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableMonthlyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksMonthly(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks =
+                this.getTableGenericChecks(
+                        spec -> spec.getPartitionedChecks().getMonthly(),
+                        connectionName, schemaName, tableName);
+
+        if (monthlyPartitionedChecks == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        } else {
+            return new ResponseEntity<>(Mono.just(monthlyPartitionedChecks), HttpStatus.OK); // 200
+        }
+    }
+    
     protected <T extends AbstractRootChecksContainerSpec> UIAllChecksModel getTableGenericChecksUI(
             Function<TableSpec, T> tableSpecToRootCheck,
             String connectionName,
@@ -1164,7 +1235,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
-    protected <T extends AbstractSpec> boolean updateTableGenericChecks(
+    protected <T extends AbstractRootChecksContainerSpec> boolean updateTableGenericChecks(
             Consumer<TableSpec> tableSpecUpdater,
             String connectionName,
             String schemaName,
@@ -1243,29 +1314,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of table level data quality checkpoints of an existing table.
+     * Updates the configuration of daily table level data quality checkpoints of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableCheckpointsSpec          New configuration of the data quality checkpoints on the table level.
+     * @param tableDailyCheckpointsSpec     New configuration of the daily data quality checkpoints on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints")
-    @ApiOperation(value = "updateTableCheckpoints", notes = "Updates the list of table level data quality checkpoints on an existing table.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/daily")
+    @ApiOperation(value = "updateTableCheckpointsDaily", notes = "Updates the list of daily table level data quality checkpoints on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 204, message = "Daily table level data quality checkpoints successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableCheckpoints(
+    public ResponseEntity<Mono<?>> updateTableCheckpointsDaily(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
-            @RequestBody Optional<TableCheckpointsSpec> tableCheckpointsSpec) {
+            @Parameter(description = "Configuration of daily table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
+            @RequestBody Optional<TableDailyCheckpointCategoriesSpec> tableDailyCheckpointsSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1274,10 +1345,12 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    if (tableCheckpointsSpec.isPresent()) {
-                        spec.setCheckpoints(tableCheckpointsSpec.get());
+                    TableCheckpointsSpec checkpointsSpec = spec.getCheckpoints();
+                    
+                    if (tableDailyCheckpointsSpec.isPresent()) {
+                        checkpointsSpec.setDaily(tableDailyCheckpointsSpec.get());
                     } else {
-                        spec.setCheckpoints(new TableCheckpointsSpec());
+                        checkpointsSpec.setDaily(null);
                     }
                 },
                 connectionName,
@@ -1293,29 +1366,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of table level data quality partitioned checks of an existing table.
-     * @param connectionName                 Connection name.
-     * @param schemaName                     Schema name.
-     * @param tableName                      Table name.
-     * @param tablePartitionedChecksRootSpec New configuration of the data quality partitioned checks on the table level.
+     * Updates the configuration of monthly table level data quality checkpoints of an existing table.
+     * @param connectionName                Connection name.
+     * @param schemaName                    Schema name.
+     * @param tableName                     Table name.
+     * @param tableMonthlyCheckpointsSpec     New configuration of the monthly data quality checkpoints on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks")
-    @ApiOperation(value = "updateTablePartitionedChecks", notes = "Updates the list of table level data quality partitioned checks on an existing table.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/monthly")
+    @ApiOperation(value = "updateTableCheckpointsMonthly", notes = "Updates the list of monthly table level data quality checkpoints on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality checkpoints successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTablePartitionedChecks(
+    public ResponseEntity<Mono<?>> updateTableCheckpointsMonthly(
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
-            @RequestBody Optional<TablePartitionedChecksRootSpec> tablePartitionedChecksRootSpec) {
+            @Parameter(description = "Configuration of monthly table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
+            @RequestBody Optional<TableMonthlyCheckpointCategoriesSpec> tableMonthlyCheckpointsSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1324,10 +1397,116 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    if (tablePartitionedChecksRootSpec.isPresent()) {
-                        spec.setPartitionedChecks(tablePartitionedChecksRootSpec.get());
+                    TableCheckpointsSpec checkpointsSpec = spec.getCheckpoints();
+
+                    if (tableMonthlyCheckpointsSpec.isPresent()) {
+                        checkpointsSpec.setMonthly(tableMonthlyCheckpointsSpec.get());
                     } else {
-                        spec.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+                        checkpointsSpec.setMonthly(null);
+                    }
+                },
+                connectionName,
+                schemaName,
+                tableName
+        );
+
+        if (success) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        } else {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+    }
+
+    /**
+     * Updates the configuration of daily table level data quality partitioned checks of an existing table.
+     * @param connectionName                  Connection name.
+     * @param schemaName                      Schema name.
+     * @param tableName                       Table name.
+     * @param tableDailyPartitionedChecksSpec New configuration of the daily data quality partitioned checks on the table level.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/daily")
+    @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Daily table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTablePartitionedChecksDaily(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
+            @RequestBody Optional<TableDailyPartitionedCheckCategoriesSpec> tableDailyPartitionedChecksSpec) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        boolean success = this.updateTableGenericChecks(
+                spec -> {
+                    TablePartitionedChecksRootSpec partitionedChecksSpec = spec.getPartitionedChecks();
+                    
+                    if (tableDailyPartitionedChecksSpec.isPresent()) {
+                        partitionedChecksSpec.setDaily(tableDailyPartitionedChecksSpec.get());
+                    } else {
+                        partitionedChecksSpec.setDaily(null);
+                    }
+                },
+                connectionName,
+                schemaName,
+                tableName
+        );
+
+        if (success) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        } else {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+    }
+
+    /**
+     * Updates the configuration of monthly table level data quality partitioned checks of an existing table.
+     * @param connectionName                  Connection name.
+     * @param schemaName                      Schema name.
+     * @param tableName                       Table name.
+     * @param tableMonthlyPartitionedChecksSpec New configuration of the monthly data quality partitioned checks on the table level.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned_checks/monthly")
+    @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Monthly table level data quality checkpoints successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTablePartitionedChecksMonthly(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
+            @RequestBody Optional<TableMonthlyPartitionedCheckCategoriesSpec> tableMonthlyPartitionedChecksSpec) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        boolean success = this.updateTableGenericChecks(
+                spec -> {
+                    TablePartitionedChecksRootSpec partitionedChecksSpec = spec.getPartitionedChecks();
+
+                    if (tableMonthlyPartitionedChecksSpec.isPresent()) {
+                        partitionedChecksSpec.setMonthly(tableMonthlyPartitionedChecksSpec.get());
+                    } else {
+                        partitionedChecksSpec.setMonthly(null);
                     }
                 },
                 connectionName,

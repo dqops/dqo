@@ -261,37 +261,37 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnCheckpoints_whenColumnAndCheckpointsRequested_updatesCheckpoints() {
+    void updateColumnCheckpointsDaily_whenColumnAndCheckpointsRequested_updatesCheckpoints() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnCheckpoints(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(this.sampleCheckpoint));
+                Optional.of(this.sampleCheckpoint.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getCheckpoints(), this.sampleCheckpoint);
+        Assertions.assertSame(columnSpec.getCheckpoints().getDaily(), this.sampleCheckpoint.getDaily());
     }
 
     @Test
-    void updateColumnPartitionedChecks_whenColumnAndPartitionedChecksRequested_updatesPartitionedChecks() {
+    void updateColumnPartitionedChecksDaily_whenColumnAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecks(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(this.samplePartitionedCheck));
+                Optional.of(this.samplePartitionedCheck.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getPartitionedChecks(), this.samplePartitionedCheck);
+        Assertions.assertSame(columnSpec.getPartitionedChecks().getDaily(), this.samplePartitionedCheck.getDaily());
     }
 
     // TODO: updateTableAdHocChecksUI, and the following check types.

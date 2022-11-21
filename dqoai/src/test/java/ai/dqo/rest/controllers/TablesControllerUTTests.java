@@ -186,35 +186,31 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableCheckpoints_whenTableRequested_thenReturnsCheckpoints() {
+    void getTableCheckpointsDaily_whenTableRequested_thenReturnsCheckpoints() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         this.sampleTable.getTableSpec().setCheckpoints(this.sampleCheckpoint);
 
-        ResponseEntity<Mono<TableCheckpointsSpec>> responseEntity = this.sut.getTableCheckpoints(
+        ResponseEntity<Mono<TableDailyCheckpointCategoriesSpec>> responseEntity = this.sut.getTableCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName());
 
-        TableCheckpointsSpec result = responseEntity.getBody().block();
+        TableDailyCheckpointCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertNotNull(result.getDaily());
-        Assertions.assertNull(result.getMonthly());
     }
 
     @Test
-    void getTablePartitionedChecks_whenTableRequested_thenReturnsPartitionedChecks() {
+    void getTablePartitionedChecksDaily_whenTableRequested_thenReturnsPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         this.sampleTable.getTableSpec().setPartitionedChecks(this.samplePartitionedCheck);
 
-        ResponseEntity<Mono<TablePartitionedChecksRootSpec>> responseEntity = this.sut.getTablePartitionedChecks(
+        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName());
 
-        TablePartitionedChecksRootSpec result = responseEntity.getBody().block();
+        TableDailyPartitionedCheckCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertNotNull(result.getDaily());
-        Assertions.assertNull(result.getMonthly());
     }
 
     @Test
@@ -281,33 +277,37 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateTableCheckpoints_whenTableAndCheckpointsRequested_updatesCheckpoints() {
+    void updateTableCheckpointsDaily_whenTableAndCheckpointsRequested_updatesCheckpoints() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableCheckpoints(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(this.sampleCheckpoint));
+                Optional.of(this.sampleCheckpoint.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(this.sampleTable.getTableSpec().getCheckpoints(), this.sampleCheckpoint);
+        Assertions.assertSame(
+                this.sampleTable.getTableSpec().getCheckpoints().getDaily(),
+                this.sampleCheckpoint.getDaily());
     }
 
     @Test
-    void updateTablePartitionedChecks_whenTableAndPartitionedChecksRequested_updatesPartitionedChecks() {
+    void updateTablePartitionedChecksDaily_whenTableAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecks(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(this.samplePartitionedCheck));
+                Optional.of(this.samplePartitionedCheck.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(this.sampleTable.getTableSpec().getPartitionedChecks(), this.samplePartitionedCheck);
+        Assertions.assertSame(
+                this.sampleTable.getTableSpec().getPartitionedChecks().getDaily(),
+                this.samplePartitionedCheck.getDaily());
     }
 
     // TODO: updateTableAdHocChecksUI, and the following check types.
