@@ -48,7 +48,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Disable Column</td>
+            <td className="px-4 py-2">Disable Data Quality Checks</td>
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleChange({ disabled: value })}
