@@ -43,8 +43,6 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpec extends Abstract
      * Default constructor.
      */
     public BetweenPercentMovingAverage7DaysRuleParametersSpec() {
-        this.maxPercentAbove = null;
-        this.maxPercentBelow = null;
     }
 
 
