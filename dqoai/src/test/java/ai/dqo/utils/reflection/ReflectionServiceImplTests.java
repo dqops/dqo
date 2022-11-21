@@ -20,14 +20,23 @@ import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentCheckSpec;
 import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentRulesSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleThresholdsSpec;
+import ai.dqo.rules.comparison.MinPercentRule100ParametersSpec;
 import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
 import ai.dqo.rules.comparison.MinValueRuleThresholdsSpec;
 import ai.dqo.sensors.column.validity.BuiltInDateFormats;
 import ai.dqo.sensors.column.validity.ColumnValidityDateTypePercentSensorParametersSpec;
 import ai.dqo.sensors.column.validity.ColumnValidityValueInRangeDatePercentSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,7 +191,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("predictionTimeWindow", fieldInfo.getClassFieldName());
         Assertions.assertEquals("prediction_time_window", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("prediction_time_window", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor reading timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor reading. The default is 14 (days).", fieldInfo.getHelpText());
+        Assertions.assertEquals("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor readout timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor readout. The default is 14 (days).", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(0, fieldInfo.getDefaultValue());
@@ -199,7 +208,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("maxPercentAbove", fieldInfo.getClassFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.", fieldInfo.getHelpText());
+        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
@@ -208,19 +217,81 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void makeFieldInfo_whenSimpleDoubleValueField_thenReturnsFieldInfo() throws Exception {
-        Field field = MinValueRuleParametersSpec.class.getDeclaredField("minValue");
+        Field field = TestableRuleParametersSpec.class.getDeclaredField("minPercent");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.double_type, fieldInfo.getDataType());
-        Assertions.assertEquals("minValue", fieldInfo.getClassFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getYamlFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getDisplayName());
+        Assertions.assertEquals("minPercent", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("min_percent", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("min_percent", fieldInfo.getDisplayName());
         Assertions.assertEquals("Minimum accepted value for the actual_value returned by the sensor (inclusive).", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(0.0, fieldInfo.getDefaultValue()); // the field is not nullable
         Assertions.assertEquals(null, fieldInfo.getConstructor());
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    public static class TestableRuleParametersSpec extends AbstractRuleParametersSpec {
+        private static final ChildHierarchyNodeFieldMapImpl<TestableRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+            {
+            }
+        };
+
+        /**
+         * Default constructor, the minimum accepted value is 0.
+         */
+        public TestableRuleParametersSpec() {
+        }
+
+        /**
+         * Creates a rule with a given value.
+         * @param minPercent Minimum accepted value.
+         */
+        public TestableRuleParametersSpec(double minPercent) {
+            this.minPercent = minPercent;
+        }
+
+        @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
+        private double minPercent = 100.0;
+
+        /**
+         * Minimum value for a data quality check readout, for example a minimum row count.
+         * @return Minimum value for a data quality check readout.
+         */
+        public double getMinPercent() {
+            return minPercent;
+        }
+
+        /**
+         * Changes the minimum value (threshold) for a data quality readout.
+         * @param minPercent Minimum value.
+         */
+        public void setMinPercent(double minPercent) {
+            this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
+            this.minPercent = minPercent;
+        }
+
+        /**
+         * Returns the child map on the spec class with all fields.
+         *
+         * @return Return the field map.
+         */
+        @Override
+        protected ChildHierarchyNodeFieldMap getChildMap() {
+            return FIELDS;
+        }
+
+        /**
+         * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
+         *
+         * @return Rule definition name (python module name without .py extension).
+         */
+        @Override
+        public String getRuleDefinitionName() {
+            return "comparison/min_percent";
+        }
     }
 
     @Test
@@ -270,7 +341,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("high", fieldInfo.getClassFieldName());
         Assertions.assertEquals("high", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("high", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Rule threshold for a high severity (3) alert.", fieldInfo.getHelpText());
+        Assertions.assertEquals("Rule threshold for a fatal severity (3) alert.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertNotNull(fieldInfo.getConstructor());

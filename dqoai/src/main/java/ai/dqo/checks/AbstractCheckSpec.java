@@ -75,9 +75,17 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean excludeFromKpi;
 
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean includeInSla;
+
     @JsonPropertyDescription("Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qualityDimension;
+
+    @JsonPropertyDescription("Dat quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String displayName;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -150,6 +158,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * Returs true if the check is a critical data quality check that is part of a data quality SLA.
+     * @return True when the check is part of a DQ SLA (data contract).
+     */
+    public boolean isIncludeInSla() {
+        return includeInSla;
+    }
+
+    /**
+     * Adds or removes a check from the list of data quality checks that are part of a data quality SLA (data contract).
+     * @param includeInSla True when the check is a part of a data quality SLA.
+     */
+    public void setIncludeInSla(boolean includeInSla) {
+        this.setDirtyIf(this.includeInSla != includeInSla);
+        this.includeInSla = includeInSla;
+    }
+
+    /**
      * Returns an overwritten data quality dimension that should be used for reporting the alerts for this data quality check.
      * @return Overwritten data quality dimension name.
      */
@@ -164,6 +189,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setQualityDimension(String qualityDimension) {
         setDirtyIf(!Objects.equals(this.qualityDimension, qualityDimension));
         this.qualityDimension = qualityDimension;
+    }
+
+    /**
+     * Returns a custom data quality check display name.
+     * @return Custom check display name.
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * Sets a custom check display name that overrides the default display name that is just a copy of the check name.
+     * @param displayName Custom check display name.
+     */
+    public void setDisplayName(String displayName) {
+        setDirtyIf(!Objects.equals(this.displayName, displayName));
+        this.displayName = displayName;
     }
 
     /**

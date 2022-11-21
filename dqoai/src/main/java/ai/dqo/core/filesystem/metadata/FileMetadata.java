@@ -55,7 +55,7 @@ public class FileMetadata implements Cloneable {
 
     /**
      * Creates a metadata object that describes a single local file.
-     * @param relativePath Path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readings files, alert files, etc.)
+     * @param relativePath Path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readouts files, rule results files, etc.)
      * @param lastModifiedAt Last modified timestamp retrieved from the file system.
      * @param fileHash Hash of the file. It is actually a content of the .[filename].parquet.crc file if such a file was found. Otherwise, a hash must be calculated from the file.
      * @param statusCheckedAt The timestamp (now) when the file status was checked for the last time.
@@ -80,7 +80,7 @@ public class FileMetadata implements Cloneable {
     }
 
     /**
-     * Returns a path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readings files, alert files, etc.)
+     * Returns a path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readouts files, rule results files, etc.)
      * @return Relative file path using a linux folder notation.
      */
     public Path getRelativePath() {

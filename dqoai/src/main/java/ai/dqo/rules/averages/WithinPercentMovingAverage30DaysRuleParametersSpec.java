@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor reading value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -44,11 +44,11 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpec extends Abstract
     public WithinPercentMovingAverage30DaysRuleParametersSpec() {
     }
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
     private Double maxPercentWithin;
 
     /**
-     * Minimum percent value for a data quality check reading, for example a minimum row count.
+     * Minimum percent value for a data quality check readout, for example a minimum row count.
      * @return A percent that is used to calculate lower limit.
      */
     public Double getMaxPercentWithin() {
@@ -56,7 +56,7 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpec extends Abstract
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality reading.
+     * Changes the minimum value (threshold) for a data quality readout.
      * @param maxPercentWithin
      */
     public void setMaxPercentWithin(Double maxPercentWithin) {

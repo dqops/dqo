@@ -42,23 +42,23 @@ public class ValueEqualsRuleThresholdsSpec extends AbstractRuleThresholdsSpec<Va
         }
     };
 
-    @JsonPropertyDescription("Rule threshold for a low severity (1) alert.")
+    @JsonPropertyDescription("Rule threshold for a warning severity (1) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueEqualsRuleParametersSpec low;
 
-    @JsonPropertyDescription("Rule threshold for a medium severity (2) alert.")
+    @JsonPropertyDescription("Rule threshold for a error severity (2) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueEqualsRuleParametersSpec medium;
 
-    @JsonPropertyDescription("Rule threshold for a high severity (3) alert.")
+    @JsonPropertyDescription("Rule threshold for a fatal severity (3) alert.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueEqualsRuleParametersSpec high;
 
     /**
-     * Alerting rules configuration that raise "LOW" severity alerts for unsatisfied rules.
+     * Alerting rules configuration that raise "WARNING" severity alerts for unsatisfied rules.
      * @return Low severity alert rule parameters.
      */
     @Override

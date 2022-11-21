@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.data.alerts.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.metadata.sources.TableSpec;
 
 /**

@@ -70,7 +70,7 @@ public class FileIndexName {
     }
 
     /**
-     * Returns the root folder type. Roots are: sources, custom rules, custom sensors, readings and alerts.
+     * Returns the root folder type. Roots are: sources, custom rules, custom sensors, sensor readouts and rule results.
      * @return Root folder type.
      */
     public DqoRoot getDqoRoot() {

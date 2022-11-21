@@ -24,12 +24,12 @@ import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
-import ai.dqo.data.alerts.snapshot.RuleResultsSnapshot;
-import ai.dqo.data.alerts.snapshot.RuleResultsSnapshotFactory;
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
-import ai.dqo.data.readings.normalization.SensorResultNormalizeService;
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshotFactory;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.readouts.normalization.SensorResultNormalizeService;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
@@ -78,7 +78,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SensorResultNormalizeService sensorResultNormalizeService;
     private final RuleEvaluationService ruleEvaluationService;
-    private final SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory;
+    private final SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
     private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
     private final UserHomeLockManager userHomeLockManager;
@@ -92,7 +92,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param connectionProviderRegistry Connection provider registry.
      * @param sensorResultNormalizeService Sensor dataset parse service.
      * @param ruleEvaluationService  Rule evaluation service.
-     * @param sensorReadingsSnapshotFactory Sensor reading storage service.
+     * @param sensorReadoutsSnapshotFactory Sensor readouts storage service.
      * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      * @param userHomeLockManager User home lock manager - used to ensure synchronized access to data files.
@@ -105,7 +105,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      ConnectionProviderRegistry connectionProviderRegistry,
                                      SensorResultNormalizeService sensorResultNormalizeService,
                                      RuleEvaluationService ruleEvaluationService,
-                                     SensorReadingsSnapshotFactory sensorReadingsSnapshotFactory,
+                                     SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
                                      RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
                                      UserHomeLockManager userHomeLockManager,
@@ -116,7 +116,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.sensorResultNormalizeService = sensorResultNormalizeService;
         this.ruleEvaluationService = ruleEvaluationService;
-        this.sensorReadingsSnapshotFactory = sensorReadingsSnapshotFactory;
+        this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
         this.userHomeLockManager = userHomeLockManager;
@@ -213,9 +213,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
-        SensorReadingsSnapshot sensorReadingsSnapshot = this.sensorReadingsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        Table allNormalizedSensorResultsTable = sensorReadingsSnapshot.getNewResults();
+        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
         Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getNewResults();
         int checksCount = 0;
         int sensorResultsCount = 0;
@@ -242,7 +242,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
 
                 // TODO: normalization service must support empty time gradient that will not truncate the time (for ad-hoc checks)
-                SensorNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
+                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
                         sensorResult, effectiveTimeSeries.getTimeGradient(), sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
@@ -255,13 +255,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
                 if (ruleDefinitionName == null) {
                     // no rule to run, just the sensor...
-                    sensorReadingsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
+                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
                 }
                 else {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
-                    LocalDateTime earliestRequiredReading = ruleTimeWindowSettings == null ? minTimePeriod :
+                    LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), effectiveTimeSeries.getTimeGradient());
 
@@ -269,10 +269,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
                     // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
                     // so we need to support just optimistic locking and verify the snapshot (parquet file dates - not modified) just before overwritting parquet files
-                    sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
+                    sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
 
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
-                            checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadingsSnapshot, progressListener);
+                            checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
                     progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                     allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
@@ -284,7 +284,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 }
             }
             catch (Exception ex) {
-                // TODO: append a special error row instead of appending the reading row...
+                // TODO: append a special error row instead of appending the readout row...
 
                 throw new CheckExecutionFailed("Check failed to execute", ex);
             }
@@ -292,9 +292,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             // TODO: we can consider flushing results here if we run out of memory (too many results)
         }
 
-        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
-        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
-            sensorReadingsSnapshot.save();
+        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
+        if (sensorReadoutsSnapshot.hasNewReadouts() && !dummySensorExecution) {
+            sensorReadoutsSnapshot.save();
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
@@ -337,9 +337,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, null));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
-        SensorReadingsSnapshot sensorReadingsSnapshot = this.sensorReadingsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        Table allNormalizedSensorResultsTable = sensorReadingsSnapshot.getNewResults();
+        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
         Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getNewResults();
         int checksCount = 0;
         int sensorResultsCount = 0;
@@ -373,7 +373,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getEffectiveTimeSeries();
 
-                SensorNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
+                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
                         sensorResult, effectiveTimeSeries.getTimeGradient(), sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
@@ -381,16 +381,16 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period tha was captured
-                LocalDateTime earliestRequiredReading = checkSpec.findEarliestRequiredHistoricReadingDate(effectiveTimeSeries.getTimeGradient(), minTimePeriod);
+                LocalDateTime earliestRequiredReadout = checkSpec.findEarliestRequiredHistoricReadoutDate(effectiveTimeSeries.getTimeGradient(), minTimePeriod);
 
                 // TODO: get a shared read lock for the time of loading file, must remember the names, modification dates of loaded parquet files,
                 // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
                 // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
                 // so we need to support just optimistic locking and verify the shapshot (parquet file dates - not modified) just before overwritting parquet files,
-                sensorReadingsSnapshot.ensureMonthsAreLoaded(earliestRequiredReading.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
+                sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
 
                 RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateLegacyRules(
-                        checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadingsSnapshot, progressListener);
+                        checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
                 progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                 allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
@@ -401,7 +401,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 highSeverityAlerts += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
             }
             catch (Exception ex) {
-                // TODO: append a special error row instead of appending the reading row...
+                // TODO: append a special error row instead of appending the readout row...
 
                 throw new CheckExecutionFailed("Check failed to execute", ex);
             }
@@ -409,9 +409,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             // TODO: we can consider flushing results here if we run out of memory (too many results)
         }
 
-        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadingsSnapshot));
-        if (sensorReadingsSnapshot.hasNewReadouts() && !dummySensorExecution) {
-            sensorReadingsSnapshot.save();
+        progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
+        if (sensorReadoutsSnapshot.hasNewReadouts() && !dummySensorExecution) {
+            sensorReadoutsSnapshot.save();
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));

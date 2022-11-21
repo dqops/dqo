@@ -18,10 +18,10 @@ package ai.dqo.execution.checks.ruleeval;
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
-import ai.dqo.data.readings.snapshot.SensorReadingsSnapshot;
-import ai.dqo.data.readings.snapshot.SensorReadingsTimeSeriesData;
-import ai.dqo.data.readings.snapshot.SensorReadingsTimeSeriesMap;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsTimeSeriesData;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsTimeSeriesMap;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.rules.*;
@@ -43,7 +43,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 /**
- * Service that evaluates rules for each sensor reading returned by a sensor query.
+ * Service that evaluates rules for each sensor readouts returned by a sensor query.
  */
 @Service
 public class RuleEvaluationServiceImpl implements RuleEvaluationService {
@@ -69,7 +69,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      * @param checkSpec               Check specification with a list of rules.
      * @param sensorRunParameters     Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
-     * @param sensorReadingsSnapshot  Snapshot of all sensor readings loaded for the table.
+     * @param sensorReadoutsSnapshot  Snapshot of all sensor readouts loaded for the table.
      * @param progressListener        Progress listener that receives events that notify about the rule evaluation.
      * @return Rule evaluation results as a table.
      */
@@ -77,12 +77,12 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     public RuleEvaluationResult evaluateRules(CheckExecutionContext checkExecutionContext,
                                               AbstractCheckSpec checkSpec,
                                               SensorExecutionRunParameters sensorRunParameters,
-                                              SensorNormalizedResult normalizedSensorResults,
-                                              SensorReadingsSnapshot sensorReadingsSnapshot,
+                                              SensorReadoutsNormalizedResult normalizedSensorResults,
+                                              SensorReadoutsSnapshot sensorReadoutsSnapshot,
                                               CheckExecutionProgressListener progressListener) {
         Table sensorResultsTable = normalizedSensorResults.getTable();
         TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataStreamHashColumn());
-        SensorReadingsTimeSeriesMap historicReadingsTimeSeries = sensorReadingsSnapshot.getHistoricReadingsTimeSeries();
+        SensorReadoutsTimeSeriesMap historicReadoutsTimeSeries = sensorReadoutsSnapshot.getHistoricReadoutsTimeSeries();
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
         DoubleColumn actualValueColumn = normalizedSensorResults.getActualValueColumn();
@@ -95,9 +95,9 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
             Long timeSeriesDimensionId = dimensionColumn.get(0);
-            SensorReadingsTimeSeriesData historicTimeSeriesData = historicReadingsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
+            SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             TimeSeriesGradient timeGradient = sensorRunParameters.getTimeSeries().getTimeGradient();
 
             ZoneId connectionTimeZoneId = sensorRunParameters.getConnectionTimeZoneId();
@@ -117,8 +117,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Double actualValue = actualValueColumn.get(allSensorResultsRowIndex);
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
 
-                HistoricDataPoint[] previousDataPoints = null; // combined data points from current readings and historic sensor results
-                HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readings
+                HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
+                HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
                 if (ruleTimeWindowSettings != null) {
                     previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
                             timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
@@ -144,8 +144,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         }
                     }
 
-                    if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReading()) {
-                        continue; // we will skip this reading, we cannot calculate a value because there is not enough sensor readings
+                    if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
+                        continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                     }
                 }
 
@@ -154,6 +154,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 int targetRowIndex = targetRuleResultRow.getRowNumber();
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
                 result.getIncludeInKpiColumn().set(targetRowIndex, !checkSpec.isExcludeFromKpi());
+                result.getIncludeInSlaColumn().set(targetRowIndex, checkSpec.isIncludeInSla());
 
                 AbstractRuleParametersSpec fatalRule = checkSpec.getFatal();
                 AbstractRuleParametersSpec errorRule = checkSpec.getError();
@@ -161,62 +162,62 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Double expectedValue = null;
 
                 if (fatalRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersHigh = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultHigh = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersHigh);
+                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersFatal);
 
-                    if (!ruleExecutionResultHigh.isPassed()) {
+                    if (!ruleExecutionResultFatal.isPassed()) {
                         highestSeverity = 3;
                     }
 
-                    if (ruleExecutionResultHigh.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultHigh.getExpectedValue();
+                    if (ruleExecutionResultFatal.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultFatal.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultHigh.getLowerBound() != null) {
-                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getLowerBound());
+                    if (ruleExecutionResultFatal.getLowerBound() != null) {
+                        result.getFatalLowerBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getLowerBound());
                     }
-                    if (ruleExecutionResultHigh.getUpperBound() != null) {
-                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultHigh.getUpperBound());
+                    if (ruleExecutionResultFatal.getUpperBound() != null) {
+                        result.getFatalUpperBoundColumn().set(targetRowIndex, ruleExecutionResultFatal.getUpperBound());
                     }
                 }
 
                 if (errorRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersMedium = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultMedium = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersMedium);
+                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersError);
 
-                    if (highestSeverity == null && !ruleExecutionResultMedium.isPassed()) {
+                    if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
                         highestSeverity = 2;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultMedium.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultMedium.getExpectedValue();
+                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultMedium.getLowerBound() != null) {
-                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getLowerBound());
+                    if (ruleExecutionResultError.getLowerBound() != null) {
+                        result.getErrorLowerBoundColumn().set(targetRowIndex, ruleExecutionResultError.getLowerBound());
                     }
-                    if (ruleExecutionResultMedium.getUpperBound() != null) {
-                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultMedium.getUpperBound());
+                    if (ruleExecutionResultError.getUpperBound() != null) {
+                        result.getErrorUpperBoundColumn().set(targetRowIndex, ruleExecutionResultError.getUpperBound());
                     }
                 }
 
                 if (warningRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersLow = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultLow = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersLow);
+                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersWarning);
 
-                    if (highestSeverity == null && !ruleExecutionResultLow.isPassed()) {
+                    if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
                         highestSeverity = 1;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultLow.getExpectedValue() != null) {
-                        expectedValue = ruleExecutionResultLow.getExpectedValue();
+                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                        expectedValue = ruleExecutionResultWarning.getExpectedValue();
                     }
 
-                    if (ruleExecutionResultLow.getLowerBound() != null) {
-                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getLowerBound());
+                    if (ruleExecutionResultWarning.getLowerBound() != null) {
+                        result.getWarningLowerBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getLowerBound());
                     }
-                    if (ruleExecutionResultLow.getUpperBound() != null) {
-                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultLow.getUpperBound());
+                    if (ruleExecutionResultWarning.getUpperBound() != null) {
+                        result.getWarningUpperBoundColumn().set(targetRowIndex, ruleExecutionResultWarning.getUpperBound());
                     }
                 }
 
@@ -238,7 +239,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      * @param checkSpec Check specification with a list of rules.
      * @param sensorRunParameters Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
-     * @param sensorReadingsSnapshot Sensor reading snapshot with historic sensor results.
+     * @param sensorReadoutsSnapshot Sensor readouts snapshot with historic sensor results.
      * @param progressListener Progress listener that receives events that notify about the rule evaluation.
      * @return Rule evaluation results as a table.
      */
@@ -246,14 +247,14 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     public RuleEvaluationResult evaluateLegacyRules(CheckExecutionContext checkExecutionContext,
                                                     AbstractCheckDeprecatedSpec checkSpec,
                                                     SensorExecutionRunParameters sensorRunParameters,
-                                                    SensorNormalizedResult normalizedSensorResults,
-                                                    SensorReadingsSnapshot sensorReadingsSnapshot,
+                                                    SensorReadoutsNormalizedResult normalizedSensorResults,
+                                                    SensorReadoutsSnapshot sensorReadoutsSnapshot,
                                                     CheckExecutionProgressListener progressListener) {
         AbstractRuleSetSpec ruleSet = checkSpec.getRuleSet();
         List<AbstractRuleThresholdsSpec<?>> enabledRules = ruleSet.getEnabledRules();
         Table sensorResultsTable = normalizedSensorResults.getTable();
         TableSliceGroup dimensionTimeSeriesSlices = sensorResultsTable.splitOn(normalizedSensorResults.getDataStreamHashColumn());
-        SensorReadingsTimeSeriesMap historicReadingsTimeSeries = sensorReadingsSnapshot.getHistoricReadingsTimeSeries();
+        SensorReadoutsTimeSeriesMap historicReadoutsTimeSeries = sensorReadoutsSnapshot.getHistoricReadoutsTimeSeries();
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
         DoubleColumn actualValueColumn = normalizedSensorResults.getActualValueColumn();
@@ -262,9 +263,9 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
             Table dimensionSensorResults = dimensionTableSlice.asTable();  // results for a single dimension, the rows should be already sorted by the time period, ascending
-            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
+            LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
             Long timeSeriesDimensionId = dimensionColumn.get(0);
-            SensorReadingsTimeSeriesData historicTimeSeriesData = historicReadingsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
+            SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             TimeSeriesGradient timeGradient = sensorRunParameters.getEffectiveTimeSeries().getTimeGradient();
             ZoneId connectionTimeZoneId = sensorRunParameters.getConnectionTimeZoneId();
             HistoricDataPointTimeSeriesCollector previousDataPointTimeSeriesCollectorCurrent = new HistoricDataPointTimeSeriesCollector(
@@ -285,8 +286,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 for (AbstractRuleThresholdsSpec<?> ruleThresholds : enabledRules) {
                     RuleTimeWindowSettingsSpec ruleTimeWindow = ruleThresholds.getTimeWindow();
-                    HistoricDataPoint[] previousDataPoints = null; // combined data points from current readings and historic sensor results
-                    HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readings
+                    HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
+                    HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
                     if (ruleTimeWindow != null) {
                         previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
                                 timePeriodLocal, ruleTimeWindow.getPredictionTimeWindow());
@@ -312,8 +313,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                             }
                         }
 
-                        if (countNotNull < ruleTimeWindow.getMinPeriodsWithReading()) {
-                            continue; // we will skip this reading, we cannot calculate a value because there is not enough sensor readings
+                        if (countNotNull < ruleTimeWindow.getMinPeriodsWithReadouts()) {
+                            continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                         }
                     }
 
