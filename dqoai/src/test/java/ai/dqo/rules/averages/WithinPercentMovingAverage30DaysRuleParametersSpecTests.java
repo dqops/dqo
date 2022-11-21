@@ -59,6 +59,7 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
         this.sut = new WithinPercentMovingAverage30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
         this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
         this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
