@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Select from '../Select';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
-import {
-  ColumnApiClient,
-  ConnectionApiClient,
-  SchemaApiClient
-} from '../../services/apiClient';
+import { ColumnApiClient, ConnectionApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import { ColumnBasicModel, CommonColumnModel } from '../../api';
+import SelectInput from '../SelectInput';
 
 export interface Option {
   label: string;
@@ -63,7 +59,7 @@ const ColumnSelect = ({
 
   return (
     <div>
-      <Select
+      <SelectInput
         disabled={disabled}
         label={label}
         value={value}
