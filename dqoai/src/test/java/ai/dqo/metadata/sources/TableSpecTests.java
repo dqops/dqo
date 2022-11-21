@@ -17,6 +17,13 @@ package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
+import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
+import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.checks.table.validity.TableValidityRowCountCheckSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,22 +139,62 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
-        TableAdHocCheckCategoriesSpec defaultChecks = new TableAdHocCheckCategoriesSpec();
-        defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
-		this.sut.setChecks(defaultChecks);
-        Assertions.assertEquals(this.sut.getChecks(), defaultChecks);
+        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
+        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
+        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+		this.sut.setChecks(adhocChecks);
+        Assertions.assertEquals(this.sut.getChecks(), adhocChecks);
         Assertions.assertTrue(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
-        TableAdHocCheckCategoriesSpec defaultChecks = new TableAdHocCheckCategoriesSpec();
-        defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
-		this.sut.setChecks(defaultChecks);
+        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
+        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
+        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+		this.sut.setChecks(adhocChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setChecks(defaultChecks);
+		this.sut.setChecks(adhocChecks);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenFreshObject_thenReturnsFalse() {
+        Assertions.assertFalse(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneAdhocCheckConfigured_thenReturnsTrue() {
+        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
+        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
+        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+        this.sut.setChecks(adhocChecks);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneDailyCheckpointCheckConfigured_thenReturnsTrue() {
+        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
+        TableDailyCheckpointCategoriesSpec daily = new TableDailyCheckpointCategoriesSpec();
+        TableStandardDailyCheckpointSpec standard = new TableStandardDailyCheckpointSpec();
+        standard.setDailyCheckpointMinRowCount(new TableMinRowCountCheckSpec());
+        daily.setStandard(standard);
+        checkpoints.setDaily(daily);
+        this.sut.setCheckpoints(checkpoints);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneMonthlyCheckpointCheckConfigured_thenReturnsTrue() {
+        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
+        TableMonthlyCheckpointCategoriesSpec daily = new TableMonthlyCheckpointCategoriesSpec();
+        TableStandardMonthlyCheckpointSpec standard = new TableStandardMonthlyCheckpointSpec();
+        standard.setMonthlyCheckpointMinRowCount(new TableMinRowCountCheckSpec());
+        daily.setStandard(standard);
+        checkpoints.setMonthly(daily);
+        this.sut.setCheckpoints(checkpoints);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 }

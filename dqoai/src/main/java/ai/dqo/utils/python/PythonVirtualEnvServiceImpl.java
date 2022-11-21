@@ -264,7 +264,7 @@ public class PythonVirtualEnvServiceImpl implements PythonVirtualEnvService {
      * @param pathToRequirementsTxt Path to requirements.
      */
     public void installPipRequirements(PythonVirtualEnv pythonVirtualEnv, Path pathToRequirementsTxt) {
-        String[] commandLine = {pythonVirtualEnv.getPythonInterpreterPath(), "-m", "pip", "install", "-r", pathToRequirementsTxt.toString()};
+        String[] commandLine = {pythonVirtualEnv.getPythonInterpreterPath(), "-m", "pip", "install", "-r", pathToRequirementsTxt.toString(), "--ignore-installed", "--no-warn-conflicts"};
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();

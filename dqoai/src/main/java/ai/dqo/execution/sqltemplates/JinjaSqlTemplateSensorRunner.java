@@ -18,7 +18,7 @@ package ai.dqo.execution.sqltemplates;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.SourceConnection;
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.ExecutingSqlOnConnectionEvent;
@@ -104,14 +104,14 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * @return Dummy result table.
      */
     public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
-        Table dummyResultTable = Table.create("dummy_results", DoubleColumn.create(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Table dummyResultTable = Table.create("dummy_results", DoubleColumn.create(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
-        row.setDouble(SensorNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, 10.0);
+        row.setDouble(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, 10.0);
 
         TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getEffectiveTimeSeries();
         if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
-            dummyResultTable.addColumns(DateTimeColumn.create(SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME));
-            row.setDateTime(SensorNormalizedResult.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
+            dummyResultTable.addColumns(DateTimeColumn.create(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME));
+            row.setDateTime(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
         }
 
         // TODO: we could also add some fake dimensions to make the dummy run more realistic

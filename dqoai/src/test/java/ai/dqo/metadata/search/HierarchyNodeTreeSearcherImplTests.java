@@ -17,7 +17,10 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.consistency.TableConsistencyRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
@@ -221,32 +224,30 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForAll_thenReturnsNonEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("*");
-        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec = new BuiltInTableConsistencyChecksSpec();
-        TableConsistencyRowCountCheckSpec tableConsistencyRowCountCheckSpec = new TableConsistencyRowCountCheckSpec();
-        builtInTableConsistencyChecksSpec.setRowCount(tableConsistencyRowCountCheckSpec);
-        tableCheckCategoriesSpec.setConsistency(builtInTableConsistencyChecksSpec);
-		tableSpec.setChecks(tableCheckCategoriesSpec);
-		table.setSpec(tableSpec);
-        ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
-        expectedList.add(tableConsistencyRowCountCheckSpec);
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
+        table.setSpec(tableSpec);
+        ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
+        expectedList.add(check);
+
+        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
     @Test
     void findChecks_whenCalledForNonFilters_thenReturnsAll() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec = new BuiltInTableConsistencyChecksSpec();
-        TableConsistencyRowCountCheckSpec tableConsistencyRowCountCheckSpec = new TableConsistencyRowCountCheckSpec();
-        builtInTableConsistencyChecksSpec.setRowCount(tableConsistencyRowCountCheckSpec);
-        tableCheckCategoriesSpec.setConsistency(builtInTableConsistencyChecksSpec);
-		tableSpec.setChecks(tableCheckCategoriesSpec);
-		table.setSpec(tableSpec);
-        ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
-        expectedList.add(tableConsistencyRowCountCheckSpec);
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
+        table.setSpec(tableSpec);
+        ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
+        expectedList.add(check);
+
+        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -254,15 +255,14 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForNotExistingName_thenReturnsEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("test");
-        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec = new BuiltInTableConsistencyChecksSpec();
-        TableConsistencyRowCountCheckSpec tableConsistencyRowCountCheckSpec = new TableConsistencyRowCountCheckSpec();
-        builtInTableConsistencyChecksSpec.setRowCount(tableConsistencyRowCountCheckSpec);
-        tableCheckCategoriesSpec.setConsistency(builtInTableConsistencyChecksSpec);
-		tableSpec.setChecks(tableCheckCategoriesSpec);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
 		table.setSpec(tableSpec);
-        ArrayList<TableConsistencyRowCountCheckSpec> expectedList = new ArrayList<>();
-        Collection<AbstractCheckDeprecatedSpec> checkSpecCollection = this.sut.findLegacyChecks(userHomeContext.getUserHome(), checkSearchFilters);
+
+        ArrayList<AbstractCheckSpec> expectedList = new ArrayList<>();
+        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 

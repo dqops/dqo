@@ -39,8 +39,8 @@ import java.time.LocalDateTime;
 public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
     private WithinPercentMovingAverage30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
-    private LocalDateTime readingTimestamp;
-    private Double[] sensorReadings;
+    private LocalDateTime readoutTimestamp;
+    private Double[] sensorReadouts;
 
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
@@ -61,23 +61,21 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
-        this.readingTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
-        this.sensorReadings = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
-
+        this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+        this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
+        this.sut.setMaxPercentWithin(5.0);
 
-        for (int i = 0; i < this.sensorReadings.length; i++) {
-            this.sensorReadings[i] = 20.0;
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
@@ -87,15 +85,15 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
 
     @Test
     void executeRule_whenActualValueIsEqualMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
-        for (int i = 0; i < this.sensorReadings.length; i++) {
-            this.sensorReadings[i] = 20.0;
+        this.sut.setMaxPercentWithin(5.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
@@ -105,15 +103,15 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
 
     @Test
     void executeRule_whenActualValueIsAboveMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsFailed() {
-        this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
-        for (int i = 0; i < this.sensorReadings.length; i++) {
-            this.sensorReadings[i] = 20.0;
+        this.sut.setMaxPercentWithin(5.0);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
@@ -123,19 +121,18 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqualButOnlyEverySecondValueIsPresent_thenReturnsPassed() {
-        this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
+        this.sut.setMaxPercentWithin(5.0);
 
-        for (int i = 0; i < this.sensorReadings.length; i++) {
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
             if (i % 2 == 1) {
                 continue; // skip
             }
-            this.sensorReadings[i] = 20.0;
+            this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
@@ -145,16 +142,15 @@ public class WithinPercentMovingAverage30DaysRuleParametersSpecTests extends Bas
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndAreDifferentSoAveragingIsRequired_thenReturnsPassed() {
-        this.sut.setMaxPercentAbove(5.0);
-        this.sut.setMaxPercentBelow(5.0);
+        this.sut.setMaxPercentWithin(5.0);
 
-        for (int i = 0; i < this.sensorReadings.length; i++) {
-            this.sensorReadings[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be 20.0
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be 20.0
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());

@@ -66,6 +66,6 @@ public class CloudSyncRulesCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.RULES, this.mode, this.isHeadless());
+        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.RULES, this.mode, this.isHeadless(), true);
     }
 }

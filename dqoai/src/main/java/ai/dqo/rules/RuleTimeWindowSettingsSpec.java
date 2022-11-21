@@ -37,11 +37,11 @@ public class RuleTimeWindowSettingsSpec extends AbstractSpec implements Cloneabl
         }
     };
 
-    @JsonPropertyDescription("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor reading timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor reading. The default is 14 (days).")
+    @JsonPropertyDescription("Number of historic time periods to look back for results. Returns results from previous time periods before the sensor readout timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a 'day' time period, the rule will receive results from the time_periods number of days before the time period in the sensor readout. The default is 14 (days).")
     private int predictionTimeWindow = 14;
 
-    @JsonPropertyDescription("Minimum number of past time periods with a sensor reading that must be present in the data in order to call the rule. The rule is not called and the sensor reading is discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor readings is not met. The default is 7.")
-    private int minPeriodsWithReading = 7;
+    @JsonPropertyDescription("Minimum number of past time periods with a sensor readout that must be present in the data in order to call the rule. The rule is not called and the sensor readout is discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor readouts is not met. The default is 7.")
+    private int minPeriodsWithReadouts = 7;
 
     // TODO: what to do with missing values? we can have a parameter that missing values are: skipped (array date density would be wrong), nulls or interpolated
 
@@ -63,20 +63,20 @@ public class RuleTimeWindowSettingsSpec extends AbstractSpec implements Cloneabl
     }
 
     /**
-     * Returns the minimum number of historic sensor readings that are required to call the rule.
-     * @return Min time periods with readings.
+     * Returns the minimum number of historic sensor readouts that are required to call the rule.
+     * @return Min time periods with readouts.
      */
-    public int getMinPeriodsWithReading() {
-        return minPeriodsWithReading;
+    public int getMinPeriodsWithReadouts() {
+        return minPeriodsWithReadouts;
     }
 
     /**
-     * Sets the minimum number of past time periods with readings.
-     * @param minPeriodsWithReading Min periods with readings.
+     * Sets the minimum number of past time periods with readouts.
+     * @param minPeriodsWithReadouts Min periods with readouts.
      */
-    public void setMinPeriodsWithReading(int minPeriodsWithReading) {
-		this.setDirtyIf(this.minPeriodsWithReading != minPeriodsWithReading);
-        this.minPeriodsWithReading = minPeriodsWithReading;
+    public void setMinPeriodsWithReadouts(int minPeriodsWithReadouts) {
+		this.setDirtyIf(this.minPeriodsWithReadouts != minPeriodsWithReadouts);
+        this.minPeriodsWithReadouts = minPeriodsWithReadouts;
     }
 
     /**

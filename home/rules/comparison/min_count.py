@@ -20,19 +20,19 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class MinCountRuleParametersSpec:
-    min_count: int
+    min_count: float
 
 
 class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
-    sensor_reading: float
+    sensor_readout: float
 
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_reading: int
+    min_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
@@ -40,7 +40,7 @@ class RuleExecutionRunParameters:
     actual_value: float
     parameters: MinCountRuleParametersSpec
     time_period_local: datetime
-    previous_readings: Sequence[HistoricDataPoint]
+    previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 

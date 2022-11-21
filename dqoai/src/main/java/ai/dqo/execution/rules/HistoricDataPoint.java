@@ -31,24 +31,24 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class HistoricDataPoint {
     /**
-     * Timestamp (based on UTC timezone) of the previous reading.
+     * Timestamp (based on UTC timezone) of the previous readout.
      */
     private Instant timestampUtc;
 
     /**
-     * Local date time of the previous reading (when the time zone is not important).
+     * Local date time of the previous radout (when the time zone is not important).
      */
     private LocalDateTime localDatetime;
 
     /**
-     * Negative index (like -1, -2...) of this value. This value says that the historic data point is -1, -2 or more time periods (e.q. days, hours) before the time window of the current sensor reading that is evaluated by a rule.
+     * Negative index (like -1, -2...) of this value. This value says that the historic data point is -1, -2 or more time periods (e.q. days, hours) before the time window of the current sensor readout that is evaluated by a rule.
      */
     private int backPeriodsIndex;
 
     /**
-     * Sensor reading from the past.
+     * Sensor readout from the past.
      */
-    private Double sensorReading;
+    private Double sensorReadout;
 
     /**
      * Default (empty) constructor.
@@ -57,53 +57,53 @@ public class HistoricDataPoint {
     }
 
     /**
-     * Creates a historic data point given the timestamp and the value of a historic sensor reading.
-     * @param timestampUtc Timestamp of the reading (absolute UTC timestamp)
-     * @param localDatetime Local date time of the reading.
+     * Creates a historic data point given the timestamp and the value of a historic sensor readout.
+     * @param timestampUtc Timestamp of the readout (absolute UTC timestamp)
+     * @param localDatetime Local date time of the readout.
      * @param backPeriodsIndex Index of the time period related to the current time period.
-     * @param sensorReading Sensor reading from the past.
+     * @param sensorReadout Sensor readout from the past.
      */
-    public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReading) {
+    public HistoricDataPoint(Instant timestampUtc, LocalDateTime localDatetime, int backPeriodsIndex, Double sensorReadout) {
         this.timestampUtc = timestampUtc;
         this.localDatetime = localDatetime;
         this.backPeriodsIndex = backPeriodsIndex;
-        this.sensorReading = sensorReading;
+        this.sensorReadout = sensorReadout;
     }
 
     /**
-     * Absolute (UTC based) timestamp of the previous sensor reading.
-     * @return Absolute timestamp of the previous sensor reading.
+     * Absolute (UTC based) timestamp of the previous sensor readout.
+     * @return Absolute timestamp of the previous sensor readout.
      */
     public Instant getTimestampUtc() {
         return timestampUtc;
     }
 
     /**
-     * Sets the timestamp of the previous reading.
-     * @param timestampUtc Timestamp of the previous reading.
+     * Sets the timestamp of the previous readout.
+     * @param timestampUtc Timestamp of the previous readout.
      */
     public void setTimestampUtc(Instant timestampUtc) {
         this.timestampUtc = timestampUtc;
     }
 
     /**
-     * Returns a local date time of the previous reading.
-     * @return Local date time of the reading.
+     * Returns a local date time of the previous readout.
+     * @return Local date time of the readout.
      */
     public LocalDateTime getLocalDatetime() {
         return localDatetime;
     }
 
     /**
-     * Sets the local date time of the reading.
-     * @param localDatetime Local date time of the reading.
+     * Sets the local date time of the readout.
+     * @param localDatetime Local date time of the readout.
      */
     public void setLocalDatetime(LocalDateTime localDatetime) {
         this.localDatetime = localDatetime;
     }
 
     /**
-     * Returns the back index (-1, -2, -3, ..) of the historic time period before the current sensor reading.
+     * Returns the back index (-1, -2, -3, ..) of the historic time period before the current sensor readout.
      * @return Back period index.
      */
     public int getBackPeriodsIndex() {
@@ -119,18 +119,18 @@ public class HistoricDataPoint {
     }
 
     /**
-     * Gets the value of the past sensor reading.
-     * @return Past sensor reading.
+     * Gets the value of the past sensor readout.
+     * @return Past sensor readout.
      */
-    public Double getSensorReading() {
-        return sensorReading;
+    public Double getSensorReadout() {
+        return sensorReadout;
     }
 
     /**
-     * Sets the past sensor reading.
-     * @param sensorReading Sensor reading.
+     * Sets the past sensor readout.
+     * @param sensorReadout Sensor readout.
      */
-    public void setSensorReading(Double sensorReading) {
-        this.sensorReading = sensorReading;
+    public void setSensorReadout(Double sensorReadout) {
+        this.sensorReadout = sensorReadout;
     }
 }

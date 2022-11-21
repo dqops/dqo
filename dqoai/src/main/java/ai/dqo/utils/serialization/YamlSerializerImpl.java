@@ -19,6 +19,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonLocation;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -57,6 +58,7 @@ public class YamlSerializerImpl implements YamlSerializer {
         this.mapper.registerModule(new Jdk8Module());
         this.mapper.registerModule(new BlackbirdModule());
         this.mapper.registerModule(new DeserializationAwareModule());  // our custom module to notify objects that they were deserialized
+        this.mapper.registerModule(new LooseDeserializationModule());
         this.mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);

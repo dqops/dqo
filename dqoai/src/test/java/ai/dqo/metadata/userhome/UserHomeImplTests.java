@@ -16,6 +16,8 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
 import ai.dqo.checks.table.consistency.TableConsistencyRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
@@ -60,10 +62,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
 
         ConnectionWrapper result = this.sut.findConnectionFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -75,10 +77,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
 
         TableWrapper result = this.sut.findTableFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -90,10 +92,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
+        tableSpec.getChecks().setStandard(standard);
+        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
+        standard.setMinRowCount(check);
 
         ColumnSpec result = this.sut.findColumnFor(check.getHierarchyId());
         Assertions.assertNull(result);

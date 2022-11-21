@@ -118,7 +118,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     }
 
     /**
-     * Synchronizes only the data roots (readings, alerts).
+     * Synchronizes only the data roots (sensor readouts, rule results).
      *
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */

@@ -24,7 +24,7 @@ import com.google.cloud.storage.Storage;
 public interface DqoCloudBucketAccessProvider {
     /**
      * Creates a configured Google storage client to access a tenant' folder in a DQO Cloud bucket.
-     * @param rootType Bucket type (readings, alerts, etc.)
+     * @param rootType Bucket type (sensor_readouts, rule_results, etc.)
      * @return Configured bucket access with a {@link Storage} client to access the data with downscoped credentials.
      */
     DqoCloudRemoteBucket getRemoteBucketClientRW(DqoRoot rootType);

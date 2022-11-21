@@ -31,7 +31,7 @@ public class RuleExecutionResult {
 
     /**
      * Returns the status if the rule has passed.
-     * @return Rule has passed and the sensor reading is valid according to the rule.
+     * @return Rule has passed and the sensor readout is valid according to the rule.
      */
     public boolean isPassed() {
         return passed;
@@ -39,7 +39,7 @@ public class RuleExecutionResult {
 
     /**
      * Sets the rule pass status.
-     * @param passed True when the rule was passed (reading is correct) or false when the value was rejected and an alert will be raised.
+     * @param passed True when the rule was passed (readout is correct) or false when the value was rejected and an alert will be raised.
      */
     public void setPassed(boolean passed) {
         this.passed = passed;

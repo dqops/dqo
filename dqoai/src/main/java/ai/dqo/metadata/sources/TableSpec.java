@@ -97,8 +97,8 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
 
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     @Deprecated
     private TimeSeriesConfigurationSpec timeSeries;
 

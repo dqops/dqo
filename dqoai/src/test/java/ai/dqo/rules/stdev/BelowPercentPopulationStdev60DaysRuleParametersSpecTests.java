@@ -39,8 +39,8 @@ import java.time.LocalDateTime;
 public class BelowPercentPopulationStdev60DaysRuleParametersSpecTests extends BaseTest {
     private BelowPercentPopulationStdev60DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
-    private LocalDateTime readingTimestamp;
-    private Double[] sensorReadings;
+    private LocalDateTime readoutTimestamp;
+    private Double[] sensorReadouts;
 
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
@@ -54,25 +54,25 @@ public class BelowPercentPopulationStdev60DaysRuleParametersSpecTests extends Ba
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
-        this.readingTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
-        this.sensorReadings = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
+        this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+        this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
         this.sut.setPercentPopulationBelow(1.0);
 
-        for (int i = 0; i < this.sensorReadings.length; i++) {
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
             if(i % 2 == 0) {
-                this.sensorReadings[i] = 15.0;
+                this.sensorReadouts[i] = 15.0;
             } else {
-                this.sensorReadings[i] = 25.0;
+                this.sensorReadouts[i] = 25.0;
             }
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadings(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readingTimestamp, this.sensorReadings);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
-                this.sut, this.readingTimestamp, historicDataPoints, this.timeWindowSettings);
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
