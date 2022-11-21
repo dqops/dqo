@@ -8,7 +8,6 @@ import Tabs from '../Tabs';
 import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
-import SpecRuleSettings from './SpecRuleSettings';
 import { DataStreamLevelSpec, UICheckModel } from '../../api';
 
 interface ICheckSettingsProps {
@@ -116,7 +115,6 @@ const CheckSettings = ({
             </div>
           )}
           {activeTab === 'parameters' && <SensorParametersSettings />}
-          {tab?.type === 'rule' && <SpecRuleSettings />}
         </div>
       </div>
     </div>

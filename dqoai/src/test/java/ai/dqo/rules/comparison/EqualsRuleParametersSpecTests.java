@@ -102,7 +102,7 @@ public class EqualsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenExpectedValueSet_thenIsDirtyIsTrue() {
-        this.sut.setExpectedValue(1);
+        this.sut.setExpectedValue(1.0);
         Assertions.assertEquals(1, this.sut.getExpectedValue());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -111,17 +111,17 @@ public class EqualsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenExpectedValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setExpectedValue(1);
+        this.sut.setExpectedValue(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setExpectedValue(1);
+        this.sut.setExpectedValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenErrorMarginSet_thenIsDirtyIsTrue() {
-        this.sut.setErrorMargin(1);
+        this.sut.setErrorMargin(1.0);
         Assertions.assertEquals(1, this.sut.getErrorMargin());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
@@ -130,11 +130,11 @@ public class EqualsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMarginErrorObjectSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setErrorMargin(1);
+        this.sut.setErrorMargin(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setErrorMargin(1);
+        this.sut.setErrorMargin(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }

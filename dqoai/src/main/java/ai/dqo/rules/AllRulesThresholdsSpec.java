@@ -60,7 +60,7 @@ public class AllRulesThresholdsSpec extends AbstractRuleSetSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueEqualsRuleThresholdsSpec valueEquals;
 
-    @JsonPropertyDescription("The current sensor reading is not more than X percent above the moving average of previous readings")
+    @JsonPropertyDescription("The current sensor readout is not more than X percent above the moving average of previous readouts")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PercentMovingAverageRuleThresholdsSpec percentAboveMovingAverage;
@@ -107,7 +107,7 @@ public class AllRulesThresholdsSpec extends AbstractRuleSetSpec {
     }
 
     /**
-     * Returns a rule that the current sensor reading is not more than X percent above the moving average of previous readings
+     * Returns a rule that the current sensor readout is not more than X percent above the moving average of previous readouts
      * @return Percent above moving average rule.
      */
     public PercentMovingAverageRuleThresholdsSpec getPercentAboveMovingAverage() {

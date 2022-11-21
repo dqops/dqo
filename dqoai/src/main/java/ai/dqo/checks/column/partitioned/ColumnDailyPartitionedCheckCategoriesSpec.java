@@ -17,7 +17,7 @@ package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -45,31 +45,31 @@ import java.util.Objects;
 public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("nulls", o -> o.nulls);
+           put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
         }
     };
 
     @JsonPropertyDescription("Daily partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsDailyPartitionedChecksSpec nulls;
+    private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnNullsDailyPartitionedChecksSpec getNulls() {
-        return nulls;
+    public ColumnMaxNegativeCountCheckSpec getdailyPartitionMaxNegativeCount() {
+        return dailyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets the container of nulls data quality checks (checkpoints).
-     * @param nulls New nulls checks.
+     * Sets the container of negative data quality checks (checkpoints).
+     * @param dailyPartitionMaxNegativeCount New negative checks.
      */
-    public void setNulls(ColumnNullsDailyPartitionedChecksSpec nulls) {
-		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
-        this.nulls = nulls;
-		this.propagateHierarchyIdToField(nulls, "nulls");
+    public void setDailyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativeCount, dailyPartitionMaxNegativeCount));
+        this.dailyPartitionMaxNegativeCount = dailyPartitionMaxNegativeCount;
+        propagateHierarchyIdToField(dailyPartitionMaxNegativeCount, "daily_partition_max_negative_count");
     }
 
     /**

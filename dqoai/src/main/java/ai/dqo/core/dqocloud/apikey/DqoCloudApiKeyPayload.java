@@ -31,7 +31,10 @@ import java.util.Map;
  * API key payload that is stored and signed inside an API key.
  */
 public class DqoCloudApiKeyPayload {
-    public static final long CURRENT_API_KEY_VERSION = 2;
+    /**
+     * API Key format version.
+     */
+    public static final long CURRENT_API_KEY_VERSION = 3;
 
     @JsonProperty("ver")
     private Long version;

@@ -441,7 +441,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName, null, null);
         this.terminalTableWritter.writeTable(connectionTables, true);
         this.terminalWriter.writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
-        boolean response = this.terminalReader.promptBoolean("Yes or No", false, false);
+        boolean response = this.terminalReader.promptBoolean("Yes or No", false);
         if (!response) {
             cliOperationStatus.setFailedMessage("You deleted 0 connections");
             return cliOperationStatus;

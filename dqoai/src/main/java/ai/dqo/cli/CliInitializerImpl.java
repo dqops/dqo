@@ -73,7 +73,7 @@ public class CliInitializerImpl implements CliInitializer {
             return; // we don't have the api key, and we can't ask for it, some commands will simply fail
         }
 
-        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true, false)) {
+        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
             return;
         }
 

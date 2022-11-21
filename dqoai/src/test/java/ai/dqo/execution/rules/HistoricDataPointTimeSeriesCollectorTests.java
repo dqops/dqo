@@ -16,8 +16,8 @@
 package ai.dqo.execution.rules;
 
 import ai.dqo.BaseTest;
-import ai.dqo.data.readings.factory.SensorReadingTableFactoryObjectMother;
-import ai.dqo.data.readings.normalization.SensorNormalizedResult;
+import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ import java.util.Arrays;
 @SpringBootTest
 public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
     private Table table;
-    private SensorNormalizedResult normalizedResult;
+    private SensorReadoutsNormalizedResult normalizedResult;
 
     /**
      * Called before each test.
@@ -44,8 +44,8 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.table = SensorReadingTableFactoryObjectMother.createEmptyNormalizedTable("tab");
-		this.normalizedResult = new SensorNormalizedResult(this.table);
+		this.table = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("tab");
+		this.normalizedResult = new SensorReadoutsNormalizedResult(this.table);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
         Assertions.assertTrue(Arrays.stream(dataPoints).allMatch(p -> p != null));
 
         for(int i = 0; i < 14; i++) {
-            Assertions.assertEquals(106.0 + i, dataPoints[i].getSensorReading());
+            Assertions.assertEquals(106.0 + i, dataPoints[i].getSensorReadout());
             Assertions.assertEquals(LocalDateTime.of(2022, 1, i + 6, 0, 0, 0), dataPoints[i].getLocalDatetime());
             Assertions.assertEquals(-(14 - i), dataPoints[i].getBackPeriodsIndex());
         }

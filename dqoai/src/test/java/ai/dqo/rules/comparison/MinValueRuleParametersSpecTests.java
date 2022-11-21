@@ -66,7 +66,7 @@ public class MinValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertEquals(1, this.sut.getMinValue());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -75,11 +75,11 @@ public class MinValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }

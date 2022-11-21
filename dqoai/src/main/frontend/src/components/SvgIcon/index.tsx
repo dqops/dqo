@@ -38,6 +38,8 @@ import { ReactComponent as ColumnSvg } from './svg/column.svg';
 import { ReactComponent as EditSvg } from './svg/edit.svg';
 import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as SaveSvg } from './svg/save.svg';
+import { ReactComponent as StopSvg } from './svg/stop.svg';
+import { ReactComponent as DisableSvg } from './svg/disable.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -77,7 +79,9 @@ const iconsMap: any = {
   column: ColumnSvg,
   edit: EditSvg,
   delete: DeleteSvg,
-  save: SaveSvg
+  save: SaveSvg,
+  stop: StopSvg,
+  disable: DisableSvg
 };
 
 interface SvgIconProps {

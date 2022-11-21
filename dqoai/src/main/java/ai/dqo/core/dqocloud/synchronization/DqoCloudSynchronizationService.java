@@ -36,7 +36,7 @@ public interface DqoCloudSynchronizationService {
     void synchronizeAll(FileSystemSynchronizationListener synchronizationListener);
 
     /**
-     * Synchronizes only the data roots (readings, alerts).
+     * Synchronizes only the data roots (sensor readouts, rule results).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     void synchronizeData(FileSystemSynchronizationListener synchronizationListener);

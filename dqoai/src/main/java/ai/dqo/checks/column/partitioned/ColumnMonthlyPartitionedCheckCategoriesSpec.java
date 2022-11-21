@@ -17,7 +17,7 @@ package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -37,7 +37,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level monthly partitioned checks. Contains categories of data quality checks that are executed for monthly partitions.
+ * Container of column level monthly partitioned checks. Contains categories of data quality checks that are executed for monthly partitionsColumnNullsMonthlyPartitionedChecksSpec.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -45,31 +45,31 @@ import java.util.Objects;
 public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("nulls", o -> o.nulls);
+            put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
         }
     };
 
     @JsonPropertyDescription("Monthly partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsMonthlyPartitionedChecksSpec nulls;
+    private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnNullsMonthlyPartitionedChecksSpec getNulls() {
-        return nulls;
+    public ColumnMaxNegativeCountCheckSpec getmonthlyPartitionMaxNegativeCount() {
+        return monthlyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets the container of nulls data quality checks (checkpoints).
-     * @param nulls New nulls checks.
+     * Sets the container of negative data quality checks (checkpoints).
+     * @param monthlyPartitionMaxNegativeCount New negative checks.
      */
-    public void setNulls(ColumnNullsMonthlyPartitionedChecksSpec nulls) {
-		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
-        this.nulls = nulls;
-		this.propagateHierarchyIdToField(nulls, "nulls");
+    public void setMonthlyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativeCount, monthlyPartitionMaxNegativeCount));
+        this.monthlyPartitionMaxNegativeCount = monthlyPartitionMaxNegativeCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxNegativeCount, "monthly_partition_max_negative_count");
     }
 
     /**
@@ -93,7 +93,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.MONTH);
+            setTimeGradient(TimeSeriesGradient.DAY);
             setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
         }};
     }
