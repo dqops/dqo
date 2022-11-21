@@ -107,11 +107,11 @@ public class TablesController {
                 .stream()
                 .filter(tw -> Objects.equals(tw.getPhysicalTableName().getSchemaName(), schemaName))
                 .sorted(Comparator.comparing(tw -> tw.getPhysicalTableName().getTableName()))
-                .map(tw -> tw.getSpec().cloneBare())
+                .map(tw -> tw.getSpec())
                 .collect(Collectors.toList());
 
         Stream<TableBasicModel> modelStream = tableSpecs.stream()
-                .map(ts -> TableBasicModel.fromTableSpecification(connectionName, ts));
+                .map(ts -> TableBasicModel.fromTableSpecificationForListEntry(connectionName, ts));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK); // 200
     }
@@ -127,7 +127,7 @@ public class TablesController {
     @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table ful specification returned", response = TableModel.class),
+            @ApiResponse(code = 200, message = "Table full specification returned", response = TableModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
