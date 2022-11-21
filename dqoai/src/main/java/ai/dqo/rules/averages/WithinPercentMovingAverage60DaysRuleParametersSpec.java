@@ -43,8 +43,6 @@ public class WithinPercentMovingAverage60DaysRuleParametersSpec extends Abstract
      * Default constructor.
      */
     public WithinPercentMovingAverage60DaysRuleParametersSpec() {
-        this.maxPercentAbove = null;
-        this.maxPercentBelow = null;
     }
 
 
@@ -58,7 +56,7 @@ public class WithinPercentMovingAverage60DaysRuleParametersSpec extends Abstract
      * Minimum percent value for a data quality check reading, for example a minimum row count.
      * @return A percent that is used to calculate lower limit.
      */
-    public double getMaxPercentBelow() {
+    public Double getMaxPercentBelow() {
         return maxPercentBelow;
     }
 
@@ -66,7 +64,7 @@ public class WithinPercentMovingAverage60DaysRuleParametersSpec extends Abstract
      * Changes the minimum value (threshold) for a data quality reading.
      * @param maxPercentBelow
      */
-    public void setMaxPercentBelow(double maxPercentBelow) {
+    public void setMaxPercentBelow(Double maxPercentBelow) {
         this.setDirtyIf(!Objects.equals(this.maxPercentBelow, maxPercentBelow));
         this.maxPercentBelow = maxPercentBelow;
     }
@@ -75,7 +73,7 @@ public class WithinPercentMovingAverage60DaysRuleParametersSpec extends Abstract
      * Maximum percent value for a data quality check reading, for example a minimum row count.
      * @return Maximum value for a data quality check reading.
      */
-    public double getMaxPercentAbove() {
+    public Double getMaxPercentAbove() {
         return maxPercentAbove;
     }
 
@@ -83,7 +81,7 @@ public class WithinPercentMovingAverage60DaysRuleParametersSpec extends Abstract
      * Changes the maximum value (threshold) for a data quality reading.
      * @param maxPercentAbove Maximum value.
      */
-    public void setMaxPercentAbove(double maxPercentAbove) {
+    public void setMaxPercentAbove(Double maxPercentAbove) {
         this.setDirtyIf(!Objects.equals(this.maxPercentAbove, maxPercentAbove));
         this.maxPercentAbove = maxPercentAbove;
     }

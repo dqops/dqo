@@ -42,8 +42,6 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpec extends Abstrac
      * Default constructor.
      */
     public BetweenPercentMovingAverage60DaysRuleParametersSpec() {
-        this.maxPercentAbove = null;
-        this.maxPercentBelow = null;
     }
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
