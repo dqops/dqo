@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -47,6 +48,7 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("nulls", o -> o.nulls);
+           put("strings", o -> o.strings);
         }
     };
 
@@ -54,6 +56,11 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyCheckpointsSpec nulls;
+
+    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsMonthlyCheckpointsSpec strings;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -71,6 +78,24 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnStringsMonthlyCheckpointsSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of strings data quality checks (checkpoints).
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsMonthlyCheckpointsSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        this.propagateHierarchyIdToField(strings, "strings");
     }
 
     /**

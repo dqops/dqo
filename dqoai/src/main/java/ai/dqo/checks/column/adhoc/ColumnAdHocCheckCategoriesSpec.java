@@ -120,16 +120,16 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     }
 
     /**
-     * Returns the nulls check configuration on a column level.
-     * @return Nulls check configuration.
+     * Returns the strings check configuration on a column level.
+     * @return Strings check configuration.
      */
     public ColumnAdHocStringsChecksSpec getStrings() {
         return strings;
     }
 
     /**
-     * Sets the nulls check configuration on a column level.
-     * @param strings New nulls checks configuration.
+     * Sets the string check configuration on a column level.
+     * @param strings New string checks configuration.
      */
     public void setStrings(ColumnAdHocStringsChecksSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
