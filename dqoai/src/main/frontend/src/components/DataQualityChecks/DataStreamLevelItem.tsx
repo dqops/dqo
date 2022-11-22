@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  DataStreamLevelSpec,
-  DataStreamLevelSpecSourceEnum
-} from '../../api';
+import { DataStreamLevelSpec, DataStreamLevelSpecSourceEnum } from '../../api';
 import Input from '../Input';
 import ColumnSelect from './ColumnSelect';
 import RadioButton from '../RadioButton';
@@ -36,7 +33,8 @@ const DataStreamLevelItem = ({
         <div className="">
           <RadioButton
             checked={
-              dataStreamLevel?.source === DataStreamLevelSpecSourceEnum.static_value
+              dataStreamLevel?.source ===
+              DataStreamLevelSpecSourceEnum.static_value
             }
             label="Static Value"
             onClick={() =>
@@ -58,7 +56,8 @@ const DataStreamLevelItem = ({
               })
             }
             disabled={
-              dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.static_value
+              dataStreamLevel?.source !==
+              DataStreamLevelSpecSourceEnum.static_value
             }
           />
         </div>
@@ -71,8 +70,7 @@ const DataStreamLevelItem = ({
           onClick={() =>
             onChange({
               ...dataStreamLevel,
-              source:
-              DataStreamLevelSpecSourceEnum.column_value
+              source: DataStreamLevelSpecSourceEnum.column_value
             })
           }
         />

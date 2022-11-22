@@ -92,7 +92,10 @@ const ConnectionPage = () => {
         />
         <div className="flex-1 bg-white border border-gray-300 flex-auto">
           {activeNode?.level === TREE_LEVEL.DATABASE && (
-            <ConnectionView connectionName={activeNode.label} />
+            <ConnectionView
+              connectionName={activeNode.label}
+              nodeId={activeTab}
+            />
           )}
           {activeNode?.level === TREE_LEVEL.SCHEMA && (
             <SchemaView

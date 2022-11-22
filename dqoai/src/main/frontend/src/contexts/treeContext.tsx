@@ -274,6 +274,17 @@ function TreeProvider(props: any) {
     }
   };
 
+  const removeTreeNode = (id: string) => {
+    console.log(id);
+    setOpenNodes(openNodes.filter((item) => item !== id));
+    setTreeData(treeData.filter((item) => item.id !== id));
+    const tabIndex = tabs.findIndex((tab) => tab.value === id);
+    if (tabIndex > -1) {
+      setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
+      setTabs(tabs.filter((item) => item.value !== id));
+    }
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -291,7 +302,8 @@ function TreeProvider(props: any) {
         setTabMap,
         changeActiveTab,
         sidebarWidth,
-        setSidebarWidth
+        setSidebarWidth,
+        removeTreeNode
       }}
       {...props}
     />

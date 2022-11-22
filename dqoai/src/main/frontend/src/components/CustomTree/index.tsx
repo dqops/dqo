@@ -77,6 +77,7 @@ const CustomTree = () => {
   const onToggleSelectedNodes = (nodes: TreeNodeId[]) => {};
   const onToggleOpenNodes = (nodes: TreeNodeId[]) => {};
 
+  console.log('treeData', treeData, openNodes);
   return (
     <div className="text-gray-100">
       <div className="">
@@ -93,7 +94,7 @@ const CustomTree = () => {
             custom: theme
           }}
           containerStyles={{
-            paddingRight: 0,
+            paddingRight: 0
           }}
         />
       </div>

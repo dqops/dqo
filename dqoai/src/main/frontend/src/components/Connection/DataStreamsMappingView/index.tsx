@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  DataStreamMappingSpec,
-  DataStreamLevelSpec
-} from '../../../api';
+import { DataStreamMappingSpec, DataStreamLevelSpec } from '../../../api';
 import DataStreamLevelItem from '../../DataQualityChecks/DataStreamLevelItem';
 
 interface IDataStreamsMappingViewProps {
@@ -10,7 +7,10 @@ interface IDataStreamsMappingViewProps {
   onChange: (value: DataStreamMappingSpec) => void;
 }
 
-const DataStreamsMappingView = ({ dataStreamsMapping, onChange }: IDataStreamsMappingViewProps) => {
+const DataStreamsMappingView = ({
+  dataStreamsMapping,
+  onChange
+}: IDataStreamsMappingViewProps) => {
   const getDataStreamLevel = (index: number) => {
     if (index === 0) return dataStreamsMapping?.level_1;
     if (index === 1) return dataStreamsMapping?.level_2;
@@ -42,7 +42,9 @@ const DataStreamsMappingView = ({ dataStreamsMapping, onChange }: IDataStreamsMa
             idx={index}
             key={index}
             dataStreamLevel={getDataStreamLevel(index)}
-            onChange={(dataStreamsLevel) => onChangeDataStreamsLevel(dataStreamsLevel, index)}
+            onChange={(dataStreamsLevel) =>
+              onChangeDataStreamsLevel(dataStreamsLevel, index)
+            }
             scope="connection"
           />
         ))}
