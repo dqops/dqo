@@ -16,7 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.CheckTimePartition;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
@@ -24,20 +24,9 @@ import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeDailyPartitionedChecksSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeMonthlyPartitionedChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -50,7 +39,6 @@ import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -60,7 +48,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
@@ -166,8 +153,8 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @EnumSource(CheckTimePartition.class)
-    void getColumnCheckpointsUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(CheckTimePartition timePartition) {
+    @EnumSource(CheckTimeScale.class)
+    void getColumnCheckpointsUI_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -184,8 +171,8 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @ParameterizedTest
-    @EnumSource(CheckTimePartition.class)
-    void getColumnPartitionedChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(CheckTimePartition timePartition) {
+    @EnumSource(CheckTimeScale.class)
+    void getColumnPartitionedChecksUI_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -288,14 +275,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         negativeChecksSpec.setWarning(maxCountRule1);
         negativeChecksSpec.setError(maxCountRule2);
         negativeChecksSpec.setFatal(maxCountRule3);
-
-        // What's the purpose of negative check if I can't assign it in this context?
-        // I guess, constricting the dependency path on this check,
-        // causes improper behavior of SpecToUiCheckMappingService.createUiModel(genericChecks).
-//        ColumnNegativeMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNegativeMonthlyPartitionedChecksSpec();
-//        negativeMonthlyPartitionedChecks.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
+        
+        ColumnNegativeMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNegativeMonthlyPartitionedChecksSpec();
+        negativeMonthlyPartitionedChecks.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
-        monthlyPartitionedCheck.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
+        monthlyPartitionedCheck.setMonthlyPartitionMaxNegativeCount(negativeMonthlyPartitionedChecks);
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
         samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
         

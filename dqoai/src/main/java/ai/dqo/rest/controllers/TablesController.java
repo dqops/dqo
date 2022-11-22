@@ -16,7 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.CheckTimePartition;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
@@ -680,7 +680,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
         UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
                 spec -> {
                     TableCheckpointsSpec checkpoints = spec.getCheckpoints();
@@ -737,7 +737,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
         UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
                 spec -> {
                     TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
@@ -1627,7 +1627,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition,
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality checkpoints configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
@@ -1695,7 +1695,7 @@ public class TablesController {
             @Parameter(description = "Connection name") @PathVariable String connectionName,
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition,
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality partitioned checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||

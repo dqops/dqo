@@ -16,7 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.CheckTimePartition;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
@@ -815,7 +815,7 @@ public class ColumnsController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
         UIAllChecksModel checksUiModel = this.getColumnGenericChecksUI(
                 spec -> {
                     ColumnCheckpointsSpec checkpoints = spec.getCheckpoints();
@@ -873,7 +873,7 @@ public class ColumnsController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition) {
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
         UIAllChecksModel checksUiModel = this.getColumnGenericChecksUI(
                 spec -> {
                     ColumnPartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
@@ -1922,7 +1922,7 @@ public class ColumnsController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimePartition timePartition,
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality checkpoints configuration")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
@@ -2013,7 +2013,7 @@ public class ColumnsController {
             @Parameter(description = "Schema name") @PathVariable String schemaName,
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
-            @Parameter(description = "Time partition (eg. daily)") @PathVariable CheckTimePartition timePartition,
+            @Parameter(description = "Time partition (eg. daily)") @PathVariable CheckTimeScale timePartition,
             @Parameter(description = "UI model with the changes to be applied to the data quality partitioned checks configuration")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
