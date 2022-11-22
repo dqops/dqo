@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import {
   getColumnChecksUi,
   updateColumnCheckUI
 } from '../../../redux/actions/column.actions';
+import { isEqual } from 'lodash';
 
 interface IColumnChecksViewProps {
   connectionName: string;
@@ -50,9 +51,17 @@ const ColumnChecksView = ({
         updatedChecksUI
       )
     );
-    getColumnChecksUi(connectionName, schemaName, tableName, columnName);
+    await dispatch(
+      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
+    );
   };
 
+  const isUpdated = useMemo(
+    () => !isEqual(updatedChecksUI, checksUI),
+    [checksUI, updatedChecksUI]
+  );
+
+  console.log(updatedChecksUI, checksUI, isUpdated);
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -61,7 +70,7 @@ const ColumnChecksView = ({
           <div className="text-xl font-semibold">{`Data quality checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
-          color="primary"
+          color={isUpdated ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40"
