@@ -25,6 +25,7 @@ import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeDailyPartitionedChecksSpec;
@@ -74,10 +75,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
-    private ColumnAdHocCheckCategoriesSpec sampleAdHocCheck;
-    private ColumnCheckpointsSpec sampleCheckpoint;
-    private ColumnPartitionedChecksRootSpec samplePartitionedCheck;
-
+    
     /**
      * Called before each test.
      * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
@@ -95,46 +93,6 @@ public class ColumnsControllerUTTests extends BaseTest {
         this.sut = new ColumnsController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
-
-
-        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
-        maxCountRule1.setMaxCount(10L);
-        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
-        maxCountRule2.setMaxCount(20L);
-        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
-        maxCountRule3.setMaxCount(30L);
-
-        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
-        nullsChecksSpec.setWarning(maxCountRule1);
-        nullsChecksSpec.setError(maxCountRule2);
-        nullsChecksSpec.setFatal(maxCountRule3);
-
-        ColumnMaxNegativeCountCheckSpec negativeChecksSpec = new ColumnMaxNegativeCountCheckSpec();
-        negativeChecksSpec.setWarning(maxCountRule1);
-        negativeChecksSpec.setError(maxCountRule2);
-        negativeChecksSpec.setFatal(maxCountRule3);
-
-        ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
-        nullChecks.setMaxNullsCount(nullsChecksSpec);
-        this.sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
-        this.sampleAdHocCheck.setNulls(nullChecks);
-
-        ColumnNullsDailyCheckpointsSpec nullDailyCheckpoints = new ColumnNullsDailyCheckpointsSpec();
-        nullDailyCheckpoints.setDailyCheckpointMaxNullsCount(nullsChecksSpec);
-        ColumnDailyCheckpointCategoriesSpec dailyCheckpoint = new ColumnDailyCheckpointCategoriesSpec();
-        dailyCheckpoint.setNulls(nullDailyCheckpoints);
-        this.sampleCheckpoint = new ColumnCheckpointsSpec();
-        this.sampleCheckpoint.setDaily(dailyCheckpoint);
-
-        // What's the purpose of negative check if I can't assign it in this context?
-        // I guess, constricting the dependency path on this check,
-        // causes improper behavior of SpecToUiCheckMappingService.createUiModel(genericChecks).
-//        ColumnNegativeDailyPartitionedChecksSpec negativeDailyPartitionedChecks = new ColumnNegativeDailyPartitionedChecksSpec();
-//        negativeDailyPartitionedChecks.setDailyPartitionMaxNegativeCount(negativeChecksSpec);
-        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new ColumnDailyPartitionedCheckCategoriesSpec();
-        dailyPartitionedCheck.setDailyPartitionMaxNegativeCount(negativeChecksSpec);
-        this.samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
-        this.samplePartitionedCheck.setDaily(dailyPartitionedCheck);
     }
 
     @Test
@@ -248,16 +206,33 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
+        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        maxCountRule1.setMaxCount(10L);
+        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        maxCountRule2.setMaxCount(20L);
+        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        maxCountRule3.setMaxCount(30L);
+
+        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
+        nullsChecksSpec.setWarning(maxCountRule1);
+        nullsChecksSpec.setError(maxCountRule2);
+        nullsChecksSpec.setFatal(maxCountRule3);
+
+        ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
+        nullChecks.setMaxNullsCount(nullsChecksSpec);
+        ColumnAdHocCheckCategoriesSpec sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
+        sampleAdHocCheck.setNulls(nullChecks);
+        
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnAdHocChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(this.sampleAdHocCheck));
+                Optional.of(sampleAdHocCheck));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getChecks(), this.sampleAdHocCheck);
+        Assertions.assertSame(columnSpec.getChecks(), sampleAdHocCheck);
     }
 
     @Test
@@ -265,33 +240,76 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
+        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        maxCountRule1.setMaxCount(10L);
+        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        maxCountRule2.setMaxCount(20L);
+        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        maxCountRule3.setMaxCount(30L);
+
+        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
+        nullsChecksSpec.setWarning(maxCountRule1);
+        nullsChecksSpec.setError(maxCountRule2);
+        nullsChecksSpec.setFatal(maxCountRule3);
+
+        ColumnNullsDailyCheckpointsSpec nullDailyCheckpoints = new ColumnNullsDailyCheckpointsSpec();
+        nullDailyCheckpoints.setDailyCheckpointMaxNullsCount(nullsChecksSpec);
+        ColumnDailyCheckpointCategoriesSpec dailyCheckpoint = new ColumnDailyCheckpointCategoriesSpec();
+        dailyCheckpoint.setNulls(nullDailyCheckpoints);
+        ColumnCheckpointsSpec sampleCheckpoint = new ColumnCheckpointsSpec();
+        sampleCheckpoint.setDaily(dailyCheckpoint);
+        
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(this.sampleCheckpoint.getDaily()));
+                Optional.of(sampleCheckpoint.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getCheckpoints().getDaily(), this.sampleCheckpoint.getDaily());
+        Assertions.assertSame(columnSpec.getCheckpoints().getDaily(), sampleCheckpoint.getDaily());
+        Assertions.assertNull(columnSpec.getCheckpoints().getMonthly());
     }
 
     @Test
-    void updateColumnPartitionedChecksDaily_whenColumnAndPartitionedChecksRequested_updatesPartitionedChecks() {
+    void updateColumnPartitionedChecksMonthly_whenColumnAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecksDaily(
+        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        maxCountRule1.setMaxCount(10L);
+        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        maxCountRule2.setMaxCount(20L);
+        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        maxCountRule3.setMaxCount(30L);
+        
+        ColumnMaxNegativeCountCheckSpec negativeChecksSpec = new ColumnMaxNegativeCountCheckSpec();
+        negativeChecksSpec.setWarning(maxCountRule1);
+        negativeChecksSpec.setError(maxCountRule2);
+        negativeChecksSpec.setFatal(maxCountRule3);
+
+        // What's the purpose of negative check if I can't assign it in this context?
+        // I guess, constricting the dependency path on this check,
+        // causes improper behavior of SpecToUiCheckMappingService.createUiModel(genericChecks).
+//        ColumnNegativeMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNegativeMonthlyPartitionedChecksSpec();
+//        negativeMonthlyPartitionedChecks.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
+        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
+        monthlyPartitionedCheck.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
+        ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
+        samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
+        
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(this.samplePartitionedCheck.getDaily()));
+                Optional.of(samplePartitionedCheck.getMonthly()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getPartitionedChecks().getDaily(), this.samplePartitionedCheck.getDaily());
+        Assertions.assertSame(columnSpec.getPartitionedChecks().getMonthly(), samplePartitionedCheck.getMonthly());
+        Assertions.assertNull(columnSpec.getPartitionedChecks().getDaily());
     }
 
     // TODO: updateTableAdHocChecksUI, and the following check types.

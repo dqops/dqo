@@ -66,10 +66,6 @@ public class TablesControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
-    private TableAdHocCheckCategoriesSpec sampleAdHocCheck;
-    private TableCheckpointsSpec sampleCheckpoint;
-    private TablePartitionedChecksRootSpec samplePartitionedCheck;
-
     /**
      * Called before each test.
      * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
@@ -87,33 +83,6 @@ public class TablesControllerUTTests extends BaseTest {
         this.sut = new TablesController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
-        
-        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
-        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
-        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
-        minRowCountSpec.setWarning(minRule1);
-        minRowCountSpec.setError(minRule2);
-        minRowCountSpec.setFatal(minRule3);
-
-        TableAdHocStandardChecksSpec standardChecksSpec = new TableAdHocStandardChecksSpec();
-        standardChecksSpec.setMinRowCount(minRowCountSpec);
-        this.sampleAdHocCheck = new TableAdHocCheckCategoriesSpec();
-        this.sampleAdHocCheck.setStandard(standardChecksSpec);
-
-        TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
-        standardDailyCheckpointSpec.setDailyCheckpointMinRowCount(minRowCountSpec);
-        TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
-        dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
-        this.sampleCheckpoint = new TableCheckpointsSpec();
-        this.sampleCheckpoint.setDaily(dailyCheckpoint);
-
-        TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
-        standardDailyPartitionedCheckSpec.setDailyPartitionMinRowCount(minRowCountSpec);
-        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
-        dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
-        this.samplePartitionedCheck = new TablePartitionedChecksRootSpec();
-        this.samplePartitionedCheck.setDaily(dailyPartitionedCheck);
     }
 
     @Test
@@ -188,7 +157,23 @@ public class TablesControllerUTTests extends BaseTest {
     @Test
     void getTableCheckpointsDaily_whenTableRequested_thenReturnsCheckpoints() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        this.sampleTable.getTableSpec().setCheckpoints(this.sampleCheckpoint);
+
+        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
+        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
+        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
+        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        minRowCountSpec.setWarning(minRule1);
+        minRowCountSpec.setError(minRule2);
+        minRowCountSpec.setFatal(minRule3);
+        
+        TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
+        standardDailyCheckpointSpec.setDailyCheckpointMinRowCount(minRowCountSpec);
+        TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
+        dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
+        TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
+        sampleCheckpoint.setDaily(dailyCheckpoint);
+        
+        this.sampleTable.getTableSpec().setCheckpoints(sampleCheckpoint);
 
         ResponseEntity<Mono<TableDailyCheckpointCategoriesSpec>> responseEntity = this.sut.getTableCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
@@ -202,7 +187,23 @@ public class TablesControllerUTTests extends BaseTest {
     @Test
     void getTablePartitionedChecksDaily_whenTableRequested_thenReturnsPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        this.sampleTable.getTableSpec().setPartitionedChecks(this.samplePartitionedCheck);
+
+        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
+        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
+        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
+        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        minRowCountSpec.setWarning(minRule1);
+        minRowCountSpec.setError(minRule2);
+        minRowCountSpec.setFatal(minRule3);
+
+        TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
+        standardDailyPartitionedCheckSpec.setDailyPartitionMinRowCount(minRowCountSpec);
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
+        dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
+        TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
+        samplePartitionedCheck.setDaily(dailyPartitionedCheck);
+
+        this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
 
         ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
@@ -232,7 +233,6 @@ public class TablesControllerUTTests extends BaseTest {
     @EnumSource(CheckTimePartition.class)
     void getTableCheckpointsUI_whenTableRequested_thenReturnsCheckpointsUi(CheckTimePartition timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        TableSpec tableSpec = this.sampleTable.getTableSpec();
 
         ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableCheckpointsUI(
                 this.sampleTable.getConnectionName(),
@@ -264,50 +264,93 @@ public class TablesControllerUTTests extends BaseTest {
     @Test
     void updateTableAdHocChecks_whenTableAndAdHocChecksRequested_updatesAdHocChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
-        
+
+        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
+        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
+        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
+        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        minRowCountSpec.setWarning(minRule1);
+        minRowCountSpec.setError(minRule2);
+        minRowCountSpec.setFatal(minRule3);
+
+        TableAdHocStandardChecksSpec standardChecksSpec = new TableAdHocStandardChecksSpec();
+        standardChecksSpec.setMinRowCount(minRowCountSpec);
+        TableAdHocCheckCategoriesSpec sampleAdHocCheck = new TableAdHocCheckCategoriesSpec();
+        sampleAdHocCheck.setStandard(standardChecksSpec);
+
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableAdHocChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(this.sampleAdHocCheck));
+                Optional.of(sampleAdHocCheck));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(this.sampleTable.getTableSpec().getChecks(), this.sampleAdHocCheck);
+        Assertions.assertSame(this.sampleTable.getTableSpec().getChecks(), sampleAdHocCheck);
     }
 
     @Test
     void updateTableCheckpointsDaily_whenTableAndCheckpointsRequested_updatesCheckpoints() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
+        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
+        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
+        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
+        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        minRowCountSpec.setWarning(minRule1);
+        minRowCountSpec.setError(minRule2);
+        minRowCountSpec.setFatal(minRule3);
+
+        TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
+        standardDailyCheckpointSpec.setDailyCheckpointMinRowCount(minRowCountSpec);
+        TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
+        dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
+        TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
+        sampleCheckpoint.setDaily(dailyCheckpoint);
+
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableCheckpointsDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(this.sampleCheckpoint.getDaily()));
+                Optional.of(sampleCheckpoint.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
                 this.sampleTable.getTableSpec().getCheckpoints().getDaily(),
-                this.sampleCheckpoint.getDaily());
+                sampleCheckpoint.getDaily());
     }
 
     @Test
     void updateTablePartitionedChecksDaily_whenTableAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
+        MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
+        MinCountRuleParametersSpec minRule2 = new MinCountRuleParametersSpec(20L);
+        MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
+        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        minRowCountSpec.setWarning(minRule1);
+        minRowCountSpec.setError(minRule2);
+        minRowCountSpec.setFatal(minRule3);
+
+        TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
+        standardDailyPartitionedCheckSpec.setDailyPartitionMinRowCount(minRowCountSpec);
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
+        dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
+        TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
+        samplePartitionedCheck.setDaily(dailyPartitionedCheck);
+
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(this.samplePartitionedCheck.getDaily()));
+                Optional.of(samplePartitionedCheck.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
                 this.sampleTable.getTableSpec().getPartitionedChecks().getDaily(),
-                this.samplePartitionedCheck.getDaily());
+                samplePartitionedCheck.getDaily());
     }
 
     // TODO: updateTableAdHocChecksUI, and the following check types.
