@@ -39,6 +39,7 @@ import { useTree } from '../../../contexts/treeContext';
 
 interface IConnectionViewProps {
   connectionName: string;
+  nodeId: string;
 }
 
 const tabs = [
@@ -72,7 +73,7 @@ const tabs = [
   }
 ];
 
-const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
+const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
   const {
     connectionBasic,
@@ -167,7 +168,10 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     }
     if (activeTab === 'data-streams') {
       await dispatch(
-        updateConnectionDefaultDataStreamsMapping(connectionName, updatedDataStreamsMapping)
+        updateConnectionDefaultDataStreamsMapping(
+          connectionName,
+          updatedDataStreamsMapping
+        )
       );
       await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
     }
@@ -179,6 +183,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
         <ConnectionDetail
           connectionBasic={updatedConnectionBasic}
           setConnectionBasic={setUpdatedConnectionBasic}
+          nodeId={nodeId}
         />
       );
     }

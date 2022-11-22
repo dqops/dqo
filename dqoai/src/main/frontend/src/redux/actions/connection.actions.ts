@@ -323,9 +323,10 @@ export const getConnectionDefaultDataStreamsMapping =
   (connectionName: string) => async (dispatch: Dispatch) => {
     dispatch(getConnectionDefaultDataStreamsMappingRequest());
     try {
-      const res = await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
-        connectionName
-      );
+      const res =
+        await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
+          connectionName
+        );
       dispatch(getConnectionDefaultDataStreamsMappingSuccess(res.data));
     } catch (err) {
       dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
@@ -340,7 +341,9 @@ export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+export const updateConnectionDefaultDataStreamsMappingFailed = (
+  error: any
+) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
