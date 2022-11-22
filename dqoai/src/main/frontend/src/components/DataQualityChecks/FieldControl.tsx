@@ -59,7 +59,6 @@ const FieldControl = ({
 
   const isInvalid = !field.optional && !value && value !== 0 && !disabled;
 
-
   return (
     <div>
       {type === 'boolean' && (

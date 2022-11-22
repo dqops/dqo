@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import {
   updateTableChecksUI
 } from '../../../redux/actions/table.actions';
 import Button from '../../Button';
+import { isEqual } from 'lodash';
 
 interface IChecksViewProps {
   connectionName: string;
@@ -48,6 +49,11 @@ const ChecksView = ({
     await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
   };
 
+  const isUpdated = useMemo(
+    () => !isEqual(updatedChecksUI, checksUI),
+    [checksUI, updatedChecksUI]
+  );
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -56,7 +62,7 @@ const ChecksView = ({
           <div className="text-xl font-semibold">{`Data quality checks for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
-          color="primary"
+          color={isUpdated ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40"

@@ -39,6 +39,7 @@ import qs from 'query-string';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
 import TimestampsView from './TimestampsView';
+import { isEqual } from 'lodash';
 
 interface ITableViewProps {
   connectionName: string;
@@ -262,6 +263,48 @@ const TableView = ({
     return false;
   }, [updatedLabels]);
 
+  const isUpdated = useMemo(() => {
+    if (activeTab === 'table') {
+      return !isEqual(updatedTableBasic, tableBasic);
+    }
+    if (activeTab === 'schedule') {
+      return !isEqual(updatedSchedule, schedule);
+    }
+    if (activeTab === 'data-quality-checks') {
+      return !isEqual(updatedChecksUI, checksUI);
+    }
+    if (activeTab === 'comments') {
+      return !isEqual(updatedComments, comments);
+    }
+    if (activeTab === 'labels') {
+      return !isEqual(updatedLabels, labels);
+    }
+    if (activeTab === 'data-streams') {
+      return !isEqual(updatedDataStreamMapping, dataStreamsMapping);
+    }
+    if (activeTab === 'timestamps') {
+      return !isEqual(
+        updatedTableBasic?.timestamp_columns,
+        tableBasic?.timestamp_columns
+      );
+    }
+    return false;
+  }, [
+    activeTab,
+    updatedTableBasic,
+    tableBasic,
+    updatedSchedule,
+    schedule,
+    updatedChecksUI,
+    checksUI,
+    updatedComments,
+    comments,
+    updatedLabels,
+    labels,
+    updatedDataStreamMapping,
+    dataStreamsMapping
+  ]);
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -270,7 +313,7 @@ const TableView = ({
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
-          color="primary"
+          color={isUpdated ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40"

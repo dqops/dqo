@@ -87,7 +87,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`
+          tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
+          hasCheck: table?.has_any_configured_checks,
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
@@ -137,7 +138,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
+          hasCheck: column?.has_any_configured_checks
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
@@ -274,6 +276,17 @@ function TreeProvider(props: any) {
     }
   };
 
+  const removeTreeNode = (id: string) => {
+    console.log(id);
+    setOpenNodes(openNodes.filter((item) => item !== id));
+    setTreeData(treeData.filter((item) => item.id !== id));
+    const tabIndex = tabs.findIndex((tab) => tab.value === id);
+    if (tabIndex > -1) {
+      setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
+      setTabs(tabs.filter((item) => item.value !== id));
+    }
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -291,7 +304,8 @@ function TreeProvider(props: any) {
         setTabMap,
         changeActiveTab,
         sidebarWidth,
-        setSidebarWidth
+        setSidebarWidth,
+        removeTreeNode
       }}
       {...props}
     />

@@ -68,7 +68,14 @@ const CustomTree = () => {
           className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
           placement="top-start"
         >
-          <div className="text-black truncate flex-1">{node.label}</div>
+          <div
+            className={clsx(
+              `text-black truncate flex-1`,
+              node.hasCheck ? 'font-bold' : ''
+            )}
+          >
+            {node.label}
+          </div>
         </Tooltip>
       </div>
     );
@@ -77,6 +84,7 @@ const CustomTree = () => {
   const onToggleSelectedNodes = (nodes: TreeNodeId[]) => {};
   const onToggleOpenNodes = (nodes: TreeNodeId[]) => {};
 
+  console.log('treeData', treeData, openNodes);
   return (
     <div className="text-gray-100">
       <div className="">
@@ -93,7 +101,7 @@ const CustomTree = () => {
             custom: theme
           }}
           containerStyles={{
-            paddingRight: 0,
+            paddingRight: 0
           }}
         />
       </div>

@@ -13,11 +13,13 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 interface IConnectionDetailProps {
   connectionBasic?: ConnectionBasicModel;
   setConnectionBasic: (value: ConnectionBasicModel) => void;
+  nodeId: string;
 }
 
 const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
   connectionBasic,
-  setConnectionBasic
+  setConnectionBasic,
+  nodeId
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -80,6 +82,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
         onClose={() => setIsOpen(false)}
         connection={connectionBasic}
         onConfirm={onRemove}
+        nodeId={nodeId}
       />
     </div>
   );
