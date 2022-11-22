@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -47,6 +48,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("nulls", o -> o.nulls);
+           put("strings", o -> o.strings);
         }
     };
 
@@ -54,6 +56,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyCheckpointsSpec nulls;
+
+    @JsonPropertyDescription("Daily checkpoints of strings in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsDailyCheckpointsSpec strings;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -71,6 +78,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnStringsDailyCheckpointsSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of strings data quality checks (checkpoints).
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsDailyCheckpointsSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        this.propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
