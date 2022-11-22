@@ -15,9 +15,8 @@
  */
 package ai.dqo.execution.checks.scheduled;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.ScheduleRootsSearchFilters;
@@ -54,7 +53,7 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
      * @return List of target checks, grouped by a target table.
      */
     @Override
-    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RunChecksSchedule schedule) {
+    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RunChecksCronSchedule schedule) {
         ScheduledChecksCollection scheduledChecksCollection = new ScheduledChecksCollection();
 
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();

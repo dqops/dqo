@@ -11,6 +11,7 @@ import { ReactComponent as CheckSvg } from './svg/check.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
+import { ReactComponent as ClockOffSvg } from './svg/clock-off.svg';
 import { ReactComponent as CloseSvg } from './svg/close.svg';
 import { ReactComponent as CogSvg } from './svg/cog.svg';
 import { ReactComponent as DownloadSvg } from './svg/download.svg';
@@ -38,6 +39,8 @@ import { ReactComponent as ColumnSvg } from './svg/column.svg';
 import { ReactComponent as EditSvg } from './svg/edit.svg';
 import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as SaveSvg } from './svg/save.svg';
+import { ReactComponent as StopSvg } from './svg/stop.svg';
+import { ReactComponent as DisableSvg } from './svg/disable.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -77,13 +80,17 @@ const iconsMap: any = {
   column: ColumnSvg,
   edit: EditSvg,
   delete: DeleteSvg,
-  save: SaveSvg
+  save: SaveSvg,
+  stop: StopSvg,
+  disable: DisableSvg,
+  'clock-off': ClockOffSvg
 };
 
 interface SvgIconProps {
   className?: string;
   name: string;
   onClick?: (e: any) => void;
+  strokeWidth?: number;
 }
 
 const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {

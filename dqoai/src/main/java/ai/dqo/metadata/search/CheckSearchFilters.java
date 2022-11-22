@@ -15,17 +15,32 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.id.HierarchyId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
 /**
  * Hierarchy node search filters.
  */
+@EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class CheckSearchFilters extends TableSearchFilters {
     private String columnName;
     private String checkName;
     private String sensorName;
+    private CheckType checkType;
+    private CheckTimeScale timeScale;
+    private String checkCategory;
+
+    @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> checkHierarchyIds;
 
     /**
@@ -90,6 +105,54 @@ public class CheckSearchFilters extends TableSearchFilters {
      */
     public void setSensorName(String sensorName) {
         this.sensorName = sensorName;
+    }
+
+    /**
+     * Returns a check type (adhoc, checkpoint, partitioned) filter.
+     * @return Check type filter.
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets a check type (adhoc, checkpoint, partitioned) filter.
+     * @param checkType Check type filter.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
+    }
+
+    /**
+     * Returns a time scale filter for checkpoints and partitioned checks.
+     * @return Time scale filter.
+     */
+    public CheckTimeScale getTimeScale() {
+        return timeScale;
+    }
+
+    /**
+     * Sets a time scale filter for checkpoints and partitioned checks.
+     * @param timeScale Time scale filter.
+     */
+    public void setTimeScale(CheckTimeScale timeScale) {
+        this.timeScale = timeScale;
+    }
+
+    /**
+     * Returns the check category name as used in YAML to group the checks.
+     * @return Check category name (standard, etc).
+     */
+    public String getCheckCategory() {
+        return checkCategory;
+    }
+
+    /**
+     * Sets the check category name as used in YAML.
+     * @param checkCategory Check category name.
+     */
+    public void setCheckCategory(String checkCategory) {
+        this.checkCategory = checkCategory;
     }
 
     /**

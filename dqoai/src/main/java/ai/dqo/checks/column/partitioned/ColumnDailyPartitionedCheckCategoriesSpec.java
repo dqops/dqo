@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -107,5 +108,17 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonIgnore
     public CheckType getCheckType() {
         return CheckType.PARTITIONED;
+    }
+
+    /**
+     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Adhoc checks do not have a time range and return null.
+     *
+     * @return Time range (daily, monthly, ...).
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.DAILY;
     }
 }

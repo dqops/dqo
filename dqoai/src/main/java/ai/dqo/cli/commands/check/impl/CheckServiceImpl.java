@@ -16,39 +16,35 @@
 package ai.dqo.cli.commands.check.impl;
 
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextFactory;
 import ai.dqo.execution.checks.CheckExecutionService;
 import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.execution.checks.ExecuteCheckQueueJob;
+import ai.dqo.execution.checks.RunChecksQueueJob;
+import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.ExecutionException;
 
 /**
  * Service called from the "check" cli commands to run checks or operate on checks.
  */
 @Service
 public class CheckServiceImpl implements CheckService {
-    private final CheckExecutionService checkExecutionService;
-    private final CheckExecutionContextFactory checkExecutionContextFactory;
     private DqoJobQueue dqoJobQueue;
+    private DqoQueueJobFactory dqoQueueJobFactory;
 
     /**
      * Default injection constructor.
-     * @param checkExecutionService Check execution service.
-     * @param checkExecutionContextFactory Check execution context factory.
+     * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
      * @param dqoJobQueue DQO job queue to execute the operation.
      */
     @Autowired
-    public CheckServiceImpl(CheckExecutionService checkExecutionService,
-                            CheckExecutionContextFactory checkExecutionContextFactory,
+    public CheckServiceImpl(DqoQueueJobFactory dqoQueueJobFactory,
                             DqoJobQueue dqoJobQueue) {
-        this.checkExecutionService = checkExecutionService;
-        this.checkExecutionContextFactory = checkExecutionContextFactory;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
 
@@ -59,14 +55,14 @@ public class CheckServiceImpl implements CheckService {
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @return Check execution summary.
      */
-    public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters, CheckExecutionProgressListener checkExecutionProgressListener,
+    public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
+                                           CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
-        CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
+        RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
+        RunChecksQueueJobParameters parameters = new RunChecksQueueJobParameters(checkSearchFilters, checkExecutionProgressListener, dummyRun);
+        runChecksJob.setParameters(parameters);
 
-        ExecuteCheckQueueJob executeCheckQueueJob = new ExecuteCheckQueueJob(
-                checkExecutionService, checkExecutionContext, checkSearchFilters, checkExecutionProgressListener, dummyRun);
-
-        this.dqoJobQueue.pushJob(executeCheckQueueJob);
-        return executeCheckQueueJob.getResult();
+        this.dqoJobQueue.pushJob(runChecksJob);
+        return runChecksJob.getResult();
     }
 }

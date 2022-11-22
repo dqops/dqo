@@ -15,19 +15,19 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 
 /**
  * Hierarchy node search filters to find nodes that have a configured schedule and match a cron expression.
  */
 public class ScheduleRootsSearchFilters {
     private Boolean enabled = true;
-    private RunChecksSchedule schedule;
+    private RunChecksCronSchedule schedule;
 
     public ScheduleRootsSearchFilters() {
     }
 
-    public ScheduleRootsSearchFilters(Boolean enabled, RunChecksSchedule schedule) {
+    public ScheduleRootsSearchFilters(Boolean enabled, RunChecksCronSchedule schedule) {
         this.enabled = enabled;
         this.schedule = schedule;
     }
@@ -62,7 +62,7 @@ public class ScheduleRootsSearchFilters {
      * Returns a schedule settings (cron expression, etc.) that must match.
      * @return Schedule configuration with a time zone on the connection.
      */
-    public RunChecksSchedule getSchedule() {
+    public RunChecksCronSchedule getSchedule() {
         return schedule;
     }
 
@@ -70,7 +70,7 @@ public class ScheduleRootsSearchFilters {
      * Sets a schedule (with connection's time zone) that must match.
      * @param schedule Schedule.
      */
-    public void setSchedule(RunChecksSchedule schedule) {
+    public void setSchedule(RunChecksCronSchedule schedule) {
         this.schedule = schedule;
     }
 }

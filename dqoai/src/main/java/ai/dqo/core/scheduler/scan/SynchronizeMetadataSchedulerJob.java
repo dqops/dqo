@@ -15,13 +15,8 @@
  */
 package ai.dqo.core.scheduler.scan;
 
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
-import ai.dqo.core.jobqueue.DelegateDqoQueueJob;
 import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.core.scheduler.JobSchedulerService;
-import ai.dqo.core.scheduler.quartz.JobKeys;
-import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
-import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -40,26 +35,18 @@ import org.springframework.stereotype.Component;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
 public class SynchronizeMetadataSchedulerJob implements Job {
-    private ScheduleChangeFinderService scheduleChangeFinderService;
-    private JobSchedulerService jobSchedulerService;
-    private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
     private DqoJobQueue dqoJobQueue;
+    private DqoQueueJobFactory dqoQueueJobFactory;
 
     /**
      * Creates a schedule metadata job instance using dependencies.
-     * @param scheduleChangeFinderService Schedule finder that knows how to identify schedules (cron expressions) in the metadata.
-     * @param jobSchedulerService Job scheduler used to update a list of schedules.
-     * @param schedulerFileSynchronizationService Cloud synchronization service.
+     * @param dqoQueueJobFactory DQO job factory.
      * @param dqoJobQueue DQO job queue to push the actual job to execute.
      */
     @Autowired
-    public SynchronizeMetadataSchedulerJob(ScheduleChangeFinderService scheduleChangeFinderService,
-                                           JobSchedulerService jobSchedulerService,
-                                           SchedulerFileSynchronizationService schedulerFileSynchronizationService,
+    public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
                                            DqoJobQueue dqoJobQueue) {
-        this.scheduleChangeFinderService = scheduleChangeFinderService;
-        this.jobSchedulerService = jobSchedulerService;
-        this.schedulerFileSynchronizationService = schedulerFileSynchronizationService;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
 
@@ -71,28 +58,15 @@ public class SynchronizeMetadataSchedulerJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            DelegateDqoQueueJob<Void> dqoQueueJob = new DelegateDqoQueueJob<>(this::runJobOperation);
-            this.dqoJobQueue.pushJob(dqoQueueJob);
-            
-            dqoQueueJob.waitForFinish(); // waits for the result, hanging the current thread
+            RunPeriodicMetadataSynchronizationDqoJob runPeriodicMetadataSynchronizationJob =
+                    this.dqoQueueJobFactory.createRunPeriodicMetadataSynchronizationJob();
+            this.dqoJobQueue.pushJob(runPeriodicMetadataSynchronizationJob);
+
+            runPeriodicMetadataSynchronizationJob.waitForFinish(); // waits for the result, hanging the current thread, but we can consider returning instantly...
         }
         catch (Exception ex) {
             log.error("Failed to execute a metadata synchronization job", ex);
             throw new JobExecutionException(ex);
         }
-    }
-
-    /**
-     * The core implementation of the operation performed by the scheduled job.
-     */
-    public Void runJobOperation() {
-        FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
-        this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode);
-
-        UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
-        JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);
-        this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS);
-
-        return null;
     }
 }

@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.scheduled;
 
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.metadata.userhome.UserHome;
 
 /**
@@ -31,5 +31,5 @@ public interface ScheduledTargetChecksFindService {
      * @param schedule Schedule to match.
      * @return List of target checks, grouped by a target table.
      */
-    ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RunChecksSchedule schedule);
+    ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RunChecksCronSchedule schedule);
 }

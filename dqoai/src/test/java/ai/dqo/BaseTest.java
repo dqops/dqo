@@ -50,9 +50,6 @@ public abstract class BaseTest {
         ParquetSupport.ensureInitialized();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         // to be extended in the future when the need appears
-
-        OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
-        double systemLoadAverage = os.getSystemLoadAverage();
     }
 
     /**

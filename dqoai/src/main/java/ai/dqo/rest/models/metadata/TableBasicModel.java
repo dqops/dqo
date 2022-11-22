@@ -43,10 +43,10 @@ public class TableBasicModel {
     private Long tableHash;
 
     @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
-    private TableTargetSpec target = new TableTargetSpec();
+    private TableTargetSpec target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
-    private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+    private TimestampColumnsSpec timestampColumns;
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -64,6 +64,23 @@ public class TableBasicModel {
     @JsonPropertyDescription("True when the table has any checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredChecks;
+
+    /**
+     * Creates a basic table model from a table specification by cherry-picking relevant fields.
+     * This model is used for the table list screen and it has even less fields.
+     * @param connectionName Connection name to store in the model.
+     * @param tableSpec      Source table specification.
+     * @return Basic table model.
+     */
+    public static TableBasicModel fromTableSpecificationForListEntry(String connectionName, TableSpec tableSpec) {
+        return new TableBasicModel() {{
+            setConnectionName(connectionName);
+            setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
+            setTarget(tableSpec.getTarget());
+            setDisabled(tableSpec.isDisabled());
+            setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
+        }};
+    }
 
     /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.

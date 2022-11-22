@@ -18,10 +18,10 @@ package ai.dqo.core.scheduler;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.*;
-import ai.dqo.core.scheduler.runcheck.RunChecksSchedulerJob;
+import ai.dqo.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
-import ai.dqo.core.scheduler.schedules.RunChecksSchedule;
+import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -136,7 +136,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     public void defineDefaultJobs() {
         try {
             if (!this.scheduler.checkExists(JobKeys.RUN_CHECKS)) {
-                this.runChecksJob = newJob(RunChecksSchedulerJob.class)
+                this.runChecksJob = newJob(RunScheduledChecksSchedulerJob.class)
                         .withIdentity(JobKeys.RUN_CHECKS)
                         .storeDurably()
                         .build();
@@ -152,7 +152,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getScanMetadataCronSchedule();
-            RunChecksSchedule scanMetadataScheduleWithTZ = new RunChecksSchedule(new RecurringScheduleSpec(scanMetadataCronSchedule), "UTC");
+            RunChecksCronSchedule scanMetadataScheduleWithTZ = new RunChecksCronSchedule(new RecurringScheduleSpec(scanMetadataCronSchedule), "UTC");
             Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataScheduleWithTZ, JobKeys.SYNCHRONIZE_METADATA);
 
             this.scheduler.scheduleJob(scanMetadataTrigger);
@@ -230,7 +230,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             UniqueSchedulesCollection schedulesCollection = new UniqueSchedulesCollection();
 
             for (Trigger trigger : triggersOfJob) {
-                RunChecksSchedule schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+                RunChecksCronSchedule schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
                 schedulesCollection.add(schedule);
             }
 
@@ -261,7 +261,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         for (Trigger trigger : triggersOfJob) {
-            RunChecksSchedule scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
+            RunChecksCronSchedule scheduleOnTrigger = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
 
             if (schedulesDelta.getSchedulesToDelete().contains(scheduleOnTrigger)) {
                 try {
@@ -276,7 +276,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             }
         }
 
-        for (RunChecksSchedule scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
+        for (RunChecksCronSchedule scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
             Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
             try {
                 if (!this.scheduler.checkExists(triggerToAdd.getKey())) {

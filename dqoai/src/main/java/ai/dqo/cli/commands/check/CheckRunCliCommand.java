@@ -15,6 +15,8 @@
  */
 package ai.dqo.cli.commands.check;
 
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
@@ -46,7 +48,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope("prototype")
-@CommandLine.Command(name = "run", description = "Run checks matching specified filters")
+@CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private final TerminalWriter terminalWriter;
     private final TerminalTableWritter terminalTableWritter;
@@ -99,6 +101,15 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")
     private Boolean enabled = true;
+
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (adhoc, checkpoint, partitioned)")
+    private CheckType checkType;
+
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
+    private CheckTimeScale timeScale;
+
+    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
+    private String checkCategory;
 
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
@@ -213,6 +224,54 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the check type (category).
+     * @return Check type (category).
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the check type to filter.
+     * @param checkType Check type filter.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
+    }
+
+    /**
+     * Gets the time scale filter for checkpoint and partitioned checks.
+     * @return Time scale filter.
+     */
+    public CheckTimeScale getTimeScale() {
+        return timeScale;
+    }
+
+    /**
+     * Sets the time scale filter for checkpoint and partitioned checks.
+     * @param timeScale Time scale filter.
+     */
+    public void setTimeScale(CheckTimeScale timeScale) {
+        this.timeScale = timeScale;
+    }
+
+    /**
+     * Returns a check category filter.
+     * @return Check category filter.
+     */
+    public String getCheckCategory() {
+        return checkCategory;
+    }
+
+    /**
+     * Sets the checks category filter.
+     * @param checkCategory Check category filter.
+     */
+    public void setCheckCategory(String checkCategory) {
+        this.checkCategory = checkCategory;
+    }
+
+    /**
      * Is the dummy run enabled.
      * @return Dummy run is enabled.
      */
@@ -258,6 +317,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setColumnName(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
+        filters.setCheckType(this.checkType);
+        filters.setTimeScale(this.timeScale);
+        filters.setCheckCategory(this.checkCategory);
         filters.setEnabled(this.enabled);
         filters.setDimensions(this.dimensions);
         filters.setLabels(this.labels);

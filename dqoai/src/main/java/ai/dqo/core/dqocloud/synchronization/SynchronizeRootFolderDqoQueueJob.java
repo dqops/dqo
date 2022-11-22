@@ -1,0 +1,67 @@
+package ai.dqo.core.dqocloud.synchronization;
+
+import ai.dqo.core.jobqueue.BaseDqoQueueJob;
+import ai.dqo.core.jobqueue.DqoJobType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+/**
+ * DQO queue job that runs synchronization with DQO Cloud in the background for one user home's root folder (sources, sensors, etc.).
+ */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class SynchronizeRootFolderDqoQueueJob extends BaseDqoQueueJob<Void> {
+    private DqoCloudSynchronizationService cloudSynchronizationService;
+    private SynchronizeRootFolderDqoQueueJobParameters parameters;
+
+    /**
+     * Creates a synchronization job.
+     * @param cloudSynchronizationService DQO Cloud synchronization service to use (provided as a dependency).
+     */
+    @Autowired
+    public SynchronizeRootFolderDqoQueueJob(
+            DqoCloudSynchronizationService cloudSynchronizationService) {
+        this.cloudSynchronizationService = cloudSynchronizationService;
+    }
+
+    /**
+     * Returns the job parameters.
+     * @return Job parameters.
+     */
+    public SynchronizeRootFolderDqoQueueJobParameters getParameters() {
+        return parameters;
+    }
+
+    /**
+     * Sets the job parameters.
+     * @param parameters Job parameters.
+     */
+    public void setParameters(SynchronizeRootFolderDqoQueueJobParameters parameters) {
+        this.parameters = parameters;
+    }
+
+    /**
+     * Job internal implementation method that should be implemented by derived jobs.
+     *
+     * @return Optional result value that could be returned by the job.
+     */
+    @Override
+    public Void onExecute() {
+        this.cloudSynchronizationService.synchronizeFolder(
+                this.parameters.getRootType(),
+                this.parameters.getFileSystemSynchronizationListener());
+        return null;
+    }
+
+    /**
+     * Returns a job type that this job class is running. Used to identify jobs.
+     *
+     * @return Job type.
+     */
+    @Override
+    public DqoJobType getJobType() {
+        return DqoJobType.SYNCHRONIZE_FOLDER;
+    }
+}

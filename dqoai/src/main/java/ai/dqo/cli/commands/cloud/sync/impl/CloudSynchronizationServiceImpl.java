@@ -22,12 +22,14 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootDqoQueueJob;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListenerProvider;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     private CloudLoginService cloudLoginService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
+    private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
 
     /**
@@ -52,6 +55,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param cloudLoginService Cloud login service - used to log in.
      * @param terminalReader Terminal reader.
      * @param terminalWriter Terminal writer to write the results.
+     * @param dqoQueueJobFactory DQO job factory used to create a new instance of a folder synchronization job.
      * @param dqoJobQueue DQO job queue to execute a background synchronization.
      */
     @Autowired
@@ -62,6 +66,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             CloudLoginService cloudLoginService,
             TerminalReader terminalReader,
             TerminalWriter terminalWriter,
+            DqoQueueJobFactory dqoQueueJobFactory,
             DqoJobQueue dqoJobQueue) {
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
         this.systemSynchronizationListenerProvider = systemSynchronizationListenerProvider;
@@ -69,6 +74,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
         this.cloudLoginService = cloudLoginService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
 
@@ -107,9 +113,12 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
         FileSystemSynchronizationListener synchronizationListener = this.systemSynchronizationListenerProvider.getSynchronizationListener(reportingMode);
 
         if (runOnBackgroundQueue) {
-            SynchronizeRootDqoQueueJob synchronizeRootDqoQueueJob = new SynchronizeRootDqoQueueJob(rootType, synchronizationListener, this.dqoCloudSynchronizationService);
-            this.dqoJobQueue.pushJob(synchronizeRootDqoQueueJob);
-            synchronizeRootDqoQueueJob.waitForFinish();
+            SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
+            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(rootType, synchronizationListener);
+            synchronizeRootFolderJob.setParameters(jobParameters);
+
+            this.dqoJobQueue.pushJob(synchronizeRootFolderJob);
+            synchronizeRootFolderJob.waitForFinish();
         }
         else {
             this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationListener);

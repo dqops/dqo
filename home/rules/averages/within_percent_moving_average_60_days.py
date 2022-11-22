@@ -21,7 +21,8 @@ import scipy
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentMovingAverage60DaysRuleParametersSpec:
-    max_percent_within: float
+    max_percent_above: float
+    max_percent_below: float
 
 
 class HistoricDataPoint:
@@ -65,11 +66,20 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered_mean = float(scipy.mean(filtered))
 
-    threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
 
-    threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+    threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
 
-    passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+
+
+    if threshold_lower != None and threshold_upper != None:
+        passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    elif threshold_lower != None and threshold_upper == None:
+        passed = (threshold_lower <= rule_parameters.actual_value)
+    elif threshold_lower == None and threshold_upper != None:
+        passed = (rule_parameters.actual_value <= threshold_upper)
+
+
 
     expected_value = filtered_mean
     lower_bound = threshold_lower

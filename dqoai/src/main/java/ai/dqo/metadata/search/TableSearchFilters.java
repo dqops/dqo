@@ -15,9 +15,17 @@
  */
 package ai.dqo.metadata.search;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
+
 /**
  * Hierarchy node search filters.
  */
+@EqualsAndHashCode(callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class TableSearchFilters {
     private String connectionName;
     private String schemaTableName;

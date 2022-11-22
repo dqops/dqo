@@ -42,8 +42,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpec extends AbstractR
     /**
      * Default constructor.
      */
-    public WithinPercentMovingAverage7DaysRuleParametersSpec() {
-        this.maxPercentWithin = null;
+    public WithinPercentMovingAverage7DaysRuleParametersSpec(){
     }
 
 

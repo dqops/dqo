@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.*;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
@@ -280,29 +280,29 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
+        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
                 ? dataStreamSearcherObject.getColumnDataStreams()
                 : dataStreamSearcherObject.getTableDataStreams() != null
                 ? dataStreamSearcherObject.getTableDataStreams()
                 : dataStreamSearcherObject.getConnectionDataStreams();
-        LabelSetSpec overridenLabels = new LabelSetSpec();
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getColumnLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getColumnLabels());
         }
 
         if (labelsSearcherObject.getTableLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
         }
 
         if (labelsSearcherObject.getConnectionLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overridenDataStreams)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
-        if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overridenLabels)) {
+        if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -341,5 +341,51 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
         parameter.getNodes().add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to search any deeper, we have found what we were looking for
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, SearchParameterObject parameter) {
+        CheckType checkTypeFilter = this.filters.getCheckType();
+        if (checkTypeFilter != null) {
+            if (checksContainerSpec.getCheckType() != checkTypeFilter) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        CheckTimeScale checkTimeScaleFilter = this.filters.getTimeScale();
+        if (checkTimeScaleFilter != null) {
+            if (checksContainerSpec.getCheckTimeScale() != checkTimeScaleFilter) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        return super.accept(checksContainerSpec, parameter);
+    }
+
+    /**
+     * Accepts a container of data quality checks for a single category.
+     *
+     * @param abstractCheckCategorySpec Container of data quality checks for a single category.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
+        String checkCategoryFilter = this.filters.getCheckCategory();
+        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+            String categoryName = abstractCheckCategorySpec.getHierarchyId().getLast().toString();
+            if (!StringPatternComparer.matchSearchPattern(categoryName, checkCategoryFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        return super.accept(abstractCheckCategorySpec, parameter);
     }
 }
