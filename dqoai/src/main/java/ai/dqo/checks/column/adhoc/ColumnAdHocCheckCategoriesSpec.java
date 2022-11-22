@@ -50,6 +50,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("strings", o -> o.strings);
             put("validity", o -> o.validity);
 			put("uniqueness", o -> o.uniqueness);
 //            put("completeness", o -> o.completeness);
@@ -62,6 +63,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocNullsChecksSpec nulls;
+
+    @JsonPropertyDescription("Configuration of strings checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocStringsChecksSpec strings;
 
     @JsonPropertyDescription("Configuration of validity checks on a column level. Validity checks verify hard rules on the data using static rules like valid column value ranges.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -110,6 +116,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the nulls check configuration on a column level.
+     * @return Nulls check configuration.
+     */
+    public ColumnAdHocStringsChecksSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the nulls check configuration on a column level.
+     * @param strings New nulls checks configuration.
+     */
+    public void setStrings(ColumnAdHocStringsChecksSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        this.propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
