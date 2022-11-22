@@ -22,4 +22,5 @@ export interface CustomTreeNode extends TreeNode {
   label: string;
   items: CustomTreeNode[];
   tooltip?: string;
+  hasCheck?: boolean;
 }

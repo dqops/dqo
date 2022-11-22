@@ -87,7 +87,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.TABLE,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`
+          tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
+          hasCheck: table?.has_any_configured_checks,
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
@@ -137,7 +138,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
+          hasCheck: column?.has_any_configured_checks
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
