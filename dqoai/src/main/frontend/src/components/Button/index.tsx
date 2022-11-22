@@ -38,7 +38,7 @@ const colorsMap = {
   info: {
     contained: 'bg-green-400 text-white',
     outlined: 'bg-white text-green-400 border border-green-400',
-    text: 'bg-white text-green-400'
+    text: 'bg-white text-blue-700 hover:bg-blue-50'
   },
   error: {
     contained: 'bg-red-500 text-white',
