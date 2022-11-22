@@ -64,9 +64,15 @@ public class CliInitializerImpl implements CliInitializer {
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
         this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
 
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
-        if (apiKey != null) {
-            return; // api key is provided somehow (by an environment variable or in the local settings)
+        try {
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            if (apiKey != null) {
+                return; // api key is provided somehow (by an environment variable or in the local settings)
+            }
+        }
+        catch (Exception ex) {
+            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+//            ex.printStackTrace(System.err);
         }
 
         if (isHeadless) {
