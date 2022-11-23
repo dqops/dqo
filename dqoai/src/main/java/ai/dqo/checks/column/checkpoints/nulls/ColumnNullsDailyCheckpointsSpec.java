@@ -17,6 +17,7 @@ package ai.dqo.checks.column.checkpoints.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,15 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_max_nulls_count", o -> o.dailyCheckpointMaxNullsCount);
+            put("daily_checkpoint_max_nulls_percent", o -> o.dailyCheckpointMaxNullsPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxNullsCountCheckSpec dailyCheckpointMaxNullsCount;
+
+    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxNullsPercentCheckSpec dailyCheckpointMaxNullsPercent;
 
     /**
      * Returns a maximum nulls count check.
@@ -59,6 +64,24 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNullsCount, dailyCheckpointMaxNullsCount));
         this.dailyCheckpointMaxNullsCount = dailyCheckpointMaxNullsCount;
         propagateHierarchyIdToField(dailyCheckpointMaxNullsCount, "daily_checkpoint_max_nulls_count");
+    }
+
+    /**
+     * Returns a maximum nulls percent check.
+     * @return Maximum nulls percent check.
+     */
+    public ColumnMaxNullsPercentCheckSpec getDailyCheckpointMaxNullsPercent() {
+        return dailyCheckpointMaxNullsPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum nulls percent check.
+     * @param dailyCheckpointMaxNullsPercent Maximum nulls percent check.
+     */
+    public void setDailyCheckpointMaxNullsPercent(ColumnMaxNullsPercentCheckSpec dailyCheckpointMaxNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNullsPercent, dailyCheckpointMaxNullsPercent));
+        this.dailyCheckpointMaxNullsPercent = dailyCheckpointMaxNullsPercent;
+        propagateHierarchyIdToField(dailyCheckpointMaxNullsPercent, "daily_checkpoint_max_nulls_percent");
     }
 
     /**
