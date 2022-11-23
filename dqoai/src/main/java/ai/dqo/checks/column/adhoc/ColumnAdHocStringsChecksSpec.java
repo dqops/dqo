@@ -17,6 +17,7 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -38,12 +39,16 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocStringsChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
+            put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMaxStringLengthBelowCheckSpec maxStringLengthBelow;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
+    private ColumnMinStringLengthAboveCheckSpec minStringLengthAbove;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
@@ -64,6 +69,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringLengthBelow, maxStringLengthBelow));
         this.maxStringLengthBelow = maxStringLengthBelow;
         propagateHierarchyIdToField(maxStringLengthBelow, "max_string_length_below");
+    }
+
+    /**
+     * Returns a minimum string length above check.
+     * @return Minimum string length above check.
+     */
+    public ColumnMinStringLengthAboveCheckSpec getMinStringLengthAbove() {
+        return minStringLengthAbove;
+    }
+
+    /**
+     * Sets a new definition of a minimum string length above check.
+     * @param minStringLengthAbove Minimum string length above check.
+     */
+    public void setMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec minStringLengthAbove) {
+        this.setDirtyIf(!Objects.equals(this.minStringLengthAbove, minStringLengthAbove));
+        this.minStringLengthAbove = minStringLengthAbove;
+        propagateHierarchyIdToField(minStringLengthAbove, "min_string_length_above");
     }
 
     /**
