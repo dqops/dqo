@@ -54,12 +54,13 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
       ...obj
     });
   };
+
   return (
     <>
       <tr
         className={clsx(
           ' border-b border-gray-100',
-          check?.disabled ? 'text-gray-700' : 'opacity-75 line-through'
+          !check?.disabled ? 'text-gray-700' : 'opacity-75 line-through'
         )}
       >
         <td className="py-2 px-4 align-top pr-4">
@@ -70,15 +71,21 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             <div>
               <Switch
                 checked={!!check?.configured}
-                onChange={(configured) => handleChange({ configured })}
+                onChange={(configured) =>
+                  handleChange({
+                    configured,
+                    disabled: configured ? check?.disabled : null
+                  })
+                }
               />
             </div>
             <SvgIcon
-              name={check?.disabled ? 'stop' : 'disable'}
+              name={!check?.disabled ? 'stop' : 'disable'}
               className={clsx(
                 'w-5 h-5',
-                check?.disabled ? 'text-blue-700' : 'text-red-700'
+                !check?.disabled ? 'text-blue-700' : 'text-red-700'
               )}
+              onClick={() => handleChange({ disabled: !check?.disabled })}
             />
             <SvgIcon
               name="cog"
