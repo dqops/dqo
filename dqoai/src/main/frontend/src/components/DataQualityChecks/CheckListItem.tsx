@@ -85,7 +85,10 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 'w-5 h-5',
                 !check?.disabled ? 'text-blue-700' : 'text-red-700'
               )}
-              onClick={() => handleChange({ disabled: !check?.disabled })}
+              onClick={() =>
+                check?.configured &&
+                handleChange({ disabled: !check?.disabled })
+              }
             />
             <SvgIcon
               name="cog"
