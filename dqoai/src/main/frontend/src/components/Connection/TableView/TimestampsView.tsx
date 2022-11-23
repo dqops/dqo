@@ -34,12 +34,12 @@ const TimestampsView = ({ columnsSpec, onChange }: TimestampsViewProps) => {
   const location = useLocation();
 
   const setColumns = (res: AxiosResponse<ColumnBasicModel[]>) => {
-    setOptions(
-      res.data.map((item) => ({
-        label: item.column_name || '',
-        value: item.column_name || ''
-      }))
-    );
+    const data = res.data.map((item) => ({
+      label: item.column_name || '',
+      value: item.column_name || ''
+    }));
+
+    setOptions([{ label: '', value: '' }, ...data]);
   };
 
   const fetchColumns = async () => {
