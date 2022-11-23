@@ -1,14 +1,7 @@
-# alpine linux would be (a little bit) lighter than debian.
-# For docker images, it's a go-to system (except if you do anything with C).
-# For the second stage, I would stick with debian, as it's more intutive to administer.
-FROM debian:bullseye-slim AS dqo-fetcher
+FROM alpine:3.17.0 AS dqo-fetcher
 ARG DQO_VERSION
 
-# What is the purpose of wget here? If it's implicitly necessary or I overlooked something, tell me.
-RUN apt-get update \
-    && apt-get install unzip \
-    && apt-get install wget -y \
-    && apt-get clean
+RUN apk update && apk add unzip
 
 WORKDIR /app
 COPY ./distribution/target/ /app/temp/
@@ -31,6 +24,4 @@ ENV DQO_HOME=/app/dqo-$DQO_VERSION
 ENV DQO_USER_HOME=/app/userhome
 
 RUN chsh -s /bin/sh
-# 1. Using environment variable.
-# 2. In order to extract the environment variable in quoted strings, it's better to use ${VAR} instead of $VAR.
 CMD ["/bin/sh", "${DQO_HOME}/bin/dqo"]
