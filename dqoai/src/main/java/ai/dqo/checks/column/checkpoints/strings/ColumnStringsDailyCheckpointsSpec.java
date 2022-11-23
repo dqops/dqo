@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.checkpoints.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +40,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         {
             put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
             put("daily_checkpoint_min_string_length_above", o -> o.dailyCheckpointMinStringLengthAbove);
+            put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);
         }
     };
 
@@ -48,6 +49,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringLengthAboveCheckSpec dailyCheckpointMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount;
 
     /**
      * Returns a maximum string length below check.
@@ -83,6 +87,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringLengthAbove, dailyCheckpointMinStringLengthAbove));
         this.dailyCheckpointMinStringLengthAbove = dailyCheckpointMinStringLengthAbove;
         propagateHierarchyIdToField(dailyCheckpointMinStringLengthAbove, "daily_checkpoint_min_string_length_above");
+    }
+
+    /**
+     * Returns a string empty count check.
+     * @return String empty count check.
+     */
+    public ColumnStringEmptyCountCheckSpec getDailyCheckpointStringEmptyCount() {
+        return dailyCheckpointStringEmptyCount;
+    }
+
+    /**
+     * Sets a new definition of a string empty count check.
+     * @param dailyCheckpointStringEmptyCount String empty count check.
+     */
+    public void setDailyCheckpointStringEmptyCount(ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringEmptyCount, dailyCheckpointStringEmptyCount));
+        this.dailyCheckpointStringEmptyCount = dailyCheckpointStringEmptyCount;
+        propagateHierarchyIdToField(dailyCheckpointStringEmptyCount, "daily_checkpoint_string_empty_count");
     }
 
     /**

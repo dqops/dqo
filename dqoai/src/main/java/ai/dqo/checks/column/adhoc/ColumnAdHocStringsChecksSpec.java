@@ -18,6 +18,7 @@ package ai.dqo.checks.column.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +40,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
+            put("string_empty_count", o -> o.stringEmptyCount);
         }
     };
 
@@ -47,6 +49,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
     private ColumnMinStringLengthAboveCheckSpec minStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnStringEmptyCountCheckSpec stringEmptyCount;
 
     /**
      * Returns a maximum string length below check.
@@ -82,6 +87,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringLengthAbove, minStringLengthAbove));
         this.minStringLengthAbove = minStringLengthAbove;
         propagateHierarchyIdToField(minStringLengthAbove, "min_string_length_above");
+    }
+
+    /**
+     * Returns a string empty count check.
+     * @return String empty count check.
+     */
+    public ColumnStringEmptyCountCheckSpec getStringEmptyCount() {
+        return stringEmptyCount;
+    }
+
+    /**
+     * Sets a new definition of a string empty count check.
+     * @param stringEmptyCount String empty count check.
+     */
+    public void setStringEmptyCount(ColumnStringEmptyCountCheckSpec stringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.stringEmptyCount, stringEmptyCount));
+        this.stringEmptyCount = stringEmptyCount;
+        propagateHierarchyIdToField(stringEmptyCount, "string_empty_count");
     }
 
     /**
