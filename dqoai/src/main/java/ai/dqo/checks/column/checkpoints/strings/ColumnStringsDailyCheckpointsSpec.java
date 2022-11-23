@@ -18,6 +18,7 @@ package ai.dqo.checks.column.checkpoints.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,11 +39,15 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
+            put("daily_checkpoint_min_string_length_above", o -> o.dailyCheckpointMinStringLengthAbove);
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringLengthBelowCheckSpec dailyCheckpointMaxStringLengthBelow;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringLengthAboveCheckSpec dailyCheckpointMinStringLengthAbove;
 
     /**
      * Returns a maximum string length below check.
@@ -60,6 +65,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringLengthBelow, dailyCheckpointMaxStringLengthBelow));
         this.dailyCheckpointMaxStringLengthBelow = dailyCheckpointMaxStringLengthBelow;
         propagateHierarchyIdToField(dailyCheckpointMaxStringLengthBelow, "daily_checkpoint_max_string_length_below");
+    }
+
+    /**
+     * Returns a minimum string length above check.
+     * @return Minimum string length below check.
+     */
+    public ColumnMinStringLengthAboveCheckSpec getDailyCheckpointMinStringLengthAbove() {
+        return dailyCheckpointMinStringLengthAbove;
+    }
+
+    /**
+     * Sets a new definition of a minimum string length above check.
+     * @param dailyCheckpointMinStringLengthAbove Minimum string length above check.
+     */
+    public void setDailyCheckpointMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec dailyCheckpointMinStringLengthAbove) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringLengthAbove, dailyCheckpointMinStringLengthAbove));
+        this.dailyCheckpointMinStringLengthAbove = dailyCheckpointMinStringLengthAbove;
+        propagateHierarchyIdToField(dailyCheckpointMinStringLengthAbove, "daily_checkpoint_min_string_length_above");
     }
 
     /**
