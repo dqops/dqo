@@ -113,8 +113,8 @@ public class ColumnsController {
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
-                .map(kv -> ColumnBasicModel.fromColumnSpecification(
-                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue().trim()));
+                .map(kv -> ColumnBasicModel.fromColumnSpecificationForListEntry(
+                        connectionName, tableWrapper.getPhysicalTableName(), kv.getKey(), kv.getValue()));
 
         return new ResponseEntity<>(Flux.fromStream(columnSpecs), HttpStatus.OK);
     }

@@ -25,6 +25,7 @@ import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.parquet.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -84,17 +85,29 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                 return null;
             }
 
-            byte[] messageBytes = Hex.decodeHex(apiKey);
-            byte[] payloadBytes = new byte[messageBytes.length - 32];
-            System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
-
-            String payloadJsonString = new String(payloadBytes, StandardCharsets.UTF_8);
-            DqoCloudApiKeyPayload deserializedApiKeyPayload = this.jsonSerializer.deserialize(payloadJsonString, DqoCloudApiKeyPayload.class);
-
-            DqoCloudApiKey dqoCloudApiKey = new DqoCloudApiKey(apiKey, deserializedApiKeyPayload);
+            DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
             return dqoCloudApiKey;
         } catch (DecoderException e) {
             throw new DqoCloudInvalidKeyException("API Key is invalid", e);
         }
+    }
+
+    /**
+     * Decodes a given API Key.
+     * @param apiKey API key to decode.
+     * @return Decoded api key.
+     * @throws DecoderException When the api key is invalid.
+     */
+    @NotNull
+    public DqoCloudApiKey decodeApiKey(String apiKey) throws DecoderException {
+        byte[] messageBytes = Hex.decodeHex(apiKey);
+        byte[] payloadBytes = new byte[messageBytes.length - 32];
+        System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
+
+        String payloadJsonString = new String(payloadBytes, StandardCharsets.UTF_8);
+        DqoCloudApiKeyPayload deserializedApiKeyPayload = this.jsonSerializer.deserialize(payloadJsonString, DqoCloudApiKeyPayload.class);
+
+        DqoCloudApiKey dqoCloudApiKey = new DqoCloudApiKey(apiKey, deserializedApiKeyPayload);
+        return dqoCloudApiKey;
     }
 }

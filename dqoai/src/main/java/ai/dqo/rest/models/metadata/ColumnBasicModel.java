@@ -18,6 +18,7 @@ package ai.dqo.rest.models.metadata;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.sources.TableSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -56,6 +57,29 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
+
+    /**
+     * Creates a basic column model from a column specification by cherry-picking relevant fields.
+     * This model is used for the column list screen and it has even less fields.
+     * @param physicalTableName Physical table name.
+     * @param columnName        Column name.
+     * @param columnSpec        Source column specification.
+     * @return Basic column model.
+     */
+    public static ColumnBasicModel fromColumnSpecificationForListEntry(String connectionName,
+                                                                      PhysicalTableName physicalTableName,
+                                                                      String columnName,
+                                                                      ColumnSpec columnSpec) {
+        return new ColumnBasicModel() {{
+            setConnectionName(connectionName);
+            setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
+            setTable(physicalTableName);
+            setColumnName(columnName);
+            setDisabled(columnSpec.isDisabled());
+            setTypeSnapshot(columnSpec.getTypeSnapshot());
+            setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
+        }};
+    }
 
     /**
      * Creates a basic column model from a column specification by cherry-picking relevant fields.
