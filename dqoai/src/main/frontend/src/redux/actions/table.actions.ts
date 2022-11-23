@@ -347,7 +347,7 @@ export const updateTableLabels =
       dispatch(updateTableLabelsFailed(err));
     }
   };
-
+// TODO: getTableChecks -> getTableAdHocChecks. Also getTableCheckpoints and getTablePartitionedChecks for CheckTimePartition
 export const getTableChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
 });
@@ -362,12 +362,12 @@ export const getTableChecksFailed = (error: any) => ({
   error
 });
 
-export const getTableChecks =
+export const getTableAdHocChecks =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
     dispatch(getTableChecksRequest());
     try {
-      const res = await TableApiClient.getTableChecks(
+      const res = await TableApiClient.getTableAdHocChecks(
         connectionName,
         schemaName,
         tableName
@@ -392,12 +392,12 @@ export const getTableChecksUiFailed = (error: any) => ({
   error
 });
 
-export const getTableChecksUI =
+export const getTableAdHocChecksUI =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
     dispatch(getTableChecksUiRequest());
     try {
-      const res = await TableApiClient.getTableChecksUI(
+      const res = await TableApiClient.getTableAdHocChecksUI(
         connectionName,
         schemaName,
         tableName
@@ -421,12 +421,12 @@ export const updateTableChecksUIFailed = (error: any) => ({
   error
 });
 
-export const updateTableChecksUI =
+export const updateTableAdHocChecksUI =
   (connectionName: string, schemaName: string, tableName: string, data: any) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableChecksUIRequest());
     try {
-      await TableApiClient.updateTableChecksUI(
+      await TableApiClient.updateTableAdHocChecksUI(
         connectionName,
         schemaName,
         tableName,

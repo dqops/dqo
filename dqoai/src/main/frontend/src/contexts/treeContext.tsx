@@ -150,7 +150,7 @@ function TreeProvider(props: any) {
           treeData,
           schemaNode?.parentId ?? ''
         );
-        const res = await TableApiClient.getTableChecksUI(
+        const res = await TableApiClient.getTableAdHocChecksUI(
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? ''
@@ -201,7 +201,7 @@ function TreeProvider(props: any) {
           treeData,
           schemaNode?.parentId ?? ''
         );
-        const res = await ColumnApiClient.getColumnChecksUI(
+        const res = await ColumnApiClient.getColumnAdHocChecksUI(
           connectionNode?.label ?? '',
           schemaNode?.label ?? '',
           tableNode?.label ?? '',

@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
+import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -53,21 +54,21 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonPropertyDescription("Monthly partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount;
+    private ColumnNegativeMonthlyPartitionedChecksSpec monthlyPartitionMaxNegativeCount;
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of monthly negative data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
      */
-    public ColumnMaxNegativeCountCheckSpec getmonthlyPartitionMaxNegativeCount() {
+    public ColumnNegativeMonthlyPartitionedChecksSpec getMonthlyPartitionMaxNegativeCount() {
         return monthlyPartitionMaxNegativeCount;
     }
 
     /**
-     * Sets the container of negative data quality checks (checkpoints).
+     * Sets the container of monthly negative data quality partitioned checks.
      * @param monthlyPartitionMaxNegativeCount New negative checks.
      */
-    public void setMonthlyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount) {
+    public void setMonthlyPartitionMaxNegativeCount(ColumnNegativeMonthlyPartitionedChecksSpec monthlyPartitionMaxNegativeCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativeCount, monthlyPartitionMaxNegativeCount));
         this.monthlyPartitionMaxNegativeCount = monthlyPartitionMaxNegativeCount;
         propagateHierarchyIdToField(monthlyPartitionMaxNegativeCount, "monthly_partition_max_negative_count");
