@@ -18,6 +18,7 @@ package ai.dqo.checks.column.checkpoints.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,11 +39,15 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
+            put("daily_checkpoint_mean_string_length_between", o -> o.dailyCheckpointMeanStringLengthBetween);
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringLengthBelowCheckSpec dailyCheckpointMaxStringLengthBelow;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween;
 
     /**
      * Returns a maximum string length below check.
@@ -60,6 +65,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringLengthBelow, dailyCheckpointMaxStringLengthBelow));
         this.dailyCheckpointMaxStringLengthBelow = dailyCheckpointMaxStringLengthBelow;
         propagateHierarchyIdToField(dailyCheckpointMaxStringLengthBelow, "daily_checkpoint_max_string_length_below");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getDailyCheckpointMeanStringLengthBetween() {
+        return dailyCheckpointMeanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param dailyCheckpointMeanStringLengthBetween Mean string length between check.
+     */
+    public void setDailyCheckpointMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanStringLengthBetween, dailyCheckpointMeanStringLengthBetween));
+        this.dailyCheckpointMeanStringLengthBetween = dailyCheckpointMeanStringLengthBetween;
+        propagateHierarchyIdToField(dailyCheckpointMeanStringLengthBetween, "daily_checkpoint_mean_string_length_between");
     }
 
     /**

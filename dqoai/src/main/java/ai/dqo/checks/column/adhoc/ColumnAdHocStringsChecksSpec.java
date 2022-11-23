@@ -17,6 +17,7 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,15 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocStringsChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
+            put("mean_string_length_between", o -> o.meanStringLengthBetween);
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMaxStringLengthBelowCheckSpec maxStringLengthBelow;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
+    private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
 
     /**
      * Returns a maximum string length below check.
@@ -59,6 +64,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringLengthBelow, maxStringLengthBelow));
         this.maxStringLengthBelow = maxStringLengthBelow;
         propagateHierarchyIdToField(maxStringLengthBelow, "max_string_length_below");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getMeanStringLengthBetween() {
+        return meanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param meanStringLengthBetween Mean string length between check.
+     */
+    public void setMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.meanStringLengthBetween, meanStringLengthBetween));
+        this.meanStringLengthBetween = meanStringLengthBetween;
+        propagateHierarchyIdToField(meanStringLengthBetween, "mean_string_length_between");
     }
 
     /**
