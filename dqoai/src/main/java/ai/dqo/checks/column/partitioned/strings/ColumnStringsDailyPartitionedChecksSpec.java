@@ -18,6 +18,7 @@ package ai.dqo.checks.column.partitioned.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,11 +39,15 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
+            put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringLengthBelowCheckSpec dailyPartitionMaxStringLengthBelow;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove;
 
     /**
      * Returns a maximum string length below  check.
@@ -60,6 +65,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringLengthBelow, dailyPartitionMaxStringLengthBelow));
         this.dailyPartitionMaxStringLengthBelow = dailyPartitionMaxStringLengthBelow;
         propagateHierarchyIdToField(dailyPartitionMaxStringLengthBelow, "daily_partition_max_string_length_below");
+    }
+
+    /**
+     * Returns a minimum string length below  check.
+     * @return Minimum string length below  check.
+     */
+    public ColumnMinStringLengthAboveCheckSpec getDailyPartitionMinStringLengthAbove() {
+        return dailyPartitionMinStringLengthAbove;
+    }
+
+    /**
+     * Sets a new definition of a minimum string length below  check.
+     * @param dailyPartitionMinStringLengthAbove Minimum string length above check.
+     */
+    public void setDailyPartitionMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringLengthAbove, dailyPartitionMinStringLengthAbove));
+        this.dailyPartitionMinStringLengthAbove = dailyPartitionMinStringLengthAbove;
+        propagateHierarchyIdToField(dailyPartitionMaxStringLengthBelow, "daily_partition_min_string_length_above");
     }
 
     /**
