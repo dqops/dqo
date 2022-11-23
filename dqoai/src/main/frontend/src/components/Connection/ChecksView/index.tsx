@@ -6,8 +6,8 @@ import { IRootState } from '../../../redux/reducers';
 import { UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableChecksUI,
-  updateTableChecksUI
+  getTableAdHocChecksUI,
+  updateTableAdHocChecksUI
 } from '../../../redux/actions/table.actions';
 import Button from '../../Button';
 import { isEqual } from 'lodash';
@@ -34,19 +34,19 @@ const ChecksView = ({
   }, [checksUI]);
 
   useEffect(() => {
-    dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableChecksUI(
+      updateTableAdHocChecksUI(
         connectionName,
         schemaName,
         tableName,
         updatedChecksUI
       )
     );
-    await dispatch(getTableChecksUI(connectionName, schemaName, tableName));
+    await dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
   };
 
   const isUpdated = useMemo(

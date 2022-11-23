@@ -21,7 +21,9 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,14 +39,17 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	private final SettingsService settingsService;
 	private final TerminalReader terminalReader;
 	private final TerminalWriter terminalWriter;
+	private final DqoCloudApiKeyProvider apiKeyProvider;
 
 	@Autowired
 	public SettingsApiKeySetCliCommand(SettingsService settingsService,
 									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
+									   TerminalWriter terminalWriter,
+									   DqoCloudApiKeyProvider apiKeyProvider) {
 		this.settingsService = settingsService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.apiKeyProvider = apiKeyProvider;
 	}
 
 	@CommandLine.Parameters(index = "0", description = "Api key")
@@ -68,6 +73,14 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 		if (Strings.isNullOrEmpty(this.key)) {
 			throwRequiredParameterMissingIfHeadless("--key");
 			this.key = this.terminalReader.prompt("Api key (--key)", null, false);
+		}
+
+		try {
+			this.apiKeyProvider.decodeApiKey(this.key);
+		}
+		catch (DecoderException ex) {
+			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
+			return -1;
 		}
 
 		CliOperationStatus cliOperationStatus = this.settingsService.setApiKey(key);

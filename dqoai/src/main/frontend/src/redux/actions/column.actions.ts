@@ -295,7 +295,7 @@ export const getColumnChecksUi =
   async (dispatch: Dispatch) => {
     dispatch(getColumnChecksUIRequest());
     try {
-      const res = await ColumnApiClient.getColumnChecksUI(
+      const res = await ColumnApiClient.getColumnAdHocChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -331,7 +331,7 @@ export const updateColumnCheckUI =
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCheckUIRequest());
     try {
-      await ColumnApiClient.updateColumnChecksUI(
+      await ColumnApiClient.updateColumnAdHocChecksUI(
         connectionName,
         schemaName,
         tableName,
