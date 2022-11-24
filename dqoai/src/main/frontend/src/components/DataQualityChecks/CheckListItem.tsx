@@ -26,32 +26,44 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const [tabs, setTabs] = useState<ITab[]>([]);
 
   const openCheckSettings = () => {
-    setExpanded(true);
-    setActiveTab('data-streams');
-    setTabs([
-      {
-        label: 'Data streams override',
-        value: 'data-streams'
-      },
-      {
-        label: 'Schedule override',
-        value: 'schedule'
-      },
-      {
-        label: 'Time series override',
-        value: 'time'
-      },
-      {
-        label: 'Comments',
-        value: 'comments'
-      }
-    ]);
+    if (check?.configured) {
+      setExpanded(true);
+      setActiveTab('data-streams');
+      setTabs([
+        {
+          label: 'Data streams override',
+          value: 'data-streams'
+        },
+        {
+          label: 'Schedule override',
+          value: 'schedule'
+        },
+        {
+          label: 'Time series override',
+          value: 'time'
+        },
+        {
+          label: 'Comments',
+          value: 'comments'
+        }
+      ]);
+    }
   };
 
   const handleChange = (obj: any) => {
     onChange({
       ...check,
       ...obj
+    });
+  };
+
+  const onChangeConfigured = (configured: boolean) => {
+    if (!configured) {
+      setExpanded(false);
+    }
+    handleChange({
+      configured,
+      disabled: configured ? check?.disabled : null
     });
   };
 
@@ -71,12 +83,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             <div>
               <Switch
                 checked={!!check?.configured}
-                onChange={(configured) =>
-                  handleChange({
-                    configured,
-                    disabled: configured ? check?.disabled : null
-                  })
-                }
+                onChange={onChangeConfigured}
               />
             </div>
             <SvgIcon
