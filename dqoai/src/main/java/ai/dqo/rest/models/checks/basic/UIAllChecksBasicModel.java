@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.rest.models.checks.basic;
 
-import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.rest.models.checks.UIAllChecksModelAbstr;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -27,16 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit all data quality checks divided by categories.
+ * Simplistic UI model that returns the list of data quality checks, their names, categories and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by categories.")
-public class UIAllChecksModel extends UIAllChecksModelAbstr {
-    @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
-    private List<UIQualityCategoryModel> categories = new ArrayList<>();
-
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
-    private CheckSearchFilters runChecksJobTemplate;
+@ApiModel(value = "UIAllChecksBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
+public class UIAllChecksBasicModel extends UIAllChecksModelAbstr {
+    @JsonPropertyDescription("List of all data quality categories that contain basic models of data quality checks inside.")
+    private List<UIQualityCategoryBasicModel> categories = new ArrayList<>();
 }

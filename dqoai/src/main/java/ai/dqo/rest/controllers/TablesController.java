@@ -34,6 +34,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.UIAllChecksModelAbstr;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
@@ -42,6 +44,7 @@ import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +52,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -68,9 +72,9 @@ public class TablesController {
 
     /**
      * Creates an instance of a controller by injecting dependencies.
-     * @param userHomeContextFactory      User home context factory.
-     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
-     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
+     * @param userHomeContextFactory           User home context factory.
+     * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
+     * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
      */
     @Autowired
     public TablesController(UserHomeContextFactory userHomeContextFactory,
@@ -364,6 +368,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
     }
 
+    
     protected <T extends AbstractRootChecksContainerSpec> T getTableGenericChecks(
             Function<TableSpec, T> extractorFromSpec,
             String connectionName,
@@ -551,8 +556,10 @@ public class TablesController {
         }
     }
     
-    protected <T extends AbstractRootChecksContainerSpec> UIAllChecksModel getTableGenericChecksUI(
+
+    protected <T extends AbstractRootChecksContainerSpec, R extends UIAllChecksModelAbstr> R getTableGenericChecksUI(
             Function<TableSpec, T> tableSpecToRootCheck,
+            BiFunction<T, CheckSearchFilters, R> rootCheckToUIModel,
             String connectionName,
             String schemaName,
             String tableName) {
@@ -585,22 +592,21 @@ public class TablesController {
             setEnabled(true);
         }};
 
-        return this.specToUiCheckMappingService.createUiModel(rootChecks, checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return rootCheckToUIModel.apply(rootChecks, checkSearchFilters);
     }
 
     /**
-     * Retrieves the configuration of data quality ad-hoc checks for a UI friendly mode on a table given a connection name and a table name.
+     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality ad-hoc check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -613,6 +619,7 @@ public class TablesController {
                     TableAdHocCheckCategoriesSpec checks = spec.getChecks();
                     return checks != null ? checks : new TableAdHocCheckCategoriesSpec();
                 },
+                this.specToUiCheckMappingService::createUiModel,
                 connectionName,
                 schemaName,
                 tableName
@@ -627,15 +634,15 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality checkpoints for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * Retrieves the configuration of data quality checkpoints as a UI friendly model on a table given a connection name, a table name, and a time partition.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality checkpoint configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui")
-    @ApiOperation(value = "getTableCheckpointsUI", notes = "Return a UI friendly model of table level data quality checkpoints on a table for a given time partition", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableCheckpointsUI", notes = "Return a UI friendly model of configurations for table level data quality checkpoints on a table for a given time partition", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksModel.class),
@@ -665,6 +672,7 @@ public class TablesController {
                     }
                     return null;
                 },
+                this.specToUiCheckMappingService::createUiModel,
                 connectionName,
                 schemaName,
                 tableName
@@ -679,18 +687,18 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality partitioned checks for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * Retrieves the configuration of data quality partitioned checks as a UI friendly model on a table given a connection name, a table name, and a time partition.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui")
-    @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned check on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -717,6 +725,7 @@ public class TablesController {
                     }
                     return null;
                 },
+                this.specToUiCheckMappingService::createUiModel,
                 connectionName,
                 schemaName,
                 tableName
@@ -730,6 +739,159 @@ public class TablesController {
         }
     }
 
+    /**
+     * Retrieves a simplistic list of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Simplistic UI friendly data quality ad-hoc checks list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/basic")
+    @ApiOperation(value = "getTableAdHocChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level data quality ad-hoc checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableAdHocChecksUIBasic(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName) {
+        UIAllChecksBasicModel checksUiModel = this.getTableGenericChecksUI(
+                spec -> {
+                    TableAdHocCheckCategoriesSpec checks = spec.getChecks();
+                    return checks != null ? checks : new TableAdHocCheckCategoriesSpec();
+                },
+                this.specToUiCheckMappingService::createUiBasicModel,
+                connectionName,
+                schemaName,
+                tableName
+        );
+
+        if (checksUiModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        else {
+            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+        }
+    }
+
+    /**
+     * Retrieves a simplistic list of data quality checkpoints as a UI friendly model on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @return Simplistic UI friendly data quality checkpoints list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui/basic")
+    @ApiOperation(value = "getTableCheckpointsUIBasic", notes = "Return a simplistic UI friendly model of table level data quality checkpoints on a table for a given time partition", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableCheckpointsUIBasic(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
+        UIAllChecksBasicModel checksUiModel = this.getTableGenericChecksUI(
+                spec -> {
+                    TableCheckpointsSpec checkpoints = spec.getCheckpoints();
+                    if (checkpoints == null) {
+                        checkpoints = new TableCheckpointsSpec();
+                    }
+
+                    AbstractRootChecksContainerSpec checkpointsPartition = null;
+
+                    switch (timePartition) {
+                        case DAILY:
+                            TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
+                            checkpointsPartition =
+                                    (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
+
+                        case MONTHLY:
+                            TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
+                            checkpointsPartition =
+                                    (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
+                    }
+                    return checkpointsPartition;
+                },
+                this.specToUiCheckMappingService::createUiBasicModel,
+                connectionName,
+                schemaName,
+                tableName
+        );
+
+        if (checksUiModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        else {
+            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+        }
+    }
+
+    /**
+     * Retrieves the configuration of data quality partitioned checks as a UI friendly model on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui/basic")
+    @ApiOperation(value = "getTablePartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level {timePartition} data quality partitioned checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTablePartitionedChecksUIBasic(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName,
+            @Parameter(description = "Table name") @PathVariable String tableName,
+            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
+        UIAllChecksBasicModel checksUiModel = this.getTableGenericChecksUI(
+                spec -> {
+                    TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
+                    if (partitionedChecks == null) {
+                        partitionedChecks = new TablePartitionedChecksRootSpec();
+                    }
+
+                    AbstractRootChecksContainerSpec partitionedChecksPartition = null;
+
+                    switch (timePartition) {
+                        case DAILY:
+                            TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
+                            partitionedChecksPartition =
+                                    (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
+
+                        case MONTHLY:
+                            TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
+                            partitionedChecksPartition =
+                                    (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
+                    }
+                    return partitionedChecksPartition;
+                },
+                this.specToUiCheckMappingService::createUiBasicModel,
+                connectionName,
+                schemaName,
+                tableName
+        );
+
+        if (checksUiModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        else {
+            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+        }
+    }
+    
+    
     /**
      * Creates (adds) a new table.
      * @param connectionName Connection name.
