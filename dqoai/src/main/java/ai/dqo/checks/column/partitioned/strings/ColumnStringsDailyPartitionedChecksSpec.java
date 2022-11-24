@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -41,6 +42,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
+            put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
             put("daily_partition_min_string_valid_dates_percent", o -> o.dailyPartitionMinStringValidDatesPercent);
         }
     };
@@ -50,6 +52,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringValidDatesPercentCheckSpec dailyPartitionMinStringValidDatesPercent;
@@ -88,6 +93,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringLengthAbove, dailyPartitionMinStringLengthAbove));
         this.dailyPartitionMinStringLengthAbove = dailyPartitionMinStringLengthAbove;
         propagateHierarchyIdToField(dailyPartitionMaxStringLengthBelow, "daily_partition_min_string_length_above");
+    }
+
+    /**
+     * Returns a mean string length between  check.
+     * @return Mean string length between  check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getDailyPartitionMeanStringLengthBetween() {
+        return dailyPartitionMeanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param dailyPartitionMeanStringLengthBetween Mean string length between check.
+     */
+    public void setDailyPartitionMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanStringLengthBetween, dailyPartitionMeanStringLengthBetween));
+        this.dailyPartitionMeanStringLengthBetween = dailyPartitionMeanStringLengthBetween;
+        propagateHierarchyIdToField(dailyPartitionMeanStringLengthBetween, "daily_partition_mean_string_length_between");
     }
 
     /**
