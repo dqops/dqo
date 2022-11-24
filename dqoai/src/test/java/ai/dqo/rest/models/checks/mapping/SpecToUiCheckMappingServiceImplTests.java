@@ -57,6 +57,6 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(4, uiModel.getCategories().size());
+        Assertions.assertEquals(5, uiModel.getCategories().size());
     }
 }
