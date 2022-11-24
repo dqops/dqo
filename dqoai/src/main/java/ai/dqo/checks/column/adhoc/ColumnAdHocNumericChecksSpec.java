@@ -45,7 +45,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
     private ColumnMaxNegativeCountCheckSpec maxNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxNegativePercentCheckSpec maxNegativePercent;
 
     /**
@@ -67,16 +67,16 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a maximum negative count check.
-     * @return Maximum negative count check.
+     * Returns a maximum negative percentage check.
+     * @return Maximum negative percentage check.
      */
     public ColumnMaxNegativePercentCheckSpec getMaxNegativePercent() {
         return maxNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative count check.
-     * @param maxNegativePercent Maximum negative count check.
+     * Sets a new definition of a maximum negative percentage check.
+     * @param maxNegativePercent Maximum negative percentage check.
      */
     public void setMaxNegativePercent(ColumnMaxNegativePercentCheckSpec maxNegativePercent) {
         this.setDirtyIf(!Objects.equals(this.maxNegativePercent, maxNegativePercent));

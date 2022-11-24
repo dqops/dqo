@@ -66,7 +66,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocNullsChecksSpec nulls;
 
-    @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
+    @JsonPropertyDescription("Configuration of column level checks that verify negative values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocNumericChecksSpec numeric;
@@ -126,16 +126,16 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     }
 
     /**
-     * Returns the nulls check configuration on a column level.
-     * @return Nulls check configuration.
+     * Returns the negative values check configuration on a column level.
+     * @return Negative values check configuration.
      */
     public ColumnAdHocNumericChecksSpec getNumeric() {
         return numeric;
     }
 
     /**
-     * Sets the nulls check configuration on a column level.
-     * @param numeric New nulls checks configuration.
+     * Sets the negative values check configuration on a column level.
+     * @param numeric New negative values checks configuration.
      */
     public void setNumeric(ColumnAdHocNumericChecksSpec numeric) {
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));

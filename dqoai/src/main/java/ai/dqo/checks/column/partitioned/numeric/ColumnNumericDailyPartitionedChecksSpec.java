@@ -33,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNegativeDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
             put("daily_partition_max_negative_percent", o -> o.dailyPartitionMaxNegativePercent);
@@ -44,7 +44,7 @@ public class ColumnNegativeDailyPartitionedChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxNegativePercentCheckSpec dailyPartitionMaxNegativePercent;
 
     /**
@@ -66,16 +66,16 @@ public class ColumnNegativeDailyPartitionedChecksSpec extends AbstractCheckCateg
     }
 
     /**
-     * Returns a maximum negative values count check.
-     * @return Maximum negative values count check.
+     * Returns a maximum negative values percentage check.
+     * @return Maximum negative values percentage check.
      */
     public ColumnMaxNegativePercentCheckSpec getDailyPartitionMaxNegativePercent() {
         return dailyPartitionMaxNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative values count check.
-     * @param dailyPartitionMaxNegativePercent Maximum negative values count check.
+     * Sets a new definition of a maximum negative values percentage check.
+     * @param dailyPartitionMaxNegativePercent Maximum negative values percentage check.
      */
     public void setDailyPartitionMaxNegativePercent(ColumnMaxNegativePercentCheckSpec dailyPartitionMaxNegativePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativePercent, dailyPartitionMaxNegativePercent));

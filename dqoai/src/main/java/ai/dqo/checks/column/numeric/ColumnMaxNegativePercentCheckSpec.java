@@ -19,9 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericNegativeCountSensorParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericNegativePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of negative values in a monitored column.
+ * Column level check that ensures that there are no more than a maximum percentage of negative values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -50,7 +48,7 @@ public class ColumnMaxNegativePercentCheckSpec extends AbstractCheckSpec<ColumnN
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericNegativePercentSensorParametersSpec parameters = new ColumnNumericNegativePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with negative value in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxPercentRuleParametersSpec error;

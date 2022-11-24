@@ -33,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNegativeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
             put("monthly_partition_max_negative_percent", o -> o.monthlyPartitionMaxNegativePercent);
@@ -44,7 +44,7 @@ public class ColumnNegativeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxNegativeCountCheckSpec monthlyPartitionMaxNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxNegativePercentCheckSpec monthlyPartitionMaxNegativePercent;
 
     /**
@@ -66,16 +66,16 @@ public class ColumnNegativeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     }
 
     /**
-     * Returns a maximum negative values count check.
-     * @return Maximum negative values count check.
+     * Returns a maximum negative values percentage check.
+     * @return Maximum negative values percentage check.
      */
     public ColumnMaxNegativePercentCheckSpec getMonthlyPartitionMaxNegativePercent() {
         return monthlyPartitionMaxNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative values count check.
-     * @param monthlyPartitionMaxNegativePercent Maximum negative values count check.
+     * Sets a new definition of a maximum negative values percentage check.
+     * @param monthlyPartitionMaxNegativePercent Maximum negative values percentage check.
      */
     public void setMonthlyPartitionMaxNegativePercent(ColumnMaxNegativePercentCheckSpec monthlyPartitionMaxNegativePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativePercent, monthlyPartitionMaxNegativePercent));

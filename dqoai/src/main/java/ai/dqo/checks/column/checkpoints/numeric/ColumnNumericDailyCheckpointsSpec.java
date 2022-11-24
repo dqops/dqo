@@ -33,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNegativeDailyCheckpointsSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_max_negative_count", o -> o.dailyCheckpointMaxNegativeCount);
             put("daily_checkpoint_max_negative_percent", o -> o.dailyCheckpointMaxNegativePercent);
@@ -44,7 +44,7 @@ public class ColumnNegativeDailyCheckpointsSpec extends AbstractCheckCategorySpe
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxNegativeCountCheckSpec dailyCheckpointMaxNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxNegativePercentCheckSpec dailyCheckpointMaxNegativePercent;
 
     /**
@@ -66,16 +66,16 @@ public class ColumnNegativeDailyCheckpointsSpec extends AbstractCheckCategorySpe
     }
 
     /**
-     * Returns a maximum negative values count check.
-     * @return Maximum negative values count check.
+     * Returns a maximum negative values percentage check.
+     * @return Maximum negative values percentage check.
      */
     public ColumnMaxNegativePercentCheckSpec getDailyCheckpointMaxNegativePercent() {
         return dailyCheckpointMaxNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative values count check.
-     * @param dailyCheckpointMaxNegativePercent Maximum negative values count check.
+     * Sets a new definition of a maximum negative values percentage check.
+     * @param dailyCheckpointMaxNegativePercent Maximum negative values percentage check.
      */
     public void setDailyCheckpointMaxNegativePercent(ColumnMaxNegativePercentCheckSpec dailyCheckpointMaxNegativePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNegativePercent, dailyCheckpointMaxNegativePercent));
