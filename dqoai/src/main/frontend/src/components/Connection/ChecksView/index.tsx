@@ -46,7 +46,9 @@ const ChecksView = ({
         updatedChecksUI
       )
     );
-    await dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
+    await dispatch(
+      getTableAdHocChecksUI(connectionName, schemaName, tableName)
+    );
   };
 
   const isUpdated = useMemo(
