@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
 import ai.dqo.rules.comparison.MaxValueRuleParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMeanLengthSensorParametersSpec;
@@ -38,7 +39,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, MaxValueRuleParametersSpec> {
+public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMeanStringLengthBetweenCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +53,17 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec error;
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec warning;
+    private BetweenFloatsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec fatal;
+    private BetweenFloatsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -89,7 +90,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxValueRuleParametersSpec getError() {
+    public BetweenFloatsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +98,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxValueRuleParametersSpec error) {
+    public void setError(BetweenFloatsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +110,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getWarning() {
+    public BetweenFloatsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +118,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxValueRuleParametersSpec warning) {
+    public void setWarning(BetweenFloatsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +130,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getFatal() {
+    public BetweenFloatsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +138,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<Co
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxValueRuleParametersSpec fatal) {
+    public void setFatal(BetweenFloatsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
