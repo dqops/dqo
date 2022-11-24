@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +42,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
+            put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
         }
     };
 
@@ -52,6 +54,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -105,6 +110,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.meanStringLengthBetween, meanStringLengthBetween));
         this.meanStringLengthBetween = meanStringLengthBetween;
         propagateHierarchyIdToField(meanStringLengthBetween, "mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnMaxStringEmptyPercentCheckSpec getMaxStringEmptyPercent() {
+        return maxStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length below check.
+     * @param maxStringEmptyPercent Maximum string length below check.
+     */
+    public void setMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyPercent, maxStringEmptyPercent));
+        this.maxStringEmptyPercent = maxStringEmptyPercent;
+        propagateHierarchyIdToField(maxStringEmptyPercent, "max_string_empty_percent");
     }
 
     /**
