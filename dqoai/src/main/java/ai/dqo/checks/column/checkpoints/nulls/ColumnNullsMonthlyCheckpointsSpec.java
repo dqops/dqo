@@ -17,6 +17,7 @@ package ai.dqo.checks.column.checkpoints.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,15 @@ public class ColumnNullsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_checkpoint_max_nulls_count", o -> o.monthlyCheckpointMaxNullsCount);
+            put("monthly_checkpoint_max_nulls_percent", o -> o.monthlyCheckpointMaxNullsPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxNullsCountCheckSpec monthlyCheckpointMaxNullsCount;
+
+    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxNullsPercentCheckSpec monthlyCheckpointMaxNullsPercent;
 
     /**
      * Returns a maximum nulls count check.
@@ -59,6 +64,24 @@ public class ColumnNullsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNullsCount, monthlyCheckpointMaxNullsCount));
         this.monthlyCheckpointMaxNullsCount = monthlyCheckpointMaxNullsCount;
         propagateHierarchyIdToField(monthlyCheckpointMaxNullsCount, "monthly_checkpoint_max_nulls_count");
+    }
+
+    /**
+     * Returns a maximum nulls percent check.
+     * @return Maximum nulls percent check.
+     */
+    public ColumnMaxNullsPercentCheckSpec getMonthlyCheckpointMaxNullsPercent() {
+        return monthlyCheckpointMaxNullsPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum nulls percent check.
+     * @param monthlyCheckpointMaxNullsPercent Maximum nulls percent check.
+     */
+    public void setMonthlyCheckpointMaxNullsPercent(ColumnMaxNullsPercentCheckSpec monthlyCheckpointMaxNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNullsPercent, monthlyCheckpointMaxNullsPercent));
+        this.monthlyCheckpointMaxNullsPercent = monthlyCheckpointMaxNullsPercent;
+        propagateHierarchyIdToField(monthlyCheckpointMaxNullsPercent, "monthly_checkpoint_max_nulls_percent");
     }
 
     /**
