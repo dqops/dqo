@@ -39,7 +39,7 @@ const TimestampsView = ({ columnsSpec, onChange }: TimestampsViewProps) => {
       value: item.column_name || ''
     }));
 
-    setOptions([{ label: '', value: '' }, ...data]);
+    setOptions([{ label: 'None', value: '' }, ...data]);
   };
 
   const fetchColumns = async () => {

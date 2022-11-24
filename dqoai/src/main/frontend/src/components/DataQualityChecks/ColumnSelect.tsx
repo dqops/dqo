@@ -41,7 +41,7 @@ const ColumnSelect = ({
       label: item.column_name || '',
       value: item.column_name || ''
     }));
-    setOptions([{ label: '', value: '' }, ...data]);
+    setOptions([{ label: 'None', value: '' }, ...data]);
   };
 
   useEffect(() => {
