@@ -4,13 +4,11 @@ import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import Button from '../../Button';
-import TimeSeriesView from '../TimeSeriesView';
 import {
   CommentSpec,
   ConnectionBasicModel,
   DataStreamMappingSpec,
-  RecurringScheduleSpec,
-  TimeSeriesConfigurationSpec
+  RecurringScheduleSpec
 } from '../../../api';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -25,8 +23,7 @@ import {
   updateConnectionComments,
   updateConnectionDefaultDataStreamsMapping,
   updateConnectionLabels,
-  updateConnectionSchedule,
-  updateConnectionTime
+  updateConnectionSchedule
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import CommentsView from '../CommentsView';
@@ -54,10 +51,6 @@ const tabs = [
     value: 'schedule'
   },
   {
-    label: 'Time series',
-    value: 'time'
-  },
-  {
     label: 'Comments',
     value: 'comments'
   },
@@ -80,7 +73,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
   const {
     connectionBasic,
     schedule,
-    timeSeries,
     comments,
     labels,
     isUpdating,
@@ -90,8 +82,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
     useState<ConnectionBasicModel>();
   const [updatedSchedule, setUpdatedSchedule] =
     useState<RecurringScheduleSpec>();
-  const [updatedTimeSeries, setUpdatedTimeSeries] =
-    useState<TimeSeriesConfigurationSpec>();
   const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const [updatedDataStreamsMapping, setUpdatedDataStreamsMapping] =
@@ -110,10 +100,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
   }, [schedule]);
 
   useEffect(() => {
-    setUpdatedTimeSeries(timeSeries);
-  }, [timeSeries]);
-
-  useEffect(() => {
     setUpdatedComments(comments);
   }, [comments]);
   useEffect(() => {
@@ -127,7 +113,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
   useEffect(() => {
     setUpdatedConnectionBasic(undefined);
     setUpdatedSchedule(undefined);
-    setUpdatedTimeSeries(undefined);
     setUpdatedComments([]);
     setUpdatedLabels([]);
     setUpdatedDataStreamsMapping(undefined);
@@ -156,10 +141,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
     if (activeTab === 'schedule') {
       await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
       await dispatch(getConnectionSchedule(connectionName));
-    }
-    if (activeTab === 'time') {
-      await dispatch(updateConnectionTime(connectionName, updatedTimeSeries));
-      await dispatch(getConnectionTime(connectionName));
     }
     if (activeTab === 'comments') {
       await dispatch(updateConnectionComments(connectionName, updatedComments));
@@ -195,16 +176,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
           schedule={updatedSchedule}
           setSchedule={setUpdatedSchedule}
         />
-      );
-    }
-    if (activeTab === 'time') {
-      return (
-        <div className="p-4">
-          <TimeSeriesView
-            timeSeries={updatedTimeSeries}
-            setTimeSeries={setUpdatedTimeSeries}
-          />
-        </div>
       );
     }
     if (activeTab === 'comments') {
