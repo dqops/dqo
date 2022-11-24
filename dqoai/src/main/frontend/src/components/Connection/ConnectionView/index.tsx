@@ -36,6 +36,8 @@ import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
+import ConfirmDialog from './ConfirmDialog';
+import { ConnectionApiClient } from '../../../services/apiClient';
 
 interface IConnectionViewProps {
   connectionName: string;
@@ -97,6 +99,7 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
   const dispatch = useActionDispatch();
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setUpdatedConnectionBasic(connectionBasic);
@@ -183,7 +186,6 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
         <ConnectionDetail
           connectionBasic={updatedConnectionBasic}
           setConnectionBasic={setUpdatedConnectionBasic}
-          nodeId={nodeId}
         />
       );
     }
@@ -254,6 +256,14 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
     return false;
   }, [updatedLabels]);
 
+  const onRemove = async () => {
+    if (connectionBasic) {
+      await ConnectionApiClient.deleteConnection(
+        connectionBasic.connection_name ?? ''
+      );
+    }
+  };
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -261,20 +271,35 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{connectionName}</div>
         </div>
-        <Button
-          color="primary"
-          variant="contained"
-          label="Save"
-          className="w-40"
-          onClick={onUpdate}
-          disabled={isDisabled}
-          loading={isUpdating}
-        />
+        <div className="flex space-x-4">
+          <Button
+            color="info"
+            variant="text"
+            label="Delete"
+            onClick={() => setIsOpen(true)}
+          />
+          <Button
+            color="primary"
+            variant="contained"
+            label="Save"
+            className="w-40"
+            onClick={onUpdate}
+            disabled={isDisabled}
+            loading={isUpdating}
+          />
+        </div>
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {renderTabContent()}
+      <ConfirmDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        connection={connectionBasic}
+        onConfirm={onRemove}
+        nodeId={nodeId}
+      />
     </div>
   );
 };
