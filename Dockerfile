@@ -8,7 +8,7 @@ COPY ./distribution/target/ /app/temp/
 RUN unzip /app/temp/dqo-distribution-$DQO_VERSION-bin.zip -d /app/dqo-$DQO_VERSION
 
 
-FROM python:3.7-slim-bullseye AS dqo-main
+FROM python:3.10.8-slim-bullseye AS dqo-main
 ARG DQO_VERSION
 WORKDIR /app
 
