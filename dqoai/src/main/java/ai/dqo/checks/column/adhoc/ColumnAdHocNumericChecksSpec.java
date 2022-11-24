@@ -17,6 +17,7 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,15 +34,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAdHocNegativeCheckSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNegativeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNumericChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_negative_count", o -> o.maxNegativeCount);
+            put("max_negative_percent", o -> o.maxNegativePercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
     private ColumnMaxNegativeCountCheckSpec maxNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
+    private ColumnMaxNegativePercentCheckSpec maxNegativePercent;
 
     /**
      * Returns a maximum negative count check.
@@ -59,6 +64,24 @@ public class ColumnAdHocNegativeCheckSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxNegativeCount, maxNegativeCount));
         this.maxNegativeCount = maxNegativeCount;
         propagateHierarchyIdToField(maxNegativeCount, "max_negative_count");
+    }
+
+    /**
+     * Returns a maximum negative count check.
+     * @return Maximum negative count check.
+     */
+    public ColumnMaxNegativePercentCheckSpec getMaxNegativePercent() {
+        return maxNegativePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum negative count check.
+     * @param maxNegativePercent Maximum negative count check.
+     */
+    public void setMaxNegativePercent(ColumnMaxNegativePercentCheckSpec maxNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxNegativePercent, maxNegativePercent));
+        this.maxNegativePercent = maxNegativePercent;
+        propagateHierarchyIdToField(maxNegativePercent, "max_negative_percent");
     }
 
     /**

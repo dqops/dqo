@@ -51,6 +51,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("validity", o -> o.validity);
 			put("uniqueness", o -> o.uniqueness);
@@ -64,6 +65,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocNullsChecksSpec nulls;
+
+    @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocNumericChecksSpec numeric;
 
     @JsonPropertyDescription("Configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -117,6 +123,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the nulls check configuration on a column level.
+     * @return Nulls check configuration.
+     */
+    public ColumnAdHocNumericChecksSpec getNumeric() {
+        return numeric;
+    }
+
+    /**
+     * Sets the nulls check configuration on a column level.
+     * @param numeric New nulls checks configuration.
+     */
+    public void setNumeric(ColumnAdHocNumericChecksSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        this.propagateHierarchyIdToField(numeric, "numeric");
     }
 
     /**
