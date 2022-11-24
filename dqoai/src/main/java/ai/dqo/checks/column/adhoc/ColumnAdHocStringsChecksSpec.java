@@ -18,7 +18,7 @@ package ai.dqo.checks.column.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
-            put("string_empty_count", o -> o.stringEmptyCount);
+            put("max_string_empty_count", o -> o.maxStringEmptyCount);
         }
     };
 
@@ -51,7 +51,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     private ColumnMinStringLengthAboveCheckSpec minStringLengthAbove;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity.")
-    private ColumnStringEmptyCountCheckSpec stringEmptyCount;
+    private ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount;
 
     /**
      * Returns a maximum string length below check.
@@ -90,21 +90,21 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a string empty count check.
-     * @return String empty count check.
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
      */
-    public ColumnStringEmptyCountCheckSpec getStringEmptyCount() {
-        return stringEmptyCount;
+    public ColumnMaxStringEmptyCountCheckSpec getMaxStringEmptyCount() {
+        return maxStringEmptyCount;
     }
 
     /**
-     * Sets a new definition of a string empty count check.
-     * @param stringEmptyCount String empty count check.
+     * Sets a new definition of a max string empty count check.
+     * @param maxStringEmptyCount Max string empty count check.
      */
-    public void setStringEmptyCount(ColumnStringEmptyCountCheckSpec stringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.stringEmptyCount, stringEmptyCount));
-        this.stringEmptyCount = stringEmptyCount;
-        propagateHierarchyIdToField(stringEmptyCount, "string_empty_count");
+    public void setMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyCount, maxStringEmptyCount));
+        this.maxStringEmptyCount = maxStringEmptyCount;
+        propagateHierarchyIdToField(maxStringEmptyCount, "max_string_empty_count");
     }
 
     /**

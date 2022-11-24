@@ -18,7 +18,7 @@ package ai.dqo.checks.column.partitioned.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("monthly_partition_max_string_length_below", o -> o.monthlyPartitionMaxStringLengthBelow);
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
-            put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
+            put("monthly_partition_max_string_empty_count", o -> o.monthlyPartitionMaxStringEmptyCount);
         }
     };
 
@@ -51,7 +51,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnMinStringLengthAboveCheckSpec monthlyPartitionMinStringLengthAbove;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
+    private ColumnMaxStringEmptyCountCheckSpec monthlyPartitionMaxStringEmptyCount;
 
     /**
      * Returns a maximum string length below check.
@@ -90,21 +90,21 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a string empty count check.
-     * @return String empty count check.
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
      */
-    public ColumnStringEmptyCountCheckSpec getMonthlyPartitionStringEmptyCount() {
-        return monthlyPartitionStringEmptyCount;
+    public ColumnMaxStringEmptyCountCheckSpec getMonthlyPartitionMaxStringEmptyCount() {
+        return monthlyPartitionMaxStringEmptyCount;
     }
 
     /**
-     * Sets a new definition of a string empty count check.
-     * @param monthlyPartitionStringEmptyCount String empty count check.
+     * Sets a new definition of a max string empty count check.
+     * @param monthlyPartitionMaxStringEmptyCount Max string empty count check.
      */
-    public void setMonthlyPartitionStringEmptyCount(ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringEmptyCount, monthlyPartitionStringEmptyCount));
-        this.monthlyPartitionStringEmptyCount = monthlyPartitionStringEmptyCount;
-        propagateHierarchyIdToField(monthlyPartitionStringEmptyCount, "monthly_partition_string_empty_count");
+    public void setMonthlyPartitionMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec monthlyPartitionMaxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringEmptyCount, monthlyPartitionMaxStringEmptyCount));
+        this.monthlyPartitionMaxStringEmptyCount = monthlyPartitionMaxStringEmptyCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringEmptyCount, "monthly_partition_max_string_empty_count");
     }
 
     /**

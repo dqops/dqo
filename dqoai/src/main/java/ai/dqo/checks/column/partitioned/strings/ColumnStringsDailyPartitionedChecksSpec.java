@@ -18,7 +18,7 @@ package ai.dqo.checks.column.partitioned.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
-            put("daily_partition_string_empty_count", o -> o.dailyPartitionStringEmptyCount);
+            put("daily_partition_max_string_empty_count", o -> o.dailyPartitionMaxStringEmptyCount);
         }
     };
 
@@ -51,7 +51,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount;
+    private ColumnMaxStringEmptyCountCheckSpec dailyPartitionMaxStringEmptyCount;
 
     /**
      * Returns a maximum string length below  check.
@@ -90,21 +90,21 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a string empty count check.
-     * @return String empty count check.
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
      */
-    public ColumnStringEmptyCountCheckSpec getDailyPartitionStringEmptyCount() {
-        return dailyPartitionStringEmptyCount;
+    public ColumnMaxStringEmptyCountCheckSpec getDailyPartitionMaxStringEmptyCount() {
+        return dailyPartitionMaxStringEmptyCount;
     }
 
     /**
-     * Sets a new definition of a string empty count check.
-     * @param dailyPartitionStringEmptyCount String empty count check.
+     * Sets a new definition of a max string empty count check.
+     * @param dailyPartitionMaxStringEmptyCount Max string empty count check.
      */
-    public void setDailyPartitionStringEmptyCount(ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringEmptyCount, dailyPartitionStringEmptyCount));
-        this.dailyPartitionStringEmptyCount = dailyPartitionStringEmptyCount;
-        propagateHierarchyIdToField(dailyPartitionStringEmptyCount, "daily_partition_string_empty_count");
+    public void setDailyPartitionMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec dailyPartitionMaxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringEmptyCount, dailyPartitionMaxStringEmptyCount));
+        this.dailyPartitionMaxStringEmptyCount = dailyPartitionMaxStringEmptyCount;
+        propagateHierarchyIdToField(dailyPartitionMaxStringEmptyCount, "daily_partition_max_string_empty_count");
     }
 
     /**

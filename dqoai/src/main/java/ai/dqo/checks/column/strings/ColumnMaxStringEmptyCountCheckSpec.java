@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringEmptyCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsMaxStringEmptyCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,8 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringEmptyCountCheckSpec extends AbstractCheckSpec<ColumnStringEmptyCountSensorParametersSpec, MaxCountRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringEmptyCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMaxStringEmptyCountCheckSpec extends AbstractCheckSpec<ColumnStringsMaxStringEmptyCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringEmptyCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -46,7 +46,7 @@ public class ColumnStringEmptyCountCheckSpec extends AbstractCheckSpec<ColumnStr
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringEmptyCountSensorParametersSpec parameters = new ColumnStringEmptyCountSensorParametersSpec();
+    private ColumnStringsMaxStringEmptyCountSensorParametersSpec parameters = new ColumnStringsMaxStringEmptyCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -68,7 +68,7 @@ public class ColumnStringEmptyCountCheckSpec extends AbstractCheckSpec<ColumnStr
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringEmptyCountSensorParametersSpec getParameters() {
+    public ColumnStringsMaxStringEmptyCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -76,7 +76,7 @@ public class ColumnStringEmptyCountCheckSpec extends AbstractCheckSpec<ColumnStr
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringEmptyCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsMaxStringEmptyCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -18,7 +18,7 @@ package ai.dqo.checks.column.checkpoints.strings;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         {
             put("monthly_checkpoint_max_string_length_below", o -> o.monthlyCheckpointMaxStringLengthBelow);
             put("monthly_checkpoint_min_string_length_above", o -> o.monthlyCheckpointMinStringLengthAbove);
-            put("monthly_checkpoint_string_empty_count", o -> o.monthlyCheckpointStringEmptyCount);
+            put("monthly_checkpoint_max_string_empty_count", o -> o.monthlyCheckpointMaxStringEmptyCount);
         }
     };
 
@@ -51,7 +51,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     private ColumnMinStringLengthAboveCheckSpec monthlyCheckpointMinStringLengthAbove;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount;
+    private ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount;
 
     /**
      * Returns a maximum string length below check.
@@ -90,21 +90,21 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns string empty count check.
-     * @return String empty count check.
+     * Returns max string empty count check.
+     * @return Max string empty count check.
      */
-    public ColumnStringEmptyCountCheckSpec getMonthlyCheckpointStringEmptyCount() {
-        return monthlyCheckpointStringEmptyCount;
+    public ColumnMaxStringEmptyCountCheckSpec getMonthlyCheckpointMaxStringEmptyCount() {
+        return monthlyCheckpointMaxStringEmptyCount;
     }
 
     /**
-     * Sets a new definition of a string empty count check.
-     * @param monthlyCheckpointStringEmptyCount String empty count check.
+     * Sets a new definition of a max string empty count check.
+     * @param monthlyCheckpointMaxStringEmptyCount Max string empty count check.
      */
-    public void setMonthlyCheckpointStringEmptyCount(ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringEmptyCount, monthlyCheckpointStringEmptyCount));
-        this.monthlyCheckpointStringEmptyCount = monthlyCheckpointStringEmptyCount;
-        propagateHierarchyIdToField(monthlyCheckpointStringEmptyCount, "monthly_checkpoint_string_count");
+    public void setMonthlyCheckpointMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringEmptyCount, monthlyCheckpointMaxStringEmptyCount));
+        this.monthlyCheckpointMaxStringEmptyCount = monthlyCheckpointMaxStringEmptyCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxStringEmptyCount, "monthly_checkpoint_max_string_empty_count");
     }
 
     /**
