@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +41,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("monthly_partition_max_string_length_below", o -> o.monthlyPartitionMaxStringLengthBelow);
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
+            put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
         }
     };
 
@@ -48,6 +50,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
     private ColumnMinStringLengthAboveCheckSpec monthlyPartitionMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    private ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween;
 
     /**
      * Returns a maximum string length below check.
@@ -83,6 +88,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringLengthAbove, monthlyPartitionMinStringLengthAbove));
         this.monthlyPartitionMinStringLengthAbove = monthlyPartitionMinStringLengthAbove;
         propagateHierarchyIdToField(monthlyPartitionMinStringLengthAbove, "monthly_partition_min_string_length_above");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getMonthlyPartitionMeanStringLengthBetween() {
+        return monthlyPartitionMeanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param monthlyPartitionMeanStringLengthBetween Mean string length between check.
+     */
+    public void setMonthlyPartitionMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanStringLengthBetween, monthlyPartitionMeanStringLengthBetween));
+        this.monthlyPartitionMeanStringLengthBetween = monthlyPartitionMeanStringLengthBetween;
+        propagateHierarchyIdToField(monthlyPartitionMeanStringLengthBetween, "monthly_partition_mean_string_length_between");
     }
 
     /**

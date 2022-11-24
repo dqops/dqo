@@ -37,12 +37,11 @@ const ColumnSelect = ({
   const setColumns = (
     res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
   ) => {
-    setOptions(
-      res.data.map((item) => ({
-        label: item.column_name || '',
-        value: item.column_name || ''
-      }))
-    );
+    const data = res.data.map((item) => ({
+      label: item.column_name || '',
+      value: item.column_name || ''
+    }));
+    setOptions([{ label: 'None', value: '' }, ...data]);
   };
 
   useEffect(() => {

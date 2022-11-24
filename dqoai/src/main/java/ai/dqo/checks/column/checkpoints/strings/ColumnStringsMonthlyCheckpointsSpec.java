@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +41,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         {
             put("monthly_checkpoint_max_string_length_below", o -> o.monthlyCheckpointMaxStringLengthBelow);
             put("monthly_checkpoint_min_string_length_above", o -> o.monthlyCheckpointMinStringLengthAbove);
+            put("monthly_checkpoint_mean_string_length_between", o -> o.monthlyCheckpointMeanStringLengthBetween);
         }
     };
 
@@ -48,6 +50,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinStringLengthAboveCheckSpec monthlyCheckpointMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMeanStringLengthBetweenCheckSpec monthlyCheckpointMeanStringLengthBetween;
 
     /**
      * Returns a maximum string length below check.
@@ -83,6 +88,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringLengthAbove, monthlyCheckpointMinStringLengthAbove));
         this.monthlyCheckpointMinStringLengthAbove = monthlyCheckpointMinStringLengthAbove;
         propagateHierarchyIdToField(monthlyCheckpointMinStringLengthAbove, "monthly_checkpoint_max_string_length_below");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getMonthlyCheckpointMeanStringLengthBetween() {
+        return monthlyCheckpointMeanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param monthlyCheckpointMeanStringLengthBetween Mean string length between check.
+     */
+    public void setMonthlyCheckpointMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec monthlyCheckpointMeanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMeanStringLengthBetween, monthlyCheckpointMeanStringLengthBetween));
+        this.monthlyCheckpointMeanStringLengthBetween = monthlyCheckpointMeanStringLengthBetween;
+        propagateHierarchyIdToField(monthlyCheckpointMeanStringLengthBetween, "monthly_checkpoint_mean_string_length_between");
     }
 
     /**
