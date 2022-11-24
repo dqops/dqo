@@ -27,7 +27,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
 
   const openCheckSettings = () => {
     if (check?.configured) {
-      setExpanded(true);
+      setExpanded(!expanded);
       setActiveTab('data-streams');
       setTabs([
         {
