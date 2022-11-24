@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +41,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("monthly_partition_max_string_length_below", o -> o.monthlyPartitionMaxStringLengthBelow);
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
+            put("monthly_partition_min_string_valid_dates_percent", o -> o.monthlyPartitionMinStringValidDatesPercent);
         }
     };
 
@@ -48,6 +50,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
     private ColumnMinStringLengthAboveCheckSpec monthlyPartitionMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -83,6 +88,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringLengthAbove, monthlyPartitionMinStringLengthAbove));
         this.monthlyPartitionMinStringLengthAbove = monthlyPartitionMinStringLengthAbove;
         propagateHierarchyIdToField(monthlyPartitionMinStringLengthAbove, "monthly_partition_min_string_length_above");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnMinStringValidDatesPercentCheckSpec getMonthlyPartitionMinStringValidDatesPercent() {
+        return monthlyPartitionMinStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param monthlyPartitionMinStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setMonthlyPartitionMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidDatesPercent, monthlyPartitionMinStringValidDatesPercent));
+        this.monthlyPartitionMinStringValidDatesPercent = monthlyPartitionMinStringValidDatesPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidDatesPercent, "monthly_partition_min_string_valid_dates_percent");
     }
 
     /**

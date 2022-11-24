@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +41,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
+            put("daily_partition_min_string_valid_dates_percent", o -> o.dailyPartitionMinStringValidDatesPercent);
         }
     };
 
@@ -48,6 +50,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringValidDatesPercentCheckSpec dailyPartitionMinStringValidDatesPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -83,6 +88,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringLengthAbove, dailyPartitionMinStringLengthAbove));
         this.dailyPartitionMinStringLengthAbove = dailyPartitionMinStringLengthAbove;
         propagateHierarchyIdToField(dailyPartitionMaxStringLengthBelow, "daily_partition_min_string_length_above");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnMinStringValidDatesPercentCheckSpec getDailyPartitionMinStringValidDatesPercent() {
+        return dailyPartitionMinStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param dailyPartitionMinStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setDailyPartitionMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec dailyPartitionMinStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidDatesPercent, dailyPartitionMinStringValidDatesPercent));
+        this.dailyPartitionMinStringValidDatesPercent = dailyPartitionMinStringValidDatesPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidDatesPercent, "daily_partition_min_string_valid_dates_percent");
     }
 
     /**
