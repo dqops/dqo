@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ConnectionBasicModel,
   ConnectionSpecProviderTypeEnum
@@ -6,36 +6,21 @@ import {
 import Input from '../../Input';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
-import Button from '../../Button';
-import ConfirmDialog from './ConfirmDialog';
-import { ConnectionApiClient } from '../../../services/apiClient';
 
 interface IConnectionDetailProps {
   connectionBasic?: ConnectionBasicModel;
   setConnectionBasic: (value: ConnectionBasicModel) => void;
-  nodeId: string;
 }
 
 const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
   connectionBasic,
   setConnectionBasic,
-  nodeId
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   const onChange = (obj: any) => {
     setConnectionBasic({
       ...connectionBasic,
       ...obj
     });
-  };
-
-  const onRemove = async () => {
-    if (connectionBasic) {
-      await ConnectionApiClient.deleteConnection(
-        connectionBasic.connection_name ?? ''
-      );
-    }
   };
 
   return (
@@ -74,16 +59,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
         )}
         {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.snowflake && <SnowflakeConnection />}
-        <Button color="error" label="Delete" onClick={() => setIsOpen(true)} />
       </div>
-
-      <ConfirmDialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        connection={connectionBasic}
-        onConfirm={onRemove}
-        nodeId={nodeId}
-      />
     </div>
   );
 };
