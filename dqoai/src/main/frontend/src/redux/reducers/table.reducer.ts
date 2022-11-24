@@ -22,7 +22,11 @@ import {
   TimeSeriesConfigurationSpec,
   TableAdHocCheckCategoriesSpec,
   UIAllChecksModel,
-  DataStreamMappingSpec
+  DataStreamMappingSpec,
+  TableDailyCheckpointCategoriesSpec,
+  TableMonthlyCheckpointCategoriesSpec,
+  TableDailyPartitionedCheckCategoriesSpec,
+  TableMonthlyPartitionedCheckCategoriesSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -40,6 +44,10 @@ export interface ITableState {
   checks?: TableAdHocCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
   dataStreamsMapping?: DataStreamMappingSpec;
+  dailyCheckpoints?: TableDailyCheckpointCategoriesSpec;
+  monthlyCheckpoints?: TableMonthlyCheckpointCategoriesSpec;
+  dailyPartitionedChecks?: TableDailyPartitionedCheckCategoriesSpec;
+  monthlyPartitionedChecks?: TableMonthlyPartitionedCheckCategoriesSpec;
 }
 
 const initialState: ITableState = {
@@ -316,6 +324,78 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dailyCheckpoints: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        monthlyCheckpoints: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dailyPartitionedChecks: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        monthlyPartitionedChecks: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR:
+      return {
+        ...state,
+        loading: false,
         error: action.error
       };
     default:
