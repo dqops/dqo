@@ -11,6 +11,10 @@ import {
   DataStreamMappingSpec,
   RecurringScheduleSpec,
   TableBasicModel,
+  TableDailyCheckpointCategoriesSpec,
+  TableDailyPartitionedCheckCategoriesSpec,
+  TableMonthlyCheckpointCategoriesSpec,
+  TableMonthlyPartitionedCheckCategoriesSpec,
   TimeSeriesConfigurationSpec,
   UIAllChecksModel
 } from '../../../api';
@@ -29,7 +33,9 @@ import {
   updateTableDataStreamMapping,
   updateTableLabels,
   updateTableSchedule,
-  updateTableTime
+  updateTableTime,
+  getTableDailyCheckpoints,
+  getTableMonthlyCheckpoints
 } from '../../../redux/actions/table.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
@@ -42,6 +48,8 @@ import TimestampsView from './TimestampsView';
 import { isEqual } from 'lodash';
 import ConfirmDialog from './ConfirmDialog';
 import { TableApiClient } from '../../../services/apiClient';
+import CheckpointsView from './CheckpointsView';
+import PartitionedChecks from './PartitionedChecks';
 
 interface ITableViewProps {
   connectionName: string;
@@ -59,8 +67,16 @@ const tabs = [
     value: 'schedule'
   },
   {
-    label: 'Data Quality Checks',
+    label: 'Ad-hoc checks',
     value: 'data-quality-checks'
+  },
+  {
+    label: 'Checkpoints',
+    value: 'checkpoints'
+  },
+  {
+    label: 'Partitioned checks',
+    value: 'partitioned-checks'
   },
   {
     label: 'Comments',
@@ -95,7 +111,11 @@ const TableView = ({
     labels,
     checksUI,
     isUpdating,
-    dataStreamsMapping
+    dataStreamsMapping,
+    dailyCheckpoints,
+    monthlyCheckpoints,
+    dailyPartitionedChecks,
+    monthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.table);
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
@@ -109,6 +129,14 @@ const TableView = ({
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
     useState<DataStreamMappingSpec>();
+  const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
+    useState<TableDailyCheckpointCategoriesSpec>();
+  const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
+    useState<TableMonthlyCheckpointCategoriesSpec>();
+  const [updatedDailyPartitionedChecks, setUpdatedDailyPartitionedChecks] =
+    useState<TableDailyPartitionedCheckCategoriesSpec>();
+  const [updatedMonthlyPartitionedChecks, setUpdatedMonthlyPartitionedChecks] =
+    useState<TableMonthlyPartitionedCheckCategoriesSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
@@ -137,6 +165,22 @@ const TableView = ({
   }, [checksUI]);
 
   useEffect(() => {
+    setUpdatedDailyCheckpoints(dailyCheckpoints);
+  }, [dailyCheckpoints]);
+
+  useEffect(() => {
+    setUpdatedMonthlyCheckpoints(monthlyCheckpoints);
+  }, [monthlyCheckpoints]);
+
+  useEffect(() => {
+    setUpdatedDailyPartitionedChecks(dailyPartitionedChecks);
+  }, [dailyPartitionedChecks]);
+
+  useEffect(() => {
+    setUpdatedMonthlyPartitionedChecks(monthlyPartitionedChecks);
+  }, [monthlyPartitionedChecks]);
+
+  useEffect(() => {
     setUpdatedDataStreamMapping(dataStreamsMapping);
   }, [dataStreamsMapping]);
 
@@ -147,6 +191,8 @@ const TableView = ({
     setUpdatedComments([]);
     setUpdatedLabels([]);
     setUpdatedDataStreamMapping(undefined);
+    setUpdatedDailyCheckpoints(undefined);
+    setUpdatedMonthlyCheckpoints(undefined);
 
     dispatch(getTableBasic(connectionName, schemaName, tableName));
     dispatch(getTableSchedule(connectionName, schemaName, tableName));
@@ -155,6 +201,8 @@ const TableView = ({
     dispatch(getTableLabels(connectionName, schemaName, tableName));
     dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
     dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
+    dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
+    dispatch(getTableMonthlyCheckpoints(connectionName, schemaName, tableName));
 
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -369,6 +417,26 @@ const TableView = ({
           <DataQualityChecks
             checksUI={updatedChecksUI}
             onChange={setUpdatedChecksUI}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'checkpoints' && (
+          <CheckpointsView
+            dailyCheckpoints={updatedDailyCheckpoints}
+            monthlyCheckpoints={updatedMonthlyCheckpoints}
+            onDailyCheckpointsChange={setUpdatedDailyCheckpoints}
+            onMonthlyCheckpointsChange={setUpdatedMonthlyCheckpoints}
+          />
+        )}
+      </div>
+      <div>
+        {activeTab === 'partitioned-checks' && (
+          <PartitionedChecks
+            dailyPartitionedChecks={updatedDailyPartitionedChecks}
+            monthlyPartitionedChecks={updatedMonthlyPartitionedChecks}
+            onDailyPartitionedChecks={setUpdatedDailyPartitionedChecks}
+            onMonthlyPartitionedChecks={setUpdatedMonthlyPartitionedChecks}
           />
         )}
       </div>
