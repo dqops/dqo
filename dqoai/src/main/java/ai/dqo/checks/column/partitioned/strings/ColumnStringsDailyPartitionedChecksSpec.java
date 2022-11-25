@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +43,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
             put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
+            put("daily_partition_max_string_whitespace_count", o -> o.dailyPartitionMaxStringWhitespaceCount);
         }
     };
 
@@ -53,6 +55,10 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringWhitespaceCountCheckSpec dailyPartitionMaxStringWhitespaceCount;
+
 
     /**
      * Returns a maximum string length below  check.
@@ -106,6 +112,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanStringLengthBetween, dailyPartitionMeanStringLengthBetween));
         this.dailyPartitionMeanStringLengthBetween = dailyPartitionMeanStringLengthBetween;
         propagateHierarchyIdToField(dailyPartitionMeanStringLengthBetween, "daily_partition_mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getDailyPartitionMaxStringWhitespaceCount() {
+        return dailyPartitionMaxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param dailyPartitionMaxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setDailyPartitionMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec dailyPartitionMaxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringWhitespaceCount, dailyPartitionMaxStringWhitespaceCount));
+        this.dailyPartitionMaxStringWhitespaceCount = dailyPartitionMaxStringWhitespaceCount;
+        propagateHierarchyIdToField(dailyPartitionMaxStringWhitespaceCount, "daily_partition_max_string_whitespace_count");
     }
 
     /**
