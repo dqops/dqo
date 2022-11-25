@@ -44,10 +44,10 @@ export interface ITableState {
   checks?: TableAdHocCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
   dataStreamsMapping?: DataStreamMappingSpec;
-  dailyCheckpoints?: TableDailyCheckpointCategoriesSpec;
-  monthlyCheckpoints?: TableMonthlyCheckpointCategoriesSpec;
-  dailyPartitionedChecks?: TableDailyPartitionedCheckCategoriesSpec;
-  monthlyPartitionedChecks?: TableMonthlyPartitionedCheckCategoriesSpec;
+  dailyCheckpoints?: UIAllChecksModel;
+  monthlyCheckpoints?: UIAllChecksModel;
+  dailyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UIAllChecksModel;
 }
 
 const initialState: ITableState = {
