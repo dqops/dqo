@@ -46,6 +46,8 @@ import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
 import TimestampsView from './TimestampsView';
 import { isEqual } from 'lodash';
+import ConfirmDialog from './ConfirmDialog';
+import { TableApiClient } from '../../../services/apiClient';
 import CheckpointsView from './CheckpointsView';
 import PartitionedChecks from './PartitionedChecks';
 
@@ -137,6 +139,7 @@ const TableView = ({
     useState<TableMonthlyPartitionedCheckCategoriesSpec>();
   const dispatch = useActionDispatch();
   const history = useHistory();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setUpdatedTableBasic(tableBasic);
@@ -355,6 +358,16 @@ const TableView = ({
     dataStreamsMapping
   ]);
 
+  const removeTable = async () => {
+    if (tableBasic) {
+      await TableApiClient.deleteTable(
+        tableBasic.connection_name ?? '',
+        tableBasic.target?.schema_name ?? '',
+        tableBasic.target?.table_name ?? ''
+      );
+    }
+  };
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
@@ -362,15 +375,23 @@ const TableView = ({
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
-        <Button
-          color={isUpdated ? 'primary' : 'secondary'}
-          variant="contained"
-          label="Save"
-          className="w-40"
-          onClick={onUpdate}
-          loading={isUpdating}
-          disabled={isDisabled}
-        />
+        <div className="flex space-x-4 items-center">
+          <Button
+            variant="text"
+            color="info"
+            label="Delete"
+            onClick={() => setIsOpen(true)}
+          />
+          <Button
+            color={isUpdated ? 'primary' : 'secondary'}
+            variant="contained"
+            label="Save"
+            className="w-40"
+            onClick={onUpdate}
+            loading={isUpdating}
+            disabled={isDisabled}
+          />
+        </div>
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
@@ -453,6 +474,13 @@ const TableView = ({
           />
         )}
       </div>
+  
+      <ConfirmDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        table={tableBasic}
+        onConfirm={removeTable}
+      />
     </div>
   );
 };
