@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import Tabs from '../../Tabs';
-import {
-  TableDailyPartitionedCheckCategoriesSpec,
-  TableMonthlyPartitionedCheckCategoriesSpec
-} from '../../../api';
-import DailyPartitionedChecks from './DailyPartitionedChecks';
-import MonthlyPartitionedChecks from './MonthlyPartitionedChecks';
+import { UIAllChecksModel } from '../../../api';
+import DataQualityChecks from '../../DataQualityChecks';
 
 const tabs = [
   {
@@ -19,14 +15,10 @@ const tabs = [
 ];
 
 interface IPartitionedChecksProps {
-  dailyPartitionedChecks?: TableDailyPartitionedCheckCategoriesSpec;
-  monthlyPartitionedChecks?: TableMonthlyPartitionedCheckCategoriesSpec;
-  onDailyPartitionedChecks: (
-    checks: TableDailyPartitionedCheckCategoriesSpec
-  ) => void;
-  onMonthlyPartitionedChecks: (
-    checks: TableMonthlyPartitionedCheckCategoriesSpec
-  ) => void;
+  dailyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UIAllChecksModel;
+  onDailyPartitionedChecks: (checks: UIAllChecksModel) => void;
+  onMonthlyPartitionedChecks: (checks: UIAllChecksModel) => void;
 }
 
 const PartitionedChecks = ({
@@ -44,14 +36,14 @@ const PartitionedChecks = ({
       </div>
       <div>
         {activeTab === 'daily' && (
-          <DailyPartitionedChecks
-            dailyPartitionedChecks={dailyPartitionedChecks}
+          <DataQualityChecks
+            checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecks}
           />
         )}
         {activeTab === 'monthly' && (
-          <MonthlyPartitionedChecks
-            monthlyPartitionedChecks={monthlyPartitionedChecks}
+          <DataQualityChecks
+            checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecks}
           />
         )}

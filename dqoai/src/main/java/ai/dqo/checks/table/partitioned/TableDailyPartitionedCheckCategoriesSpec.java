@@ -119,6 +119,6 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.DAILY;
+        return CheckTimeScale.daily;
     }
 }

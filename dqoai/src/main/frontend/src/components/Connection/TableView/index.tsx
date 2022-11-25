@@ -5,16 +5,13 @@ import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import {
-  TableDailyCheckpointCategoriesSpec,
-  TableDailyPartitionedCheckCategoriesSpec,
-  TableMonthlyCheckpointCategoriesSpec,
-  TableMonthlyPartitionedCheckCategoriesSpec
-} from '../../../api';
+import { UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableDailyCheckpoints,
-  getTableMonthlyCheckpoints
+  getTableMonthlyCheckpoints,
+  getTableDailyPartitionedChecks,
+  getTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
@@ -88,13 +85,13 @@ const TableView = ({
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
   const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
-    useState<TableDailyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
-    useState<TableMonthlyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedDailyPartitionedChecks, setUpdatedDailyPartitionedChecks] =
-    useState<TableDailyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyPartitionedChecks, setUpdatedMonthlyPartitionedChecks] =
-    useState<TableMonthlyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -120,6 +117,12 @@ const TableView = ({
 
     dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
     dispatch(getTableMonthlyCheckpoints(connectionName, schemaName, tableName));
+    dispatch(
+      getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+    );
+    dispatch(
+      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+    );
 
     const searchQuery = qs.stringify({
       connection: connectionName,
