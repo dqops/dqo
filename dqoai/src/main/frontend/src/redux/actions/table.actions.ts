@@ -517,10 +517,11 @@ export const getTableDailyCheckpoints =
   async (dispatch: Dispatch) => {
     dispatch(getTableDailyCheckpointsRequest());
     try {
-      const res = await TableApiClient.getTableCheckpointsDaily(
+      const res = await TableApiClient.getTableCheckpointsUI(
         connectionName,
         schemaName,
-        tableName
+        tableName,
+        'DAILY' as any
       );
       dispatch(getTableDailyCheckpointsSuccess(res.data));
     } catch (err) {
@@ -547,10 +548,11 @@ export const getTableMonthlyCheckpoints =
   async (dispatch: Dispatch) => {
     dispatch(getTableMonthlyCheckpointsRequest());
     try {
-      const res = await TableApiClient.getTableCheckpointsMonthly(
+      const res = await TableApiClient.getTableCheckpointsUI(
         connectionName,
         schemaName,
-        tableName
+        tableName,
+        'MONTHLY' as any
       );
       dispatch(getTableMonthlyCheckpointsSuccess(res.data));
     } catch (err) {
@@ -577,10 +579,11 @@ export const getTableDailyPartitionedChecks =
   async (dispatch: Dispatch) => {
     dispatch(getTableDailyPartitionedChecksRequest());
     try {
-      const res = await TableApiClient.getTablePartitionedChecksDaily(
+      const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
         schemaName,
-        tableName
+        tableName,
+        'DAILY' as any
       );
       dispatch(getTableDailyPartitionedChecksSuccess(res.data));
     } catch (err) {
@@ -607,10 +610,11 @@ export const getTableMonthlyPartitionedChecks =
   async (dispatch: Dispatch) => {
     dispatch(getTableMonthlyPartitionedChecksRequest());
     try {
-      const res = await TableApiClient.getTablePartitionedChecksMonthly(
+      const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
         schemaName,
-        tableName
+        tableName,
+        'MONTHLY' as any
       );
       dispatch(getTableMonthlyPartitionedChecksSuccess(res.data));
     } catch (err) {
