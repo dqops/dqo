@@ -41,7 +41,7 @@ const CheckRuleItem = ({
   };
 
   return (
-    <div className="text-left text-gray-700">
+    <div className="text-left text-gray-700 h-13 flex items-center">
       <div className="flex space-x-2 items-end">
         {parameters?.configured ? (
           <IconButton

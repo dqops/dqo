@@ -75,7 +75,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
           !check?.disabled ? 'text-gray-700' : 'opacity-75 line-through'
         )}
       >
-        <td className="py-2 px-4 align-top pr-4">
+        <td className="py-2 px-4 pr-4">
           <div className="flex space-x-2 items-center min-w-60">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
@@ -116,7 +116,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             <div>{check.check_name}</div>
           </div>
         </td>
-        <td className="py-2 px-4 align-top">
+        <td className="py-2 px-4">
           <div className="flex space-x-2">
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
@@ -129,7 +129,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 align-bottom bg-orange-100">
+        <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
             disabled={check.disabled}
             parameters={check?.rule?.error}
@@ -144,7 +144,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
             type="error"
           />
         </td>
-        <td className="py-2 px-4 align-bottom bg-red-100">
+        <td className="py-2 px-4 bg-red-100">
           <CheckRuleItem
             disabled={check.disabled}
             parameters={check?.rule?.fatal}
@@ -160,7 +160,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
           />
         </td>
         <td className="min-w-5 max-w-5 border-b" />
-        <td className="py-2 px-4 align-bottom bg-yellow-100">
+        <td className="py-2 px-4 bg-yellow-100">
           <CheckRuleItem
             disabled={check.disabled}
             parameters={check?.rule?.warning}
