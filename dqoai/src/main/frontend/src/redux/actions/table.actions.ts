@@ -521,7 +521,7 @@ export const getTableDailyCheckpoints =
         connectionName,
         schemaName,
         tableName,
-        'DAILY' as any
+        'daily'
       );
       dispatch(getTableDailyCheckpointsSuccess(res.data));
     } catch (err) {
@@ -552,7 +552,7 @@ export const getTableMonthlyCheckpoints =
         connectionName,
         schemaName,
         tableName,
-        'MONTHLY' as any
+        'monthly'
       );
       dispatch(getTableMonthlyCheckpointsSuccess(res.data));
     } catch (err) {
@@ -583,7 +583,7 @@ export const getTableDailyPartitionedChecks =
         connectionName,
         schemaName,
         tableName,
-        'DAILY' as any
+        'daily'
       );
       dispatch(getTableDailyPartitionedChecksSuccess(res.data));
     } catch (err) {
@@ -614,7 +614,7 @@ export const getTableMonthlyPartitionedChecks =
         connectionName,
         schemaName,
         tableName,
-        'MONTHLY' as any
+        'monthly'
       );
       dispatch(getTableMonthlyPartitionedChecksSuccess(res.data));
     } catch (err) {
