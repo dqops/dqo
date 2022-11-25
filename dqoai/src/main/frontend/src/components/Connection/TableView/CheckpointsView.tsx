@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import Tabs from '../../Tabs';
-import {
-  TableDailyCheckpointCategoriesSpec,
-  TableMonthlyCheckpointCategoriesSpec
-} from '../../../api';
-import DailyCheckpoints from './DailyCheckpoints';
-import MonthlyCheckpoints from './MonthlyCheckpoints';
+import { UIAllChecksModel } from '../../../api';
+import DataQualityChecks from '../../DataQualityChecks';
 
 const tabs = [
   {
@@ -19,14 +15,10 @@ const tabs = [
 ];
 
 interface ICheckpointsViewProps {
-  dailyCheckpoints?: TableDailyCheckpointCategoriesSpec;
-  monthlyCheckpoints?: TableMonthlyCheckpointCategoriesSpec;
-  onDailyCheckpointsChange: (
-    checks: TableDailyCheckpointCategoriesSpec
-  ) => void;
-  onMonthlyCheckpointsChange: (
-    checks: TableMonthlyCheckpointCategoriesSpec
-  ) => void;
+  dailyCheckpoints?: UIAllChecksModel;
+  monthlyCheckpoints?: UIAllChecksModel;
+  onDailyCheckpointsChange: (checks: UIAllChecksModel) => void;
+  onMonthlyCheckpointsChange: (checks: UIAllChecksModel) => void;
 }
 
 const CheckpointsView = ({
@@ -45,14 +37,14 @@ const CheckpointsView = ({
       </div>
       <div>
         {activeTab === 'daily' && (
-          <DailyCheckpoints
-            dailyCheckpoints={dailyCheckpoints}
+          <DataQualityChecks
+            checksUI={dailyCheckpoints}
             onChange={onDailyCheckpointsChange}
           />
         )}
         {activeTab === 'monthly' && (
-          <MonthlyCheckpoints
-            monthlyCheckpoints={monthlyCheckpoints}
+          <DataQualityChecks
+            checksUI={monthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
           />
         )}

@@ -11,10 +11,6 @@ import {
   DataStreamMappingSpec,
   RecurringScheduleSpec,
   TableBasicModel,
-  TableDailyCheckpointCategoriesSpec,
-  TableDailyPartitionedCheckCategoriesSpec,
-  TableMonthlyCheckpointCategoriesSpec,
-  TableMonthlyPartitionedCheckCategoriesSpec,
   TimeSeriesConfigurationSpec,
   UIAllChecksModel
 } from '../../../api';
@@ -35,7 +31,9 @@ import {
   updateTableSchedule,
   updateTableTime,
   getTableDailyCheckpoints,
-  getTableMonthlyCheckpoints
+  getTableMonthlyCheckpoints,
+  getTableDailyPartitionedChecks,
+  getTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
 import CommentsView from '../CommentsView';
 import LabelsView from '../LabelsView';
@@ -130,13 +128,13 @@ const TableView = ({
   const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
     useState<DataStreamMappingSpec>();
   const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
-    useState<TableDailyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
-    useState<TableMonthlyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedDailyPartitionedChecks, setUpdatedDailyPartitionedChecks] =
-    useState<TableDailyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyPartitionedChecks, setUpdatedMonthlyPartitionedChecks] =
-    useState<TableMonthlyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isOpen, setIsOpen] = useState(false);
@@ -203,6 +201,12 @@ const TableView = ({
     dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
     dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
     dispatch(getTableMonthlyCheckpoints(connectionName, schemaName, tableName));
+    dispatch(
+      getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+    );
+    dispatch(
+      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+    );
 
     const searchQuery = qs.stringify({
       connection: connectionName,
