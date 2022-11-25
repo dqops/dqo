@@ -13,75 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const sizes = {
-  0: '0rem',
-  '0.25': '0.0625rem',
-  '0.5': '0.125rem',
-  '0.75': '0.1875rem',
-  1: '0.25rem',
-  2: '0.5rem',
-  '2-05': '0.625rem',
-  3: '0.75rem',
-  3.5: '0.875rem',
-  '5.5': '1.375rem',
-  4: '1rem',
-  5: '1.25rem',
-  6: '1.5rem',
-  8: '2rem',
-  9: '2.25rem',
-  '9.5': '2.375rem',
-  10: '2.5rem',
-  11: '2.75rem',
-  12: '3rem',
-  '13.5': '3.375rem',
-  14: '3.5rem',
-  15: '3.75rem',
-  16: '4rem',
-  17: '4.25rem',
-  18: '4.5rem',
-  20: '5rem',
-  21: '5.25rem',
-  24: '6rem',
-  25: '6.25rem',
-  28: '7rem',
-  29: '7.25rem',
-  30: '7.5rem',
-  32: '8rem',
-  33: '8.25rem',
-  36: '9rem',
-  37: '9.25rem',
-  38: '9.5rem',
-  40: '10rem',
-  '40-75': '10.1875rem',
-  44: '11rem',
-  48: '12rem',
-  50: '12.5rem',
-  52: '13rem',
-  56: '14rem',
-  60: '15rem',
-  64: '16rem',
-  68: '17rem',
-  70: '17.5rem',
-  72: '18rem',
-  75: '18.75rem',
-  76: '19rem',
-  80: '20rem',
-  90: '22.5rem',
-  100: '25rem',
-  120: '30rem',
-  130: '32.5rem',
-  140: '35rem',
-  150: '37.5rem',
-  160: '40rem',
-  180: '45rem',
-  192: '48rem',
-  200: '50rem',
-  210: '52.5rem',
-  240: '60rem',
-  400: '100rem',
-  420: '105rem',
-  440: '110rem'
-};
+
+const sizes = {};
+
+for (let i = 0; i < 500; i++) {
+  sizes[i] = `${i / 4}rem`;
+  sizes[`${i}.5`] = `${(i + 0.5) / 4}rem`;
+}
 
 const withMT = require("@material-tailwind/react/utils/withMT");
 
