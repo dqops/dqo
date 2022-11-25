@@ -32,7 +32,7 @@ const ActionGroup = ({
   };
 
   return (
-    <div className="flex space-x-4 items-center absolute right-4 top-2">
+    <div className="flex space-x-4 items-center absolute right-2 top-2">
       <Button
         variant="text"
         color="info"
