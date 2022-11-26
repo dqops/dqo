@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking daily partitions or rows for each day of data.
+ * Container of built-in preconfigured data quality check points on a column level that are checking monthly partitions or rows for each month of data.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,17 +43,21 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_length_below", o -> o.monthlyPartitionMaxStringLengthBelow);
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
             put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
+            put("monthly_partition_max_string_null_placeholder_count", o -> o.monthlyPartitionMaxStringNullPlaceholderCount);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringLengthBelowCheckSpec monthlyPartitionMaxStringLengthBelow;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringLengthAboveCheckSpec monthlyPartitionMinStringLengthAbove;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringNullPlaceholderCountCheckSpec monthlyPartitionMaxStringNullPlaceholderCount;
 
     /**
      * Returns a maximum string length below check.
@@ -106,6 +111,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanStringLengthBetween, monthlyPartitionMeanStringLengthBetween));
         this.monthlyPartitionMeanStringLengthBetween = monthlyPartitionMeanStringLengthBetween;
         propagateHierarchyIdToField(monthlyPartitionMeanStringLengthBetween, "monthly_partition_mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnMaxStringNullPlaceholderCountCheckSpec getMonthlyPartitionMaxStringNullPlaceholderCount() {
+        return monthlyPartitionMaxStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param monthlyPartitionMaxStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setMonthlyPartitionMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec monthlyPartitionMaxStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringNullPlaceholderCount, monthlyPartitionMaxStringNullPlaceholderCount));
+        this.monthlyPartitionMaxStringNullPlaceholderCount = monthlyPartitionMaxStringNullPlaceholderCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringNullPlaceholderCount, "monthly_partition_max_string_null_placeholder_count");
     }
 
     /**

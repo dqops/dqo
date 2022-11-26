@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +43,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_string_length_below", o -> o.monthlyCheckpointMaxStringLengthBelow);
             put("monthly_checkpoint_min_string_length_above", o -> o.monthlyCheckpointMinStringLengthAbove);
             put("monthly_checkpoint_mean_string_length_between", o -> o.monthlyCheckpointMeanStringLengthBetween);
+            put("monthly_checkpoint_max_string_null_placeholder_count", o -> o.monthlyCheckpointMaxStringNullPlaceholderCount);
         }
     };
 
@@ -53,6 +55,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMeanStringLengthBetweenCheckSpec monthlyCheckpointMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount;
 
     /**
      * Returns a maximum string length below check.
@@ -106,6 +111,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMeanStringLengthBetween, monthlyCheckpointMeanStringLengthBetween));
         this.monthlyCheckpointMeanStringLengthBetween = monthlyCheckpointMeanStringLengthBetween;
         propagateHierarchyIdToField(monthlyCheckpointMeanStringLengthBetween, "monthly_checkpoint_mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnMaxStringNullPlaceholderCountCheckSpec getMonthlyCheckpointMaxStringNullPlaceholderCount() {
+        return monthlyCheckpointMaxStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param monthlyCheckpointMaxStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setMonthlyCheckpointMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringNullPlaceholderCount, monthlyCheckpointMaxStringNullPlaceholderCount));
+        this.monthlyCheckpointMaxStringNullPlaceholderCount = monthlyCheckpointMaxStringNullPlaceholderCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxStringNullPlaceholderCount, "monthly_checkpoint_max_string_null_placeholder_count");
     }
 
     /**
