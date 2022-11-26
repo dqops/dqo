@@ -76,6 +76,7 @@ const DataStreamLevelItem = ({
         />
         <div className="flex-1">
           <ColumnSelect
+            triggerClassName="!h-8"
             disabled={
               dataStreamLevel?.source !==
               DataStreamLevelSpecSourceEnum.column_value
