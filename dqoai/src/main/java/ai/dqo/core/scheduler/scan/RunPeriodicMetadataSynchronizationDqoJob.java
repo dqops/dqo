@@ -1,8 +1,7 @@
 package ai.dqo.core.scheduler.scan;
 
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
-import ai.dqo.core.jobqueue.BaseDqoQueueJob;
-import ai.dqo.core.jobqueue.DqoJobType;
+import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunPeriodicMetadataSynchronizationDqoJob extends BaseDqoQueueJob<Void> {
+public class RunPeriodicMetadataSynchronizationDqoJob extends DqoQueueJob<Void> {
     private ScheduleChangeFinderService scheduleChangeFinderService;
     private JobSchedulerService jobSchedulerService;
     private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
@@ -39,11 +38,12 @@ public class RunPeriodicMetadataSynchronizationDqoJob extends BaseDqoQueueJob<Vo
 
     /**
      * Job internal implementation method that should be implemented by derived jobs.
+     * @param jobExecutionContext Job execution context.
      *
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public Void onExecute() {
+    public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
         this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode);
 
@@ -62,5 +62,17 @@ public class RunPeriodicMetadataSynchronizationDqoJob extends BaseDqoQueueJob<Vo
     @Override
     public DqoJobType getJobType() {
         return DqoJobType.SCHEDULED_SYNCHRONIZATION;
+    }
+
+    /**
+     * Returns a concurrency constraint that will limit the number of parallel running jobs.
+     * Return null when the job has no concurrency limits (an unlimited number of jobs can run at the same time).
+     *
+     * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
+     */
+    @Override
+    public JobConcurrencyConstraint getConcurrencyConstraint() {
+        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_SCHEDULER_METADATA, null);
+        return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }
 }

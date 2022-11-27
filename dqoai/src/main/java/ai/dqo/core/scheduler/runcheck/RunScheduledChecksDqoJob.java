@@ -2,8 +2,10 @@ package ai.dqo.core.scheduler.runcheck;
 
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
-import ai.dqo.core.jobqueue.BaseDqoQueueJob;
+import ai.dqo.core.jobqueue.DqoJobExecutionContext;
+import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.DqoJobType;
+import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunScheduledChecksDqoJob extends BaseDqoQueueJob<Void> {
+public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
     private JobSchedulerService jobSchedulerService;
     private CheckExecutionService checkExecutionService;
     private CheckExecutionContextFactory checkExecutionContextFactory;
@@ -75,11 +77,12 @@ public class RunScheduledChecksDqoJob extends BaseDqoQueueJob<Void> {
 
     /**
      * Job internal implementation method that should be implemented by derived jobs.
+     * @param jobExecutionContext Job execution context.
      *
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public Void onExecute() {
+    public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
@@ -105,5 +108,16 @@ public class RunScheduledChecksDqoJob extends BaseDqoQueueJob<Void> {
     @Override
     public DqoJobType getJobType() {
         return DqoJobType.RUN_SCHEDULED_CHECKS_CRON;
+    }
+
+    /**
+     * Returns a concurrency constraint that will limit the number of parallel running jobs.
+     * Return null when the job has no concurrency limits (an unlimited number of jobs can run at the same time).
+     *
+     * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
+     */
+    @Override
+    public JobConcurrencyConstraint getConcurrencyConstraint() {
+        return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
     }
 }

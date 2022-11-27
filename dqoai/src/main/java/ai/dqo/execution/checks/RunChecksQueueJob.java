@@ -1,11 +1,11 @@
 package ai.dqo.execution.checks;
 
-import ai.dqo.core.jobqueue.BaseDqoQueueJob;
+import ai.dqo.core.jobqueue.DqoJobExecutionContext;
+import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.DqoJobType;
+import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextFactory;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunChecksQueueJob extends BaseDqoQueueJob<CheckExecutionSummary> {
+public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     private CheckExecutionContextFactory checkExecutionContextFactory;
     private CheckExecutionService checkExecutionService;
     private RunChecksQueueJobParameters parameters;
@@ -47,11 +47,12 @@ public class RunChecksQueueJob extends BaseDqoQueueJob<CheckExecutionSummary> {
 
     /**
      * Job internal implementation method that should be implemented by derived jobs.
+     * @param jobExecutionContext Job execution context.
      *
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public CheckExecutionSummary onExecute() {
+    public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
                 checkExecutionContext,
@@ -69,5 +70,16 @@ public class RunChecksQueueJob extends BaseDqoQueueJob<CheckExecutionSummary> {
     @Override
     public DqoJobType getJobType() {
         return DqoJobType.RUN_CHECKS;
+    }
+
+    /**
+     * Returns a concurrency constraint that will limit the number of parallel running jobs.
+     * Return null when the job has no concurrency limits (an unlimited number of jobs can run at the same time).
+     *
+     * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
+     */
+    @Override
+    public JobConcurrencyConstraint getConcurrencyConstraint() {
+        return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
     }
 }
