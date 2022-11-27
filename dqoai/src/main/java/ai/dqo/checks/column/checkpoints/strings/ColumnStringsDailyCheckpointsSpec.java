@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +43,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
             put("daily_checkpoint_min_string_length_above", o -> o.dailyCheckpointMinStringLengthAbove);
             put("daily_checkpoint_mean_string_length_between", o -> o.dailyCheckpointMeanStringLengthBetween);
+            put("daily_checkpoint_min_string_boolean_placeholder_percent", o -> o.dailyCheckpointMinStringBooleanPlaceholderPercent);
         }
     };
 
@@ -53,6 +55,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyCheckpointMinStringBooleanPlaceholderPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -106,6 +111,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanStringLengthBetween, dailyCheckpointMeanStringLengthBetween));
         this.dailyCheckpointMeanStringLengthBetween = dailyCheckpointMeanStringLengthBetween;
         propagateHierarchyIdToField(dailyCheckpointMeanStringLengthBetween, "daily_checkpoint_mean_string_length_between");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnMinStringBooleanPlaceholderPercentCheckSpec getDailyCheckpointMinStringBooleanPlaceholderPercent() {
+        return dailyCheckpointMinStringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string boolean placeholder percent check.
+     * @param dailyCheckpointMinStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     */
+    public void setDailyCheckpointMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyCheckpointMinStringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringBooleanPlaceholderPercent, dailyCheckpointMinStringBooleanPlaceholderPercent));
+        this.dailyCheckpointMinStringBooleanPlaceholderPercent = dailyCheckpointMinStringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinStringBooleanPlaceholderPercent, "daily_checkpoint_min_string_boolean_placeholder_percent");
     }
 
     /**
