@@ -10,15 +10,17 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +38,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     private final DqoJobIdGenerator dqoJobIdGenerator;
     private DqoQueueConfigurationProperties queueConfigurationProperties;
     private Sinks.Many<DqoJobChange> jobUpdateSink;
+    private Map<Long, CompletableFuture<Long>> waitingClients = new ConcurrentHashMap<>();
 
 
     /**
@@ -150,18 +153,64 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @return Initial job queue snapshot.
      */
     @Override
-    public DqoJobQueueSnapshotModel getInitialJobList() {
+    public DqoJobQueueInitialSnapshotModel getInitialJobList() {
         long changeSequence;
         List<DqoJobHistoryEntryModel> jobs;
 
         synchronized (this.lock) {
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-            jobs = this.allJobs.values()
-                    .stream()
-                    .collect(Collectors.toList());
+            jobs = new ArrayList<>(this.allJobs.values());
         }
 
-        return new DqoJobQueueSnapshotModel(jobs, changeSequence);
+        return new DqoJobQueueInitialSnapshotModel(jobs, changeSequence);
+    }
+
+    /**
+     * Waits for a next batch of changes after the <code>lastChangeId</code>. May return an empty list after the timeout.
+     * @param lastChangeId Last change id to get changes after.
+     * @param timeout Timeout to wait.
+     * @param timeUnit Timeout unit.
+     * @return Mono with a list of changes and the next sequence id.
+     */
+    @Override
+    public Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit) {
+        List<DqoJobChangeModel> changesList;
+        long changeSequence;
+        CompletableFuture<DqoJobQueueIncrementalSnapshotModel> waitForChangeFuture = null;
+
+        synchronized (this.lock) {
+            changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
+            changesList = new ArrayList<>(this.jobChanges
+                    .tailMap(lastChangeId, false)
+                    .values());
+            if (changesList.size() == 0) {
+                CompletableFuture<Long> completableFuture = new CompletableFuture<>();
+                completableFuture.completeOnTimeout(null, timeout, timeUnit);
+                this.waitingClients.put(changeSequence, completableFuture);
+                waitForChangeFuture = completableFuture.handleAsync((result, ex) -> {
+                    this.waitingClients.remove(changeSequence);
+                    if (result == null) {
+                        return new DqoJobQueueIncrementalSnapshotModel(null, changeSequence);
+                    }
+                    else {
+                        synchronized (this.lock) {
+                            long nextChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
+                            List<DqoJobChangeModel> newChangesList = new ArrayList<>(this.jobChanges
+                                    .tailMap(lastChangeId, false)
+                                    .values());
+
+                            return new DqoJobQueueIncrementalSnapshotModel(newChangesList, nextChangeId);
+                        }
+                    }
+                });
+            }
+        }
+
+        if (changesList.size() > 0) {
+            return Mono.just(new DqoJobQueueIncrementalSnapshotModel(changesList, changeSequence));
+        }
+
+        return Mono.fromFuture(waitForChangeFuture);
     }
 
     /**
@@ -169,9 +218,12 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @param jobChange Job change notification.
      */
     public void onJobChange(DqoJobChange jobChange) {
+        long changeSequence;
+        List<CompletableFuture<Long>> awaitersToNotify = null;
+
         try {
             synchronized (this.lock) {
-                long changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId(); // serialized change number
+                changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId(); // serialized change number
 
                 if (jobChange.getStatus() == DqoJobStatus.QUEUED) {
                     // new job
@@ -199,6 +251,17 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
                     removeOldFinishedJobs();
                     removeOldJobChanges();
+                }
+
+                if (this.waitingClients.size() > 0) {
+                    awaitersToNotify = new ArrayList<>(this.waitingClients.values());
+                    this.waitingClients.clear();
+                }
+            }
+
+            if (awaitersToNotify != null) {
+                for (CompletableFuture<Long> awaitingClientFuture : awaitersToNotify) {
+                    awaitingClientFuture.complete(changeSequence);
                 }
             }
         }

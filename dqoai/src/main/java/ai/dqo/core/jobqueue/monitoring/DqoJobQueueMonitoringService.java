@@ -1,6 +1,9 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
+import reactor.core.publisher.Mono;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Job queue monitoring service. Tracks a queue of messages about the job queue that should be pushed back to the client.
@@ -53,5 +56,14 @@ public interface DqoJobQueueMonitoringService {
      *
      * @return Initial job queue snapshot.
      */
-    DqoJobQueueSnapshotModel getInitialJobList();
+    DqoJobQueueInitialSnapshotModel getInitialJobList();
+
+    /**
+     * Waits for a next batch of changes after the <code>lastChangeId</code>. May return an empty list after the timeout.
+     * @param lastChangeId Last change id to get changes after.
+     * @param timeout Timeout to wait.
+     * @param timeUnit Timeout unit.
+     * @return Mono with a list of changes and the next sequence id.
+     */
+    Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit);
 }

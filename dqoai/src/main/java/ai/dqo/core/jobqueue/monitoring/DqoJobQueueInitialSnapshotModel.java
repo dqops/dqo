@@ -8,7 +8,7 @@ import java.util.List;
  * Returns the current snapshot of running jobs.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DqoJobQueueSnapshotModel {
+public class DqoJobQueueInitialSnapshotModel {
     private List<DqoJobHistoryEntryModel> jobs;
     private long lastChangeId;
 
@@ -17,7 +17,7 @@ public class DqoJobQueueSnapshotModel {
      * @param jobs List of jobs.
      * @param lastChangeId Last change id.
      */
-    public DqoJobQueueSnapshotModel(List<DqoJobHistoryEntryModel> jobs, long lastChangeId) {
+    public DqoJobQueueInitialSnapshotModel(List<DqoJobHistoryEntryModel> jobs, long lastChangeId) {
         this.jobs = jobs;
         this.lastChangeId = lastChangeId;
     }
