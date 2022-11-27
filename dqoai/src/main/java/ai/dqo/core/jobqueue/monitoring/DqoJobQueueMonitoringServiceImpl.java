@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringService {
     private final Object lock = new Object();
+    private boolean started;
     private final Duration publishBusyLoopingDuration = Duration.ofSeconds(30);
     private final TreeMap<DqoQueueJobId, DqoJobHistoryEntryModel> allJobs = new TreeMap<>();
     private final TreeMap<Long, DqoJobChangeModel> jobChanges = new TreeMap<>();
@@ -54,10 +55,15 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      */
     @Override
     public void start() {
+        if (started) {
+            return;
+        }
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<DqoJobChange> dqoJobChangeModelFlux = this.jobUpdateSink.asFlux();
         dqoJobChangeModelFlux.publishOn(Schedulers.parallel())
                 .subscribe(jobModel -> onJobChange(jobModel));
+
+        this.started = true;
     }
 
     /**
