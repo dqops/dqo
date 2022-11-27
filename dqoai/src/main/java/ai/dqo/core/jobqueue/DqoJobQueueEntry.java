@@ -1,11 +1,11 @@
 package ai.dqo.core.jobqueue;
 
-import java.time.Instant;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Holder of a single DQO job on the queue.
  */
-public class DqoJobQueueEntry {
+public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
     private DqoQueueJob<?> job;
     private DqoQueueJobId jobId;
     private JobConcurrencyConstraint jobConcurrencyConstraint;
@@ -53,5 +53,30 @@ public class DqoJobQueueEntry {
      */
     public JobConcurrencyConstraint getJobConcurrencyConstraint() {
         return jobConcurrencyConstraint;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DqoJobQueueEntry that = (DqoJobQueueEntry) o;
+
+        return jobId.equals(that.jobId);
+    }
+
+    @Override
+    public int hashCode() {
+        return jobId.hashCode();
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(@NotNull DqoJobQueueEntry o) {
+        return this.jobId.compareTo(o.getJobId());
     }
 }

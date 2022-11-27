@@ -175,4 +175,12 @@ public class HierarchyId {
     public HierarchyId clone() {
         return new HierarchyId(this.elements.clone());
     }
+
+    /**
+     * Creates a hierarchy id model.
+     * @return Hierarchy ID model.
+     */
+    public HierarchyIdModel toHierarchyIdModel() {
+        return new HierarchyIdModel(this.elements);
+    }
 }

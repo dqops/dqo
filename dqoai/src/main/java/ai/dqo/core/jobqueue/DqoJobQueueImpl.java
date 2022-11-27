@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,9 +27,11 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
 
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
     private final DqoJobConcurrencyLimiter jobConcurrencyLimiter;
+    private DqoJobIdGenerator dqoJobIdGenerator;
     private final AtomicInteger startedThreadsCount = new AtomicInteger();
     private final AtomicInteger runningJobsCount = new AtomicInteger();
     private LinkedBlockingQueue<DqoJobQueueEntry> jobsBlockingQueue;
+    private Set<DqoJobQueueEntry> runningJobs;
     private boolean started;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
@@ -38,12 +41,16 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
     /**
      * Creates a new dqo queue job.
      * @param queueConfigurationProperties dqo.cloud.* configuration parameters.
+     * @param jobConcurrencyLimiter Job concurrency limiter.
+     * @param dqoJobIdGenerator Job ID generator.
      */
     @Autowired
     public DqoJobQueueImpl(DqoQueueConfigurationProperties queueConfigurationProperties,
-                           DqoJobConcurrencyLimiter jobConcurrencyLimiter) {
+                           DqoJobConcurrencyLimiter jobConcurrencyLimiter,
+                           DqoJobIdGenerator dqoJobIdGenerator) {
         this.queueConfigurationProperties = queueConfigurationProperties;
         this.jobConcurrencyLimiter = jobConcurrencyLimiter;
+        this.dqoJobIdGenerator = dqoJobIdGenerator;
     }
 
     /**
@@ -64,6 +71,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
         this.executorService = Executors.newCachedThreadPool();
         this.runnerThreadsFutures = new ArrayList<>();
+        this.runningJobs = ConcurrentHashMap.newKeySet();
 
         startNewThreadWhenRequired(); // start the first processing thread
 
@@ -122,11 +130,13 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
                             continue;
                         }
                         DqoJobExecutionContext jobExecutionContext = new DqoJobExecutionContext(dqoJobQueueEntry.getJobId());
+                        this.runningJobs.add(dqoJobQueueEntry);
                         job.execute(jobExecutionContext);
                     } catch (Exception ex) {
                         log.error("Failed to execute a job: " + ex.getMessage(), ex);
                     }
                     finally {
+                        this.runningJobs.remove(dqoJobQueueEntry);
                         this.runningJobsCount.decrementAndGet();
                         if (dqoJobQueueEntry.getJobConcurrencyConstraint() != null) {
                                 // tell the limiter that the job has finished
@@ -156,7 +166,8 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
 
         for (int i = 0; i < this.startedThreadsCount.get(); i++) {
             try {
-                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), DqoQueueJobId.createNew()));
+                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
             } catch (InterruptedException ex) {
                 log.error("Job queue stop() operation failed to publish a poison message", ex);
             }
@@ -177,6 +188,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         this.executorService = null;
         this.runnerThreadsFutures = null;
         this.jobsBlockingQueue = null;
+        this.runningJobs = null;
         this.started = false;
     }
 
@@ -197,7 +209,8 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
 
         try {
-            this.jobsBlockingQueue.put(new DqoJobQueueEntry(job, DqoQueueJobId.createNew()));
+            DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+            this.jobsBlockingQueue.put(new DqoJobQueueEntry(job, newJobId));
         } catch (InterruptedException e) {
             throw new JobQueuePushFailedException("Cannot push a job to the queue", e);
         }

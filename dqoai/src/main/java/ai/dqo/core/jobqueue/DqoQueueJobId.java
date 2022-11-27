@@ -1,50 +1,51 @@
 package ai.dqo.core.jobqueue;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Identifies a single job.
  */
-public class DqoQueueJobId {
-    private UUID jobUuid;
-    private List<UUID> parentJobs;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
+    private long jobId;
+    private List<Long> parentJobs;
     private Instant createdAt;
 
     /**
      * Creates a new job id.
      */
     public DqoQueueJobId() {
+        this.createdAt = Instant.now();
     }
 
     /**
-     * Creates a new job id, assigning a new ID. The job creation time is now.
-     * @return New job id.
+     * Creates a new job, given a job id.
+     * @param jobId Job id.
      */
-    public static DqoQueueJobId createNew() {
-        DqoQueueJobId dqoQueueJobId = new DqoQueueJobId();
-        dqoQueueJobId.jobUuid = UUID.randomUUID();
-        dqoQueueJobId.createdAt = Instant.now();
-
-        return dqoQueueJobId;
+    public DqoQueueJobId(long jobId) {
+        this();
+        this.jobId = jobId;
     }
 
     /**
-     * Returns a unique job ID (UUID) that was assigned to the job.
-     * @return Unique job id (UUID).
+     * Returns a unique job ID  that was assigned to the job.
+     * @return Unique job id.
      */
-    public UUID getJobUuid() {
-        return jobUuid;
+    public long getJobId() {
+        return jobId;
     }
 
     /**
-     * Sets the job UUID. Should be used only for deserialization.
-     * @param jobUuid Job UUID.
+     * Sets the job id. Should be used only for deserialization.
+     * @param jobId Job id.
      */
-    public void setJobUuid(UUID jobUuid) {
-        this.jobUuid = jobUuid;
+    public void setJobId(long jobId) {
+        this.jobId = jobId;
     }
 
     /**
@@ -67,7 +68,7 @@ public class DqoQueueJobId {
      * Returns a list of parent job ids.
      * @return List of parent job ids or null, when no parent jobs are present.
      */
-    public List<UUID> getParentJobs() {
+    public List<Long> getParentJobs() {
         return parentJobs;
     }
 
@@ -75,7 +76,7 @@ public class DqoQueueJobId {
      * Sets a list orf parent job ids. Should be used only for deserialization.
      * @param parentJobs List of parent job ids.
      */
-    public void setParentJobs(List<UUID> parentJobs) {
+    public void setParentJobs(List<Long> parentJobs) {
         this.parentJobs = parentJobs;
     }
 
@@ -83,11 +84,44 @@ public class DqoQueueJobId {
      * Registers a parent job id. If a parent job is cancelled, we can find all child jobs and also cancel them.
      * @param parentJobId Job id of a parent job.
      */
-    public void addParentJobId(UUID parentJobId) {
+    public void addParentJobId(Long parentJobId) {
         if (this.parentJobs == null) {
             this.parentJobs = new ArrayList<>();
         }
 
         this.parentJobs.add(parentJobId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DqoQueueJobId that = (DqoQueueJobId) o;
+
+        return jobId == that.jobId;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (jobId ^ (jobId >>> 32));
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(@NotNull DqoQueueJobId o) {
+        return Long.compare(this.jobId, o.jobId);
+    }
+
+    @Override
+    public String toString() {
+        return "DqoQueueJobId{" +
+                "jobId=" + jobId +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
