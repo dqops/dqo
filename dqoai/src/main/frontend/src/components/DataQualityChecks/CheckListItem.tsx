@@ -6,6 +6,7 @@ import SensorParameters from './SensorParameters';
 import Switch from '../Switch';
 import clsx from 'clsx';
 import CheckRuleItem from './CheckRuleItem';
+import { JobApiClient } from '../../services/apiClient';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -67,6 +68,10 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     });
   };
 
+  const onRunCheck = () => {
+    JobApiClient.runChecks(check?.run_checks_job_template);
+  };
+
   return (
     <>
       <tr
@@ -112,6 +117,11 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 check?.schedule_override?.disabled ? 'line-through' : ''
               )}
               strokeWidth={check?.schedule_override ? 4 : 2}
+            />
+            <SvgIcon
+              name="play"
+              className="text-green-700 w-5 cursor-pointer"
+              onClick={onRunCheck}
             />
             <div>{check.check_name}</div>
           </div>
