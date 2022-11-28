@@ -19,6 +19,7 @@ interface IColumnSelectProps {
   disabled?: boolean;
   scope?: string;
   error?: boolean;
+  triggerClassName?: string;
 }
 
 const ColumnSelect = ({
@@ -28,6 +29,7 @@ const ColumnSelect = ({
   onChange,
   disabled,
   scope = 'column',
+  triggerClassName,
   error
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
@@ -65,7 +67,7 @@ const ColumnSelect = ({
         value={value}
         tooltipText={tooltipText}
         options={options}
-        triggerClassName="!h-8"
+        triggerClassName={triggerClassName}
         onChange={onChange}
         error={error}
       />
