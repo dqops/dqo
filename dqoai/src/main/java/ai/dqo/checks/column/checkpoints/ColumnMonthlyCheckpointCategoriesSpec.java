@@ -143,6 +143,6 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.MONTHLY;
+        return CheckTimeScale.monthly;
     }
 }

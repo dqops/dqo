@@ -1,7 +1,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
-import ai.dqo.core.jobqueue.BaseDqoQueueJob;
-import ai.dqo.core.jobqueue.DqoJobType;
+import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SynchronizeRootFolderDqoQueueJob extends BaseDqoQueueJob<Void> {
+public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
     private DqoCloudSynchronizationService cloudSynchronizationService;
     private SynchronizeRootFolderDqoQueueJobParameters parameters;
 
@@ -44,11 +44,12 @@ public class SynchronizeRootFolderDqoQueueJob extends BaseDqoQueueJob<Void> {
 
     /**
      * Job internal implementation method that should be implemented by derived jobs.
+     * @param jobExecutionContext Job execution context.
      *
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public Void onExecute() {
+    public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.cloudSynchronizationService.synchronizeFolder(
                 this.parameters.getRootType(),
                 this.parameters.getFileSystemSynchronizationListener());
@@ -63,5 +64,30 @@ public class SynchronizeRootFolderDqoQueueJob extends BaseDqoQueueJob<Void> {
     @Override
     public DqoJobType getJobType() {
         return DqoJobType.SYNCHRONIZE_FOLDER;
+    }
+
+    /**
+     * Returns a concurrency constraint that will limit the number of parallel running jobs.
+     * Return null when the job has no concurrency limits (an unlimited number of jobs can run at the same time).
+     *
+     * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
+     */
+    @Override
+    public JobConcurrencyConstraint getConcurrencyConstraint() {
+        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER, this.parameters.getRootType());
+        return new JobConcurrencyConstraint(concurrencyTarget, 1);
+    }
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     *
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    @Override
+    public DqoJobEntryParametersModel createParametersModel() {
+        return new DqoJobEntryParametersModel() {{
+           setSynchronizeRootFolderParameters(parameters);
+        }};
     }
 }

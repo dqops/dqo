@@ -1,55 +1,28 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
-import Button from '../../Button';
 import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import {
-  CommentSpec,
-  DataStreamMappingSpec,
-  RecurringScheduleSpec,
-  TableBasicModel,
-  TableDailyCheckpointCategoriesSpec,
-  TableDailyPartitionedCheckCategoriesSpec,
-  TableMonthlyCheckpointCategoriesSpec,
-  TableMonthlyPartitionedCheckCategoriesSpec,
-  TimeSeriesConfigurationSpec,
-  UIAllChecksModel
-} from '../../../api';
+import { UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableBasic,
-  getTableAdHocChecksUI,
-  getTableComments,
-  getTableDataStreamMapping,
-  getTableLabels,
-  getTableSchedule,
-  getTableTime,
-  updateTableBasic,
-  updateTableAdHocChecksUI,
-  updateTableComments,
-  updateTableDataStreamMapping,
-  updateTableLabels,
-  updateTableSchedule,
-  updateTableTime,
   getTableDailyCheckpoints,
-  getTableMonthlyCheckpoints
+  getTableMonthlyCheckpoints,
+  getTableDailyPartitionedChecks,
+  getTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
-import CommentsView from '../CommentsView';
-import LabelsView from '../LabelsView';
-import DataQualityChecks from '../../DataQualityChecks';
 import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
-import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
 import TimestampsView from './TimestampsView';
-import { isEqual } from 'lodash';
-import ConfirmDialog from './ConfirmDialog';
-import { TableApiClient } from '../../../services/apiClient';
 import CheckpointsView from './CheckpointsView';
 import PartitionedChecks from './PartitionedChecks';
+import AdhocView from './AdhocView';
+import TableCommentView from './TableCommentView';
+import TableLabelsView from './TableLabelsView';
+import TableDataStream from './TableDataStream';
 
 interface ITableViewProps {
   connectionName: string;
@@ -104,14 +77,6 @@ const TableView = ({
   const [activeTab, setActiveTab] = useState('table');
 
   const {
-    tableBasic,
-    schedule,
-    timeSeries,
-    comments,
-    labels,
-    checksUI,
-    isUpdating,
-    dataStreamsMapping,
     dailyCheckpoints,
     monthlyCheckpoints,
     dailyPartitionedChecks,
@@ -119,50 +84,16 @@ const TableView = ({
   } = useSelector((state: IRootState) => state.table);
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
 
-  const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
-  const [updatedSchedule, setUpdatedSchedule] =
-    useState<RecurringScheduleSpec>();
-  const [updatedTimeSeries, setUpdatedTimeSeries] =
-    useState<TimeSeriesConfigurationSpec>();
-  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
-  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  const [updatedDataStreamMapping, setUpdatedDataStreamMapping] =
-    useState<DataStreamMappingSpec>();
   const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
-    useState<TableDailyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
-    useState<TableMonthlyCheckpointCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedDailyPartitionedChecks, setUpdatedDailyPartitionedChecks] =
-    useState<TableDailyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const [updatedMonthlyPartitionedChecks, setUpdatedMonthlyPartitionedChecks] =
-    useState<TableMonthlyPartitionedCheckCategoriesSpec>();
+    useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
   const history = useHistory();
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    setUpdatedTableBasic(tableBasic);
-  }, [tableBasic]);
-
-  useEffect(() => {
-    setUpdatedSchedule(schedule);
-  }, [schedule]);
-
-  useEffect(() => {
-    setUpdatedTimeSeries(timeSeries);
-  }, [timeSeries]);
-
-  useEffect(() => {
-    setUpdatedComments(comments);
-  }, [comments]);
-  useEffect(() => {
-    setUpdatedLabels(labels);
-  }, [labels]);
-
-  useEffect(() => {
-    setUpdatedChecksUI(checksUI);
-  }, [checksUI]);
 
   useEffect(() => {
     setUpdatedDailyCheckpoints(dailyCheckpoints);
@@ -181,28 +112,17 @@ const TableView = ({
   }, [monthlyPartitionedChecks]);
 
   useEffect(() => {
-    setUpdatedDataStreamMapping(dataStreamsMapping);
-  }, [dataStreamsMapping]);
-
-  useEffect(() => {
-    setUpdatedTableBasic(undefined);
-    setUpdatedSchedule(undefined);
-    setUpdatedTimeSeries(undefined);
-    setUpdatedComments([]);
-    setUpdatedLabels([]);
-    setUpdatedDataStreamMapping(undefined);
     setUpdatedDailyCheckpoints(undefined);
     setUpdatedMonthlyCheckpoints(undefined);
 
-    dispatch(getTableBasic(connectionName, schemaName, tableName));
-    dispatch(getTableSchedule(connectionName, schemaName, tableName));
-    dispatch(getTableTime(connectionName, schemaName, tableName));
-    dispatch(getTableComments(connectionName, schemaName, tableName));
-    dispatch(getTableLabels(connectionName, schemaName, tableName));
-    dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
-    dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
     dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
     dispatch(getTableMonthlyCheckpoints(connectionName, schemaName, tableName));
+    dispatch(
+      getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+    );
+    dispatch(
+      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+    );
 
     const searchQuery = qs.stringify({
       connection: connectionName,
@@ -212,85 +132,6 @@ const TableView = ({
 
     history.replace(`/?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
-
-  const onUpdate = async () => {
-    if (activeTab === 'table' || activeTab === 'timestamps') {
-      await dispatch(
-        updateTableBasic(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedTableBasic
-        )
-      );
-      await dispatch(getTableBasic(connectionName, schemaName, tableName));
-    }
-    if (activeTab === 'schedule') {
-      await dispatch(
-        updateTableSchedule(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedSchedule
-        )
-      );
-      await dispatch(getTableSchedule(connectionName, schemaName, tableName));
-    }
-    if (activeTab === 'time') {
-      await dispatch(
-        updateTableTime(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedTimeSeries
-        )
-      );
-      await dispatch(getTableTime(connectionName, schemaName, tableName));
-    }
-    if (activeTab === 'comments') {
-      await dispatch(
-        updateTableComments(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedComments
-        )
-      );
-      await dispatch(getTableComments(connectionName, schemaName, tableName));
-    }
-    if (activeTab === 'labels') {
-      await dispatch(
-        updateTableLabels(connectionName, schemaName, tableName, updatedLabels)
-      );
-      await dispatch(getTableLabels(connectionName, schemaName, tableName));
-    }
-    if (activeTab === 'data-quality-checks') {
-      await dispatch(
-        updateTableAdHocChecksUI(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedChecksUI
-        )
-      );
-      await dispatch(
-        getTableAdHocChecksUI(connectionName, schemaName, tableName)
-      );
-    }
-    if (activeTab === 'data-streams') {
-      await dispatch(
-        updateTableDataStreamMapping(
-          connectionName,
-          schemaName,
-          tableName,
-          updatedDataStreamMapping
-        )
-      );
-      await dispatch(
-        getTableDataStreamMapping(connectionName, schemaName, tableName)
-      );
-    }
-  };
 
   const onChangeTab = (tab: string) => {
     setActiveTab(tab);
@@ -308,90 +149,30 @@ const TableView = ({
     }
   }, [pageTab, tabMap]);
 
-  const isDisabled = useMemo(() => {
-    if (activeTab === 'labels') {
-      return updatedLabels.some((label) => !label);
-    }
-
-    return false;
-  }, [updatedLabels]);
-
-  const isUpdated = useMemo(() => {
-    if (activeTab === 'table') {
-      return !isEqual(updatedTableBasic, tableBasic);
-    }
-    if (activeTab === 'schedule') {
-      return !isEqual(updatedSchedule, schedule);
-    }
-    if (activeTab === 'data-quality-checks') {
-      return !isEqual(updatedChecksUI, checksUI);
-    }
-    if (activeTab === 'comments') {
-      return !isEqual(updatedComments, comments);
-    }
-    if (activeTab === 'labels') {
-      return !isEqual(updatedLabels, labels);
-    }
-    if (activeTab === 'data-streams') {
-      return !isEqual(updatedDataStreamMapping, dataStreamsMapping);
-    }
-    if (activeTab === 'timestamps') {
-      return !isEqual(
-        updatedTableBasic?.timestamp_columns,
-        tableBasic?.timestamp_columns
-      );
-    }
-    return false;
-  }, [
-    activeTab,
-    updatedTableBasic,
-    tableBasic,
-    updatedSchedule,
-    schedule,
-    updatedChecksUI,
-    checksUI,
-    updatedComments,
-    comments,
-    updatedLabels,
-    labels,
-    updatedDataStreamMapping,
-    dataStreamsMapping
-  ]);
-
-  const removeTable = async () => {
-    if (tableBasic) {
-      await TableApiClient.deleteTable(
-        tableBasic.connection_name ?? '',
-        tableBasic.target?.schema_name ?? '',
-        tableBasic.target?.table_name ?? ''
-      );
-    }
-  };
-
   return (
-    <div className="">
-      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
+    <div className="relative">
+      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
-        <div className="flex space-x-4 items-center">
-          <Button
-            variant="text"
-            color="info"
-            label="Delete"
-            onClick={() => setIsOpen(true)}
-          />
-          <Button
-            color={isUpdated ? 'primary' : 'secondary'}
-            variant="contained"
-            label="Save"
-            className="w-40"
-            onClick={onUpdate}
-            loading={isUpdating}
-            disabled={isDisabled}
-          />
-        </div>
+        {/*<div className="flex space-x-4 items-center">*/}
+        {/*  <Button*/}
+        {/*    variant="text"*/}
+        {/*    color="info"*/}
+        {/*    label="Delete"*/}
+        {/*    onClick={() => setIsOpen(true)}*/}
+        {/*  />*/}
+        {/*  <Button*/}
+        {/*    color={isUpdated ? 'primary' : 'secondary'}*/}
+        {/*    variant="contained"*/}
+        {/*    label="Save"*/}
+        {/*    className="w-40"*/}
+        {/*    onClick={onUpdate}*/}
+        {/*    loading={isUpdating}*/}
+        {/*    disabled={isDisabled}*/}
+        {/*  />*/}
+        {/*</div>*/}
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
@@ -399,24 +180,27 @@ const TableView = ({
       <div>
         {activeTab === 'table' && (
           <TableDetails
-            tableBasic={updatedTableBasic}
-            setTableBasic={setUpdatedTableBasic}
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
       <div>
         {activeTab === 'schedule' && (
           <ScheduleDetail
-            schedule={updatedSchedule}
-            setSchedule={setUpdatedSchedule}
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
       <div>
         {activeTab === 'data-quality-checks' && (
-          <DataQualityChecks
-            checksUI={updatedChecksUI}
-            onChange={setUpdatedChecksUI}
+          <AdhocView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
@@ -442,45 +226,40 @@ const TableView = ({
       </div>
       <div>
         {activeTab === 'comments' && (
-          <CommentsView
-            comments={updatedComments}
-            onChange={setUpdatedComments}
+          <TableCommentView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
       <div>
         {activeTab === 'labels' && (
-          <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />
+          <TableLabelsView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+          />
         )}
       </div>
       <div>
         {activeTab === 'data-streams' && (
-          <DataStreamsMappingView
-            dataStreamsMapping={updatedDataStreamMapping}
-            onChange={setUpdatedDataStreamMapping}
+          <TableDataStream
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
       <div>
         {activeTab === 'timestamps' && (
           <TimestampsView
-            columnsSpec={updatedTableBasic?.timestamp_columns}
-            onChange={(columns) =>
-              setUpdatedTableBasic({
-                ...updatedTableBasic,
-                timestamp_columns: columns
-              })
-            }
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
           />
         )}
       </div>
-  
-      <ConfirmDialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        table={tableBasic}
-        onConfirm={removeTable}
-      />
     </div>
   );
 };

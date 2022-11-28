@@ -40,10 +40,6 @@ const SelectInput = ({
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
 
-  const selectedOption = useMemo(() => {
-    return options.find((item) => item.value === value);
-  }, [options, value]);
-
   const handleClick = (option: Option) => {
     if (onChange) {
       onChange(option.value);
@@ -54,6 +50,7 @@ const SelectInput = ({
   const filteredOptions = useMemo(() => {
     return options.filter(
       (option) =>
+        option.label === 'None' ||
         option.label.toLowerCase().indexOf((value || '').toLowerCase()) > -1
     );
   }, [value, options]);
