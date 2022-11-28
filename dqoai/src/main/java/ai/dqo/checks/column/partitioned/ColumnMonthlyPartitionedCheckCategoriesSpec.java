@@ -119,6 +119,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.MONTHLY;
+        return CheckTimeScale.monthly;
     }
 }

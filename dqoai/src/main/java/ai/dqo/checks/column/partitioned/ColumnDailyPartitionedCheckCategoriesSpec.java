@@ -119,6 +119,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.DAILY;
+        return CheckTimeScale.daily;
     }
 }
