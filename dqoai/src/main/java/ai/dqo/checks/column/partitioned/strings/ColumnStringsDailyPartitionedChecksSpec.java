@@ -46,7 +46,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
             put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
             put("daily_partition_max_string_empty_percent", o -> o.dailyPartitionMaxStringEmptyPercent);
-            put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
             put("daily_partition_max_string_empty_percent", o -> o.dailyPartitionMaxStringEmptyPercent);
             put("daily_partition_max_string_empty_count", o -> o.dailyPartitionMaxStringEmptyCount);
         }
@@ -63,9 +62,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringEmptyPercentCheckSpec dailyPartitionMaxStringEmptyPercent;
-
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween;
 
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringEmptyPercentCheckSpec dailyPartitionMaxStringEmptyPercent;
@@ -143,24 +139,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringEmptyPercent, dailyPartitionMaxStringEmptyPercent));
         this.dailyPartitionMaxStringEmptyPercent = dailyPartitionMaxStringEmptyPercent;
         propagateHierarchyIdToField(dailyPartitionMaxStringEmptyPercent, "daily_partition_max_string_empty_percent");
-    }
-
-    /**
-     * Returns a mean string length between  check.
-     * @return Mean string length between  check.
-     */
-    public ColumnMeanStringLengthBetweenCheckSpec getDailyPartitionMeanStringLengthBetween() {
-        return dailyPartitionMeanStringLengthBetween;
-    }
-
-    /**
-     * Sets a new definition of a mean string length between check.
-     * @param dailyPartitionMeanStringLengthBetween Mean string length between check.
-     */
-    public void setDailyPartitionMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanStringLengthBetween, dailyPartitionMeanStringLengthBetween));
-        this.dailyPartitionMeanStringLengthBetween = dailyPartitionMeanStringLengthBetween;
-        propagateHierarchyIdToField(dailyPartitionMeanStringLengthBetween, "daily_partition_mean_string_length_between");
     }
 
     /**

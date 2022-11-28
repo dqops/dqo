@@ -61,9 +61,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween;
-
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent;
 
@@ -104,24 +101,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringLengthAbove, monthlyPartitionMinStringLengthAbove));
         this.monthlyPartitionMinStringLengthAbove = monthlyPartitionMinStringLengthAbove;
         propagateHierarchyIdToField(monthlyPartitionMinStringLengthAbove, "monthly_partition_min_string_length_above");
-    }
-
-    /**
-     * Returns a mean string length between check.
-     * @return Mean string length between check.
-     */
-    public ColumnMeanStringLengthBetweenCheckSpec getMonthlyPartitionMeanStringLengthBetween() {
-        return monthlyPartitionMeanStringLengthBetween;
-    }
-
-    /**
-     * Sets a new definition of a mean string length between check.
-     * @param monthlyPartitionMeanStringLengthBetween Mean string length between check.
-     */
-    public void setMonthlyPartitionMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanStringLengthBetween, monthlyPartitionMeanStringLengthBetween));
-        this.monthlyPartitionMeanStringLengthBetween = monthlyPartitionMeanStringLengthBetween;
-        propagateHierarchyIdToField(monthlyPartitionMeanStringLengthBetween, "monthly_partition_mean_string_length_between");
     }
 
     /**
