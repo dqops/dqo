@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
  */
@@ -52,7 +54,7 @@ public class MaxValueRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param maxValue Maximum value that is accepted.
      */
     public void setMaxValue(Double maxValue) {
-		this.setDirtyIf(this.maxValue != maxValue);
+        this.setDirtyIf(!Objects.equals(this.maxValue,maxValue));
         this.maxValue = maxValue;
     }
 
