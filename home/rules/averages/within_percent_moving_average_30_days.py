@@ -21,8 +21,7 @@ import scipy
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class WithinPercentMovingAverage30DaysRuleParametersSpec:
-    max_percent_above: float
-    max_percent_below: float
+    max_percent_within: float
 
 
 class HistoricDataPoint:
@@ -66,9 +65,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered_mean = float(scipy.mean(filtered))
 
-    threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
 
-    threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+    threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
 
 
 

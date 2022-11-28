@@ -22,5 +22,5 @@ public interface DqoJobQueue {
      * @param job Job to be pushed.
      * @return Completable future.
      */
-    <T> CompletableFuture<T> pushJob(BaseDqoQueueJob<T> job);
+    <T> CompletableFuture<T> pushJob(DqoQueueJob<T> job);
 }

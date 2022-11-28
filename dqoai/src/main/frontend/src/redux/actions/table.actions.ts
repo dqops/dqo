@@ -497,3 +497,127 @@ export const updateTableDataStreamMapping =
       dispatch(updateTableDataStreamsMappingFailed(err));
     }
   };
+
+export const getTableDailyCheckpointsRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS
+});
+
+export const getTableDailyCheckpointsSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_SUCCESS,
+  data
+});
+
+export const getTableDailyCheckpointsFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const getTableDailyCheckpoints =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableDailyCheckpointsRequest());
+    try {
+      const res = await TableApiClient.getTableCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        'daily'
+      );
+      dispatch(getTableDailyCheckpointsSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableDailyCheckpointsFailed(err));
+    }
+  };
+
+export const getTableMonthlyCheckpointsRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS
+});
+
+export const getTableMonthlyCheckpointsSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_SUCCESS,
+  data
+});
+
+export const getTableMonthlyCheckpointsFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const getTableMonthlyCheckpoints =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableMonthlyCheckpointsRequest());
+    try {
+      const res = await TableApiClient.getTableCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        'monthly'
+      );
+      dispatch(getTableMonthlyCheckpointsSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableMonthlyCheckpointsFailed(err));
+    }
+  };
+
+export const getTableDailyPartitionedChecksRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS
+});
+
+export const getTableDailyPartitionedChecksSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  data
+});
+
+export const getTableDailyPartitionedChecksFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
+  error
+});
+
+export const getTableDailyPartitionedChecks =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableDailyPartitionedChecksRequest());
+    try {
+      const res = await TableApiClient.getTablePartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        'daily'
+      );
+      dispatch(getTableDailyPartitionedChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableDailyPartitionedChecksFailed(err));
+    }
+  };
+
+export const getTableMonthlyPartitionedChecksRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS
+});
+
+export const getTableMonthlyPartitionedChecksSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  data
+});
+
+export const getTableMonthlyPartitionedChecksFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  error
+});
+
+export const getTableMonthlyPartitionedChecks =
+  (connectionName: string, schemaName: string, tableName: string) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableMonthlyPartitionedChecksRequest());
+    try {
+      const res = await TableApiClient.getTablePartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        'monthly'
+      );
+      dispatch(getTableMonthlyPartitionedChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableMonthlyPartitionedChecksFailed(err));
+    }
+  };

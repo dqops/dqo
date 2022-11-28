@@ -18,6 +18,8 @@ package ai.dqo.checks.column.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -40,6 +42,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
+            put("mean_string_length_between", o -> o.meanStringLengthBetween);
+            put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
             put("max_string_empty_count", o -> o.maxStringEmptyCount);
         }
     };
@@ -49,6 +53,12 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
     private ColumnMinStringLengthAboveCheckSpec minStringLengthAbove;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
+    private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount;
@@ -87,6 +97,42 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringLengthAbove, minStringLengthAbove));
         this.minStringLengthAbove = minStringLengthAbove;
         propagateHierarchyIdToField(minStringLengthAbove, "min_string_length_above");
+    }
+
+    /**
+     * Returns a mean string length between check.
+     * @return Mean string length between check.
+     */
+    public ColumnMeanStringLengthBetweenCheckSpec getMeanStringLengthBetween() {
+        return meanStringLengthBetween;
+    }
+
+    /**
+     * Sets a new definition of a mean string length between check.
+     * @param meanStringLengthBetween Mean string length between check.
+     */
+    public void setMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween) {
+        this.setDirtyIf(!Objects.equals(this.meanStringLengthBetween, meanStringLengthBetween));
+        this.meanStringLengthBetween = meanStringLengthBetween;
+        propagateHierarchyIdToField(meanStringLengthBetween, "mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnMaxStringEmptyPercentCheckSpec getMaxStringEmptyPercent() {
+        return maxStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length below check.
+     * @param maxStringEmptyPercent Maximum string length below check.
+     */
+    public void setMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyPercent, maxStringEmptyPercent));
+        this.maxStringEmptyPercent = maxStringEmptyPercent;
+        propagateHierarchyIdToField(maxStringEmptyPercent, "max_string_empty_percent");
     }
 
     /**
