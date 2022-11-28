@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
  */
@@ -79,7 +81,7 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param expectedValue New expected value.
      */
     public void setExpectedValue(Double expectedValue) {
-        this.setDirtyIf(this.expectedValue != expectedValue);
+        this.setDirtyIf(!Objects.equals(this.expectedValue,expectedValue));
         this.expectedValue = expectedValue;
     }
 
@@ -97,7 +99,7 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param errorMargin New error margin.
      */
     public void setErrorMargin(Double errorMargin) {
-        this.setDirtyIf(this.errorMargin != errorMargin);
+        this.setDirtyIf(!Objects.equals(this.errorMargin,errorMargin));
         this.errorMargin = errorMargin;
     }
 
