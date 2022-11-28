@@ -46,6 +46,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
             put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
             put("monthly_partition_max_string_empty_percent", o -> o.monthlyPartitionMaxStringEmptyPercent);
+            put("monthly_partition_max_string_empty_count", o -> o.monthlyPartitionMaxStringEmptyCount);
         }
     };
 
@@ -57,9 +58,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween;
-
-    @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent;
@@ -137,24 +135,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanStringLengthBetween, monthlyPartitionMeanStringLengthBetween));
         this.monthlyPartitionMeanStringLengthBetween = monthlyPartitionMeanStringLengthBetween;
         propagateHierarchyIdToField(monthlyPartitionMeanStringLengthBetween, "monthly_partition_mean_string_length_between");
-    }
-
-    /**
-     * Returns a maximum empty string percentage check.
-     * @return Maximum empty string percentage check.
-     */
-    public ColumnMaxStringEmptyPercentCheckSpec getMonthlyPartitionMaxStringEmptyPercent() {
-        return monthlyPartitionMaxStringEmptyPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum empty string percentage check.
-     * @param monthlyPartitionMaxStringEmptyPercent Maximum empty string percentage check.
-     */
-    public void setMonthlyPartitionMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringEmptyPercent, monthlyPartitionMaxStringEmptyPercent));
-        this.monthlyPartitionMaxStringEmptyPercent = monthlyPartitionMaxStringEmptyPercent;
-        propagateHierarchyIdToField(monthlyPartitionMaxStringEmptyPercent, "monthly_partition_max_string_empty_percent");
     }
 
     /**

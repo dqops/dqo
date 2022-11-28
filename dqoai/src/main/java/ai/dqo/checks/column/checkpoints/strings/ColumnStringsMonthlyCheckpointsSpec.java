@@ -46,7 +46,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_min_string_length_above", o -> o.monthlyCheckpointMinStringLengthAbove);
             put("monthly_checkpoint_mean_string_length_between", o -> o.monthlyCheckpointMeanStringLengthBetween);
             put("monthly_checkpoint_max_string_empty_percent", o -> o.monthlyCheckpointMaxStringEmptyPercent);
-            put("monthly_checkpoint_max_string_empty_percent", o -> o.monthlyCheckpointMaxStringEmptyPercent);
             put("monthly_checkpoint_max_string_empty_count", o -> o.monthlyCheckpointMaxStringEmptyCount);
         }
     };
@@ -62,10 +61,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxStringEmptyPercentCheckSpec monthlyCheckpointMaxStringEmptyPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringEmptyPercentCheckSpec monthlyCheckpointMaxStringEmptyPercent;
-
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount;
@@ -140,24 +135,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMeanStringLengthBetween, monthlyCheckpointMeanStringLengthBetween));
         this.monthlyCheckpointMeanStringLengthBetween = monthlyCheckpointMeanStringLengthBetween;
         propagateHierarchyIdToField(monthlyCheckpointMeanStringLengthBetween, "monthly_checkpoint_mean_string_length_between");
-    }
-
-    /**
-     * Returns a maximum string empty percent check.
-     * @return Maximum string empty percent check.
-     */
-    public ColumnMaxStringEmptyPercentCheckSpec getMonthlyCheckpointMaxStringEmptyPercent() {
-        return monthlyCheckpointMaxStringEmptyPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string empty percent check.
-     * @param monthlyCheckpointMaxStringEmptyPercent Maximum string empty percent check.
-     */
-    public void setMonthlyCheckpointMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec monthlyCheckpointMaxStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringEmptyPercent, monthlyCheckpointMaxStringEmptyPercent));
-        this.monthlyCheckpointMaxStringEmptyPercent = monthlyCheckpointMaxStringEmptyPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringEmptyPercent, "monthly_checkpoint_max_string_empty_percent");
     }
 
     /**
