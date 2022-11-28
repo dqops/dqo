@@ -22,6 +22,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -47,6 +48,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
             put("monthly_partition_max_string_empty_percent", o -> o.monthlyPartitionMaxStringEmptyPercent);
             put("monthly_partition_max_string_whitespace_count", o -> o.monthlyPartitionMaxStringWhitespaceCount);
+            put("monthly_partition_max_string_whitespace_percent", o -> o.monthlyPartitionMaxStringWhitespacePercent);
             put("monthly_partition_min_string_valid_dates_percent", o -> o.monthlyPartitionMinStringValidDatesPercent);
         }
     };
@@ -68,6 +70,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringWhitespacePercentCheckSpec monthlyPartitionMaxStringWhitespacePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -175,6 +180,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidDatesPercent, monthlyPartitionMinStringValidDatesPercent));
         this.monthlyPartitionMinStringValidDatesPercent = monthlyPartitionMinStringValidDatesPercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringValidDatesPercent, "monthly_partition_min_string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a maximum string whitespace percent check.
+     * @return Maximum string whitespace percent check.
+     */
+    public ColumnMaxStringWhitespacePercentCheckSpec getMonthlyPartitionMaxStringWhitespacePercent() {
+        return monthlyPartitionMaxStringWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace percent check.
+     * @param monthlyPartitionMaxStringWhitespacePercent Maximum string whitespace percent check.
+     */
+    public void setMonthlyPartitionMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec monthlyPartitionMaxStringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringWhitespacePercent, monthlyPartitionMaxStringWhitespacePercent));
+        this.monthlyPartitionMaxStringWhitespacePercent = monthlyPartitionMaxStringWhitespacePercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringWhitespacePercent, "monthly_partition_max_string_whitespace_percent");
     }
 
     /**
