@@ -16,6 +16,7 @@
 package ai.dqo.core.locks;
 
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,7 +32,7 @@ import java.util.Map;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class UserHomeLockManagerImpl implements UserHomeLockManager {
     private final DqoCoreConfigurationProperties coreConfigurationProperties;
-    private final Map<LockFolderScope, ReaderWriterLockHolder> locks;
+    private final Map<DqoRoot, ReaderWriterLockHolder> locks;
 
     /**
      * Creates an instance of the lock manager.
@@ -42,11 +43,11 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
         this.coreConfigurationProperties = coreConfigurationProperties;
         long lockWaitTimeoutSeconds = coreConfigurationProperties.getLockWaitTimeoutSeconds();
         this.locks = new LinkedHashMap<>() {{
-            put(LockFolderScope.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(LockFolderScope.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(LockFolderScope.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(LockFolderScope.SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(LockFolderScope.RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.DATA_SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.DATA_RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }
 
@@ -58,7 +59,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
     @Override
-    public AcquiredSharedReadLock lockSharedRead(LockFolderScope scope) {
+    public AcquiredSharedReadLock lockSharedRead(DqoRoot scope) {
         ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
         return readerWriterLockHolder.lockSharedRead();
     }
@@ -71,7 +72,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
     @Override
-    public AcquiredExclusiveWriteLock lockExclusiveWrite(LockFolderScope scope) {
+    public AcquiredExclusiveWriteLock lockExclusiveWrite(DqoRoot scope) {
         ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
         return readerWriterLockHolder.lockExclusiveWrite();
     }

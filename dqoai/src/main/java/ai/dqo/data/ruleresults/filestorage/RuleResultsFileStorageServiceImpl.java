@@ -16,9 +16,9 @@
 package ai.dqo.data.ruleresults.filestorage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
-import ai.dqo.core.locks.LockFolderScope;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.DataStorageIOException;
 import ai.dqo.data.ChangeDeltaMode;
@@ -118,7 +118,7 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      * @param month The date of the first date of the month.
      */
     public void saveTableMonth(Table data, String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(LockFolderScope.RULE_RESULTS)) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(DqoRoot.DATA_RULE_RESULTS)) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.RULE_RESULTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
@@ -147,7 +147,7 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      * @return Returns a dataset table with the rule results. Returns null if the data is not present (missing file).
      */
     public Table loadForTableAndMonth(String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(LockFolderScope.RULE_RESULTS)) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(DqoRoot.DATA_RULE_RESULTS)) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.RULE_RESULTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);

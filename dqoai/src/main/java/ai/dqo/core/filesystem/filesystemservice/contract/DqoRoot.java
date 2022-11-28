@@ -15,8 +15,14 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.contract;
 
+import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
+
+import java.util.Objects;
+
 /**
  * DQO root folders in the dqo use home that may be replicated to a remote file system (uploaded to DQO Cloud or any other cloud).
+ * It is also used as a lock scope.
  */
 public enum DqoRoot {
     /**
@@ -42,5 +48,41 @@ public enum DqoRoot {
     /**
      * User custom rules files (python).
      */
-    RULES
+    RULES;
+
+    /**
+     * Creates a dqo user home root from the folder path.
+     * @param folderPath Folder path.
+     * @return DQO root folder or null when locking on the target folder is not supported.
+     */
+    public static DqoRoot fromHomeFolderPath(HomeFolderPath folderPath) {
+        if (folderPath.isEmpty()) {
+            return null;
+        }
+
+        String folder1 = folderPath.get(0).getObjectName();
+        if (Objects.equals(folder1, BuiltInFolderNames.SOURCES)) {
+            return SOURCES;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.SENSORS)) {
+            return SENSORS;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.RULES)) {
+            return RULES;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.DATA) && folderPath.size() > 1) {
+            String folder2 = folderPath.get(1).getObjectName();
+            if (Objects.equals(folder2, BuiltInFolderNames.SENSOR_READOUTS)) {
+                return DATA_SENSOR_READOUTS;
+            }
+            else if (Objects.equals(folder2, BuiltInFolderNames.RULE_RESULTS)) {
+                return DATA_RULE_RESULTS;
+            }
+        }
+
+        return null; // unknown folder, not
+    }
 }

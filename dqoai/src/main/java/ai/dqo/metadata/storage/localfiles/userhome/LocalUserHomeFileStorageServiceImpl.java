@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileStorageServiceImpl;
 import ai.dqo.core.filesystem.virtual.FileContent;
@@ -22,7 +23,6 @@ import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
-import ai.dqo.core.locks.LockFolderScope;
 import ai.dqo.core.locks.UserHomeLockManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public boolean fileExists(HomeFilePath filePath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(filePath.getFolder());
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
                 return super.fileExists(filePath);
@@ -63,7 +63,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public boolean folderExists(HomeFolderPath folderPath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(folderPath);
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
                 return super.folderExists(folderPath);
@@ -76,7 +76,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public boolean tryDeleteFolder(HomeFolderPath folderPath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(folderPath);
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
         if (lockFolderScope != null) {
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 return super.tryDeleteFolder(folderPath);
@@ -89,7 +89,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public FileContent readTextFile(HomeFilePath filePath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(filePath.getFolder());
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
                 return super.readTextFile(filePath);
@@ -102,7 +102,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public void saveFile(HomeFilePath filePath, FileContent fileContent) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(filePath.getFolder());
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 super.saveFile(filePath, fileContent);
@@ -115,7 +115,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public boolean deleteFile(HomeFilePath filePath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(filePath.getFolder());
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(filePath.getFolder());
         if (lockFolderScope != null) {
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 return super.deleteFile(filePath);
@@ -128,7 +128,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public List<HomeFolderPath> listFolders(HomeFolderPath folderPath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(folderPath);
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
                 return super.listFolders(folderPath);
@@ -141,7 +141,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
 
     @Override
     public List<HomeFilePath> listFiles(HomeFolderPath folderPath) {
-        LockFolderScope lockFolderScope = LockFolderScope.fromHomeFolderPath(folderPath);
+        DqoRoot lockFolderScope = DqoRoot.fromHomeFolderPath(folderPath);
         if (lockFolderScope != null) {
             try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(lockFolderScope)) {
                 return super.listFiles(folderPath);
