@@ -56,7 +56,7 @@ public interface DqoJobQueueMonitoringService {
      *
      * @return Initial job queue snapshot.
      */
-    DqoJobQueueInitialSnapshotModel getInitialJobList();
+    Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList();
 
     /**
      * Waits for a next batch of changes after the <code>lastChangeId</code>. May return an empty list after the timeout.
