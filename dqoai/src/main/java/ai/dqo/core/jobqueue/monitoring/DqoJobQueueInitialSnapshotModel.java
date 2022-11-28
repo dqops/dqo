@@ -10,16 +10,16 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DqoJobQueueInitialSnapshotModel {
     private List<DqoJobHistoryEntryModel> jobs;
-    private long lastChangeId;
+    private long lastSequenceNumber;
 
     /**
      * Creates a new job snapshot.
      * @param jobs List of jobs.
-     * @param lastChangeId Last change id.
+     * @param lastSequenceNumber Last change id (sequence number).
      */
-    public DqoJobQueueInitialSnapshotModel(List<DqoJobHistoryEntryModel> jobs, long lastChangeId) {
+    public DqoJobQueueInitialSnapshotModel(List<DqoJobHistoryEntryModel> jobs, long lastSequenceNumber) {
         this.jobs = jobs;
-        this.lastChangeId = lastChangeId;
+        this.lastSequenceNumber = lastSequenceNumber;
     }
 
     /**
@@ -32,9 +32,9 @@ public class DqoJobQueueInitialSnapshotModel {
 
     /**
      * Returns the last change id. This value must be used in a follow-up parked rest api call to get changes after this change id.
-     * @return Last change id.
+     * @return Last change id (sequence number).
      */
-    public long getLastChangeId() {
-        return lastChangeId;
+    public long getLastSequenceNumber() {
+        return lastSequenceNumber;
     }
 }

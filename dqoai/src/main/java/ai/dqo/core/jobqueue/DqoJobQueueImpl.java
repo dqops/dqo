@@ -210,10 +210,10 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
     /**
      * Pushes a job to the job queue without waiting.
      * @param job Job to be pushed.
-     * @return Completable future.
+     * @return Started job summary and a future to await for finish.
      */
     @Override
-    public <T> CompletableFuture<T> pushJob(DqoQueueJob<T> job) {
+    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job) {
         if (!this.started) {
             throw new IllegalStateException("Cannot publish a job because the job queue is not started yet.");
         }
@@ -228,11 +228,11 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, newJobId);
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
             this.jobsBlockingQueue.put(jobQueueEntry);
+
+            return new PushJobResult<>(job.getFuture(), newJobId);
         } catch (InterruptedException e) {
             throw new JobQueuePushFailedException("Cannot push a job to the queue", e);
         }
-
-        return job.getFuture();
     }
 
     /**
