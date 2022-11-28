@@ -77,7 +77,7 @@ dqo:
   queue:
     threads: 10
     keep-finished-jobs-history-seconds: 3600
-    keep-jobs-changes-history-seconds: 300
+    keep-jobs-changes-history-seconds: 1200
   scheduler:
     scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
     enable-cloud-sync: true
