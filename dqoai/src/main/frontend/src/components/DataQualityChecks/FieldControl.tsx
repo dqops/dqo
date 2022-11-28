@@ -151,6 +151,7 @@ const FieldControl = ({
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.column_name && (
         <ColumnSelect
+          triggerClassName="!h-8"
           label={label}
           value={value}
           tooltipText={tooltip}

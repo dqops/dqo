@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public enum CheckTimeScale {
     @JsonProperty("daily")
-    DAILY,
+    daily,  // lowercase name to make swagger work
 
     @JsonProperty("monthly")
-    MONTHLY
+    monthly // lowercase name to make swagger work
 }

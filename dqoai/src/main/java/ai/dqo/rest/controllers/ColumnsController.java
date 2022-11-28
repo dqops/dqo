@@ -824,11 +824,11 @@ public class ColumnsController {
                     }
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             ColumnDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
                             return (checkpointsDaily != null) ? checkpointsDaily : new ColumnDailyCheckpointCategoriesSpec();
 
-                        case MONTHLY:
+                        case monthly:
                             ColumnMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
                             return (checkpointsMonthly != null) ? checkpointsMonthly : new ColumnMonthlyCheckpointCategoriesSpec();
 
@@ -881,11 +881,11 @@ public class ColumnsController {
                     }
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             ColumnDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
                             return (partitionedChecksDaily != null) ? partitionedChecksDaily : new ColumnDailyPartitionedCheckCategoriesSpec();
 
-                        case MONTHLY:
+                        case monthly:
                             ColumnMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
                             return (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new ColumnMonthlyPartitionedCheckCategoriesSpec();
 
@@ -1935,13 +1935,13 @@ public class ColumnsController {
                     ColumnCheckpointsSpec checkpoints = spec.getCheckpoints();
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (checkpoints == null || checkpoints.getDaily() == null) {
                                 return new ColumnDailyCheckpointCategoriesSpec();
                             }
                             return checkpoints.getDaily();
 
-                        case MONTHLY:
+                        case monthly:
                             if (checkpoints == null || checkpoints.getMonthly() == null) {
                                 return new ColumnMonthlyCheckpointCategoriesSpec();
                             }
@@ -1958,12 +1958,12 @@ public class ColumnsController {
                     }
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (!check.isDefault()) {
                                 checkpoints.setDaily((ColumnDailyCheckpointCategoriesSpec) check);
                             }
 
-                        case MONTHLY:
+                        case monthly:
                             if (!check.isDefault()) {
                                 checkpoints.setMonthly((ColumnMonthlyCheckpointCategoriesSpec) check);
                             }
@@ -2024,13 +2024,13 @@ public class ColumnsController {
                     ColumnPartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (partitionedChecks == null || partitionedChecks.getDaily() == null) {
                                 return new ColumnDailyPartitionedCheckCategoriesSpec();
                             }
                             return partitionedChecks.getDaily();
 
-                        case MONTHLY:
+                        case monthly:
                             if (partitionedChecks == null || partitionedChecks.getMonthly() == null) {
                                 return new ColumnMonthlyPartitionedCheckCategoriesSpec();
                             }
@@ -2047,12 +2047,12 @@ public class ColumnsController {
                     }
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (!check.isDefault()) {
                                 partitionedChecks.setDaily((ColumnDailyPartitionedCheckCategoriesSpec) check);
                             }
 
-                        case MONTHLY:
+                        case monthly:
                             if (!check.isDefault()) {
                                 partitionedChecks.setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec) check);
                             }

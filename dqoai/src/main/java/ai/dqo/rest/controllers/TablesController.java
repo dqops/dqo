@@ -688,20 +688,16 @@ public class TablesController {
                         checkpoints = new TableCheckpointsSpec();
                     }
 
-                    AbstractRootChecksContainerSpec checkpointsPartition = null;
-
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
-                            checkpointsPartition =
-                                    (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
+                            return (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
 
-                        case MONTHLY:
+                        case monthly:
                             TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
-                            checkpointsPartition =
-                                    (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
+                            return (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
                     }
-                    return checkpointsPartition;
+                    return null;
                 },
                 connectionName,
                 schemaName,
@@ -744,20 +740,16 @@ public class TablesController {
                         partitionedChecks = new TablePartitionedChecksRootSpec();
                     }
 
-                    AbstractRootChecksContainerSpec partitionedChecksPartition = null;
-
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
-                            partitionedChecksPartition =
-                                    (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
+                            return (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
 
-                        case MONTHLY:
+                        case monthly:
                             TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
-                            partitionedChecksPartition =
-                                    (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
+                            return (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
                     }
-                    return partitionedChecksPartition;
+                    return null;
                 },
                 connectionName,
                 schemaName,
@@ -1639,13 +1631,13 @@ public class TablesController {
                     TableCheckpointsSpec checkpoints = spec.getCheckpoints();
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (checkpoints.getDaily() == null) {
                                 checkpoints.setDaily(new TableDailyCheckpointCategoriesSpec());
                             }
                             return checkpoints.getDaily();
 
-                        case MONTHLY:
+                        case monthly:
                             if (checkpoints.getMonthly() == null) {
                                 checkpoints.setMonthly(new TableMonthlyCheckpointCategoriesSpec());
                             }
@@ -1706,13 +1698,13 @@ public class TablesController {
                     TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
 
                     switch (timePartition) {
-                        case DAILY:
+                        case daily:
                             if (partitionedChecks.getDaily() == null) {
                                 partitionedChecks.setDaily(new TableDailyPartitionedCheckCategoriesSpec());
                             }
                             return partitionedChecks.getDaily();
 
-                        case MONTHLY:
+                        case monthly:
                             if (partitionedChecks.getMonthly() == null) {
                                 partitionedChecks.setMonthly(new TableMonthlyPartitionedCheckCategoriesSpec());
                             }

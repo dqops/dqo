@@ -1,89 +1,125 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ColumnBasicModel,
   TimestampColumnsSpec,
   TimestampColumnsSpecPartitionedChecksTimestampSourceEnum
 } from '../../../api';
 import Select from '../../Select';
-import { AxiosResponse } from 'axios';
-import { ColumnApiClient } from '../../../services/apiClient';
-import qs from 'query-string';
-import { useLocation } from 'react-router-dom';
-import { Option } from '../../DataQualityChecks/ColumnSelect';
-import SelectInput from '../../SelectInput';
+import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
+import ActionGroup from './ActionGroup';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import {
+  getTableBasic,
+  updateTableBasic
+} from '../../../redux/actions/table.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface TimestampsViewProps {
-  columnsSpec?: TimestampColumnsSpec;
-  onChange: (columns: TimestampColumnsSpec) => void;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
-const TimestampsView = ({ columnsSpec, onChange }: TimestampsViewProps) => {
-  const partitionedChecksOptions = [
-    {
-      label: 'event_timestamp',
-      value:
-        TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp
-    },
-    {
-      label: 'ingestion_timestamp',
-      value:
-        TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp
-    }
-  ];
-  const [options, setOptions] = useState<Option[]>([]);
-  const location = useLocation();
+const partitionedChecksOptions = [
+  {
+    label: 'Event Timestamp Column (event_timestamp)',
+    value:
+      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp
+  },
+  {
+    label: 'Ingestion Timestamp Column (ingestion_timestamp)',
+    value:
+      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp
+  }
+];
 
-  const setColumns = (res: AxiosResponse<ColumnBasicModel[]>) => {
-    setOptions(
-      res.data.map((item) => ({
-        label: item.column_name || '',
-        value: item.column_name || ''
-      }))
-    );
-  };
+const TimestampsView = ({
+  connectionName,
+  schemaName,
+  tableName
+}: TimestampsViewProps) => {
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [columnsSpec, setColumnsSpec] = useState<TimestampColumnsSpec>();
+  const { tableBasic, isUpdating } = useSelector(
+    (state: IRootState) => state.table
+  );
+  const dispatch = useActionDispatch();
 
-  const fetchColumns = async () => {
-    try {
-      const params: any = qs.parse(location.search);
-      const { connection, schema, table } = params;
-      const res: AxiosResponse<ColumnBasicModel[]> =
-        await ColumnApiClient.getColumns(connection, schema, table);
-      setColumns(res);
-    } catch (err) {
-      console.error(err);
-    }
+  const handleChange = (obj: any) => {
+    setColumnsSpec({
+      ...columnsSpec,
+      ...obj
+    });
+    setIsUpdated(true);
   };
 
   useEffect(() => {
-    fetchColumns().then();
+    setColumnsSpec(tableBasic?.timestamp_columns);
+  }, [tableBasic?.timestamp_columns]);
+
+  useEffect(() => {
+    dispatch(getTableBasic(connectionName, schemaName, tableName));
   }, []);
+
+  const onUpdate = async () => {
+    await dispatch(
+      updateTableBasic(connectionName, schemaName, tableName, {
+        ...tableBasic,
+        timestamp_columns: columnsSpec
+      })
+    );
+    await dispatch(getTableBasic(connectionName, schemaName, tableName));
+    setIsUpdated(false);
+  };
+
+  const isDisabled =
+    !isUpdated ||
+    (columnsSpec?.partitioned_checks_timestamp_source ===
+      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp &&
+      !columnsSpec?.ingestion_timestamp_column) ||
+    (columnsSpec?.partitioned_checks_timestamp_source ===
+      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp &&
+      !columnsSpec?.event_timestamp_column);
 
   return (
     <div className="py-4 px-8 flex flex-col">
+      <ActionGroup
+        onUpdate={onUpdate}
+        isUpdated={isUpdated}
+        isUpdating={isUpdating}
+        isDisabled={isDisabled}
+      />
+
       <div className="mb-4">
-        <SelectInput
+        <ColumnSelect
           label="Event Timestamp Column"
-          options={options}
           value={columnsSpec?.event_timestamp_column}
           onChange={(column) =>
-            onChange({
-              ...columnsSpec,
+            handleChange({
               event_timestamp_column: column
             })
+          }
+          error={
+            columnsSpec?.partitioned_checks_timestamp_source ===
+              TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp &&
+            !columnsSpec?.event_timestamp_column
           }
         />
       </div>
 
       <div className="mb-4">
-        <SelectInput
+        <ColumnSelect
           label="Ingestion Timestamp Column"
-          options={options}
           value={columnsSpec?.ingestion_timestamp_column}
           onChange={(column) =>
-            onChange({
-              ...columnsSpec,
+            handleChange({
               ingestion_timestamp_column: column
             })
+          }
+          error={
+            columnsSpec?.partitioned_checks_timestamp_source ===
+              TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp &&
+            !columnsSpec?.ingestion_timestamp_column
           }
         />
       </div>
@@ -94,8 +130,7 @@ const TimestampsView = ({ columnsSpec, onChange }: TimestampsViewProps) => {
           options={partitionedChecksOptions}
           value={columnsSpec?.partitioned_checks_timestamp_source}
           onChange={(column) =>
-            onChange({
-              ...columnsSpec,
+            handleChange({
               partitioned_checks_timestamp_source: column
             })
           }
