@@ -12,6 +12,10 @@ import ColumnsView from '../../components/Connection/ColumnsView';
 import ColumnView from '../../components/Connection/ColumnView';
 import ChecksView from '../../components/Connection/ChecksView';
 import ColumnChecksView from '../../components/Connection/ColumnChecksView';
+import DailyChecksView from '../../components/Connection/DailyChecksView';
+import MonthlyChecksView from '../../components/Connection/MonthlyChecksView';
+import DailyPartitionedChecksView from '../../components/Connection/DailyPartitionedChecksView';
+import MonthlyPartitionedChecksView from '../../components/Connection/MonthlyPartitionedChecksView';
 
 const ConnectionPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
@@ -41,7 +45,11 @@ const ConnectionPage = () => {
       };
     } else if (
       activeNode?.level === TREE_LEVEL.COLUMNS ||
-      activeNode?.level === TREE_LEVEL.TABLE_CHECKS
+      activeNode?.level === TREE_LEVEL.TABLE_CHECKS ||
+      activeNode?.level === TREE_LEVEL.TABLE_DAILY_CHECKS ||
+      activeNode?.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS ||
+      activeNode?.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS ||
+      activeNode?.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS
     ) {
       const tableNode = findTreeNode(treeData, activeNode?.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -138,6 +146,35 @@ const ConnectionPage = () => {
               schemaName={params?.schemaName ?? ''}
               tableName={params?.tableName ?? ''}
               columnName={params?.columnName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.TABLE_DAILY_CHECKS && (
+            <DailyChecksView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS && (
+            <MonthlyChecksView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
+          )}
+          {activeNode?.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS && (
+            <DailyPartitionedChecksView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
+            />
+          )}
+          {activeNode?.level ===
+            TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS && (
+            <MonthlyPartitionedChecksView
+              connectionName={params?.connectionName ?? ''}
+              schemaName={params?.schemaName ?? ''}
+              tableName={params?.tableName ?? ''}
             />
           )}
         </div>
