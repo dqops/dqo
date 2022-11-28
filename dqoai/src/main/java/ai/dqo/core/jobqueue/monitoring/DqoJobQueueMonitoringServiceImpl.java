@@ -79,7 +79,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = new DqoJobHistoryEntryModel(jobQueueEntry);
             DqoJobChange dqoJobChange = new DqoJobChange(dqoJobHistoryEntryModel.getStatus(), dqoJobHistoryEntryModel);
 
-            this.jobUpdateSink.emitNext(dqoJobChange, Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration));
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobAddedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -94,7 +95,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobRunningEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.RUNNING, jobQueueEntry.getJobId());
-            this.jobUpdateSink.emitNext(dqoJobChange, Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration));
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobRunningEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -109,7 +111,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobParkedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.WAITING, jobQueueEntry.getJobId());
-            this.jobUpdateSink.emitNext(dqoJobChange, Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration));
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobParkedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -124,7 +127,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobSucceededEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.SUCCEEDED, jobQueueEntry.getJobId());
-            this.jobUpdateSink.emitNext(dqoJobChange, Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration));
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobSucceededEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -140,7 +144,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobFailedEvent(DqoJobQueueEntry jobQueueEntry, String errorMessage) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage);
-            this.jobUpdateSink.emitNext(dqoJobChange, Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration));
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobFailedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
