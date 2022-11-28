@@ -21,6 +21,9 @@ import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,6 +47,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
             put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
             put("monthly_partition_max_string_empty_percent", o -> o.monthlyPartitionMaxStringEmptyPercent);
+            put("monthly_partition_max_string_whitespace_count", o -> o.monthlyPartitionMaxStringWhitespaceCount);
+            put("monthly_partition_max_string_whitespace_percent", o -> o.monthlyPartitionMaxStringWhitespacePercent);
+            put("monthly_partition_min_string_valid_dates_percent", o -> o.monthlyPartitionMinStringValidDatesPercent);
         }
     };
 
@@ -58,6 +64,15 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringEmptyPercentCheckSpec monthlyPartitionMaxStringEmptyPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringWhitespaceCountCheckSpec monthlyPartitionMaxStringWhitespaceCount;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringWhitespacePercentCheckSpec monthlyPartitionMaxStringWhitespacePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -129,6 +144,60 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringEmptyPercent, monthlyPartitionMaxStringEmptyPercent));
         this.monthlyPartitionMaxStringEmptyPercent = monthlyPartitionMaxStringEmptyPercent;
         propagateHierarchyIdToField(monthlyPartitionMaxStringEmptyPercent, "monthly_partition_max_string_empty_percent");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getMonthlyPartitionMaxStringWhitespaceCount() {
+        return monthlyPartitionMaxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param monthlyPartitionMaxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setMonthlyPartitionMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec monthlyPartitionMaxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringWhitespaceCount, monthlyPartitionMaxStringWhitespaceCount));
+        this.monthlyPartitionMaxStringWhitespaceCount = monthlyPartitionMaxStringWhitespaceCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringWhitespaceCount, "monthly_partition_max_string_whitespace_count");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnMinStringValidDatesPercentCheckSpec getMonthlyPartitionMinStringValidDatesPercent() {
+        return monthlyPartitionMinStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param monthlyPartitionMinStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setMonthlyPartitionMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidDatesPercent, monthlyPartitionMinStringValidDatesPercent));
+        this.monthlyPartitionMinStringValidDatesPercent = monthlyPartitionMinStringValidDatesPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidDatesPercent, "monthly_partition_min_string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a maximum string whitespace percent check.
+     * @return Maximum string whitespace percent check.
+     */
+    public ColumnMaxStringWhitespacePercentCheckSpec getMonthlyPartitionMaxStringWhitespacePercent() {
+        return monthlyPartitionMaxStringWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace percent check.
+     * @param monthlyPartitionMaxStringWhitespacePercent Maximum string whitespace percent check.
+     */
+    public void setMonthlyPartitionMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec monthlyPartitionMaxStringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringWhitespacePercent, monthlyPartitionMaxStringWhitespacePercent));
+        this.monthlyPartitionMaxStringWhitespacePercent = monthlyPartitionMaxStringWhitespacePercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringWhitespacePercent, "monthly_partition_max_string_whitespace_percent");
     }
 
     /**
