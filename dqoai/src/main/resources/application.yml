@@ -59,8 +59,6 @@ dqo:
     home: .
     has-local-home: true
   storage:
-    sensor-readouts-storage-path: .data/sensor_readouts
-    rule-results-storage-path: .data/rule_results
     gcp:
       upload-buffer-size: 5000000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
