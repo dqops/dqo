@@ -22,11 +22,7 @@ import {
   TimeSeriesConfigurationSpec,
   TableAdHocCheckCategoriesSpec,
   UIAllChecksModel,
-  DataStreamMappingSpec,
-  TableDailyCheckpointCategoriesSpec,
-  TableMonthlyCheckpointCategoriesSpec,
-  TableDailyPartitionedCheckCategoriesSpec,
-  TableMonthlyPartitionedCheckCategoriesSpec
+  DataStreamMappingSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -396,6 +392,74 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
         error: action.error
       };
     default:
