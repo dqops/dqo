@@ -118,7 +118,7 @@ const SelectInput = ({
             <div
               data-testid="select-option"
               key={index}
-              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8"
+              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
               onClick={() => handleClick(option)}
             >
               {option.label}

@@ -22,6 +22,7 @@ import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,7 +48,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
             put("max_string_whitespace_count", o -> o.maxStringWhitespaceCount);
             put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
-
+            put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
         }
     };
 
@@ -66,6 +67,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount;
 
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
+    private ColumnMinStringValidDatesPercentCheckSpec minStringValidDatesPercent;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringWhitespacePercentCheckSpec maxStringWhitespacePercent;
@@ -176,6 +179,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringWhitespacePercent, maxStringWhitespacePercent));
         this.maxStringWhitespacePercent = maxStringWhitespacePercent;
         propagateHierarchyIdToField(maxStringWhitespacePercent, "max_string_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnMinStringValidDatesPercentCheckSpec getMinStringValidDatesPercent() {
+        return minStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param minStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec minStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidDatesPercent, minStringValidDatesPercent));
+        this.minStringValidDatesPercent = minStringValidDatesPercent;
+        propagateHierarchyIdToField(minStringValidDatesPercent, "min_string_valid_dates_percent");
     }
 
     /**
