@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-public class CheckSearchFilters extends TableSearchFilters {
+public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     private String columnName;
     private String checkName;
     private String sensorName;
@@ -203,5 +204,23 @@ public class CheckSearchFilters extends TableSearchFilters {
                 .map(hierarchyIdModel -> hierarchyIdModel.toHierarchyId())
                 .collect(Collectors.toSet());
         this.checkHierarchyIds = hierarchyIds;
+    }
+
+    /**
+     * Creates a deep clone of the search object.
+     * @return Deep cloned object.
+     */
+    @Override
+    public CheckSearchFilters clone() {
+        try {
+            CheckSearchFilters cloned = (CheckSearchFilters) super.clone();
+            if (this.checkHierarchyIds != null) {
+                cloned.checkHierarchyIds = new HashSet<>(this.checkHierarchyIds);
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Cannot clone the object", ex);
+        }
     }
 }
