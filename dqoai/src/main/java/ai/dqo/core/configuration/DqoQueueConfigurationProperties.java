@@ -28,6 +28,8 @@ import org.springframework.context.annotation.Configuration;
 public class DqoQueueConfigurationProperties implements Cloneable {
     private int threads = 10;
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
+    private int keepFinishedJobsHistorySeconds = 3600;
+    private int keepJobsChangesHistorySeconds = 300;
 
     /**
      * Returns the number of threads that the job queue uses for processing jobs.
@@ -59,6 +61,39 @@ public class DqoQueueConfigurationProperties implements Cloneable {
      */
     public void setMaxNonBlockingCapacity(Integer maxNonBlockingCapacity) {
         this.maxNonBlockingCapacity = maxNonBlockingCapacity;
+    }
+
+    /**
+     * Number of seconds to preserve the history of finished jobs on the queue monitor.
+     * When user opens UI, jobs finished but to the given number of seconds ago will be still shown.
+     * @return Number of seconds to preserve the history of finished jobs.
+     */
+    public int getKeepFinishedJobsHistorySeconds() {
+        return keepFinishedJobsHistorySeconds;
+    }
+
+    /**
+     * Sets the number of seconds to keep the history of finished jobs.
+     * @param keepFinishedJobsHistorySeconds Finished jobs time to keep on the history list.
+     */
+    public void setKeepFinishedJobsHistorySeconds(int keepFinishedJobsHistorySeconds) {
+        this.keepFinishedJobsHistorySeconds = keepFinishedJobsHistorySeconds;
+    }
+
+    /**
+     * The number of seconds to preserve the history of job changes.
+     * @return Number of seconds to keep the history of job changes.
+     */
+    public int getKeepJobsChangesHistorySeconds() {
+        return keepJobsChangesHistorySeconds;
+    }
+
+    /**
+     * Sets the number of seconds to keep the history of job changes.
+     * @param keepJobsChangesHistorySeconds Number of seconds.
+     */
+    public void setKeepJobsChangesHistorySeconds(int keepJobsChangesHistorySeconds) {
+        this.keepJobsChangesHistorySeconds = keepJobsChangesHistorySeconds;
     }
 
     /**

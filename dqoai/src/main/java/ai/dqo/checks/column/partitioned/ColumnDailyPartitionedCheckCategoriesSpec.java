@@ -18,7 +18,6 @@ package ai.dqo.checks.column.partitioned;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNegativeDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -120,6 +119,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.DAILY;
+        return CheckTimeScale.daily;
     }
 }
