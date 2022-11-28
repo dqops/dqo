@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,6 +44,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_length_below", o -> o.dailyPartitionMaxStringLengthBelow);
             put("daily_partition_min_string_length_above", o -> o.dailyPartitionMinStringLengthAbove);
             put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
+            put("daily_partition_max_string_empty_percent", o -> o.dailyPartitionMaxStringEmptyPercent);
             put("daily_partition_max_string_whitespace_percent", o -> o.dailyPartitionMaxStringWhitespacePercent);
         }
     };
@@ -55,6 +57,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringEmptyPercentCheckSpec dailyPartitionMaxStringEmptyPercent;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringWhitespacePercentCheckSpec dailyPartitionMaxStringWhitespacePercent;
@@ -111,6 +116,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanStringLengthBetween, dailyPartitionMeanStringLengthBetween));
         this.dailyPartitionMeanStringLengthBetween = dailyPartitionMeanStringLengthBetween;
         propagateHierarchyIdToField(dailyPartitionMeanStringLengthBetween, "daily_partition_mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum empty string percentage check.
+     * @return Maximum empty string percentage check.
+     */
+    public ColumnMaxStringEmptyPercentCheckSpec getDailyPartitionMaxStringEmptyPercent() {
+        return dailyPartitionMaxStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum empty string percentage check.
+     * @param dailyPartitionMaxStringEmptyPercent Maximum empty string percentage check.
+     */
+    public void setDailyPartitionMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec dailyPartitionMaxStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringEmptyPercent, dailyPartitionMaxStringEmptyPercent));
+        this.dailyPartitionMaxStringEmptyPercent = dailyPartitionMaxStringEmptyPercent;
+        propagateHierarchyIdToField(dailyPartitionMaxStringEmptyPercent, "daily_partition_max_string_empty_percent");
     }
 
     /**
