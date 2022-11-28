@@ -45,7 +45,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
             put(LockFolderScope.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(LockFolderScope.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(LockFolderScope.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(LockFolderScope.READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(LockFolderScope.SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(LockFolderScope.RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }

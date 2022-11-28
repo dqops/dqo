@@ -37,9 +37,6 @@ public class DqoConfigurationProperties implements Cloneable {
     private DqoSecretsConfigurationProperties secrets;
 
     @Autowired
-    private DqoStorageConfigurationProperties storage;
-
-    @Autowired
     private DqoCloudConfigurationProperties cloud;
 
     @Autowired
@@ -132,22 +129,6 @@ public class DqoConfigurationProperties implements Cloneable {
     }
 
     /**
-     * DQO storage configuration - where to store the results.
-     * @return Storage configuration.
-     */
-    public DqoStorageConfigurationProperties getStorage() {
-        return storage;
-    }
-
-    /**
-     * Sets the storage configuration.
-     * @param storage New storage configuration.
-     */
-    public void setStorage(DqoStorageConfigurationProperties storage) {
-        this.storage = storage;
-    }
-
-    /**
      * Returns the DQO Cloud configuration.
      * @return DQO cloud configuration.
      */
@@ -190,7 +171,6 @@ public class DqoConfigurationProperties implements Cloneable {
             cloned.user = this.user != null ? this.user.clone() : null;
             cloned.python = this.python != null ? this.python.clone() : null;
             cloned.secrets = this.secrets != null ? this.secrets.clone() : null;
-            cloned.storage = this.storage != null ? this.storage.clone() : null;
             cloned.cloud = this.cloud != null ? this.cloud.clone() : null;
             cloned.scheduler = this.scheduler != null ? this.scheduler.clone() : null;
             return cloned;
