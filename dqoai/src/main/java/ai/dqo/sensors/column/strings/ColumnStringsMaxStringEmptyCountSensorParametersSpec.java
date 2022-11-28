@@ -52,6 +52,6 @@ public class ColumnStringsMaxStringEmptyCountSensorParametersSpec extends Abstra
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/max_string_empty_count";
+        return "column/strings/string_max_empty_count";
     }
 }
