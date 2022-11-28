@@ -33,8 +33,8 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.checks.AbstractUIAllChecksModel;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
-import ai.dqo.rest.models.checks.UIAllChecksModelAbstr;
 import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
@@ -372,34 +372,99 @@ public class ColumnsController {
         return new ResponseEntity<>(Mono.justOrEmpty(scheduleOverride), HttpStatus.OK); // 200
     }
 
-    protected <T extends AbstractRootChecksContainerSpec> Optional<T> getColumnGenericChecks(
-            Function<ColumnSpec, T> extractorFromSpec,
-            String connectionName,
-            String schemaName,
-            String tableName,
-            String columnName) {
+    /**
+     * Retrieves the configuration of an overridden time series on a column given a connection, table add column names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return Overridden time series configuration on a column.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/timeseriesoverride")
+    @ApiOperation(value = "getColumnTimeSeriesOverride", notes = "Return the configuration of an overridden time series on a column", response = TimeSeriesConfigurationSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of an overridden time series on a column returned", response = TimeSeriesConfigurationSpec.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TimeSeriesConfigurationSpec>> getColumnTimeSeriesOverride(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
         ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
-            return null;
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
                 new PhysicalTableName(schemaName, tableName), true);
         if (tableWrapper == null) {
-            return null;
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         if (columnSpec == null) {
-            return null;
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        return Optional.ofNullable(extractorFromSpec.apply(columnSpec));
+        TimeSeriesConfigurationSpec timeSeriesOverride = columnSpec.getTimeSeriesOverride();
+
+        return new ResponseEntity<>(Mono.justOrEmpty(timeSeriesOverride), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of an overridden data streams mapping on a column given a connection, table add column names.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return Overridden data streams configuration on a column.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/datastreamsoverride")
+    @ApiOperation(value = "getColumnDataStreamsOverride", notes = "Return the configuration of overridden data streams on a column", response = DataStreamMappingSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of overridden data streams on a column returned", response = DataStreamMappingSpec.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    @Deprecated
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getColumnDataStreamsOverride(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataStreamMappingSpec dataStreamsOverride = columnSpec.getDataStreamsOverride();
+
+        return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsOverride), HttpStatus.OK); // 200
     }
 
     /**
@@ -433,11 +498,10 @@ public class ColumnsController {
         
         if (checks == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else if (checks.isPresent()) {
-            return new ResponseEntity<>(Mono.just(checks.get()), HttpStatus.OK); // 200
-        } else {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
+
+        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
+        return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
     /**
@@ -478,11 +542,15 @@ public class ColumnsController {
        
         if (dailyCheckpoints == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else if (dailyCheckpoints.isPresent()) {
-            return new ResponseEntity<>(Mono.just(dailyCheckpoints.get()), HttpStatus.OK); // 200
-        } else {
+        }
+
+        ColumnCheckpointsSpec checkpointsSpec = columnSpec.getCheckpoints();
+        if (checkpointsSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
+
+        ColumnDailyCheckpointCategoriesSpec dailyCheckpoints = checkpointsSpec.getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyCheckpoints), HttpStatus.OK); // 200
     }
 
     /**
@@ -523,11 +591,15 @@ public class ColumnsController {
 
         if (monthlyCheckpoints == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else if (monthlyCheckpoints.isPresent()) {
-            return new ResponseEntity<>(Mono.just(monthlyCheckpoints.get()), HttpStatus.OK); // 200
-        } else {
+        }
+
+        ColumnCheckpointsSpec checkpointsSpec = columnSpec.getCheckpoints();
+        if (checkpointsSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
+
+        ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpoints = checkpointsSpec.getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyCheckpoints), HttpStatus.OK); // 200
     }
     
     /**
@@ -568,11 +640,15 @@ public class ColumnsController {
         
         if (dailyPartitionedChecks == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else if (dailyPartitionedChecks.isPresent()) {
-            return new ResponseEntity<>(Mono.just(dailyPartitionedChecks.get()), HttpStatus.OK); // 200
-        } else {
+        }
+
+        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
+
+        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = partitionedChecksSpec.getDaily();
+        return new ResponseEntity<>(Mono.just(dailyPartitionedChecks), HttpStatus.OK); // 200
     }
 
     /**
@@ -613,15 +689,19 @@ public class ColumnsController {
 
         if (monthlyPartitionedChecks == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else if (monthlyPartitionedChecks.isPresent()) {
-            return new ResponseEntity<>(Mono.just(monthlyPartitionedChecks.get()), HttpStatus.OK); // 200
-        } else {
+        }
+
+        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
+
+        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = partitionedChecksSpec.getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitionedChecks), HttpStatus.OK); // 200
     }
 
 
-    protected <T extends AbstractRootChecksContainerSpec, R extends UIAllChecksModelAbstr> R getColumnGenericChecksUI(
+    protected <T extends AbstractRootChecksContainerSpec, R extends AbstractUIAllChecksModel> R getColumnGenericChecksUI(
             Function<ColumnSpec, T> columnSpecToRootCheck,
             BiFunction<T, CheckSearchFilters, R> rootCheckToUIModel,
             String connectionName,
@@ -662,10 +742,10 @@ public class ColumnsController {
             setTimeScale(genericChecks.getCheckTimeScale());
             setEnabled(true);
         }};
-        
+
         return rootCheckToUIModel.apply(genericChecks, checkSearchFilters);
     }
-    
+
     /**
      * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
@@ -691,7 +771,7 @@ public class ColumnsController {
                 spec -> {
                     ColumnAdHocCheckCategoriesSpec checks = spec.getChecks();
                     if (checks == null) {
-                        checks = new ColumnAdHocCheckCategoriesSpec();
+                        return new ColumnAdHocCheckCategoriesSpec();
                     }
                     return checks;
                 },
@@ -699,15 +779,13 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
-        
+                columnName);
+
         if (checksUiModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -742,12 +820,18 @@ public class ColumnsController {
 
                     switch (timePartition) {
                         case daily:
-                            ColumnDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
-                            return (checkpointsDaily != null) ? checkpointsDaily : new ColumnDailyCheckpointCategoriesSpec();
+                            ColumnDailyCheckpointCategoriesSpec dailyCheckpoints = checkpoints.getDaily();
+                            if (dailyCheckpoints == null) {
+                                return new ColumnDailyCheckpointCategoriesSpec();
+                            }
+                            return dailyCheckpoints;
 
                         case monthly:
-                            ColumnMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
-                            return (checkpointsMonthly != null) ? checkpointsMonthly : new ColumnMonthlyCheckpointCategoriesSpec();
+                            ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpoints = checkpoints.getMonthly();
+                            if (monthlyCheckpoints == null) {
+                                return new ColumnMonthlyCheckpointCategoriesSpec();
+                            }
+                            return monthlyCheckpoints;
 
                         default:
                             return null;
@@ -757,15 +841,13 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
+                columnName);
 
         if (checksUiModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -800,12 +882,18 @@ public class ColumnsController {
 
                     switch (timePartition) {
                         case daily:
-                            ColumnDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
-                            return (partitionedChecksDaily != null) ? partitionedChecksDaily : new ColumnDailyPartitionedCheckCategoriesSpec();
+                            ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = partitionedChecks.getDaily();
+                            if (dailyPartitionedChecks == null) {
+                                return new ColumnDailyPartitionedCheckCategoriesSpec();
+                            }
+                            return dailyPartitionedChecks;
 
                         case monthly:
-                            ColumnMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
-                            return (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                            ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = partitionedChecks.getMonthly();
+                            if (monthlyPartitionedChecks == null) {
+                                return new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                            }
+                            return monthlyPartitionedChecks;
 
                         default:
                             return null;
@@ -815,15 +903,12 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
+                columnName);
 
         if (checksUiModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -851,7 +936,7 @@ public class ColumnsController {
                 spec -> {
                     ColumnAdHocCheckCategoriesSpec checks = spec.getChecks();
                     if (checks == null) {
-                        checks = new ColumnAdHocCheckCategoriesSpec();
+                        return new ColumnAdHocCheckCategoriesSpec();
                     }
                     return checks;
                 },
@@ -859,15 +944,12 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
+                columnName);
 
         if (checksUiModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -893,22 +975,29 @@ public class ColumnsController {
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
             @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
-        UIAllChecksBasicModel checksUiModel = this.getColumnGenericChecksUI(
+        
+        UIAllChecksBasicModel checksUiBasicModel = this.getColumnGenericChecksUI(
                 spec -> {
                     ColumnCheckpointsSpec checkpoints = spec.getCheckpoints();
                     if (checkpoints == null) {
                         checkpoints = new ColumnCheckpointsSpec();
                     }
-
+                    
                     switch (timePartition) {
-                        case DAILY:
-                            ColumnDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
-                            return (checkpointsDaily != null) ? checkpointsDaily : new ColumnDailyCheckpointCategoriesSpec();
+                        case daily:
+                            ColumnDailyCheckpointCategoriesSpec dailyCheckpoints = checkpoints.getDaily();
+                            if (dailyCheckpoints == null) {
+                                return new ColumnDailyCheckpointCategoriesSpec();
+                            }
+                            return dailyCheckpoints;
 
-                        case MONTHLY:
-                            ColumnMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
-                            return (checkpointsMonthly != null) ? checkpointsMonthly : new ColumnMonthlyCheckpointCategoriesSpec();
-
+                        case monthly:
+                            ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpoints = checkpoints.getMonthly();
+                            if (monthlyCheckpoints == null) {
+                                return new ColumnMonthlyCheckpointCategoriesSpec();
+                            }
+                            return monthlyCheckpoints;
+                            
                         default:
                             return null;
                     }
@@ -917,15 +1006,12 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
+                columnName);
 
-        if (checksUiModel == null) {
+        if (checksUiBasicModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+        return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -951,21 +1037,28 @@ public class ColumnsController {
             @Parameter(description = "Table name") @PathVariable String tableName,
             @Parameter(description = "Column name") @PathVariable String columnName,
             @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
-        UIAllChecksBasicModel checksUiModel = this.getColumnGenericChecksUI(
+        
+        UIAllChecksBasicModel checksUiBasicModel = this.getColumnGenericChecksUI(
                 spec -> {
                     ColumnPartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
                     if (partitionedChecks == null) {
                         partitionedChecks = new ColumnPartitionedChecksRootSpec();
                     }
-
+                    
                     switch (timePartition) {
-                        case DAILY:
-                            ColumnDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
-                            return (partitionedChecksDaily != null) ? partitionedChecksDaily : new ColumnDailyPartitionedCheckCategoriesSpec();
+                        case daily:
+                            ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = partitionedChecks.getDaily();
+                            if (dailyPartitionedChecks == null) {
+                                return new ColumnDailyPartitionedCheckCategoriesSpec();
+                            }
+                            return dailyPartitionedChecks;
 
-                        case MONTHLY:
-                            ColumnMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
-                            return (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                        case monthly:
+                            ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = partitionedChecks.getMonthly();
+                            if (monthlyPartitionedChecks == null) {
+                                return new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                            }
+                            return monthlyPartitionedChecks;
 
                         default:
                             return null;
@@ -975,15 +1068,12 @@ public class ColumnsController {
                 connectionName,
                 schemaName,
                 tableName,
-                columnName
-        );
-
-        if (checksUiModel == null) {
+                columnName);
+        
+        if (checksUiBasicModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
-        }
+        return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
 
 
@@ -2068,5 +2158,34 @@ public class ColumnsController {
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+
+    protected ColumnSpec getColumnSpec(
+            String connectionName,
+            String schemaName,
+            String tableName,
+            String columnName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return null;
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return null;
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return null;
+        }
+
+        return tableSpec.getColumns().get(columnName);
     }
 }
