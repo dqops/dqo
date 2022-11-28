@@ -104,6 +104,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                                     CheckSearchFilters runChecksTemplate) {
         // TODO: Handling runChecksTemplate.
+        //       (Think about hierarchy. If checks should by design be also in basic model,
+        //        maybe setting them should be done on the abstract class.)
         UIAllChecksBasicModel uiAllChecksBasicModel = new UIAllChecksBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
