@@ -1,25 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
+import ActionGroup from './ActionGroup';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import {
+  getTableSchedule,
+  updateTableSchedule
+} from '../../../redux/actions/table.actions';
 
 interface IScheduleDetailProps {
-  schedule?: RecurringScheduleSpec;
-  setSchedule: (value: RecurringScheduleSpec) => void;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
 }
 
-const ScheduleDetail = ({ schedule, setSchedule }: IScheduleDetailProps) => {
+const ScheduleDetail = ({
+  connectionName,
+  schemaName,
+  tableName
+}: IScheduleDetailProps) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
+  const [updatedSchedule, setUpdatedSchedule] =
+    useState<RecurringScheduleSpec>();
+  const [isUpdated, setIsUpdated] = useState(false);
+
+  const { schedule, isUpdating } = useSelector(
+    (state: IRootState) => state.table
+  );
+  const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    dispatch(getTableSchedule(connectionName, schemaName, tableName));
+  }, []);
+
+  useEffect(() => {
+    setUpdatedSchedule(schedule);
+  }, [schedule]);
 
   const handleChange = (obj: any) => {
-    setSchedule({
-      ...schedule,
+    setUpdatedSchedule({
+      ...updatedSchedule,
       ...obj
     });
+    setIsUpdated(true);
   };
 
   const onChangeMode = (e: any) => {
@@ -56,8 +86,26 @@ const ScheduleDetail = ({ schedule, setSchedule }: IScheduleDetailProps) => {
     setHour(val);
   };
 
+  const onUpdate = async () => {
+    await dispatch(
+      updateTableSchedule(
+        connectionName,
+        schemaName,
+        tableName,
+        updatedSchedule
+      )
+    );
+    await dispatch(getTableSchedule(connectionName, schemaName, tableName));
+    setIsUpdated(false);
+  };
+
   return (
     <div className="p-4">
+      <ActionGroup
+        onUpdate={onUpdate}
+        isUpdated={isUpdated}
+        isUpdating={isUpdating}
+      />
       <table className="mb-6">
         <tr>
           <td className="px-4 py-2">

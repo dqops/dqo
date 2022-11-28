@@ -3,10 +3,12 @@ package ai.dqo.core.dqocloud.synchronization;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Parameters object for a job that synchronizes one folder with DQO Cloud.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SynchronizeRootFolderDqoQueueJobParameters {
     private DqoRoot rootType;
     @JsonIgnore

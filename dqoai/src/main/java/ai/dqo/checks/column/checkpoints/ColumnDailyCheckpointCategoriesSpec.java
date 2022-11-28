@@ -143,6 +143,6 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.DAILY;
+        return CheckTimeScale.daily;
     }
 }

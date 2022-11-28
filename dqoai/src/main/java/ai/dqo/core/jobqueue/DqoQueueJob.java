@@ -1,22 +1,23 @@
 package ai.dqo.core.jobqueue;
 
-import java.util.UUID;
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Base class for DQO jobs.
  */
-public abstract class BaseDqoQueueJob<T> {
-    private final UUID jobId = UUID.randomUUID();
+public abstract class DqoQueueJob<T> {
     private CompletableFuture<T> future = new CompletableFuture<T>();
 
     /**
      * Executes the job inside the job queue.
+     * @param jobExecutionContext Job execution context.
      */
-    public final void execute() {
+    public final void execute(DqoJobExecutionContext jobExecutionContext) {
         try {
-            T result = this.onExecute();
+            T result = this.onExecute(jobExecutionContext);
             this.future.complete(result);
         }
         catch (Exception ex){
@@ -26,9 +27,10 @@ public abstract class BaseDqoQueueJob<T> {
 
     /**
      * Job internal implementation method that should be implemented by derived jobs.
+     * @param jobExecutionContext Job execution context.
      * @return Optional result value that could be returned by the job.
      */
-    public abstract T onExecute();
+    public abstract T onExecute(DqoJobExecutionContext jobExecutionContext);
 
     /**
      * Returns a job type that this job class is running. Used to identify jobs.
@@ -37,12 +39,18 @@ public abstract class BaseDqoQueueJob<T> {
     public abstract DqoJobType getJobType();
 
     /**
-     * Returns a unique job ID that was assigned to the job.
-     * @return Unique job id.
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
      */
-    public UUID getJobId() {
-        return jobId;
-    }
+    public abstract DqoJobEntryParametersModel createParametersModel();
+
+    /**
+     * Returns a concurrency constraint that will limit the number of parallel running jobs.
+     * Return null when the job has no concurrency limits (an unlimited number of jobs can run at the same time).
+     * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
+     */
+    public abstract JobConcurrencyConstraint getConcurrencyConstraint();
 
     /**
      * Returns the job completable future used to await for the job to finish.

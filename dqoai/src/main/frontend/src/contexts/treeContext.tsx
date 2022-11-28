@@ -88,7 +88,7 @@ function TreeProvider(props: any) {
           parentId: node.id,
           items: [],
           tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
-          hasCheck: table?.has_any_configured_checks,
+          hasCheck: table?.has_any_configured_checks
         }));
         setTreeData([...treeData, ...items]);
         setOpenNodes(uniq([...openNodes, id]));
@@ -109,11 +109,43 @@ function TreeProvider(props: any) {
           },
           {
             id: `${node.id}.checks`,
-            label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${node.label}`,
+            label: 'Ad-hoc checks',
             level: TREE_LEVEL.TABLE_CHECKS,
             parentId: node.id,
             items: [],
             tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`
+          },
+          {
+            id: `${node.id}.dailyCheck`,
+            label: 'Daily checkpoints',
+            level: TREE_LEVEL.TABLE_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`
+          },
+          {
+            id: `${node.id}.monthlyCheck`,
+            label: 'Monthly checkpoints',
+            level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`
+          },
+          {
+            id: `${node.id}.dailyPartitionedChecks`,
+            label: 'Daily partitioned checks',
+            level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`
+          },
+          {
+            id: `${node.id}.monthlyPartitionedChecks`,
+            label: 'Monthly partitioned checks',
+            level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`
           }
         ];
 

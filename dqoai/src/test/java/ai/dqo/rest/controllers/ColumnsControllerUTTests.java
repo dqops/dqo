@@ -167,7 +167,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getCategories().size());
+        Assertions.assertEquals(2, result.getCategories().size());
     }
 
     @ParameterizedTest
