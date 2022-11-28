@@ -20,6 +20,9 @@ import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
@@ -46,6 +49,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
             put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
+            put("max_string_empty_count", o -> o.maxStringEmptyCount);
             put("max_string_whitespace_count", o -> o.maxStringWhitespaceCount);
             put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
             put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
@@ -63,6 +67,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent;
+
+    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount;
@@ -143,6 +150,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringEmptyPercent, maxStringEmptyPercent));
         this.maxStringEmptyPercent = maxStringEmptyPercent;
         propagateHierarchyIdToField(maxStringEmptyPercent, "max_string_empty_percent");
+    }
+
+    /**
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
+     */
+    public ColumnMaxStringEmptyCountCheckSpec getMaxStringEmptyCount() {
+        return maxStringEmptyCount;
+    }
+
+    /**
+     * Sets a new definition of a max string empty count check.
+     * @param maxStringEmptyCount Max string empty count check.
+     */
+    public void setMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyCount, maxStringEmptyCount));
+        this.maxStringEmptyCount = maxStringEmptyCount;
+        propagateHierarchyIdToField(maxStringEmptyCount, "max_string_empty_count");
     }
 
     /**
