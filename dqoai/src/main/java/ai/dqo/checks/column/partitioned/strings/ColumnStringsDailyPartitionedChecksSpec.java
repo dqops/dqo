@@ -23,6 +23,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,6 +48,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_mean_string_length_between", o -> o.dailyPartitionMeanStringLengthBetween);
             put("daily_partition_max_string_empty_percent", o -> o.dailyPartitionMaxStringEmptyPercent);
             put("daily_partition_max_string_empty_count", o -> o.dailyPartitionMaxStringEmptyCount);
+            put("daily_partition_max_string_whitespace_count", o -> o.dailyPartitionMaxStringWhitespaceCount);
         }
     };
 
@@ -64,6 +66,10 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringEmptyCountCheckSpec dailyPartitionMaxStringEmptyCount;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringWhitespaceCountCheckSpec dailyPartitionMaxStringWhitespaceCount;
+
 
     /**
      * Returns a maximum string length below  check.
@@ -153,6 +159,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringEmptyCount, dailyPartitionMaxStringEmptyCount));
         this.dailyPartitionMaxStringEmptyCount = dailyPartitionMaxStringEmptyCount;
         propagateHierarchyIdToField(dailyPartitionMaxStringEmptyCount, "daily_partition_max_string_empty_count");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getDailyPartitionMaxStringWhitespaceCount() {
+        return dailyPartitionMaxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param dailyPartitionMaxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setDailyPartitionMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec dailyPartitionMaxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringWhitespaceCount, dailyPartitionMaxStringWhitespaceCount));
+        this.dailyPartitionMaxStringWhitespaceCount = dailyPartitionMaxStringWhitespaceCount;
+        propagateHierarchyIdToField(dailyPartitionMaxStringWhitespaceCount, "daily_partition_max_string_whitespace_count");
     }
 
     /**

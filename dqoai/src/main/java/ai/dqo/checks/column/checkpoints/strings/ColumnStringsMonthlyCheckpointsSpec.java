@@ -23,6 +23,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,6 +48,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_mean_string_length_between", o -> o.monthlyCheckpointMeanStringLengthBetween);
             put("monthly_checkpoint_max_string_empty_percent", o -> o.monthlyCheckpointMaxStringEmptyPercent);
             put("monthly_checkpoint_max_string_empty_count", o -> o.monthlyCheckpointMaxStringEmptyCount);
+            put("monthly_checkpoint_max_string_whitespace_count", o -> o.monthlyCheckpointMaxStringWhitespaceCount);
         }
     };
 
@@ -64,6 +66,10 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxStringWhitespaceCountCheckSpec monthlyCheckpointMaxStringWhitespaceCount;
+
 
     /**
      * Returns a maximum string length below check.
@@ -153,6 +159,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringEmptyCount, monthlyCheckpointMaxStringEmptyCount));
         this.monthlyCheckpointMaxStringEmptyCount = monthlyCheckpointMaxStringEmptyCount;
         propagateHierarchyIdToField(monthlyCheckpointMaxStringEmptyCount, "monthly_checkpoint_max_string_empty_count");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getMonthlyCheckpointMaxStringWhitespaceCount() {
+        return monthlyCheckpointMaxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param monthlyCheckpointMaxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setMonthlyCheckpointMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec monthlyCheckpointMaxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringWhitespaceCount, monthlyCheckpointMaxStringWhitespaceCount));
+        this.monthlyCheckpointMaxStringWhitespaceCount = monthlyCheckpointMaxStringWhitespaceCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxStringWhitespaceCount, "monthly_checkpoint_max_string_whitespace_count");
     }
 
     /**

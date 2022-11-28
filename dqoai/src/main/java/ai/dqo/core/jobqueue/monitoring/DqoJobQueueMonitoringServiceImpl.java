@@ -158,16 +158,20 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      * @return Initial job queue snapshot.
      */
     @Override
-    public DqoJobQueueInitialSnapshotModel getInitialJobList() {
-        long changeSequence;
-        List<DqoJobHistoryEntryModel> jobs;
+    public Mono<DqoJobQueueInitialSnapshotModel> getInitialJobList() {
+        Mono<DqoJobQueueInitialSnapshotModel> jobsMono = Mono.defer(() -> {
+            long changeSequence;
+            List<DqoJobHistoryEntryModel> jobs;
 
-        synchronized (this.lock) {
-            changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
-            jobs = new ArrayList<>(this.allJobs.values());
-        }
+            synchronized (this.lock) {
+                changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
+                jobs = new ArrayList<>(this.allJobs.values());
+            }
 
-        return new DqoJobQueueInitialSnapshotModel(jobs, changeSequence);
+            return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, changeSequence));
+        });
+
+        return jobsMono;
     }
 
     /**
