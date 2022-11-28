@@ -20,6 +20,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,6 +45,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
             put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
+            put("max_string_whitespace_count", o -> o.maxStringWhitespaceCount);
             put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
 
         }
@@ -60,6 +62,10 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount;
+
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringWhitespacePercentCheckSpec maxStringWhitespacePercent;
@@ -134,6 +140,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringEmptyPercent, maxStringEmptyPercent));
         this.maxStringEmptyPercent = maxStringEmptyPercent;
         propagateHierarchyIdToField(maxStringEmptyPercent, "max_string_empty_percent");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getMaxStringWhitespaceCount() {
+        return maxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param maxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringWhitespaceCount, maxStringWhitespaceCount));
+        this.maxStringWhitespaceCount = maxStringWhitespaceCount;
+        propagateHierarchyIdToField(maxStringWhitespaceCount, "max_string_whitespace_count");
     }
 
     /**

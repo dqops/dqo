@@ -30,6 +30,7 @@ public class DqoQueueConfigurationProperties implements Cloneable {
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
     private int keepFinishedJobsHistorySeconds = 3600;
     private int keepJobsChangesHistorySeconds = 300;
+    private int getJobChangesSinceWaitSeconds = 30;
 
     /**
      * Returns the number of threads that the job queue uses for processing jobs.
@@ -94,6 +95,23 @@ public class DqoQueueConfigurationProperties implements Cloneable {
      */
     public void setKeepJobsChangesHistorySeconds(int keepJobsChangesHistorySeconds) {
         this.keepJobsChangesHistorySeconds = keepJobsChangesHistorySeconds;
+    }
+
+    /**
+     * Number of seconds that a parked rest api {@link ai.dqo.rest.controllers.JobsController#getJobChangesSince(long)} is waiting for any change to the job queue.
+     * The rest api will return an empty change list after that timeout.
+     * @return Number of seconds to wait for any change on the queue before returning an empty list of changes.
+     */
+    public int getGetJobChangesSinceWaitSeconds() {
+        return getJobChangesSinceWaitSeconds;
+    }
+
+    /**
+     * Sets a timeout for "parking" a rest api that is reading an incremental list of job changes on the queue.
+     * @param getJobChangesSinceWaitSeconds Wait time in seconds.
+     */
+    public void setGetJobChangesSinceWaitSeconds(int getJobChangesSinceWaitSeconds) {
+        this.getJobChangesSinceWaitSeconds = getJobChangesSinceWaitSeconds;
     }
 
     /**

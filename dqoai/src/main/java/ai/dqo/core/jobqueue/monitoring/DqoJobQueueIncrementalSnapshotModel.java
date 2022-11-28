@@ -10,16 +10,16 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DqoJobQueueIncrementalSnapshotModel {
     private List<DqoJobChangeModel> jobChanges;
-    private long lastChangeId;
+    private long lastSequenceNumber;
 
     /**
      * Creates an incremental change history model.
      * @param jobChanges List of changes.
-     * @param lastChangeId Last change id.
+     * @param lastSequenceNumber Last change id (sequence number).
      */
-    public DqoJobQueueIncrementalSnapshotModel(List<DqoJobChangeModel> jobChanges, long lastChangeId) {
+    public DqoJobQueueIncrementalSnapshotModel(List<DqoJobChangeModel> jobChanges, long lastSequenceNumber) {
         this.jobChanges = jobChanges;
-        this.lastChangeId = lastChangeId;
+        this.lastSequenceNumber = lastSequenceNumber;
     }
 
     /**
@@ -31,10 +31,10 @@ public class DqoJobQueueIncrementalSnapshotModel {
     }
 
     /**
-     * Last change id. Use this id in the next call to get more changes.
+     * Last change id (sequence number). Use this id in the next call to get more changes.
      * @return Last change id.
      */
-    public long getLastChangeId() {
-        return lastChangeId;
+    public long getLastSequenceNumber() {
+        return lastSequenceNumber;
     }
 }
