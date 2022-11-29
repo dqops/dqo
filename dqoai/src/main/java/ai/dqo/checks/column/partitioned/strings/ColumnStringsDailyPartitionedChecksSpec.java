@@ -26,6 +26,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,6 +54,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_whitespace_count", o -> o.dailyPartitionMaxStringWhitespaceCount);
             put("daily_partition_max_string_whitespace_percent", o -> o.dailyPartitionMaxStringWhitespacePercent);
             put("daily_partition_min_string_valid_dates_percent", o -> o.dailyPartitionMinStringValidDatesPercent);
+            put("daily_partition_max_string_null_placeholder_count", o -> o.dailyPartitionMaxStringNullPlaceholderCount);
         }
     };
 
@@ -79,6 +81,10 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringValidDatesPercentCheckSpec dailyPartitionMinStringValidDatesPercent;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringNullPlaceholderCountCheckSpec dailyPartitionMaxStringNullPlaceholderCount;
+
 
     /**
      * Returns a maximum string length below  check.
@@ -222,6 +228,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidDatesPercent, dailyPartitionMinStringValidDatesPercent));
         this.dailyPartitionMinStringValidDatesPercent = dailyPartitionMinStringValidDatesPercent;
         propagateHierarchyIdToField(dailyPartitionMinStringValidDatesPercent, "daily_partition_min_string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnMaxStringNullPlaceholderCountCheckSpec getDailyPartitionMaxStringNullPlaceholderCount() {
+        return dailyPartitionMaxStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param dailyPartitionMaxStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setDailyPartitionMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec dailyPartitionMaxStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringNullPlaceholderCount, dailyPartitionMaxStringNullPlaceholderCount));
+        this.dailyPartitionMaxStringNullPlaceholderCount = dailyPartitionMaxStringNullPlaceholderCount;
+        propagateHierarchyIdToField(dailyPartitionMaxStringNullPlaceholderCount, "daily_partition_max_string_null_placeholder_count");
     }
 
     /**

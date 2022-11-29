@@ -25,6 +25,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,6 +53,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_string_whitespace_count", o -> o.monthlyCheckpointMaxStringWhitespaceCount);
             put("monthly_checkpoint_max_string_whitespace_percent", o -> o.monthlyCheckpointMaxStringWhitespacePercent);
             put("monthly_checkpoint_min_string_valid_dates_percent", o -> o.monthlyCheckpointMinStringValidDatesPercent);
+            put("monthly_checkpoint_max_string_null_placeholder_count", o -> o.monthlyCheckpointMaxStringNullPlaceholderCount);
         }
     };
 
@@ -78,6 +80,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxStringWhitespacePercentCheckSpec monthlyCheckpointMaxStringWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount;
 
     /**
      * Returns a maximum string length below check.
@@ -220,6 +225,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringWhitespacePercent, monthlyCheckpointMaxStringWhitespacePercent));
         this.monthlyCheckpointMaxStringWhitespacePercent = monthlyCheckpointMaxStringWhitespacePercent;
         propagateHierarchyIdToField(monthlyCheckpointMaxStringWhitespacePercent, "monthly_checkpoint_max_string_whitespace_percent");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnMaxStringNullPlaceholderCountCheckSpec getMonthlyCheckpointMaxStringNullPlaceholderCount() {
+        return monthlyCheckpointMaxStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param monthlyCheckpointMaxStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setMonthlyCheckpointMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringNullPlaceholderCount, monthlyCheckpointMaxStringNullPlaceholderCount));
+        this.monthlyCheckpointMaxStringNullPlaceholderCount = monthlyCheckpointMaxStringNullPlaceholderCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxStringNullPlaceholderCount, "monthly_checkpoint_max_string_null_placeholder_count");
     }
 
     /**
