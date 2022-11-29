@@ -28,6 +28,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -57,6 +58,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
             put("max_string_null_placeholder_count", o -> o.maxStringNullPlaceholderCount);
             put("max_string_null_placeholder_percent", o -> o.maxStringNullPlaceholderPercent);
+            put("min_string_boolean_placeholder_percent", o -> o.minStringBooleanPlaceholderPercent);
+
         }
     };
 
@@ -89,6 +92,10 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxStringNullPlaceholderPercentCheckSpec maxStringNullPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringBooleanPlaceholderPercentCheckSpec minStringBooleanPlaceholderPercent;
+
 
     /**
      * Returns a maximum string length below check.
@@ -268,6 +275,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringNullPlaceholderPercent, maxStringNullPlaceholderPercent));
         this.maxStringNullPlaceholderPercent = maxStringNullPlaceholderPercent;
         propagateHierarchyIdToField(maxStringNullPlaceholderPercent, "max_string_null_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnMinStringBooleanPlaceholderPercentCheckSpec getMinStringBooleanPlaceholderPercent() {
+        return minStringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string boolean placeholder percent check.
+     * @param minStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     */
+    public void setMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec minStringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringBooleanPlaceholderPercent, minStringBooleanPlaceholderPercent));
+        this.minStringBooleanPlaceholderPercent = minStringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(minStringBooleanPlaceholderPercent, "min_string_boolean_placeholder_percent");
     }
 
     /**
