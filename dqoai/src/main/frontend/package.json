@@ -42,8 +42,8 @@
     "typescript": "^4.8.2"
   },
   "scripts": {
-    "start": "./node/npx react-scripts start",
-    "build": "./node/npx react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "./node/npx react-scripts test",
     "eject": "./node/npx react-scripts eject",
     "tslint": "./node/npx tslint \"src/**/*.{ts,tsx,js}\" --fix",
