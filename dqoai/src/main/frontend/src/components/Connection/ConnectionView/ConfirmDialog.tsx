@@ -9,20 +9,18 @@ interface ConfirmDialogProps {
   onClose: () => void;
   connection?: ConnectionBasicModel;
   onConfirm: () => Promise<void>;
-  nodeId: string;
 }
 
 const ConfirmDialog = ({
   open,
   onClose,
   connection,
-  onConfirm,
-  nodeId
+  onConfirm
 }: ConfirmDialogProps) => {
-  const { removeTreeNode } = useTree();
+  const { removeTreeNode, activeTab } = useTree();
   const handleSubmit = async () => {
     await onConfirm();
-    removeTreeNode(nodeId);
+    removeTreeNode(activeTab);
     onClose();
   };
 
