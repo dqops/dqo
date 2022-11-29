@@ -59,15 +59,15 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyCheckpointsSpec nulls;
 
-    @JsonPropertyDescription("Daily checkpoints of strings in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsDailyCheckpointsSpec strings;
-
     @JsonPropertyDescription("Daily checkpoints of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyCheckpointsSpec numeric;
+
+    @JsonPropertyDescription("Daily checkpoints of strings in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsDailyCheckpointsSpec strings;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -91,24 +91,6 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnStringsDailyCheckpointsSpec getStrings() {
-        return strings;
-    }
-
-    /**
-     * Sets the container of strings data quality checks (checkpoints).
-     * @param strings New strings checks.
-     */
-    public void setStrings(ColumnStringsDailyCheckpointsSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
-    }
-
-    /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
-     */
     public ColumnNumericDailyCheckpointsSpec getNumeric() {
         return numeric;
     }
@@ -121,6 +103,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         this.propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnStringsDailyCheckpointsSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of strings data quality checks (checkpoints).
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsDailyCheckpointsSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        this.propagateHierarchyIdToField(strings, "strings");
     }
 
     /**

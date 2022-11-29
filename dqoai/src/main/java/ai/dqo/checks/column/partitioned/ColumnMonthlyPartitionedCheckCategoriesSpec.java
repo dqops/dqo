@@ -59,15 +59,15 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyPartitionedChecksSpec nulls;
 
-    @JsonPropertyDescription("Monthly partitioned checks of strings values in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMonthlyPartitionedChecksSpec strings;
-
     @JsonPropertyDescription("Monthly partitioned checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyPartitionedChecksSpec numeric;
+
+    @JsonPropertyDescription("Monthly partitioned checks of strings values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsMonthlyPartitionedChecksSpec strings;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -88,24 +88,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     }
 
     /**
-     * Returns the container of monthly strings data quality partitioned checks.
-     * @return Container of row standard monthly data quality partitioned checks.
-     */
-    public ColumnStringsMonthlyPartitionedChecksSpec getStrings() {
-        return strings;
-    }
-
-    /**
-     * Sets the container of monthly strings data quality partitioned checks.
-     * @param strings New strings checks.
-     */
-    public void setStrings(ColumnStringsMonthlyPartitionedChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        propagateHierarchyIdToField(strings, "strings");
-    }
-
-    /**
      * Returns the container of monthly numeric data quality partitioned checks.
      * @return Container of row standard monthly data quality partitioned checks.
      */
@@ -121,6 +103,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of monthly strings data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnStringsMonthlyPartitionedChecksSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of monthly strings data quality partitioned checks.
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsMonthlyPartitionedChecksSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        propagateHierarchyIdToField(strings, "strings");
     }
 
     /**

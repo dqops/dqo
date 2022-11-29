@@ -59,15 +59,15 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyCheckpointsSpec nulls;
 
-    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMonthlyCheckpointsSpec strings;
-
     @JsonPropertyDescription("Monthly checkpoints of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyCheckpointsSpec numeric;
+
+    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsMonthlyCheckpointsSpec strings;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.

@@ -60,18 +60,18 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyPartitionedChecksSpec nulls;
 
-    @JsonPropertyDescription("Daily partitioned checks of strings in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsDailyPartitionedChecksSpec strings;
-
     @JsonPropertyDescription("Daily partitioned checks of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyPartitionedChecksSpec numeric;
 
+    @JsonPropertyDescription("Daily partitioned checks of strings in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsDailyPartitionedChecksSpec strings;
+
     /**
-     * Returns the container of daily nulls data quality partitioned checks.
+     * Returns the container of daily null data quality partitioned checks.
      * @return Container of row standard daily data quality partitioned checks.
      */
     public ColumnNullsDailyPartitionedChecksSpec getNulls() {
@@ -79,31 +79,13 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     }
 
     /**
-     * Sets the container of daily nulls data quality partitioned checks.
+     * Sets the container of daily null data quality partitioned checks.
      * @param nulls New nulls checks.
      */
     public void setNulls(ColumnNullsDailyPartitionedChecksSpec nulls) {
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         propagateHierarchyIdToField(nulls, "nulls");
-    }
-
-    /**
-     * Returns the container of daily strings data quality partitioned checks.
-     * @return Container of row standard daily data quality partitioned checks.
-     */
-    public ColumnStringsDailyPartitionedChecksSpec getStrings() {
-        return strings;
-    }
-
-    /**
-     * Sets the container of daily strings data quality partitioned checks.
-     * @param strings New strings checks.
-     */
-    public void setStrings(ColumnStringsDailyPartitionedChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
@@ -122,6 +104,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of daily strings data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnStringsDailyPartitionedChecksSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of daily strings data quality partitioned checks.
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsDailyPartitionedChecksSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
