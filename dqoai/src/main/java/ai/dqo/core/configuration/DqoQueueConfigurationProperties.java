@@ -28,6 +28,9 @@ import org.springframework.context.annotation.Configuration;
 public class DqoQueueConfigurationProperties implements Cloneable {
     private int threads = 10;
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
+    private int keepFinishedJobsHistorySeconds = 3600;
+    private int keepJobsChangesHistorySeconds = 300;
+    private int getJobChangesSinceWaitSeconds = 30;
 
     /**
      * Returns the number of threads that the job queue uses for processing jobs.
@@ -59,6 +62,56 @@ public class DqoQueueConfigurationProperties implements Cloneable {
      */
     public void setMaxNonBlockingCapacity(Integer maxNonBlockingCapacity) {
         this.maxNonBlockingCapacity = maxNonBlockingCapacity;
+    }
+
+    /**
+     * Number of seconds to preserve the history of finished jobs on the queue monitor.
+     * When user opens UI, jobs finished but to the given number of seconds ago will be still shown.
+     * @return Number of seconds to preserve the history of finished jobs.
+     */
+    public int getKeepFinishedJobsHistorySeconds() {
+        return keepFinishedJobsHistorySeconds;
+    }
+
+    /**
+     * Sets the number of seconds to keep the history of finished jobs.
+     * @param keepFinishedJobsHistorySeconds Finished jobs time to keep on the history list.
+     */
+    public void setKeepFinishedJobsHistorySeconds(int keepFinishedJobsHistorySeconds) {
+        this.keepFinishedJobsHistorySeconds = keepFinishedJobsHistorySeconds;
+    }
+
+    /**
+     * The number of seconds to preserve the history of job changes.
+     * @return Number of seconds to keep the history of job changes.
+     */
+    public int getKeepJobsChangesHistorySeconds() {
+        return keepJobsChangesHistorySeconds;
+    }
+
+    /**
+     * Sets the number of seconds to keep the history of job changes.
+     * @param keepJobsChangesHistorySeconds Number of seconds.
+     */
+    public void setKeepJobsChangesHistorySeconds(int keepJobsChangesHistorySeconds) {
+        this.keepJobsChangesHistorySeconds = keepJobsChangesHistorySeconds;
+    }
+
+    /**
+     * Number of seconds that a parked rest api {@link ai.dqo.rest.controllers.JobsController#getJobChangesSince(long)} is waiting for any change to the job queue.
+     * The rest api will return an empty change list after that timeout.
+     * @return Number of seconds to wait for any change on the queue before returning an empty list of changes.
+     */
+    public int getGetJobChangesSinceWaitSeconds() {
+        return getJobChangesSinceWaitSeconds;
+    }
+
+    /**
+     * Sets a timeout for "parking" a rest api that is reading an incremental list of job changes on the queue.
+     * @param getJobChangesSinceWaitSeconds Wait time in seconds.
+     */
+    public void setGetJobChangesSinceWaitSeconds(int getJobChangesSinceWaitSeconds) {
+        this.getJobChangesSinceWaitSeconds = getJobChangesSinceWaitSeconds;
     }
 
     /**

@@ -25,14 +25,14 @@ import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizatio
 public interface FileSystemSynchronizationService {
     /**
      * Synchronizes changes between two file systems.
-     * @param source Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
-     * @param target Target file system to send the changes in the source and download new changes.
+     * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQO Cloud or similar).
+     * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
      * @return Synchronization result with two new file indexes after the file synchronization.
      */
-    SynchronizationResult synchronize(FileSystemChangeSet source,
-                                      FileSystemChangeSet target,
+    SynchronizationResult synchronize(FileSystemChangeSet local,
+                                      FileSystemChangeSet remote,
                                       DqoRoot dqoRoot,
                                       FileSystemSynchronizationListener synchronizationListener);
 }

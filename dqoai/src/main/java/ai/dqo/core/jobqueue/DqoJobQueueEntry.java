@@ -1,0 +1,82 @@
+package ai.dqo.core.jobqueue;
+
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Holder of a single DQO job on the queue.
+ */
+public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
+    private DqoQueueJob<?> job;
+    private DqoQueueJobId jobId;
+    private JobConcurrencyConstraint jobConcurrencyConstraint;
+
+    /**
+     * Creates a dqo job queue entry.
+     * @param job Job.
+     * @param jobId Job id.
+     * @param jobConcurrencyConstraint Optional job concurrency constraint retrieved from the job. It is cached for the whole time when the job is awaiting on the queue.
+     */
+    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, JobConcurrencyConstraint jobConcurrencyConstraint) {
+        this.job = job;
+        this.jobId = jobId;
+        this.jobConcurrencyConstraint = jobConcurrencyConstraint;
+    }
+
+    /**
+     * Creates a dqo job queue entry for a job that has no concurrency constrains (parallel execution limits).
+     * @param job Job.
+     * @param jobId Job id.
+     */
+    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId) {
+        this(job, jobId, job.getConcurrencyConstraint());
+    }
+
+    /**
+     * Returns the dqo job object instance.
+     * @return DQO Job instance.
+     */
+    public DqoQueueJob<?> getJob() {
+        return job;
+    }
+
+    /**
+     * Returns the dqo job id.
+     * @return Job id.
+     */
+    public DqoQueueJobId getJobId() {
+        return jobId;
+    }
+
+    /**
+     * Returns an optional job concurrency constraint that identifies the concurrency target and the DOP.
+     * @return Job concurrency constraint or null, when the job has no concurrency limits.
+     */
+    public JobConcurrencyConstraint getJobConcurrencyConstraint() {
+        return jobConcurrencyConstraint;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DqoJobQueueEntry that = (DqoJobQueueEntry) o;
+
+        return jobId.equals(that.jobId);
+    }
+
+    @Override
+    public int hashCode() {
+        return jobId.hashCode();
+    }
+
+    /**
+     * Compares this object with the specified object for order.  Returns a
+     * negative integer, zero, or a positive integer as this object is less
+     * than, equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(@NotNull DqoJobQueueEntry o) {
+        return this.jobId.compareTo(o.getJobId());
+    }
+}

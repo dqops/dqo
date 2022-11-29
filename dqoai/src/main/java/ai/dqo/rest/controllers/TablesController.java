@@ -17,6 +17,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
@@ -28,6 +29,7 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -620,7 +622,15 @@ public class TablesController {
             return null;
         }
 
-        return this.specToUiCheckMappingService.createUiModel(rootChecks);
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(rootChecks.getCheckType());
+            setTimeScale(rootChecks.getCheckTimeScale());
+            setEnabled(true);
+        }};
+
+        return this.specToUiCheckMappingService.createUiModel(rootChecks, checkSearchFilters);
     }
 
     /**

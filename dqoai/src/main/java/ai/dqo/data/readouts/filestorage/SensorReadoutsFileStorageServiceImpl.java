@@ -15,7 +15,11 @@
  */
 package ai.dqo.data.readouts.filestorage;
 
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
+import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
+import ai.dqo.core.locks.AcquiredSharedReadLock;
+import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.DataStorageIOException;
 import ai.dqo.data.ChangeDeltaMode;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -47,19 +51,19 @@ import java.time.temporal.ChronoUnit;
  */
 @Service
 public class SensorReadoutsFileStorageServiceImpl implements SensorReadoutsFileStorageService {
-    private final DqoStorageConfigurationProperties storageConfigurationProperties;
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
+    private final UserHomeLockManager userHomeLockManager;
 
     /**
      * Dependency injection constructor.
-     * @param storageConfigurationProperties Storage configuration.
      * @param localDqoUserHomePathProvider Local DQO User Home path finder.
+     * @param userHomeLockManager User home lock manager.
      */
     @Autowired
-    public SensorReadoutsFileStorageServiceImpl(DqoStorageConfigurationProperties storageConfigurationProperties,
-                                                LocalDqoUserHomePathProvider localDqoUserHomePathProvider) {
-        this.storageConfigurationProperties = storageConfigurationProperties;
+    public SensorReadoutsFileStorageServiceImpl(LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
+                                                UserHomeLockManager userHomeLockManager) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
+        this.userHomeLockManager = userHomeLockManager;
     }
 
     /**
@@ -113,8 +117,8 @@ public class SensorReadoutsFileStorageServiceImpl implements SensorReadoutsFileS
      * @param month The date of the first date of the month.
      */
     public void saveTableMonth(Table data, String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadoutsStoragePath());
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(DqoRoot.DATA_SENSOR_READOUTS)) {
+            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.SENSOR_READOUTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
@@ -142,8 +146,8 @@ public class SensorReadoutsFileStorageServiceImpl implements SensorReadoutsFileS
      * @return Returns a dataset table with the results. Returns null if the data is not present (missing file).
      */
     public Table loadForTableAndMonth(String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getSensorReadoutsStoragePath());
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(DqoRoot.DATA_SENSOR_READOUTS)) {
+            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.SENSOR_READOUTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);

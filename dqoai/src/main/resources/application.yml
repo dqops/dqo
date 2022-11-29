@@ -10,6 +10,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher    # https://stackoverflow.com/questions/70036953/springboot-2-6-0-spring-fox-3-failed-to-start-bean-documentationpluginsboot
+    async:
+      request-timeout: 60000
   shell:
     interactive:
       enabled: false
@@ -57,8 +59,6 @@ dqo:
     home: .
     has-local-home: true
   storage:
-    sensor-readouts-storage-path: .data/sensor_readouts
-    rule-results-storage-path: .data/rule_results
     gcp:
       upload-buffer-size: 5000000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
@@ -76,6 +76,9 @@ dqo:
     lock-wait-timeout-seconds: 900
   queue:
     threads: 10
+    keep-finished-jobs-history-seconds: 3600
+    keep-jobs-changes-history-seconds: 1200
+    get-job-changes-since-wait-seconds: 30
   scheduler:
     scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
     enable-cloud-sync: true

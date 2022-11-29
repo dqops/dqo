@@ -22,6 +22,7 @@ import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.*;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
@@ -60,11 +61,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
      * @return Checks data quality container.
      */
     @Override
-    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec) {
+    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec, CheckSearchFilters runChecksTemplate) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
+        uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
         for (FieldInfo dimensionFieldInfo : dimensionsFields) {
@@ -74,7 +77,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             }
 
             Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue);
+            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue, runChecksTemplate);
             uiAllChecksModel.getCategories().add(categoryModel);
         }
 
@@ -85,12 +88,16 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for all data quality checks for one category.
      * @param dimensionFieldInfo Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
+     * @param runChecksTemplate Run check job template.
      * @return UI model for a category with all quality checks.
      */
-    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode) {
+    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode, CheckSearchFilters runChecksTemplate) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
         categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
         categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
+        CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
+        runChecksCategoryTemplate.setCheckCategory(dimensionFieldInfo.getYamlFieldName());
+        categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         List<FieldInfo> checksFields = checkListClassInfo.getFields();
@@ -111,7 +118,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             }
             else {
                 AbstractCheckSpec<?,?> checkFieldValue = (AbstractCheckSpec<?,?>) checkSpecObject;
-                UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue);
+                UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate);
                 checkModel.setConfigured(checkSpecObjectNullable != null);
                 categoryModel.getChecks().add(checkModel);
             }
@@ -124,12 +131,16 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for a single data quality check.
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
      * @param checkSpec Check specification instance retrieved from the object.
+     * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @return Check model.
      */
-    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?> checkSpec) {
+    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?> checkSpec, CheckSearchFilters runChecksCategoryTemplate) {
         UICheckModel checkModel = new UICheckModel();
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
+        CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
+        runOneCheckTemplate.setCheckName(checkFieldInfo.getYamlFieldName());
+        checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
 
         checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
         checkModel.setComments(checkSpec.getComments());

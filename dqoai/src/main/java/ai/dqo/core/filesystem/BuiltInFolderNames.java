@@ -40,6 +40,16 @@ public final class BuiltInFolderNames {
     public static final String DATA = ".data";
 
     /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the sensor readouts are stored.
+     */
+    public static final String SENSOR_READOUTS = "sensor_readouts";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the rule results are stored.
+     */
+    public static final String RULE_RESULTS = "rule_results";
+
+    /**
      * Local index folder.
      */
     public static final String INDEX = ".index";

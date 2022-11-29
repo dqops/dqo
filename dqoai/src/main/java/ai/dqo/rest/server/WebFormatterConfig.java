@@ -15,9 +15,14 @@
  */
 package ai.dqo.rest.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+import org.springframework.http.codec.ServerCodecConfigurer;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
@@ -25,8 +30,14 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  * Spring reactive (webflux) configuration for the formatters.
  */
 @Configuration
-@EnableWebFlux
 public class WebFormatterConfig implements WebFluxConfigurer {
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    public WebFormatterConfig(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     /**
      * Configures the default format for date/time as an ISO format.
      * @param registry Formatter registry.
@@ -36,5 +47,12 @@ public class WebFormatterConfig implements WebFluxConfigurer {
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(registry);
+    }
+
+    @Override
+    public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
+        configurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(this.objectMapper));
+        configurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(this.objectMapper));
+        WebFluxConfigurer.super.configureHttpMessageCodecs(configurer);
     }
 }

@@ -41,6 +41,7 @@ import { ReactComponent as DeleteSvg } from './svg/delete.svg';
 import { ReactComponent as SaveSvg } from './svg/save.svg';
 import { ReactComponent as StopSvg } from './svg/stop.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
+import { ReactComponent as PlaySvg } from './svg/play.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -83,7 +84,8 @@ const iconsMap: any = {
   save: SaveSvg,
   stop: StopSvg,
   disable: DisableSvg,
-  'clock-off': ClockOffSvg
+  'clock-off': ClockOffSvg,
+  play: PlaySvg
 };
 
 interface SvgIconProps {

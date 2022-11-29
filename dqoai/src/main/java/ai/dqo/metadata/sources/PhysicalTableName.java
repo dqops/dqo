@@ -248,4 +248,12 @@ public class PhysicalTableName implements Cloneable {
             throw new RuntimeException("Object cannot be cloned.");
         }
     }
+
+    /**
+     * Creates a search filter for the table. A search filter is just a "schema.table".
+     * @return Table search filter.
+     */
+    public String toTableSearchFilter() {
+        return this.schemaName + "." + this.tableName;
+    }
 }

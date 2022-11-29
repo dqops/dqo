@@ -30,6 +30,10 @@ export enum TREE_LEVEL {
   TABLE_PARTITIONED_DAILY_CHECKS = 'table_partitioned_daily_checks',
   TABLE_PARTITIONED_MONTHLY_CHECKS = 'table_partitioned_monthly_checks',
   COLUMN_CHECKS = 'column_checks',
+  COLUMN_DAILY_CHECKS = 'column_daily_checks',
+  COLUMN_MONTHLY_CHECKS = 'column_monthly_checks',
+  COLUMN_PARTITIONED_DAILY_CHECKS = 'column_partitioned_daily_checks',
+  COLUMN_PARTITIONED_MONTHLY_CHECKS = 'column_partitioned_monthly_checks',
   COLUMN = 'column',
   ROOT = 'root',
   CHECK = 'check'
