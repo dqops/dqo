@@ -15,6 +15,9 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
+import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.locks.UserHomeLockManagerImpl;
+import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;
 
@@ -30,7 +33,8 @@ public final class LocalHomeStorageServiceObjectMother {
     public static LocalUserHomeFileStorageServiceImpl createLocalUserHomeStorageServiceForTestableHome(boolean recreateHomeDirectory) {
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(recreateHomeDirectory);
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService);
+            UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
 
             return localHomeStorageService;
@@ -49,7 +53,8 @@ public final class LocalHomeStorageServiceObjectMother {
     public static LocalUserHomeFileStorageServiceImpl createDefaultHomeStorageService(boolean recreateHomeDirectory) {
         try {
             HomeLocationFindService homeLocationFindService = HomeLocationFindServiceObjectMother.getDefaultHomeFinder(recreateHomeDirectory);
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService);
+            UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
 
             return localHomeStorageService;

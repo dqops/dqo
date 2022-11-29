@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "dqo.core")
 @EqualsAndHashCode(callSuper = false)
-public class DqoCoreConfigurationProperties {
+public class DqoCoreConfigurationProperties implements Cloneable {
     private boolean printStackTrace;
     private long lockWaitTimeoutSeconds = 15 * 60;
 
@@ -59,5 +59,20 @@ public class DqoCoreConfigurationProperties {
      */
     public void setLockWaitTimeoutSeconds(long lockWaitTimeoutSeconds) {
         this.lockWaitTimeoutSeconds = lockWaitTimeoutSeconds;
+    }
+
+    /**
+     * Creates a clone of the object.
+     * @return Cloned instance.
+     */
+    @Override
+    public DqoCoreConfigurationProperties clone() {
+        try {
+            DqoCoreConfigurationProperties cloned = (DqoCoreConfigurationProperties) super.clone();
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Cannot clone object", ex);
+        }
     }
 }

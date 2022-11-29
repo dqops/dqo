@@ -15,6 +15,8 @@
  */
 package ai.dqo.core.locks;
 
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+
 /**
  * Lock manager that controls access to the user home in a parallel environment.
  */
@@ -25,7 +27,7 @@ public interface UserHomeLockManager {
      * @return Shared read lock that must be released by calling the {@link AcquiredSharedReadLock#close()}
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
-    AcquiredSharedReadLock lockSharedRead(LockFolderScope scope);
+    AcquiredSharedReadLock lockSharedRead(DqoRoot scope);
 
     /**
      * Obtains an exclusive lock on a whole folder.
@@ -33,5 +35,5 @@ public interface UserHomeLockManager {
      * @return Exclusive write lock that must be released by calling the {@link AcquiredExclusiveWriteLock#close()}
      * @throws LockWaitTimeoutException When the lock was not acquired because the wait time has exceeded.
      */
-    AcquiredExclusiveWriteLock lockExclusiveWrite(LockFolderScope scope);
+    AcquiredExclusiveWriteLock lockExclusiveWrite(DqoRoot scope);
 }

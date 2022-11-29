@@ -18,6 +18,7 @@ package ai.dqo.rest.models.checks.mapping;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -45,18 +46,18 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters());
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(4, uiModel.getCategories().size());
+        Assertions.assertEquals(2, uiModel.getCategories().size());
     }
 
     @Test
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters());
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(5, uiModel.getCategories().size());
+        Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 }

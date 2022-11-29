@@ -18,6 +18,7 @@ package ai.dqo.rest.models.checks.mapping;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +48,7 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters());
 
         this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
     }
@@ -55,7 +56,7 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters());
 
         this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);
     }

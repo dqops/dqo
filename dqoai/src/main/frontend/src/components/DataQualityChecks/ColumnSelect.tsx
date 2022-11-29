@@ -19,6 +19,7 @@ interface IColumnSelectProps {
   disabled?: boolean;
   scope?: string;
   error?: boolean;
+  triggerClassName?: string;
 }
 
 const ColumnSelect = ({
@@ -28,6 +29,7 @@ const ColumnSelect = ({
   onChange,
   disabled,
   scope = 'column',
+  triggerClassName,
   error
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
@@ -37,11 +39,12 @@ const ColumnSelect = ({
   const setColumns = (
     res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
   ) => {
-    const data = res.data.map((item) => ({
-      label: item.column_name || '',
-      value: item.column_name || ''
-    }));
-    setOptions([{ label: 'None', value: '' }, ...data]);
+    setOptions(
+      res.data.map((item) => ({
+        label: item.column_name || '',
+        value: item.column_name || ''
+      }))
+    );
   };
 
   useEffect(() => {
@@ -64,7 +67,7 @@ const ColumnSelect = ({
         value={value}
         tooltipText={tooltipText}
         options={options}
-        triggerClassName="!h-8"
+        triggerClassName={triggerClassName}
         onChange={onChange}
         error={error}
       />

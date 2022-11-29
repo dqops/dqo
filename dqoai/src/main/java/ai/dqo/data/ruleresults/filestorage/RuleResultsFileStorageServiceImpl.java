@@ -15,7 +15,11 @@
  */
 package ai.dqo.data.ruleresults.filestorage;
 
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
+import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
+import ai.dqo.core.locks.AcquiredSharedReadLock;
+import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.DataStorageIOException;
 import ai.dqo.data.ChangeDeltaMode;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -47,20 +51,20 @@ import java.time.temporal.ChronoUnit;
  */
 @Service
 public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorageService {
-    private final DqoStorageConfigurationProperties storageConfigurationProperties;
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
+    private final UserHomeLockManager userHomeLockManager;
 
     /**
      * Dependency injection constructor.
-     * @param storageConfigurationProperties Storage configuration.
      * @param localDqoUserHomePathProvider DQO User home finder.
+     * @param userHomeLockManager User home lock manager.
      */
     @Autowired
     public RuleResultsFileStorageServiceImpl(
-            DqoStorageConfigurationProperties storageConfigurationProperties,
-            LocalDqoUserHomePathProvider localDqoUserHomePathProvider) {
-        this.storageConfigurationProperties = storageConfigurationProperties;
+            LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
+            UserHomeLockManager userHomeLockManager) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
+        this.userHomeLockManager = userHomeLockManager;
     }
 
     /**
@@ -114,8 +118,8 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      * @param month The date of the first date of the month.
      */
     public void saveTableMonth(Table data, String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getRuleResultsStoragePath());
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(DqoRoot.DATA_RULE_RESULTS)) {
+            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.RULE_RESULTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
@@ -143,8 +147,8 @@ public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorage
      * @return Returns a dataset table with the rule results. Returns null if the data is not present (missing file).
      */
     public Table loadForTableAndMonth(String connectionName, PhysicalTableName tableName, LocalDate month) {
-        try {
-            Path configuredStoragePath = Path.of(this.storageConfigurationProperties.getRuleResultsStoragePath());
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(DqoRoot.DATA_RULE_RESULTS)) {
+            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, BuiltInFolderNames.RULE_RESULTS);
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
             String hivePartitionFolderName = makeHivePartitionPath(connectionName, tableName, month);
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);

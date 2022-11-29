@@ -18,7 +18,8 @@ package ai.dqo.data.ruleresults.snapshot;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
+import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.ruleresults.filestorage.RuleResultsFileStorageServiceImpl;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
@@ -40,7 +41,6 @@ import java.time.LocalDateTime;
 public class RuleResultsSnapshotTests extends BaseTest {
     private RuleResultsSnapshot sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private DqoStorageConfigurationProperties storageConfigurationProperties;
     private RuleResultsFileStorageServiceImpl ruleResultsFileStorageService;
     private PhysicalTableName tableName;
 
@@ -55,9 +55,9 @@ public class RuleResultsSnapshotTests extends BaseTest {
     protected void setUp() throws Throwable {
         super.setUp();
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-		storageConfigurationProperties = this.dqoConfigurationProperties.getStorage();
-        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
-        ruleResultsFileStorageService = new RuleResultsFileStorageServiceImpl(storageConfigurationProperties, localUserHomeProviderStub);
+		LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
+        UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        ruleResultsFileStorageService = new RuleResultsFileStorageServiceImpl(localUserHomeProviderStub, newLockManager);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new RuleResultsSnapshot("conn", tableName, this.ruleResultsFileStorageService, newRows);

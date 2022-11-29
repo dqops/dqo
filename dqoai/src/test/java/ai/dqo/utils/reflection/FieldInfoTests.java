@@ -17,6 +17,7 @@ package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -118,12 +119,12 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsFilled_thenReturnsExistingValue() throws Exception {
-        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("standard");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
-        BuiltInTableValidityChecksSpec expected = new BuiltInTableValidityChecksSpec();
-        target.setValidity(expected);
+        TableAdHocStandardChecksSpec expected = new TableAdHocStandardChecksSpec();
+        target.setStandard(expected);
 
         Object result = sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
@@ -132,15 +133,15 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsNull_thenCreatesNewObjectThatIsNotStored() throws Exception {
-        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("validity");
+        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("standard");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
-        target.setValidity(null);
-        BuiltInTableValidityChecksSpec result = (BuiltInTableValidityChecksSpec)sut.getFieldValueOrNewObject(target);
+        target.setStandard(null);
+        TableAdHocStandardChecksSpec result = (TableAdHocStandardChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
 
-        BuiltInTableValidityChecksSpec result2 = (BuiltInTableValidityChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableAdHocStandardChecksSpec result2 = (TableAdHocStandardChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result2);
         Assertions.assertNotSame(result, result2);
     }

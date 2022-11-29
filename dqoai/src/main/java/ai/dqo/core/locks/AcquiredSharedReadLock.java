@@ -15,12 +15,13 @@
  */
 package ai.dqo.core.locks;
 
+import java.io.Closeable;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Acquired shared read lock that must be returned.
  */
-public class AcquiredSharedReadLock implements AutoCloseable {
+public class AcquiredSharedReadLock implements Closeable {
     private boolean released;
     private ReentrantReadWriteLock.ReadLock readLock;
 
@@ -36,7 +37,7 @@ public class AcquiredSharedReadLock implements AutoCloseable {
      * Releases the read lock in the reverse order of acquisition.
      */
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (this.released) {
             return;
         }

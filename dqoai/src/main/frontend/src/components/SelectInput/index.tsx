@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
@@ -39,10 +39,7 @@ const SelectInput = ({
 }: SelectInputProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
-
-  const selectedOption = useMemo(() => {
-    return options.find((item) => item.value === value);
-  }, [options, value]);
+  const [isChanged, setIsChanged] = useState(false);
 
   const handleClick = (option: Option) => {
     if (onChange) {
@@ -52,11 +49,21 @@ const SelectInput = ({
   };
 
   const filteredOptions = useMemo(() => {
+    if (!isChanged) return options;
+
     return options.filter(
       (option) =>
+        option.label === 'None' ||
         option.label.toLowerCase().indexOf((value || '').toLowerCase()) > -1
     );
-  }, [value, options]);
+  }, [value, options, isChanged]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e.target.value);
+    }
+    setIsChanged(true);
+  };
 
   return (
     <div className={clsx('', className)}>
@@ -98,7 +105,7 @@ const SelectInput = ({
           <input
             className="h-full pl-4 focus:outline-none w-full"
             value={value}
-            onChange={(e) => onChange && onChange(e.target.value)}
+            onChange={handleChange}
             placeholder={placeholder}
           />
           <SvgIcon
@@ -121,7 +128,7 @@ const SelectInput = ({
             <div
               data-testid="select-option"
               key={index}
-              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm h-8"
+              className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm"
               onClick={() => handleClick(option)}
             >
               {option.label}

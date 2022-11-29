@@ -1,58 +1,112 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColumnBasicModel } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import NumberInput from '../../NumberInput';
+import ColumnActionGroup from './ColumnActionGroup';
+import {
+  getColumnBasic,
+  updateColumnBasic
+} from '../../../redux/actions/column.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IColumnDetailsProps {
-  columnBasic?: ColumnBasicModel;
-  setColumnBasic: (value: ColumnBasicModel) => void;
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
+  columnName: string;
 }
 
-const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
+const TableDetails = ({
+  connectionName,
+  schemaName,
+  tableName,
+  columnName
+}: IColumnDetailsProps) => {
+  const dispatch = useActionDispatch();
+  const [updatedColumnBasic, setUpdatedColumnBasic] =
+    useState<ColumnBasicModel>();
+  const [isUpdated, setIsUpdated] = useState(false);
+
+  const { columnBasic, isUpdating } = useSelector(
+    (state: IRootState) => state.column
+  );
+
+  useEffect(() => {
+    setUpdatedColumnBasic(columnBasic);
+  }, [columnBasic]);
+
   const handleChange = (obj: any) => {
-    setColumnBasic({
-      ...columnBasic,
+    setUpdatedColumnBasic({
+      ...updatedColumnBasic,
       ...obj
     });
+    setIsUpdated(true);
   };
 
   const handleSnapTypeChange = (obj: any) => {
-    setColumnBasic({
-      ...columnBasic,
+    setUpdatedColumnBasic({
+      ...updatedColumnBasic,
       type_snapshot: {
-        ...columnBasic?.type_snapshot,
+        ...updatedColumnBasic?.type_snapshot,
         ...obj
       }
     });
   };
 
+  useEffect(() => {
+    dispatch(getColumnBasic(connectionName, schemaName, tableName, columnName));
+  }, []);
+
+  const onUpdate = async () => {
+    await dispatch(
+      updateColumnBasic(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        updatedColumnBasic
+      )
+    );
+  };
+
   return (
     <div className="p-4">
+      <ColumnActionGroup
+        onUpdate={onUpdate}
+        isUpdating={isUpdating}
+        isUpdated={isUpdated}
+      />
       <table className="mb-6 mt-4 w-160">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>
-            <td className="px-4 py-2">{columnBasic?.connection_name}</td>
+            <td className="px-4 py-2">{updatedColumnBasic?.connection_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Schema Name</td>
-            <td className="px-4 py-2">{columnBasic?.table?.schemaName}</td>
+            <td className="px-4 py-2">
+              {updatedColumnBasic?.table?.schemaName}
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2">Table Name</td>
-            <td className="px-4 py-2">{columnBasic?.table?.tableName}</td>
+            <td className="px-4 py-2">
+              {updatedColumnBasic?.table?.tableName}
+            </td>
           </tr>
           <tr>
             <td className="px-4 py-2">Column Name</td>
-            <td className="px-4 py-2">{columnBasic?.column_name}</td>
+            <td className="px-4 py-2">{updatedColumnBasic?.column_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Disable Data Quality Checks</td>
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleChange({ disabled: value })}
-                checked={columnBasic?.disabled}
+                checked={updatedColumnBasic?.disabled}
               />
             </td>
           </tr>
@@ -60,7 +114,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">Column Type</td>
             <td className="px-4 py-2">
               <Input
-                value={columnBasic?.type_snapshot?.column_type}
+                value={updatedColumnBasic?.type_snapshot?.column_type}
                 onChange={(e) =>
                   handleSnapTypeChange({ column_type: e.target.value })
                 }
@@ -72,7 +126,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleSnapTypeChange({ nullable: value })}
-                checked={columnBasic?.type_snapshot?.nullable}
+                checked={updatedColumnBasic?.type_snapshot?.nullable}
               />
             </td>
           </tr>
@@ -80,7 +134,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">Length</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={columnBasic?.type_snapshot?.length || ''}
+                value={updatedColumnBasic?.type_snapshot?.length || ''}
                 onChange={(value) => handleSnapTypeChange({ length: value })}
               />
             </td>
@@ -89,7 +143,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">Scale</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={columnBasic?.type_snapshot?.scale}
+                value={updatedColumnBasic?.type_snapshot?.scale}
                 onChange={(value) => handleSnapTypeChange({ scale: value })}
               />
             </td>
@@ -98,7 +152,7 @@ const TableDetails = ({ columnBasic, setColumnBasic }: IColumnDetailsProps) => {
             <td className="px-4 py-2">Precision</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={columnBasic?.type_snapshot?.precision}
+                value={updatedColumnBasic?.type_snapshot?.precision}
                 onChange={(value) => handleSnapTypeChange({ precision: value })}
               />
             </td>
