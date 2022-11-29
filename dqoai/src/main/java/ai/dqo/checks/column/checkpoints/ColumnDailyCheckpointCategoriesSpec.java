@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -48,6 +49,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("nulls", o -> o.nulls);
+           put("numeric", o -> o.numeric);
            put("strings", o -> o.strings);
         }
     };
@@ -56,6 +58,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyCheckpointsSpec nulls;
+
+    @JsonPropertyDescription("Daily checkpoints of numeric in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNumericDailyCheckpointsSpec numeric;
 
     @JsonPropertyDescription("Daily checkpoints of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -78,6 +85,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnNumericDailyCheckpointsSpec getNumeric() {
+        return numeric;
+    }
+
+    /**
+     * Sets the container of numeric data quality checks (checkpoints).
+     * @param numeric New numeric checks.
+     */
+    public void setNumeric(ColumnNumericDailyCheckpointsSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        this.propagateHierarchyIdToField(numeric, "numeric");
     }
 
     /**

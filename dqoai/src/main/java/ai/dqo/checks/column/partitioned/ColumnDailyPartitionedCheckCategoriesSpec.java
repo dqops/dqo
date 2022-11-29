@@ -18,7 +18,10 @@ package ai.dqo.checks.column.partitioned;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
+import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -46,31 +49,79 @@ import java.util.Objects;
 public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
+            put("nulls", o -> o.nulls);
+            put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
         }
     };
 
-    @JsonPropertyDescription("Daily partitioned checks of negative values in the column")
+    @JsonPropertyDescription("Daily partitioned checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericDailyPartitionedChecksSpec dailyPartitionMaxNegativeCount;
+    private ColumnNullsDailyPartitionedChecksSpec nulls;
+
+    @JsonPropertyDescription("Daily partitioned checks of numeric in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNumericDailyPartitionedChecksSpec numeric;
+
+    @JsonPropertyDescription("Daily partitioned checks of strings in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsDailyPartitionedChecksSpec strings;
 
     /**
-     * Returns the container of daily negative data quality partitioned checks.
+     * Returns the container of daily null data quality partitioned checks.
      * @return Container of row standard daily data quality partitioned checks.
      */
-    public ColumnNumericDailyPartitionedChecksSpec getDailyPartitionMaxNegativeCount() {
-        return dailyPartitionMaxNegativeCount;
+    public ColumnNullsDailyPartitionedChecksSpec getNulls() {
+        return nulls;
     }
 
     /**
-     * Sets the container of daily negative data quality partitioned checks.
-     * @param dailyPartitionMaxNegativeCount New negative checks.
+     * Sets the container of daily null data quality partitioned checks.
+     * @param nulls New nulls checks.
      */
-    public void setDailyPartitionMaxNegativeCount(ColumnNumericDailyPartitionedChecksSpec dailyPartitionMaxNegativeCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativeCount, dailyPartitionMaxNegativeCount));
-        this.dailyPartitionMaxNegativeCount = dailyPartitionMaxNegativeCount;
-        propagateHierarchyIdToField(dailyPartitionMaxNegativeCount, "daily_partition_max_negative_count");
+    public void setNulls(ColumnNullsDailyPartitionedChecksSpec nulls) {
+		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
+        this.nulls = nulls;
+        propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of daily numeric data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnNumericDailyPartitionedChecksSpec getNumeric() {
+        return numeric;
+    }
+
+    /**
+     * Sets the container of daily numeric data quality partitioned checks.
+     * @param numeric New numeric checks.
+     */
+    public void setNumeric(ColumnNumericDailyPartitionedChecksSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of daily strings data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnStringsDailyPartitionedChecksSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of daily strings data quality partitioned checks.
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsDailyPartitionedChecksSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        propagateHierarchyIdToField(strings, "strings");
     }
 
     /**
