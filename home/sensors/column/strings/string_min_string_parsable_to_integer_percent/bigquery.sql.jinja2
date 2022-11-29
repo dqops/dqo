@@ -2,8 +2,7 @@
 SELECT
       CASE
           WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
-          WHEN COUNT (PARSE_NUMERIC({{ lib.render_target_column('analyzed_table')}})) != 0 THEN COUNT(PARSE_NUMERIC({{ lib.render_target_column('analyzed_table')}}))/COUNT(*)
-          ELSE 0
+          ELSE COUNT(PARSE_NUMERIC({{ lib.render_target_column('analyzed_table')}}))/COUNT(*)
         END AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
