@@ -72,12 +72,15 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     JobApiClient.runChecks(check?.run_checks_job_template);
   };
 
+  const isDisabled = !check?.configured || check?.disabled;
+
   return (
     <>
       <tr
         className={clsx(
           ' border-b border-gray-100',
-          !check?.disabled ? 'text-gray-700' : 'opacity-75 line-through'
+          !isDisabled ? 'text-gray-700' : 'opacity-75',
+          check?.disabled ? 'line-through' : ''
         )}
       >
         <td className="py-2 px-4 pr-4">
@@ -134,14 +137,14 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 onChange={(parameters: UIFieldModel[]) =>
                   handleChange({ sensor_parameters: parameters })
                 }
-                disabled={check.disabled}
+                disabled={!check?.configured || check.disabled}
               />
             </div>
           </div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
-            disabled={check.disabled}
+            disabled={isDisabled}
             parameters={check?.rule?.error}
             onChange={(error) =>
               handleChange({
@@ -156,7 +159,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         </td>
         <td className="py-2 px-4 bg-red-100">
           <CheckRuleItem
-            disabled={check.disabled}
+            disabled={isDisabled}
             parameters={check?.rule?.fatal}
             onChange={(fatal) =>
               handleChange({
@@ -172,7 +175,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
         <td className="min-w-5 max-w-5 border-b" />
         <td className="py-2 px-4 bg-yellow-100">
           <CheckRuleItem
-            disabled={check.disabled}
+            disabled={isDisabled}
             parameters={check?.rule?.warning}
             onChange={(warning) =>
               handleChange({
