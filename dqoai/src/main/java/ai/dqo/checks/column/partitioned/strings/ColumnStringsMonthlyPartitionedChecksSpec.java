@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking daily partitions or rows for each day of data.
+ * Container of built-in preconfigured data quality check points on a column level that are checking monthly partitions or rows for each month of data.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -42,17 +43,22 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_length_below", o -> o.monthlyPartitionMaxStringLengthBelow);
             put("monthly_partition_min_string_length_above", o -> o.monthlyPartitionMinStringLengthAbove);
             put("monthly_partition_mean_string_length_between", o -> o.monthlyPartitionMeanStringLengthBetween);
+            put("monthly_partition_min_string_parsable_to_integer_percent", o -> o.monthlyPartitionMinStringParsableToIntegerPercent);
+
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringLengthBelowCheckSpec monthlyPartitionMaxStringLengthBelow;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringLengthAboveCheckSpec monthlyPartitionMinStringLengthAbove;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMeanStringLengthBetweenCheckSpec monthlyPartitionMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -106,6 +112,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanStringLengthBetween, monthlyPartitionMeanStringLengthBetween));
         this.monthlyPartitionMeanStringLengthBetween = monthlyPartitionMeanStringLengthBetween;
         propagateHierarchyIdToField(monthlyPartitionMeanStringLengthBetween, "monthly_partition_mean_string_length_between");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent  check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyPartitionMinStringParsableToIntegerPercent() {
+        return monthlyPartitionMinStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param monthlyPartitionMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setMonthlyPartitionMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringParsableToIntegerPercent, monthlyPartitionMinStringParsableToIntegerPercent));
+        this.monthlyPartitionMinStringParsableToIntegerPercent = monthlyPartitionMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringParsableToIntegerPercent, "monthly_partition_min_string_parsable_to_integer_percent");
     }
 
     /**

@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +42,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
+            put("min_string_parsable_to_integer_percent", o -> o.minStringParsableToIntegerPercent);
+
         }
     };
 
@@ -52,6 +55,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec minStringParsableToIntegerPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -105,6 +111,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.meanStringLengthBetween, meanStringLengthBetween));
         this.meanStringLengthBetween = meanStringLengthBetween;
         propagateHierarchyIdToField(meanStringLengthBetween, "mean_string_length_between");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getMinStringParsableToIntegerPercent() {
+        return minStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param minStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec minStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringParsableToIntegerPercent, minStringParsableToIntegerPercent));
+        this.minStringParsableToIntegerPercent = minStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(minStringParsableToIntegerPercent, "min_string_parsable_to_integer_percent");
     }
 
     /**

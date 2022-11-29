@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,6 +43,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
             put("daily_checkpoint_min_string_length_above", o -> o.dailyCheckpointMinStringLengthAbove);
             put("daily_checkpoint_mean_string_length_between", o -> o.dailyCheckpointMeanStringLengthBetween);
+            put("daily_checkpoint_min_string_parsable_to_integer_percent", o -> o.dailyCheckpointMinStringParsableToIntegerPercent);
+
         }
     };
 
@@ -53,6 +56,10 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent;
+
 
     /**
      * Returns a maximum string length below check.
@@ -106,6 +113,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanStringLengthBetween, dailyCheckpointMeanStringLengthBetween));
         this.dailyCheckpointMeanStringLengthBetween = dailyCheckpointMeanStringLengthBetween;
         propagateHierarchyIdToField(dailyCheckpointMeanStringLengthBetween, "daily_checkpoint_mean_string_length_between");
+    }
+
+    /**
+    * Returns a minimum string parsable to integer percent check.
+    * @return Minimum string parsable to integer percent check.
+    */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getDailyCheckpointMinStringParsableToIntegerPercent() {
+        return dailyCheckpointMinStringParsableToIntegerPercent;
+    }
+
+    /**
+    * Sets a new definition of a minimum string parsable to integer percent check.
+    * @param dailyCheckpointMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+    */
+    public void setDailyCheckpointMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringParsableToIntegerPercent, dailyCheckpointMinStringParsableToIntegerPercent));
+        this.dailyCheckpointMinStringParsableToIntegerPercent = dailyCheckpointMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinStringParsableToIntegerPercent, "daily_checkpoint_min_string_parsable_to_integer_percent");
     }
 
     /**
