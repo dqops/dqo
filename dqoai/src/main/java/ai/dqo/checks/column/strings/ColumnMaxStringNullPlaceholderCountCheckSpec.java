@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckSpec<ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec, MaxCountRuleParametersSpec> {
+public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckSpec<ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec, MaxCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringNullPlaceholderCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,17 +51,17 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with a null placeholder strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRuleParametersSpec error;
+    private MaxCountRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRuleParametersSpec warning;
+    private MaxCountRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRuleParametersSpec fatal;
+    private MaxCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -88,7 +88,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRuleParametersSpec getError() {
+    public MaxCountRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -96,7 +96,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRuleParametersSpec error) {
+    public void setError(MaxCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -108,7 +108,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRuleParametersSpec getWarning() {
+    public MaxCountRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -116,7 +116,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRuleParametersSpec warning) {
+    public void setWarning(MaxCountRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -128,7 +128,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRuleParametersSpec getFatal() {
+    public MaxCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -136,7 +136,7 @@ public class ColumnMaxStringNullPlaceholderCountCheckSpec extends AbstractCheckS
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRuleParametersSpec fatal) {
+    public void setFatal(MaxCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.comparison;
+package ai.dqo.rules.averages;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -27,49 +27,41 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+ * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxPercentRule100ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRule100ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class Within5PercentMovingAverage60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<Within5PercentMovingAverage60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Default constructor.
      */
-    public MaxPercentRule100ParametersSpec() {
+    public Within5PercentMovingAverage60DaysRuleParametersSpec() {
+    }
+
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    private Double maxPercentWithin = 5.0;
+
+    /**
+     * Minimum percent value for a data quality check readout, for example a minimum row count.
+     * @return A percent that is used to calculate lower limit.
+     */
+    public Double getMaxPercentWithin() {
+        return maxPercentWithin;
     }
 
     /**
-     * Creates a rule with a given value.
-     * @param maxPercent Minimum accepted value.
+     * Changes the minimum value (threshold) for a data quality readout.
+     * @param maxPercentWithin
      */
-    public MaxPercentRule100ParametersSpec(Double maxPercent) {
-        this.maxPercent = maxPercent;
-    }
-
-    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxPercent = 100.0;
-
-    /**
-     * Returns a maximum value for a data quality check readout, for example a maximum row count.
-     * @return Maximum value for a data quality check readout.
-     */
-    public Double getMaxPercent() {
-        return maxPercent;
-    }
-
-    /**
-     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
-     * @param maxPercent Maximum value that is accepted.
-     */
-    public void setMaxPercent(Double maxPercent) {
-        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
-        this.maxPercent = maxPercent;
+    public void setMaxPercentWithin(Double maxPercentWithin) {
+        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
+        this.maxPercentWithin = maxPercentWithin;
     }
 
     /**
@@ -89,6 +81,6 @@ public class MaxPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/max_percent";
+        return "averages/within_percent_moving_average_60_days";
     }
 }

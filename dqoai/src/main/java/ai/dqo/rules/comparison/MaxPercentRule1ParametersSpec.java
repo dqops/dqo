@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-        package ai.dqo.rules.stdev;
+package ai.dqo.rules.comparison;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -27,44 +27,51 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BelowStdevMultiply30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxPercentRule1ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRule1ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.")
-    private Double stdevMultiplierBelow;
-
     /**
-     * Default constructor.
+     * Default constructor, the minimum accepted value is 0.
      */
-    public BelowStdevMultiply30DaysRuleParametersSpec() {
-        this.stdevMultiplierBelow = null;
+    public MaxPercentRule1ParametersSpec() {
     }
 
     /**
-     * Multiplied factor used to calculate a multiplied stdev.
-     * @return Multiple factor used to calculate a multiplied stdev.
+     * Creates a rule with a given value.
+     * @param maxPercent Minimum accepted value.
      */
-    public Double getStdevMultiplierBelow() {
-        return stdevMultiplierBelow;
+    public MaxPercentRule1ParametersSpec(Double maxPercent) {
+        this.maxPercent = maxPercent;
     }
+
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
+    private Double maxPercent = 1.0;
 
     /**
-     * Sets multiple factor to calculate multiplied stdev.
-     * @param stdevMultiplierBelow Multiple factor.
+     * Returns a maximum value for a data quality check readout, for example a maximum row count.
+     * @return Maximum value for a data quality check readout.
      */
-    public void setStdevMultiplierBelow(Double stdevMultiplierBelow) {
-        this.setDirtyIf(!Objects.equals(this.stdevMultiplierBelow, stdevMultiplierBelow));
-        this.stdevMultiplierBelow = stdevMultiplierBelow;
+    public Double getMaxPercent() {
+        return maxPercent;
     }
 
+
+    /**
+     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
+     * @param maxPercent Maximum value that is accepted.
+     */
+    public void setMaxPercent(Double maxPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
+        this.maxPercent = maxPercent;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -83,6 +90,6 @@ public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRulePara
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/below_stdev_multiply_30_days";
+        return "comparison/max_percent";
     }
 }

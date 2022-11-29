@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.averages;
+package ai.dqo.rules.stdev;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -32,59 +32,39 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenPercentMovingAverage7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentMovingAverage7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class Below3StdevMultiply7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<Below3StdevMultiply7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    private Double stdevMultiplierBelow = 3.0;
 
     /**
      * Default constructor.
      */
-    public BetweenPercentMovingAverage7DaysRuleParametersSpec() {
-    }
-
-
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
-    private Double maxPercentAbove;
-
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
-    private Double maxPercentBelow;
-
-    /**
-     * Minimum percent value for a data quality check readout, for example a minimum row count.
-     * @return A percent that is used to calculate lower limit.
-     */
-    public Double getMaxPercentBelow() {
-        return maxPercentBelow;
+    public Below3StdevMultiply7DaysRuleParametersSpec() {
+        this.stdevMultiplierBelow = null;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality readout.
-     * @param maxPercentBelow
+     * Multiplied factor used to calculate a multiplied stdev.
+     * @return Multiple factor used to calculate a multiplied stdev.
      */
-    public void setMaxPercentBelow(Double maxPercentBelow) {
-        this.setDirtyIf(!Objects.equals(this.maxPercentBelow, maxPercentBelow));
-        this.maxPercentBelow = maxPercentBelow;
+    public Double getStdevMultiplierBelow() {
+        return stdevMultiplierBelow;
     }
 
     /**
-     * Maximum percent value for a data quality check readout, for example a minimum row count.
-     * @return Maximum value for a data quality check readout.
+     * Sets multiple factor to calculate multiplied stdev.
+     * @param stdevMultiplierBelow Multiple factor.
      */
-    public Double getMaxPercentAbove() {
-        return maxPercentAbove;
+    public void setStdevMultiplierBelow(Double stdevMultiplierBelow) {
+        this.setDirtyIf(!Objects.equals(this.stdevMultiplierBelow, stdevMultiplierBelow));
+        this.stdevMultiplierBelow = stdevMultiplierBelow;
     }
 
-    /**
-     * Changes the maximum value (threshold) for a data quality readout.
-     * @param maxPercentAbove Maximum value.
-     */
-    public void setMaxPercentAbove(Double maxPercentAbove) {
-        this.setDirtyIf(!Objects.equals(this.maxPercentAbove, maxPercentAbove));
-        this.maxPercentAbove = maxPercentAbove;
-    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -103,6 +83,6 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpec extends Abstract
      */
     @Override
     public String getRuleDefinitionName() {
-        return "averages/between_percent_moving_average_7_days";
+        return "stdev/below_stdev_multiply_7_days";
     }
 }

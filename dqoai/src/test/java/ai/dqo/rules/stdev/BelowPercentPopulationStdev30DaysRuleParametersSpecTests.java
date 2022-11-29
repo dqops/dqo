@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class BelowPercentPopulationStdev30DaysRuleParametersSpecTests extends BaseTest {
-    private BelowPercentPopulationStdev30DaysRuleParametersSpec sut;
+    private Below1PercentPopulationStdev30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class BelowPercentPopulationStdev30DaysRuleParametersSpecTests extends Ba
     @BeforeEach
     protected void  setUp() throws Throwable {
         super.setUp();
-        this.sut = new BelowPercentPopulationStdev30DaysRuleParametersSpec();
+        this.sut = new Below1PercentPopulationStdev30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 

@@ -38,7 +38,7 @@ import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
-import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -193,11 +193,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
@@ -227,11 +227,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
         ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
@@ -264,11 +264,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRuleParametersSpec maxCountRule1 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRuleParametersSpec maxCountRule2 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRuleParametersSpec maxCountRule3 = new MaxCountRuleParametersSpec();
+        MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
         
         ColumnMaxNegativeCountCheckSpec negativeChecksSpec = new ColumnMaxNegativeCountCheckSpec();

@@ -32,19 +32,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BelowPercentPopulationStdev60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BelowPercentPopulationStdev60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class Below2PercentPopulationStdev7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<Below2PercentPopulationStdev7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.")
-    private Double percentPopulationBelow;
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    private Double percentPopulationBelow = 2.0;
 
     /**
      * Default constructor.
      */
-    public BelowPercentPopulationStdev60DaysRuleParametersSpec() {
+    public Below2PercentPopulationStdev7DaysRuleParametersSpec() {
         this.percentPopulationBelow = null;
     }
 
@@ -82,6 +82,6 @@ public class BelowPercentPopulationStdev60DaysRuleParametersSpec extends Abstrac
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/below_percent_population_stdev_60_days";
+        return "stdev/below_percent_population_stdev_7_days";
     }
 }

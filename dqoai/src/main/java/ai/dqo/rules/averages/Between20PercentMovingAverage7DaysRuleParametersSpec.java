@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenPercentMovingAverage60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentMovingAverage60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class Between20PercentMovingAverage7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<Between20PercentMovingAverage7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -42,15 +42,15 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpec extends Abstrac
     /**
      * Default constructor.
      */
-    public BetweenPercentMovingAverage60DaysRuleParametersSpec() {
+    public Between20PercentMovingAverage7DaysRuleParametersSpec() {
     }
 
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
-    private Double maxPercentAbove;
+    private Double maxPercentAbove = 20.0;
 
     @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
-    private Double maxPercentBelow;
+    private Double maxPercentBelow = 20.0;
 
     /**
      * Minimum percent value for a data quality check readout, for example a minimum row count.
@@ -103,6 +103,6 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpec extends Abstrac
      */
     @Override
     public String getRuleDefinitionName() {
-        return "averages/between_percent_moving_average_60_days";
+        return "averages/between_percent_moving_average_7_days";
     }
 }

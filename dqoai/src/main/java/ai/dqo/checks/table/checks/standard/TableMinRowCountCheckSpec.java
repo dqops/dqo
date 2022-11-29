@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
+import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRuleParametersSpec> {
+public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableMinRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,17 +51,17 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec error;
+    private MinCountRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec warning;
+    private MinCountRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec fatal;
+    private MinCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -88,7 +88,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRuleParametersSpec getError() {
+    public MinCountRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -96,7 +96,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRuleParametersSpec error) {
+    public void setError(MinCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -108,7 +108,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getWarning() {
+    public MinCountRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -116,7 +116,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleParametersSpec warning) {
+    public void setWarning(MinCountRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -128,7 +128,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getFatal() {
+    public MinCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -136,7 +136,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleParametersSpec fatal) {
+    public void setFatal(MinCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
