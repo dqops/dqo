@@ -1,6 +1,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -75,5 +76,18 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER, this.parameters.getRootType());
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
+    }
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     *
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    @Override
+    public DqoJobEntryParametersModel createParametersModel() {
+        return new DqoJobEntryParametersModel() {{
+           setSynchronizeRootFolderParameters(parameters);
+        }};
     }
 }

@@ -18,7 +18,8 @@ package ai.dqo.data.readouts.snapshot;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
+import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
@@ -40,7 +41,6 @@ import java.time.LocalDateTime;
 public class SensorReadoutsSnapshotTests extends BaseTest {
     private SensorReadoutsSnapshot sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private DqoStorageConfigurationProperties storageConfigurationProperties;
     private SensorReadoutsFileStorageServiceImpl sensorReadoutsFileStorageService;
     private PhysicalTableName tableName;
 
@@ -55,9 +55,9 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
     protected void setUp() throws Throwable {
         super.setUp();
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-		storageConfigurationProperties = this.dqoConfigurationProperties.getStorage();
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
-        sensorReadoutsFileStorageService = new SensorReadoutsFileStorageServiceImpl(storageConfigurationProperties, localUserHomeProviderStub);
+        UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        sensorReadoutsFileStorageService = new SensorReadoutsFileStorageServiceImpl(localUserHomeProviderStub, newLockManager);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.sensorReadoutsFileStorageService, newRows);

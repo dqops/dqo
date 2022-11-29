@@ -219,6 +219,38 @@ function TreeProvider(props: any) {
             parentId: node.id,
             items: [],
             tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`
+          },
+          {
+            id: `${node.id}.dailyCheck`,
+            label: 'Daily checkpoints',
+            level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`
+          },
+          {
+            id: `${node.id}.monthlyCheck`,
+            label: 'Monthly checkpoints',
+            level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`
+          },
+          {
+            id: `${node.id}.dailyPartitionedChecks`,
+            label: 'Daily partitioned checks',
+            level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`
+          },
+          {
+            id: `${node.id}.monthlyPartitionedChecks`,
+            label: 'Monthly partitioned checks',
+            level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
+            parentId: node.id,
+            items: [],
+            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`
           }
         ];
 

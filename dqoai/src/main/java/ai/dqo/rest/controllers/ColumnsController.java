@@ -17,6 +17,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
@@ -28,6 +29,7 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -746,8 +748,17 @@ public class ColumnsController {
         if (genericChecks == null) {
             return null;
         }
-        
-        return this.specToUiCheckMappingService.createUiModel(genericChecks);
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumnName(columnName);
+            setCheckType(genericChecks.getCheckType());
+            setTimeScale(genericChecks.getCheckTimeScale());
+            setEnabled(true);
+        }};
+
+        return this.specToUiCheckMappingService.createUiModel(genericChecks, checkSearchFilters);
     }
     
     /**

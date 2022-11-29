@@ -2,6 +2,7 @@ package ai.dqo.core.scheduler.scan;
 
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
@@ -74,5 +75,16 @@ public class RunPeriodicMetadataSynchronizationDqoJob extends DqoQueueJob<Void> 
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_SCHEDULER_METADATA, null);
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
+    }
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     *
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    @Override
+    public DqoJobEntryParametersModel createParametersModel() {
+        return new DqoJobEntryParametersModel();
     }
 }

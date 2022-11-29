@@ -4,6 +4,7 @@ import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,18 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
+    }
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     *
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    @Override
+    public DqoJobEntryParametersModel createParametersModel() {
+        return new DqoJobEntryParametersModel() {{
+            setRunChecksParameters(parameters);
+        }};
     }
 }

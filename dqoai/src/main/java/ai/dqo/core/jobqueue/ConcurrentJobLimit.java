@@ -65,6 +65,6 @@ public class ConcurrentJobLimit {
      * @return True when no more concurrent jobs could be started, false when the limit is not yet reached.
      */
     public boolean isConcurrencyLimitReached() {
-        return this.atomicLimit.get() > this.atomicRunningJobsCount.get();
+        return this.atomicRunningJobsCount.get() >= this.atomicLimit.get();
     }
 }

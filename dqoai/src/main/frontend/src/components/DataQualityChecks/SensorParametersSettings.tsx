@@ -1,10 +1,10 @@
 import React from 'react';
-import { TableConsistencyRowCountSensorParametersSpec } from '../../api';
+import { TableStandardRowCountSensorParametersSpec } from '../../api';
 import Checkbox from '../Checkbox';
 import TextArea from '../TextArea';
 
 interface ISensorParametersSettingsProps {
-  parameters?: TableConsistencyRowCountSensorParametersSpec;
+  parameters?: TableStandardRowCountSensorParametersSpec;
 }
 
 const SensorParametersSettings = ({

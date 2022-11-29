@@ -1,5 +1,7 @@
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -35,6 +37,13 @@ public abstract class DqoQueueJob<T> {
      * @return Job type.
      */
     public abstract DqoJobType getJobType();
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    public abstract DqoJobEntryParametersModel createParametersModel();
 
     /**
      * Returns a concurrency constraint that will limit the number of parallel running jobs.

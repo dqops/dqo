@@ -54,7 +54,7 @@ const TableDataStream = ({
 
   const handleChange = (value: DataStreamMappingSpec) => {
     setUpdatedDataStreamMapping(value);
-    setIsUpdated(false);
+    setIsUpdated(true);
   };
 
   return (

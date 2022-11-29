@@ -18,13 +18,18 @@ package ai.dqo.metadata.search;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.metadata.id.HierarchyIdModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Hierarchy node search filters.
@@ -32,7 +37,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
-public class CheckSearchFilters extends TableSearchFilters {
+public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     private String columnName;
     private String checkName;
     private String sensorName;
@@ -169,5 +174,53 @@ public class CheckSearchFilters extends TableSearchFilters {
      */
     public void setCheckHierarchyIds(Set<HierarchyId> checkHierarchyIds) {
         this.checkHierarchyIds = checkHierarchyIds;
+    }
+
+    /**
+     * Returns a list of check id models that could be returned to the UI.
+     * @return List of hierarchy id models of selected checks.
+     */
+    public List<HierarchyIdModel> getCheckHierarchyIdsModels() {
+        if (this.checkHierarchyIds == null) {
+            return null;
+        }
+
+        return this.checkHierarchyIds.stream()
+                .map(hierarchyId -> hierarchyId.toHierarchyIdModel())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Sets a list of hierarchy ids of selected checks, deserialized from JSON.
+     * @param hierarchyIdsModels List of hierarchy ids, deserialized.
+     */
+    public void setCheckHierarchyIdsModels(List<HierarchyIdModel> hierarchyIdsModels) {
+        if (hierarchyIdsModels == null) {
+            this.checkHierarchyIds = null;
+            return;
+        }
+
+        Set<HierarchyId> hierarchyIds = hierarchyIdsModels.stream()
+                .map(hierarchyIdModel -> hierarchyIdModel.toHierarchyId())
+                .collect(Collectors.toSet());
+        this.checkHierarchyIds = hierarchyIds;
+    }
+
+    /**
+     * Creates a deep clone of the search object.
+     * @return Deep cloned object.
+     */
+    @Override
+    public CheckSearchFilters clone() {
+        try {
+            CheckSearchFilters cloned = (CheckSearchFilters) super.clone();
+            if (this.checkHierarchyIds != null) {
+                cloned.checkHierarchyIds = new HashSet<>(this.checkHierarchyIds);
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Cannot clone the object", ex);
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ai.dqo.core.jobqueue;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
  * DQO job queue - manages a pool of threads that are executing operations.
  */
@@ -20,7 +18,7 @@ public interface DqoJobQueue {
      * Pushes a job to the job queue without waiting.
      *
      * @param job Job to be pushed.
-     * @return Completable future.
+     * @return Started job summary and a future to await for finish.
      */
-    <T> CompletableFuture<T> pushJob(DqoQueueJob<T> job);
+    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
 }

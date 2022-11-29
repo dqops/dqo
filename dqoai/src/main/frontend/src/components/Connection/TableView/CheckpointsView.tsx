@@ -29,7 +29,6 @@ const CheckpointsView = ({
 }: ICheckpointsViewProps) => {
   const [activeTab, setActiveTab] = useState('daily');
 
-  console.log('daily', dailyCheckpoints, monthlyCheckpoints);
   return (
     <div className="py-2">
       <div className="border-b border-gray-300">

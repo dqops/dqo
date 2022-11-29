@@ -1,6 +1,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,9 +28,12 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
 
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
     private final DqoJobConcurrencyLimiter jobConcurrencyLimiter;
+    private DqoJobIdGenerator dqoJobIdGenerator;
+    private final DqoJobQueueMonitoringService queueMonitoringService;
     private final AtomicInteger startedThreadsCount = new AtomicInteger();
     private final AtomicInteger runningJobsCount = new AtomicInteger();
     private LinkedBlockingQueue<DqoJobQueueEntry> jobsBlockingQueue;
+    private Set<DqoJobQueueEntry> runningJobs;
     private boolean started;
     private ExecutorService executorService;
     private List<Future<?>> runnerThreadsFutures;
@@ -38,12 +43,19 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
     /**
      * Creates a new dqo queue job.
      * @param queueConfigurationProperties dqo.cloud.* configuration parameters.
+     * @param jobConcurrencyLimiter Job concurrency limiter.
+     * @param dqoJobIdGenerator Job ID generator.
+     * @param queueMonitoringService Queue monitoring service.
      */
     @Autowired
     public DqoJobQueueImpl(DqoQueueConfigurationProperties queueConfigurationProperties,
-                           DqoJobConcurrencyLimiter jobConcurrencyLimiter) {
+                           DqoJobConcurrencyLimiter jobConcurrencyLimiter,
+                           DqoJobIdGenerator dqoJobIdGenerator,
+                           DqoJobQueueMonitoringService queueMonitoringService) {
         this.queueConfigurationProperties = queueConfigurationProperties;
         this.jobConcurrencyLimiter = jobConcurrencyLimiter;
+        this.dqoJobIdGenerator = dqoJobIdGenerator;
+        this.queueMonitoringService = queueMonitoringService;
     }
 
     /**
@@ -55,6 +67,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
             return;
         }
 
+        this.queueMonitoringService.start();
         this.jobsBlockingQueue = new LinkedBlockingQueue<>(queueConfigurationProperties.getMaxNonBlockingCapacity() != null ?
                 queueConfigurationProperties.getMaxNonBlockingCapacity() : Integer.MAX_VALUE);
 
@@ -64,6 +77,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
         this.executorService = Executors.newCachedThreadPool();
         this.runnerThreadsFutures = new ArrayList<>();
+        this.runningJobs = ConcurrentHashMap.newKeySet();
 
         startNewThreadWhenRequired(); // start the first processing thread
 
@@ -103,9 +117,13 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
                     if (dqoJobQueueEntry == null) {  // no parked jobs, waiting cor the parallel limit
                         dqoJobQueueEntry = jobQueue.take(); // waiting on the main blocking queue
                         if (dqoJobQueueEntry.getJobConcurrencyConstraint() != null) {
-                            dqoJobQueueEntry = this.jobConcurrencyLimiter.parkOrRegisterStartedJob(dqoJobQueueEntry);
-                            if (dqoJobQueueEntry == null) {
+                            DqoJobQueueEntry unparkedDqoJobToRun = this.jobConcurrencyLimiter.parkOrRegisterStartedJob(dqoJobQueueEntry);
+                            if (unparkedDqoJobToRun == null) {
+                                this.queueMonitoringService.publishJobParkedEvent(dqoJobQueueEntry);
                                 continue; // the job was parked
+                            }
+                            else {
+                                dqoJobQueueEntry = unparkedDqoJobToRun;
                             }
                         }
                     }
@@ -116,17 +134,24 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
                         return;
                     }
 
+                    this.queueMonitoringService.publishJobRunningEvent(dqoJobQueueEntry);
+
                     this.runningJobsCount.incrementAndGet();
                     try {
                         if (job.getFuture().isCancelled()) {
                             continue;
                         }
                         DqoJobExecutionContext jobExecutionContext = new DqoJobExecutionContext(dqoJobQueueEntry.getJobId());
+                        this.runningJobs.add(dqoJobQueueEntry);
                         job.execute(jobExecutionContext);
+
+                        this.queueMonitoringService.publishJobSucceededEvent(dqoJobQueueEntry);
                     } catch (Exception ex) {
                         log.error("Failed to execute a job: " + ex.getMessage(), ex);
+                        this.queueMonitoringService.publishJobFailedEvent(dqoJobQueueEntry, ex.getMessage());
                     }
                     finally {
+                        this.runningJobs.remove(dqoJobQueueEntry);
                         this.runningJobsCount.decrementAndGet();
                         if (dqoJobQueueEntry.getJobConcurrencyConstraint() != null) {
                                 // tell the limiter that the job has finished
@@ -156,7 +181,8 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
 
         for (int i = 0; i < this.startedThreadsCount.get(); i++) {
             try {
-                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), DqoQueueJobId.createNew()));
+                DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+                this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
             } catch (InterruptedException ex) {
                 log.error("Job queue stop() operation failed to publish a poison message", ex);
             }
@@ -177,16 +203,17 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         this.executorService = null;
         this.runnerThreadsFutures = null;
         this.jobsBlockingQueue = null;
+        this.runningJobs = null;
         this.started = false;
     }
 
     /**
      * Pushes a job to the job queue without waiting.
      * @param job Job to be pushed.
-     * @return Completable future.
+     * @return Started job summary and a future to await for finish.
      */
     @Override
-    public <T> CompletableFuture<T> pushJob(DqoQueueJob<T> job) {
+    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job) {
         if (!this.started) {
             throw new IllegalStateException("Cannot publish a job because the job queue is not started yet.");
         }
@@ -197,12 +224,15 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
 
         try {
-            this.jobsBlockingQueue.put(new DqoJobQueueEntry(job, DqoQueueJobId.createNew()));
+            DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
+            DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, newJobId);
+            this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
+            this.jobsBlockingQueue.put(jobQueueEntry);
+
+            return new PushJobResult<>(job.getFuture(), newJobId);
         } catch (InterruptedException e) {
             throw new JobQueuePushFailedException("Cannot push a job to the queue", e);
         }
-
-        return job.getFuture();
     }
 
     /**

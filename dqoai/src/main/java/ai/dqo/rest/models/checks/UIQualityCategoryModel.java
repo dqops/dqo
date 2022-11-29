@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.checks;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,4 +42,7 @@ public class UIQualityCategoryModel {
 
     @JsonPropertyDescription("List of data quality checks within the category.")
     private List<UICheckModel> checks = new ArrayList<>();
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
+    private CheckSearchFilters runChecksJobTemplate;
 }

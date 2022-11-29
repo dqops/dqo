@@ -3,10 +3,12 @@ package ai.dqo.execution.checks;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Parameters object for the run checks job.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RunChecksQueueJobParameters {
     private CheckSearchFilters checkSearchFilters;
     @JsonIgnore

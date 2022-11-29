@@ -58,7 +58,7 @@ const CheckRuleItem = ({
         ) : (
           <button
             className={clsx(
-              'px-4 py-1.5 text-sm whitespace-nowrap rounded-full text-white',
+              'px-4 py-1.5 text-sm whitespace-nowrap rounded-full text-white disabled:bg-gray-100 disabled:text-black disabled:cursor-not-allowed',
               classesMap[type]
             )}
             onClick={() =>
@@ -67,6 +67,7 @@ const CheckRuleItem = ({
                 configured: true
               })
             }
+            disabled={disabled}
           >
             {buttonLabelMap[type]}
           </button>

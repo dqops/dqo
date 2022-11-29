@@ -24,6 +24,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
  * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
  */
@@ -66,7 +68,7 @@ public class MinValueRuleParametersSpec extends AbstractRuleParametersSpec {
      * @param minValue Minimum value.
      */
     public void setMinValue(Double minValue) {
-		this.setDirtyIf(this.minValue != minValue);
+        this.setDirtyIf(!Objects.equals(this.minValue,minValue));
         this.minValue = minValue;
     }
 

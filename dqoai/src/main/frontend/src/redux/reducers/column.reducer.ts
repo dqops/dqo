@@ -32,6 +32,10 @@ export interface IColumnState {
   comments: CommentSpec[];
   labels: string[];
   checksUI?: UIAllChecksModel;
+  dailyCheckpoints?: UIAllChecksModel;
+  monthlyCheckpoints?: UIAllChecksModel;
+  dailyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UIAllChecksModel;
 }
 
 const initialState: IColumnState = {
@@ -185,6 +189,146 @@ const columnReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dailyCheckpoints: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        monthlyCheckpoints: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        dailyPartitionedChecks: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        monthlyPartitionedChecks: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
         error: action.error
       };
     default:

@@ -1,5 +1,6 @@
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -42,5 +43,16 @@ public final class PoisonDqoJobQueueJob extends DqoQueueJob<Void> {
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         return null;
+    }
+
+    /**
+     * Creates a typed parameters model that could be sent back to the UI.
+     * The parameters model could contain a subset of parameters.
+     *
+     * @return Job queue parameters that are easy to serialize and shown in the UI.
+     */
+    @Override
+    public DqoJobEntryParametersModel createParametersModel() {
+        return new DqoJobEntryParametersModel();
     }
 }
