@@ -27,6 +27,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -55,6 +56,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
             put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
             put("max_string_null_placeholder_count", o -> o.maxStringNullPlaceholderCount);
+            put("max_string_null_placeholder_percent", o -> o.maxStringNullPlaceholderPercent);
         }
     };
 
@@ -84,6 +86,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringNullPlaceholderCountCheckSpec maxStringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxStringNullPlaceholderPercentCheckSpec maxStringNullPlaceholderPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -245,6 +250,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringNullPlaceholderCount, maxStringNullPlaceholderCount));
         this.maxStringNullPlaceholderCount = maxStringNullPlaceholderCount;
         propagateHierarchyIdToField(maxStringNullPlaceholderCount, "max_string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnMaxStringNullPlaceholderPercentCheckSpec getMaxStringNullPlaceholderPercent() {
+        return maxStringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder percent check.
+     * @param maxStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     */
+    public void setMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec maxStringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringNullPlaceholderPercent, maxStringNullPlaceholderPercent));
+        this.maxStringNullPlaceholderPercent = maxStringNullPlaceholderPercent;
+        propagateHierarchyIdToField(maxStringNullPlaceholderPercent, "max_string_null_placeholder_percent");
     }
 
     /**

@@ -25,6 +25,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,6 +54,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_string_whitespace_percent", o -> o.dailyCheckpointMaxStringWhitespacePercent);
             put("daily_checkpoint_min_string_valid_dates_percent", o -> o.dailyCheckpointMinStringValidDatesPercent);
             put("daily_checkpoint_max_string_null_placeholder_count", o -> o.dailyCheckpointMaxStringNullPlaceholderCount);
+            put("daily_checkpoint_max_string_null_placeholder_percent", o -> o.dailyCheckpointMaxStringNullPlaceholderPercent);
         }
     };
 
@@ -83,6 +85,10 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringNullPlaceholderCountCheckSpec dailyCheckpointMaxStringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxStringNullPlaceholderPercentCheckSpec dailyCheckpointMaxStringNullPlaceholderPercent;
+
 
     /**
      * Returns a maximum string length below check.
@@ -244,6 +250,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringNullPlaceholderCount, dailyCheckpointMaxStringNullPlaceholderCount));
         this.dailyCheckpointMaxStringNullPlaceholderCount = dailyCheckpointMaxStringNullPlaceholderCount;
         propagateHierarchyIdToField(dailyCheckpointMaxStringNullPlaceholderCount, "daily_checkpoint_max_string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnMaxStringNullPlaceholderPercentCheckSpec getDailyCheckpointMaxStringNullPlaceholderPercent() {
+        return dailyCheckpointMaxStringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder percent check.
+     * @param dailyCheckpointMaxStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     */
+    public void setDailyCheckpointMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec dailyCheckpointMaxStringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringNullPlaceholderPercent, dailyCheckpointMaxStringNullPlaceholderPercent));
+        this.dailyCheckpointMaxStringNullPlaceholderPercent = dailyCheckpointMaxStringNullPlaceholderPercent;
+        propagateHierarchyIdToField(dailyCheckpointMaxStringNullPlaceholderPercent, "daily_checkpoint_max_string_null_placeholder_percent");
     }
 
     /**
