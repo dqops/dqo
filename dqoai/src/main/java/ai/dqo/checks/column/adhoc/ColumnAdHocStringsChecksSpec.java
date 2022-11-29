@@ -19,6 +19,13 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,6 +49,11 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
+            put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
+            put("max_string_empty_count", o -> o.maxStringEmptyCount);
+            put("max_string_whitespace_count", o -> o.maxStringWhitespaceCount);
+            put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
+            put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
             put("max_string_null_placeholder_count", o -> o.maxStringNullPlaceholderCount);
         }
     };
@@ -54,6 +66,21 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnMeanStringLengthBetweenCheckSpec meanStringLengthBetween;
+
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent;
+
+    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
+    private ColumnMinStringValidDatesPercentCheckSpec minStringValidDatesPercent;
+
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringWhitespacePercentCheckSpec maxStringWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxStringNullPlaceholderCountCheckSpec maxStringNullPlaceholderCount;
@@ -110,6 +137,96 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.meanStringLengthBetween, meanStringLengthBetween));
         this.meanStringLengthBetween = meanStringLengthBetween;
         propagateHierarchyIdToField(meanStringLengthBetween, "mean_string_length_between");
+    }
+
+    /**
+     * Returns a maximum string empty percent check.
+     * @return Maximum string empty percent check.
+     */
+    public ColumnMaxStringEmptyPercentCheckSpec getMaxStringEmptyPercent() {
+        return maxStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string empty percent check.
+     * @param maxStringEmptyPercent Maximum string empty percent check.
+     */
+    public void setMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec maxStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyPercent, maxStringEmptyPercent));
+        this.maxStringEmptyPercent = maxStringEmptyPercent;
+        propagateHierarchyIdToField(maxStringEmptyPercent, "max_string_empty_percent");
+    }
+
+    /**
+     * Returns a max string empty count check.
+     * @return Max string empty count check.
+     */
+    public ColumnMaxStringEmptyCountCheckSpec getMaxStringEmptyCount() {
+        return maxStringEmptyCount;
+    }
+
+    /**
+     * Sets a new definition of a max string empty count check.
+     * @param maxStringEmptyCount Max string empty count check.
+     */
+    public void setMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec maxStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringEmptyCount, maxStringEmptyCount));
+        this.maxStringEmptyCount = maxStringEmptyCount;
+        propagateHierarchyIdToField(maxStringEmptyCount, "max_string_empty_count");
+    }
+
+    /**
+     * Returns a maximum string whitespace count check.
+     * @return Maximum string whitespace count check.
+     */
+    public ColumnMaxStringWhitespaceCountCheckSpec getMaxStringWhitespaceCount() {
+        return maxStringWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace count check.
+     * @param maxStringWhitespaceCount Maximum string whitespace count check.
+     */
+    public void setMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec maxStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringWhitespaceCount, maxStringWhitespaceCount));
+        this.maxStringWhitespaceCount = maxStringWhitespaceCount;
+        propagateHierarchyIdToField(maxStringWhitespaceCount, "max_string_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string whitespace percent check.
+     * @return Maximum string whitespace percent check.
+     */
+    public ColumnMaxStringWhitespacePercentCheckSpec getMaxStringWhitespacePercent() {
+        return maxStringWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string whitespace percent check.
+     * @param maxStringWhitespacePercent Maximum string whitespace percent check.
+     */
+    public void setMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec maxStringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringWhitespacePercent, maxStringWhitespacePercent));
+        this.maxStringWhitespacePercent = maxStringWhitespacePercent;
+        propagateHierarchyIdToField(maxStringWhitespacePercent, "max_string_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnMinStringValidDatesPercentCheckSpec getMinStringValidDatesPercent() {
+        return minStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param minStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec minStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidDatesPercent, minStringValidDatesPercent));
+        this.minStringValidDatesPercent = minStringValidDatesPercent;
+        propagateHierarchyIdToField(minStringValidDatesPercent, "min_string_valid_dates_percent");
     }
 
     /**
