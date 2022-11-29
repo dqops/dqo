@@ -50,10 +50,10 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
-            put("validity", o -> o.validity);
-            put("consistency", o -> o.consistency);
+//            put("validity", o -> o.validity);
+//            put("consistency", o -> o.consistency);
             put("timeliness", o -> o.timeliness);
-            put("custom", o -> o.custom);
+//            put("custom", o -> o.custom);
         }
     };
 
@@ -62,17 +62,17 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAdHocStandardChecksSpec standard;
 
-    @JsonPropertyDescription("Configuration of validity checks on a table level. Validity checks verify hard rules on the data using static rules, like a minimum row count.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private BuiltInTableValidityChecksSpec validity = new BuiltInTableValidityChecksSpec();
+//    @JsonPropertyDescription("Configuration of validity checks on a table level. Validity checks verify hard rules on the data using static rules, like a minimum row count.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    @Deprecated
+//    private BuiltInTableValidityChecksSpec validity = new BuiltInTableValidityChecksSpec();
 
-    @JsonPropertyDescription("Configuration of consistency checks on a table level. Consistency checks detect anomalies like rapid row count changes.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
+//    @JsonPropertyDescription("Configuration of consistency checks on a table level. Consistency checks detect anomalies like rapid row count changes.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    @Deprecated
+//    private BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
 
     @JsonPropertyDescription("Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -80,11 +80,11 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @Deprecated
     private BuiltInTableTimelinessChecksSpec timeliness = new BuiltInTableTimelinessChecksSpec();
 
-    @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private CustomTableCheckSpecMap custom;
+//    @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    @Deprecated
+//    private CustomTableCheckSpecMap custom;
 
     /**
      * Returns the standard check configuration on a table level.
@@ -104,41 +104,41 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         this.propagateHierarchyIdToField(standard, "standard");
     }
 
-    /**
-     * Returns the validity check configuration on a table level.
-     * @return Validity check configuration.
-     */
-    public BuiltInTableValidityChecksSpec getValidity() {
-        return validity;
-    }
+//    /**
+//     * Returns the validity check configuration on a table level.
+//     * @return Validity check configuration.
+//     */
+//    public BuiltInTableValidityChecksSpec getValidity() {
+//        return validity;
+//    }
+//
+//    /**
+//     * Sets the validity check configuration on a table level.
+//     * @param validity New validity checks configuration.
+//     */
+//    public void setValidity(BuiltInTableValidityChecksSpec validity) {
+//		this.setDirtyIf(!Objects.equals(this.validity, validity));
+//        this.validity = validity;
+//		this.propagateHierarchyIdToField(validity, "validity");
+//    }
 
-    /**
-     * Sets the validity check configuration on a table level.
-     * @param validity New validity checks configuration.
-     */
-    public void setValidity(BuiltInTableValidityChecksSpec validity) {
-		this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-		this.propagateHierarchyIdToField(validity, "validity");
-    }
-
-    /**
-     * Built-in consistency checks that verify if the table data changes in a steady way.
-     * @return Consistency data quality checks on a table level.
-     */
-    public BuiltInTableConsistencyChecksSpec getConsistency() {
-        return consistency;
-    }
-
-    /**
-     * Sets a new object with consistency table level checks.
-     * @param consistency New consistency checks.
-     */
-    public void setConsistency(BuiltInTableConsistencyChecksSpec consistency) {
-		this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-        this.consistency = consistency;
-		this.propagateHierarchyIdToField(consistency, "consistency");
-    }
+//    /**
+//     * Built-in consistency checks that verify if the table data changes in a steady way.
+//     * @return Consistency data quality checks on a table level.
+//     */
+//    public BuiltInTableConsistencyChecksSpec getConsistency() {
+//        return consistency;
+//    }
+//
+//    /**
+//     * Sets a new object with consistency table level checks.
+//     * @param consistency New consistency checks.
+//     */
+//    public void setConsistency(BuiltInTableConsistencyChecksSpec consistency) {
+//		this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+//        this.consistency = consistency;
+//		this.propagateHierarchyIdToField(consistency, "consistency");
+//    }
 
     /**
      * Built-in timeliness checks that verify if the table data changes in a steady way.
@@ -158,23 +158,23 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         this.propagateHierarchyIdToField(timeliness, "timeliness");
     }
 
-    /**
-     * Returns a dictionary of custom sensors.
-     * @return Custom sensors map.
-     */
-    public CustomTableCheckSpecMap getCustom() {
-        return custom;
-    }
-
-    /**
-     * Sets a dictionary of custom sensors.
-     * @param custom Custom sensors map.
-     */
-    public void setCustom(CustomTableCheckSpecMap custom) {
-		this.setDirtyIf(!Objects.equals(this.custom, custom));
-        this.custom = custom;
-		this.propagateHierarchyIdToField(custom, "custom");
-    }
+//    /**
+//     * Returns a dictionary of custom sensors.
+//     * @return Custom sensors map.
+//     */
+//    public CustomTableCheckSpecMap getCustom() {
+//        return custom;
+//    }
+//
+//    /**
+//     * Sets a dictionary of custom sensors.
+//     * @param custom Custom sensors map.
+//     */
+//    public void setCustom(CustomTableCheckSpecMap custom) {
+//		this.setDirtyIf(!Objects.equals(this.custom, custom));
+//        this.custom = custom;
+//		this.propagateHierarchyIdToField(custom, "custom");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.

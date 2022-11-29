@@ -18,7 +18,8 @@ package ai.dqo.data.readouts.filestorage;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
+import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.ChangeDeltaMode;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
@@ -39,7 +40,6 @@ import java.time.LocalDateTime;
 public class SensorReadoutsFileStorageServiceImplTests extends BaseTest {
     private SensorReadoutsFileStorageServiceImpl sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private DqoStorageConfigurationProperties storageConfigurationProperties;
 
     /**
      * Called before each test.
@@ -52,9 +52,9 @@ public class SensorReadoutsFileStorageServiceImplTests extends BaseTest {
     protected void setUp() throws Throwable {
         super.setUp();
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-		storageConfigurationProperties = this.dqoConfigurationProperties.getStorage();
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
-        this.sut = new SensorReadoutsFileStorageServiceImpl(storageConfigurationProperties, localUserHomeProviderStub);
+        UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        this.sut = new SensorReadoutsFileStorageServiceImpl(localUserHomeProviderStub, newLockManager);
     }
 
     @Test

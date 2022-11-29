@@ -23,6 +23,7 @@ import ai.dqo.core.filesystem.synchronization.FileSystemChangeSet;
 import ai.dqo.core.filesystem.synchronization.FileSystemSynchronizationService;
 import ai.dqo.core.filesystem.synchronization.SynchronizationResult;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
 import ai.dqo.metadata.fileindices.FileLocation;
@@ -48,6 +49,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory. Provides access to the local user home context.
      * @param fileSystemSynchronizationService File system synchronization utility.
+     * @param dqoUserHomeFileSystemFactory User home file system factory.
+     * @param dqoCloudRemoteFileSystemServiceFactory DQO Cloud remote file system factory.
      */
     @Autowired
     public DqoCloudSynchronizationServiceImpl(UserHomeContextFactory userHomeContextFactory,

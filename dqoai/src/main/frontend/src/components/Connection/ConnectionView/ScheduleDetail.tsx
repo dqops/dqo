@@ -1,28 +1,55 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
+import {
+  getConnectionSchedule,
+  updateConnectionSchedule
+} from '../../../redux/actions/connection.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import ConnectionActionGroup from './ConnectionActionGroup';
 
 interface IScheduleDetailProps {
-  schedule?: RecurringScheduleSpec;
-  setSchedule: (value: RecurringScheduleSpec) => void;
+  connectionName: string;
 }
 
-const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
-  schedule,
-  setSchedule
-}) => {
+const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
   const [mode, setMode] = useState('minutes');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
+  const [isUpdated, setIsUpdated] = useState(false);
+  const dispatch = useActionDispatch();
+  const [updatedSchedule, setUpdatedSchedule] =
+    useState<RecurringScheduleSpec>();
+
+  const { schedule, isUpdating } = useSelector(
+    (state: IRootState) => state.connection
+  );
 
   const handleChange = (obj: any) => {
-    setSchedule({
-      ...schedule,
+    setIsUpdated(true);
+    setUpdatedSchedule({
+      ...updatedSchedule,
       ...obj
     });
+  };
+
+  useEffect(() => {
+    setUpdatedSchedule(schedule);
+  }, [schedule]);
+
+  useEffect(() => {
+    dispatch(getConnectionSchedule(connectionName));
+  }, [connectionName]);
+
+  const onUpdate = async () => {
+    await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
+    await dispatch(getConnectionSchedule(connectionName));
+    setIsUpdated(false);
   };
 
   const onChangeMode = (e: any) => {
@@ -61,6 +88,11 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({
 
   return (
     <div className="p-4">
+      <ConnectionActionGroup
+        onUpdate={onUpdate}
+        isUpdated={isUpdated}
+        isUpdating={isUpdating}
+      />
       <table className="mb-6">
         <tr>
           <td className="px-4 py-2">

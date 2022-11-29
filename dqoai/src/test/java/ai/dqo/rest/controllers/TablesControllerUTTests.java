@@ -146,7 +146,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, result.getCategories().size());
+        Assertions.assertEquals(2, result.getCategories().size());
     }
 
     @Test
@@ -221,7 +221,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, result.getCategories().size());
+        Assertions.assertEquals(2, result.getCategories().size());
     }
 
     @ParameterizedTest

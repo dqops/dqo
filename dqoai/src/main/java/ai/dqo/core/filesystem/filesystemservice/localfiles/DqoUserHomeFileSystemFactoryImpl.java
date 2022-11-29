@@ -15,7 +15,6 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.localfiles;
 
-import ai.dqo.core.configuration.DqoStorageConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
@@ -31,21 +30,17 @@ import java.nio.file.Path;
 @Component
 public class DqoUserHomeFileSystemFactoryImpl implements DqoUserHomeFileSystemFactory {
     private LocalFileSystemService localFileSystemService;
-    private DqoStorageConfigurationProperties storageConfigurationProperties;
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
 
     /**
      * Default injection constructor.
      * @param localFileSystemService Local file system service.
-     * @param storageConfigurationProperties Local data storage configuration.
      * @param localDqoUserHomePathProvider Local DQO User Home path provider.
      */
     @Autowired
     public DqoUserHomeFileSystemFactoryImpl(LocalFileSystemService localFileSystemService,
-                                            DqoStorageConfigurationProperties storageConfigurationProperties,
                                             LocalDqoUserHomePathProvider localDqoUserHomePathProvider) {
         this.localFileSystemService = localFileSystemService;
-        this.storageConfigurationProperties = storageConfigurationProperties;
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
     }
 
@@ -70,10 +65,10 @@ public class DqoUserHomeFileSystemFactoryImpl implements DqoUserHomeFileSystemFa
 
         switch (rootType) {
             case DATA_SENSOR_READOUTS:
-                return localUserHomePath.resolve(this.storageConfigurationProperties.getSensorReadoutsStoragePath());
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.SENSOR_READOUTS);
 
             case DATA_RULE_RESULTS:
-                return localUserHomePath.resolve(this.storageConfigurationProperties.getRuleResultsStoragePath());
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.RULE_RESULTS);
 
             case SOURCES:
                 return localUserHomePath.resolve(BuiltInFolderNames.SOURCES);

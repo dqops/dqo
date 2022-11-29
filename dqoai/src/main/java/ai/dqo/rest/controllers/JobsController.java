@@ -1,7 +1,14 @@
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
@@ -20,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Jobs controller that supports publishing new jobs.
  */
@@ -31,20 +40,28 @@ public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
+    private final DqoJobQueueMonitoringService jobQueueMonitoringService;
+    private final DqoQueueConfigurationProperties queueConfigurationProperties;
 
     /**
      * Creates a new controller, injecting dependencies.
      * @param dqoQueueJobFactory DQO queue job factory used to create new instances of jobs.
      * @param dqoJobQueue Job queue used to publish or review running jobs.
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
+     * @param jobQueueMonitoringService Job queue monitoring service.
+     * @param queueConfigurationProperties Queue configuration parameters.
      */
     @Autowired
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
                           DqoJobQueue dqoJobQueue,
-                          CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider) {
+                          CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
+                          DqoJobQueueMonitoringService jobQueueMonitoringService,
+                          DqoQueueConfigurationProperties queueConfigurationProperties) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
+        this.jobQueueMonitoringService = jobQueueMonitoringService;
+        this.queueConfigurationProperties = queueConfigurationProperties;
     }
 
     /**
@@ -53,14 +70,14 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping("/runchecks")
-    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks")
+    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue"),
+            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = DqoQueueJobId.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> runChecks(
+    public ResponseEntity<Mono<DqoQueueJobId>> runChecks(
             @Parameter(description = "Data quality checks filter") @RequestBody CheckSearchFilters checkSearchFilters) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
@@ -71,10 +88,45 @@ public class JobsController {
                 false);
         runChecksJob.setParameters(runChecksQueueJobParameters);
 
-        this.dqoJobQueue.pushJob(runChecksJob);
+        PushJobResult<CheckExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runChecksJob);
+        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    }
 
-        // TODO: return a job summary with the jobId and a start time
+    /**
+     * Retrieves a list of all queued and recently finished jobs.
+     * @return List of all active or recently finished jobs on the queue.
+     */
+    @GetMapping("/jobs")
+    @ApiOperation(value = "getAllJobs", notes = "Retrieves a list of all queued and recently finished jobs.",
+            response = DqoJobQueueInitialSnapshotModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "A list of all queued and finished jobs returned. Call jobchangessince/{changeSequence} to receive incremental changes.",
+                    response = DqoJobQueueInitialSnapshotModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>> getAllJobs() {
+        Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
+        return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
+    }
 
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+    /**
+     * Retrieves an incremental list of job changes (new jobs or job status changes).
+     * @return List of jobs that have changed since the given sequence number.
+     */
+    @GetMapping("/jobchangessince/{sequenceNumber}")
+    @ApiOperation(value = "getJobChangesSince", notes = "Retrieves an incremental list of job changes (new jobs or job status changes)",
+            response = DqoJobQueueIncrementalSnapshotModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "A list of all queued and finished jobs returned. Call jobchangessince/{sequenceNumber} to receive incremental changes.",
+                    response = DqoJobQueueIncrementalSnapshotModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoJobQueueIncrementalSnapshotModel>> getJobChangesSince(
+            @Parameter(description = "Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
+        Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
+                sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
+        return new ResponseEntity<>(incrementalJobChanges, HttpStatus.OK); // 200
     }
 }

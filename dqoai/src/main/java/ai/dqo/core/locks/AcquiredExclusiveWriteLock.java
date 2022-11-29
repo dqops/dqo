@@ -15,13 +15,14 @@
  */
 package ai.dqo.core.locks;
 
+import java.io.Closeable;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Acquired exclusive write lock that is a write lock only on the deepest level lock, all parent locks are
  * locked in shared read mode.
  */
-public class AcquiredExclusiveWriteLock implements AutoCloseable {
+public class AcquiredExclusiveWriteLock implements Closeable {
     private final ReentrantReadWriteLock.WriteLock writeLock;
     private boolean released;
 
@@ -37,7 +38,7 @@ public class AcquiredExclusiveWriteLock implements AutoCloseable {
      * Releases the read lock in the reverse order of acquisition.
      */
     @Override
-    public void close() throws Exception {
+    public void close() {
         if (this.released) {
             return;
         }

@@ -19,7 +19,7 @@ import { Dispatch } from 'redux';
 import { ColumnApiClient } from '../../services/apiClient';
 import { COLUMN_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel } from '../../api';
+import { ColumnBasicModel, UIAllChecksModel } from '../../api';
 
 export const getColumnsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMNS
@@ -341,5 +341,305 @@ export const updateColumnCheckUI =
       dispatch(updateColumnCheckUISuccess());
     } catch (err) {
       dispatch(updateColumnCheckUIFailed(err));
+    }
+  };
+
+export const getColumnDailyCheckpointsRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS
+});
+
+export const getColumnDailyCheckpointsSuccess = (data: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_SUCCESS,
+  data
+});
+
+export const getColumnDailyCheckpointsFailed = (error: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const getColumnDailyCheckpoints =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getColumnDailyCheckpointsRequest());
+    try {
+      const res = await ColumnApiClient.getColumnCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'daily'
+      );
+      dispatch(getColumnDailyCheckpointsSuccess(res.data));
+    } catch (err) {
+      dispatch(getColumnDailyCheckpointsFailed(err));
+    }
+  };
+
+export const updateColumnDailyCheckpointsRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS
+});
+
+export const updateColumnDailyCheckpointsSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_SUCCESS
+});
+
+export const updateColumnDailyCheckpointsFailed = (error: any) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const updateColumnDailyCheckpoints =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string,
+    data: UIAllChecksModel
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateColumnDailyCheckpointsRequest());
+    try {
+      await ColumnApiClient.updateColumnCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'daily',
+        data
+      );
+      dispatch(updateColumnDailyCheckpointsSuccess());
+    } catch (err) {
+      dispatch(updateColumnDailyCheckpointsFailed(err));
+    }
+  };
+
+export const getColumnMonthlyCheckpointsRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS
+});
+
+export const getColumnMonthlyCheckpointsSuccess = (data: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS,
+  data
+});
+
+export const getColumnMonthlyCheckpointsFailed = (error: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const getColumnMonthlyCheckpoints =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getColumnMonthlyCheckpointsRequest());
+    try {
+      const res = await ColumnApiClient.getColumnCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'monthly'
+      );
+      dispatch(getColumnMonthlyCheckpointsSuccess(res.data));
+    } catch (err) {
+      dispatch(getColumnMonthlyCheckpointsFailed(err));
+    }
+  };
+
+export const updateColumnMonthlyCheckpointsRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS
+});
+
+export const updateColumnMonthlyCheckpointsSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS
+});
+
+export const updateColumnMonthlyCheckpointsFailed = (error: any) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
+  error
+});
+
+export const updateColumnMonthlyCheckpoints =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string,
+    data: UIAllChecksModel
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateColumnMonthlyCheckpointsRequest());
+    try {
+      await ColumnApiClient.updateColumnCheckpointsUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'monthly',
+        data
+      );
+      dispatch(updateColumnMonthlyCheckpointsSuccess());
+    } catch (err) {
+      dispatch(updateColumnMonthlyCheckpointsFailed(err));
+    }
+  };
+
+export const getColumnDailyPartitionedChecksRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS
+});
+
+export const getColumnDailyPartitionedChecksSuccess = (data: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  data
+});
+
+export const getColumnDailyPartitionedChecksFailed = (error: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
+  error
+});
+
+export const getColumnDailyPartitionedChecks =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getColumnDailyPartitionedChecksRequest());
+    try {
+      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'daily'
+      );
+      dispatch(getColumnDailyPartitionedChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getColumnDailyPartitionedChecksFailed(err));
+    }
+  };
+
+export const updateColumnDailyPartitionedChecksRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS
+});
+
+export const updateColumnDailyPartitionedChecksSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS
+});
+
+export const updateColumnDailyPartitionedChecksFailed = (error: any) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
+  error
+});
+
+export const updateColumnDailyPartitionedChecks =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string,
+    data: UIAllChecksModel
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateColumnDailyPartitionedChecksRequest());
+    try {
+      await ColumnApiClient.updateColumnPartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'daily',
+        data
+      );
+      dispatch(updateColumnDailyPartitionedChecksSuccess());
+    } catch (err) {
+      dispatch(updateColumnDailyPartitionedChecksFailed(err));
+    }
+  };
+
+export const getColumnMonthlyPartitionedChecksRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS
+});
+
+export const getColumnMonthlyPartitionedChecksSuccess = (data: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  data
+});
+
+export const getColumnMonthlyPartitionedChecksFailed = (error: any) => ({
+  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  error
+});
+
+export const getColumnMonthlyPartitionedChecks =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getColumnMonthlyPartitionedChecksRequest());
+    try {
+      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'monthly'
+      );
+      dispatch(getColumnMonthlyPartitionedChecksSuccess(res.data));
+    } catch (err) {
+      dispatch(getColumnMonthlyPartitionedChecksFailed(err));
+    }
+  };
+
+export const updateColumnMonthlyPartitionedChecksRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS
+});
+
+export const updateColumnMonthlyPartitionedChecksSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS
+});
+
+export const updateColumnMonthlyPartitionedChecksFailed = (error: any) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  error
+});
+
+export const updateColumnMonthlyPartitionedChecks =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    columnName: string,
+    data: UIAllChecksModel
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateColumnMonthlyPartitionedChecksRequest());
+    try {
+      await ColumnApiClient.updateColumnPartitionedChecksUI(
+        connectionName,
+        schemaName,
+        tableName,
+        columnName,
+        'monthly',
+        data
+      );
+      dispatch(updateColumnMonthlyPartitionedChecksSuccess());
+    } catch (err) {
+      dispatch(updateColumnMonthlyPartitionedChecksFailed(err));
     }
   };
