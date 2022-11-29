@@ -49,8 +49,8 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
-            put("strings", o -> o.strings);
             put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
         }
     };
 

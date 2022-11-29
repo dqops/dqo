@@ -50,8 +50,8 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
-            put("strings", o -> o.strings);
             put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
         }
     };
 
