@@ -48,7 +48,7 @@ public class ColumnMinStringParsableToIntegerPercentCheckSpec extends AbstractCh
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsStringMinParsableToIntegerPercentSensorParametersSpec parameters = new ColumnStringsStringMinParsableToIntegerPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a boolean placeholder strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100ParametersSpec error;
