@@ -39,6 +39,8 @@ import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -193,7 +195,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule10ParametersSpec maxCountRule1 = new MaxCountRule10ParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);
@@ -227,7 +229,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule10ParametersSpec maxCountRule1 = new MaxCountRule10ParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);
@@ -264,7 +266,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule10ParametersSpec maxCountRule1 = new MaxCountRule10ParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule0ParametersSpec maxCountRule2 = new MaxCountRule0ParametersSpec();
         maxCountRule2.setMaxCount(20L);

@@ -37,7 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxStringLengthBelowCheckSpec extends AbstractCheckSpec<ColumnStringsStringMaxLengthSensorParametersSpec, MaxValueRuleParametersSpec> {
+public class ColumnMaxStringLengthBelowCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMaxLengthSensorParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringLengthBelowCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
