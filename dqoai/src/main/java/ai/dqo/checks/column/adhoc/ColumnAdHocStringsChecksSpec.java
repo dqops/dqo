@@ -29,6 +29,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -59,6 +60,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_null_placeholder_count", o -> o.maxStringNullPlaceholderCount);
             put("max_string_null_placeholder_percent", o -> o.maxStringNullPlaceholderPercent);
             put("min_string_boolean_placeholder_percent", o -> o.minStringBooleanPlaceholderPercent);
+            put("max_string_surrounded_by_whitespace_count", o -> o.maxStringSurroundedByWhitespaceCount);
 
         }
     };
@@ -96,6 +98,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec minStringBooleanPlaceholderPercent;
 
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec maxStringSurroundedByWhitespaceCount;
 
     /**
      * Returns a maximum string length below check.
@@ -293,6 +297,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringBooleanPlaceholderPercent, minStringBooleanPlaceholderPercent));
         this.minStringBooleanPlaceholderPercent = minStringBooleanPlaceholderPercent;
         propagateHierarchyIdToField(minStringBooleanPlaceholderPercent, "min_string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace count check.
+     * @return Maximum string surrounded by whitespace count check.
+     */
+    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getMaxStringSurroundedByWhitespaceCount() {
+        return maxStringSurroundedByWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace count check.
+     * @param maxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
+     */
+    public void setMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec maxStringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.maxStringSurroundedByWhitespaceCount, maxStringSurroundedByWhitespaceCount));
+        this.maxStringSurroundedByWhitespaceCount = maxStringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(maxStringSurroundedByWhitespaceCount, "max_string_surrounded_by_whitespace_count");
     }
 
     /**

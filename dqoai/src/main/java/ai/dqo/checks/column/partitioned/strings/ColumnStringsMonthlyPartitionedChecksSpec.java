@@ -29,6 +29,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -59,6 +60,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_null_placeholder_count", o -> o.monthlyPartitionMaxStringNullPlaceholderCount);
             put("monthly_partition_max_string_null_placeholder_percent", o -> o.monthlyPartitionMaxStringNullPlaceholderPercent);
             put("monthly_partition_min_string_boolean_placeholder_percent", o -> o.monthlyPartitionMinStringBooleanPlaceholderPercent);
+            put("monthly_partition_max_string_surrounded_by_whitespace_percent", o -> o.monthlyPartitionMaxStringSurroundedByWhitespacePercent);
 
         }
     };
@@ -81,7 +83,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringWhitespaceCountCheckSpec monthlyPartitionMaxStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinStringValidDatesPercentCheckSpec monthlyPartitionMinStringValidDatesPercent;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
@@ -96,6 +98,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyPartitionMinStringBooleanPlaceholderPercent;
 
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -293,6 +297,26 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringBooleanPlaceholderPercent, monthlyPartitionMinStringBooleanPlaceholderPercent));
         this.monthlyPartitionMinStringBooleanPlaceholderPercent = monthlyPartitionMinStringBooleanPlaceholderPercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringBooleanPlaceholderPercent, "monthly_partition_min_string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace count check.
+     *
+     * @return Maximum string surrounded by whitespace count check.
+     */
+    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getMonthlyPartitionMaxStringSurroundedByWhitespacePercent() {
+        return monthlyPartitionMaxStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace count check.
+     *
+     * @param monthlyPartitionMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace count check.
+     */
+    public void setMonthlyPartitionMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringSurroundedByWhitespacePercent, monthlyPartitionMaxStringSurroundedByWhitespacePercent));
+        this.monthlyPartitionMaxStringSurroundedByWhitespacePercent = monthlyPartitionMaxStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringSurroundedByWhitespacePercent, "monthly_partition_max_string_surrounded_by_whitespace_percent");
     }
 
     /**
