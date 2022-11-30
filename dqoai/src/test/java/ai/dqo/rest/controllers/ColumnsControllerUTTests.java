@@ -185,7 +185,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getCategories().size());
+        Assertions.assertEquals(3, result.getCategories().size());
     }
 
     @Test
@@ -279,7 +279,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         ColumnNumericMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNumericMonthlyPartitionedChecksSpec();
         negativeMonthlyPartitionedChecks.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
-        monthlyPartitionedCheck.setMonthlyPartitionMaxNegativeCount(negativeMonthlyPartitionedChecks);
+        monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
         samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
         
