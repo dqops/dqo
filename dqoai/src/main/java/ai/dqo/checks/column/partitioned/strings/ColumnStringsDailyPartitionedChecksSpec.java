@@ -29,6 +29,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -60,6 +61,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_null_placeholder_count", o -> o.dailyPartitionMaxStringNullPlaceholderCount);
             put("daily_partition_max_string_null_placeholder_percent", o -> o.dailyPartitionMaxStringNullPlaceholderPercent);
             put("daily_partition_min_string_boolean_placeholder_percent", o -> o.dailyPartitionMinStringBooleanPlaceholderPercent);
+            put("daily_partition_min_string_parsable_to_integer_percent", o -> o.dailyPartitionMinStringParsableToIntegerPercent);
             put("daily_partition_max_string_surrounded_by_whitespace_percent", o -> o.dailyPartitionMaxStringSurroundedByWhitespacePercent);
 
         }
@@ -101,6 +103,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent;
+
     /**
      * Returns a maximum string length below  check.
      *
@@ -112,7 +117,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string length below  check.
-     *
      * @param dailyPartitionMaxStringLengthBelow Maximum string length below  check.
      */
     public void setDailyPartitionMaxStringLengthBelow(ColumnMaxStringLengthBelowCheckSpec dailyPartitionMaxStringLengthBelow) {
@@ -123,7 +127,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a minimum string length below  check.
-     *
      * @return Minimum string length below  check.
      */
     public ColumnMinStringLengthAboveCheckSpec getDailyPartitionMinStringLengthAbove() {
@@ -132,7 +135,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a minimum string length below  check.
-     *
      * @param dailyPartitionMinStringLengthAbove Minimum string length above check.
      */
     public void setDailyPartitionMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec dailyPartitionMinStringLengthAbove) {
@@ -143,7 +145,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a mean string length between  check.
-     *
      * @return Mean string length between  check.
      */
     public ColumnMeanStringLengthBetweenCheckSpec getDailyPartitionMeanStringLengthBetween() {
@@ -152,7 +153,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a mean string length between check.
-     *
      * @param dailyPartitionMeanStringLengthBetween Mean string length between check.
      */
     public void setDailyPartitionMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec dailyPartitionMeanStringLengthBetween) {
@@ -163,7 +163,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a maximum empty string percentage check.
-     *
      * @return Maximum empty string percentage check.
      */
     public ColumnMaxStringEmptyPercentCheckSpec getDailyPartitionMaxStringEmptyPercent() {
@@ -172,7 +171,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum empty string percentage check.
-     *
      * @param dailyPartitionMaxStringEmptyPercent Maximum empty string percentage check.
      */
     public void setDailyPartitionMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec dailyPartitionMaxStringEmptyPercent) {
@@ -183,7 +181,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a max string empty count check.
-     *
      * @return Max string empty count check.
      */
     public ColumnMaxStringEmptyCountCheckSpec getDailyPartitionMaxStringEmptyCount() {
@@ -192,7 +189,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a max string empty count check.
-     *
      * @param dailyPartitionMaxStringEmptyCount Max string empty count check.
      */
     public void setDailyPartitionMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec dailyPartitionMaxStringEmptyCount) {
@@ -203,7 +199,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a maximum string whitespace count check.
-     *
      * @return Maximum string whitespace count check.
      */
     public ColumnMaxStringWhitespaceCountCheckSpec getDailyPartitionMaxStringWhitespaceCount() {
@@ -212,7 +207,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string whitespace count check.
-     *
      * @param dailyPartitionMaxStringWhitespaceCount Maximum string whitespace count check.
      */
     public void setDailyPartitionMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec dailyPartitionMaxStringWhitespaceCount) {
@@ -223,7 +217,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a maximum string whitespace percent check.
-     *
      * @return Maximum string whitespace percent check.
      */
     public ColumnMaxStringWhitespacePercentCheckSpec getDailyPartitionMaxStringWhitespacePercent() {
@@ -232,7 +225,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string whitespace percent check.
-     *
      * @param dailyPartitionMaxStringWhitespacePercent Maximum string whitespace percent check.
      */
     public void setDailyPartitionMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec dailyPartitionMaxStringWhitespacePercent) {
@@ -243,7 +235,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a minimum string valid dates percent check.
-     *
      * @return Minimum string valid dates percent check.
      */
     public ColumnMinStringValidDatesPercentCheckSpec getDailyPartitionMinStringValidDatesPercent() {
@@ -252,7 +243,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a minimum string valid dates percent check.
-     *
      * @param dailyPartitionMinStringValidDatesPercent Minimum string valid dates percent check.
      */
     public void setDailyPartitionMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec dailyPartitionMinStringValidDatesPercent) {
@@ -263,7 +253,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a maximum string null placeholder count check.
-     *
      * @return Maximum string null placeholder count check.
      */
     public ColumnMaxStringNullPlaceholderCountCheckSpec getDailyPartitionMaxStringNullPlaceholderCount() {
@@ -272,7 +261,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string null placeholder count check.
-     *
      * @param dailyPartitionMaxStringNullPlaceholderCount Maximum string null placeholder count check.
      */
     public void setDailyPartitionMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec dailyPartitionMaxStringNullPlaceholderCount) {
@@ -283,7 +271,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a maximum string null placeholder percent check.
-     *
      * @return Maximum string null placeholder percent check.
      */
     public ColumnMaxStringNullPlaceholderPercentCheckSpec getDailyPartitionMaxStringNullPlaceholderPercent() {
@@ -292,7 +279,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string null placeholder percent check.
-     *
      * @param dailyPartitionMaxStringNullPlaceholderPercent Maximum string null placeholder percent check.
      */
     public void setDailyPartitionMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec dailyPartitionMaxStringNullPlaceholderPercent) {
@@ -303,7 +289,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Returns a minimum string boolean placeholder percent check.
-     *
      * @return Minimum string boolean placeholder percent check.
      */
     public ColumnMinStringBooleanPlaceholderPercentCheckSpec getDailyPartitionMinStringBooleanPlaceholderPercent() {
@@ -312,7 +297,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a minimum string boolean placeholder percent check.
-     *
      * @param dailyPartitionMinStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
      */
     public void setDailyPartitionMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyPartitionMinStringBooleanPlaceholderPercent) {
@@ -322,8 +306,25 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent  check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getDailyPartitionMinStringParsableToIntegerPercent() {
+        return dailyPartitionMinStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param dailyPartitionMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setDailyPartitionMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringParsableToIntegerPercent, dailyPartitionMinStringParsableToIntegerPercent));
+        this.dailyPartitionMinStringParsableToIntegerPercent = dailyPartitionMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringParsableToIntegerPercent, "daily_partition_min_string_parsable_to_integer_percent");
+    }
+
+    /**
      * Returns a maximum string surrounded by whitespace count check.
-     *
      * @return Maximum string surrounded by whitespace count check.
      */
     public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getDailyPartitionMaxStringSurroundedByWhitespacePercent() {
@@ -332,7 +333,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace count check.
-     *
      * @param dailyPartitionMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace count check.
      */
     public void setDailyPartitionMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent) {
