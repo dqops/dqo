@@ -61,7 +61,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_null_placeholder_count", o -> o.monthlyPartitionMaxStringNullPlaceholderCount);
             put("monthly_partition_max_string_null_placeholder_percent", o -> o.monthlyPartitionMaxStringNullPlaceholderPercent);
             put("monthly_partition_min_string_boolean_placeholder_percent", o -> o.monthlyPartitionMinStringBooleanPlaceholderPercent);
-            put("monthly_partition_max_string_surrounded_by_whitespace_percent", o -> o.monthlyPartitionMaxStringSurroundedByWhitespacePercent);
+            put("monthly_partition_max_string_surrounded_by_whitespace_count", o -> o.monthlyPartitionMaxStringSurroundedByWhitespaceCount);
             put("monthly_partition_min_string_parsable_to_integer_count", o -> o.monthlyPartitionMinStringParsableToIntegerCount);
 
         }
@@ -101,7 +101,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyPartitionMinStringBooleanPlaceholderPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent;
+    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespaceCount;
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerCount;
@@ -327,19 +327,19 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      *
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getMonthlyPartitionMaxStringSurroundedByWhitespacePercent() {
-        return monthlyPartitionMaxStringSurroundedByWhitespacePercent;
+    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getMonthlyPartitionMaxStringSurroundedByWhitespaceCount() {
+        return monthlyPartitionMaxStringSurroundedByWhitespaceCount;
     }
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace count check.
      *
-     * @param monthlyPartitionMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace count check.
+     * @param monthlyPartitionMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
      */
-    public void setMonthlyPartitionMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringSurroundedByWhitespacePercent, monthlyPartitionMaxStringSurroundedByWhitespacePercent));
-        this.monthlyPartitionMaxStringSurroundedByWhitespacePercent = monthlyPartitionMaxStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyPartitionMaxStringSurroundedByWhitespacePercent, "monthly_partition_max_string_surrounded_by_whitespace_percent");
+    public void setMonthlyPartitionMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringSurroundedByWhitespaceCount, monthlyPartitionMaxStringSurroundedByWhitespaceCount));
+        this.monthlyPartitionMaxStringSurroundedByWhitespaceCount = monthlyPartitionMaxStringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringSurroundedByWhitespaceCount, "monthly_partition_max_string_surrounded_by_whitespace_count");
     }
 
     /**
