@@ -62,7 +62,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_null_placeholder_percent", o -> o.monthlyPartitionMaxStringNullPlaceholderPercent);
             put("monthly_partition_min_string_boolean_placeholder_percent", o -> o.monthlyPartitionMinStringBooleanPlaceholderPercent);
             put("monthly_partition_max_string_surrounded_by_whitespace_percent", o -> o.monthlyPartitionMaxStringSurroundedByWhitespacePercent);
-            put("monthly_partition_min_string_parsable_to_integer_percent", o -> o.monthlyPartitionMinStringParsableToIntegerPercent);
+            put("monthly_partition_min_string_parsable_to_integer_count", o -> o.monthlyPartitionMinStringParsableToIntegerCount);
 
         }
     };
@@ -104,7 +104,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent;
+    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerCount;
 
     /**
      * Returns a maximum string length below check.
@@ -308,18 +308,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum string parsable to integer percent check.
      * @return Minimum string parsable to integer percent  check.
      */
-    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyPartitionMinStringParsableToIntegerPercent() {
-        return monthlyPartitionMinStringParsableToIntegerPercent;
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyPartitionMinStringParsableToIntegerCount() {
+        return monthlyPartitionMinStringParsableToIntegerCount;
     }
 
     /**
      * Sets a new definition of a minimum string parsable to integer percent check.
-     * @param monthlyPartitionMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     * @param monthlyPartitionMinStringParsableToIntegerCount Minimum string parsable to integer percent check.
      */
-    public void setMonthlyPartitionMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringParsableToIntegerPercent, monthlyPartitionMinStringParsableToIntegerPercent));
-        this.monthlyPartitionMinStringParsableToIntegerPercent = monthlyPartitionMinStringParsableToIntegerPercent;
-        propagateHierarchyIdToField(monthlyPartitionMinStringParsableToIntegerPercent, "monthly_partition_min_string_parsable_to_integer_percent");
+    public void setMonthlyPartitionMinStringParsableToIntegerCount(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringParsableToIntegerCount, monthlyPartitionMinStringParsableToIntegerCount));
+        this.monthlyPartitionMinStringParsableToIntegerCount = monthlyPartitionMinStringParsableToIntegerCount;
+        propagateHierarchyIdToField(monthlyPartitionMinStringParsableToIntegerCount, "monthly_partition_min_string_parsable_to_integer_count");
     }
 
     /**
