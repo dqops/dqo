@@ -27,6 +27,8 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -57,6 +59,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_string_null_placeholder_count", o -> o.dailyCheckpointMaxStringNullPlaceholderCount);
             put("daily_checkpoint_max_string_null_placeholder_percent", o -> o.dailyCheckpointMaxStringNullPlaceholderPercent);
             put("daily_checkpoint_min_string_boolean_placeholder_percent", o -> o.dailyCheckpointMinStringBooleanPlaceholderPercent);
+            put("daily_checkpoint_min_string_parsable_to_integer_percent", o -> o.dailyCheckpointMinStringParsableToIntegerPercent);
+            put("daily_checkpoint_max_string_surrounded_by_whitespace_count", o -> o.dailyCheckpointMaxStringSurroundedByWhitespaceCount);
+
         }
     };
 
@@ -84,16 +89,20 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringWhitespacePercentCheckSpec dailyCheckpointMaxStringWhitespacePercent;
 
-
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringNullPlaceholderCountCheckSpec dailyCheckpointMaxStringNullPlaceholderCount;
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxStringNullPlaceholderPercentCheckSpec dailyCheckpointMaxStringNullPlaceholderPercent;
 
-
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyCheckpointMinStringBooleanPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointMaxStringSurroundedByWhitespaceCount;
 
     /**
      * Returns a maximum string length below check.
@@ -291,6 +300,42 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringBooleanPlaceholderPercent, dailyCheckpointMinStringBooleanPlaceholderPercent));
         this.dailyCheckpointMinStringBooleanPlaceholderPercent = dailyCheckpointMinStringBooleanPlaceholderPercent;
         propagateHierarchyIdToField(dailyCheckpointMinStringBooleanPlaceholderPercent, "daily_checkpoint_min_string_boolean_placeholder_percent");
+    }
+
+    /**
+    * Returns a minimum string parsable to integer percent check.
+    * @return Minimum string parsable to integer percent check.
+    */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getDailyCheckpointMinStringParsableToIntegerPercent() {
+        return dailyCheckpointMinStringParsableToIntegerPercent;
+    }
+
+    /**
+    * Sets a new definition of a minimum string parsable to integer percent check.
+    * @param dailyCheckpointMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+    */
+    public void setDailyCheckpointMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringParsableToIntegerPercent, dailyCheckpointMinStringParsableToIntegerPercent));
+        this.dailyCheckpointMinStringParsableToIntegerPercent = dailyCheckpointMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinStringParsableToIntegerPercent, "daily_checkpoint_min_string_parsable_to_integer_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace count check.
+     * @return Maximum string surrounded by whitespace count check.
+     */
+    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getDailyCheckpointMaxStringSurroundedByWhitespaceCount() {
+        return dailyCheckpointMaxStringSurroundedByWhitespaceCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace count check.
+     * @param dailyCheckpointMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
+     */
+    public void setDailyCheckpointMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointMaxStringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringSurroundedByWhitespaceCount, dailyCheckpointMaxStringSurroundedByWhitespaceCount));
+        this.dailyCheckpointMaxStringSurroundedByWhitespaceCount = dailyCheckpointMaxStringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(dailyCheckpointMaxStringSurroundedByWhitespaceCount, "daily_checkpoint_max_string_surrounded_by_whitespace_count");
     }
 
     /**
