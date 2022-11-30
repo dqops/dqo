@@ -27,6 +27,8 @@ import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -55,6 +57,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_whitespace_percent", o -> o.monthlyPartitionMaxStringWhitespacePercent);
             put("monthly_partition_min_string_valid_dates_percent", o -> o.monthlyPartitionMinStringValidDatesPercent);
             put("monthly_partition_max_string_null_placeholder_count", o -> o.monthlyPartitionMaxStringNullPlaceholderCount);
+            put("monthly_partition_max_string_null_placeholder_percent", o -> o.monthlyPartitionMaxStringNullPlaceholderPercent);
+            put("monthly_partition_min_string_boolean_placeholder_percent", o -> o.monthlyPartitionMinStringBooleanPlaceholderPercent);
+
         }
     };
 
@@ -84,6 +89,13 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringNullPlaceholderCountCheckSpec monthlyPartitionMaxStringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxStringNullPlaceholderPercentCheckSpec monthlyPartitionMaxStringNullPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyPartitionMinStringBooleanPlaceholderPercent;
+
 
     /**
      * Returns a maximum string length below check.
@@ -245,6 +257,42 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringNullPlaceholderCount, monthlyPartitionMaxStringNullPlaceholderCount));
         this.monthlyPartitionMaxStringNullPlaceholderCount = monthlyPartitionMaxStringNullPlaceholderCount;
         propagateHierarchyIdToField(monthlyPartitionMaxStringNullPlaceholderCount, "monthly_partition_max_string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnMaxStringNullPlaceholderPercentCheckSpec getMonthlyPartitionMaxStringNullPlaceholderPercent() {
+        return monthlyPartitionMaxStringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder percent check.
+     * @param monthlyPartitionMaxStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     */
+    public void setMonthlyPartitionMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec monthlyPartitionMaxStringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxStringNullPlaceholderPercent, monthlyPartitionMaxStringNullPlaceholderPercent));
+        this.monthlyPartitionMaxStringNullPlaceholderPercent = monthlyPartitionMaxStringNullPlaceholderPercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxStringNullPlaceholderPercent, "monthly_partition_max_string_null_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnMinStringBooleanPlaceholderPercentCheckSpec getMonthlyPartitionMinStringBooleanPlaceholderPercent() {
+        return monthlyPartitionMinStringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string boolean placeholder percent check.
+     * @param monthlyPartitionMinStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     */
+    public void setMonthlyPartitionMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyPartitionMinStringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringBooleanPlaceholderPercent, monthlyPartitionMinStringBooleanPlaceholderPercent));
+        this.monthlyPartitionMinStringBooleanPlaceholderPercent = monthlyPartitionMinStringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringBooleanPlaceholderPercent, "monthly_partition_min_string_boolean_placeholder_percent");
     }
 
     /**

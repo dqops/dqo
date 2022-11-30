@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ConnectionBasicModel,
   ConnectionSpecProviderTypeEnum
@@ -6,25 +6,61 @@ import {
 import Input from '../../Input';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import {
+  getConnectionBasic,
+  updateConnectionBasic
+} from '../../../redux/actions/connection.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import ConnectionActionGroup from './ConnectionActionGroup';
 
 interface IConnectionDetailProps {
-  connectionBasic?: ConnectionBasicModel;
-  setConnectionBasic: (value: ConnectionBasicModel) => void;
+  connectionName: string;
 }
 
 const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
-  connectionBasic,
-  setConnectionBasic,
+  connectionName
 }) => {
+  const [updatedConnectionBasic, setUpdatedConnectionBasic] =
+    useState<ConnectionBasicModel>();
+  const [isUpdated, setIsUpdated] = useState(false);
+  const { connectionBasic, isUpdating } = useSelector(
+    (state: IRootState) => state.connection
+  );
+  const dispatch = useActionDispatch();
+
+  useEffect(() => {
+    setUpdatedConnectionBasic(connectionBasic);
+  }, [connectionBasic]);
+
+  useEffect(() => {
+    dispatch(getConnectionBasic(connectionName));
+  }, [connectionName]);
+
   const onChange = (obj: any) => {
-    setConnectionBasic({
-      ...connectionBasic,
+    setUpdatedConnectionBasic({
+      ...updatedConnectionBasic,
       ...obj
     });
+    setIsUpdated(true);
+  };
+
+  const onUpdate = async () => {
+    await dispatch(
+      updateConnectionBasic(connectionName, updatedConnectionBasic)
+    );
+    await dispatch(getConnectionBasic(connectionName));
+    setIsUpdated(false);
   };
 
   return (
     <div className="p-4">
+      <ConnectionActionGroup
+        onUpdate={onUpdate}
+        isUpdating={isUpdating}
+        isUpdated={isUpdated}
+      />
       <table className="mb-6">
         <tbody>
           <tr>
@@ -32,7 +68,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
               <div>Connection name:</div>
             </td>
             <td className="px-4 py-2">
-              <div>{connectionBasic?.connection_name}</div>
+              <div>{updatedConnectionBasic?.connection_name}</div>
             </td>
           </tr>
           <tr>
@@ -41,7 +77,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
             </td>
             <td className="px-4 py-2">
               <Input
-                value={connectionBasic?.time_zone}
+                value={updatedConnectionBasic?.time_zone}
                 onChange={(e) => onChange({ time_zone: e.target.value })}
               />
             </td>
@@ -50,14 +86,14 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
       </table>
 
       <div className="px-4">
-        {connectionBasic?.provider_type ===
+        {updatedConnectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
-            spec={connectionBasic?.bigquery}
+            spec={updatedConnectionBasic?.bigquery}
             onChange={onChange}
           />
         )}
-        {connectionBasic?.provider_type ===
+        {updatedConnectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.snowflake && <SnowflakeConnection />}
       </div>
     </div>

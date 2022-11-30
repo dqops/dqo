@@ -18,7 +18,9 @@ package ai.dqo.checks.column.partitioned;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -46,31 +48,79 @@ import java.util.Objects;
 public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
+            put("nulls", o -> o.nulls);
+            put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
         }
     };
 
-    @JsonPropertyDescription("Monthly partitioned checks of negative values in the column")
+    @JsonPropertyDescription("Monthly partitioned checks of nulls values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMonthlyPartitionedChecksSpec monthlyPartitionMaxNegativeCount;
+    private ColumnNullsMonthlyPartitionedChecksSpec nulls;
+
+    @JsonPropertyDescription("Monthly partitioned checks of numeric values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNumericMonthlyPartitionedChecksSpec numeric;
+
+    @JsonPropertyDescription("Monthly partitioned checks of strings values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsMonthlyPartitionedChecksSpec strings;
 
     /**
-     * Returns the container of monthly negative data quality partitioned checks.
+     * Returns the container of monthly null data quality partitioned checks.
      * @return Container of row standard monthly data quality partitioned checks.
      */
-    public ColumnNumericMonthlyPartitionedChecksSpec getMonthlyPartitionMaxNegativeCount() {
-        return monthlyPartitionMaxNegativeCount;
+    public ColumnNullsMonthlyPartitionedChecksSpec getNulls() {
+        return nulls;
     }
 
     /**
-     * Sets the container of monthly negative data quality partitioned checks.
-     * @param monthlyPartitionMaxNegativeCount New negative checks.
+     * Sets the container of monthly null data quality partitioned checks.
+     * @param nulls New nulls checks.
      */
-    public void setMonthlyPartitionMaxNegativeCount(ColumnNumericMonthlyPartitionedChecksSpec monthlyPartitionMaxNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNegativeCount, monthlyPartitionMaxNegativeCount));
-        this.monthlyPartitionMaxNegativeCount = monthlyPartitionMaxNegativeCount;
-        propagateHierarchyIdToField(monthlyPartitionMaxNegativeCount, "monthly_partition_max_negative_count");
+    public void setNulls(ColumnNullsMonthlyPartitionedChecksSpec nulls) {
+        this.setDirtyIf(!Objects.equals(this.nulls, nulls));
+        this.nulls = nulls;
+        propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the container of monthly numeric data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnNumericMonthlyPartitionedChecksSpec getNumeric() {
+        return numeric;
+    }
+
+    /**
+     * Sets the container of monthly numeric data quality partitioned checks.
+     * @param numeric New numeric checks.
+     */
+    public void setNumeric(ColumnNumericMonthlyPartitionedChecksSpec numeric) {
+        this.setDirtyIf(!Objects.equals(this.numeric, numeric));
+        this.numeric = numeric;
+        propagateHierarchyIdToField(numeric, "numeric");
+    }
+
+    /**
+     * Returns the container of monthly strings data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnStringsMonthlyPartitionedChecksSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets the container of monthly strings data quality partitioned checks.
+     * @param strings New strings checks.
+     */
+    public void setStrings(ColumnStringsMonthlyPartitionedChecksSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        propagateHierarchyIdToField(strings, "strings");
     }
 
     /**

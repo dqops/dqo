@@ -1,40 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
-import Button from '../../Button';
-import {
-  CommentSpec,
-  ConnectionBasicModel,
-  DataStreamMappingSpec,
-  RecurringScheduleSpec
-} from '../../../api';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import {
-  getConnectionBasic,
-  getConnectionComments,
-  getConnectionDefaultDataStreamsMapping,
-  getConnectionLabels,
-  getConnectionSchedule,
-  getConnectionTime,
-  updateConnectionBasic,
-  updateConnectionComments,
-  updateConnectionDefaultDataStreamsMapping,
-  updateConnectionLabels,
-  updateConnectionSchedule
-} from '../../../redux/actions/connection.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import CommentsView from '../CommentsView';
-import LabelsView from '../LabelsView';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
 import SchemasView from './SchemasView';
-import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useTree } from '../../../contexts/treeContext';
-import ConfirmDialog from './ConfirmDialog';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import ConnectionCommentView from './ConnectionCommentView';
+import ConnectionLabelsView from './ConnectionLabelsView';
+import ConnectionDataStream from './ConnectionDataStream';
 
 interface IConnectionViewProps {
   connectionName: string;
@@ -68,62 +43,12 @@ const tabs = [
   }
 ];
 
-const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
+const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
-  const {
-    connectionBasic,
-    schedule,
-    comments,
-    labels,
-    isUpdating,
-    defaultDataStreams
-  } = useSelector((state: IRootState) => state.connection);
-  const [updatedConnectionBasic, setUpdatedConnectionBasic] =
-    useState<ConnectionBasicModel>();
-  const [updatedSchedule, setUpdatedSchedule] =
-    useState<RecurringScheduleSpec>();
-  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
-  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
-  const [updatedDataStreamsMapping, setUpdatedDataStreamsMapping] =
-    useState<DataStreamMappingSpec>();
-  const dispatch = useActionDispatch();
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setUpdatedConnectionBasic(connectionBasic);
-  }, [connectionBasic]);
-
-  useEffect(() => {
-    setUpdatedSchedule(schedule);
-  }, [schedule]);
-
-  useEffect(() => {
-    setUpdatedComments(comments);
-  }, [comments]);
-  useEffect(() => {
-    setUpdatedLabels(labels);
-  }, [labels]);
-
-  useEffect(() => {
-    setUpdatedDataStreamsMapping(defaultDataStreams);
-  }, [defaultDataStreams]);
-
-  useEffect(() => {
-    setUpdatedConnectionBasic(undefined);
-    setUpdatedSchedule(undefined);
-    setUpdatedComments([]);
-    setUpdatedLabels([]);
-    setUpdatedDataStreamsMapping(undefined);
-
-    dispatch(getConnectionBasic(connectionName));
-    dispatch(getConnectionSchedule(connectionName));
-    dispatch(getConnectionTime(connectionName));
-    dispatch(getConnectionComments(connectionName));
-    dispatch(getConnectionLabels(connectionName));
-    dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
-
     const searchQuery = qs.stringify({
       connection: connectionName
     });
@@ -131,74 +56,24 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
     history.replace(`/?${searchQuery}`);
   }, [connectionName]);
 
-  const onUpdate = async () => {
-    if (activeTab === 'connection') {
-      await dispatch(
-        updateConnectionBasic(connectionName, updatedConnectionBasic)
-      );
-      await dispatch(getConnectionBasic(connectionName));
-    }
-    if (activeTab === 'schedule') {
-      await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
-      await dispatch(getConnectionSchedule(connectionName));
-    }
-    if (activeTab === 'comments') {
-      await dispatch(updateConnectionComments(connectionName, updatedComments));
-      await dispatch(getConnectionComments(connectionName));
-    }
-    if (activeTab === 'labels') {
-      await dispatch(updateConnectionLabels(connectionName, updatedLabels));
-      await dispatch(getConnectionLabels(connectionName));
-    }
-    if (activeTab === 'data-streams') {
-      await dispatch(
-        updateConnectionDefaultDataStreamsMapping(
-          connectionName,
-          updatedDataStreamsMapping
-        )
-      );
-      await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
-    }
-  };
-
   const renderTabContent = () => {
     if (activeTab === 'connection') {
-      return (
-        <ConnectionDetail
-          connectionBasic={updatedConnectionBasic}
-          setConnectionBasic={setUpdatedConnectionBasic}
-        />
-      );
+      return <ConnectionDetail connectionName={connectionName} />;
     }
     if (activeTab === 'schedule') {
-      return (
-        <ScheduleDetail
-          schedule={updatedSchedule}
-          setSchedule={setUpdatedSchedule}
-        />
-      );
+      return <ScheduleDetail connectionName={connectionName} />;
     }
     if (activeTab === 'comments') {
-      return (
-        <CommentsView
-          comments={updatedComments}
-          onChange={setUpdatedComments}
-        />
-      );
+      return <ConnectionCommentView connectionName={connectionName} />;
     }
     if (activeTab === 'labels') {
-      return <LabelsView labels={updatedLabels} onChange={setUpdatedLabels} />;
+      return <ConnectionLabelsView connectionName={connectionName} />;
     }
     if (activeTab === 'schemas') {
       return <SchemasView connectionName={connectionName} />;
     }
     if (activeTab === 'data-streams') {
-      return (
-        <DataStreamsMappingView
-          dataStreamsMapping={updatedDataStreamsMapping}
-          onChange={setUpdatedDataStreamsMapping}
-        />
-      );
+      return <ConnectionDataStream connectionName={connectionName} />;
     }
     return null;
   };
@@ -219,58 +94,18 @@ const ConnectionView = ({ connectionName, nodeId }: IConnectionViewProps) => {
     }
   }, [pageTab, tabMap]);
 
-  const isDisabled = useMemo(() => {
-    if (activeTab === 'labels') {
-      return updatedLabels.some((label) => !label);
-    }
-
-    return false;
-  }, [updatedLabels]);
-
-  const onRemove = async () => {
-    if (connectionBasic) {
-      await ConnectionApiClient.deleteConnection(
-        connectionBasic.connection_name ?? ''
-      );
-    }
-  };
-
   return (
-    <div className="">
-      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
+    <div className="relative">
+      <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{connectionName}</div>
-        </div>
-        <div className="flex space-x-4">
-          <Button
-            color="info"
-            variant="text"
-            label="Delete"
-            onClick={() => setIsOpen(true)}
-          />
-          <Button
-            color="primary"
-            variant="contained"
-            label="Save"
-            className="w-40"
-            onClick={onUpdate}
-            disabled={isDisabled}
-            loading={isUpdating}
-          />
         </div>
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {renderTabContent()}
-      <ConfirmDialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        connection={connectionBasic}
-        onConfirm={onRemove}
-        nodeId={nodeId}
-      />
     </div>
   );
 };
