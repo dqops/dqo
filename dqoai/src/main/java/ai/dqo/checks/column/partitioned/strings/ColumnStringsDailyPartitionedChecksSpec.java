@@ -29,6 +29,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -59,6 +60,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_null_placeholder_count", o -> o.dailyPartitionMaxStringNullPlaceholderCount);
             put("daily_partition_max_string_null_placeholder_percent", o -> o.dailyPartitionMaxStringNullPlaceholderPercent);
             put("daily_partition_min_string_boolean_placeholder_percent", o -> o.dailyPartitionMinStringBooleanPlaceholderPercent);
+            put("daily_partition_min_string_parsable_to_integer_percent", o -> o.dailyPartitionMinStringParsableToIntegerPercent);
+
         }
     };
 
@@ -95,6 +98,10 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyPartitionMinStringBooleanPlaceholderPercent;
+
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent;
 
 
     /**
@@ -293,6 +300,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringBooleanPlaceholderPercent, dailyPartitionMinStringBooleanPlaceholderPercent));
         this.dailyPartitionMinStringBooleanPlaceholderPercent = dailyPartitionMinStringBooleanPlaceholderPercent;
         propagateHierarchyIdToField(dailyPartitionMinStringBooleanPlaceholderPercent, "daily_partition_min_string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent  check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getDailyPartitionMinStringParsableToIntegerPercent() {
+        return dailyPartitionMinStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param dailyPartitionMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setDailyPartitionMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringParsableToIntegerPercent, dailyPartitionMinStringParsableToIntegerPercent));
+        this.dailyPartitionMinStringParsableToIntegerPercent = dailyPartitionMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringParsableToIntegerPercent, "daily_partition_min_string_parsable_to_integer_percent");
     }
 
     /**

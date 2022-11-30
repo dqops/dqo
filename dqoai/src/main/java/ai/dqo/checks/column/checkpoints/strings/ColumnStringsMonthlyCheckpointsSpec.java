@@ -28,6 +28,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -58,6 +59,8 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_string_null_placeholder_count", o -> o.monthlyCheckpointMaxStringNullPlaceholderCount);
             put("monthly_checkpoint_max_string_null_placeholder_percent", o -> o.monthlyCheckpointMaxStringNullPlaceholderPercent);
             put("monthly_checkpoint_min_string_boolean_placeholder_percent", o -> o.monthlyCheckpointMinStringBooleanPlaceholderPercent);
+
+            put("monthly_checkpoint_min_string_parsable_to_integer_percent", o -> o.monthlyCheckpointMinStringParsableToIntegerPercent);
 
         }
     };
@@ -94,6 +97,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyCheckpointMinStringBooleanPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyCheckpointMinStringParsableToIntegerPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -290,6 +296,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringBooleanPlaceholderPercent, monthlyCheckpointMinStringBooleanPlaceholderPercent));
         this.monthlyCheckpointMinStringBooleanPlaceholderPercent = monthlyCheckpointMinStringBooleanPlaceholderPercent;
         propagateHierarchyIdToField(monthlyCheckpointMinStringBooleanPlaceholderPercent, "monthly_checkpoint_min_string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyCheckpointMinStringParsableToIntegerPercent() {
+        return monthlyCheckpointMinStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param monthlyCheckpointMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setMonthlyCheckpointMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyCheckpointMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringParsableToIntegerPercent, monthlyCheckpointMinStringParsableToIntegerPercent));
+        this.monthlyCheckpointMinStringParsableToIntegerPercent = monthlyCheckpointMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinStringParsableToIntegerPercent, "monthly_checkpoint_min_string_parsable_to_integer_percent");
     }
 
     /**
