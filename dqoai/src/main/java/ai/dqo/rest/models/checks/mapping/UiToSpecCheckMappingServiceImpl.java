@@ -110,7 +110,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
                 updateLegacyCheckSpec(checkModel, checkSpec);
             }
             else {
-                AbstractCheckSpec<?,?> checkSpec = (AbstractCheckSpec<?,?>)checkNodeObject;
+                AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>)checkNodeObject;
                 updateCheckSpec(checkModel, checkSpec);
             }
 
@@ -128,7 +128,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param checkModel Source UI model for the data quality check.
      * @param checkSpec  Target check specification to update.
      */
-    protected void updateCheckSpec(UICheckModel checkModel, AbstractCheckSpec<?,?> checkSpec) {
+    protected void updateCheckSpec(UICheckModel checkModel, AbstractCheckSpec<?,?,?,?> checkSpec) {
         checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
@@ -187,7 +187,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param ruleThresholdsModel Source rule thresholds model with changes to the low, medium and high severities.
      * @param checkSpec  Target rule thresholds specification to update.
      */
-    protected void updateRuleThresholdsSpec(UIRuleThresholdsModel ruleThresholdsModel, AbstractCheckSpec<?, ?> checkSpec) {
+    protected void updateRuleThresholdsSpec(UIRuleThresholdsModel ruleThresholdsModel, AbstractCheckSpec<?,?,?,?> checkSpec) {
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo errorFieldInfo = ruleThresholdsClassInfo.getField("error");
         updateSeveritySpec(ruleThresholdsModel.getError(), errorFieldInfo, checkSpec);
@@ -228,7 +228,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      */
     protected void updateSeveritySpec(UIRuleParametersModel ruleParametersModel,
                                             FieldInfo severityFieldInfo,
-                                            AbstractCheckSpec<?,?> checkSpec) {
+                                            AbstractCheckSpec<?,?,?,?> checkSpec) {
         if (ruleParametersModel.isConfigured()) {
             AbstractRuleParametersSpec ruleParametersSpec = (AbstractRuleParametersSpec)
                     severityFieldInfo.getFieldValueOrNewObject(checkSpec);
