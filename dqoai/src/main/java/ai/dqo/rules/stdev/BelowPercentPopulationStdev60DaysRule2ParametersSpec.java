@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-        package ai.dqo.rules.stdev;
+package ai.dqo.rules.stdev;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -32,39 +32,38 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BelowStdevMultiply30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class BelowPercentPopulationStdev60DaysRule2ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<BelowPercentPopulationStdev60DaysRule2ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.")
-    private Double stdevMultiplierBelow;
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.")
+    private Double percentPopulationBelow = 2.0;
 
     /**
      * Default constructor.
      */
-    public BelowStdevMultiply30DaysRuleParametersSpec() {
-        this.stdevMultiplierBelow = null;
+    public BelowPercentPopulationStdev60DaysRule2ParametersSpec() {
+        this.percentPopulationBelow = null;
     }
 
     /**
      * Multiplied factor used to calculate a multiplied stdev.
      * @return Multiple factor used to calculate a multiplied stdev.
      */
-    public Double getStdevMultiplierBelow() {
-        return stdevMultiplierBelow;
+    public Double getPercentPopulationBelow() {
+        return percentPopulationBelow;
     }
 
     /**
      * Sets multiple factor to calculate multiplied stdev.
-     * @param stdevMultiplierBelow Multiple factor.
+     * @param percentPopulationBelow Multiple factor.
      */
-    public void setStdevMultiplierBelow(Double stdevMultiplierBelow) {
-        this.setDirtyIf(!Objects.equals(this.stdevMultiplierBelow, stdevMultiplierBelow));
-        this.stdevMultiplierBelow = stdevMultiplierBelow;
+    public void setPercentPopulationBelow(Double percentPopulationBelow) {
+        this.setDirtyIf(!Objects.equals(this.percentPopulationBelow, percentPopulationBelow));
+        this.percentPopulationBelow = percentPopulationBelow;
     }
-
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -83,6 +82,6 @@ public class BelowStdevMultiply30DaysRuleParametersSpec extends AbstractRulePara
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/below_stdev_multiply_30_days";
+        return "stdev/below_percent_population_stdev_60_days";
     }
 }

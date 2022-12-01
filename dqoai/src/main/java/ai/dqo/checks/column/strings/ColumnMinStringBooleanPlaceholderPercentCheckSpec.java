@@ -19,7 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinPercentRule100ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMinBooleanPlaceholderPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,7 +39,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringMinBooleanPlaceholderPercentSensorParametersSpec, MinPercentRule100ParametersSpec> {
+public class ColumnMinStringBooleanPlaceholderPercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMinBooleanPlaceholderPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringBooleanPlaceholderPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,17 +54,17 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a boolean placeholder strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec error;
+    private MinPercentRule98ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MinPercentRule99ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec fatal;
+    private MinPercentRule95ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -88,7 +91,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule100ParametersSpec getError() {
+    public MinPercentRule98ParametersSpec getError() {
         return this.error;
     }
 
@@ -96,7 +99,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule100ParametersSpec error) {
+    public void setError(MinPercentRule98ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -108,7 +111,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MinPercentRule99ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -116,7 +119,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MinPercentRule99ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -128,7 +131,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getFatal() {
+    public MinPercentRule95ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -136,7 +139,7 @@ public class ColumnMinStringBooleanPlaceholderPercentCheckSpec extends AbstractC
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule100ParametersSpec fatal) {
+    public void setFatal(MinPercentRule95ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

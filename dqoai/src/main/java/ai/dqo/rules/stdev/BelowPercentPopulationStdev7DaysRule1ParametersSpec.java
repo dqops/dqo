@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.comparison;
+package ai.dqo.rules.stdev;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -27,49 +27,42 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinPercentRule100ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinPercentRule100ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class BelowPercentPopulationStdev7DaysRule1ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<BelowPercentPopulationStdev7DaysRule1ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    private Double percentPopulationBelow = 1.0;
+
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Default constructor.
      */
-    public MinPercentRule100ParametersSpec() {
+    public BelowPercentPopulationStdev7DaysRule1ParametersSpec() {
+        this.percentPopulationBelow = null;
     }
 
     /**
-     * Creates a rule with a given value.
-     * @param minPercent Minimum accepted value.
+     * Multiplied factor used to calculate a multiplied stdev.
+     * @return Multiple factor used to calculate a multiplied stdev.
      */
-    public MinPercentRule100ParametersSpec(Double minPercent) {
-        this.minPercent = minPercent;
-    }
-
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double minPercent = 100.0;
-
-    /**
-     * Minimum value for a data quality check readout, for example a minimum row count.
-     * @return Minimum value for a data quality check readout.
-     */
-    public Double getMinPercent() {
-        return minPercent;
+    public Double getPercentPopulationBelow() {
+        return percentPopulationBelow;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality readout.
-     * @param minPercent Minimum value.
+     * Sets multiple factor to calculate multiplied stdev.
+     * @param percentPopulationBelow Multiple factor.
      */
-    public void setMinPercent(Double minPercent) {
-        this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
-        this.minPercent = minPercent;
+    public void setPercentPopulationBelow(Double percentPopulationBelow) {
+        this.setDirtyIf(!Objects.equals(this.percentPopulationBelow, percentPopulationBelow));
+        this.percentPopulationBelow = percentPopulationBelow;
     }
 
     /**
@@ -89,6 +82,6 @@ public class MinPercentRule100ParametersSpec extends AbstractRuleParametersSpec 
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_percent";
+        return "stdev/below_percent_population_stdev_7_days";
     }
 }
