@@ -32,6 +32,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentChec
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -65,6 +66,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_parsable_to_integer_percent", o -> o.dailyPartitionMinStringParsableToIntegerPercent);
             put("daily_partition_max_string_surrounded_by_whitespace_count", o -> o.dailyPartitionMaxStringSurroundedByWhitespaceCount);
             put("daily_partition_max_string_surrounded_by_whitespace_percent", o -> o.dailyPartitionMaxStringSurroundedByWhitespacePercent);
+            put("daily_partition_min_string_parsable_to_float_percent", o -> o.dailyPartitionMinStringParsableToFloatPercent);
 
         }
     };
@@ -110,6 +112,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringParsableToFloatPercentCheckSpec dailyPartitionMinStringParsableToFloatPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -339,7 +344,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets a new definition of a maximum string surrounded by whitespace count check.
      * @param dailyPartitionMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
      */
-    public void setdailyPartitionMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespaceCount) {
+    public void setDailyPartitionMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespaceCount) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespaceCount, dailyPartitionMaxStringSurroundedByWhitespaceCount));
         this.dailyPartitionMaxStringSurroundedByWhitespaceCount = dailyPartitionMaxStringSurroundedByWhitespaceCount;
         propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespaceCount, "daily_partition_max_string_surrounded_by_whitespace_count");
@@ -363,6 +368,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespacePercent, dailyPartitionMaxStringSurroundedByWhitespacePercent));
         this.dailyPartitionMaxStringSurroundedByWhitespacePercent = dailyPartitionMaxStringSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespacePercent, "daily_partition_max_string_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to float percent check.
+     * @return Minimum string parsable to float percent  check.
+     */
+    public ColumnMinStringParsableToFloatPercentCheckSpec getDailyPartitionMinStringParsableToFloatPercent() {
+        return dailyPartitionMinStringParsableToFloatPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to float percent check.
+     * @param dailyPartitionMinStringParsableToFloatPercent Minimum string parsable to float percent check.
+     */
+    public void setDailyPartitionMinStringParsableToFloatPercent(ColumnMinStringParsableToFloatPercentCheckSpec dailyPartitionMinStringParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringParsableToFloatPercent, dailyPartitionMinStringParsableToFloatPercent));
+        this.dailyPartitionMinStringParsableToFloatPercent = dailyPartitionMinStringParsableToFloatPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringParsableToFloatPercent, "daily_partition_min_string_parsable_to_float_percent");
     }
 
     /**
