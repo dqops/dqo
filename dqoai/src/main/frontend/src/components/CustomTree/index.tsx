@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ReactTree, ReactTreeTheme, TreeRenderFn } from '@naisutech/react-tree';
 import { useTree } from '../../contexts/treeContext';
 import SvgIcon from '../SvgIcon';
@@ -6,6 +6,9 @@ import { TREE_LEVEL } from '../../shared/enums';
 import clsx from 'clsx';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { Tooltip } from '@material-tailwind/react';
+import ContextMenu from './ContextMenu';
+import ConfirmDialog from './ConfirmDialog';
+import { CustomTreeNode } from '../../shared/interfaces';
 
 const theme: ReactTreeTheme = {
   text: {
@@ -27,6 +30,9 @@ const theme: ReactTreeTheme = {
 
 const CustomTree = () => {
   const { changeActiveTab, treeData, openNodes, toggleOpenNode } = useTree();
+  const [isOpen, setIsOpen] = useState(false);
+  const { removeNode } = useTree();
+  const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
 
   const renderIcon: TreeRenderFn = (props: any) => {
     if (props.node.level === TREE_LEVEL.CHECK) {
@@ -51,12 +57,17 @@ const CustomTree = () => {
     return 'column';
   };
 
+  const openConfirm = (node: CustomTreeNode) => {
+    setSelectedNode(node);
+    setIsOpen(true);
+  };
+
   const renderNode: TreeRenderFn = (props) => {
     const { node }: { node: any } = props;
 
     return (
       <div
-        className="flex space-x-2 py-1 flex-1 max-w-full"
+        className="flex space-x-2 py-1 flex-1"
         onClick={() => changeActiveTab(node)}
       >
         <SvgIcon
@@ -68,13 +79,16 @@ const CustomTree = () => {
           className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
           placement="top-start"
         >
-          <div
-            className={clsx(
-              `text-black truncate flex-1`,
-              node.hasCheck ? 'font-bold' : ''
-            )}
-          >
-            {node.label}
+          <div className="flex flex-1 justify-between items-center">
+            <div
+              className={clsx(
+                `text-black flex-1 truncate mr-7`,
+                node.hasCheck ? 'font-bold' : ''
+              )}
+            >
+              {node.label}
+            </div>
+            <ContextMenu node={node} openConfirm={openConfirm} />
           </div>
         </Tooltip>
       </div>
@@ -84,7 +98,6 @@ const CustomTree = () => {
   const onToggleSelectedNodes = (nodes: TreeNodeId[]) => {};
   const onToggleOpenNodes = (nodes: TreeNodeId[]) => {};
 
-  console.log('treeData', treeData, openNodes);
   return (
     <div className="text-gray-100">
       <div className="">
@@ -95,7 +108,6 @@ const CustomTree = () => {
           onToggleSelectedNodes={onToggleSelectedNodes}
           onToggleOpenNodes={onToggleOpenNodes}
           openNodes={openNodes}
-          truncateLongText={true}
           theme="custom"
           themes={{
             custom: theme
@@ -105,6 +117,12 @@ const CustomTree = () => {
           }}
         />
       </div>
+      <ConfirmDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        message="Are you sure want to remove this?"
+        onConfirm={() => removeNode(selectedNode)}
+      />
     </div>
   );
 };

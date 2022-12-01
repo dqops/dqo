@@ -341,13 +341,46 @@ function TreeProvider(props: any) {
   };
 
   const removeTreeNode = (id: string) => {
-    console.log(id);
     setOpenNodes(openNodes.filter((item) => item !== id));
     setTreeData(treeData.filter((item) => item.id !== id));
     const tabIndex = tabs.findIndex((tab) => tab.value === id);
     if (tabIndex > -1) {
       setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
       setTabs(tabs.filter((item) => item.value !== id));
+    }
+  };
+
+  const removeNode = async (node: CustomTreeNode) => {
+    setOpenNodes(openNodes.filter((item) => item !== node.id));
+    setTreeData(treeData.filter((item) => item.id !== node.id));
+    const tabIndex = tabs.findIndex((tab) => tab.value === node.id);
+    if (tabIndex > -1) {
+      setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
+      setTabs(tabs.filter((item) => item.value !== node.id));
+    }
+
+    if (node.level === TREE_LEVEL.DATABASE) {
+      await ConnectionApiClient.deleteConnection(node.label);
+    } else if (node.level === TREE_LEVEL.TABLE) {
+      const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      await TableApiClient.deleteTable(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        node.label
+      );
+    } else if (node.level === TREE_LEVEL.COLUMN) {
+      const parentNode = findTreeNode(treeData, node?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      await ColumnApiClient.deleteColumn(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        node.label
+      );
     }
   };
 
@@ -369,7 +402,8 @@ function TreeProvider(props: any) {
         changeActiveTab,
         sidebarWidth,
         setSidebarWidth,
-        removeTreeNode
+        removeTreeNode,
+        removeNode,
       }}
       {...props}
     />
