@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.TableOwnerSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
@@ -65,6 +66,9 @@ public class TableBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredChecks;
 
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this table.")
+    private CheckSearchFilters runChecksJobTemplate;
+
     /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
      * This model is used for the table list screen and it has even less fields.
@@ -79,6 +83,11 @@ public class TableBasicModel {
             setTarget(tableSpec.getTarget());
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+            }});
         }};
     }
 
@@ -99,6 +108,11 @@ public class TableBasicModel {
             setFilter(tableSpec.getFilter());
             setOwner(tableSpec.getOwner());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+            }});
         }};
     }
 
