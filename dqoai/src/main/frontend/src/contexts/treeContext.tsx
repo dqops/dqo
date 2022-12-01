@@ -16,7 +16,6 @@ import {
 import { TREE_LEVEL } from '../shared/enums';
 import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
-import { uniq } from 'lodash';
 import { findTreeNode } from '../utils/tree';
 
 const TreeContext = React.createContext({} as any);
@@ -51,6 +50,237 @@ function TreeProvider(props: any) {
     })();
   }, []);
 
+  const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {
+    setOpenNodes([
+      ...openNodes.filter(
+        (item) => item.toString().indexOf(node.id.toString()) !== 0
+      ),
+      node.id
+    ]);
+    const newTreeData = treeData.filter(
+      (item) =>
+        item.id === node.id ||
+        item.id.toString().indexOf(node?.id.toString()) !== 0
+    );
+    setTreeData([...newTreeData, ...items]);
+  };
+
+  const refreshDatabaseNode = async (node: CustomTreeNode) => {
+    const res: AxiosResponse<SchemaModel[]> = await SchemaApiClient.getSchemas(
+      node.label
+    );
+
+    const items = res.data.map((schema) => ({
+      id: `${node.id}.${schema.schema_name}`,
+      label: schema.schema_name || '',
+      level: TREE_LEVEL.SCHEMA,
+      parentId: node.id,
+      items: [],
+      tooltip: `${node?.label}.${schema.schema_name}`
+    }));
+
+    resetTreeData(node, items);
+  };
+
+  const refreshSchemaNode = async (node: CustomTreeNode) => {
+    const connectionNode = findTreeNode(treeData, node.parentId ?? '');
+    const res: AxiosResponse<TableBasicModel[]> =
+      await TableApiClient.getTables(connectionNode?.label ?? '', node.label);
+    const items = res.data.map((table) => ({
+      id: `${node.id}.${table.target?.table_name}`,
+      label: table.target?.table_name || '',
+      level: TREE_LEVEL.TABLE,
+      parentId: node.id,
+      items: [],
+      tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
+      hasCheck: table?.has_any_configured_checks
+    }));
+    resetTreeData(node, items);
+  };
+
+  const refreshTableNode = async (node: CustomTreeNode) => {
+    const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
+    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    const items = [
+      {
+        id: `${node.id}.columns`,
+        label: `Columns for ${connectionNode?.label}.${schemaNode?.label}.${node.label}`,
+        level: TREE_LEVEL.COLUMNS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} columns`
+      },
+      {
+        id: `${node.id}.checks`,
+        label: 'Ad-hoc checks',
+        level: TREE_LEVEL.TABLE_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`
+      },
+      {
+        id: `${node.id}.dailyCheck`,
+        label: 'Daily checkpoints',
+        level: TREE_LEVEL.TABLE_DAILY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`
+      },
+      {
+        id: `${node.id}.monthlyCheck`,
+        label: 'Monthly checkpoints',
+        level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`
+      },
+      {
+        id: `${node.id}.dailyPartitionedChecks`,
+        label: 'Daily partitioned checks',
+        level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`
+      },
+      {
+        id: `${node.id}.monthlyPartitionedChecks`,
+        label: 'Monthly partitioned checks',
+        level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`
+      }
+    ];
+
+    resetTreeData(node, items);
+  };
+
+  const refreshColumnNode = async (node: CustomTreeNode) => {
+    const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
+    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+    const items = [
+      {
+        id: `${node.id}.checks`,
+        label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label}`,
+        level: TREE_LEVEL.COLUMN_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`
+      },
+      {
+        id: `${node.id}.dailyCheck`,
+        label: 'Daily checkpoints',
+        level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`
+      },
+      {
+        id: `${node.id}.monthlyCheck`,
+        label: 'Monthly checkpoints',
+        level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`
+      },
+      {
+        id: `${node.id}.dailyPartitionedChecks`,
+        label: 'Daily partitioned checks',
+        level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`
+      },
+      {
+        id: `${node.id}.monthlyPartitionedChecks`,
+        label: 'Monthly partitioned checks',
+        level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`
+      }
+    ];
+    resetTreeData(node, items);
+  };
+
+  const refreshColumnsNode = async (node: CustomTreeNode) => {
+    const tableNode = findTreeNode(treeData, node.parentId ?? '');
+    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    const res: AxiosResponse<ColumnBasicModel[]> =
+      await ColumnApiClient.getColumns(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? ''
+      );
+    const items = res.data.map((column) => ({
+      id: `${node.id}.${column.column_name}`,
+      label: column.column_name || '',
+      level: TREE_LEVEL.COLUMN,
+      parentId: node.id,
+      items: [],
+      tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
+      hasCheck: column?.has_any_configured_checks
+    }));
+    resetTreeData(node, items);
+  };
+
+  const refreshTableChecksNode = async (node: CustomTreeNode) => {
+    const tableNode = findTreeNode(treeData, node.parentId ?? '');
+    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    const res = await TableApiClient.getTableAdHocChecksUI(
+      connectionNode?.label ?? '',
+      schemaNode?.label ?? '',
+      tableNode?.label ?? ''
+    );
+    const items: CustomTreeNode[] = [];
+    res.data.categories?.forEach((category) => {
+      category.checks?.forEach((check) => {
+        items.push({
+          id: `${node.id}.${category.category}_${check?.check_name}`,
+          label: `${category.category} - ${check?.check_name}` || '',
+          level: TREE_LEVEL.CHECK,
+          parentId: node.id,
+          tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`,
+          items: []
+        });
+      });
+    });
+    resetTreeData(node, items);
+  };
+
+  const refreshColumnChecksNode = async (node: CustomTreeNode) => {
+    const columnNode = findTreeNode(treeData, node.parentId ?? '');
+    const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    const res = await ColumnApiClient.getColumnAdHocChecksUI(
+      connectionNode?.label ?? '',
+      schemaNode?.label ?? '',
+      tableNode?.label ?? '',
+      columnNode?.label ?? ''
+    );
+    const items: CustomTreeNode[] = [];
+    res.data.categories?.forEach((category) => {
+      category.checks?.forEach((check) => {
+        items.push({
+          id: `${node.id}.${category.category}_${check?.check_name}`,
+          label: `${category.category} - ${check?.check_name}` || '',
+          level: TREE_LEVEL.CHECK,
+          parentId: node.id,
+          tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`,
+          items: []
+        });
+      });
+    });
+    resetTreeData(node, items);
+  };
+
   const toggleOpenNode = async (id: TreeNodeId) => {
     if (openNodes.includes(id)) {
       setOpenNodes(openNodes.filter((item) => item !== id));
@@ -61,232 +291,7 @@ function TreeProvider(props: any) {
 
       if (!node) return;
 
-      if (node.level === TREE_LEVEL.DATABASE) {
-        const res: AxiosResponse<SchemaModel[]> =
-          await SchemaApiClient.getSchemas(node.label);
-        const items = res.data.map((schema) => ({
-          id: `${node.id}.${schema.schema_name}`,
-          label: schema.schema_name || '',
-          level: TREE_LEVEL.SCHEMA,
-          parentId: node.id,
-          items: [],
-          tooltip: `${node?.label}.${schema.schema_name}`
-        }));
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.SCHEMA) {
-        const connectionNode = findTreeNode(treeData, node.parentId ?? '');
-        const res: AxiosResponse<TableBasicModel[]> =
-          await TableApiClient.getTables(
-            connectionNode?.label ?? '',
-            node.label
-          );
-        const items = res.data.map((table) => ({
-          id: `${node.id}.${table.target?.table_name}`,
-          label: table.target?.table_name || '',
-          level: TREE_LEVEL.TABLE,
-          parentId: node.id,
-          items: [],
-          tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
-          hasCheck: table?.has_any_configured_checks
-        }));
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.TABLE) {
-        const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
-        const connectionNode = findTreeNode(
-          treeData,
-          schemaNode?.parentId ?? ''
-        );
-        const items = [
-          {
-            id: `${node.id}.columns`,
-            label: `Columns for ${connectionNode?.label}.${schemaNode?.label}.${node.label}`,
-            level: TREE_LEVEL.COLUMNS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} columns`
-          },
-          {
-            id: `${node.id}.checks`,
-            label: 'Ad-hoc checks',
-            level: TREE_LEVEL.TABLE_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`
-          },
-          {
-            id: `${node.id}.dailyCheck`,
-            label: 'Daily checkpoints',
-            level: TREE_LEVEL.TABLE_DAILY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`
-          },
-          {
-            id: `${node.id}.monthlyCheck`,
-            label: 'Monthly checkpoints',
-            level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`
-          },
-          {
-            id: `${node.id}.dailyPartitionedChecks`,
-            label: 'Daily partitioned checks',
-            level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`
-          },
-          {
-            id: `${node.id}.monthlyPartitionedChecks`,
-            label: 'Monthly partitioned checks',
-            level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`
-          }
-        ];
-
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.COLUMNS) {
-        const tableNode = findTreeNode(treeData, node.parentId ?? '');
-        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-        const connectionNode = findTreeNode(
-          treeData,
-          schemaNode?.parentId ?? ''
-        );
-        const res: AxiosResponse<ColumnBasicModel[]> =
-          await ColumnApiClient.getColumns(
-            connectionNode?.label ?? '',
-            schemaNode?.label ?? '',
-            tableNode?.label ?? ''
-          );
-        const items = res.data.map((column) => ({
-          id: `${node.id}.${column.column_name}`,
-          label: column.column_name || '',
-          level: TREE_LEVEL.COLUMN,
-          parentId: node.id,
-          items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
-          hasCheck: column?.has_any_configured_checks
-        }));
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-        const tableNode = findTreeNode(treeData, node.parentId ?? '');
-        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-        const connectionNode = findTreeNode(
-          treeData,
-          schemaNode?.parentId ?? ''
-        );
-        const res = await TableApiClient.getTableAdHocChecksUI(
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? ''
-        );
-        const items: CustomTreeNode[] = [];
-        res.data.categories?.forEach((category) => {
-          category.checks?.forEach((check) => {
-            items.push({
-              id: `${node.id}.${category.category}_${check?.check_name}`,
-              label: `${category.category} - ${check?.check_name}` || '',
-              level: TREE_LEVEL.CHECK,
-              parentId: node.id,
-              tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`,
-              items: []
-            });
-          });
-        });
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.COLUMN) {
-        const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
-        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-        const connectionNode = findTreeNode(
-          treeData,
-          schemaNode?.parentId ?? ''
-        );
-
-        const items = [
-          {
-            id: `${node.id}.checks`,
-            label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label}`,
-            level: TREE_LEVEL.COLUMN_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`
-          },
-          {
-            id: `${node.id}.dailyCheck`,
-            label: 'Daily checkpoints',
-            level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`
-          },
-          {
-            id: `${node.id}.monthlyCheck`,
-            label: 'Monthly checkpoints',
-            level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`
-          },
-          {
-            id: `${node.id}.dailyPartitionedChecks`,
-            label: 'Daily partitioned checks',
-            level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`
-          },
-          {
-            id: `${node.id}.monthlyPartitionedChecks`,
-            label: 'Monthly partitioned checks',
-            level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
-            parentId: node.id,
-            items: [],
-            tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`
-          }
-        ];
-
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
-        const columnNode = findTreeNode(treeData, node.parentId ?? '');
-        const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
-        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-        const connectionNode = findTreeNode(
-          treeData,
-          schemaNode?.parentId ?? ''
-        );
-        const res = await ColumnApiClient.getColumnAdHocChecksUI(
-          connectionNode?.label ?? '',
-          schemaNode?.label ?? '',
-          tableNode?.label ?? '',
-          columnNode?.label ?? ''
-        );
-        const items: CustomTreeNode[] = [];
-        res.data.categories?.forEach((category) => {
-          category.checks?.forEach((check) => {
-            items.push({
-              id: `${node.id}.${category.category}_${check?.check_name}`,
-              label: `${category.category} - ${check?.check_name}` || '',
-              level: TREE_LEVEL.CHECK,
-              parentId: node.id,
-              tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`,
-              items: []
-            });
-          });
-        });
-        setTreeData([...treeData, ...items]);
-        setOpenNodes(uniq([...openNodes, id]));
-      }
+      await refreshNode(node);
     }
   };
 
@@ -384,6 +389,24 @@ function TreeProvider(props: any) {
     }
   };
 
+  const refreshNode = async (node: CustomTreeNode) => {
+    if (node.level === TREE_LEVEL.DATABASE) {
+      await refreshDatabaseNode(node);
+    } else if (node.level === TREE_LEVEL.SCHEMA) {
+      await refreshSchemaNode(node);
+    } else if (node.level === TREE_LEVEL.TABLE) {
+      await refreshTableNode(node);
+    } else if (node.level === TREE_LEVEL.COLUMNS) {
+      await refreshColumnsNode(node);
+    } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
+      await refreshTableChecksNode(node);
+    } else if (node.level === TREE_LEVEL.COLUMN) {
+      await refreshColumnNode(node);
+    } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
+      await refreshColumnChecksNode(node);
+    }
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -404,6 +427,7 @@ function TreeProvider(props: any) {
         setSidebarWidth,
         removeTreeNode,
         removeNode,
+        refreshNode
       }}
       {...props}
     />
