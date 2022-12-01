@@ -102,7 +102,7 @@ public class CliOperationStatus {
 	 * Sets the message and sets success to true.
 	 * @param message Message.
 	 */
-	public void setSuccesMessage(String message) {
+	public void setSuccessMessage(String message) {
 		setSuccess(true);
 		this.message = message;
 	}

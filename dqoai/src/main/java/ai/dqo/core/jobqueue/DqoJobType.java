@@ -20,4 +20,7 @@ public enum DqoJobType {
 
     @JsonProperty("run scheduled checks by cron")
     RUN_SCHEDULED_CHECKS_CRON,
+
+    @JsonProperty("import schema")
+    IMPORT_SCHEMA,
 }

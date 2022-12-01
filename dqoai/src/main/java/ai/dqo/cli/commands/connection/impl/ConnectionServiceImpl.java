@@ -406,7 +406,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();
-        cliOperationStatus.setSuccesMessage(String.format(
+        cliOperationStatus.setSuccessMessage(String.format(
                 "Connection %s was successfully added.\nRun 'table import -c=%s' to import tables.", connectionName, connectionName));
         return cliOperationStatus;
     }
@@ -455,7 +455,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         );
 
         userHomeContext.flush();
-        cliOperationStatus.setSuccesMessage(String.format("Successfully removed %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionSpecs.size()));
         return cliOperationStatus;
     }
 
@@ -508,7 +508,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 }
         );
 
-        cliOperationStatus.setSuccesMessage(String.format("Successfully updated %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d connections", connectionSpecs.size()));
         return cliOperationStatus;
     }
 

@@ -166,7 +166,7 @@ public class ColumnServiceImpl implements ColumnService {
 
 		table.getSpec().getColumns().put(columnName, columnSpec);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage(String.format("Column %s was successfully added.", columnName));
+		cliOperationStatus.setSuccessMessage(String.format("Column %s was successfully added.", columnName));
 		return cliOperationStatus;
 	}
 
@@ -216,7 +216,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
 	}
 
@@ -259,7 +259,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully updated %d columns.", columnSpecs.size()));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
 	}
 
@@ -307,7 +307,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully renamed column %s.", columnName));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully renamed column %s.", columnName));
 		return cliOperationStatus;
 	}
 
@@ -361,7 +361,7 @@ public class ColumnServiceImpl implements ColumnService {
 			}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully %s %d columns.",
+		cliOperationStatus.setSuccessMessage(String.format("Successfully %s %d columns.",
 															disable ? "disabled" : "enabled", columnSpecs.size()));
 		return cliOperationStatus;
 	}
