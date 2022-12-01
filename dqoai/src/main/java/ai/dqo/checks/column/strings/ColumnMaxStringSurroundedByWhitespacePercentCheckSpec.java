@@ -19,7 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxPercentRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMaxSurroundedByWhitespacePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,27 +38,31 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringMaxSurroundedByWhitespacePercentSensorParametersSpec, MaxPercentRule0ParametersSpec> {
+public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringMaxSurroundedByWhitespacePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringSurroundedByWhitespacePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
+
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsStringMaxSurroundedByWhitespacePercentSensorParametersSpec parameters = new ColumnStringsStringMaxSurroundedByWhitespacePercentSensorParametersSpec();
+
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with surrounded by whitespace strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule0ParametersSpec error;
+    private MaxPercentRule2ParametersSpec error;
+
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule0ParametersSpec warning;
+    private MaxPercentRule1ParametersSpec warning;
+
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule0ParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -83,7 +89,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule0ParametersSpec getError() {
+    public MaxPercentRule2ParametersSpec getError() {
         return this.error;
     }
 
@@ -91,7 +97,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule0ParametersSpec error) {
+    public void setError(MaxPercentRule2ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -103,7 +109,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule0ParametersSpec getWarning() {
+    public MaxPercentRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -111,7 +117,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule0ParametersSpec warning) {
+    public void setWarning(MaxPercentRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -123,7 +129,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxPercentRule0ParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -131,7 +137,7 @@ public class ColumnMaxStringSurroundedByWhitespacePercentCheckSpec extends Abstr
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxPercentRule0ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
