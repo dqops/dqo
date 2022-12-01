@@ -117,7 +117,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 categoryModel.getChecks().add(checkModel);
             }
             else {
-                AbstractCheckSpec<?,?> checkFieldValue = (AbstractCheckSpec<?,?>) checkSpecObject;
+                AbstractCheckSpec<?,?,?,?> checkFieldValue = (AbstractCheckSpec<?,?,?,?>) checkSpecObject;
                 UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate);
                 checkModel.setConfigured(checkSpecObjectNullable != null);
                 categoryModel.getChecks().add(checkModel);
@@ -134,7 +134,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @return Check model.
      */
-    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?> checkSpec, CheckSearchFilters runChecksCategoryTemplate) {
+    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?,?,?> checkSpec, CheckSearchFilters runChecksCategoryTemplate) {
         UICheckModel checkModel = new UICheckModel();
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
@@ -209,7 +209,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param checkSpec Rule threshold object with the alert/warning/fatal thresholds.
      * @return Rule threshold model.
      */
-    protected UIRuleThresholdsModel createRuleThresholdsModel(AbstractCheckSpec<?,?> checkSpec) {
+    protected UIRuleThresholdsModel createRuleThresholdsModel(AbstractCheckSpec<?,?,?,?> checkSpec) {
         UIRuleThresholdsModel thresholdsModel = new UIRuleThresholdsModel();
 
         ClassInfo abstractCheckClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
@@ -263,7 +263,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param abstractCheckSpec Rule thresholds specification object (parent object).
      * @return Rule parameters.
      */
-    protected UIRuleParametersModel createRuleParametersModel(FieldInfo severityFieldInfo, AbstractCheckSpec<?,?> abstractCheckSpec) {
+    protected UIRuleParametersModel createRuleParametersModel(FieldInfo severityFieldInfo, AbstractCheckSpec<?,?,?,?> abstractCheckSpec) {
         UIRuleParametersModel parametersModel = new UIRuleParametersModel();
         AbstractRuleParametersSpec parametersValueNullable = (AbstractRuleParametersSpec)severityFieldInfo.getFieldValue(abstractCheckSpec);
         AbstractRuleParametersSpec parametersSpecNotNull = parametersValueNullable != null ? parametersValueNullable :

@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends BaseTest {
-    private BetweenPercentMovingAverage60DaysRuleParametersSpec sut;
+    private BetweenPercentMovingAverage60DaysRule5ParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -56,7 +56,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-        this.sut = new BetweenPercentMovingAverage60DaysRuleParametersSpec();
+        this.sut = new BetweenPercentMovingAverage60DaysRule5ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 

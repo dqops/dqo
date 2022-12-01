@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 
 @SpringBootTest
 public class BelowStdevMultiply7DaysRuleParametersSpecTests extends BaseTest {
-    private BelowStdevMultiply7DaysRuleParametersSpec sut;
+    private BelowStdevMultiply7DaysRule1ParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class BelowStdevMultiply7DaysRuleParametersSpecTests extends BaseTest {
     @BeforeEach
     protected void  setUp() throws Throwable {
         super.setUp();
-        this.sut = new BelowStdevMultiply7DaysRuleParametersSpec();
+        this.sut = new BelowStdevMultiply7DaysRule1ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 

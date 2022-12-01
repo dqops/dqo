@@ -46,7 +46,7 @@ public class SensorExecutionRunParameters {
     private ColumnSpec column; // may be null
     private CheckType checkType;
     @JsonIgnore
-    private AbstractCheckSpec<?,?> check;
+    private AbstractCheckSpec<?,?,?,?> check;
     private TimeSeriesConfigurationSpec timeSeries;
     private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
@@ -142,7 +142,7 @@ public class SensorExecutionRunParameters {
      * Returns the data quality check specification.
      * @return Data quality check specification.
      */
-    public AbstractCheckSpec<?, ?> getCheck() {
+    public AbstractCheckSpec<?,?,?,?> getCheck() {
         return check;
     }
 
@@ -150,7 +150,7 @@ public class SensorExecutionRunParameters {
      * Sets the data quality check specification.
      * @param check Check specification.
      */
-    public void setCheck(AbstractCheckSpec<?, ?> check) {
+    public void setCheck(AbstractCheckSpec<?,?,?,?> check) {
         this.check = check;
     }
 

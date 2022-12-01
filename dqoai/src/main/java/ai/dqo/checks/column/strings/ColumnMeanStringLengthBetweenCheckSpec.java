@@ -39,7 +39,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMeanStringLengthBetweenCheckSpec extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec> {
+public class ColumnMeanStringLengthBetweenCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMeanStringLengthBetweenCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

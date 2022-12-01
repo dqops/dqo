@@ -39,7 +39,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringLengthAboveCheckSpec extends AbstractCheckSpec<ColumnStringsStringMinLengthSensorParametersSpec, MinValueRuleParametersSpec> {
+public class ColumnMinStringLengthAboveCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMinLengthSensorParametersSpec, MinValueRuleParametersSpec,MinValueRuleParametersSpec,MinValueRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringLengthAboveCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }

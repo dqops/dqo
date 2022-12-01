@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.averages;
+package ai.dqo.rules.comparison;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -27,44 +27,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class WithinPercentMovingAverage7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<WithinPercentMovingAverage7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxCountRule10ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule10ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
+    // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
+
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
+    private Long maxCount = 10L;
 
     /**
-     * Default constructor.
+     * Returns a maximum value for a data quality check readout, for example a maximum row count.
+     * @return Maximum value for a data quality check readout.
      */
-    public WithinPercentMovingAverage7DaysRuleParametersSpec(){
-    }
-
-
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
-    private Double maxPercentWithin;
-
-
-    /**
-     * Max percent value for a data quality check readout, for example a minimum row count.
-     * @return A percent that is used to calculate lower and upper limit.
-     */
-    public Double getMaxPercentWithin() {
-        return maxPercentWithin;
+    public Long getMaxCount() {
+        return maxCount;
     }
 
     /**
-     * Changes the maximum value (threshold) for a data quality readout.
-     * @param maxPercentWithin Maximum value.
+     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
+     * @param maxCount Maximum value that is accepted.
      */
-    public void setMaxPercentWithin(Double maxPercentWithin) {
-        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
-        this.maxPercentWithin = maxPercentWithin;
+    public void setMaxCount(Long maxCount) {
+        this.setDirtyIf(!Objects.equals(this.maxCount, maxCount));
+        this.maxCount = maxCount;
     }
 
     /**
@@ -84,6 +77,6 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpec extends AbstractR
      */
     @Override
     public String getRuleDefinitionName() {
-        return "averages/within_percent_moving_average_7_days";
+        return "comparison/max_count";
     }
 }

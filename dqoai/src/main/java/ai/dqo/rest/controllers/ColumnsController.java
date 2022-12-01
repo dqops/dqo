@@ -1973,11 +1973,13 @@ public class ColumnsController {
                             if (!check.isDefault()) {
                                 checkpoints.setDaily((ColumnDailyCheckpointCategoriesSpec) check);
                             }
+                            break;
 
                         case monthly:
                             if (!check.isDefault()) {
                                 checkpoints.setMonthly((ColumnMonthlyCheckpointCategoriesSpec) check);
                             }
+                            break;
                     }
                     spec.setCheckpoints(checkpoints);
                 },
@@ -2062,11 +2064,13 @@ public class ColumnsController {
                             if (!check.isDefault()) {
                                 partitionedChecks.setDaily((ColumnDailyPartitionedCheckCategoriesSpec) check);
                             }
+                            break;
 
                         case monthly:
                             if (!check.isDefault()) {
                                 partitionedChecks.setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec) check);
                             }
+                            break;
                     }
                     spec.setPartitionedChecks(partitionedChecks);
                 },

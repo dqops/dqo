@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.stdev;
+package ai.dqo.rules.averages;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -32,37 +32,39 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BelowPercentPopulationStdev30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BelowPercentPopulationStdev30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class WithinPercentMovingAverage7DaysRule5ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<WithinPercentMovingAverage7DaysRule5ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.")
-    private Double percentPopulationBelow;
 
     /**
      * Default constructor.
      */
-    public BelowPercentPopulationStdev30DaysRuleParametersSpec() {
-        this.percentPopulationBelow = null;
+    public WithinPercentMovingAverage7DaysRule5ParametersSpec(){
+    }
+
+
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    private Double maxPercentWithin = 5.0;
+
+
+    /**
+     * Max percent value for a data quality check readout, for example a minimum row count.
+     * @return A percent that is used to calculate lower and upper limit.
+     */
+    public Double getMaxPercentWithin() {
+        return maxPercentWithin;
     }
 
     /**
-     * Multiplied factor used to calculate a multiplied stdev.
-     * @return Multiple factor used to calculate a multiplied stdev.
+     * Changes the maximum value (threshold) for a data quality readout.
+     * @param maxPercentWithin Maximum value.
      */
-    public Double getPercentPopulationBelow() {
-        return percentPopulationBelow;
-    }
-
-    /**
-     * Sets multiple factor to calculate multiplied stdev.
-     * @param percentPopulationBelow Multiple factor.
-     */
-    public void setPercentPopulationBelow(Double percentPopulationBelow) {
-        this.setDirtyIf(!Objects.equals(this.percentPopulationBelow, percentPopulationBelow));
-        this.percentPopulationBelow = percentPopulationBelow;
+    public void setMaxPercentWithin(Double maxPercentWithin) {
+        this.setDirtyIf(!Objects.equals(this.maxPercentWithin, maxPercentWithin));
+        this.maxPercentWithin = maxPercentWithin;
     }
 
     /**
@@ -82,6 +84,6 @@ public class BelowPercentPopulationStdev30DaysRuleParametersSpec extends Abstrac
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/below_percent_population_stdev_30_days";
+        return "averages/within_percent_moving_average_7_days";
     }
 }
