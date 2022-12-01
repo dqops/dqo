@@ -1,5 +1,8 @@
 package ai.dqo.rest.controllers.remote.services;
 
+/**
+ * Exception wrapper over errors raised in {@link SourceSchemasService}.
+ */
 public class SourceSchemasServiceException extends RuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.

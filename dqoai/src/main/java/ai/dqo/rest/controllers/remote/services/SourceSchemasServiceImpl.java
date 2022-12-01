@@ -82,7 +82,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                     setImported(importedSchemaNames.contains(this.getSchemaName()));
                 }}).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new SourceSchemasServiceException("Connection error, check database authorization credentials.", e); // TODO: Specific exception catching.
+            throw new SourceSchemasServiceException("Source database connection error: " + e.getMessage(), e);
         }
 
         return schemaRemoteModels;

@@ -58,7 +58,7 @@ public class SourceSchemasController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = SchemaRemoteModel[].class),
-            @ApiResponse(code = 401, message = "Unauthorized access to the source database", response = SpringErrorPayload.class),
+            @ApiResponse(code = 400, message = "Error accessing the remote source database", response = SpringErrorPayload.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -69,8 +69,7 @@ public class SourceSchemasController {
             result = sourceSchemasService.loadSchemas(connectionName);
         }
         catch (SourceSchemasServiceException e) {
-            // TODO: Check exception type and react accordingly.
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(Flux.error(e), HttpStatus.BAD_REQUEST);
         }
 
         if (result == null) {
