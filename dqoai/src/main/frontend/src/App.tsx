@@ -1,27 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import AppProvider from './contexts/AppProvider';
-import store from './redux/store';
 import Routes from './Routes';
 import { ThemeProvider } from '@material-tailwind/react';
-import { NotificationProvider } from './contexts/notificationContext';
+import { useActionDispatch } from './hooks/useActionDispatch';
+import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from './redux/reducers';
 
 const App = () => {
+  const dispatch = useActionDispatch();
+  const { lastSequenceNumber } = useSelector((state: IRootState) => state.job);
+
+  useEffect(() => {
+    dispatch(getAllJobs());
+  }, []);
+
+  useEffect(() => {
+    if (!lastSequenceNumber) return;
+
+    setTimeout(() => {
+      dispatch(getJobsChanges(lastSequenceNumber));
+    }, 10000);
+  }, [lastSequenceNumber]);
+
   return (
-    <NotificationProvider>
-      <Provider store={store}>
-        <AppProvider>
-          <ThemeProvider value={{}}>
-            <Router>
-              <Routes />
-            </Router>
-          </ThemeProvider>
-        </AppProvider>
-      </Provider>
-    </NotificationProvider>
+    <AppProvider>
+      <ThemeProvider value={{}}>
+        <Router>
+          <Routes />
+        </Router>
+      </ThemeProvider>
+    </AppProvider>
   );
 };
 

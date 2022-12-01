@@ -14,8 +14,11 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
+export enum JOB_ACTION {
+  GET_JOBS = 'JOB_ACTION/GET_JOBS',
+  GET_JOBS_SUCCESS = 'JOB_ACTION/GET_JOBS_SUCCESS',
+  GET_JOBS_ERROR = 'JOB_ACTION/GET_JOBS_ERROR',
+  GET_JOBS_CHANGES = 'JOB_ACTION/GET_JOBS_CHANGES',
+  GET_JOBS_CHANGES_SUCCESS = 'JOB_ACTION/GET_JOBS_CHANGES_SUCCESS',
+  GET_JOBS_CHANGES_ERROR = 'JOB_ACTION/GET_JOBS_CHANGES_ERROR'
+}
