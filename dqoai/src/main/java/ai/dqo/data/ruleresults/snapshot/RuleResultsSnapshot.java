@@ -140,7 +140,11 @@ public class RuleResultsSnapshot {
 
             Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstLoadedMonth, lastMonthToLoad);
             if (loadedRows != null) {
-				this.historicResults.append(loadedRows);
+                if (this.historicResults == null) {
+                    this.historicResults = loadedRows;
+                } else {
+                    this.historicResults.append(loadedRows);
+                }
             }
         }
 
@@ -152,7 +156,11 @@ public class RuleResultsSnapshot {
 
             Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, firstMonthToLoad, this.lastLoadedMonth);
             if (loadedRows != null) {
-				this.historicResults.append(loadedRows);
+                if (this.historicResults == null) {
+                    this.historicResults = loadedRows;
+                } else {
+                    this.historicResults.append(loadedRows);
+                }
             }
         }
     }
