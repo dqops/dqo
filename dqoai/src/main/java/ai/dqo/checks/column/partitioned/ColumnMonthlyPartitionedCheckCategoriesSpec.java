@@ -21,6 +21,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -51,6 +52,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
         }
     };
 
@@ -68,6 +70,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Monthly partitioned checks of uniqueness values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessMonthlyPartitionedChecksSpec uniqueness;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -121,6 +128,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the container of monthly uniqueness data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnUniquenessMonthlyPartitionedChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of monthly uniqueness data quality partitioned checks.
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessMonthlyPartitionedChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

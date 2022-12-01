@@ -22,6 +22,7 @@ import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -52,6 +53,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
         }
     };
 
@@ -69,6 +71,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Daily partitioned checks of uniqueness in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessDailyPartitionedChecksSpec uniqueness;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -122,6 +129,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the container of daily uniqueness data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnUniquenessDailyPartitionedChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of daily uniqueness data quality partitioned checks.
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessDailyPartitionedChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

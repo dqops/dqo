@@ -54,7 +54,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
 //            put("validity", o -> o.validity);
-//			put("uniqueness", o -> o.uniqueness);
+			put("uniqueness", o -> o.uniqueness);
 //            put("completeness", o -> o.completeness);
 //            put("consistency", o -> o.consistency);
 //            put("custom", o -> o.custom);
@@ -75,6 +75,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocStringsChecksSpec strings;
+
+    @JsonPropertyDescription("Configuration of uniqueness checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocUniquenessChecksSpec uniqueness;
 
 //    @JsonPropertyDescription("Configuration of validity checks on a column level. Validity checks verify hard rules on the data using static rules like valid column value ranges.")
 //    @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -159,6 +164,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the uniqueness check configuration on a column level.
+     * @return Uniqueness check configuration.
+     */
+    public ColumnAdHocUniquenessChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the uniqueness check configuration on a column level.
+     * @param uniqueness New uniqueness checks configuration.
+     */
+    public void setUniqueness(ColumnAdHocUniquenessChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
 //    /**
