@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class SourceSchemasController {
             result = sourceSchemasService.loadSchemas(connectionName);
         }
         catch (SourceSchemasServiceException e) {
-            return new ResponseEntity<>(Flux.error(e), HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         if (result == null) {
