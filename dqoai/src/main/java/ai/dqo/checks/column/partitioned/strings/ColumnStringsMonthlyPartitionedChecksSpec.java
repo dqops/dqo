@@ -30,6 +30,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec
 import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -106,8 +107,11 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionMaxStringSurroundedByWhitespaceCount;
 
+    @JsonPropertyDescription("Verifies that the number of parsable to integer string in a column does not exceed the minimum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinStringParsableToIntegerCountCheckSpec monthlyPartitionMinStringParsableToIntegerCount;
+
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerCount;
+    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec monthlyPartitionMaxStringSurroundedByWhitespacePercent;
@@ -311,21 +315,39 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a minimum string parsable to integer percent check.
-     * @return Minimum string parsable to integer percent  check.
+     * Returns a minimum string parsable to integer count check.
+     * @return Minimum string parsable to integer count  check.
      */
-    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyPartitionMinStringParsableToIntegerCount() {
+    public ColumnMinStringParsableToIntegerCountCheckSpec getMonthlyPartitionMinStringParsableToIntegerCount() {
         return monthlyPartitionMinStringParsableToIntegerCount;
     }
 
     /**
-     * Sets a new definition of a minimum string parsable to integer percent check.
-     * @param monthlyPartitionMinStringParsableToIntegerCount Minimum string parsable to integer percent check.
+     * Sets a new definition of a minimum string parsable to integer count check.
+     * @param monthlyPartitionMinStringParsableToIntegerCount Minimum string parsable to integer count check.
      */
-    public void setMonthlyPartitionMinStringParsableToIntegerCount(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerCount) {
+    public void setMonthlyPartitionMinStringParsableToIntegerCount(ColumnMinStringParsableToIntegerCountCheckSpec monthlyPartitionMinStringParsableToIntegerCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringParsableToIntegerCount, monthlyPartitionMinStringParsableToIntegerCount));
         this.monthlyPartitionMinStringParsableToIntegerCount = monthlyPartitionMinStringParsableToIntegerCount;
         propagateHierarchyIdToField(monthlyPartitionMinStringParsableToIntegerCount, "monthly_partition_min_string_parsable_to_integer_count");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent  check.
+     */
+    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyPartitionMinStringParsableToIntegerPercent() {
+        return monthlyPartitionMinStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param monthlyPartitionMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setMonthlyPartitionMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyPartitionMinStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringParsableToIntegerPercent, monthlyPartitionMinStringParsableToIntegerPercent));
+        this.monthlyPartitionMinStringParsableToIntegerPercent = monthlyPartitionMinStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringParsableToIntegerPercent, "monthly_partition_min_string_parsable_to_integer_percent");
     }
 
     /**
