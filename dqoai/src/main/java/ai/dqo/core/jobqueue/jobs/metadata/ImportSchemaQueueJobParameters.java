@@ -1,8 +1,11 @@
 package ai.dqo.core.jobqueue.jobs.metadata;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Parameters for the {@link ImportSchemaQueueJob} job that imports tables from a database.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ImportSchemaQueueJobParameters {
     private String connectionName;
     private String schemaName;
