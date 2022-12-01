@@ -31,6 +31,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSp
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -63,6 +64,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_boolean_placeholder_percent", o -> o.dailyPartitionMinStringBooleanPlaceholderPercent);
             put("daily_partition_min_string_parsable_to_integer_percent", o -> o.dailyPartitionMinStringParsableToIntegerPercent);
             put("daily_partition_max_string_surrounded_by_whitespace_count", o -> o.dailyPartitionMaxStringSurroundedByWhitespaceCount);
+            put("daily_partition_max_string_surrounded_by_whitespace_percent", o -> o.dailyPartitionMaxStringSurroundedByWhitespacePercent);
 
         }
     };
@@ -106,9 +108,11 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent;
+
     /**
      * Returns a maximum string length below  check.
-     *
      * @return Maximum string length below  check.
      */
     public ColumnMaxStringLengthBelowCheckSpec getDailyPartitionMaxStringLengthBelow() {
@@ -339,6 +343,26 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespaceCount, dailyPartitionMaxStringSurroundedByWhitespaceCount));
         this.dailyPartitionMaxStringSurroundedByWhitespaceCount = dailyPartitionMaxStringSurroundedByWhitespaceCount;
         propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespaceCount, "daily_partition_max_string_surrounded_by_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace percent check.
+     *
+     * @return Maximum string surrounded by whitespace percent check.
+     */
+    public ColumnMaxStringSurroundedByWhitespacePercentCheckSpec getDailyPartitionMaxStringSurroundedByWhitespacePercent() {
+        return dailyPartitionMaxStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace percent check.
+     *
+     * @param dailyPartitionMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     */
+    public void setDailyPartitionMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespacePercent, dailyPartitionMaxStringSurroundedByWhitespacePercent));
+        this.dailyPartitionMaxStringSurroundedByWhitespacePercent = dailyPartitionMaxStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespacePercent, "daily_partition_max_string_surrounded_by_whitespace_percent");
     }
 
     /**
