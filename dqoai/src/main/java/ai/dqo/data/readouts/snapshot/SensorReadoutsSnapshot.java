@@ -136,8 +136,6 @@ public class SensorReadoutsSnapshot {
             return;
         }
 
-        assert this.historicResults != null;
-
         if (startMonth.isBefore(this.firstLoadedMonth)) {
             // we need to load a few months before
             LocalDate lastMonthToLoad = this.firstLoadedMonth.minus(1, ChronoUnit.MONTHS);
@@ -145,7 +143,11 @@ public class SensorReadoutsSnapshot {
 
             Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, this.firstLoadedMonth, lastMonthToLoad);
             if (loadedRows != null) {
-				this.historicResults.append(loadedRows);
+                if (this.historicResults == null) {
+                    this.historicResults = loadedRows;
+                } else {
+                    this.historicResults.append(loadedRows);
+                }
 				this.timeSeriesMap = null;
             }
         }
@@ -158,7 +160,11 @@ public class SensorReadoutsSnapshot {
 
             Table loadedRows = this.storageService.loadForTableAndMonthsRange(this.connection, this.tableName, firstMonthToLoad, this.lastLoadedMonth);
             if (loadedRows != null) {
-				this.historicResults.append(loadedRows);
+                if (this.historicResults == null) {
+                    this.historicResults = loadedRows;
+                } else {
+                    this.historicResults.append(loadedRows);
+                }
 				this.timeSeriesMap = null;
             }
         }

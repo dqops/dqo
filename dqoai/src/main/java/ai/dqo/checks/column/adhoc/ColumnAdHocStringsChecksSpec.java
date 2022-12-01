@@ -31,6 +31,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSp
 import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -63,6 +64,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_boolean_placeholder_percent", o -> o.minStringBooleanPlaceholderPercent);
             put("max_string_surrounded_by_whitespace_count", o -> o.maxStringSurroundedByWhitespaceCount);
             put("min_string_parsable_to_integer_percent", o -> o.minStringParsableToIntegerPercent);
+            put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
 
         }
     };
@@ -105,6 +107,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringParsableToIntegerPercentCheckSpec minStringParsableToIntegerPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec maxStringSurroundedByWhitespacePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -338,6 +343,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxStringSurroundedByWhitespaceCount, maxStringSurroundedByWhitespaceCount));
         this.maxStringSurroundedByWhitespaceCount = maxStringSurroundedByWhitespaceCount;
         propagateHierarchyIdToField(maxStringSurroundedByWhitespaceCount, "max_string_surrounded_by_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace percent check.
+     * @return Maximum string surrounded by whitespace percent check.
+     */
+    public ColumnMaxStringSurroundedByWhitespacePercentCheckSpec getMaxStringSurroundedByWhitespacePercent() {
+        return maxStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace percent check.
+     * @param maxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     */
+    public void setMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespacePercentCheckSpec maxStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxStringSurroundedByWhitespacePercent, maxStringSurroundedByWhitespacePercent));
+        this.maxStringSurroundedByWhitespacePercent = maxStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(maxStringSurroundedByWhitespacePercent, "max_string_surrounded_by_whitespace_percent");
     }
 
     /**

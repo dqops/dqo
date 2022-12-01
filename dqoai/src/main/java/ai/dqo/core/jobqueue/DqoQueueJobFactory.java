@@ -1,6 +1,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.jobqueue.jobs.metadata.ImportSchemaQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
@@ -33,4 +34,10 @@ public interface DqoQueueJobFactory {
      * @return Run scheduled checks job.
      */
     RunScheduledChecksDqoJob createRunScheduledChecksJob();
+
+    /**
+     * Creates a job that imports tables from a schema in a source database.
+     * @return Schema import job.
+     */
+    ImportSchemaQueueJob createImportSchemaJob();
 }

@@ -17,5 +17,10 @@ public enum ConcurrentJobType {
     /**
      * Synchronizes the metadata that the scheduler knows. Detects new or disabled schedules (cron expressions).
      */
-    SYNCHRONIZE_SCHEDULER_METADATA
+    SYNCHRONIZE_SCHEDULER_METADATA,
+
+    /**
+     * Import tables from one schema on a source connection.
+     */
+    IMPORT_SCHEMA
 }

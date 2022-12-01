@@ -73,7 +73,7 @@ public class FileWritterImpl implements FileWritter {
 				myWriter.write(content);
 				myWriter.close();
 
-				cliOperationStatus.setSuccesMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
+				cliOperationStatus.setSuccessMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 
 				return cliOperationStatus;
 			}
@@ -83,7 +83,7 @@ public class FileWritterImpl implements FileWritter {
 			myWriter.write(content);
 			myWriter.close();
 
-			cliOperationStatus.setSuccesMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
+			cliOperationStatus.setSuccessMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 		} catch (Exception e) {
 			cliOperationStatus.setFailedMessage("Cannot save content to file:\n" + e);
 		}
