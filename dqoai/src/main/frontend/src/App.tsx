@@ -14,7 +14,6 @@ const App = () => {
   const dispatch = useActionDispatch();
   const { lastSequenceNumber } = useSelector((state: IRootState) => state.job);
 
-  console.log('lastSequenceNumber', lastSequenceNumber);
   useEffect(() => {
     dispatch(getAllJobs());
   }, []);
