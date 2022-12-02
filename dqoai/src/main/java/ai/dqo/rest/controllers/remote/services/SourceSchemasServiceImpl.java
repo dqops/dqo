@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers.remote.services;
 
 import ai.dqo.connectors.*;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -80,6 +81,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                     setSchemaName(sourceSchemaModel.getSchemaName());
                     setConnectionName(connectionName);
                     setImported(importedSchemaNames.contains(this.getSchemaName()));
+                    setImportTableJobParameters(new ImportTablesQueueJobParameters(connectionName, sourceSchemaModel.getSchemaName(), null));
                 }}).collect(Collectors.toList());
         } catch (Exception e) {
             throw new SourceSchemasServiceException("Source database connection error: " + e.getMessage(), e);

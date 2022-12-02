@@ -18,6 +18,7 @@ package ai.dqo.core.jobqueue.jobs.table;
 
 import ai.dqo.connectors.*;
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
@@ -160,11 +161,10 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
      */
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
-        ImportTablesQueueJobConcurrencyTarget target = new ImportTablesQueueJobConcurrencyTarget(
+        ImportSchemaQueueJobConcurrencyTarget target = new ImportSchemaQueueJobConcurrencyTarget(
                 this.importParameters.getConnectionName(),
-                this.importParameters.getSchemaName(),
-                new HashSet<>(this.importParameters.getTableNames()));
-        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.IMPORT_TABLES, target);
+                this.importParameters.getSchemaName());
+        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.IMPORT_SCHEMA, target);
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }
 }

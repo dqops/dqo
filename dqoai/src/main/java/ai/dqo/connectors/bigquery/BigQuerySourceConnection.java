@@ -236,7 +236,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
         sqlBuilder.append(dialectSettings.quoteIdentifier(schemaName));
         sqlBuilder.append(".INFORMATION_SCHEMA.COLUMNS ");
 
-        if (tableNames.size() > 0) {
+        if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append("WHERE table_name IN (");
             for (int ti = 0; ti < tableNames.size(); ti++) {
                 String tableName = tableNames.get(ti);

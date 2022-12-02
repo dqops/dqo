@@ -16,6 +16,7 @@
 
 package ai.dqo.rest.models.remote;
 
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
@@ -36,4 +37,7 @@ public class SchemaRemoteModel {
 
     @JsonPropertyDescription("Is the schema imported.")
     private boolean isImported;
+
+    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
+    private ImportTablesQueueJobParameters importTableJobParameters;
 }
