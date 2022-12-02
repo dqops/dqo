@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,31 @@ import java.util.Objects;
 public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_max_datetime_values_in_future_percent", o -> o.monthlyPartitionMaxDatetimeValuesInFuturePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec monthlyPartitionMaxDatetimeValuesInFuturePercent;
+
+    /**
+     * Returns a maximum datetime values in future percentage check.
+     * @return Maximum datetime values in future percentage check.
+     */
+    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getMonthlyPartitionMaxDatetimeValuesInFuturePercent() {
+        return monthlyPartitionMaxDatetimeValuesInFuturePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum datetime values in future percentage check.
+     * @param monthlyPartitionMaxDatetimeValuesInFuturePercent Maximum datetime values in future percentage check.
+     */
+    public void setMonthlyPartitionMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec monthlyPartitionMaxDatetimeValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDatetimeValuesInFuturePercent, monthlyPartitionMaxDatetimeValuesInFuturePercent));
+        this.monthlyPartitionMaxDatetimeValuesInFuturePercent = monthlyPartitionMaxDatetimeValuesInFuturePercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxDatetimeValuesInFuturePercent, "monthly_partition_max_datetime_values_in_future_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
