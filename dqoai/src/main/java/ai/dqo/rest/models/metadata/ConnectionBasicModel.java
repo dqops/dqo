@@ -89,6 +89,7 @@ public class ConnectionBasicModel {
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
+                setEnabled(true);
             }});
         }};
     }

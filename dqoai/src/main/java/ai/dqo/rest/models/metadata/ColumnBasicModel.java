@@ -87,6 +87,7 @@ public class ColumnBasicModel {
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
+                setEnabled(true);
             }});
         }};
     }

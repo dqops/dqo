@@ -87,6 +87,7 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setEnabled(true);
             }});
         }};
     }

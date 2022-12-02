@@ -91,6 +91,7 @@ public class SchemasController {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(s + ".*");
+                setEnabled(true);
             }});
         }});
 
