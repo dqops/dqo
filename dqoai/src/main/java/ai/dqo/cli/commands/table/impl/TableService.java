@@ -36,6 +36,7 @@ public interface TableService {
      * Imports all tables to the connection from a given schema name.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
+     * @param tableName Optional table name pattern.
      * @return Cli operation status.
      */
     CliOperationStatus importTables(String connectionName, String schemaName, String tableName) throws TableImportFailedException;

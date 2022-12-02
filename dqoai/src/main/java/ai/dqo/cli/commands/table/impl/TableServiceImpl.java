@@ -157,6 +157,7 @@ public class TableServiceImpl implements TableService {
      * Imports all tables to the connection from a given schema name.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
+     * @param tableName Optional table name pattern.
      * @return Cli operation status.
      */
     public CliOperationStatus importTables(String connectionName, String schemaName, String tableName) {
