@@ -4,13 +4,20 @@ import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
 import { DATABASE_TYPE } from '../../shared/enums';
+import { IDatabase } from '../../shared/interfaces';
+import ImportSchemas from '../../components/ImportSchemas';
+
+const initialDatabase = {
+  connectionName: ''
+};
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);
-  const [database, setDatabase] = useState<DATABASE_TYPE | undefined>();
+  const [dbType, setDBType] = useState<DATABASE_TYPE | undefined>();
+  const [database, setDatabase] = useState<IDatabase>(initialDatabase);
 
   const onSelect = (db: DATABASE_TYPE) => {
-    setDatabase(db);
+    setDBType(db);
     setStep(1);
   };
 
@@ -21,7 +28,7 @@ const Dashboard = () => {
   };
 
   const onNext = () => {
-    if (step < 1) {
+    if (step < 2) {
       setStep(step + 1);
     }
   };
@@ -30,7 +37,20 @@ const Dashboard = () => {
     <MainLayout>
       {step === 0 && <SelectDatabase onSelect={onSelect} />}
       {step === 1 && (
-        <DatabaseConnection type={database} onPrev={onPrev} onNext={onNext} />
+        <DatabaseConnection
+          type={dbType}
+          onPrev={onPrev}
+          onNext={onNext}
+          database={database}
+          onChange={setDatabase}
+        />
+      )}
+      {step === 2 && (
+        <ImportSchemas
+          connectionName={database.connectionName}
+          onPrev={onPrev}
+          onNext={onNext}
+        />
       )}
     </MainLayout>
   );

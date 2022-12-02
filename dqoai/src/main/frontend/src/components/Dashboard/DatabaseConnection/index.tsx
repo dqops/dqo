@@ -5,17 +5,22 @@ import Button from '../../Button';
 import Input from '../../Input';
 import BigqueryConnection from './BigqueryConnection';
 import SnowflakeConnection from './SnowflakeConnection';
+import { IDatabase } from '../../../shared/interfaces';
 
 interface IDatabaseConnectionProps {
   type?: DATABASE_TYPE;
   onPrev: () => void;
   onNext: () => void;
+  database: IDatabase;
+  onChange: (db: IDatabase) => void;
 }
 
 const DatabaseConnection = ({
   type,
   onPrev,
-  onNext
+  onNext,
+  database,
+  onChange,
 }: IDatabaseConnectionProps) => {
   return (
     <div>
@@ -37,7 +42,14 @@ const DatabaseConnection = ({
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
-        <Input label="Database Name" className="mb-4" />
+        <Input
+          label="Database Name"
+          className="mb-4"
+          value={database.connectionName}
+          onChange={(e) =>
+            onChange({ ...database, connectionName: e.target.value })
+          }
+        />
         <Input label="JDBC driver url" className="mb-4" />
         <Input label="Username" className="mb-4" />
         <Input label="Password" className="mb-6" />

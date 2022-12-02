@@ -16,3 +16,4 @@
 
 export * from './tab.interface';
 export * from './tree.interface';
+export * from './database.interface';
