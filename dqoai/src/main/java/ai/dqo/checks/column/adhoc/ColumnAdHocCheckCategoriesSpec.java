@@ -18,10 +18,6 @@ package ai.dqo.checks.column.adhoc;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.consistency.BuiltInColumnConsistencyChecksSpec;
-import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
-import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
-import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -53,11 +49,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
-//            put("validity", o -> o.validity);
-//			put("uniqueness", o -> o.uniqueness);
-//            put("completeness", o -> o.completeness);
-//            put("consistency", o -> o.consistency);
-//            put("custom", o -> o.custom);
+			put("uniqueness", o -> o.uniqueness);
         }
     };
 
@@ -76,36 +68,10 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocStringsChecksSpec strings;
 
-//    @JsonPropertyDescription("Configuration of validity checks on a column level. Validity checks verify hard rules on the data using static rules like valid column value ranges.")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    @Deprecated  // to be modified
-//    private BuiltInColumnValidityChecksSpec validity;
-
-//    @JsonPropertyDescription("Configuration of uniqueness checks on a table level. Uniqueness checks verify that the column values are unique or the percentage of duplicates is acceptable.")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    @Deprecated
-//    private BuiltInColumnUniquenessChecksSpec uniqueness;
-
-//    //TODO add description
-//    @JsonPropertyDescription("Configuration of completeness checks on a column level. Completeness checks verify...")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    private BuiltInColumnCompletenessChecksSpec completeness;
-
-//    @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    @Deprecated
-//    private CustomColumnCheckSpecMap custom;
-
-    //TODO add description
-//    @JsonPropertyDescription("Configuration of consistency checks on a column level. Consistency checks verify...")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    @Deprecated
-//    private BuiltInColumnConsistencyChecksSpec consistency;
+    @JsonPropertyDescription("Configuration of uniqueness checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocUniquenessChecksSpec uniqueness;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -161,77 +127,23 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.propagateHierarchyIdToField(strings, "strings");
     }
 
-//    /**
-//     * Returns the validity check configuration on a column level.
-//     * @return Validity check configuration.
-//     */
-//    public BuiltInColumnValidityChecksSpec getValidity() {
-//        return validity;
-//    }
-//
-//    /**
-//     * Sets the validity check configuration on a column level.
-//     * @param validity New validity checks configuration.
-//     */
-//    public void setValidity(BuiltInColumnValidityChecksSpec validity) {
-//		this.setDirtyIf(!Objects.equals(this.validity, validity));
-//        this.validity = validity;
-//		this.propagateHierarchyIdToField(validity, "validity");
-//    }
-//
-//    /**
-//     * Column uniqueness checks.
-//     * @return Column uniqueness checks.
-//     */
-//    public BuiltInColumnUniquenessChecksSpec getUniqueness() {
-//        return uniqueness;
-//    }
-//
-//    /**
-//     * Sets the set of column uniqueness checks.
-//     * @param uniqueness Column uniqueness checks.
-//     */
-//    public void setUniqueness(BuiltInColumnUniquenessChecksSpec uniqueness) {
-//		this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
-//        this.uniqueness = uniqueness;
-//		this.propagateHierarchyIdToField(uniqueness, "uniqueness");
-//    }
-//
-//    /**
-//     * Returns a dictionary of custom sensors.
-//     * @return Custom sensors map.
-//     */
-//    public CustomColumnCheckSpecMap getCustom() {
-//        return custom;
-//    }
-//
-//    /**
-//     * Sets a dictionary of custom sensors.
-//     * @param custom Custom sensors map.
-//     */
-//    public void setCustom(CustomColumnCheckSpecMap custom) {
-//		this.setDirtyIf(!Objects.equals(this.custom, custom));
-//        this.custom = custom;
-//		this.propagateHierarchyIdToField(custom, "custom");
-//    }
-//
-//    /**
-//     * Column consistency checks.
-//     * @return Column consistency checks.
-//     */
-//    public BuiltInColumnConsistencyChecksSpec getConsistency() {
-//        return consistency;
-//    }
-//
-//    /**
-//     * Sets the set of column consistency checks.
-//     * @param consistency Column consistency checks.
-//     */
-//    public void setConsistency(BuiltInColumnConsistencyChecksSpec consistency) {
-//        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
-//        this.consistency = consistency;
-//        this.propagateHierarchyIdToField(consistency, "consistency");
-//    }
+    /**
+     * Returns the uniqueness check configuration on a column level.
+     * @return Uniqueness check configuration.
+     */
+    public ColumnAdHocUniquenessChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the uniqueness check configuration on a column level.
+     * @param uniqueness New uniqueness checks configuration.
+     */
+    public void setUniqueness(ColumnAdHocUniquenessChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

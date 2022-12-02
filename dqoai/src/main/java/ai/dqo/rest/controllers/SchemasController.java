@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -86,6 +87,11 @@ public class SchemasController {
         Stream<SchemaModel> modelStream = schemaNameList.stream().map(s -> new SchemaModel() {{
             setConnectionName(connectionName);
             setSchemaName(s);
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+            }});
         }});
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);

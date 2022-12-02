@@ -1,31 +1,99 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 
 import {
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
   Popover,
   PopoverHandler,
   PopoverContent,
   IconButton
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
-import {
-  useNotification,
-  Notification
-} from '../../contexts/notificationContext';
 import moment from 'moment';
-import Button from '../Button';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import {
+  DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelStatusEnum
+} from '../../api';
+
+const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
+  const [open, setOpen] = useState(false);
+
+  const renderValue = (value: any) => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (typeof value === 'object') {
+      return value.toString();
+    }
+    return value;
+  };
+
+  const renderStatus = () => {
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+      return <SvgIcon name="success" className="w-4 h-4 text-green-700" />;
+    }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
+      return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
+    }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.queued) {
+      return <SvgIcon name="queue" className="w-4 h-4 text-gray-700" />;
+    }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.failed) {
+      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+    }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
+      return <SvgIcon name="pause" className="w-4 h-4 text-orange-700" />;
+    }
+  };
+  return (
+    <Accordion open={open}>
+      <AccordionHeader onClick={() => setOpen(!open)}>
+        <div className="flex justify-between items-center text-sm w-full">
+          <div className="flex space-x-1 items-center">
+            <div>{job.jobType}</div>
+            {renderStatus()}
+          </div>
+          <div>
+            {moment(job.jobId?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+          </div>
+        </div>
+      </AccordionHeader>
+      <AccordionBody>
+        <table>
+          <tbody>
+            <tr>
+              <td className="px-2 capitalize">Last Changed</td>
+              <td className="px-2 truncate">
+                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              </td>
+            </tr>
+            {job?.parameters?.runChecksParameters?.checkSearchFilters &&
+              Object.entries(
+                job?.parameters?.runChecksParameters?.checkSearchFilters
+              ).map(([key, value], index) => (
+                <tr key={index}>
+                  <td className="px-2 capitalize">{key}</td>
+                  <td className="px-2 truncate">{renderValue(value)}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </AccordionBody>
+    </Accordion>
+  );
+};
 
 const NotificationMenu = () => {
-  const { notifications, setNotifications, removeNotification } =
-    useNotification();
+  const { jobs } = useSelector((state: IRootState) => state.job);
 
-  const data = useMemo(() => {
-    const notificationsData = [...notifications];
-    notificationsData.sort(
-      (a: Notification, b: Notification) => b.date - a.date
-    );
-
-    return notificationsData;
-  }, [notifications]);
+  const data = jobs?.jobs
+    ? jobs?.jobs.sort((a, b) => {
+        return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+      })
+    : [];
 
   return (
     <Popover placement="bottom-end">
@@ -34,47 +102,18 @@ const NotificationMenu = () => {
           <div className="relative">
             <SvgIcon name="bell" className="w-5 h-5 text-gray-500" />
             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500 text-white px-1 py-0.5 text-xxs">
-              {notifications.length}
+              {jobs?.jobs?.length}
             </span>
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-80 max-w-80">
-        <div className="border-b border-gray-300 font-semibold pb-2 text-xl flex items-center justify-between">
+      <PopoverContent className="z-50 min-w-80 max-w-80 px-0 ">
+        <div className="border-b border-gray-300 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
-          <Button
-            label="Dismiss All"
-            color="primary"
-            variant="text"
-            textSize="sm"
-            className="py-1.5 !rounded uppercase font-medium"
-            onClick={() => setNotifications([])}
-          />
         </div>
-        <div className="overflow-auto max-h-100">
-          {!notifications.length && (
-            <div className="py-2">No notifications</div>
-          )}
-          {data.map((item: Notification) => (
-            <div key={item.date} className="text-gray-700 py-2">
-              <div className="flex justify-between items-center">
-                <div className="font-semibold mb-2">{item.name}</div>
-              </div>
-              <div className="mb-1 text-sm">
-                {moment(item.date).format('MMM DD, YYYY hh:mm:ss A')}
-              </div>
-              <div>{item.message?.slice(0, 100)}...</div>
-              <div className="flex justify-end">
-                <Button
-                  label="Dismiss"
-                  color="primary"
-                  variant="text"
-                  textSize="sm"
-                  className="py-1.5 !rounded uppercase font-medium"
-                  onClick={() => removeNotification(item)}
-                />
-              </div>
-            </div>
+        <div className="overflow-auto max-h-100 py-4 px-4">
+          {data?.map((job) => (
+            <JobItem key={job.jobId?.jobId} job={job} />
           ))}
         </div>
       </PopoverContent>

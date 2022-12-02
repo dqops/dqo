@@ -178,6 +178,14 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Creates a search filter for the table. A search filter is just a "schema.table".
+     * @return Table search filter.
+     */
+    public String toTableSearchFilter() {
+        return this.schemaName + "." + this.tableName;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.

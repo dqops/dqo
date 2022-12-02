@@ -21,6 +21,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -51,6 +52,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("nulls", o -> o.nulls);
            put("numeric", o -> o.numeric);
            put("strings", o -> o.strings);
+           put("uniqueness", o -> o.uniqueness);
         }
     };
 
@@ -68,6 +70,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyCheckpointsSpec strings;
+
+    @JsonPropertyDescription("Daily checkpoints of uniqueness in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessDailyCheckpointsSpec uniqueness;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -121,6 +128,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnUniquenessDailyCheckpointsSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of uniqueness data quality checks (checkpoints).
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessDailyCheckpointsSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
     }
 
     /**

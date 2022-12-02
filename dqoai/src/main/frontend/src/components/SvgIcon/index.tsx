@@ -43,6 +43,11 @@ import { ReactComponent as StopSvg } from './svg/stop.svg';
 import { ReactComponent as DisableSvg } from './svg/disable.svg';
 import { ReactComponent as PlaySvg } from './svg/play.svg';
 import { ReactComponent as OptionsSvg } from './svg/options.svg';
+import { ReactComponent as QueueSvg } from './svg/queue.svg';
+import { ReactComponent as SuccessSvg } from './svg/success.svg';
+import { ReactComponent as FailedSvg } from './svg/failed.svg';
+import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
+import { ReactComponent as PauseSvg } from './svg/pause.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -87,7 +92,12 @@ const iconsMap: any = {
   disable: DisableSvg,
   'clock-off': ClockOffSvg,
   play: PlaySvg,
-  options: OptionsSvg
+  options: OptionsSvg,
+  queue: QueueSvg,
+  waiting: WaitingSvg,
+  pause: PauseSvg,
+  failed: FailedSvg,
+  success: SuccessSvg
 };
 
 interface SvgIconProps {
