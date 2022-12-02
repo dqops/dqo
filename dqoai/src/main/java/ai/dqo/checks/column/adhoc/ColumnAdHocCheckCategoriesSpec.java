@@ -50,6 +50,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
 			put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
         }
     };
 
@@ -72,6 +73,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocUniquenessChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Configuration of datetime checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocDatetimeChecksSpec datetime;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -143,6 +149,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the datetime check configuration on a column level.
+     * @return Datetime check configuration.
+     */
+    public ColumnAdHocDatetimeChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the datetime check configuration on a column level.
+     * @param datetime New datetime checks configuration.
+     */
+    public void setDatetime(ColumnAdHocDatetimeChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        this.propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**

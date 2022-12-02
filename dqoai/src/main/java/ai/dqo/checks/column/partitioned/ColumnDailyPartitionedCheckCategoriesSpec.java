@@ -23,6 +23,7 @@ import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksS
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -54,6 +55,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
         }
     };
 
@@ -76,6 +78,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyPartitionedChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Daily partitioned checks of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeDailyPartitionedChecksSpec datetime;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -147,6 +154,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the container of daily datetime data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnDatetimeDailyPartitionedChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of daily datetime data quality partitioned checks.
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeDailyPartitionedChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**

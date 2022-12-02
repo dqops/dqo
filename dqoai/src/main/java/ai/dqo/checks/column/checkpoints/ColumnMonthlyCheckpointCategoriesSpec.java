@@ -22,6 +22,7 @@ import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -53,6 +54,7 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("numeric", o -> o.numeric);
            put("strings", o -> o.strings);
            put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
         }
     };
 
@@ -66,7 +68,7 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyCheckpointsSpec numeric;
 
-    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
+    @JsonPropertyDescription("Monthly checkpoints of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyCheckpointsSpec strings;
@@ -75,6 +77,11 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessMonthlyCheckpointsSpec uniqueness;
+
+    @JsonPropertyDescription("Monthly checkpoints of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeMonthlyCheckpointsSpec datetime;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -146,6 +153,24 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnDatetimeMonthlyCheckpointsSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of datetime data quality checks (checkpoints).
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeMonthlyCheckpointsSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        this.propagateHierarchyIdToField(datetime, "datetime");
     }
 
     /**
