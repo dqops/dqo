@@ -16,28 +16,27 @@
 
 package ai.dqo.rest.models.remote;
 
-import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Schema model returned from REST API. Describes a schema on the source database with established connection.
+ * Table model returned from REST API. Describes a table on the source database with established connection.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "SchemaRemoteModel", description = "Schema remote model")
-public class SchemaRemoteModel {
+@ApiModel(value = "TableRemoteBasicModel", description = "Table remote basic model")
+public class TableRemoteBasicModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
-    @JsonPropertyDescription("Is the schema imported.")
-    private boolean isImported;
+    @JsonPropertyDescription("Table name.")
+    private String tableName;
 
-    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
-    private ImportTablesQueueJobParameters importTableJobParameters;
+    @JsonPropertyDescription("Is the table imported.")
+    private boolean isImported;
 }

@@ -1,10 +1,26 @@
-package ai.dqo.core.jobqueue.jobs.metadata;
+/*
+ * Copyright © 2022 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ai.dqo.core.jobqueue.jobs.table;
 
 import ai.dqo.connectors.*;
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.search.StringPatternComparer;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -15,23 +31,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Queue job that imports tables from a source connection.
+ * Queue job that imports a single table from a source connection.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult> {
+public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult> {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
-    private ImportSchemaQueueJobParameters importParameters;
+    private ImportTablesQueueJobParameters importParameters;
 
     @Autowired
-    public ImportSchemaQueueJob(UserHomeContextFactory userHomeContextFactory,
+    public ImportTablesQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
                                 SecretValueProvider secretValueProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
@@ -43,65 +58,31 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      * Returns the import parameters object.
      * @return Import parameters object.
      */
-    public ImportSchemaQueueJobParameters getImportParameters() {
+    public ImportTablesQueueJobParameters getImportParameters() {
         return importParameters;
     }
 
     /**
-     * Sets the parameters object for the job that identifies the connection and schema that should be imported.
+     * Sets the parameters object for the job that identifies the connection, schema and table that should be imported.
      * @param importParameters Import parameters to store.
      */
-    public void setImportParameters(ImportSchemaQueueJobParameters importParameters) {
+    public void setImportParameters(ImportTablesQueueJobParameters importParameters) {
         this.importParameters = importParameters;
     }
 
     /**
-     * Returns boolean value if name fits tableFilterName.
-     * @param name table name.
-     * @param tableFilterName table filter name.
-     * @return True value if name fits tableFilterName.
-     */
-    public boolean fitsTableFilterName(String name, String tableFilterName) {
-        if (tableFilterName != null) {
-            if (StringPatternComparer.isSearchPattern(tableFilterName)) {
-                return StringPatternComparer.matchSearchPattern(name, tableFilterName);
-            } else  {
-                return tableFilterName.equals(name);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Filters table spec list by filter name.
-     * @param baseSpecs list of table specs.
-     * @param tableFilterName table filter name.
-     * @return Table with a list of filtered tables.
-     */
-    public List<TableSpec> filterTableSpecs(List<TableSpec> baseSpecs, String tableFilterName) {
-        List<TableSpec>resultList = new ArrayList<>();
-        for (TableSpec spec: baseSpecs) {
-            PhysicalTableName physicalTableName = spec.getTarget().toPhysicalTableName();
-            String sourceTableName = physicalTableName.getTableName();
-            if(fitsTableFilterName(sourceTableName, tableFilterName)) {
-                resultList.add(spec);
-            }
-        }
-        return resultList;
-    }
-
-    /**
-     * Creates a tablesaw table with a list of physical tables that will be imported.
-     * @param sourceTableSpecs List of source tables to be imported.
+     * Creates a tablesaw table with a list of imported tables.
+     * @param sourceTableSpecs List of table that have been imported.
      * @return Dataset with a summary of the import.
      */
     public Table createDatasetTableFromTableSpecs(List<TableSpec> sourceTableSpecs) {
+        // TODO: move method to tablesaw utils (repeated in ImportSchemaQueueJob).
         Table resultTable = Table.create().addColumns(
                 StringColumn.create("Schema name"),
                 StringColumn.create("Table name"),
                 IntColumn.create("Column count"));
 
-        for( TableSpec sourceTableSpec : sourceTableSpecs) {
+        for(TableSpec sourceTableSpec : sourceTableSpecs) {
             Row row = resultTable.appendRow();
             row.setString(0, sourceTableSpec.getTarget().getSchemaName());
             row.setString(1, sourceTableSpec.getTarget().getTableName());
@@ -117,20 +98,14 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public ImportSchemaQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
-        String tableNamePattern = this.importParameters.getTableNamePattern();
-
-        if (tableNamePattern == null) {
-            tableNamePattern = "*";
-        }
-
+    public ImportTablesQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
         ConnectionWrapper connectionWrapper = connections.getByObjectName(this.importParameters.getConnectionName(), true);
         if (connectionWrapper == null) {
-            throw new ImportSchemaQueueJobException("Connection " + this.importParameters.getConnectionName() + "  was not found");
+            throw new ImportTablesQueueJobException("Connection " + this.importParameters.getConnectionName() + "  was not found");
         }
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
@@ -139,18 +114,10 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
-            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName());
-            if (tableModels.size() == 0) {
-                throw new ImportSchemaQueueJobException("No tables found in the data source when importing tables on the " +
-                        this.importParameters.getConnectionName() + ", from the " + this.importParameters.getSchemaName() + " schema");
-            }
-
-            List<String> tableNames = tableModels.stream()
-                    .map(tm -> tm.getTableName().getTableName())
-                    .collect(Collectors.toList());
-
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames);
-            sourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
+            // TODO: Separate jobs for each table.
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
+                    this.importParameters.getSchemaName(),
+                    this.importParameters.getTableNames());
 
             TableList currentTablesColl = connectionWrapper.getTables();
             currentTablesColl.importTables(sourceTableSpecs);
@@ -158,7 +125,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
 
             Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);
 
-            return new ImportSchemaQueueJobResult(resultTable);
+            return new ImportTablesQueueJobResult(resultTable);
         }
     }
 
@@ -169,7 +136,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.IMPORT_SCHEMA;
+        return DqoJobType.IMPORT_TABLES;
     }
 
     /**
@@ -182,7 +149,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel()
         {{
-            setImportSchemaParameters(importParameters);
+            setImportTableParameters(importParameters);
         }};
     }
 
@@ -195,7 +162,8 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         ImportSchemaQueueJobConcurrencyTarget target = new ImportSchemaQueueJobConcurrencyTarget(
-                this.importParameters.getConnectionName(), this.importParameters.getSchemaName());
+                this.importParameters.getConnectionName(),
+                this.importParameters.getSchemaName());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.IMPORT_SCHEMA, target);
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }

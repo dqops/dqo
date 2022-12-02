@@ -243,7 +243,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             sqlBuilder.append("'");
         }
 
-        if (tableNames.size() > 0) {
+        if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append(" AND TABLE_NAME IN (");
             for (int ti = 0; ti < tableNames.size(); ti++) {
                 String tableName = tableNames.get(ti);

@@ -1,7 +1,7 @@
 package ai.dqo.core.jobqueue;
 
 /**
- * The type of a concurrent job on which concurrency limits are applied.
+ * The type of concurrent job on which concurrency limits are applied.
  */
 public enum ConcurrentJobType {
     /**
@@ -22,5 +22,15 @@ public enum ConcurrentJobType {
     /**
      * Import tables from one schema on a source connection.
      */
-    IMPORT_SCHEMA
+    IMPORT_SCHEMA,
+
+    /**
+     * Import tables from a source connection, given a list of table names.
+     */
+    IMPORT_TABLES,
+
+//    /**
+//     * Import a table from a source connection.
+//     */
+//    IMPORT_TABLE,
 }

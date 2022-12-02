@@ -23,4 +23,10 @@ public enum DqoJobType {
 
     @JsonProperty("import schema")
     IMPORT_SCHEMA,
+
+    @JsonProperty("import selected tables")
+    IMPORT_TABLES,
+
+//    @JsonProperty("import table")
+//    IMPORT_TABLE,
 }

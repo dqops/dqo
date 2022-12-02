@@ -342,7 +342,6 @@ public class ConnectionsController {
         return new ResponseEntity<>(Flux.fromIterable(sortedCommonColumnList), HttpStatus.OK); // 200
     }
 
-
     /**
      * Creates (adds) a new connection.
      * @param connectionName Connection name.
@@ -376,6 +375,51 @@ public class ConnectionsController {
         }
 
         ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
+        connectionWrapper.setSpec(connectionSpec);
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Creates (adds) a new connection given teh basic information.
+     * @param connectionName Connection name.
+     * @param connectionBasicModel Basic connection model.
+     * @return Empty response.
+     */
+    @PostMapping("/{connectionName}/basic")
+    @ApiOperation(value = "createConnectionBasic", notes = "Creates a new connection given the basic information.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New connection successfully created"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Connection with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> createConnectionBasic(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
+        if (Strings.isNullOrEmpty(connectionName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+//        if (!Objects.equals(connectionName, connectionBasicModel.getConnectionName())) {
+//            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
+//        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper existingConnectionWrapper = connections.getByObjectName(connectionName, true);
+        if (existingConnectionWrapper != null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a connection with this name already exists
+        }
+
+        ConnectionWrapper connectionWrapper = connections.createAndAddNew(connectionName);
+        ConnectionSpec connectionSpec = new ConnectionSpec();
+        connectionBasicModel.copyToConnectionSpecification(connectionSpec);
         connectionWrapper.setSpec(connectionSpec);
         userHomeContext.flush();
 
