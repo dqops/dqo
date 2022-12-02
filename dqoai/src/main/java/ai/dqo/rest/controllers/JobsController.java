@@ -5,6 +5,9 @@ import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
@@ -130,25 +133,25 @@ public class JobsController {
         return new ResponseEntity<>(incrementalJobChanges, HttpStatus.OK); // 200
     }
 
-//    /**
-//     * Starts a new background job that will import selected schema.
-//     * @param importParameters Import schema job parameters.
-//     * @return Job summary response with the identity of the started job.
-//     */
-//    @PostMapping("/importschema")
-//    @ApiOperation(value = "importSchema", notes = "Starts a new background job that will import selected schema.", response = DqoQueueJobId.class)
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 201, message = "New job that will import selected schema was added to the queue", response = DqoQueueJobId.class),
-//            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-//    })
-//    public ResponseEntity<Mono<DqoQueueJobId>> importSchema(
-//            @Parameter(description = "Import schema job parameters")
-//            @RequestBody ImportSchemaQueueJobParameters importParameters) {
-//        // TODO: Add listener.
-//        ImportSchemaQueueJob importSchemaJob = this.dqoQueueJobFactory.createImportSchemaJob();
-//        importSchemaJob.setImportParameters(importParameters);
-//        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob);
-//        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
-//    }
+    /**
+     * Starts a new background job that will import selected tables.
+     * @param importParameters Import tables job parameters.
+     * @return Job summary response with the identity of the started job.
+     */
+    @PostMapping("/importtables")
+    @ApiOperation(value = "importTables", notes = "Starts a new background job that will import selected tables.", response = DqoQueueJobId.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New job that will import selected tables was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoQueueJobId>> importTables(
+            @Parameter(description = "Import tables job parameters")
+            @RequestBody ImportTablesQueueJobParameters importParameters) {
+        // TODO: Add listener.
+        ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
+        importTablesJob.setImportParameters(importParameters);
+        PushJobResult<ImportTablesQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob);
+        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    }
 }
