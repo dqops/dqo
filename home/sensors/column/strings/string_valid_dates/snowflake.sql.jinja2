@@ -1,6 +1,11 @@
-{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 SELECT
-    COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+    100.0 * SUM(
+        WHEN
+            SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL THEN 1
+            ELSE 0
+        END
+    ) / COUNT(*) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
