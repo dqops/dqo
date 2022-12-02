@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2022 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.rest.controllers.remote.services.SourceSchemasService;
-import ai.dqo.rest.controllers.remote.services.SourceSchemasServiceException;
+import ai.dqo.rest.controllers.remote.services.SourceTablesService;
+import ai.dqo.rest.controllers.remote.services.SourceTablesServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.rest.models.remote.SchemaRemoteModel;
+import ai.dqo.rest.models.remote.TableRemoteBasicModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,43 +34,44 @@ import reactor.core.publisher.Flux;
 
 import java.util.List;
 
-
 /**
- * REST api controller to manage the list of schemas inside a connection on a remote source database.
+ * REST api controller to manage the tables on a source database related to a connection.
  */
 @RestController
 @RequestMapping("/api/remote/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceSchemasController", description = "Schema remote management")
-public class SourceSchemasController {
-    private SourceSchemasService sourceSchemasService;
+@Api(value = "SourceTablesController", description = "Tables remote management")
+public class SourceTablesController {
+    private SourceTablesService sourceTablesService;
 
     @Autowired
-    public SourceSchemasController(SourceSchemasService sourceSchemasService) {
-        this.sourceSchemasService = sourceSchemasService;
+    public SourceTablesController(SourceTablesService sourceTablesService) {
+        this.sourceTablesService = sourceTablesService;
     }
 
     /**
-     * Returns a list of schemas inside a connection.
+     * Returns a list of tables inside a schema, on the source database.
      * @param connectionName Connection name. Required import.
-     * @return List of schemas inside a connection.
+     * @param schemaName     Schema name.
+     * @return List of tables inside a schema.
      */
-    @GetMapping("/{connectionName}/schemas")
-    @ApiOperation(value = "getRemoteSchemas", notes = "Returns a list of schemas inside a connection on a remote database", response = SchemaRemoteModel[].class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables")
+    @ApiOperation(value = "getRemoteTables", notes = "Returns a list of tables inside a schema from the source database", response = TableRemoteBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SchemaRemoteModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableRemoteBasicModel[].class),
             @ApiResponse(code = 400, message = "Error accessing the remote source database", response = SpringErrorPayload.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SchemaRemoteModel>> getRemoteSchemas(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
-        List<SchemaRemoteModel> result;
+    public ResponseEntity<Flux<TableRemoteBasicModel>> getRemoteTables(
+            @Parameter(description = "Connection name") @PathVariable String connectionName,
+            @Parameter(description = "Schema name") @PathVariable String schemaName) {
+        List<TableRemoteBasicModel> result;
         try {
-            result = sourceSchemasService.showSchemas(connectionName);
+            result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName);
         }
-        catch (SourceSchemasServiceException e) {
+        catch (SourceTablesServiceException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
