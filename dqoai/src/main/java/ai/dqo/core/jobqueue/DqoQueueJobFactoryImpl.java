@@ -1,7 +1,8 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.core.jobqueue.jobs.metadata.ImportSchemaQueueJob;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
@@ -73,5 +74,15 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public ImportSchemaQueueJob createImportSchemaJob() {
         return this.beanFactory.getBean(ImportSchemaQueueJob.class);
+    }
+
+    /**
+     * Creates a job that imports tables from a schema in a source database.
+     *
+     * @return Import tables import job.
+     */
+    @Override
+    public ImportTablesQueueJob createImportTablesJob() {
+        return this.beanFactory.getBean(ImportTablesQueueJob.class);
     }
 }
