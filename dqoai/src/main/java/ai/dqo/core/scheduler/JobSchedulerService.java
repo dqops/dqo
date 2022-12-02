@@ -40,6 +40,12 @@ public interface JobSchedulerService {
     CheckRunReportingMode getCheckRunReportingMode();
 
     /**
+     * Checks if the job scheduler is started.
+     * @return True - the job scheduler is running, false - it is not started.
+     */
+    boolean isStarted();
+
+    /**
      * Initializes and starts the scheduler.
      * @param synchronizationMode File synchronization reporting mode.
      * @param checkRunReportingMode Check execution reporting mode.

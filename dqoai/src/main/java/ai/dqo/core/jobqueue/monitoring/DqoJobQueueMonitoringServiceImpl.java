@@ -74,7 +74,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      */
     @Override
     public void start() {
-        if (started) {
+        if (this.started) {
             return;
         }
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
@@ -83,6 +83,25 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 .subscribe(jobModel -> onJobChange(jobModel));
 
         this.started = true;
+    }
+
+    /**
+     * Stops the queue monitoring. All calls to get a list of jobs will fail after the queue monitor was stopped.
+     */
+    @Override
+    public void stop() {
+        if (!this.started) {
+            return;
+        }
+
+        try {
+            Sinks.Many<DqoJobChange> currentSink = this.jobUpdateSink;
+            this.jobUpdateSink = null;
+            currentSink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
+        }
+        finally {
+            this.started = false;
+        }
     }
 
     /**

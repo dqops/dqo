@@ -31,6 +31,11 @@ public interface DqoJobQueueMonitoringService {
     void start();
 
     /**
+     * Stops the queue monitoring. All calls to get a list of jobs will fail after the queue monitor was stopped.
+     */
+    void stop();
+
+    /**
      * Publishes a new job on the history.
      *
      * @param jobQueueEntry New job entry.

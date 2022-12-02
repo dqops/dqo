@@ -42,6 +42,12 @@ public class DqoConfigurationProperties implements Cloneable {
     @Autowired
     private DqoSchedulerConfigurationProperties scheduler;
 
+    @Autowired
+    private DqoQueueConfigurationProperties queue;
+
+    @Autowired
+    private DqoLoggingConfigurationProperties logging;
+
     private String home;
     private String yamlSchemaServer;
 
@@ -161,6 +167,38 @@ public class DqoConfigurationProperties implements Cloneable {
     }
 
     /**
+     * Returns the job queue configuration.
+     * @return Job queue configuration.
+     */
+    public DqoQueueConfigurationProperties getQueue() {
+        return queue;
+    }
+
+    /**
+     * Sets the job queue configuration.
+     * @param queue Job queue configuration.
+     */
+    public void setQueue(DqoQueueConfigurationProperties queue) {
+        this.queue = queue;
+    }
+
+    /**
+     * Returns the logging configuration for logs in the user home.
+     * @return Logging configuration.
+     */
+    public DqoLoggingConfigurationProperties getLogging() {
+        return logging;
+    }
+
+    /**
+     * Sets an instance of a logging configuration.
+     * @param logging Logging configuration.
+     */
+    public void setLogging(DqoLoggingConfigurationProperties logging) {
+        this.logging = logging;
+    }
+
+    /**
      * Clones the current object.
      * @return Deeply cloned instance.
      */
@@ -173,6 +211,8 @@ public class DqoConfigurationProperties implements Cloneable {
             cloned.secrets = this.secrets != null ? this.secrets.clone() : null;
             cloned.cloud = this.cloud != null ? this.cloud.clone() : null;
             cloned.scheduler = this.scheduler != null ? this.scheduler.clone() : null;
+            cloned.queue = this.queue != null ? this.queue.clone() : null;
+            cloned.logging = this.logging != null ? this.logging.clone() : null;
             return cloned;
         }
         catch (Exception ex) {

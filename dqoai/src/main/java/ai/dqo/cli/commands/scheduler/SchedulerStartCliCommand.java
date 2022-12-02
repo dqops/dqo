@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.scheduler;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -33,21 +34,27 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "start", description = "Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
 public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
+    private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
 
     /**
      * Creates a cli command given the dependencies.
      * @param jobSchedulerService Job scheduler dependency.
+     * @param schedulerConfigurationProperties DQO Scheduler configuration - used to get the default values.
      */
     @Autowired
-    public SchedulerStartCliCommand(JobSchedulerService jobSchedulerService) {
+    public SchedulerStartCliCommand(JobSchedulerService jobSchedulerService,
+                                    DqoSchedulerConfigurationProperties schedulerConfigurationProperties) {
         this.jobSchedulerService = jobSchedulerService;
+        this.schedulerConfigurationProperties = schedulerConfigurationProperties;
+        this.synchronizationMode = schedulerConfigurationProperties.getSynchronizationMode();
+        this.checkRunMode = schedulerConfigurationProperties.getCheckRunMode();
     }
 
-    @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "summary")
-    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
+    @CommandLine.Option(names = {"-sm", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)")
+    private FileSystemSynchronizationReportingMode synchronizationMode;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "info")
-    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.info;
+    @CommandLine.Option(names = {"-crm", "--check-run-mode"}, description = "Check execution reporting mode (silent, summary, info, debug)")
+    private CheckRunReportingMode checkRunMode;
 
     /**
      * Returns the synchronization logging mode.
@@ -89,8 +96,13 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
-        this.jobSchedulerService.triggerMetadataSynchronization();
-        return 0;
+        if (!this.jobSchedulerService.isStarted()) {
+            this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
+            this.jobSchedulerService.triggerMetadataSynchronization();
+
+            return 0;
+        }
+
+        return -1; // scheduler already running
     }
 }

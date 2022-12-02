@@ -17,8 +17,10 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +38,8 @@ public class CliInitializerImpl implements CliInitializer {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
     private TerminalReader terminalReader;
     private CloudLoginService cloudLoginService;
+    private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private JobSchedulerService jobSchedulerService;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -43,16 +47,22 @@ public class CliInitializerImpl implements CliInitializer {
      * @param dqoCloudApiKeyProvider Cloud api key provider - to detect if the api key was given.
      * @param terminalReader Terminal reader - used to ask the user to log in.
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
+     * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
+     * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
                               DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
                               TerminalReader terminalReader,
-                              CloudLoginService cloudLoginService) {
+                              CloudLoginService cloudLoginService,
+                              DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                              JobSchedulerService jobSchedulerService) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
         this.cloudLoginService = cloudLoginService;
+        this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -65,24 +75,34 @@ public class CliInitializerImpl implements CliInitializer {
         this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
 
         try {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
-            if (apiKey != null) {
-                return; // api key is provided somehow (by an environment variable or in the local settings)
+            try {
+                DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+                if (apiKey != null) {
+                    return; // api key is provided somehow (by an environment variable or in the local settings)
+                }
+            } catch (Exception ex) {
+                System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+//            ex.printStackTrace(System.err);
+            }
+
+            if (isHeadless) {
+                return; // we don't have the api key, and we can't ask for it, some commands will simply fail
+            }
+
+            if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
+                return;
+            }
+
+            this.cloudLoginService.logInToDqoCloud();
+        }
+        finally {
+            if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
+                    this.dqoSchedulerConfigurationProperties.getStart()) {
+                this.jobSchedulerService.start(
+                        this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                        this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+                this.jobSchedulerService.triggerMetadataSynchronization();
             }
         }
-        catch (Exception ex) {
-            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
-//            ex.printStackTrace(System.err);
-        }
-
-        if (isHeadless) {
-            return; // we don't have the api key, and we can't ask for it, some commands will simply fail
-        }
-
-        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
-            return;
-        }
-
-        this.cloudLoginService.logInToDqoCloud();
     }
 }

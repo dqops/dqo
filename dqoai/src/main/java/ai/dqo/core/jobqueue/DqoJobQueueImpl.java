@@ -199,6 +199,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
 
         this.executorService.shutdown();
+        this.queueMonitoringService.stop();
 
         this.executorService = null;
         this.runnerThreadsFutures = null;

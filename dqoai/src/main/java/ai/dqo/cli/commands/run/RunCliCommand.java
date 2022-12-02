@@ -18,6 +18,7 @@ package ai.dqo.cli.commands.run;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -35,17 +36,22 @@ import picocli.CommandLine;
 public class RunCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
     private TerminalReader terminalReader;
+    private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
 
     /**
      * Creates a cli command given the dependencies.
      *
-     * @param jobSchedulerService Job scheduler dependency.
-     * @param terminalReader      Terminal reader - used to wait for an exit signal.
+     * @param jobSchedulerService                 Job scheduler dependency.
+     * @param terminalReader                      Terminal reader - used to wait for an exit signal.
+     * @param dqoSchedulerConfigurationProperties DQO job scheduler configuration - used to check if the scheduler is not disabled.
      */
     @Autowired
-    public RunCliCommand(JobSchedulerService jobSchedulerService, TerminalReader terminalReader) {
+    public RunCliCommand(JobSchedulerService jobSchedulerService,
+                         TerminalReader terminalReader,
+                         DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties) {
         this.jobSchedulerService = jobSchedulerService;
         this.terminalReader = terminalReader;
+        this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
     }
 
     @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "summary")
@@ -94,8 +100,15 @@ public class RunCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
-        this.jobSchedulerService.triggerMetadataSynchronization();
+        if (this.dqoSchedulerConfigurationProperties.getStart() == null ||
+                this.dqoSchedulerConfigurationProperties.getStart()) {
+            // even if the job scheduler is started, we just change the logging modes to the parameters from the "run" command parameters
+            this.jobSchedulerService.start(this.synchronizationMode, this.checkRunMode);
+        }
+        if (this.dqoSchedulerConfigurationProperties.getStart() == null) {
+            // the scheduler was not configured before
+            this.jobSchedulerService.triggerMetadataSynchronization();
+        }
         this.terminalReader.waitForExit("DQO was started in a server mode.");
         this.jobSchedulerService.shutdown();
         return 0;
