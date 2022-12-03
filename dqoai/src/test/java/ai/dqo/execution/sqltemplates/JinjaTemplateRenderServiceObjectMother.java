@@ -49,8 +49,7 @@ public class JinjaTemplateRenderServiceObjectMother {
     public static String renderBuiltInTemplate(SensorExecutionRunParameters runParameters) {
 //        Assertions.assertNull(runParameters.getTable().getTimeSeries());
 //        Assertions.assertNull(runParameters.getTable().getDimensions());
-        Assertions.assertNull(runParameters.getConnection().getDefaultTimeSeries());
-        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreams());
+        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreamMapping());
         if (runParameters.getColumn() != null) {
             Assertions.assertNull(runParameters.getColumn().getTimeSeriesOverride());
             Assertions.assertNull(runParameters.getColumn().getDataStreamsOverride());

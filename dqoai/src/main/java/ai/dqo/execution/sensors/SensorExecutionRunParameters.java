@@ -286,10 +286,6 @@ public class SensorExecutionRunParameters {
             return this.table.getTimeSeries();
         }
 
-        if (this.connection != null && this.connection.getDefaultTimeSeries() != null) {
-            return this.connection.getDefaultTimeSeries();
-        }
-
         return TimeSeriesConfigurationSpec.createDefault();
     }
 }

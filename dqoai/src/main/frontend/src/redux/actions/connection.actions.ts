@@ -151,60 +151,6 @@ export const updateConnectionSchedule =
     }
   };
 
-export const getConnectionTimeRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME
-});
-
-export const getConnectionTimeSuccess = (data: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME_SUCCESS,
-  data
-});
-
-export const getConnectionTimeFailed = (error: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME_ERROR,
-  error
-});
-
-export const getConnectionTime =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionTimeRequest());
-    try {
-      const res = await ConnectionApiClient.getConnectionDefaultTimeSeries(
-        connectionName
-      );
-      dispatch(getConnectionTimeSuccess(res.data));
-    } catch (err) {
-      dispatch(getConnectionTimeFailed(err));
-    }
-  };
-
-export const updateConnectionTimeRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME
-});
-
-export const updateConnectionTimeSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME_SUCCESS
-});
-
-export const updateConnectionTimeFailed = (error: any) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME_ERROR,
-  error
-});
-
-export const updateConnectionTime =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
-    dispatch(updateConnectionTimeRequest());
-    try {
-      await ConnectionApiClient.updateConnectionDefaultTimeSeries(
-        connectionName,
-        data
-      );
-      dispatch(updateConnectionTimeSuccess());
-    } catch (err) {
-      dispatch(updateConnectionTimeFailed(err));
-    }
-  };
-
 export const getConnectionCommentsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS
 });

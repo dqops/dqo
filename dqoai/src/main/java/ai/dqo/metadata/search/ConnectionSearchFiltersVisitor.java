@@ -72,8 +72,8 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
-        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionWrapper.getSpec().getDefaultDataStreams())) {
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreamMapping());
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionWrapper.getSpec().getDefaultDataStreamMapping())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionWrapper.getSpec().getLabels())) {
@@ -102,8 +102,8 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionSpec.getLabels());
-        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionSpec.getDefaultDataStreams());
-        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreams())) {
+        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionSpec.getDefaultDataStreamMapping());
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreamMapping())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionSpec.getLabels())) {
@@ -112,7 +112,7 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
         if(!this.filters.getEnabled()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
-        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreams())) {
+        if (!DataStreamsMappingSearchMatcher.matchAllConnectionDataStreamsMapping(this.filters, connectionSpec.getDefaultDataStreamMapping())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionSpec.getLabels())) {

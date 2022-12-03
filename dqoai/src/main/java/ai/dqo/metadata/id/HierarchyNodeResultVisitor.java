@@ -38,6 +38,7 @@ import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
 import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
@@ -520,4 +521,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(TimestampColumnsSpec timestampColumnsSpec, P parameter);
+
+    /**
+     * Accepts a map (hashtable) of named data stream mappings.
+     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, P parameter);
 }

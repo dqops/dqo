@@ -76,9 +76,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         if (timeSeries == null) {
             timeSeries = expandedTable.getTimeSeries();
         }
-        if(timeSeries == null) {
-            timeSeries = expandedConnection.getDefaultTimeSeries();
-        }
 
         DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
         if (dataStreams == null && column != null) {
@@ -88,7 +85,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             dataStreams = expandedTable.getDataStreams();
         }
         if (dataStreams == null) {
-            dataStreams = expandedConnection.getDefaultDataStreams();
+            dataStreams = expandedConnection.getDefaultDataStreamMapping();
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
@@ -135,10 +132,10 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         if (dataStreams == null) {
-            dataStreams = expandedConnection.getDefaultDataStreams();
+            dataStreams = expandedConnection.getDefaultDataStreamMapping();
         }
-        else if (expandedConnection.getDefaultDataStreams() != null){
-            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedConnection.getDefaultDataStreams());
+        else if (expandedConnection.getDefaultDataStreamMapping() != null){
+            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedConnection.getDefaultDataStreamMapping());
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
