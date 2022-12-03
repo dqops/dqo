@@ -189,6 +189,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
     private CheckRunReportingMode dqoSchedulerCheckRunMode;
 
+    @CommandLine.Option(names = {"--spring.config.location"},
+            description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
+                    "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")
+    private String springConfigLocation;
+
     /**
      * This field will capture all remaining parameters that could be also in the form "--name" and should be captured by Spring to update the configuration parameters.
      */
