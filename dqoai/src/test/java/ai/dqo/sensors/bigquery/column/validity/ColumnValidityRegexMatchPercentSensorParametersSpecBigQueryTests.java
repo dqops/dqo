@@ -160,7 +160,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother
             .renderBuiltInTemplate(runParameters);
@@ -192,7 +192,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -223,7 +223,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -254,7 +254,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -285,7 +285,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -316,7 +316,7 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecBigQueryTests ex
 
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 

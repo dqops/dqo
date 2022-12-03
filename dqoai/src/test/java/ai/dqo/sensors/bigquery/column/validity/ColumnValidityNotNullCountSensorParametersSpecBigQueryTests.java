@@ -418,7 +418,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
         runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -437,7 +437,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
         runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("IT")));
+                        DataStreamLevelSpecObjectMother.createTag("IT")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -455,7 +455,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
     void renderSensor_whenlevel1StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -473,7 +473,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
     void renderSensor_whenlevel1StaticStringWithQuoteAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE's")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE's")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -492,8 +492,8 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -512,9 +512,9 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -534,8 +534,8 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         null,
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -554,8 +554,8 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createCurrentTimeSeries(TimeSeriesGradient.DAY));
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("US"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("US"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -575,7 +575,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("country"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 

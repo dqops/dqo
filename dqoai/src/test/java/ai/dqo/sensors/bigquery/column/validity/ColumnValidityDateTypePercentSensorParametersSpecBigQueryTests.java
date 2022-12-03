@@ -176,7 +176,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("country"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
