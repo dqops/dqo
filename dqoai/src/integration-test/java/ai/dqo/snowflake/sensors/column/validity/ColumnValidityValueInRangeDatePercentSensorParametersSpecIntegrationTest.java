@@ -74,7 +74,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         System.out.println(renderedTemplate);
@@ -97,7 +97,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();

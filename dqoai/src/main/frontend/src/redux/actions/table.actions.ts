@@ -168,66 +168,6 @@ export const updateTableSchedule =
     }
   };
 
-export const getTableTimeRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_TIME
-});
-
-export const getTableTimeSuccess = (data: any) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_SUCCESS,
-  data
-});
-
-export const getTableTimeFailed = (error: any) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_ERROR,
-  error
-});
-
-export const getTableTime =
-  (connectionName: string, schemaName: string, tableName: string) =>
-  async (dispatch: Dispatch) => {
-    dispatch(getTableTimeRequest());
-    try {
-      const res = await TableApiClient.getTableTimeSeries(
-        connectionName,
-        schemaName,
-        tableName
-      );
-      dispatch(getTableTimeSuccess(res.data));
-    } catch (err) {
-      dispatch(getTableTimeFailed(err));
-    }
-  };
-
-export const updateTableTimeRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_TIME
-});
-
-export const updateTableTimeSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_TIME_SUCCESS
-});
-
-export const updateTableTimeFailed = (error: any) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_TIME_ERROR,
-  error
-});
-
-export const updateTableTime =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
-  async (dispatch: Dispatch) => {
-    dispatch(updateTableTimeRequest());
-    try {
-      await TableApiClient.updateTableTimeSeries(
-        connectionName,
-        schemaName,
-        tableName,
-        data
-      );
-      dispatch(updateTableTimeSuccess());
-    } catch (err) {
-      dispatch(updateTableTimeFailed(err));
-    }
-  };
-
 export const getTableCommentsRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_COMMENTS
 });

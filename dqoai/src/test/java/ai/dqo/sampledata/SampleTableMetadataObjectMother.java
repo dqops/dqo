@@ -93,7 +93,6 @@ public class SampleTableMetadataObjectMother {
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         TableTargetSpec tableTargetSpec = new TableTargetSpec(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(tableTargetSpec);
-        tableSpec.setTimeSeries(new TimeSeriesConfigurationSpec());
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {

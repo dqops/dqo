@@ -70,9 +70,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractCheckDeprecatedSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
-        if (timeSeries == null) {
-            timeSeries = expandedTable.getTimeSeries();
-        }
 
         DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
         if (dataStreams == null && column != null) {

@@ -205,46 +205,6 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the time series configuration for a table given a connection name and a table names.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @return Time series configuration for the requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/timeseries")
-    @ApiOperation(value = "getTableTimeSeries", notes = "Return the time series configuration for a table", response = TimeSeriesConfigurationSpec.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table's time series configuration returned", response = TimeSeriesConfigurationSpec.class),
-            @ApiResponse(code = 404, message = "Connection or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<TimeSeriesConfigurationSpec>> getTableTimeSeries(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableSpec tableSpec = tableWrapper.getSpec();
-        TimeSeriesConfigurationSpec timeSeries = tableSpec.getTimeSeries();
-
-        return new ResponseEntity<>(Mono.justOrEmpty(timeSeries), HttpStatus.OK); // 200
-    }
-
-    /**
      * Retrieves the data streams configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -940,63 +900,6 @@ public class TablesController {
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         tableBasicModel.copyToTableSpecification(tableSpec);
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
-
-    /**
-     * Updates the time series configuration of an existing table.
-     * @param connectionName              Connection name.
-     * @param schemaName                  Schema name.
-     * @param tableName                   Table name.
-     * @param timeSeriesConfigurationSpec New time series configuration or null (an empty optional).
-     * @return Empty response.
-     */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/timeseries")
-    @ApiOperation(value = "updateTableTimeSeries", notes = "Updates the time series configuration of an existing table.")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's time series configuration successfully updated"),
-            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table not found"),
-            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> updateTableTimeSeries(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Time series configuration to store or an empty object to clear the time series configuration")
-                @RequestBody Optional<TimeSeriesConfigurationSpec> timeSeriesConfigurationSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
-
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
-
-        // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (timeSeriesConfigurationSpec.isPresent()) {
-            tableSpec.setTimeSeries(timeSeriesConfigurationSpec.get());
-        } else {
-            tableSpec.setTimeSeries(null);
-        }
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

@@ -67,7 +67,7 @@ public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpecI
         this.sut.setTimeScale("HOUR");
         this.sut.setMaxDifference(218);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();

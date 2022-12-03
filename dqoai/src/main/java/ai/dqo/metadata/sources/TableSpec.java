@@ -50,7 +50,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         {
 			put("target", o -> o.target);
             put("timestamp_columns", o -> o.timestampColumns);
-			put("time_series", o -> o.timeSeries);
 			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -96,11 +95,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
-
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    @Deprecated
-    private TimeSeriesConfigurationSpec timeSeries;
 
     @JsonPropertyDescription("Data streams configuration. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -230,26 +224,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         setDirtyIf(!Objects.equals(this.timestampColumns, timestampColumns));
         this.timestampColumns = timestampColumns;
         propagateHierarchyIdToField(timestampColumns, "timestamp_columns");
-    }
-
-    /**
-     * Returns the time series configuration for this table.
-     * @return Time series configuration.
-     */
-    @Deprecated
-    public TimeSeriesConfigurationSpec getTimeSeries() {
-        return timeSeries;
-    }
-
-    /**
-     * Sets a new time series configuration for this table.
-     * @param timeSeries New time series configuration.
-     */
-    @Deprecated
-    public void setTimeSeries(TimeSeriesConfigurationSpec timeSeries) {
-		setDirtyIf(!Objects.equals(this.timeSeries, timeSeries));
-        this.timeSeries = timeSeries;
-		propagateHierarchyIdToField(timeSeries, "time_series");
     }
 
     /**
@@ -492,9 +466,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
-            if (cloned.timeSeries != null) {
-                cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
-            }
             if (cloned.dataStreams != null) {
                 cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
@@ -521,7 +492,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
-            cloned.timeSeries = null;
             cloned.timestampColumns = null;
             cloned.dataStreams = null;
             cloned.labels = null;
@@ -551,7 +521,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timestampColumns = null;
-            cloned.timeSeries = null;
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;

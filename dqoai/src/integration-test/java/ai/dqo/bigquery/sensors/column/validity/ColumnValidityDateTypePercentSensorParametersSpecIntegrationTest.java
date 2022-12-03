@@ -79,7 +79,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecIntegrationTest ex
         this.sut = (ColumnValidityDateTypePercentSensorParametersSpec) runParameters.getSensorParameters();
         this.sut.setNamedDateFormat(BuiltInDateFormats.MonthNameDayYear);
 
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

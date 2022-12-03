@@ -73,7 +73,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -95,7 +95,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         this.sut.setIncludeMaxValue(false);
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
