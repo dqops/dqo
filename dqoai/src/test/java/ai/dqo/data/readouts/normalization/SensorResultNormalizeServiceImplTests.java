@@ -154,7 +154,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
@@ -171,7 +171,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone).minus(Period.ofDays(2));
         Assertions.assertEquals(localTimeNow.truncatedTo(ChronoUnit.DAYS), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
     }
 
     @Test
@@ -188,7 +188,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         Assertions.assertNotNull(results.getDataStreamHashColumn());
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
         Assertions.assertEquals("7a8c2b10-e072-a57f-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
         Assertions.assertEquals("0d60392a-f71b-35f1-ff52-a61c0648323f", results.getIdColumn().get(0));
     }
@@ -207,7 +207,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
         LocalDateTime localTimeNow = LocalDateTime.now(this.utcZone);
         Assertions.assertEquals(LocalDateTime.of(LocalDate.of(localTimeNow.getYear(), localTimeNow.getMonth(), 1), LocalTime.MIDNIGHT), results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
-        Assertions.assertEquals("whole table", results.getDataStreamNameColumn().get(0));
+        Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
     }
 
     @Test

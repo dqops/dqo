@@ -44,7 +44,7 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
     /**
      * The data stream name that covers the whole table, without dividing the table into named data streams.
      */
-    public static final String WHOLE_TABLE_DATA_STREAM_NAME = "whole table";
+    public static final String ALL_DATA_DATA_STREAM_NAME = "all data";
 
     /**
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
@@ -508,8 +508,8 @@ public class SensorResultNormalizeServiceImpl implements SensorResultNormalizeSe
         }
 
         if (notNullColumnCount == 0) {
-            // when no data stream columns are used, we return data_stream_name as "whole table"
-            return WHOLE_TABLE_DATA_STREAM_NAME;
+            // when no data stream columns are used, we return data_stream_name as "all data"
+            return ALL_DATA_DATA_STREAM_NAME;
         }
 
         StringBuilder sb = new StringBuilder();
