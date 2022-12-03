@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import {
   Popover,
-  PopoverHandler,
-  PopoverContent
+  PopoverContent,
+  PopoverHandler
 } from '@material-tailwind/react';
 import SvgIcon from '../SvgIcon';
 import { CustomTreeNode } from '../../shared/interfaces';
@@ -16,11 +16,16 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
-  const { refreshNode } = useTree();
+  const { refreshNode, runChecks } = useTree();
   const [open, setOpen] = useState(false);
 
   const handleRefresh = () => {
     refreshNode(node);
+    setOpen(false);
+  };
+
+  const handleRunChecks = () => {
+    runChecks(node);
     setOpen(false);
   };
 
@@ -46,6 +51,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               onClick={() => openConfirm(node)}
             >
               Delete
+            </div>
+          )}
+          {node.level !== TREE_LEVEL.COLUMNS && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={handleRunChecks}
+            >
+              Run checks
             </div>
           )}
           <div
