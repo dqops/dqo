@@ -16,8 +16,11 @@
 package ai.dqo.rest.server;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
+
+import java.time.Duration;
 
 /**
  * Spring WebFlux configuration for serving the static content.
@@ -33,6 +36,9 @@ public class StaticResourcesConfiguration implements WebFluxConfigurer {
         String baseUrl = "";
         registry.addResourceHandler(baseUrl + "/**")
                 .addResourceLocations("classpath:/static/")
+                .setUseLastModified(true)
+                .setOptimizeLocations(true)
+                .setCacheControl(CacheControl.maxAge(Duration.ofMinutes(60)).cachePublic().mustRevalidate())
                 .resourceChain(true);
     }
 }
