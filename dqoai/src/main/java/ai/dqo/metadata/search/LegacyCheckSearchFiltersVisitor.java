@@ -77,11 +77,9 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreamMapping());
+
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -228,7 +226,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setColumnDataStreams(columnSpec.getDataStreamsOverride());
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -280,29 +277,25 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
-                ? dataStreamSearcherObject.getColumnDataStreams()
-                : dataStreamSearcherObject.getTableDataStreams() != null
-                ? dataStreamSearcherObject.getTableDataStreams()
-                : dataStreamSearcherObject.getConnectionDataStreams();
-        LabelSetSpec overridenLabels = new LabelSetSpec();
+        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getTableDataStreams();
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getColumnLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getColumnLabels());
         }
 
         if (labelsSearcherObject.getTableLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getTableLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
         }
 
         if (labelsSearcherObject.getConnectionLabels() != null) {
-            overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overridenDataStreams)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
-        if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overridenLabels)) {
+        if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

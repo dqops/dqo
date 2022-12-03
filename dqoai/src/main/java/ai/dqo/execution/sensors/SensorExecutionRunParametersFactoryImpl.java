@@ -72,9 +72,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
 
         DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
-        if (dataStreams == null && column != null) {
-            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
-        }
         if (dataStreams == null) {
             dataStreams = expandedTable.getDataStreams();
         }
@@ -114,9 +111,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
 
         DataStreamMappingSpec dataStreams = null;  // TODO: when we add custom checks with a fully configurable data stream mapping (for a single check), we should retrieve it here and merge with defaults
-        if (expandedColumn != null) {
-            dataStreams = expandedColumn.getDataStreamsOverride();
-        }
 
         if (dataStreams == null) {
             dataStreams = expandedTable.getDataStreams();

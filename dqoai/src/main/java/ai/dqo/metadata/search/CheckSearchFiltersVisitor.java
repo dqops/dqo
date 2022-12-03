@@ -77,11 +77,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreamMapping());
+
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -224,11 +222,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setColumnDataStreams(columnSpec.getDataStreamsOverride());
+
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -280,11 +276,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
-                ? dataStreamSearcherObject.getColumnDataStreams()
-                : dataStreamSearcherObject.getTableDataStreams() != null
-                ? dataStreamSearcherObject.getTableDataStreams()
-                : dataStreamSearcherObject.getConnectionDataStreams();
+        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getTableDataStreams(); // TODO: search by a named data stream
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {

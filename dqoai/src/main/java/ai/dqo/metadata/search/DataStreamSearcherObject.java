@@ -17,18 +17,11 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 
+/**
+ * Helper object used when a search visitor is traversing nodes to find target checks to execute, given the data stream hierarchy tags.
+ */
 public class DataStreamSearcherObject {
-	private DataStreamMappingSpec connectionDataStreams;
 	private DataStreamMappingSpec tableDataStreams;
-	private DataStreamMappingSpec columnDataStreams;
-
-	public DataStreamMappingSpec getConnectionDataStreams() {
-		return this.connectionDataStreams;
-	}
-
-	public void setConnectionDataStreams(DataStreamMappingSpec connectionDataStreams) {
-		this.connectionDataStreams = connectionDataStreams;
-	}
 
 	public DataStreamMappingSpec getTableDataStreams() {
 		return this.tableDataStreams;
@@ -36,15 +29,5 @@ public class DataStreamSearcherObject {
 
 	public void setTableDataStreams(DataStreamMappingSpec tableDataStreams) {
 		this.tableDataStreams = tableDataStreams;
-	}
-
-	@Deprecated
-	public DataStreamMappingSpec getColumnDataStreams() {
-		return this.columnDataStreams;
-	}
-
-	@Deprecated
-	public void setColumnDataStreams(DataStreamMappingSpec columnDataStreams) {
-		this.columnDataStreams = columnDataStreams;
 	}
 }

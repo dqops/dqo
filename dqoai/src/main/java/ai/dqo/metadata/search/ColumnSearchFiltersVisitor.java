@@ -72,11 +72,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreamMapping());
+
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -219,7 +217,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setColumnDataStreams(columnSpec.getDataStreamsOverride());
 
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
@@ -230,14 +227,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        labelsSearcherObject.setTableLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setTableDataStreams(columnSpec.getDataStreamsOverride());
+        labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
-                ? dataStreamSearcherObject.getColumnDataStreams()
-                : dataStreamSearcherObject.getTableDataStreams() != null
-                ? dataStreamSearcherObject.getTableDataStreams()
-                : dataStreamSearcherObject.getConnectionDataStreams();
+        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getTableDataStreams();
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
