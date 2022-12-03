@@ -305,16 +305,6 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
@@ -521,7 +511,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.6.8</version>
+			<version>1.6.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -590,6 +580,11 @@
 			<artifactId>snowflake-jdbc</artifactId>
 			<version>3.13.24</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>swagger-ui-dist</artifactId>
+			<version>4.15.5</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
 		</dependency>
 
 		<!-- test dependencies -->
@@ -766,7 +761,7 @@
 									<url>https://dqo.ai</url>
 								</contact>
 								<license>
-									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+									<url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
 									<name>Apache 2.0</name>
 								</license>
 							</info>
@@ -784,6 +779,28 @@
 						<goals>
 							<goal>generate</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-swagger-json</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target/swagger</directory>
+								</resource>
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

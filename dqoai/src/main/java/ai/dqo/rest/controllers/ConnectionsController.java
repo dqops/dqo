@@ -28,11 +28,7 @@ import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,7 +91,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<ConnectionModel>> getConnection(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -129,7 +125,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<ConnectionBasicModel>> getConnectionBasic(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -159,7 +155,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<RecurringScheduleSpec>> getConnectionSchedule(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -189,7 +185,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<CommentsListSpec>> getConnectionComments(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -219,7 +215,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<LabelSetSpec>> getConnectionLabels(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -249,7 +245,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TimeSeriesConfigurationSpec>> getConnectionDefaultTimeSeries(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -279,7 +275,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DataStreamMappingSpec>> getConnectionDefaultDataStreamsMapping(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -310,7 +306,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<CommonColumnModel>> getConnectionCommonColumns(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -359,8 +355,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> createConnection(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Connection specification") @RequestBody ConnectionSpec connectionSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
         if (Strings.isNullOrEmpty(connectionName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -398,8 +394,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> createConnectionBasic(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
         if (Strings.isNullOrEmpty(connectionName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
@@ -438,8 +434,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnection(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Connection specification") @RequestBody ConnectionSpec connectionSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -472,8 +468,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionBasic(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Connection basic details") @RequestBody ConnectionBasicModel connectionBasicModel) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Connection basic details") @RequestBody ConnectionBasicModel connectionBasicModel) {
         if (!Objects.equals(connectionName, connectionBasicModel.getConnectionName())) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 400 - connection name mismatch
         }
@@ -512,8 +508,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionSchedule(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -551,8 +547,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionLabels(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "List of labels") @RequestBody Optional<LabelSetSpec> labelSetSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("List of labels") @RequestBody Optional<LabelSetSpec> labelSetSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -589,8 +585,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionComments(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("List of comments") @RequestBody Optional<CommentsListSpec> commentsListSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -627,8 +623,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionDefaultTimeSeries(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Default time series configuration to be assigned to a connection")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Default time series configuration to be assigned to a connection")
                 @RequestBody Optional<TimeSeriesConfigurationSpec> timeSeriesConfigurationSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -667,8 +663,8 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateConnectionDefaultDataStreamsMapping(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Default data streams mapping to be assigned to a connection")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Default data streams mapping to be assigned to a connection")
                 @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -705,7 +701,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> deleteConnection(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 

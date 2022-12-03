@@ -20,11 +20,7 @@ import ai.dqo.rest.controllers.remote.services.SourceTablesService;
 import ai.dqo.rest.controllers.remote.services.SourceTablesServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.TableRemoteBasicModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,8 +61,8 @@ public class SourceTablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<TableRemoteBasicModel>> getRemoteTables(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName) {
         List<TableRemoteBasicModel> result;
         try {
             result = sourceTablesService.showTablesOnRemoteSchema(connectionName, schemaName);

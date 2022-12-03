@@ -19,11 +19,7 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +77,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DqoQueueJobId>> runChecks(
-            @Parameter(description = "Data quality checks filter") @RequestBody CheckSearchFilters checkSearchFilters) {
+            @ApiParam("Data quality checks filter") @RequestBody CheckSearchFilters checkSearchFilters) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 CheckRunReportingMode.silent, false);
@@ -127,7 +123,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DqoJobQueueIncrementalSnapshotModel>> getJobChangesSince(
-            @Parameter(description = "Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
+            @ApiParam("Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
         Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
                 sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
         return new ResponseEntity<>(incrementalJobChanges, HttpStatus.OK); // 200
@@ -146,7 +142,7 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DqoQueueJobId>> importTables(
-            @Parameter(description = "Import tables job parameters")
+            @ApiParam("Import tables job parameters")
             @RequestBody ImportTablesQueueJobParameters importParameters) {
         // TODO: Add listener.
         ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
