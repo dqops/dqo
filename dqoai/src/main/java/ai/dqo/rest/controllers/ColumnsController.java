@@ -658,7 +658,8 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        return this.specToUiCheckMappingService.createUiModel(genericChecks, checkSearchFilters);
+        return this.specToUiCheckMappingService.createUiModel(genericChecks, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
     }
     
     /**

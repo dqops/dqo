@@ -85,4 +85,7 @@ public class UICheckModel {
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
+    private String dataStream;
 }

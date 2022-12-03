@@ -129,11 +129,6 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
-        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
-        labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -161,11 +156,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setTableLabels(tableSpec.getLabels());
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
+
         if (enabledFilter != null) {
             if (enabledFilter && tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
@@ -276,7 +271,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getTableDataStreams(); // TODO: search by a named data stream
+        DataStreamMappingSpec selectedDataStream =
+                abstractCheckSpec.getDataStream() != null && dataStreamSearcherObject.getTableDataStreams() != null ?
+                        dataStreamSearcherObject.getTableDataStreams().get(abstractCheckSpec.getDataStream()) : null;
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -291,7 +288,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overriddenDataStreams)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedDataStream)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {

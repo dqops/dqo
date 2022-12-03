@@ -129,11 +129,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
-        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
-        labelsSearcherObject.setTableLabels(tableWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -263,7 +258,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
@@ -277,7 +271,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        DataStreamMappingSpec overriddenDataStreams = dataStreamSearcherObject.getTableDataStreams();
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -292,9 +285,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, overriddenDataStreams)) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }

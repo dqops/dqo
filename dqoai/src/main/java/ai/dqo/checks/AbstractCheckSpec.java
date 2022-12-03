@@ -84,9 +84,13 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qualityDimension;
 
-    @JsonPropertyDescription("Dat quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
+    @JsonPropertyDescription("Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String displayName;
+
+    @JsonPropertyDescription("Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String dataStream;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -207,6 +211,22 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public void setDisplayName(String displayName) {
         setDirtyIf(!Objects.equals(this.displayName, displayName));
         this.displayName = displayName;
+    }
+
+    /**
+     * Returns the name of a named data stream that is defined on the parent table level and should be used on this check.
+     * @return Data stream level.
+     */
+    public String getDataStream() {
+        return dataStream;
+    }
+
+    /**
+     * Sets a data stream name to be used for this check.
+     * @param dataStream Data stream name.
+     */
+    public void setDataStream(String dataStream) {
+        this.dataStream = dataStream;
     }
 
     /**

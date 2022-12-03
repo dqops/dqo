@@ -169,7 +169,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
             sourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
 
             TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs);
+            currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultDataStreamMapping());
             userHomeContext.flush();
 
             Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);

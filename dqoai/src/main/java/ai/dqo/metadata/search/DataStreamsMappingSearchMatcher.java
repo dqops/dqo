@@ -79,34 +79,6 @@ public class DataStreamsMappingSearchMatcher {
 
 	/**
 	 * Returns a boolean value if filters fit spec.
-	 * @param connectionSearchFilters Connection search filters.
-	 * @param dataStreamMappingSpec Data streams mapping spec.
-	 * @return Boolean value if filters fit spec.
-	 */
-	static boolean matchAllConnectionDataStreamsMapping(ConnectionSearchFilters connectionSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
-		String[] dimensions = connectionSearchFilters.getDimensions();
-		if (dimensions == null) {
-			return true;
-		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
-	}
-
-	/**
-	 * Returns a boolean value if filters fit spec.
-	 * @param tableSearchFilters Table search filters.
-	 * @param dataStreamsMappingSpec Data streams configuration spec.
-	 * @return Boolean value if filters fit spec.
-	 */
-	static boolean matchAllTableDataStreams(TableSearchFilters tableSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
-		String[] dimensions = tableSearchFilters.getDimensions();
-		if (dimensions == null) {
-			return true;
-		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamsMappingSpec));
-	}
-
-	/**
-	 * Returns a boolean value if filters fit spec.
 	 * @param columnSearchFilters Column search filters.
 	 * @param dataStreamsMappingSpec Data streams mapping spec.
 	 * @return Boolean value if filters fit spec.

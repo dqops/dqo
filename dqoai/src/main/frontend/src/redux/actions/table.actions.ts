@@ -378,63 +378,63 @@ export const updateTableAdHocChecksUI =
     }
   };
 
-export const getTableDataStreamsMappingRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING
+export const getTableDefaultDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const getTableDataStreamsMappingSuccess = (data: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS,
+export const getTableDefaultDataStreamsMappingSuccess = (data: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getTableDataStreamsMappingFailed = (error: any) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR,
+export const getTableDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const getTableDataStreamMapping =
+export const getTableDefaultDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDataStreamsMappingRequest());
+    dispatch(getTableDefaultDataStreamsMappingRequest());
     try {
-      const res = await TableApiClient.getTableDataStreamsMapping(
+      const res = await TableApiClient.getTableDefaultDataStreamsMapping(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableDataStreamsMappingSuccess(res.data));
+      dispatch(getTableDefaultDataStreamsMappingSuccess(res.data));
     } catch (err) {
-      dispatch(getTableDataStreamsMappingFailed(err));
+      dispatch(getTableDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const updateTableDataStreamsMappingRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING
+export const updateTableDefaultDataStreamsMappingRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const updateTableDataStreamsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS
+export const updateTableDefaultDataStreamsSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateTableDataStreamsMappingFailed = (error: any) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR,
+export const updateTableDefaultDataStreamsMappingFailed = (error: any) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
-export const updateTableDataStreamMapping =
+export const updateTableDefaultDataStreamMapping =
   (connectionName: string, schemaName: string, tableName: string, data: any) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDataStreamsMappingRequest());
+    dispatch(updateTableDefaultDataStreamsMappingRequest());
     try {
-      await TableApiClient.updateTableDataStreamsMapping(
+      await TableApiClient.updateTableDefaultDataStreamsMapping(
         connectionName,
         schemaName,
         tableName,
         data
       );
-      dispatch(updateTableDataStreamsSuccess());
+      dispatch(updateTableDefaultDataStreamsSuccess());
     } catch (err) {
-      dispatch(updateTableDataStreamsMappingFailed(err));
+      dispatch(updateTableDefaultDataStreamsMappingFailed(err));
     }
   };
 

@@ -229,7 +229,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getTableDataStreams();
+        DataStreamMappingSpec overriddenDataStreams =
+                dataStreamSearcherObject.getTableDataStreams() != null ?
+                dataStreamSearcherObject.getTableDataStreams().getFirstDataStreamMapping() : null;
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -244,7 +246,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllColumnDataStreams(this.filters, overridenDataStreams)) {
+        if (!DataStreamsMappingSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {

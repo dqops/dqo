@@ -62,10 +62,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
+     * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return Checks data quality container.
      */
     @Override
-    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec, CheckSearchFilters runChecksTemplate) {
+    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                          CheckSearchFilters runChecksTemplate,
+                                          String defaultDataStreamName) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
@@ -77,7 +80,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             }
 
             Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo, categoryFieldValue, runChecksTemplate);
+            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo,
+                    categoryFieldValue, runChecksTemplate, defaultDataStreamName);
             uiAllChecksModel.getCategories().add(categoryModel);
         }
 
@@ -89,9 +93,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param dimensionFieldInfo Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
      * @param runChecksTemplate Run check job template.
+     * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI model for a category with all quality checks.
      */
-    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo, Object checkCategoryParentNode, CheckSearchFilters runChecksTemplate) {
+    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo,
+                                                         Object checkCategoryParentNode,
+                                                         CheckSearchFilters runChecksTemplate,
+                                                         String defaultDataStreamName) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
         categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
         categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
@@ -121,6 +129,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate);
                 checkModel.setConfigured(checkSpecObjectNullable != null);
                 categoryModel.getChecks().add(checkModel);
+
+                if (checkSpecObjectNullable == null) { // this check is not configured, so we will propose the default data stream name
+                    checkModel.setDataStream(defaultDataStreamName);
+                }
             }
         }
 
@@ -148,6 +160,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
         checkModel.setSupportsTimeSeries(false);
         checkModel.setSupportsDataStreams(false);
+        checkModel.setDataStream(checkSpec.getDataStream());
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");

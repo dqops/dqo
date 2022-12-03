@@ -15,19 +15,27 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 
 /**
  * Helper object used when a search visitor is traversing nodes to find target checks to execute, given the data stream hierarchy tags.
  */
 public class DataStreamSearcherObject {
-	private DataStreamMappingSpec tableDataStreams;
+	private DataStreamMappingSpecMap tableDataStreams;
 
-	public DataStreamMappingSpec getTableDataStreams() {
+	/**
+	 * Returns a collection (map) of named data streams defined at a table level.
+	 * @return Data streams map.
+	 */
+	public DataStreamMappingSpecMap getTableDataStreams() {
 		return this.tableDataStreams;
 	}
 
-	public void setTableDataStreams(DataStreamMappingSpec tableDataStreams) {
+	/**
+	 * Stores (remembers) the data stream mappings collection from a table level.
+	 * @param tableDataStreams Data streams map from the table level.
+	 */
+	public void setTableDataStreams(DataStreamMappingSpecMap tableDataStreams) {
 		this.tableDataStreams = tableDataStreams;
 	}
 }

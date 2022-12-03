@@ -205,21 +205,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the data streams configuration for a table given a connection name and a table names.
+     * Retrieves the default (first) data streams configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Data streams configuration for the requested table.
+     * @return Default data streams configuration for the requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
-    @ApiOperation(value = "getTableDataStreamsMapping", notes = "Return the data streams mapping for a table", response = DataStreamMappingSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "getTableDefaultDataStreamsMapping", notes = "Return the default (first) data streams mapping for a table", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Data streams mapping for a table returned", response = DataStreamMappingSpec.class),
+            @ApiResponse(code = 200, message = "Default data streams mapping for a table returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDataStreamsMapping(
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDefaultDataStreamsMapping(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -239,7 +239,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams();
+        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams().getFirstDataStreamMapping();
 
         return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
     }
@@ -585,7 +585,8 @@ public class TablesController {
             setEnabled(true);
         }};
 
-        return this.specToUiCheckMappingService.createUiModel(rootChecks, checkSearchFilters);
+        return this.specToUiCheckMappingService.createUiModel(rootChecks, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
     }
 
     /**
@@ -906,28 +907,28 @@ public class TablesController {
     }
 
     /**
-     * Updates the data streams mapping of an existing table.
+     * Updates the default (first) data streams mapping of an existing table.
      * @param connectionName         Connection name.
      * @param schemaName             Schema name.
      * @param tableName              Table name.
-     * @param dataStreamsMappingSpec New data streams mapping or null (an empty optional).
+     * @param dataStreamsMappingSpec New default data streams mapping or null (an empty optional).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
-    @ApiOperation(value = "updateTableDataStreamsMapping", notes = "Updates the data streams mapping at a table level.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "updateTableDefaultDataStreamsMapping", notes = "Updates the default data streams mapping at a table level.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's data streams mapping successfully updated"),
+            @ApiResponse(code = 204, message = "Table's default data streams mapping successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDataStreamsMapping(
+    public ResponseEntity<Mono<?>> updateTableDefaultDataStreamsMapping(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data streams mapping to store or an empty object to clear the data streams mapping on a table level")
+            @ApiParam("Default data streams mapping to store or an empty object to clear the data streams mapping on a table level")
             @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -953,9 +954,9 @@ public class TablesController {
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         if (dataStreamsMappingSpec.isPresent()) {
-            tableSpec.setDataStreams(dataStreamsMappingSpec.get());
+            tableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamsMappingSpec.get());
         } else {
-            tableSpec.setDataStreams(new DataStreamMappingSpec());
+            tableSpec.getDataStreams().setFirstDataStreamMapping(null); // will remove the first mapping
         }
         userHomeContext.flush();
 
