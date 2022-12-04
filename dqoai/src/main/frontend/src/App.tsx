@@ -21,9 +21,7 @@ const App = () => {
   useEffect(() => {
     if (!lastSequenceNumber) return;
 
-    setTimeout(() => {
-      dispatch(getJobsChanges(lastSequenceNumber));
-    }, 10000);
+    dispatch(getJobsChanges(lastSequenceNumber));
   }, [lastSequenceNumber]);
 
   return (

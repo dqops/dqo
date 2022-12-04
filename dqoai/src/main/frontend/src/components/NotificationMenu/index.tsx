@@ -45,7 +45,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
-      return <SvgIcon name="pause" className="w-4 h-4 text-orange-700" />;
+      return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
   return (

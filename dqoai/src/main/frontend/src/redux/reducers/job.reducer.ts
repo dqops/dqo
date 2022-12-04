@@ -61,7 +61,7 @@ const schemaReducer = (state = initialState, action: any) => {
       };
     case JOB_ACTION.GET_JOBS_CHANGES_SUCCESS: {
       const newJobs: DqoJobHistoryEntryModel[] = state.jobs?.jobs || [];
-      const jobChanges: DqoJobChangeModel[] = action.data.jobChanges;
+      const jobChanges: DqoJobChangeModel[] = action.data.jobChanges || [];
 
       jobChanges.map((jobChange) => {
         const existingJob = newJobs.find(

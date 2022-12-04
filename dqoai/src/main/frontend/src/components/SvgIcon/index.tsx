@@ -48,6 +48,7 @@ import { ReactComponent as SuccessSvg } from './svg/success.svg';
 import { ReactComponent as FailedSvg } from './svg/failed.svg';
 import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
+import { ReactComponent as RunningSvg } from './svg/running.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -97,7 +98,8 @@ const iconsMap: any = {
   waiting: WaitingSvg,
   pause: PauseSvg,
   failed: FailedSvg,
-  success: SuccessSvg
+  success: SuccessSvg,
+  running: RunningSvg
 };
 
 interface SvgIconProps {
