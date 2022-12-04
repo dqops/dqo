@@ -63,7 +63,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
         this.sut = new ColumnConsistencyNotNullPercentSensorParametersSpec();
         this.checkSpec = new ColumnConsistencyNotNullPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test

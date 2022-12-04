@@ -63,7 +63,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecIntegrationTest ex
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithValidValuesAndDefaultDateFormat_thenReturnsCorrectValue() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -75,7 +75,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecIntegrationTest ex
     @Test
     void runSensor_whenSensorExecutedOnColumnWithValidValuesAndNamedDateFormatMonthNameDayYear_thenReturnsCorrectValue1() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date_type_Mon_d_Y", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type_Mon_d_Y", this.checkSpec);
         this.sut = (ColumnValidityDateTypePercentSensorParametersSpec) runParameters.getSensorParameters();
         this.sut.setNamedDateFormat(BuiltInDateFormats.MonthNameDayYear);
 

@@ -63,7 +63,7 @@ public class ColumnValidityNonNegativePercentSensorParametersSpecBigQueryTests e
 		this.sut = new ColumnValidityNonNegativePercentSensorParametersSpec();
 		this.checkSpec = new ColumnValidityNonNegativePercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test

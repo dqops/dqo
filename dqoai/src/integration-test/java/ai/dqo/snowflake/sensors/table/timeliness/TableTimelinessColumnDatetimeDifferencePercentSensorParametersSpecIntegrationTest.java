@@ -66,7 +66,7 @@ public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpecI
         this.sut.setColumn2("real_datetime");
         this.sut.setTimeScale("HOUR");
         this.sut.setMaxDifference(218);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         runParameters.setTimeSeries(null);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

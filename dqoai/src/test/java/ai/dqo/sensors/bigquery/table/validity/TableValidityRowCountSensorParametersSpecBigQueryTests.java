@@ -60,7 +60,7 @@ public class TableValidityRowCountSensorParametersSpecBigQueryTests extends Base
 		this.sut = new TableValidityRowCountSensorParametersSpec();
 		this.checkSpec = new TableValidityRowCountCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableAndCheck(
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableAndLegacyCheck(
 				this.userHomeContext.getUserHome(),
                 BigQueryConnectionSpecObjectMother.CONNECTION_NAME,
                 BigQueryTableSpecObjectMother.DATASET_NAME,

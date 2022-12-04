@@ -57,7 +57,7 @@ public class ColumnValidityValueInRangeNumericalPercentSensorParametersSpecBigQu
 		this.sut = new ColumnValidityValueInRangeNumericalPercentSensorParametersSpec();
 		this.checkSpec = new ColumnValidityValueInRangeNumericalPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         this.sut = (ColumnValidityValueInRangeNumericalPercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 

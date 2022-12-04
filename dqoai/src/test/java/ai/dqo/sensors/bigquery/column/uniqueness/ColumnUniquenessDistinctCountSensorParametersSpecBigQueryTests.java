@@ -63,7 +63,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
 		this.sut = new ColumnUniquenessDistinctCountSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test

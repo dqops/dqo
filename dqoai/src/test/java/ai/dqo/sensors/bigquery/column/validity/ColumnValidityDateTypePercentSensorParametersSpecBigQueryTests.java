@@ -63,7 +63,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
         this.sut = new ColumnValidityDateTypePercentSensorParametersSpec();
         this.checkSpec = new ColumnValidityDateTypePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date", this.checkSpec);
         this.sut = (ColumnValidityDateTypePercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 

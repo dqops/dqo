@@ -65,7 +65,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
     @Test
     void runSensor_whenSensorExecutedOnColumnWithDatesAndAllValuesInRangeAndDefaultBounds_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnValidityValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);
@@ -86,7 +86,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecIntegratio
     @Test
     void runSensor_whenSensorExecutedOnColumnWithDatesAnd4ValuesInRangeAndIncludeMaxValueFalse_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnValidityValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);

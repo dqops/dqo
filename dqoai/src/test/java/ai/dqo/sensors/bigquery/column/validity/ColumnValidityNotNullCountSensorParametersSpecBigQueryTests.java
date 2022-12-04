@@ -63,7 +63,7 @@ public class ColumnValidityNotNullCountSensorParametersSpecBigQueryTests extends
 		this.sut = new ColumnValidityNotNullCountSensorParametersSpec();
 		this.checkSpec = new ColumnValidityNotNullCountCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test
