@@ -47,6 +47,9 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
   }, [connectionName]);
 
   const onUpdate = async () => {
+    if (!updatedSchedule) {
+      return;
+    }
     await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
     await dispatch(getConnectionSchedule(connectionName));
     setIsUpdated(false);

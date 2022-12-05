@@ -40,6 +40,9 @@ const TableDataStream = ({
   }, []);
 
   const onUpdate = async () => {
+    if (!updatedDataStreamMapping) {
+      return;
+    }
     await dispatch(
       updateTableDefaultDataStreamMapping(
         connectionName,

@@ -28,12 +28,12 @@ export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
 });
 
-export const getJobsSuccess = (data: any) => ({
+export const getJobsSuccess = (data: DqoJobQueueInitialSnapshotModel) => ({
   type: JOB_ACTION.GET_JOBS_SUCCESS,
   data
 });
 
-export const getJobsFailed = (error: any) => ({
+export const getJobsFailed = (error: unknown) => ({
   type: JOB_ACTION.GET_JOBS_ERROR,
   error
 });
@@ -53,12 +53,14 @@ export const getJobsChangesRequest = () => ({
   type: JOB_ACTION.GET_JOBS_CHANGES
 });
 
-export const getJobsChangesSuccess = (data: any) => ({
+export const getJobsChangesSuccess = (
+  data: DqoJobQueueIncrementalSnapshotModel
+) => ({
   type: JOB_ACTION.GET_JOBS_CHANGES_SUCCESS,
   data
 });
 
-export const getJobsChangesFailed = (error: any) => ({
+export const getJobsChangesFailed = (error: unknown) => ({
   type: JOB_ACTION.GET_JOBS_CHANGES_ERROR,
   error
 });

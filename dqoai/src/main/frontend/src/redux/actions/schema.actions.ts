@@ -25,12 +25,12 @@ export const getSchemasRequest = () => ({
   type: SCHEMA_ACTION.GET_SCHEMAS
 });
 
-export const getSchemasSuccess = (data: any) => ({
+export const getSchemasSuccess = (data: SchemaModel[]) => ({
   type: SCHEMA_ACTION.GET_SCHEMAS_SUCCESS,
   data
 });
 
-export const getSchemasFailed = (error: any) => ({
+export const getSchemasFailed = (error: unknown) => ({
   type: SCHEMA_ACTION.GET_SCHEMAS_ERROR,
   error
 });
