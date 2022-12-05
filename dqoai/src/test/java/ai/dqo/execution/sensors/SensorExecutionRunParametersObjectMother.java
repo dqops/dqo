@@ -15,13 +15,11 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.CheckType;
+import ai.dqo.checks.*;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -118,25 +116,70 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
-     * Creates a sensor run parameters object to run on a given sample table.
+     * Creates a sensor run parameters object to run an ad-hoc check on a given sample table.
      * @param sampleTableMetadata Sample table metadata.
      * @param checkSpec Check specification.
-     * @param checkType Check type.
-     * @param timeSeriesConfigurationSpec Time series configuration.
      * @return Sensor execution run parameters.
      */
-     public static SensorExecutionRunParameters createForTableAndCheck(
+     public static SensorExecutionRunParameters createForTableForAdHocCheck(
+             SampleTableMetadata sampleTableMetadata,
+             AbstractCheckSpec checkSpec) {
+         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
+         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
+         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+         SensorExecutionRunParametersFactory factory = getFactory();
+         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
+
+         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run a checkpoint check on a given sample table.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param checkSpec Check specification.
+     * @param timeScale Time scale (daily, monthly).
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableForCheckpointCheck(
             SampleTableMetadata sampleTableMetadata,
             AbstractCheckSpec checkSpec,
-            CheckType checkType,
-            TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
+            CheckTimeScale timeScale) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         SensorExecutionRunParametersFactory factory = getFactory();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
+                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(timeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run a date/time partitioned check on a given sample table.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param checkSpec Check specification.
+     * @param timeScale Time scale (daily, monthly).
+     * @param datePartitioningColumn The name of the column used for the date partitioning.
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableForPartitionedCheck(
+            SampleTableMetadata sampleTableMetadata,
+            AbstractCheckSpec checkSpec,
+            CheckTimeScale timeScale,
+            String datePartitioningColumn) {
+        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
+        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        SensorExecutionRunParametersFactory factory = getFactory();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
+                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(timeScale, datePartitioningColumn);
+
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -179,7 +222,6 @@ public class SensorExecutionRunParametersObjectMother {
      * @param timeSeriesConfigurationSpec Time series configuration.
      * @return Sensor execution run parameters.
      */
-    @Deprecated
     public static SensorExecutionRunParameters createForTableColumnAndCheck(
             UserHome userHome, String connectionName, String schemaName, String tableName, String columnName,
             AbstractCheckSpec checkSpec, CheckType checkType, TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
@@ -220,29 +262,78 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
-     * Creates a sensor run parameters object to run on a given sample table, when a column is selected.
+     * Creates a sensor run parameters object to run an adhoc check on a given sample table, when a column is selected.
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
-     * @param checkType Check type.
-     * @param timeSeriesConfigurationSpec Time series configuration.
      * @return Sensor execution run parameters.
      */
-    @Deprecated
-    public static SensorExecutionRunParameters createForTableColumnAndCheck(
+    public static SensorExecutionRunParameters createForTableColumnForAdHocCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
-            AbstractCheckSpec checkSpec,
-            CheckType checkType,
-            TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
+            AbstractCheckSpec checkSpec) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run a checkpoint check on a given sample table, when a column is selected.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param columnName Target column name.
+     * @param checkSpec Check specification.
+     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableColumnForCheckpointCheck(
+            SampleTableMetadata sampleTableMetadata,
+            String columnName,
+            AbstractCheckSpec checkSpec,
+            CheckTimeScale checkTimeScale) {
+        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
+        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        SensorExecutionRunParametersFactory factory = getFactory();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(checkTimeScale);
+
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, dialectSettings);
+        return sensorExecutionRunParameters;
+    }
+
+    /**
+     * Creates a sensor run parameters object to run a date/time partitioned check on a given sample table, when a column is selected.
+     * @param sampleTableMetadata Sample table metadata.
+     * @param columnName Target column name.
+     * @param checkSpec Check specification.
+     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @param timePartitioningColumn The name of a date partitioning column.
+     * @return Sensor execution run parameters.
+     */
+    public static SensorExecutionRunParameters createForTableColumnForPartitionedCheck(
+            SampleTableMetadata sampleTableMetadata,
+            String columnName,
+            AbstractCheckSpec checkSpec,
+            CheckTimeScale checkTimeScale,
+            String timePartitioningColumn) {
+        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
+        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        SensorExecutionRunParametersFactory factory = getFactory();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
+                checkTimeScale, timePartitioningColumn);
+
+        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
 }
