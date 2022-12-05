@@ -13,21 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.data;
+package ai.dqo.data.storage;
 
 /**
- * Change delta modes supported by the storage service. Parquet files could be simply replaced, or we can detect
- * rows that should be inserted/updated/deleted.
+ * Constants with the partitioning column names used to store parquet files in a hive compliant partition folders.
  */
-@Deprecated
-public enum ChangeDeltaMode {
+public class ParquetPartitioningKeys {
     /**
-     * All rows are replaced in a snapshot. The snapshot is written to disk.
+     * Connection name column.
      */
-    REPLACE_ALL,
+    public static final String CONNECTION = "c";
 
     /**
-     * New or modified rows are found and marked for insertion, update or deletion.
+     * Target object name (schema.table for tables) name.
      */
-    INSERT_UPDATE_DELETE
+    public static final String TARGET = "t";
+
+    /**
+     * Month as a date of the first day of the month, for example: m=2022-03-10
+     */
+    public static final String MONTH = "m";
 }
