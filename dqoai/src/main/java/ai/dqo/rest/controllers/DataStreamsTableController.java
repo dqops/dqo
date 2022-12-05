@@ -132,8 +132,10 @@ public class DataStreamsTableController {
         return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
     }
 
+
     /**
      * Update a specific data stream using a new model.
+     * Remark: POST method is used, because renaming the data stream would break idempotence.
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
      * @param tableName       Table name.
@@ -141,7 +143,7 @@ public class DataStreamsTableController {
      * @param dataStreamModel Data stream trimmed model.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @PostMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
     @ApiOperation(value = "updateDataStream", notes = "Updates a data stream according to the provided model")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -186,8 +188,58 @@ public class DataStreamsTableController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
+
     /**
-     * Deletes a specific data stream by name.
+     * Sets a specific data stream as a default for the table.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @param dataStreamName  Data stream name.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}/setDefault")
+    @ApiOperation(value = "setDefaultDataStream", notes = "Sets a data stream as default")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data stream successfully set as default for the table"),
+            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> setDefaultDataStream(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Data stream name") @PathVariable String dataStreamName) {
+
+        TableSpec tableSpec = this.obtainTableSpec(connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataStreamMappingSpecMap dataStreamMapping = tableSpec.getDataStreams();
+        if (!dataStreamMapping.containsKey(dataStreamName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        if (!dataStreamName.equals(dataStreamMapping.getFirstDataStreamMappingName())) {
+            // TODO: Think about implementing this inside DataStreamMappingSpecMap.
+            DataStreamMappingSpecMap newMapping = new DataStreamMappingSpecMap();
+            newMapping.put(dataStreamName, dataStreamMapping.get(dataStreamName));
+            for (Map.Entry<String, DataStreamMappingSpec> dataStreamEntry : dataStreamMapping.entrySet()) {
+                if (dataStreamEntry.getKey().equals(dataStreamName)) {
+                    continue;
+                }
+                newMapping.put(dataStreamEntry.getKey(), dataStreamEntry.getValue());
+            }
+            tableSpec.setDataStreams(newMapping);
+        }
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+
+    /**
+     * Delets a specific data stream.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -231,7 +283,8 @@ public class DataStreamsTableController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
-    private DataStreamMappingSpecMap obtainDataStreamMapping(String connectionName, String schemaName, String tableName) {
+    // TODO: Suggestion: util class for exploring the path.
+    private TableSpec obtainTableSpec(String connectionName, String schemaName, String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -247,6 +300,14 @@ public class DataStreamsTableController {
             return null;
         }
 
-        return tableWrapper.getSpec().getDataStreams();
+        return tableWrapper.getSpec();
+    }
+
+    private DataStreamMappingSpecMap obtainDataStreamMapping(String connectionName, String schemaName, String tableName) {
+        TableSpec tableSpec = this.obtainTableSpec(connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return null;
+        }
+        return tableSpec.getDataStreams();
     }
 }
