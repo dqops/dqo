@@ -16,6 +16,7 @@
 
 package ai.dqo.rest.controllers;
 
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -23,7 +24,9 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.DataStreamTableBasicModel;
 import ai.dqo.rest.models.metadata.DataStreamTableModel;
+import ai.dqo.rest.models.metadata.DataStreamTableTrimmedModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -128,6 +131,62 @@ public class DataStreamsTableController {
         }};
         return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
     }
+
+    /**
+     * Update a specific data stream using a new model.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @param dataStreamName  Data stream name up until now.
+     * @param dataStreamModel Data stream trimmed model.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @ApiOperation(value = "updateDataStream", notes = "Updates a data stream according to the provided model")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data stream successfully updated"),
+            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateDataStream(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Data stream name") @PathVariable String dataStreamName,
+            @ApiParam("Data stream trimmed model") @RequestBody DataStreamTableTrimmedModel dataStreamModel) {
+        if (Strings.isNullOrEmpty(connectionName)                                    ||
+                Strings.isNullOrEmpty(schemaName)                                    ||
+                Strings.isNullOrEmpty(tableName)                                     ||
+                Strings.isNullOrEmpty(dataStreamName)                                ||
+                // TODO: How to handle these default mappings?
+                //       What do we mean by "named data stream"?
+                //       How does a check with a default name relate to a default data stream (first on the list)?
+                dataStreamName.equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME) ||
+                dataStreamModel == null                                              ||
+                (dataStreamModel.getDataStreamName() != null &&
+                        dataStreamModel.getDataStreamName().equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME)
+                )) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        DataStreamMappingSpecMap dataStreamMapping = this.obtainDataStreamMapping(connectionName, schemaName, tableName);
+        if (dataStreamMapping == null || !dataStreamMapping.containsKey(dataStreamName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String newName = dataStreamModel.getDataStreamName();
+        if (Strings.isNullOrEmpty(newName)) {
+            newName = dataStreamName;
+        }
+
+        DataStreamMappingSpec newSpec = dataStreamModel.getSpec();
+        dataStreamMapping.put(newName, newSpec);
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    
 
     private DataStreamMappingSpecMap obtainDataStreamMapping(String connectionName, String schemaName, String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
