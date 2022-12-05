@@ -88,6 +88,47 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<version>6.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+									<generatorName>typescript-axios</generatorName>
+									<output>${project.basedir}/src/main/frontend/src/api</output>
+									<configOptions>
+										<supportsES6>true</supportsES6>
+										<withInterfaces>true</withInterfaces>
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}/src/main/frontend/src/api</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
 						<version>1.12.1</version>
@@ -860,47 +901,6 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.2.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
-							<generatorName>typescript-axios</generatorName>
-							<output>${project.basedir}/src/main/frontend/src/api</output>
-							<configOptions>
-								<supportsES6>true</supportsES6>
-								<withInterfaces>true</withInterfaces>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
-							<arguments>
-								<argument>${project.basedir}/src/main/frontend/src/api</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
