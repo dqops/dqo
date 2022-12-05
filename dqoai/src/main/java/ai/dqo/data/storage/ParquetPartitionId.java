@@ -25,7 +25,7 @@ public class ParquetPartitionId {
      */
     public ParquetPartitionId(DqoRoot tableType, String connectionName, PhysicalTableName tableName, LocalDate month) {
         assert month.getDayOfMonth() == 1;
-
+        this.tableType = tableType;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.month = month;

@@ -47,7 +47,7 @@ public class JinjaTemplateRenderServiceObjectMother {
      * @return Rendered template.
      */
     public static String renderBuiltInTemplate(SensorExecutionRunParameters runParameters) {
-        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreamMapping());
+//        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreamMapping());
         JinjaTemplateRenderParameters renderParameters = JinjaTemplateRenderParametersObjectMother.createForRunParameters(runParameters);
         return renderBuiltInTemplate(renderParameters);
     }

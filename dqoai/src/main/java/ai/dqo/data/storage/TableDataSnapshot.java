@@ -88,12 +88,23 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Returns a map of loaded partitions, keyed by the partition id.
+     * @return Map of loaded partitions.
+     */
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> getLoadedMonthlyPartitions() {
+        return loadedMonthlyPartitions;
+    }
+
+    /**
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
-     * @param startMonth The date of the start month. It could be any date within the month, because the whole month is always loaded.
-     * @param endMonth The date fo the end month. It could be any date within the month, because the whole month is always loaded.
+     * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
+     * @param end The date fo the end month. It could be any date within the month, because the whole month is always loaded.
      */
-    public void ensureMonthsAreLoaded(LocalDate startMonth, LocalDate endMonth) {
+    public void ensureMonthsAreLoaded(LocalDate start, LocalDate end) {
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
+
         if (this.firstLoadedMonth == null) {
             // no data ever loaded
 
@@ -131,6 +142,29 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Retrieves a loaded partition. The partition that is requested must be already loaded
+     * @param date Date to be loaded.
+     * @param load True when the partition for the given date should be loaded if it is not loaded. False when we are just performing a lookup
+     *             in the dictionary of already loaded partitions.
+     * @return Loaded partition or null. If the partition has no data (which was confirmed by trying to read the parquet file),
+     *         then the returned object is not null, but its internal tablesaw data is null.
+     */
+    public LoadedMonthlyPartition getMonthPartition(LocalDate date, boolean load) {
+        LocalDate monthDate = LocalDateTimeTruncateUtility.truncateMonth(date);
+
+        if (load) {
+            this.ensureMonthsAreLoaded(monthDate, monthDate);
+        }
+
+        if (this.loadedMonthlyPartitions == null || loadedMonthlyPartitions.size() == 0) {
+            return null;
+        }
+
+        ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, monthDate);
+        return this.loadedMonthlyPartitions.get(partitionId);
+    }
+
+    /**
      * Saves all results to a persistent storage (like files). New rows are added, rows with matching IDs are updated.
      * Rows identified by an ID column are deleted.
      */
@@ -146,13 +180,13 @@ public class TableDataSnapshot {
 
         DateTimeColumn newResultsTimePeriodColumn = (DateTimeColumn) this.tableDataChanges.getNewOrChangedRows()
                 .column(this.storageSettings.getTimePeriodColumnName());
-        LocalDateTime minDateNewResults = Optional.of(newResultsTimePeriodColumn.min())
-                .orElse(LocalDateTime.of(this.firstLoadedMonth, LocalTime.MIDNIGHT));
-        LocalDateTime maxDateNewResults = Optional.of(newResultsTimePeriodColumn.max())
-                .orElse(LocalDateTime.of(this.lastLoadedMonth, LocalTime.MIDNIGHT));
+        LocalDateTime minDateNewResults = newResultsTimePeriodColumn.min();
+        LocalDate startMonth = minDateNewResults != null ?
+                LocalDateTimeTruncateUtility.truncateMonth(minDateNewResults.toLocalDate()) : this.firstLoadedMonth;
 
-        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(minDateNewResults.toLocalDate());
-        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(maxDateNewResults.toLocalDate());
+        LocalDateTime maxDateNewResults = newResultsTimePeriodColumn.max();
+        LocalDate endMonth = maxDateNewResults != null ?
+                LocalDateTimeTruncateUtility.truncateMonth(maxDateNewResults.toLocalDate()) : this.lastLoadedMonth;
 
         if (this.loadedMonthlyPartitions == null) {
             // no historic data was loaded

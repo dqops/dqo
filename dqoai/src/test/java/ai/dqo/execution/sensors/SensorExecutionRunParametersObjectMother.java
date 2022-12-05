@@ -258,6 +258,7 @@ public class SensorExecutionRunParametersObjectMother {
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, columnSpec,
                 checkSpec, dialectSettings);
+        sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc());
         return sensorExecutionRunParameters;
     }
 

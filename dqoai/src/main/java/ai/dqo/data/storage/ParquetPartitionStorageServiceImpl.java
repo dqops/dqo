@@ -227,7 +227,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
             }
 
-            if ((tableDataChanges.getDeletedIds() == null || tableDataChanges.getDeletedIds().size() == 0) && dataToSave != null) {
+            if (tableDataChanges.getDeletedIds() == null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
                 Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
                         .isNotIn(tableDataChanges.getDeletedIds());
                 if (rowsToDeleteSelection.size() > 0) {

@@ -67,6 +67,7 @@ public class TableValidityRowCountSensorParametersSpecBigQueryTests extends Base
                 BigQueryTableSpecObjectMother.TableNames.bq_data_types_test.name(),
 				this.checkSpec
         );
+        this.runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc());
     }
 
     @Test

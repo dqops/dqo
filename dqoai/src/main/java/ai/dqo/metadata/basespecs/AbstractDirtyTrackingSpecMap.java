@@ -17,6 +17,7 @@ package ai.dqo.metadata.basespecs;
 
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.LinkedHashMap;
@@ -26,7 +27,7 @@ import java.util.Map;
  * Dictionary of spec objects indexed by a key.
  */
 public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & HierarchyNode>
-        extends LinkedHashMap<String, V> implements HierarchyNode {
+        extends LinkedHashMap<String, V> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
     private boolean dirty;
     @JsonIgnore
@@ -198,5 +199,16 @@ public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & Hiera
     public V putIfAbsent(String key, V value) {
 		this.setDirty();
         return super.putIfAbsent(key, value);
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    public boolean isDefault() {
+        return this.size() == 0;
     }
 }

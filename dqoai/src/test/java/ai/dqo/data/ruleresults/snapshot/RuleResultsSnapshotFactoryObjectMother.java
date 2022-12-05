@@ -18,6 +18,7 @@ package ai.dqo.data.ruleresults.snapshot;
 import ai.dqo.data.ruleresults.factory.RuleResultsTableFactoryImpl;
 import ai.dqo.data.ruleresults.filestorage.DummyRuleResultsFileStorageService;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
+import ai.dqo.data.storage.DummyParquetPartitionStorageService;
 
 /**
  * Object mother for {@link RuleResultsSnapshotFactory}
@@ -29,6 +30,6 @@ public class RuleResultsSnapshotFactoryObjectMother {
      * @return Rule result storage service.
      */
     public static RuleResultsSnapshotFactory createDummyRuleResultsStorageService() {
-        return new RuleResultsSnapshotFactoryImpl(new DummyRuleResultsFileStorageService(), new RuleResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
+        return new RuleResultsSnapshotFactoryImpl(new DummyParquetPartitionStorageService(), new RuleResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl()));
     }
 }
