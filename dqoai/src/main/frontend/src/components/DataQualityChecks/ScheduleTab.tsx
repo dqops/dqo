@@ -7,7 +7,7 @@ import NumberInput from '../NumberInput';
 
 interface IScheduleTabProps {
   schedule?: RecurringScheduleSpec;
-  onChange: (item: RecurringScheduleSpec) => void;
+  onChange: (item?: RecurringScheduleSpec) => void;
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
@@ -63,7 +63,8 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
       <div className="px-4">
         <Checkbox
           checked={!!schedule}
-          onChange={(value) => {}}
+          // onChange={(value) => {}}
+          onChange={(value) => (value ? onChange({}) : onChange(undefined))}
           label="Configure a custom schedule for a data quality check"
         />
       </div>
