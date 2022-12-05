@@ -5,14 +5,14 @@ import Button from '../../Button';
 import Input from '../../Input';
 import BigqueryConnection from './BigqueryConnection';
 import SnowflakeConnection from './SnowflakeConnection';
-import { IDatabase } from '../../../shared/interfaces';
+import { ConnectionBasicModel } from '../../../api';
 
 interface IDatabaseConnectionProps {
   type?: DATABASE_TYPE;
   onPrev: () => void;
   onNext: () => void;
-  database: IDatabase;
-  onChange: (db: IDatabase) => void;
+  database: ConnectionBasicModel;
+  onChange: (db: ConnectionBasicModel) => void;
 }
 
 const DatabaseConnection = ({
@@ -20,7 +20,7 @@ const DatabaseConnection = ({
   onPrev,
   onNext,
   database,
-  onChange,
+  onChange
 }: IDatabaseConnectionProps) => {
   return (
     <div>
@@ -43,23 +43,54 @@ const DatabaseConnection = ({
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
-          label="Database Name"
+          label="Connection Name"
           className="mb-4"
-          value={database.connectionName}
+          value={database.connection_name}
           onChange={(e) =>
-            onChange({ ...database, connectionName: e.target.value })
+            onChange({ ...database, connection_name: e.target.value })
           }
         />
-        <Input label="JDBC driver url" className="mb-4" />
-        <Input label="Username" className="mb-4" />
-        <Input label="Password" className="mb-6" />
+        <Input
+          label="Database Name"
+          className="mb-4"
+          value={database.database_name}
+          onChange={(e) =>
+            onChange({ ...database, database_name: e.target.value })
+          }
+        />
+        <Input
+          label="JDBC driver url"
+          className="mb-4"
+          value={database.url}
+          onChange={(e) => onChange({ ...database, url: e.target.value })}
+        />
+        <Input
+          label="Username"
+          className="mb-4"
+          value={database.user}
+          onChange={(e) => onChange({ ...database, user: e.target.value })}
+        />
+        <Input
+          label="Password"
+          className="mb-6"
+          value={database.password}
+          onChange={(e) => onChange({ ...database, password: e.target.value })}
+        />
 
         {type === DATABASE_TYPE.BIGQUERY ? (
-          <BigqueryConnection />
+          <BigqueryConnection
+            bigquery={database.bigquery}
+            onChange={(bigquery) => onChange({ ...database, bigquery })}
+          />
         ) : (
           <SnowflakeConnection />
         )}
-        <Input label="Timezone" className="mb-4" />
+        <Input
+          label="Timezone"
+          className="mb-4"
+          value={database.time_zone}
+          onChange={(e) => onChange({ ...database, time_zone: e.target.value })}
+        />
 
         <div className="flex space-x-4 justify-end mt-6">
           <Button

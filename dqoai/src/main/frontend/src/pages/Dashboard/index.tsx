@@ -4,17 +4,14 @@ import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
 import { DATABASE_TYPE } from '../../shared/enums';
-import { IDatabase } from '../../shared/interfaces';
 import ImportSchemas from '../../components/ImportSchemas';
-
-const initialDatabase = {
-  connectionName: ''
-};
+import { ConnectionApiClient } from '../../services/apiClient';
+import { ConnectionBasicModel } from '../../api';
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);
   const [dbType, setDBType] = useState<DATABASE_TYPE | undefined>();
-  const [database, setDatabase] = useState<IDatabase>(initialDatabase);
+  const [database, setDatabase] = useState<ConnectionBasicModel>({});
 
   const onSelect = (db: DATABASE_TYPE) => {
     setDBType(db);
@@ -27,7 +24,19 @@ const Dashboard = () => {
     }
   };
 
-  const onNext = () => {
+  const onNext = async () => {
+    if (!database?.connection_name) {
+      return;
+    }
+    if (step === 1) {
+      await ConnectionApiClient.createConnectionBasic(
+        database?.connection_name,
+        database
+      );
+      setStep(step + 1);
+      return;
+    }
+
     if (step < 2) {
       setStep(step + 1);
     }
@@ -47,7 +56,7 @@ const Dashboard = () => {
       )}
       {step === 2 && (
         <ImportSchemas
-          connectionName={database.connectionName}
+          connectionName={database?.connection_name ?? ''}
           onPrev={onPrev}
           onNext={onNext}
         />
