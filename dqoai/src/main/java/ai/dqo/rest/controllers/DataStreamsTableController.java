@@ -82,9 +82,6 @@ public class DataStreamsTableController {
 
         List<DataStreamTableBasicModel> result = new LinkedList<>();
         for (String dataStreamName : dataStreamMapping.keySet()) {
-            if (!dataStreamName.equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME)) {
-                continue;
-            }
             result.add(new DataStreamTableBasicModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
@@ -158,18 +155,11 @@ public class DataStreamsTableController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data stream name") @PathVariable String dataStreamName,
             @ApiParam("Data stream trimmed model") @RequestBody DataStreamTableTrimmedModel dataStreamModel) {
-        if (Strings.isNullOrEmpty(connectionName)                                    ||
-                Strings.isNullOrEmpty(schemaName)                                    ||
-                Strings.isNullOrEmpty(tableName)                                     ||
-                Strings.isNullOrEmpty(dataStreamName)                                ||
-                // TODO: How to handle these default mappings?
-                //       What do we mean by "named data stream"?
-                //       How does a check with a default name relate to a default data stream (first on the list)?
-                dataStreamName.equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME) ||
-                dataStreamModel == null                                              ||
-                (dataStreamModel.getDataStreamName() != null &&
-                        dataStreamModel.getDataStreamName().equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME)
-                )) {
+        if (Strings.isNullOrEmpty(connectionName)     ||
+                Strings.isNullOrEmpty(schemaName)     ||
+                Strings.isNullOrEmpty(tableName)      ||
+                Strings.isNullOrEmpty(dataStreamName) ||
+                dataStreamModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -263,11 +253,7 @@ public class DataStreamsTableController {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||
-                Strings.isNullOrEmpty(dataStreamName) ||
-                // TODO: How to handle these default mappings?
-                //       What do we mean by "named data stream"?
-                //       How does a check with a default name relate to a default data stream (first on the list)?
-                dataStreamName.equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME)) {
+                Strings.isNullOrEmpty(dataStreamName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -277,9 +263,8 @@ public class DataStreamsTableController {
         }
 
         // If data stream is not found, return success (because idempotence).
-        if (dataStreamMapping.containsKey(dataStreamName)) {
-            dataStreamMapping.remove(dataStreamName);
-        }
+        dataStreamMapping.remove(dataStreamName);
+
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
