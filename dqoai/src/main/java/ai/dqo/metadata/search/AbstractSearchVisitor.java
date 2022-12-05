@@ -38,6 +38,7 @@ import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
 import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -749,6 +750,18 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map (hashtable) of named data stream mappings.
+     *
+     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

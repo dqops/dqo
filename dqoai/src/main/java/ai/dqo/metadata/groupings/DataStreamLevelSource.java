@@ -22,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public enum DataStreamLevelSource {
     /**
-     * The data stream level ID value is hardcoded as a static value. All data quality results are assigned the same, hardcoded data stream level value.
+     * The data stream level ID value is hardcoded as a static value (tag). All data quality results are assigned the same, hardcoded data stream level value.
      */
-    @JsonProperty("static_value")
-    STATIC_VALUE,
+    @JsonProperty("tag")
+    TAG,
 
     /**
      * The data stream level ID value is obtained from the data. An extra GROUP BY [column name] is added to the sensor query.

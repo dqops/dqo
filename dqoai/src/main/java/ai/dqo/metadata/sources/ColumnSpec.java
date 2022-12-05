@@ -51,8 +51,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
-			put("time_series_override", o -> o.timeSeriesOverride);
-			put("data_streams_override", o -> o.dataStreamsOverride);
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
@@ -69,18 +67,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
-
-    @JsonPropertyDescription("Time series source configuration for a table. When a time series configuration is assigned at a table level, it overrides any time series settings from the connection or table levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private TimeSeriesConfigurationSpec timeSeriesOverride;
-
-    @JsonPropertyDescription("Data streams configuration. When a data streams configuration is assigned at a table level, it overrides any data streams settings from the connection or table levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private DataStreamMappingSpec dataStreamsOverride;
 
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -159,43 +145,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 		this.setDirtyIf(!Objects.equals(this.typeSnapshot, typeSnapshot));
         this.typeSnapshot = typeSnapshot;
 		propagateHierarchyIdToField(typeSnapshot, "type_snapshot");
-    }
-
-    /**
-     * Returns the time series configuration for this column.
-     * @return Time series configuration.
-     */
-    public TimeSeriesConfigurationSpec getTimeSeriesOverride() {
-        return timeSeriesOverride;
-    }
-
-    /**
-     * Sets a new time series configuration for this column.
-     * @param timeSeriesOverride New time series configuration.
-     */
-    public void setTimeSeriesOverride(TimeSeriesConfigurationSpec timeSeriesOverride) {
-		setDirtyIf(!Objects.equals(this.timeSeriesOverride, timeSeriesOverride));
-        this.timeSeriesOverride = timeSeriesOverride;
-		propagateHierarchyIdToField(timeSeriesOverride, "time_series_override");
-    }
-
-    /**
-     * Returns the data streams configuration for the column.
-     * @return Data streams configuration.
-     */
-    @Deprecated
-    public DataStreamMappingSpec getDataStreamsOverride() {
-        return dataStreamsOverride;
-    }
-
-    /**
-     * Returns the data streams configuration for the column.
-     * @param dataStreamsOverride Data streams configuration.
-     */
-    public void setDataStreamsOverride(DataStreamMappingSpec dataStreamsOverride) {
-		setDirtyIf(!Objects.equals(this.dataStreamsOverride, dataStreamsOverride));
-        this.dataStreamsOverride = dataStreamsOverride;
-		propagateHierarchyIdToField(dataStreamsOverride, "data_streams_override");
     }
 
     /**
@@ -338,14 +287,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.typeSnapshot = cloned.typeSnapshot.clone();
             }
 
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
-            }
-
-            if (cloned.dataStreamsOverride != null) {
-                cloned.dataStreamsOverride = cloned.dataStreamsOverride.clone();
-            }
-
             if (cloned.labels != null) {
                 cloned.labels = cloned.labels.clone();
             }
@@ -411,12 +352,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.dataStreamsOverride != null) {
-                cloned.dataStreamsOverride = cloned.dataStreamsOverride.expandAndTrim(secretValueProvider);
-            }
             if (cloned.labels != null) {
                 cloned.labels = cloned.labels.clone();
             }
@@ -443,8 +378,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
-            cloned.timeSeriesOverride = null;
-            cloned.dataStreamsOverride = null;
             cloned.labels = null;
             return cloned;
         }

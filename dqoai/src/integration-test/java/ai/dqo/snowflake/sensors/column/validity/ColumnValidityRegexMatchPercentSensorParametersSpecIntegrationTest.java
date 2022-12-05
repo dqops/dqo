@@ -64,9 +64,9 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecIntegrationTest 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithMixedValuesAndSetEmailRegex_thenReturnsValues() {
         this.sut.setNamedRegex(BuiltInRegex.email);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "email_mixed", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "email_mixed", this.checkSpec);
         this.sut = (ColumnValidityRegexMatchPercentSensorParametersSpec) runParameters.getSensorParameters();
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -78,9 +78,9 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecIntegrationTest 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithMixedValuesAndSetCustomRegex_thenReturnsValues() {
         this.sut.setCustomRegex("abcd");
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
         this.sut = (ColumnValidityRegexMatchPercentSensorParametersSpec) runParameters.getSensorParameters();
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -92,9 +92,9 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecIntegrationTest 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithMixedValuesAndSetPhoneNumberRegex_Where_Correct1() {
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
         this.sut = (ColumnValidityRegexMatchPercentSensorParametersSpec) runParameters.getSensorParameters();
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         runParameters.getTable().setFilter("\"correct\"=1");
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -107,9 +107,9 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecIntegrationTest 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithMixedValuesAndSetPhoneNumberRegex_Where_Correct0() {
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
         this.sut = (ColumnValidityRegexMatchPercentSensorParametersSpec) runParameters.getSensorParameters();
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         runParameters.getTable().setFilter("\"correct\"=0");
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -122,9 +122,9 @@ public class ColumnValidityRegexMatchPercentSensorParametersSpecIntegrationTest 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithMixedValuesAndSetPhoneNumberRegex_WholeColumn() {
         this.sut.setNamedRegex(BuiltInRegex.phoneNumber);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "phone_numbers_mixed", this.checkSpec);
         this.sut = (ColumnValidityRegexMatchPercentSensorParametersSpec) runParameters.getSensorParameters();
-        runParameters.getTable().setTimeSeries(null);
+        runParameters.setTimeSeries(null);
         //runParameters.getTable().setFilter("correct=0");
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

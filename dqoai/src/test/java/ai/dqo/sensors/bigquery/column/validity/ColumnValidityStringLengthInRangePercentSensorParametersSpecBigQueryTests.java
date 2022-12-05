@@ -57,7 +57,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecBigQuer
         this.sut = new ColumnValidityStringLengthInRangePercentSensorParametersSpec();
         this.checkSpec = new ColumnValidityStringLengthInRangePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         this.sut = (ColumnValidityStringLengthInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 
@@ -117,7 +117,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecBigQuer
 
     @Test
     void renderSensor_whenLowerBoundIs3AndUpperBoundIs5AndColumnWithIntValues_thenRendersCorrectSql() {
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string_int", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string_int", this.checkSpec);
         this.sut = (ColumnValidityStringLengthInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
         this.sut.setMinLength(3);
         this.sut.setMaxLength(5);

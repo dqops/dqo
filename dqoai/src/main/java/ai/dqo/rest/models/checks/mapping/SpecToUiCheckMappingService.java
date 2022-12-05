@@ -29,7 +29,10 @@ public interface SpecToUiCheckMappingService {
      *
      * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
+     * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return Checks data quality container.
      */
-    UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec, CheckSearchFilters runChecksTemplate);
+    UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                   CheckSearchFilters runChecksTemplate,
+                                   String defaultDataStreamName);
 }

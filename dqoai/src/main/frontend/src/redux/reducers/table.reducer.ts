@@ -146,41 +146,6 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_TIME:
-      return {
-        ...state,
-        loading: true
-      };
-    case TABLE_ACTION.GET_TABLE_TIME_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        timeSeries: action.data,
-        error: null
-      };
-    case TABLE_ACTION.GET_TABLE_TIME_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.error
-      };
-    case TABLE_ACTION.UPDATE_TABLE_TIME:
-      return {
-        ...state,
-        isUpdating: true
-      };
-    case TABLE_ACTION.UPDATE_TABLE_TIME_SUCCESS:
-      return {
-        ...state,
-        isUpdating: false,
-        error: null
-      };
-    case TABLE_ACTION.UPDATE_TABLE_TIME_ERROR:
-      return {
-        ...state,
-        isUpdating: false,
-        error: action.error
-      };
     case TABLE_ACTION.GET_TABLE_COMMENTS:
       return {
         ...state,
@@ -287,36 +252,36 @@ const tableReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING:
+    case TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         loading: false,
         dataStreamsMapping: action.data,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_DATA_STREAMS_MAPPING_ERROR:
+    case TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING:
+    case TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
       return {
         ...state,
         isUpdating: true
       };
-    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_SUCCESS:
+    case TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case TABLE_ACTION.UPDATE_TABLE_DATA_STREAMS_MAPPING_ERROR:
+    case TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
       return {
         ...state,
         isUpdating: false,

@@ -16,6 +16,8 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
 import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -37,11 +39,19 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("min_unique_count", o -> o.minUniqueCount);
+            put("max_duplicate_count", o -> o.maxDuplicateCount);
+            put("max_duplicate_percent", o -> o.maxDuplicatePercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count.")
     private ColumnMinUniqueCountCheckSpec minUniqueCount;
+
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
+    private ColumnMaxDuplicateCountCheckSpec maxDuplicateCount;
+
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent.")
+    private ColumnMaxDuplicatePercentCheckSpec maxDuplicatePercent;
 
     /**
      * Returns a minimum unique count check.
@@ -59,6 +69,42 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minUniqueCount, minUniqueCount));
         this.minUniqueCount = minUniqueCount;
         propagateHierarchyIdToField(minUniqueCount, "min_unique_count");
+    }
+
+    /**
+     * Returns a maximum duplicate count check.
+     * @return Maximum duplicate count check.
+     */
+    public ColumnMaxDuplicateCountCheckSpec getMaxDuplicateCount() {
+        return maxDuplicateCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum duplicate count check.
+     * @param maxDuplicateCount Maximum duplicate count check.
+     */
+    public void setMaxDuplicateCount(ColumnMaxDuplicateCountCheckSpec maxDuplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.maxDuplicateCount, maxDuplicateCount));
+        this.maxDuplicateCount = maxDuplicateCount;
+        propagateHierarchyIdToField(maxDuplicateCount, "max_duplicate_count");
+    }
+
+    /**
+     * Returns a maximum duplicate percent check.
+     * @return Maximum duplicate percent check.
+     */
+    public ColumnMaxDuplicatePercentCheckSpec getMaxDuplicatePercent() {
+        return maxDuplicatePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum duplicate percent check.
+     * @param maxDuplicatePercent Maximum duplicate percent check.
+     */
+    public void setMaxDuplicatePercent(ColumnMaxDuplicatePercentCheckSpec maxDuplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxDuplicatePercent, maxDuplicatePercent));
+        this.maxDuplicatePercent = maxDuplicatePercent;
+        propagateHierarchyIdToField(maxDuplicatePercent, "max_duplicate_percent");
     }
 
     /**

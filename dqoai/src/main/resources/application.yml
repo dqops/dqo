@@ -8,8 +8,6 @@ spring:
   application:
     name: dqo
   mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher    # https://stackoverflow.com/questions/70036953/springboot-2-6-0-spring-fox-3-failed-to-start-bean-documentationpluginsboot
     async:
       request-timeout: 60000
   shell:
@@ -58,6 +56,11 @@ dqo:
   user:
     home: .
     has-local-home: true
+  logging:
+    enable-user-home-logging: true
+    max-history: 7
+    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n"
+    total-size-cap: 10mb
   storage:
     gcp:
       upload-buffer-size: 5000000
@@ -80,5 +83,8 @@ dqo:
     keep-jobs-changes-history-seconds: 1200
     get-job-changes-since-wait-seconds: 30
   scheduler:
+    #start: true
+    synchronization-mode: silent
+    check-run-mode: silent
     scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
     enable-cloud-sync: true

@@ -38,6 +38,7 @@ public interface SensorExecutionRunParametersFactory {
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
+    @Deprecated
     SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
                                                               TableSpec table,
                                                               ColumnSpec column,

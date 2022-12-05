@@ -58,4 +58,9 @@ public final class BuiltInFolderNames {
      * Credentials folder to store local credentials that are not stored in the repository.
      */
     public static final String CREDENTIALS = ".credentials";
+
+    /**
+     * Local log folder inside the user home that stores logs.
+     */
+    public static final String LOGS = ".logs";
 }

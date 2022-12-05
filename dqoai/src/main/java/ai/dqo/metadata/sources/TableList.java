@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyNode;
 
 import java.util.List;
@@ -67,6 +68,7 @@ public interface TableList extends Iterable<TableWrapper>, HierarchyNode {
     /**
      * Adds missing tables or missing columns from the source. Overwrites also the last known column data type.
      * @param sourceTableSpecs Source tables.
+     * @param defaultDataStreamMapping Default data stream mapping (from the connection) to be added to all imported tables.
      */
-    void importTables(List<TableSpec> sourceTableSpecs);
+    void importTables(List<TableSpec> sourceTableSpecs, DataStreamMappingSpec defaultDataStreamMapping);
 }

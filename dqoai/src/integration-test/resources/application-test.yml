@@ -14,3 +14,5 @@ dqo:
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: dqo-ai-testing
+  logging:
+    enable-user-home-logging: false

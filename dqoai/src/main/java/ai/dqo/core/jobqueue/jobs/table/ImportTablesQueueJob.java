@@ -120,7 +120,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesQueueJobResult
                     this.importParameters.getTableNames());
 
             TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs);
+            currentTablesColl.importTables(sourceTableSpecs, connectionSpec.getDefaultDataStreamMapping());
             userHomeContext.flush();
 
             Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);

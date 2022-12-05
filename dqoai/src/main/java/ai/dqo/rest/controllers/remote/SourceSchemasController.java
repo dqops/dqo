@@ -19,11 +19,7 @@ import ai.dqo.rest.controllers.remote.services.SourceSchemasService;
 import ai.dqo.rest.controllers.remote.services.SourceSchemasServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.SchemaRemoteModel;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +60,7 @@ public class SourceSchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<SchemaRemoteModel>> getRemoteSchemas(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         List<SchemaRemoteModel> result;
         try {
             result = sourceSchemasService.showSchemas(connectionName);

@@ -66,7 +66,7 @@ public class TableTimelinessCurrentDelaySensorParametersSpecIntegrationTest exte
         this.sut.setColumn("datetime_col");
         this.sut.setTimeScale(BuiltInTimeScale.DAY);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "datetime_col", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "datetime_col", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

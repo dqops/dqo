@@ -70,26 +70,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractCheckDeprecatedSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
-        if (timeSeries == null && expandedColumn != null) {
-            timeSeries = expandedColumn.getTimeSeriesOverride();
-        }
-        if (timeSeries == null) {
-            timeSeries = expandedTable.getTimeSeries();
-        }
-        if(timeSeries == null) {
-            timeSeries = expandedConnection.getDefaultTimeSeries();
-        }
-
         DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
-        if (dataStreams == null && column != null) {
-            dataStreams = expandedColumn.getDataStreamsOverride(); // TODO: support combining an affective dimension configuration
-        }
-        if (dataStreams == null) {
-            dataStreams = expandedTable.getDataStreams();
-        }
-        if (dataStreams == null) {
-            dataStreams = expandedConnection.getDefaultDataStreams();
-        }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
@@ -121,25 +102,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
-
-        DataStreamMappingSpec dataStreams = null;  // TODO: when we add custom checks with a fully configurable data stream mapping (for a single check), we should retrieve it here and merge with defaults
-        if (expandedColumn != null) {
-            dataStreams = expandedColumn.getDataStreamsOverride();
-        }
-
-        if (dataStreams == null) {
-            dataStreams = expandedTable.getDataStreams();
-        }
-        else if (expandedTable.getDataStreams() != null){
-            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedTable.getDataStreams());
-        }
-
-        if (dataStreams == null) {
-            dataStreams = expandedConnection.getDefaultDataStreams();
-        }
-        else if (expandedConnection.getDefaultDataStreams() != null){
-            dataStreams = dataStreams.getEffectiveDataStreamMapping(expandedConnection.getDefaultDataStreams());
-        }
+        DataStreamMappingSpec dataStreams = check.getDataStream() != null ?
+                expandedTable.getDataStreams().get(check.getDataStream()) : null;
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);

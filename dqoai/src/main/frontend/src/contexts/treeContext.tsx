@@ -10,6 +10,7 @@ import {
 import {
   ColumnApiClient,
   ConnectionApiClient,
+  JobApiClient,
   SchemaApiClient,
   TableApiClient
 } from '../services/apiClient';
@@ -39,7 +40,8 @@ function TreeProvider(props: any) {
         label: item.connection_name ?? '',
         items: [],
         level: TREE_LEVEL.DATABASE,
-        tooltip: item.connection_name
+        tooltip: item.connection_name,
+        run_checks_job_template: item.run_checks_job_template
       }))
     );
   };
@@ -76,7 +78,8 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
       items: [],
-      tooltip: `${node?.label}.${schema.schema_name}`
+      tooltip: `${node?.label}.${schema.schema_name}`,
+      run_checks_job_template: schema.run_checks_job_template
     }));
 
     resetTreeData(node, items);
@@ -93,7 +96,8 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
-      hasCheck: table?.has_any_configured_checks
+      hasCheck: table?.has_any_configured_checks,
+      run_checks_job_template: table.run_checks_job_template
     }));
     resetTreeData(node, items);
   };
@@ -223,7 +227,8 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
-      hasCheck: column?.has_any_configured_checks
+      hasCheck: column?.has_any_configured_checks,
+      run_checks_job_template: column.run_checks_job_template
     }));
     resetTreeData(node, items);
   };
@@ -407,6 +412,149 @@ function TreeProvider(props: any) {
     }
   };
 
+  const runChecks = async (node: CustomTreeNode) => {
+    if (node.run_checks_job_template) {
+      JobApiClient.runChecks(node.run_checks_job_template);
+      return;
+    }
+
+    let connectionNode: CustomTreeNode | undefined;
+    let schemaNode: CustomTreeNode | undefined;
+    let tableNode: CustomTreeNode | undefined;
+    let columnNode: CustomTreeNode | undefined;
+
+    if (
+      node?.level === TREE_LEVEL.TABLE_CHECKS ||
+      node?.level === TREE_LEVEL.TABLE_DAILY_CHECKS ||
+      node?.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS ||
+      node?.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS ||
+      node?.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS
+    ) {
+      tableNode = findTreeNode(treeData, node?.parentId ?? '');
+      schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    }
+
+    if (
+      node?.level === TREE_LEVEL.COLUMN_CHECKS ||
+      node?.level === TREE_LEVEL.COLUMN_DAILY_CHECKS ||
+      node?.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS ||
+      node?.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS ||
+      node?.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS
+    ) {
+      columnNode = findTreeNode(treeData, node?.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    }
+
+    if (node.level === TREE_LEVEL.TABLE_CHECKS) {
+      const res = await TableApiClient.getTableAdHocChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? ''
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
+      const res = await TableApiClient.getTableCheckpointsUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        'daily'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
+      const res = await TableApiClient.getTableCheckpointsUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        'monthly'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
+      const res = await TableApiClient.getTablePartitionedChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        'daily'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
+      const res = await TableApiClient.getTablePartitionedChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        'daily'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+
+    if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
+      const res = await ColumnApiClient.getColumnAdHocChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        columnNode?.label ?? ''
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
+      const res = await ColumnApiClient.getColumnCheckpointsUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        columnNode?.label ?? '',
+        'daily'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
+      const res = await ColumnApiClient.getColumnCheckpointsUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        columnNode?.label ?? '',
+        'monthly'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
+      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        columnNode?.label ?? '',
+        'daily'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+    if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
+      const res = await ColumnApiClient.getColumnPartitionedChecksUI(
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        tableNode?.label ?? '',
+        columnNode?.label ?? '',
+        'monthly'
+      );
+      JobApiClient.runChecks(res.data.run_checks_job_template);
+      return;
+    }
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -427,7 +575,8 @@ function TreeProvider(props: any) {
         setSidebarWidth,
         removeTreeNode,
         removeNode,
-        refreshNode
+        refreshNode,
+        runChecks
       }}
       {...props}
     />

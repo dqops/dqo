@@ -278,18 +278,6 @@ public class SensorExecutionRunParameters {
             return this.timeSeries;
         }
 
-        if (this.column != null && this.column.getTimeSeriesOverride() != null) {
-            return this.column.getTimeSeriesOverride();
-        }
-
-        if (this.table != null && this.table.getTimeSeries() != null) {
-            return this.table.getTimeSeries();
-        }
-
-        if (this.connection != null && this.connection.getDefaultTimeSeries() != null) {
-            return this.connection.getDefaultTimeSeries();
-        }
-
         return TimeSeriesConfigurationSpec.createDefault();
     }
 }

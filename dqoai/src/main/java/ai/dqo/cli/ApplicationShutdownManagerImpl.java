@@ -15,6 +15,8 @@
  */
 package ai.dqo.cli;
 
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -26,10 +28,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationShutdownManagerImpl implements ApplicationShutdownManager {
     private ApplicationContext applicationContext;
+    private DqoJobQueue dqoJobQueue;
+    private JobSchedulerService jobSchedulerService;
 
+    /**
+     * Constructor that receives dependencies to services that should be notified to shutdown.
+     * @param applicationContext Spring application context - used to stop the web server.
+     * @param dqoJobQueue Job queue.
+     * @param jobSchedulerService Job scheduler.
+     */
     @Autowired
-    public ApplicationShutdownManagerImpl(ApplicationContext applicationContext) {
+    public ApplicationShutdownManagerImpl(ApplicationContext applicationContext,
+                                          DqoJobQueue dqoJobQueue,
+                                          JobSchedulerService jobSchedulerService) {
         this.applicationContext = applicationContext;
+        this.dqoJobQueue = dqoJobQueue;
+        this.jobSchedulerService = jobSchedulerService;
     }
 
     /**
@@ -37,7 +51,9 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
      * @param returnCode Return code.
      */
     @Override
-    public void initiateShutdown(int returnCode){
+    public void initiateShutdown(int returnCode) {
+        this.dqoJobQueue.stop();
+        jobSchedulerService.shutdown();
         SpringApplication.exit(this.applicationContext, () -> returnCode);
     }
 }

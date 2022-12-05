@@ -22,6 +22,7 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -50,7 +51,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         {
 			put("target", o -> o.target);
             put("timestamp_columns", o -> o.timestampColumns);
-			put("time_series", o -> o.timeSeries);
 			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -97,15 +97,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
 
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    @Deprecated
-    private TimeSeriesConfigurationSpec timeSeries;
-
-    @JsonPropertyDescription("Data streams configuration. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Data stream mappings list. Data streams are configured in two cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DataStreamMappingSpec dataStreams = new DataStreamMappingSpec();
+    private DataStreamMappingSpecMap dataStreams = new DataStreamMappingSpecMap();
 
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
@@ -233,30 +228,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the time series configuration for this table.
-     * @return Time series configuration.
+     * Returns the data streams configurations for the table.
+     * @return Data streams configurations.
      */
-    @Deprecated
-    public TimeSeriesConfigurationSpec getTimeSeries() {
-        return timeSeries;
-    }
-
-    /**
-     * Sets a new time series configuration for this table.
-     * @param timeSeries New time series configuration.
-     */
-    @Deprecated
-    public void setTimeSeries(TimeSeriesConfigurationSpec timeSeries) {
-		setDirtyIf(!Objects.equals(this.timeSeries, timeSeries));
-        this.timeSeries = timeSeries;
-		propagateHierarchyIdToField(timeSeries, "time_series");
-    }
-
-    /**
-     * Returns the data streams configuration for the table.
-     * @return Data streams configuration.
-     */
-    public DataStreamMappingSpec getDataStreams() {
+    public DataStreamMappingSpecMap getDataStreams() {
         return dataStreams;
     }
 
@@ -264,7 +239,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      * Returns the data streams configuration for the table.
      * @param dataStreams Data streams configuration.
      */
-    public void setDataStreams(DataStreamMappingSpec dataStreams) {
+    public void setDataStreams(DataStreamMappingSpecMap dataStreams) {
 		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
         this.dataStreams = dataStreams;
 		propagateHierarchyIdToField(dataStreams, "data_streams");
@@ -492,9 +467,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
-            if (cloned.timeSeries != null) {
-                cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
-            }
             if (cloned.dataStreams != null) {
                 cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
@@ -521,7 +493,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
-            cloned.timeSeries = null;
             cloned.timestampColumns = null;
             cloned.dataStreams = null;
             cloned.labels = null;
@@ -551,7 +522,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timestampColumns = null;
-            cloned.timeSeries = null;
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;

@@ -38,71 +38,43 @@ public class DataStreamsMappingSearchMatcher {
 				dataStreams.getLevel7() == null || dataStreams.getLevel8() == null || dataStreams.getLevel9() == null) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel1().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel1().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel1().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel1().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel2().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel2().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel2().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel2().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel3().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel3().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel3().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel3().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel4().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel4().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel4().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel4().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel5().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel5().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel5().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel5().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel6().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel6().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel6().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel6().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel7().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel7().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel7().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel7().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel8().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel8().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel8().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel8().getTag(), level)) {
 			return true;
 		}
-		if (level.equals(dataStreams.getLevel9().getStaticValue()) ||
-				StringPatternComparer.matchSearchPattern(dataStreams.getLevel9().getStaticValue(), level)) {
+		if (level.equals(dataStreams.getLevel9().getTag()) ||
+				StringPatternComparer.matchSearchPattern(dataStreams.getLevel9().getTag(), level)) {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Returns a boolean value if filters fit spec.
-	 * @param connectionSearchFilters Connection search filters.
-	 * @param dataStreamMappingSpec Data streams mapping spec.
-	 * @return Boolean value if filters fit spec.
-	 */
-	static boolean matchAllConnectionDataStreamsMapping(ConnectionSearchFilters connectionSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
-		String[] dimensions = connectionSearchFilters.getDimensions();
-		if (dimensions == null) {
-			return true;
-		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
-	}
-
-	/**
-	 * Returns a boolean value if filters fit spec.
-	 * @param tableSearchFilters Table search filters.
-	 * @param dataStreamsMappingSpec Data streams configuration spec.
-	 * @return Boolean value if filters fit spec.
-	 */
-	static boolean matchAllTableDataStreams(TableSearchFilters tableSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
-		String[] dimensions = tableSearchFilters.getDimensions();
-		if (dimensions == null) {
-			return true;
-		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamsMappingSpec));
 	}
 
 	/**

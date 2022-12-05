@@ -63,7 +63,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		this.sut = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test
@@ -417,7 +417,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -436,7 +436,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
         runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("IT")));
+                        DataStreamLevelSpecObjectMother.createTag("IT")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -454,7 +454,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
     void renderSensor_whenLevel1StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -472,7 +472,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
     void renderSensor_whenLevel1StaticStringWithQuoteAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE's")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE's")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -491,8 +491,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -511,9 +511,9 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -533,8 +533,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         null,
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -553,8 +553,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createCurrentTimeSeries(TimeSeriesGradient.DAY));
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("US"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("US"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -574,7 +574,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("country"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
