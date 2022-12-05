@@ -5,7 +5,7 @@ import {
 } from '../../../api';
 import Select from '../../Select';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {

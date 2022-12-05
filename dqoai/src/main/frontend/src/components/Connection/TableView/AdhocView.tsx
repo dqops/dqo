@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../DataQualityChecks';
-import ActionGroup from './ActionGroup';
+import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { UIAllChecksModel } from '../../../api';
@@ -59,7 +59,7 @@ const AdhocView = ({
 
   return (
     <div>
-      <ActionGroup
+      <TableActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdated}
         isUpdating={isUpdating}
