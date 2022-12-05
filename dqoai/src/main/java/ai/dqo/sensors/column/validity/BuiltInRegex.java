@@ -20,5 +20,6 @@ package ai.dqo.sensors.column.validity;
  */
 public enum BuiltInRegex {
     email,
-    phoneNumber
+    phoneNumber,
+    zipCodeUS
 }
