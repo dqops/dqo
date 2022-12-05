@@ -22,6 +22,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.DataStreamTableBasicModel;
+import ai.dqo.rest.models.metadata.DataStreamTableModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.*;
 
@@ -59,7 +61,7 @@ public class DataStreamsTableController {
      * @return List of basic models of data streams on the table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams")
-    @ApiOperation(value = "getDataStreams", notes = "Returns a list of datastreams on the table", response = DataStreamTableBasicModel[].class)
+    @ApiOperation(value = "getDataStreams", notes = "Returns a list of data streams on the table", response = DataStreamTableBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = DataStreamTableBasicModel[].class),
@@ -69,26 +71,14 @@ public class DataStreamsTableController {
     public ResponseEntity<Flux<DataStreamTableBasicModel>> getDataStreams(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam ("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
+            @ApiParam("Table name") @PathVariable String tableName) {
+        DataStreamMappingSpecMap dataStreamMapping = this.obtainDataStreamMapping(connectionName, schemaName, tableName);
+        if (dataStreamMapping == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        DataStreamMappingSpecMap dataStreamMappingSpecMap = tableWrapper.getSpec().getDataStreams();
 
         List<DataStreamTableBasicModel> result = new LinkedList<>();
-        for (String dataStreamName : dataStreamMappingSpecMap.keySet()) {
+        for (String dataStreamName : dataStreamMapping.keySet()) {
             if (!dataStreamName.equals(DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME)) {
                 continue;
             }
@@ -101,5 +91,60 @@ public class DataStreamsTableController {
         }
 
         return new ResponseEntity<>(Flux.fromIterable(result), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Returns the configuration of a specific data stream.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param dataStreamName Data stream name.
+     * @return Model of the data stream containing all configurations.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @ApiOperation(value = "getDataStream", notes = "Returns a model of the data stream", response = DataStreamTableModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = DataStreamTableModel[].class),
+            @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DataStreamTableModel>> getDataStream(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Data stream name") @PathVariable String dataStreamName) {
+        DataStreamMappingSpecMap dataStreamMapping = this.obtainDataStreamMapping(connectionName, schemaName, tableName);
+        if (dataStreamMapping == null || !dataStreamMapping.containsKey(dataStreamName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DataStreamTableModel result = new DataStreamTableModel(){{
+            setConnectionName(connectionName);
+            setSchemaName(schemaName);
+            setTableName(tableName);
+            setDataStreamName(dataStreamName);
+            setSpec(dataStreamMapping.get(dataStreamName));
+        }};
+        return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
+    }
+
+    private DataStreamMappingSpecMap obtainDataStreamMapping(String connectionName, String schemaName, String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return null;
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return null;
+        }
+
+        return tableWrapper.getSpec().getDataStreams();
     }
 }
