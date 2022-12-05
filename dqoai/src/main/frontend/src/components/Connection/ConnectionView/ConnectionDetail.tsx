@@ -89,7 +89,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
         {updatedConnectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
-            spec={updatedConnectionBasic?.bigquery}
+            bigquery={updatedConnectionBasic?.bigquery}
             onChange={onChange}
           />
         )}
