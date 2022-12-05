@@ -19,18 +19,18 @@ import { Dispatch } from 'redux';
 import { ColumnApiClient } from '../../services/apiClient';
 import { COLUMN_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, UIAllChecksModel } from '../../api';
+import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../api';
 
 export const getColumnsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMNS
 });
 
-export const getColumnsSuccess = (data: any) => ({
+export const getColumnsSuccess = (data: ColumnBasicModel[]) => ({
   type: COLUMN_ACTION.GET_COLUMNS_SUCCESS,
   data
 });
 
-export const getColumnsFailed = (error: any) => ({
+export const getColumnsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMNS_ERROR,
   error
 });
@@ -56,12 +56,12 @@ export const getColumnBasicRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_BASIC
 });
 
-export const getColumnBasicSuccess = (data: any) => ({
+export const getColumnBasicSuccess = (data: ColumnBasicModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_BASIC_SUCCESS,
   data
 });
 
-export const getColumnBasicFailed = (error: any) => ({
+export const getColumnBasicFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_BASIC_ERROR,
   error
 });
@@ -96,7 +96,7 @@ export const updateColumnBasicSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_BASIC_SUCCESS
 });
 
-export const updateColumnBasicFailed = (error: any) => ({
+export const updateColumnBasicFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_BASIC_ERROR,
   error
 });
@@ -107,7 +107,7 @@ export const updateColumnBasic =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: any
+    data: ColumnBasicModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnBasicRequest());
@@ -129,12 +129,12 @@ export const getColumnCommentsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_COMMENTS
 });
 
-export const getColumnCommentsSuccess = (data: any) => ({
+export const getColumnCommentsSuccess = (data: CommentSpec[]) => ({
   type: COLUMN_ACTION.GET_COLUMN_COMMENTS_SUCCESS,
   data
 });
 
-export const getColumnCommentsFailed = (error: any) => ({
+export const getColumnCommentsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_COMMENTS_ERROR,
   error
 });
@@ -169,7 +169,7 @@ export const updateColumnCommentsSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_COMMENTS_SUCCESS
 });
 
-export const updateColumnCommentsFailed = (error: any) => ({
+export const updateColumnCommentsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_COMMENTS_ERROR,
   error
 });
@@ -180,7 +180,7 @@ export const updateColumnComments =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: any
+    data: CommentSpec[]
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCommentsRequest());
@@ -202,12 +202,12 @@ export const getColumnLabelsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_LABELS
 });
 
-export const getColumnLabelsSuccess = (data: any) => ({
+export const getColumnLabelsSuccess = (data: string[]) => ({
   type: COLUMN_ACTION.GET_COLUMN_LABELS_SUCCESS,
   data
 });
 
-export const getColumnLabelsFailed = (error: any) => ({
+export const getColumnLabelsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_LABELS_ERROR,
   error
 });
@@ -242,7 +242,7 @@ export const updateColumnLabelsSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_SUCCESS
 });
 
-export const updateColumnLabelsFailed = (error: any) => ({
+export const updateColumnLabelsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_ERROR,
   error
 });
@@ -253,7 +253,7 @@ export const updateColumnLabels =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: any
+    data: string[]
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnLabelsRequest());
@@ -275,12 +275,12 @@ export const getColumnChecksUIRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI
 });
 
-export const getColumnChecksUISuccess = (data: any) => ({
+export const getColumnChecksUISuccess = (data: UIAllChecksModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
   data
 });
 
-export const getColumnChecksUIFailed = (error: any) => ({
+export const getColumnChecksUIFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_ERROR,
   error
 });
@@ -315,7 +315,7 @@ export const updateColumnCheckUISuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_SUCCESS
 });
 
-export const updateColumnCheckUIFailed = (error: any) => ({
+export const updateColumnCheckUIFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_ERROR,
   error
 });
@@ -326,7 +326,7 @@ export const updateColumnCheckUI =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: any
+    data: UIAllChecksModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCheckUIRequest());
@@ -348,12 +348,12 @@ export const getColumnDailyCheckpointsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS
 });
 
-export const getColumnDailyCheckpointsSuccess = (data: any) => ({
+export const getColumnDailyCheckpointsSuccess = (data: UIAllChecksModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_SUCCESS,
   data
 });
 
-export const getColumnDailyCheckpointsFailed = (error: any) => ({
+export const getColumnDailyCheckpointsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR,
   error
 });
@@ -389,7 +389,7 @@ export const updateColumnDailyCheckpointsSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_SUCCESS
 });
 
-export const updateColumnDailyCheckpointsFailed = (error: any) => ({
+export const updateColumnDailyCheckpointsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_ERROR,
   error
 });
@@ -423,12 +423,12 @@ export const getColumnMonthlyCheckpointsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS
 });
 
-export const getColumnMonthlyCheckpointsSuccess = (data: any) => ({
+export const getColumnMonthlyCheckpointsSuccess = (data: UIAllChecksModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS,
   data
 });
 
-export const getColumnMonthlyCheckpointsFailed = (error: any) => ({
+export const getColumnMonthlyCheckpointsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
   error
 });
@@ -464,7 +464,7 @@ export const updateColumnMonthlyCheckpointsSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS
 });
 
-export const updateColumnMonthlyCheckpointsFailed = (error: any) => ({
+export const updateColumnMonthlyCheckpointsFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
   error
 });
@@ -498,12 +498,14 @@ export const getColumnDailyPartitionedChecksRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS
 });
 
-export const getColumnDailyPartitionedChecksSuccess = (data: any) => ({
+export const getColumnDailyPartitionedChecksSuccess = (
+  data: UIAllChecksModel
+) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data
 });
 
-export const getColumnDailyPartitionedChecksFailed = (error: any) => ({
+export const getColumnDailyPartitionedChecksFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
@@ -539,7 +541,7 @@ export const updateColumnDailyPartitionedChecksSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS
 });
 
-export const updateColumnDailyPartitionedChecksFailed = (error: any) => ({
+export const updateColumnDailyPartitionedChecksFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
@@ -573,12 +575,14 @@ export const getColumnMonthlyPartitionedChecksRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS
 });
 
-export const getColumnMonthlyPartitionedChecksSuccess = (data: any) => ({
+export const getColumnMonthlyPartitionedChecksSuccess = (
+  data: UIAllChecksModel
+) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data
 });
 
-export const getColumnMonthlyPartitionedChecksFailed = (error: any) => ({
+export const getColumnMonthlyPartitionedChecksFailed = (error: unknown) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });
@@ -614,7 +618,7 @@ export const updateColumnMonthlyPartitionedChecksSuccess = () => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS
 });
 
-export const updateColumnMonthlyPartitionedChecksFailed = (error: any) => ({
+export const updateColumnMonthlyPartitionedChecksFailed = (error: unknown) => ({
   type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });

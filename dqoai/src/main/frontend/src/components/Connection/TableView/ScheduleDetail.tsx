@@ -87,6 +87,9 @@ const ScheduleDetail = ({
   };
 
   const onUpdate = async () => {
+    if (!updatedSchedule) {
+      return;
+    }
     await dispatch(
       updateTableSchedule(
         connectionName,
