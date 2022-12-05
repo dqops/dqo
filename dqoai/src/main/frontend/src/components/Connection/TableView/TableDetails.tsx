@@ -46,6 +46,9 @@ const TableDetails = ({
   };
 
   const onUpdate = async () => {
+    if (!updatedTableBasic) {
+      return;
+    }
     await dispatch(
       updateTableBasic(connectionName, schemaName, tableName, updatedTableBasic)
     );

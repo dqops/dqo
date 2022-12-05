@@ -19,18 +19,25 @@ import { Dispatch } from 'redux';
 import { TableApiClient } from '../../services/apiClient';
 import { TABLE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { TableBasicModel, UIAllChecksModel } from '../../api';
+import {
+  CommentSpec,
+  DataStreamMappingSpec,
+  RecurringScheduleSpec,
+  TableAdHocCheckCategoriesSpec,
+  TableBasicModel,
+  UIAllChecksModel
+} from '../../api';
 
 export const getTablesRequest = () => ({
   type: TABLE_ACTION.GET_TABLES
 });
 
-export const getTablesSuccess = (data: any) => ({
+export const getTablesSuccess = (data: TableBasicModel[]) => ({
   type: TABLE_ACTION.GET_TABLES_SUCCESS,
   data
 });
 
-export const getTablesFailed = (error: any) => ({
+export const getTablesFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLES_ERROR,
   error
 });
@@ -52,12 +59,12 @@ export const getTableBasicRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_BASIC
 });
 
-export const getTableBasicSuccess = (data: any) => ({
+export const getTableBasicSuccess = (data: TableBasicModel) => ({
   type: TABLE_ACTION.GET_TABLE_BASIC_SUCCESS,
   data
 });
 
-export const getTableBasicFailed = (error: any) => ({
+export const getTableBasicFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_BASIC_ERROR,
   error
 });
@@ -86,13 +93,18 @@ export const updateTableBasicSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_BASIC_SUCCESS
 });
 
-export const updateTableBasicFailed = (error: any) => ({
+export const updateTableBasicFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_BASIC_ERROR,
   error
 });
 
 export const updateTableBasic =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: TableBasicModel
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableBasicRequest());
     try {
@@ -112,12 +124,12 @@ export const getTableScheduleRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_SCHEDULE
 });
 
-export const getTableScheduleSuccess = (data: any) => ({
+export const getTableScheduleSuccess = (data: RecurringScheduleSpec) => ({
   type: TABLE_ACTION.GET_TABLE_SCHEDULE_SUCCESS,
   data
 });
 
-export const getTableScheduleFailed = (error: any) => ({
+export const getTableScheduleFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_SCHEDULE_ERROR,
   error
 });
@@ -146,13 +158,18 @@ export const updateTableScheduleSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_SUCCESS
 });
 
-export const updateTableScheduleFailed = (error: any) => ({
+export const updateTableScheduleFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_ERROR,
   error
 });
 
 export const updateTableSchedule =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: RecurringScheduleSpec
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableScheduleRequest());
     try {
@@ -172,12 +189,12 @@ export const getTableCommentsRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_COMMENTS
 });
 
-export const getTableCommentsSuccess = (data: any) => ({
+export const getTableCommentsSuccess = (data: CommentSpec[]) => ({
   type: TABLE_ACTION.GET_TABLE_COMMENTS_SUCCESS,
   data
 });
 
-export const getTableCommentsFailed = (error: any) => ({
+export const getTableCommentsFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_COMMENTS_ERROR,
   error
 });
@@ -206,13 +223,18 @@ export const updateTableCommentsSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_COMMENTS_SUCCESS
 });
 
-export const updateTableCommentsFailed = (error: any) => ({
+export const updateTableCommentsFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_COMMENTS_ERROR,
   error
 });
 
 export const updateTableComments =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: CommentSpec[]
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableCommentsRequest());
     try {
@@ -232,12 +254,12 @@ export const getTableLabelsRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_LABELS
 });
 
-export const getTableLabelsSuccess = (data: any) => ({
+export const getTableLabelsSuccess = (data: string[]) => ({
   type: TABLE_ACTION.GET_TABLE_LABELS_SUCCESS,
   data
 });
 
-export const getTableLabelsFailed = (error: any) => ({
+export const getTableLabelsFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_LABELS_ERROR,
   error
 });
@@ -266,13 +288,18 @@ export const updateTableLabelsSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_LABELS_SUCCESS
 });
 
-export const updateTableLabelsFailed = (error: any) => ({
+export const updateTableLabelsFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_LABELS_ERROR,
   error
 });
 
 export const updateTableLabels =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: string[]
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableLabelsRequest());
     try {
@@ -292,12 +319,12 @@ export const getTableChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
 });
 
-export const getTableChecksSuccess = (data: any) => ({
+export const getTableChecksSuccess = (data: TableAdHocCheckCategoriesSpec) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
   data
 });
 
-export const getTableChecksFailed = (error: any) => ({
+export const getTableChecksFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR,
   error
 });
@@ -322,12 +349,12 @@ export const getTableChecksUiRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI
 });
 
-export const getTableChecksUiSuccess = (data: any) => ({
+export const getTableChecksUiSuccess = (data: UIAllChecksModel) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
   data
 });
 
-export const getTableChecksUiFailed = (error: any) => ({
+export const getTableChecksUiFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
   error
 });
@@ -356,13 +383,18 @@ export const updateTableChecksUISuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS
 });
 
-export const updateTableChecksUIFailed = (error: any) => ({
+export const updateTableChecksUIFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
   error
 });
 
 export const updateTableAdHocChecksUI =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: UIAllChecksModel
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableChecksUIRequest());
     try {
@@ -382,12 +414,14 @@ export const getTableDefaultDataStreamsMappingRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const getTableDefaultDataStreamsMappingSuccess = (data: any) => ({
+export const getTableDefaultDataStreamsMappingSuccess = (
+  data: DataStreamMappingSpec
+) => ({
   type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getTableDefaultDataStreamsMappingFailed = (error: any) => ({
+export const getTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
@@ -416,13 +450,18 @@ export const updateTableDefaultDataStreamsSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
 });
 
-export const updateTableDefaultDataStreamsMappingFailed = (error: any) => ({
+export const updateTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const updateTableDefaultDataStreamMapping =
-  (connectionName: string, schemaName: string, tableName: string, data: any) =>
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    data: DataStreamMappingSpec
+  ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableDefaultDataStreamsMappingRequest());
     try {
@@ -442,12 +481,12 @@ export const getTableDailyCheckpointsRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS
 });
 
-export const getTableDailyCheckpointsSuccess = (data: any) => ({
+export const getTableDailyCheckpointsSuccess = (data: UIAllChecksModel) => ({
   type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_SUCCESS,
   data
 });
 
-export const getTableDailyCheckpointsFailed = (error: any) => ({
+export const getTableDailyCheckpointsFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR,
   error
 });
@@ -477,7 +516,7 @@ export const updateTableDailyCheckpointsSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_SUCCESS
 });
 
-export const updateTableDailyCheckpointsFailed = (error: any) => ({
+export const updateTableDailyCheckpointsFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_ERROR,
   error
 });
@@ -509,12 +548,12 @@ export const getTableMonthlyCheckpointsRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS
 });
 
-export const getTableMonthlyCheckpointsSuccess = (data: any) => ({
+export const getTableMonthlyCheckpointsSuccess = (data: UIAllChecksModel) => ({
   type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_SUCCESS,
   data
 });
 
-export const getTableMonthlyCheckpointsFailed = (error: any) => ({
+export const getTableMonthlyCheckpointsFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR,
   error
 });
@@ -544,7 +583,7 @@ export const updateTableMonthlyCheckpointsSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_SUCCESS
 });
 
-export const updateTableMonthlyCheckpointsFailed = (error: any) => ({
+export const updateTableMonthlyCheckpointsFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_ERROR,
   error
 });
@@ -576,12 +615,14 @@ export const getTableDailyPartitionedChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS
 });
 
-export const getTableDailyPartitionedChecksSuccess = (data: any) => ({
+export const getTableDailyPartitionedChecksSuccess = (
+  data: UIAllChecksModel
+) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data
 });
 
-export const getTableDailyPartitionedChecksFailed = (error: any) => ({
+export const getTableDailyPartitionedChecksFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
@@ -611,7 +652,7 @@ export const updateTableDailyPartitionedChecksSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS
 });
 
-export const updateTableDailyPartitionedChecksFailed = (error: any) => ({
+export const updateTableDailyPartitionedChecksFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
@@ -643,12 +684,14 @@ export const getTableMonthlyPartitionedChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS
 });
 
-export const getTableMonthlyPartitionedChecksSuccess = (data: any) => ({
+export const getTableMonthlyPartitionedChecksSuccess = (
+  data: UIAllChecksModel
+) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data
 });
 
-export const getTableMonthlyPartitionedChecksFailed = (error: any) => ({
+export const getTableMonthlyPartitionedChecksFailed = (error: unknown) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });
@@ -678,7 +721,7 @@ export const updateTableMonthlyPartitionedChecksSuccess = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS
 });
 
-export const updateTableMonthlyPartitionedChecksFailed = (error: any) => ({
+export const updateTableMonthlyPartitionedChecksFailed = (error: unknown) => ({
   type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });

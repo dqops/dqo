@@ -42,6 +42,9 @@ const ColumnChecksView = ({
   }, [connectionName, schemaName, tableName, columnName]);
 
   const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
     await dispatch(
       updateColumnCheckUI(
         connectionName,
