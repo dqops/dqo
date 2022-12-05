@@ -6,7 +6,7 @@ import {
   updateTableLabels
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import LabelsView from '../LabelsView';
 
 interface ITableLabelsViewProps {

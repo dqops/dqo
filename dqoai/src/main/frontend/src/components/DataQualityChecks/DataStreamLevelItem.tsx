@@ -33,8 +33,7 @@ const DataStreamLevelItem = ({
         <div className="">
           <RadioButton
             checked={
-              dataStreamLevel?.source ===
-              DataStreamLevelSpecSourceEnum.tag
+              dataStreamLevel?.source === DataStreamLevelSpecSourceEnum.tag
             }
             label="Tag"
             onClick={() =>
@@ -56,8 +55,7 @@ const DataStreamLevelItem = ({
               })
             }
             disabled={
-              dataStreamLevel?.source !==
-              DataStreamLevelSpecSourceEnum.tag
+              dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.tag
             }
           />
         </div>

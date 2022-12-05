@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
@@ -34,7 +34,9 @@ const TableDataStream = ({
   }, [dataStreamsMapping]);
 
   useEffect(() => {
-    dispatch(getTableDefaultDataStreamMapping(connectionName, schemaName, tableName));
+    dispatch(
+      getTableDefaultDataStreamMapping(connectionName, schemaName, tableName)
+    );
   }, []);
 
   const onUpdate = async () => {

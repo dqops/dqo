@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TableBasicModel } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';

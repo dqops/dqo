@@ -4,7 +4,7 @@ import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
