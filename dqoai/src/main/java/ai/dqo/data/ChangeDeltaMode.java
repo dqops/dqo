@@ -19,6 +19,7 @@ package ai.dqo.data;
  * Change delta modes supported by the storage service. Parquet files could be simply replaced, or we can detect
  * rows that should be inserted/updated/deleted.
  */
+@Deprecated
 public enum ChangeDeltaMode {
     /**
      * All rows are replaced in a snapshot. The snapshot is written to disk.

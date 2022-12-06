@@ -47,6 +47,9 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
   };
 
   const onUpdate = async () => {
+    if (!updatedConnectionBasic) {
+      return;
+    }
     await dispatch(
       updateConnectionBasic(connectionName, updatedConnectionBasic)
     );

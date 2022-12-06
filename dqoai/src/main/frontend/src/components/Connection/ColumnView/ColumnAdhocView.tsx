@@ -42,6 +42,9 @@ const AdhocView = ({
   }, [checksUI]);
 
   const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
     await dispatch(
       updateColumnCheckUI(
         connectionName,

@@ -38,6 +38,10 @@ const ChecksView = ({
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
+
     await dispatch(
       updateTableAdHocChecksUI(
         connectionName,

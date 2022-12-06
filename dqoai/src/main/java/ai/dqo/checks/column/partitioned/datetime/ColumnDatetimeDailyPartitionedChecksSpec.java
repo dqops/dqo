@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,31 @@ import java.util.Objects;
 public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_partition_max_datetime_values_in_future_percent", o -> o.dailyPartitionMaxDatetimeValuesInFuturePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent;
+
+    /**
+     * Returns a maximum datetime values in future percentage check.
+     * @return Maximum datetime values in future percentage check.
+     */
+    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getDailyPartitionMaxDatetimeValuesInFuturePercent() {
+        return dailyPartitionMaxDatetimeValuesInFuturePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum datetime values in future percentage check.
+     * @param dailyPartitionMaxDatetimeValuesInFuturePercent Maximum datetime values in future percentage check.
+     */
+    public void setDailyPartitionMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDatetimeValuesInFuturePercent, dailyPartitionMaxDatetimeValuesInFuturePercent));
+        this.dailyPartitionMaxDatetimeValuesInFuturePercent = dailyPartitionMaxDatetimeValuesInFuturePercent;
+        propagateHierarchyIdToField(dailyPartitionMaxDatetimeValuesInFuturePercent, "daily_partition_max_datetime_values_in_future_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

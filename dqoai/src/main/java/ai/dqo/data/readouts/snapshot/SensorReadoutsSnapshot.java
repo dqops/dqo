@@ -232,9 +232,9 @@ public class SensorReadoutsSnapshot {
             for (TableSlice tableSlice : tableSlices) {
                 Table timeSeriesTable = tableSlice.asTable();
                 LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME);
-                LongColumn dimensionIdColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
+                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
                 long checkHashId = checkHashColumn.get(0); // the first row has the value
-                long dimensionId = dimensionIdColumn.get(0);
+                long dimensionId = dataStreamHashColumn.get(0);
 
                 SensorReadoutTimeSeriesKey timeSeriesKey = new SensorReadoutTimeSeriesKey(checkHashId, dimensionId);
                 Table sortedTimeSeriesTable = timeSeriesTable.sortOn(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME);

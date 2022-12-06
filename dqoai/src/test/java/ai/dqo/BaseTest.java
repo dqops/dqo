@@ -15,7 +15,7 @@
  */
 package ai.dqo;
 
-import ai.dqo.data.ParquetSupport;
+import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.AfterEach;
@@ -25,9 +25,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
 
 /**
  * Base class for unit tests. All test classes must extend this class DIRECTLY (with no intermediate classes in the class hierarchy).
@@ -47,7 +44,7 @@ public abstract class BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
-        ParquetSupport.ensureInitialized();
+        TablesawParquetSupportFix.ensureInitialized();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         // to be extended in the future when the need appears
     }
