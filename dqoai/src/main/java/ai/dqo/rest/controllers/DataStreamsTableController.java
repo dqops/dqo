@@ -175,6 +175,11 @@ public class DataStreamsTableController {
 
         DataStreamMappingSpec newSpec = dataStreamModel.getSpec();
         dataStreamMapping.put(newName, newSpec);
+        if (!newName.equals(dataStreamName)) {
+            // If renaming actually happened.
+            dataStreamMapping.remove(dataStreamName);
+        }
+
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
@@ -262,7 +267,7 @@ public class DataStreamsTableController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        // If data stream is not found, return success (because idempotence).
+        // If data stream is not found, return success (idempotence).
         dataStreamMapping.remove(dataStreamName);
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
