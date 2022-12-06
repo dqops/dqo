@@ -16,7 +16,7 @@
 package ai.dqo.data.readouts.snapshot;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
-import ai.dqo.data.readouts.filestorage.DummySensorReadoutsFileStorageService;
+import ai.dqo.data.storage.DummyParquetPartitionStorageService;
 
 /**
  * Object mother for {@link SensorReadoutsSnapshotFactory}
@@ -28,6 +28,6 @@ public class SensorReadoutsSnapshotFactoryObjectMother {
      * @return Sensor readouts storage service.
      */
     public static SensorReadoutsSnapshotFactory createDummySensorReadoutStorageService() {
-        return new SensorReadoutsSnapshotFactoryImpl(new DummySensorReadoutsFileStorageService(), new SensorReadoutsTableFactoryImpl());
+        return new SensorReadoutsSnapshotFactoryImpl(new DummyParquetPartitionStorageService(), new SensorReadoutsTableFactoryImpl());
     }
 }

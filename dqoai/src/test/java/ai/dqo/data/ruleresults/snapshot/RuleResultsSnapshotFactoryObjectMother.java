@@ -16,7 +16,6 @@
 package ai.dqo.data.ruleresults.snapshot;
 
 import ai.dqo.data.ruleresults.factory.RuleResultsTableFactoryImpl;
-import ai.dqo.data.ruleresults.filestorage.DummyRuleResultsFileStorageService;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.data.storage.DummyParquetPartitionStorageService;
 

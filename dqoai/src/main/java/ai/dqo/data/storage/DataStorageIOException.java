@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.data;
+package ai.dqo.data.storage;
 
 /**
  * Exception that wraps an {@link java.io.IOException} for IO related issues when a sensor result or alert result files cannot be loaded or saved.

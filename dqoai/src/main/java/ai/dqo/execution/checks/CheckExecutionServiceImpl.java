@@ -217,7 +217,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
+        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         int checksCount = 0;
         int sensorResultsCount = 0;
@@ -295,7 +295,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
-        if (sensorReadoutsSnapshot.hasNewReadouts() && !dummySensorExecution) {
+        if (sensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             sensorReadoutsSnapshot.save();
         }
 
@@ -341,7 +341,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
+        Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         int checksCount = 0;
         int sensorResultsCount = 0;
@@ -412,7 +412,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingSensorResults(new SavingSensorResultsEvent(tableSpec, sensorReadoutsSnapshot));
-        if (sensorReadoutsSnapshot.hasNewReadouts() && !dummySensorExecution) {
+        if (sensorReadoutsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             sensorReadoutsSnapshot.save();
         }
 
