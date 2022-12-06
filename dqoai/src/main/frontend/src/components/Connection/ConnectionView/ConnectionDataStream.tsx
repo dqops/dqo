@@ -34,6 +34,9 @@ const ConnectionDataStream = ({
   }, [connectionName]);
 
   const onUpdate = async () => {
+    if (!updatedDataStreamsMapping) {
+      return;
+    }
     await dispatch(
       updateConnectionDefaultDataStreamsMapping(
         connectionName,

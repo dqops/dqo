@@ -326,7 +326,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<?>> createConnection(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Connection specification") @RequestBody ConnectionSpec connectionSpec) {
-        if (Strings.isNullOrEmpty(connectionName)) {
+        if (Strings.isNullOrEmpty(connectionName) || connectionSpec == null || connectionSpec.getProviderType() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
@@ -365,7 +365,7 @@ public class ConnectionsController {
     public ResponseEntity<Mono<?>> createConnectionBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
-        if (Strings.isNullOrEmpty(connectionName)) {
+        if (Strings.isNullOrEmpty(connectionName) || connectionBasicModel == null || connectionBasicModel.getProviderType() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 

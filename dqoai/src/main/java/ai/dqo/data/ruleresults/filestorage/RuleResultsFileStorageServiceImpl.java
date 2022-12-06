@@ -50,6 +50,7 @@ import java.time.temporal.ChronoUnit;
  * Service that provides access to rule evaluation results (alerts).
  */
 @Service
+@Deprecated
 public class RuleResultsFileStorageServiceImpl implements RuleResultsFileStorageService {
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;

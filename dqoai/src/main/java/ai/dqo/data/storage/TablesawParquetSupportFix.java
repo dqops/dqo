@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.data;
+package ai.dqo.data.storage;
 
 import com.google.common.base.Strings;
 import net.tlabs.tablesaw.parquet.TablesawParquet;
@@ -22,7 +22,7 @@ import tech.tablesaw.api.ColumnType;
 /**
  * Tablesaw parquet format initialization. Performs one time parquet support initialization.
  */
-public class ParquetSupport {
+public class TablesawParquetSupportFix {
     private static boolean initialized;
     private static final Object lock = new Object();
 

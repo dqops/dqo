@@ -25,7 +25,7 @@ logging:
     root: WARN
     org:
       jline: ERROR
-      springframework: OFF
+      springframework: ERROR
       apache:
         hadoop:
           util: ERROR

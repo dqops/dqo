@@ -16,7 +16,7 @@
 package ai.dqo;
 
 import ai.dqo.core.configuration.DqoCloudConfigurationPropertiesObjectMother;
-import ai.dqo.data.ParquetSupport;
+import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +45,7 @@ public abstract class BaseIntegrationTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
-        ParquetSupport.ensureInitialized();
+        TablesawParquetSupportFix.ensureInitialized();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         DqoCloudConfigurationPropertiesObjectMother.configureTestableApiKey();
         // to be extended in the future when the need appears

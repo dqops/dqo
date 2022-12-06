@@ -5,19 +5,19 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { TableApiClient } from '../../../services/apiClient';
 
-interface IActionGroupProps {
+interface ITableActionGroupProps {
   isDisabled?: boolean;
   onUpdate: () => void;
   isUpdating?: boolean;
   isUpdated?: boolean;
 }
 
-const ActionGroup = ({
+const TableActionGroup = ({
   isUpdated,
   isUpdating,
   isDisabled,
   onUpdate
-}: IActionGroupProps) => {
+}: ITableActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tableBasic } = useSelector((state: IRootState) => state.table);
 
@@ -58,4 +58,4 @@ const ActionGroup = ({
   );
 };
 
-export default ActionGroup;
+export default TableActionGroup;

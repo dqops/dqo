@@ -61,6 +61,9 @@ const TableDetails = ({
   }, []);
 
   const onUpdate = async () => {
+    if (!updatedColumnBasic) {
+      return;
+    }
     await dispatch(
       updateColumnBasic(
         connectionName,

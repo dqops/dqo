@@ -72,6 +72,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneab
     public static TimeSeriesConfigurationSpec createDefault() {
         return new TimeSeriesConfigurationSpec() {{
 			setMode(TimeSeriesMode.current_time);
+            setTimeGradient(TimeSeriesGradient.MILLISECOND);
         }};
     }
 

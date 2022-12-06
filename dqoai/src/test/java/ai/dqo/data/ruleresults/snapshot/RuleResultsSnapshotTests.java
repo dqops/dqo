@@ -20,12 +20,15 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
-import ai.dqo.data.ruleresults.filestorage.RuleResultsFileStorageServiceImpl;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
+import ai.dqo.data.storage.ParquetPartitionStorageService;
+import ai.dqo.data.storage.ParquetPartitionStorageServiceImpl;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,12 +39,13 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @SpringBootTest
 public class RuleResultsSnapshotTests extends BaseTest {
     private RuleResultsSnapshot sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private RuleResultsFileStorageServiceImpl ruleResultsFileStorageService;
+    private ParquetPartitionStorageService parquestStorageService;
     private PhysicalTableName tableName;
 
     /**
@@ -57,10 +61,10 @@ public class RuleResultsSnapshotTests extends BaseTest {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
 		LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        ruleResultsFileStorageService = new RuleResultsFileStorageServiceImpl(localUserHomeProviderStub, newLockManager);
+        parquestStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new RuleResultsSnapshot("conn", tableName, this.ruleResultsFileStorageService, newRows);
+		this.sut = new RuleResultsSnapshot("conn", tableName, this.parquestStorageService, newRows);
     }
 
     void saveThreeMonthsData() {
@@ -81,7 +85,8 @@ public class RuleResultsSnapshotTests extends BaseTest {
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
 
-		this.ruleResultsFileStorageService.saveTableInMonthsRange(sourceTable, this.sut.getConnection(), tableName, start, end);
+        RuleResultsSnapshot tempSut = new RuleResultsSnapshot("conn", tableName, this.parquestStorageService, sourceTable);
+        tempSut.save();
     }
 
     @Test
@@ -92,16 +97,21 @@ public class RuleResultsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-        Table table = this.sut.getHistoricResults();
-        Assertions.assertNotNull(table);
-        Assertions.assertEquals(2, table.rowCount());
+        LoadedMonthlyPartition firstMonth = this.sut.getMonthPartition(start, false);
+        Assertions.assertNotNull(firstMonth);
+        Assertions.assertNotNull(firstMonth.getData());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        Assertions.assertEquals(20.5, firstMonth.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                firstMonth.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
+
+        LoadedMonthlyPartition secondMonth = this.sut.getMonthPartition(end, false);
+        Assertions.assertNotNull(secondMonth);
+        Assertions.assertNotNull(secondMonth.getData());
+
+        Assertions.assertEquals(30.5, secondMonth.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
+                secondMonth.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
     }
 
     @Test
@@ -111,12 +121,12 @@ public class RuleResultsSnapshotTests extends BaseTest {
         LocalDate end = LocalDate.of(2022, 3, 1);
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-        Table table = this.sut.getHistoricResults();
-        Assertions.assertNotNull(table);
-        Assertions.assertEquals(2, table.rowCount());
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = this.sut.getLoadedMonthlyPartitions();
+        Assertions.assertNotNull(loadedMonthlyPartitions);
+        Assertions.assertEquals(2, loadedMonthlyPartitions.size());
 
 		this.sut.ensureMonthsAreLoaded(start, end);
-        Assertions.assertEquals(2, table.rowCount());
+        Assertions.assertEquals(2, loadedMonthlyPartitions.size());
     }
 
     @Test
@@ -127,21 +137,27 @@ public class RuleResultsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-		this.sut.ensureMonthsAreLoaded(LocalDate.of(2022, 1, 1), end);
+        LocalDate dateMonth1 = LocalDate.of(2022, 1, 1);
+        this.sut.ensureMonthsAreLoaded(dateMonth1, end);
 
-        Table table = this.sut.getHistoricResults();
-        Assertions.assertNotNull(table);
-        Assertions.assertEquals(3, table.rowCount());
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = this.sut.getLoadedMonthlyPartitions();
+        Assertions.assertNotNull(loadedMonthlyPartitions);
+        Assertions.assertEquals(3, loadedMonthlyPartitions.size());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        LoadedMonthlyPartition month2 = this.sut.getMonthPartition(start, false);
+        Assertions.assertEquals(20.5, month2.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                month2.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
+
+        LoadedMonthlyPartition month3 = this.sut.getMonthPartition(end, false);
+        Assertions.assertEquals(30.5, month3.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(2));
+                month3.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
+
+        LoadedMonthlyPartition month1 = this.sut.getMonthPartition(dateMonth1, false);
+        Assertions.assertEquals(10.5, month1.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(2));
+                month1.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
     }
 
     @Test
@@ -152,31 +168,26 @@ public class RuleResultsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-		this.sut.ensureMonthsAreLoaded(end, LocalDate.of(2022, 3, 1));
+        LocalDate dateMonth3 = LocalDate.of(2022, 3, 1);
+        this.sut.ensureMonthsAreLoaded(end, dateMonth3);
 
-        Table table = this.sut.getHistoricResults();
-        Assertions.assertNotNull(table);
-        Assertions.assertEquals(3, table.rowCount());
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = this.sut.getLoadedMonthlyPartitions();
+        Assertions.assertNotNull(loadedMonthlyPartitions);
+        Assertions.assertEquals(3, loadedMonthlyPartitions.size());
 
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        LoadedMonthlyPartition month1 = this.sut.getMonthPartition(start, false);
+        Assertions.assertEquals(10.5, month1.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                month1.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
+
+        LoadedMonthlyPartition month2 = this.sut.getMonthPartition(end, false);
+        Assertions.assertEquals(20.5, month2.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(2));
+                month2.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
+
+        LoadedMonthlyPartition month3 = this.sut.getMonthPartition(dateMonth3, false);
+        Assertions.assertEquals(30.5, month3.getData().column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(2));
-    }
-
-    @Test
-    void hasNewRuleResults_whenNoNewRows_thenReturnsFalse() {
-        Assertions.assertFalse(this.sut.hasNewRuleResults());
-    }
-
-    @Test
-    void hasNewRuleResults_whenNewRows_thenReturnsTrue() {
-		this.sut.getNewResults().appendRow();
-        Assertions.assertTrue(this.sut.hasNewRuleResults());
+                month3.getData().column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
     }
 }

@@ -1,23 +1,19 @@
 package ai.dqo.bigquery.sensors.table.standard;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
-import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
-import ai.dqo.checks.table.relevance.TableRelevanceMovingWeekAverageCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.relevance.TableRelevanceMovingWeekAverageSensorParametersSpec;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,12 +44,15 @@ public class TableStandardRowCountSensorParametersSpecIntegrationTest extends Ba
         this.sut = new TableStandardRowCountSensorParametersSpec();
         this.checkSpec = new TableMinRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+        TableAdHocStandardChecksSpec category = new TableAdHocStandardChecksSpec();
+        this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
+        category.setMinRowCount(this.checkSpec);
     }
 
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableAndCheck(
-                sampleTableMetadata, this.checkSpec, CheckType.ADHOC, TimeSeriesConfigurationSpec.createDefault());
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

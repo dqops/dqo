@@ -218,7 +218,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
-        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getNewResults();
+        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         int checksCount = 0;
         int sensorResultsCount = 0;
         int passedRules = 0;
@@ -300,7 +300,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
-        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
+        if (ruleResultsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             ruleResultsSnapshot.save();
         }
         progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, checks,
@@ -342,7 +342,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getNewResults();
-        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getNewResults();
+        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         int checksCount = 0;
         int sensorResultsCount = 0;
         int passedRules = 0;
@@ -417,7 +417,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         }
 
         progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResults(tableSpec, ruleResultsSnapshot));
-        if (ruleResultsSnapshot.hasNewRuleResults() && !dummySensorExecution) {
+        if (ruleResultsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
             ruleResultsSnapshot.save();
         }
         progressListener.onTableChecksProcessingFinished(new TableChecksProcessingFinished(connectionWrapper, tableSpec, null,
