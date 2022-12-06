@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,31 @@ import java.util.Objects;
 public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocDatetimeChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("max_datetime_values_in_future_percent", o -> o.maxDatetimeValuesInFuturePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent;
+
+    /**
+     * Returns a maximum datetime values in future percent check.
+     * @return Maximum datetime values in future percent check.
+     */
+    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getMaxDatetimeValuesInFuturePercent() {
+        return maxDatetimeValuesInFuturePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum datetime values in future percent check.
+     * @param maxDatetimeValuesInFuturePercent Maximum datetime values in future percent check.
+     */
+    public void setMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxDatetimeValuesInFuturePercent, maxDatetimeValuesInFuturePercent));
+        this.maxDatetimeValuesInFuturePercent = maxDatetimeValuesInFuturePercent;
+        propagateHierarchyIdToField(maxDatetimeValuesInFuturePercent, "max_datetime_values_in_future_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
