@@ -99,11 +99,11 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), null);
         UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, new CheckSearchFilters());
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(4, uiBasicModel.getCategories().size());
+        Assertions.assertEquals(2, uiBasicModel.getCategories().size());
 
         Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>> names =
                 extractCheckNamesFromUIModels(uiModel, uiBasicModel);
@@ -114,11 +114,11 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), null);
         UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, new CheckSearchFilters());
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(6, uiBasicModel.getCategories().size());
+        Assertions.assertEquals(5, uiBasicModel.getCategories().size());
 
         Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>> names =
                 extractCheckNamesFromUIModels(uiModel, uiBasicModel);

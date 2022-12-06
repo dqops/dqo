@@ -222,7 +222,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -240,7 +240,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @Test
