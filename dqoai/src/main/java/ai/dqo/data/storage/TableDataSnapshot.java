@@ -7,11 +7,9 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Contains a snapshot of data for one parquet table (such as sensor_readouts or rule_results) that was loaded
@@ -93,6 +91,29 @@ public class TableDataSnapshot {
      */
     public Map<ParquetPartitionId, LoadedMonthlyPartition> getLoadedMonthlyPartitions() {
         return loadedMonthlyPartitions;
+    }
+
+    /**
+     * Creates a table with a combined data from all loaded partitions as a single tablesaw table.
+     * The order of partitions whose data is appended to the result table is not ensured.
+     * @return Table with the data from all partitions or null when no partitions were loaded or all loaded partitions were empty.
+     */
+    public Table getAllData() {
+        Table allData = null;
+        if (loadedMonthlyPartitions != null) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : this.loadedMonthlyPartitions.values()) {
+                if (loadedMonthlyPartition.getData() != null) {
+                    if (allData == null) {
+                        allData = loadedMonthlyPartition.getData().copy();
+                    }
+                    else {
+                        allData.append(loadedMonthlyPartition.getData());
+                    }
+                }
+            }
+        }
+
+        return allData;
     }
 
     /**

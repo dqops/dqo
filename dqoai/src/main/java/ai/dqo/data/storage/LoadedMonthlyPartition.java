@@ -23,6 +23,16 @@ public class LoadedMonthlyPartition {
     }
 
     /**
+     * Creates a wrapper over one empty partition with no data.
+     * @param partitionId Partition id - identifies the partition (month, schema.table, month).
+     */
+    public LoadedMonthlyPartition(ParquetPartitionId partitionId) {
+        this.partitionId = partitionId;
+        this.lastModified = 0L;
+        this.data = null;
+    }
+
+    /**
      * Returns the partition identifier (month, schema.table, month).
      * @return Partition identifier.
      */

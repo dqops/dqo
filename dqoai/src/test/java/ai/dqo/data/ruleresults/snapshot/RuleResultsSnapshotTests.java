@@ -45,7 +45,7 @@ import java.util.Map;
 public class RuleResultsSnapshotTests extends BaseTest {
     private RuleResultsSnapshot sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private ParquetPartitionStorageService parquestStorageService;
+    private ParquetPartitionStorageService parquetStorageService;
     private PhysicalTableName tableName;
 
     /**
@@ -61,10 +61,10 @@ public class RuleResultsSnapshotTests extends BaseTest {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
 		LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        parquestStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
+        parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new RuleResultsSnapshot("conn", tableName, this.parquestStorageService, newRows);
+		this.sut = new RuleResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);
     }
 
     void saveThreeMonthsData() {
@@ -85,7 +85,7 @@ public class RuleResultsSnapshotTests extends BaseTest {
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
 
-        RuleResultsSnapshot tempSut = new RuleResultsSnapshot("conn", tableName, this.parquestStorageService, sourceTable);
+        RuleResultsSnapshot tempSut = new RuleResultsSnapshot("conn", tableName, this.parquetStorageService, sourceTable);
         tempSut.save();
     }
 

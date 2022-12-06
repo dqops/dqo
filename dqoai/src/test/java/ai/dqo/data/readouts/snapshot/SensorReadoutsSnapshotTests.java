@@ -23,9 +23,11 @@ import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
-import ai.dqo.data.readouts.filestorage.SensorReadoutsFileStorageServiceImpl;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionStorageServiceImpl;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +43,7 @@ import java.time.LocalDateTime;
 public class SensorReadoutsSnapshotTests extends BaseTest {
     private SensorReadoutsSnapshot sut;
     private DqoConfigurationProperties dqoConfigurationProperties;
-    private SensorReadoutsFileStorageServiceImpl sensorReadoutsFileStorageService;
+    private ParquetPartitionStorageServiceImpl parquetStorageService;
     private PhysicalTableName tableName;
 
     /**
@@ -57,10 +59,10 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        sensorReadoutsFileStorageService = new SensorReadoutsFileStorageServiceImpl(localUserHomeProviderStub, newLockManager);
+        parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.sensorReadoutsFileStorageService, newRows);
+		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, newRows);
     }
 
     void saveThreeMonthsData() {
@@ -81,7 +83,8 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
 
-		this.sensorReadoutsFileStorageService.saveTableInMonthsRange(sourceTable, this.sut.getConnection(), tableName, start, end);
+        SensorReadoutsSnapshot tempSut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, sourceTable);
+        tempSut.save();
     }
 
     @Test
@@ -92,7 +95,11 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-        Table table = this.sut.getHistoricResults();
+        LoadedMonthlyPartition firstMonth = this.sut.getMonthPartition(start, false);
+        Assertions.assertNotNull(firstMonth);
+        Assertions.assertNotNull(firstMonth.getData());
+
+        Table table = this.sut.getAllData();
         Assertions.assertNotNull(table);
         Assertions.assertEquals(2, table.rowCount());
 
@@ -111,7 +118,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         LocalDate end = LocalDate.of(2022, 3, 1);
 		this.sut.ensureMonthsAreLoaded(start, end);
 
-        Table table = this.sut.getHistoricResults();
+        Table table = this.sut.getAllData();
         Assertions.assertNotNull(table);
         Assertions.assertEquals(2, table.rowCount());
 
@@ -129,7 +136,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(LocalDate.of(2022, 1, 1), end);
 
-        Table table = this.sut.getHistoricResults();
+        Table table = this.sut.getAllData();
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
@@ -154,7 +161,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
 
 		this.sut.ensureMonthsAreLoaded(end, LocalDate.of(2022, 3, 1));
 
-        Table table = this.sut.getHistoricResults();
+        Table table = this.sut.getAllData();
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
@@ -167,16 +174,5 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(2));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
                 table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(2));
-    }
-
-    @Test
-    void hasNewReadouts_whenNoNewRows_thenReturnsFalse() {
-        Assertions.assertFalse(this.sut.hasNewReadouts());
-    }
-
-    @Test
-    void hasNewReadouts_whenNewRows_thenReturnsTrue() {
-		this.sut.getNewResults().appendRow();
-        Assertions.assertTrue(this.sut.hasNewReadouts());
     }
 }

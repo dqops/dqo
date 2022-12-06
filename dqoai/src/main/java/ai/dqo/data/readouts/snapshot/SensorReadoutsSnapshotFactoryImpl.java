@@ -16,7 +16,7 @@
 package ai.dqo.data.readouts.snapshot;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
-import ai.dqo.data.readouts.filestorage.SensorReadoutsFileStorageService;
+import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import tech.tablesaw.api.Table;
  */
 @Component
 public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshotFactory {
-    private final SensorReadoutsFileStorageService storageService;
+    private final ParquetPartitionStorageService storageService;
     private final SensorReadoutsTableFactory sensorReadoutsTableFactory;
 
     /**
@@ -36,7 +36,7 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
      */
     @Autowired
     public SensorReadoutsSnapshotFactoryImpl(
-			SensorReadoutsFileStorageService storageService,
+            ParquetPartitionStorageService storageService,
 			SensorReadoutsTableFactory sensorReadoutsTableFactory) {
         this.storageService = storageService;
         this.sensorReadoutsTableFactory = sensorReadoutsTableFactory;
