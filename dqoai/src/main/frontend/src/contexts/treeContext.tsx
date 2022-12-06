@@ -46,6 +46,21 @@ function TreeProvider(props: any) {
     );
   };
 
+  const addConnection = async (connection: ConnectionBasicModel) => {
+    setTreeData([
+      ...treeData,
+      {
+        id: connection.connection_name ?? '',
+        parentId: null,
+        label: connection.connection_name ?? '',
+        items: [],
+        level: TREE_LEVEL.DATABASE,
+        tooltip: connection.connection_name,
+        run_checks_job_template: connection.run_checks_job_template
+      }
+    ]);
+  };
+
   useEffect(() => {
     (async () => {
       await getConnections();
@@ -62,7 +77,8 @@ function TreeProvider(props: any) {
     const newTreeData = treeData.filter(
       (item) =>
         item.id === node.id ||
-        item.id.toString().indexOf(node?.id.toString()) !== 0
+        item.level === node.level ||
+        item.parentId !== node.id
     );
     setTreeData([...newTreeData, ...items]);
   };
@@ -576,7 +592,8 @@ function TreeProvider(props: any) {
         removeTreeNode,
         removeNode,
         refreshNode,
-        runChecks
+        runChecks,
+        addConnection
       }}
       {...props}
     />
