@@ -41,9 +41,6 @@ public class ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec extends
     @JsonPropertyDescription("This field can be used to choose a predefined regex.")
     private BuiltInRegex namedRegex;
 
-    @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
-    private String customRegex = null;
-
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -71,14 +68,5 @@ public class ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec extends
     public void setNamedRegex(BuiltInRegex namedRegex) {
         this.setDirtyIf(!Objects.equals(this.namedRegex, namedRegex));
         this.namedRegex = namedRegex;
-    }
-
-    public String getCustomRegex() {
-        return customRegex;
-    }
-
-    public void setCustomRegex(String customRegex) {
-        this.setDirtyIf(!Objects.equals(this.customRegex, customRegex));
-        this.customRegex = customRegex;
     }
 }
