@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { SourceSchemasApi } from '../../../services/apiClient';
-import { SchemaRemoteModel } from '../../../api';
+import { JobApiClient, SourceSchemasApi } from '../../../services/apiClient';
+import {
+  DqoJobHistoryEntryModelStatusEnum,
+  SchemaRemoteModel
+} from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Loader from '../../Loader';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { toggleMenu } from '../../../redux/actions/job.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { isEqual } from 'lodash';
 
 interface ISchemasViewProps {
   connectionName: string;
@@ -13,6 +21,9 @@ interface ISchemasViewProps {
 const SchemasView = ({ connectionName }: ISchemasViewProps) => {
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+  const { jobs } = useSelector((state: IRootState) => state.job);
+
+  const dispatch = useActionDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -24,6 +35,26 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
         setLoading(false);
       });
   }, [connectionName]);
+
+  const onImportTables = (schema: SchemaRemoteModel) => {
+    JobApiClient.importTables(schema.importTableJobParameters);
+    dispatch(toggleMenu(true));
+  };
+
+  const isExist = (schema: SchemaRemoteModel) => {
+    const job = jobs?.jobs?.find((item) =>
+      isEqual(
+        item.parameters?.importTableParameters,
+        schema.importTableJobParameters
+      )
+    );
+    return (
+      job &&
+      (job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        DqoJobHistoryEntryModelStatusEnum.running ||
+        DqoJobHistoryEntryModelStatusEnum.waiting)
+    );
+  };
 
   return (
     <div className="py-4 px-8">
@@ -56,7 +87,13 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
                   />
                 </td>
                 <td className="py-2 px-4 text-left">
-                  <Button label="Import tables" color="primary" />
+                  {!isExist(item) && (
+                    <Button
+                      label="Import tables"
+                      color="primary"
+                      onClick={() => onImportTables(item)}
+                    />
+                  )}
                 </td>
               </tr>
             ))}
