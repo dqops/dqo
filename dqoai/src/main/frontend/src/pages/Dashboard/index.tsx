@@ -45,7 +45,6 @@ const Dashboard = () => {
       {step === 0 && <SelectDatabase onSelect={onSelect} />}
       {step === 1 && (
         <DatabaseConnection
-          onPrev={onPrev}
           onNext={onNext}
           database={database}
           onChange={setDatabase}

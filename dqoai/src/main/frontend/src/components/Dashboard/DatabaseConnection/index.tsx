@@ -9,23 +9,22 @@ import {
   ConnectionBasicModelProviderTypeEnum
 } from '../../../api';
 import { ConnectionApiClient } from '../../../services/apiClient';
-import { data } from 'autoprefixer';
 import { useTree } from '../../../contexts/treeContext';
+import { useHistory } from 'react-router-dom';
 
 interface IDatabaseConnectionProps {
-  onPrev: () => void;
   onNext: () => void;
   database: ConnectionBasicModel;
   onChange: (db: ConnectionBasicModel) => void;
 }
 
 const DatabaseConnection = ({
-  onPrev,
   onNext,
   database,
   onChange
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
+  const history = useHistory();
 
   const onSave = async () => {
     if (!database.connection_name) {
@@ -39,9 +38,8 @@ const DatabaseConnection = ({
     const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
     );
-    console.log('0-----------', res.data);
     addConnection(res.data);
-    onNext();
+    history.push('/?tab=schemas');
   };
 
   return (

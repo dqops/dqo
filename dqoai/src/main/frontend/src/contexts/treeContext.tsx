@@ -47,18 +47,17 @@ function TreeProvider(props: any) {
   };
 
   const addConnection = async (connection: ConnectionBasicModel) => {
-    setTreeData([
-      ...treeData,
-      {
-        id: connection.connection_name ?? '',
-        parentId: null,
-        label: connection.connection_name ?? '',
-        items: [],
-        level: TREE_LEVEL.DATABASE,
-        tooltip: connection.connection_name,
-        run_checks_job_template: connection.run_checks_job_template
-      }
-    ]);
+    const newNode = {
+      id: connection.connection_name ?? '',
+      parentId: null,
+      label: connection.connection_name ?? '',
+      items: [],
+      level: TREE_LEVEL.DATABASE,
+      tooltip: connection.connection_name,
+      run_checks_job_template: connection.run_checks_job_template
+    };
+    setTreeData([...treeData, newNode]);
+    await changeActiveTab(newNode);
   };
 
   useEffect(() => {

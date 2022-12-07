@@ -109,6 +109,8 @@ interface SvgIconProps {
   name: string;
   onClick?: (e: any) => void;
   strokeWidth?: number;
+  width?: number;
+  height?: number;
 }
 
 const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {
