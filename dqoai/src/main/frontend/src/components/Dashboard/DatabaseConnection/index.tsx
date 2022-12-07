@@ -36,10 +36,11 @@ const DatabaseConnection = ({
       database?.connection_name ?? '',
       database
     );
-    const connection = ConnectionApiClient.getConnectionBasic(
+    const res = await ConnectionApiClient.getConnectionBasic(
       database.connection_name
     );
-    addConnection(connection);
+    console.log('0-----------', res.data);
+    addConnection(res.data);
     onNext();
   };
 
