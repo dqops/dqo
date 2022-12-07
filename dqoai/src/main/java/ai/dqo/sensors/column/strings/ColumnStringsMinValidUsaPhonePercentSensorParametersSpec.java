@@ -54,6 +54,6 @@ public class ColumnStringsMinValidUsaPhonePercentSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/string/string_min_valid_usa_phone_percent";
+        return "column/strings/string_min_valid_usa_phone_percent";
     }
 }
