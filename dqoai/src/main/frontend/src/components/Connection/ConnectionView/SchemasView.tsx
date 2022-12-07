@@ -20,28 +20,7 @@ interface ISchemasViewProps {
 
 const SchemasView = ({ connectionName }: ISchemasViewProps) => {
   const [loading, setLoading] = useState(false);
-  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
-    {
-      connectionName,
-      schemaName: 'Schema 1',
-      imported: true,
-      importTableJobParameters: {
-        connectionName,
-        schemaName: 'Schema 1',
-        tableNames: ['table1', 'table2']
-      }
-    },
-    {
-      connectionName,
-      schemaName: 'Schema 2',
-      imported: false,
-      importTableJobParameters: {
-        connectionName,
-        schemaName: 'Schema 2',
-        tableNames: ['table3', 'table4']
-      }
-    }
-  ]);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
 
   const dispatch = useActionDispatch();
