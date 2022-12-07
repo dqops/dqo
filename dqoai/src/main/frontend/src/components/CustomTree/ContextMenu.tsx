@@ -34,6 +34,12 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     e.stopPropagation();
   };
 
+  const copyToClipboard = (e: any) => {
+    e.stopPropagation();
+    window.navigator.clipboard.writeText(node?.label);
+    setOpen(false);
+  };
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -67,6 +73,17 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           >
             Refresh
           </div>
+          {(node.level === TREE_LEVEL.DATABASE ||
+            node.level === TREE_LEVEL.SCHEMA ||
+            node.level === TREE_LEVEL.TABLE ||
+            node.level === TREE_LEVEL.COLUMN) && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={copyToClipboard}
+            >
+              Copy full name
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>
