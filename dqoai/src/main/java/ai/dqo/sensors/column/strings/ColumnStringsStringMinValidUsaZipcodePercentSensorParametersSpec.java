@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.column.validity;
+package ai.dqo.sensors.column.strings;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -32,14 +31,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
-
-    @JsonPropertyDescription("This field can be used to choose a predefined regex.")
-    private BuiltInRegex namedRegex;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -58,15 +54,6 @@ public class ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/validity/validity_min_valid_usa_zipcode_percent";
-    }
-
-    public BuiltInRegex getNamedRegex() {
-        return namedRegex;
-    }
-
-    public void setNamedRegex(BuiltInRegex namedRegex) {
-        this.setDirtyIf(!Objects.equals(this.namedRegex, namedRegex));
-        this.namedRegex = namedRegex;
+        return "column/strings/string_min_valid_usa_zipcode_percent";
     }
 }

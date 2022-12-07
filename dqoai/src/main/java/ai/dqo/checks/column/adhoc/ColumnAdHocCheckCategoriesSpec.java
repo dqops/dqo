@@ -51,7 +51,6 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("strings", o -> o.strings);
 			put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
-            put("validity", o -> o.validity);
         }
     };
 
@@ -79,11 +78,6 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocDatetimeChecksSpec datetime;
-
-    @JsonPropertyDescription("Configuration of validity checks on a column level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocValidityChecksSpec validity;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -173,24 +167,6 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the validity check configuration on a column level.
-     * @return Validity check configuration.
-     */
-    public ColumnAdHocValidityChecksSpec getValidity() {
-        return validity;
-    }
-
-    /**
-     * Sets the validity check configuration on a column level.
-     * @param validity New validity checks configuration.
-     */
-    public void setValidity(ColumnAdHocValidityChecksSpec validity) {
-        this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-        this.propagateHierarchyIdToField(validity, "validity");
     }
 
     /**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.validity;
+package ai.dqo.checks.column.strings;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.validity.ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,18 +39,18 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnValidityMinValidUsaZipcodePercentCheckSpec
-        extends AbstractCheckSpec<ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+public class ColumnMinStringValidUsaZipcodePercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
 
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnValidityMinValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Numerical value in range percent sensor parameters")
+    @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec();
+    private ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnValidityMinValidUsaZipcodePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnValidityMinValidUsaZipcodePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnValidityMinValidUsaZipcodePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -23,7 +23,6 @@ import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedC
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.validity.ColumnValidityMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -55,7 +54,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
-            put("validity", o -> o.validity);
         }
     };
 
@@ -83,11 +81,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeMonthlyPartitionedChecksSpec datetime;
-
-    @JsonPropertyDescription("Monthly partitioned checks of validity values in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityMonthlyPartitionedChecksSpec validity;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -177,24 +170,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the container of monthly validity data quality partitioned checks.
-     * @return Container of row standard monthly data quality partitioned checks.
-     */
-    public ColumnValidityMonthlyPartitionedChecksSpec getValidity() {
-        return validity;
-    }
-
-    /**
-     * Sets the container of monthly validity data quality partitioned checks.
-     * @param validity New validity checks.
-     */
-    public void setValidity(ColumnValidityMonthlyPartitionedChecksSpec validity) {
-        this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-        propagateHierarchyIdToField(validity, "validity");
     }
 
     /**

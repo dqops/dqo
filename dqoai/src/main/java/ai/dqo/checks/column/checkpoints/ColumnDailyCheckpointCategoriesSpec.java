@@ -23,7 +23,6 @@ import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericDailyCheckpointsSpe
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeDailyCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.validity.ColumnValidityDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -56,7 +55,6 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("strings", o -> o.strings);
            put("uniqueness", o -> o.uniqueness);
            put("datetime", o -> o.datetime);
-            put("validity", o -> o.validity);
         }
     };
 
@@ -84,11 +82,6 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyCheckpointsSpec datetime;
-
-    @JsonPropertyDescription("Daily checkpoints of validity in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityDailyCheckpointsSpec validity;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -178,24 +171,6 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
-     */
-    public ColumnValidityDailyCheckpointsSpec getValidity() {
-        return validity;
-    }
-
-    /**
-     * Sets the container of validity data quality checks (checkpoints).
-     * @param validity New validity checks.
-     */
-    public void setValidity(ColumnValidityDailyCheckpointsSpec validity) {
-        this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-        this.propagateHierarchyIdToField(validity, "validity");
     }
 
     /**

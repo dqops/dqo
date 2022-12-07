@@ -24,7 +24,6 @@ import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChe
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.validity.ColumnValidityDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -57,7 +56,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
-            put("validity", o -> o.validity);
         }
     };
 
@@ -85,11 +83,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyPartitionedChecksSpec datetime;
-
-    @JsonPropertyDescription("Daily partitioned checks of validity in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityDailyPartitionedChecksSpec validity;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -179,24 +172,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the container of daily validity data quality partitioned checks.
-     * @return Container of row standard daily data quality partitioned checks.
-     */
-    public ColumnValidityDailyPartitionedChecksSpec getValidity() {
-        return validity;
-    }
-
-    /**
-     * Sets the container of daily validity data quality partitioned checks.
-     * @param validity New validity checks.
-     */
-    public void setValidity(ColumnValidityDailyPartitionedChecksSpec validity) {
-        this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-        propagateHierarchyIdToField(validity, "validity");
     }
 
     /**

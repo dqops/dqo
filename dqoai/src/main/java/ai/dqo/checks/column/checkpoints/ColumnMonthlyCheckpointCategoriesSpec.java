@@ -23,7 +23,6 @@ import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericMonthlyCheckpointsS
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeMonthlyCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.validity.ColumnValidityMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -56,8 +55,6 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("strings", o -> o.strings);
            put("uniqueness", o -> o.uniqueness);
            put("datetime", o -> o.datetime);
-           put("validity", o -> o.validity);
-
         }
     };
 
@@ -85,11 +82,6 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeMonthlyCheckpointsSpec datetime;
-
-    @JsonPropertyDescription("Monthly checkpoints of validity in the column")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnValidityMonthlyCheckpointsSpec validity;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -179,24 +171,6 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
-    }
-
-    /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
-     */
-    public ColumnValidityMonthlyCheckpointsSpec getValidity() {
-        return validity;
-    }
-
-    /**
-     * Sets the container of validity data quality checks (checkpoints).
-     * @param validity New validity checks.
-     */
-    public void setValidity(ColumnValidityMonthlyCheckpointsSpec validity) {
-        this.setDirtyIf(!Objects.equals(this.validity, validity));
-        this.validity = validity;
-        this.propagateHierarchyIdToField(validity, "validity");
     }
 
     /**
