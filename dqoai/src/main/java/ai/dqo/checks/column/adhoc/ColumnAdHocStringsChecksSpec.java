@@ -33,6 +33,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheck
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -67,6 +68,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_parsable_to_integer_percent", o -> o.minStringParsableToIntegerPercent);
             put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
+            put("min_string_valid_usa_phone_percent", o -> o.minStringValidUsaPhonePercent);
 
         }
     };
@@ -115,6 +117,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringParsableToFloatPercentCheckSpec minStringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec minStringValidUsaPhonePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -384,6 +389,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringParsableToFloatPercent, minStringParsableToFloatPercent));
         this.minStringParsableToFloatPercent = minStringParsableToFloatPercent;
         propagateHierarchyIdToField(minStringParsableToFloatPercent, "min_string_parsable_to_float_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getMinStringValidUsaPhonePercent() {
+        return minStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param minStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec minStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidUsaPhonePercent, minStringValidUsaPhonePercent));
+        this.minStringValidUsaPhonePercent = minStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(minStringValidUsaPhonePercent, "min_string_valid_usa_phone_percent");
     }
 
     /**
