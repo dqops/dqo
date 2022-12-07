@@ -4,7 +4,7 @@ import Tabs from '../../Tabs';
 import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import qs from 'query-string';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import SchemasView from './SchemasView';
 import { useTree } from '../../../contexts/treeContext';
 import ConnectionCommentView from './ConnectionCommentView';
@@ -47,14 +47,25 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const [activeTab, setActiveTab] = useState('connection');
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
+  const location = useLocation();
 
   useEffect(() => {
+    const params = qs.parse(location.search);
+
     const searchQuery = qs.stringify({
+      ...params,
       connection: connectionName
     });
 
     history.replace(`/?${searchQuery}`);
-  }, [connectionName]);
+  }, [connectionName, location.search]);
+
+  useEffect(() => {
+    const params = qs.parse(location.search);
+    if (params.tab) {
+      setActiveTab(params.tab as string);
+    }
+  }, [location.search]);
 
   const renderTabContent = () => {
     if (activeTab === 'connection') {
@@ -80,6 +91,14 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
 
   const onChangeTab = (tab: string) => {
     setActiveTab(tab);
+    const params = qs.parse(location.search);
+
+    const searchQuery = qs.stringify({
+      ...params,
+      tab
+    });
+    history.replace(`/?${searchQuery}`);
+
     setTabMap({
       ...tabMap,
       [pageTab]: tab

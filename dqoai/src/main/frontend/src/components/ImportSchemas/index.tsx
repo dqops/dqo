@@ -27,7 +27,6 @@ const ImportSchemas = ({
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
 
   useEffect(() => {
-    console.log('connectionName');
     SourceSchemasApi.getRemoteSchemas(connectionName).then((res) => {
       setSchemas(res.data);
     });

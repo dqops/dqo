@@ -17,6 +17,8 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { toggleMenu } from '../../redux/actions/job.actions';
 
 const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const [open, setOpen] = useState(false);
@@ -48,6 +50,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
+
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
@@ -79,6 +82,33 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   <td className="px-2 truncate">{renderValue(value)}</td>
                 </tr>
               ))}
+
+            {job?.parameters?.importTableParameters && (
+              <>
+                <tr>
+                  <td className="px-2 capitalize">Connection Name</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importTableParameters?.connectionName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2 capitalize">Schema Name</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importTableParameters?.schemaName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2 capitalize align-top">Tables</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importTableParameters?.tableNames?.map(
+                      (item, index) => (
+                        <div key={index}>{item}</div>
+                      )
+                    )}
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
       </AccordionBody>
@@ -87,7 +117,8 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
 };
 
 const NotificationMenu = () => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const dispatch = useActionDispatch();
 
   const data = jobs?.jobs
     ? jobs?.jobs.sort((a, b) => {
@@ -95,8 +126,12 @@ const NotificationMenu = () => {
       })
     : [];
 
+  const toggleOpen = () => {
+    dispatch(toggleMenu(!isOpen));
+  };
+
   return (
-    <Popover placement="bottom-end">
+    <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
         <IconButton className="!mr-3" variant="text">
           <div className="relative">
