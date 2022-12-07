@@ -1,30 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { SchemaApiClient } from '../../../services/apiClient';
-import { SchemaModel } from '../../../api';
+import { SourceSchemasApi } from '../../../services/apiClient';
+import { SchemaRemoteModel } from '../../../api';
+import SvgIcon from '../../SvgIcon';
+import Button from '../../Button';
+import Loader from '../../Loader';
+import ConnectionActionGroup from './ConnectionActionGroup';
 
 interface ISchemasViewProps {
   connectionName: string;
 }
 
 const SchemasView = ({ connectionName }: ISchemasViewProps) => {
-  const [schemas, setSchemas] = useState<SchemaModel[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(connectionName).then((res) => {
-      setSchemas(res.data);
-    });
+    setLoading(true);
+    SourceSchemasApi.getRemoteSchemas(connectionName)
+      .then((res) => {
+        setSchemas(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [connectionName]);
 
   return (
     <div className="py-4 px-8">
-      <div className="font-semibold pb-2 mb-2 border-b border-gray-300">
-        Schema Name
-      </div>
-      {schemas.map((item) => (
-        <div key={item.schema_name} className="mb-3">
-          {item.schema_name}
+      <ConnectionActionGroup />
+      {loading ? (
+        <div className="flex justify-center h-100">
+          <Loader isFull={false} className="w-8 h-8 fill-green-700" />
         </div>
-      ))}
+      ) : (
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 text-left">Source Schema Name</th>
+              <th className="py-2 px-4 text-left">Is already imported</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {schemas.map((item) => (
+              <tr key={item.schemaName} className="mb-3">
+                <td className="py-2 px-4 text-left">{item.schemaName}</td>
+                <td className="py-2 px-4 text-left">
+                  <SvgIcon
+                    name={item.imported ? 'check' : 'close'}
+                    className={
+                      item.imported ? 'text-green-700' : 'text-red-700'
+                    }
+                    width={30}
+                    height={22}
+                  />
+                </td>
+                <td className="py-2 px-4 text-left">
+                  <Button label="Import tables" color="primary" />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };

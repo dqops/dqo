@@ -4,10 +4,12 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
+import qs from 'query-string';
+import { useHistory, useLocation } from 'react-router-dom';
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
-  onUpdate: () => void;
+  onUpdate?: () => void;
   isUpdating?: boolean;
   isUpdated?: boolean;
 }
@@ -22,6 +24,8 @@ const ConnectionActionGroup = ({
   const { connectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
+  const location = useLocation();
+  const history = useHistory();
 
   const removeConnection = async () => {
     if (connectionBasic) {
@@ -29,6 +33,15 @@ const ConnectionActionGroup = ({
         connectionBasic.connection_name ?? ''
       );
     }
+  };
+  const goToSchemas = () => {
+    const params = qs.parse(location.search);
+
+    const searchQuery = qs.stringify({
+      ...params,
+      tab: 'schemas'
+    });
+    history.replace(`/?${searchQuery}`);
   };
 
   return (
@@ -39,15 +52,18 @@ const ConnectionActionGroup = ({
         label="Delete"
         onClick={() => setIsOpen(true)}
       />
-      <Button
-        color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
-        variant="contained"
-        label="Save"
-        className="w-40"
-        onClick={onUpdate}
-        loading={isUpdating}
-        disabled={isDisabled}
-      />
+      <Button label="Import metadata" color="primary" onClick={goToSchemas} />
+      {onUpdate && (
+        <Button
+          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
+          disabled={isDisabled}
+        />
+      )}
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
