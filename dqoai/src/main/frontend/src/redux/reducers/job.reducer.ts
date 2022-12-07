@@ -26,11 +26,13 @@ export interface IJobsState {
   loading: boolean;
   error: any;
   lastSequenceNumber?: number;
+  isOpen: boolean;
 }
 
 const initialState: IJobsState = {
   loading: false,
-  error: null
+  error: null,
+  isOpen: false,
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -97,6 +99,11 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         error: action.error
+      };
+    case JOB_ACTION.TOGGLE_MENU:
+      return {
+        ...state,
+        isOpen: action.isOpen
       };
     default:
       return state;
