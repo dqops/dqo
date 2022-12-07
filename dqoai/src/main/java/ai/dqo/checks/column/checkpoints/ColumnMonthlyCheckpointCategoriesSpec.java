@@ -54,7 +54,7 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("numeric", o -> o.numeric);
            put("strings", o -> o.strings);
            put("uniqueness", o -> o.uniqueness);
-            put("datetime", o -> o.datetime);
+           put("datetime", o -> o.datetime);
         }
     };
 
