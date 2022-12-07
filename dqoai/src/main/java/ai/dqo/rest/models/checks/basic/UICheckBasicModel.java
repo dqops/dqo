@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.rest.models.checks.basic;
 
-import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,20 +22,23 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * UI model that returns the form definition and the form data to edit all data quality checks divided by categories.
+ * Simplistic UI model that returns a single data quality check, it's name and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by categories.")
-public class UIAllChecksModel extends AbstractUIAllChecksModel {
-    @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
-    private List<UIQualityCategoryModel> categories = new ArrayList<>();
+@ApiModel(value = "UICheckBasicModel", description = "Simplistic UI model that returns a single data quality check, it's name and \"configured\" flag")
+public class UICheckBasicModel {
+    /**
+     * Data quality check name that is used in YAML file. Identifies the data quality check.
+     */
+    @JsonPropertyDescription("Data quality check name that is used in YAML.")
+    private String checkName;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
-    private CheckSearchFilters runChecksJobTemplate;
+    @JsonPropertyDescription("Help text that describes the data quality check.")
+    private String helpText;
+
+    @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
+    private boolean configured;
 }
