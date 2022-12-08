@@ -5,11 +5,12 @@ import ConnectionDetail from './ConnectionDetail';
 import ScheduleDetail from './ScheduleDetail';
 import qs from 'query-string';
 import { useHistory, useLocation } from 'react-router-dom';
-import SchemasView from './SchemasView';
+import SourceSchemasView from './SourceSchemasView';
 import { useTree } from '../../../contexts/treeContext';
 import ConnectionCommentView from './ConnectionCommentView';
 import ConnectionLabelsView from './ConnectionLabelsView';
 import ConnectionDataStream from './ConnectionDataStream';
+import SchemasView from './SchemasView';
 
 interface IConnectionViewProps {
   connectionName: string;
@@ -48,6 +49,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
   const location = useLocation();
+  const [showMetaData, setShowMetaData] = useState(false);
 
   useEffect(() => {
     const params = qs.parse(location.search);
@@ -65,6 +67,11 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     if (params.tab) {
       setActiveTab(params.tab as string);
     }
+    if (params.source) {
+      setShowMetaData(true);
+    } else {
+      setShowMetaData(false);
+    }
   }, [location.search]);
 
   const renderTabContent = () => {
@@ -81,7 +88,11 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       return <ConnectionLabelsView connectionName={connectionName} />;
     }
     if (activeTab === 'schemas') {
-      return <SchemasView connectionName={connectionName} />;
+      if (showMetaData) {
+        return <SourceSchemasView connectionName={connectionName} />;
+      } else {
+        return <SchemasView connectionName={connectionName} />;
+      }
     }
     if (activeTab === 'data-streams') {
       return <ConnectionDataStream connectionName={connectionName} />;
@@ -92,9 +103,10 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   const onChangeTab = (tab: string) => {
     setActiveTab(tab);
     const params = qs.parse(location.search);
+    const { source, ...data } = params;
 
     const searchQuery = qs.stringify({
-      ...params,
+      ...data,
       tab
     });
     history.replace(`/?${searchQuery}`);
