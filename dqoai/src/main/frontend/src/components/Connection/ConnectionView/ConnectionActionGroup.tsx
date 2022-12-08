@@ -39,7 +39,8 @@ const ConnectionActionGroup = ({
 
     const searchQuery = qs.stringify({
       ...params,
-      tab: 'schemas'
+      tab: 'schemas',
+      source: true
     });
     history.replace(`/?${searchQuery}`);
   };
@@ -52,7 +53,12 @@ const ConnectionActionGroup = ({
         label="Delete"
         onClick={() => setIsOpen(true)}
       />
-      <Button label="Import metadata" color="primary" onClick={goToSchemas} />
+      <Button
+        label="Import metadata"
+        color="info"
+        variant="text"
+        onClick={goToSchemas}
+      />
       {onUpdate && (
         <Button
           color={isUpdated && !isDisabled ? 'primary' : 'secondary'}

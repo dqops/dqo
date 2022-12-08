@@ -80,7 +80,7 @@ public class SourceSchemasServiceImpl implements SourceSchemasService {
                 .map(sourceSchemaModel -> new SchemaRemoteModel(){{
                     setSchemaName(sourceSchemaModel.getSchemaName());
                     setConnectionName(connectionName);
-                    setImported(importedSchemaNames.contains(this.getSchemaName()));
+                    setAlreadyImported(importedSchemaNames.contains(this.getSchemaName()));
                     setImportTableJobParameters(new ImportTablesQueueJobParameters(connectionName, sourceSchemaModel.getSchemaName(), null));
                 }}).collect(Collectors.toList());
         } catch (Exception e) {
