@@ -1,40 +1,66 @@
 import React from 'react';
 
-import { DATABASE_TYPE } from '../../../shared/enums';
 import Button from '../../Button';
 import Input from '../../Input';
 import BigqueryConnection from './BigqueryConnection';
 import SnowflakeConnection from './SnowflakeConnection';
-import { ConnectionBasicModel } from '../../../api';
+import {
+  ConnectionBasicModel,
+  ConnectionBasicModelProviderTypeEnum
+} from '../../../api';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import { useTree } from '../../../contexts/treeContext';
+import { useHistory } from 'react-router-dom';
 
 interface IDatabaseConnectionProps {
-  type?: DATABASE_TYPE;
-  onPrev: () => void;
   onNext: () => void;
   database: ConnectionBasicModel;
   onChange: (db: ConnectionBasicModel) => void;
 }
 
 const DatabaseConnection = ({
-  type,
-  onPrev,
   onNext,
   database,
   onChange
 }: IDatabaseConnectionProps) => {
+  const { addConnection } = useTree();
+  const history = useHistory();
+
+  const onSave = async () => {
+    if (!database.connection_name) {
+      return;
+    }
+
+    await ConnectionApiClient.createConnectionBasic(
+      database?.connection_name ?? '',
+      database
+    );
+    const res = await ConnectionApiClient.getConnectionBasic(
+      database.connection_name
+    );
+    addConnection(res.data);
+    history.push('/?tab=schemas');
+  };
+
   return (
     <div>
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>
-            {type === DATABASE_TYPE.BIGQUERY ? 'Google Bigquery' : 'Snowflake'}{' '}
+            {database.provider_type ===
+            ConnectionBasicModelProviderTypeEnum.bigquery
+              ? 'Google Bigquery'
+              : 'Snowflake'}{' '}
             Connection Settings
           </div>
         </div>
         <img
           src={
-            type === DATABASE_TYPE.BIGQUERY ? '/bigQuery.png' : '/snowflake.png'
+            database.provider_type ===
+            ConnectionBasicModelProviderTypeEnum.bigquery
+              ? '/bigQuery.png'
+              : '/snowflake.png'
           }
           className="h-16"
           alt="db logo"
@@ -51,61 +77,65 @@ const DatabaseConnection = ({
           }
         />
         <Input
-          label="Database Name"
-          className="mb-4"
-          value={database.database_name}
-          onChange={(e) =>
-            onChange({ ...database, database_name: e.target.value })
-          }
-        />
-        <Input
-          label="JDBC driver url"
-          className="mb-4"
-          value={database.url}
-          onChange={(e) => onChange({ ...database, url: e.target.value })}
-        />
-        <Input
-          label="Username"
-          className="mb-4"
-          value={database.user}
-          onChange={(e) => onChange({ ...database, user: e.target.value })}
-        />
-        <Input
-          label="Password"
-          className="mb-6"
-          value={database.password}
-          onChange={(e) => onChange({ ...database, password: e.target.value })}
-        />
-
-        {type === DATABASE_TYPE.BIGQUERY ? (
-          <BigqueryConnection
-            bigquery={database.bigquery}
-            onChange={(bigquery) => onChange({ ...database, bigquery })}
-          />
-        ) : (
-          <SnowflakeConnection />
-        )}
-        <Input
           label="Timezone"
           className="mb-4"
           value={database.time_zone}
           onChange={(e) => onChange({ ...database, time_zone: e.target.value })}
         />
 
+        {database.provider_type !==
+          ConnectionBasicModelProviderTypeEnum.bigquery && (
+          <>
+            <Input
+              label="Database Name"
+              className="mb-4"
+              value={database.database_name}
+              onChange={(e) =>
+                onChange({ ...database, database_name: e.target.value })
+              }
+            />
+            <Input
+              label="JDBC driver url"
+              className="mb-4"
+              value={database.url}
+              onChange={(e) => onChange({ ...database, url: e.target.value })}
+            />
+            <Input
+              label="Username"
+              className="mb-4"
+              value={database.user}
+              onChange={(e) => onChange({ ...database, user: e.target.value })}
+            />
+            <Input
+              label="Password"
+              className="mb-6"
+              value={database.password}
+              onChange={(e) =>
+                onChange({ ...database, password: e.target.value })
+              }
+            />
+          </>
+        )}
+
+        <div className="mt-6">
+          {database.provider_type ===
+          ConnectionBasicModelProviderTypeEnum.bigquery ? (
+            <BigqueryConnection
+              bigquery={database.bigquery}
+              onChange={(bigquery) => onChange({ ...database, bigquery })}
+            />
+          ) : (
+            <SnowflakeConnection />
+          )}
+        </div>
+
         <div className="flex space-x-4 justify-end mt-6">
           <Button
             color="primary"
-            variant="outlined"
-            label="Prev"
-            className="w-40"
-            onClick={onPrev}
-          />
-          <Button
-            color="primary"
             variant="contained"
-            label="Next"
+            label="Save"
             className="w-40"
-            onClick={onNext}
+            onClick={onSave}
           />
         </div>
       </div>

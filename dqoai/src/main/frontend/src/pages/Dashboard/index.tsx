@@ -3,18 +3,20 @@ import React, { useState } from 'react';
 import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
-import { DATABASE_TYPE } from '../../shared/enums';
 import ImportSchemas from '../../components/ImportSchemas';
-import { ConnectionApiClient } from '../../services/apiClient';
-import { ConnectionBasicModel } from '../../api';
+import {
+  ConnectionBasicModel,
+  ConnectionBasicModelProviderTypeEnum
+} from '../../api';
 
 const Dashboard = () => {
   const [step, setStep] = useState(0);
-  const [dbType, setDBType] = useState<DATABASE_TYPE | undefined>();
   const [database, setDatabase] = useState<ConnectionBasicModel>({});
 
-  const onSelect = (db: DATABASE_TYPE) => {
-    setDBType(db);
+  const onSelect = (db: ConnectionBasicModelProviderTypeEnum) => {
+    setDatabase({
+      provider_type: db
+    });
     setStep(1);
   };
 
@@ -29,10 +31,6 @@ const Dashboard = () => {
       return;
     }
     if (step === 1) {
-      await ConnectionApiClient.createConnectionBasic(
-        database?.connection_name,
-        database
-      );
       setStep(step + 1);
       return;
     }
@@ -47,8 +45,6 @@ const Dashboard = () => {
       {step === 0 && <SelectDatabase onSelect={onSelect} />}
       {step === 1 && (
         <DatabaseConnection
-          type={dbType}
-          onPrev={onPrev}
           onNext={onNext}
           database={database}
           onChange={setDatabase}

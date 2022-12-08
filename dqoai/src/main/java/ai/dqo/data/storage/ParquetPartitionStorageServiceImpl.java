@@ -19,9 +19,7 @@ import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.data.DataStorageIOException;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.ruleresults.filestorage.RuleResultsPartitioningKeys;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
@@ -75,19 +73,19 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(RuleResultsPartitioningKeys.CONNECTION);
+        stringBuilder.append(ParquetPartitioningKeys.CONNECTION);
         stringBuilder.append('=');
         String encodedConnection = URLEncoder.encode(partitionId.getConnectionName(), StandardCharsets.UTF_8);
         stringBuilder.append(encodedConnection);
         stringBuilder.append('/');
 
-        stringBuilder.append(RuleResultsPartitioningKeys.TARGET);
+        stringBuilder.append(ParquetPartitioningKeys.TARGET);
         stringBuilder.append('=');
         String encodedTable = URLEncoder.encode(partitionId.getTableName().toString(), StandardCharsets.UTF_8);
         stringBuilder.append(encodedTable);
         stringBuilder.append('/');
 
-        stringBuilder.append(RuleResultsPartitioningKeys.MONTH);
+        stringBuilder.append(ParquetPartitioningKeys.MONTH);
         stringBuilder.append('=');
         stringBuilder.append(partitionId.getMonth());
         stringBuilder.append('/');
@@ -204,14 +202,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 return; // nothing to change in this partition
             }
 
-            Table partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
-
+            Table partitionDataOld;
             if (targetParquetFile.exists() && targetParquetFile.lastModified() != loadedPartition.getLastModified()) {
                 // file was modified
                 TablesawParquetReadOptions readOptions = TablesawParquetReadOptions
                         .builder(targetParquetFile)
                         .build();
                 partitionDataOld = new TablesawParquetReader().read(readOptions); // reloading the data, now under an exclusive write lock
+            } else {
+                partitionDataOld = loadedPartition.getData() != null ? loadedPartition.getData().copy() : null;
             }
 
             Table dataToSave = partitionDataOld;
@@ -227,9 +226,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
             }
 
-            if (tableDataChanges.getDeletedIds() == null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
+            if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
                 Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
-                        .isNotIn(tableDataChanges.getDeletedIds());
+                        .isIn(tableDataChanges.getDeletedIds());
                 if (rowsToDeleteSelection.size() > 0) {
                     dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
                 } else if (newOrChangedDataPartitionMonth == null) {

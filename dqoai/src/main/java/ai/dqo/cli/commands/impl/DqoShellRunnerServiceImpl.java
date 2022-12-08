@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.impl;
 
 import ai.dqo.cli.completion.InputCapturingCompleter;
+import lombok.extern.slf4j.Slf4j;
 import org.jline.console.SystemRegistry;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
  * Root DQO shell runner. Separated into a different class to avoid circular dependencies in IoC.
  */
 @Component
+@Slf4j
 public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
     private final SystemRegistry systemRegistry;
     private final LineReader cliLineReader;
@@ -54,7 +56,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
 //        boolean completeInWord = cliLineReader.isSet(LineReader.Option.COMPLETE_IN_WORD);
 
         // start the shell and process input until the user quits with Ctrl-D
-        String line;
+        String line = null;
         while (true) {
             try {
 				systemRegistry.cleanUp();
@@ -78,6 +80,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
             } catch (EndOfFileException e) {
                 return 0;
             } catch (Exception e) {
+                log.error("Command failed: " + line + ", error message: " + e.getMessage(), e);
 				systemRegistry.trace(e);
             }
         }

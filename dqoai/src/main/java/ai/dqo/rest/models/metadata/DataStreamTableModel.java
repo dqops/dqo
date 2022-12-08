@@ -14,30 +14,36 @@
  * limitations under the License.
  */
 
-package ai.dqo.rest.models.remote;
+package ai.dqo.rest.models.metadata;
 
-import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Schema model returned from REST API. Describes a schema on the source database with established connection.
+ * Model of data stream on a table returned by the rest api, including all configuration information.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "SchemaRemoteModel", description = "Schema remote model")
-public class SchemaRemoteModel {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ApiModel(value = "DataStreamTableModel", description = "Table-level data stream model containing nested objects")
+public class DataStreamTableModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
-    @JsonPropertyDescription("Has the schema been imported.")
-    private boolean alreadyImported;
+    @JsonPropertyDescription("Table name.")
+    private String tableName;
 
-    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
-    private ImportTablesQueueJobParameters importTableJobParameters;
+    @JsonPropertyDescription("Data stream name.")
+    private String dataStreamName;
+
+    @JsonPropertyDescription("Data stream specification.")
+    private DataStreamMappingSpec spec;
 }

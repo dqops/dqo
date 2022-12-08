@@ -49,6 +49,7 @@ import { ReactComponent as FailedSvg } from './svg/failed.svg';
 import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as RunningSvg } from './svg/running.svg';
+import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -99,7 +100,8 @@ const iconsMap: any = {
   pause: PauseSvg,
   failed: FailedSvg,
   success: SuccessSvg,
-  running: RunningSvg
+  running: RunningSvg,
+  hourglass: HourglassSvg
 };
 
 interface SvgIconProps {
@@ -107,6 +109,8 @@ interface SvgIconProps {
   name: string;
   onClick?: (e: any) => void;
   strokeWidth?: number;
+  width?: number;
+  height?: number;
 }
 
 const SvgIcon = ({ className, name, ...others }: SvgIconProps) => {

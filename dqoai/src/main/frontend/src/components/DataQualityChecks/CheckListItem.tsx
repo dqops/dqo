@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { UICheckModel, UIFieldModel } from '../../api';
+import {
+  DqoJobHistoryEntryModelStatusEnum,
+  UICheckModel,
+  UIFieldModel
+} from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
 import SensorParameters from './SensorParameters';
@@ -7,6 +11,9 @@ import Switch from '../Switch';
 import clsx from 'clsx';
 import CheckRuleItem from './CheckRuleItem';
 import { JobApiClient } from '../../services/apiClient';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import { isEqual } from 'lodash';
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -25,6 +32,14 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
+  const { jobs } = useSelector((state: IRootState) => state.job);
+
+  const job = jobs?.jobs?.find((item) =>
+    isEqual(
+      item.parameters?.runChecksParameters?.checkSearchFilters,
+      check.run_checks_job_template
+    )
+  );
 
   const openCheckSettings = () => {
     if (check?.configured) {
@@ -64,7 +79,26 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     }
     handleChange({
       configured,
-      disabled: configured ? check?.disabled : null
+      disabled: configured ? check?.disabled : null,
+      ...(configured
+        ? {
+            rule: {
+              ...check.rule,
+              error: {
+                ...check.rule?.error,
+                configured: true
+              },
+              fatal: {
+                ...check.rule?.fatal,
+                configured: true
+              },
+              warning: {
+                ...check.rule?.warning,
+                configured: true
+              }
+            }
+          }
+        : {})
     });
   };
 
@@ -121,11 +155,28 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
               )}
               strokeWidth={check?.schedule_override ? 4 : 2}
             />
-            <SvgIcon
-              name="play"
-              className="text-green-700 w-5 cursor-pointer"
-              onClick={onRunCheck}
-            />
+            {(!job ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
+              <SvgIcon
+                name="play"
+                className="text-green-700 h-5 cursor-pointer"
+                onClick={onRunCheck}
+              />
+            )}
+            {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
+              <SvgIcon
+                name="hourglass"
+                className="text-gray-700 h-5 cursor-pointer"
+              />
+            )}
+            {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
+              <SvgIcon
+                name="hourglass"
+                className="text-gray-700 h-5 cursor-pointer"
+              />
+            )}
             <div>{check.check_name}</div>
           </div>
         </td>

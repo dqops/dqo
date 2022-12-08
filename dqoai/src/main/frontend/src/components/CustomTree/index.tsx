@@ -9,6 +9,7 @@ import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from './ContextMenu';
 import ConfirmDialog from './ConfirmDialog';
 import { CustomTreeNode } from '../../shared/interfaces';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const theme: ReactTreeTheme = {
   text: {
@@ -33,6 +34,15 @@ const CustomTree = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { removeNode } = useTree();
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
+  const history = useHistory();
+  const location = useLocation();
+
+  const handleNodeClick = (node: CustomTreeNode) => {
+    if (location.pathname !== '/') {
+      history.push('/');
+    }
+    changeActiveTab(node);
+  };
 
   const renderIcon: TreeRenderFn = (props: any) => {
     if (props.node.level === TREE_LEVEL.CHECK) {
@@ -68,7 +78,7 @@ const CustomTree = () => {
     return (
       <div
         className="flex space-x-2 py-1 flex-1"
-        onClick={() => changeActiveTab(node)}
+        onClick={() => handleNodeClick(node)}
       >
         <SvgIcon
           name={getIcon(node.level)}

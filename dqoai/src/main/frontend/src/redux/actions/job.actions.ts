@@ -76,3 +76,8 @@ export const getJobsChanges =
       dispatch(getJobsChangesFailed(err));
     }
   };
+
+export const toggleMenu = (isOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_MENU,
+  isOpen
+});

@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.metadata;
+package ai.dqo.rest.models.checks.basic;
 
-import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,22 +23,22 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Schema model that is returned by the REST API. Describes a single unique schema name.
+ * Simplistic UI model that returns a single data quality check, it's name and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SchemaModel", description = "Schema model")
-public class SchemaModel {
-    @JsonPropertyDescription("Connection name.")
-    private String connectionName;
+@ApiModel(value = "UICheckBasicModel", description = "Simplistic UI model that returns a single data quality check, it's name and \"configured\" flag")
+public class UICheckBasicModel {
+    /**
+     * Data quality check name that is used in YAML file. Identifies the data quality check.
+     */
+    @JsonPropertyDescription("Data quality check name that is used in YAML.")
+    private String checkName;
 
-    @JsonPropertyDescription("Schema name.")
-    private String schemaName;
+    @JsonPropertyDescription("Help text that describes the data quality check.")
+    private String helpText;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
-    private CheckSearchFilters runChecksJobTemplate;
-
-    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
-    private ImportTablesQueueJobParameters importTableJobParameters;
+    @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
+    private boolean configured;
 }

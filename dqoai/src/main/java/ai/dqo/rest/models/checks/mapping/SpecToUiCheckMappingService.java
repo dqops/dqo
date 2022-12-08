@@ -18,21 +18,31 @@ package ai.dqo.rest.models.checks.mapping;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 
 /**
- * Service that creates the UI model from the data quality check specifications,
- * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
+ * Service that creates a UI friendly model from the data quality check specifications,
+ * enabling transformation from the storage model (YAML compliant) to a UI friendly model.
  */
 public interface SpecToUiCheckMappingService {
     /**
-     * Creates a checks UI model for the whole container of table level or column level data quality checks, divided into categories.
-     *
-     * @param checkCategoriesSpec Table level data quality checks container or a column level data quality checks container.
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
+     * Creates a UI friendly model of the whole checks container of table level or column level data quality checks, divided into categories.
+     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations.
      * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
-     * @return Checks data quality container.
+     * @return UI friendly model of data quality checks' container.
      */
     UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                    CheckSearchFilters runChecksTemplate,
                                    String defaultDataStreamName);
+
+    /**
+     * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
+     *
+     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations.
+     * @return Simplistic UI friendly model of data quality checks' container.
+     */
+    UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                             CheckSearchFilters runChecksTemplate);
 }

@@ -33,6 +33,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheck
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -67,6 +68,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_parsable_to_integer_percent", o -> o.minStringParsableToIntegerPercent);
             put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
+            put("min_string_valid_usa_zipcode_percent", o -> o.minStringValidUsaZipcodePercent);
 
         }
     };
@@ -115,6 +117,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringParsableToFloatPercentCheckSpec minStringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringValidUsaZipcodePercentCheckSpec minStringValidUsaZipcodePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -384,6 +389,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringParsableToFloatPercent, minStringParsableToFloatPercent));
         this.minStringParsableToFloatPercent = minStringParsableToFloatPercent;
         propagateHierarchyIdToField(minStringParsableToFloatPercent, "min_string_parsable_to_float_percent");
+    }
+
+    /**
+     * Returns a minimum string valid usa zip code percent check.
+     * @return Minimum string valid usa zip code percent check.
+     */
+    public ColumnMinStringValidUsaZipcodePercentCheckSpec getMinStringValidUsaZipcodePercent() {
+        return minStringValidUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid usa zip code percent check.
+     * @param minStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
+     */
+    public void setMinStringValidUsaZipcodePercent(ColumnMinStringValidUsaZipcodePercentCheckSpec minStringValidUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidUsaZipcodePercent, minStringValidUsaZipcodePercent));
+        this.minStringValidUsaZipcodePercent = minStringValidUsaZipcodePercent;
+        propagateHierarchyIdToField(minStringValidUsaZipcodePercent, "min_string_valid_usa_zipcode_percent");
     }
 
     /**

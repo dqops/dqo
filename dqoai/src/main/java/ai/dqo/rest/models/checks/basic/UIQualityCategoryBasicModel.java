@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.metadata;
+package ai.dqo.rest.models.checks.basic;
 
-import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,23 +22,23 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Schema model that is returned by the REST API. Describes a single unique schema name.
+ * Simplistic UI model that returns the list of data quality checks (their names and "configured" flag) within a specified category.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SchemaModel", description = "Schema model")
-public class SchemaModel {
-    @JsonPropertyDescription("Connection name.")
-    private String connectionName;
+@ApiModel(value = "UIQualityCategoryBasicModel", description = "Simplistic UI model that returns the list of data quality checks (their names and \"configured\" flag) within a specified category.")
+public class UIQualityCategoryBasicModel {
+    @JsonPropertyDescription("Data quality category name.")
+    private String category;
 
-    @JsonPropertyDescription("Schema name.")
-    private String schemaName;
+    @JsonPropertyDescription("Help text that describes the category.")
+    private String helpText;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
-    private CheckSearchFilters runChecksJobTemplate;
-
-    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
-    private ImportTablesQueueJobParameters importTableJobParameters;
+    @JsonPropertyDescription("Simplistic list of data quality checks within the category.")
+    private List<UICheckBasicModel> checks = new ArrayList<>();
 }
