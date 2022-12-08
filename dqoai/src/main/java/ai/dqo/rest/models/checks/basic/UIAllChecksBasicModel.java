@@ -15,7 +15,6 @@
  */
 package ai.dqo.rest.models.checks.basic;
 
-import ai.dqo.rest.models.checks.AbstractUIAllChecksModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -33,7 +32,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIAllChecksBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
-public class UIAllChecksBasicModel extends AbstractUIAllChecksModel {
+public class UIAllChecksBasicModel {
     @JsonPropertyDescription("List of all data quality categories that contain basic models of data quality checks inside.")
     private List<UIQualityCategoryBasicModel> categories = new ArrayList<>();
 }
