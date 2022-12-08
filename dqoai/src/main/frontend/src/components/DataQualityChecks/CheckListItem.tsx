@@ -79,7 +79,26 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     }
     handleChange({
       configured,
-      disabled: configured ? check?.disabled : null
+      disabled: configured ? check?.disabled : null,
+      ...(configured
+        ? {
+            rule: {
+              ...check.rule,
+              error: {
+                ...check.rule?.error,
+                configured: true
+              },
+              fatal: {
+                ...check.rule?.fatal,
+                configured: true
+              },
+              warning: {
+                ...check.rule?.warning,
+                configured: true
+              }
+            }
+          }
+        : {})
     });
   };
 
