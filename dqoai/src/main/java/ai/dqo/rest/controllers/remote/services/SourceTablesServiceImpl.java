@@ -84,7 +84,7 @@ public class SourceTablesServiceImpl implements SourceTablesService {
                     .map(sourceTableModel -> new TableRemoteBasicModel(){{
                         setConnectionName(connectionName);
                         setSchemaName(sourceTableModel.getSchemaName());
-                        setImported(importedTableNames.contains(sourceTableModel.getTableName().getTableName()));
+                        setAlreadyImported(importedTableNames.contains(sourceTableModel.getTableName().getTableName()));
                         setTableName(sourceTableModel.getTableName().getTableName());
                     }}).collect(Collectors.toList());
         } catch (Exception e) {

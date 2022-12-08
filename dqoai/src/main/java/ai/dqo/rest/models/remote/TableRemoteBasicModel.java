@@ -37,6 +37,6 @@ public class TableRemoteBasicModel {
     @JsonPropertyDescription("Table name.")
     private String tableName;
 
-    @JsonPropertyDescription("Is the table imported.")
-    private boolean isImported;
+    @JsonPropertyDescription("Has the table been imported.")
+    private boolean alreadyImported;
 }
