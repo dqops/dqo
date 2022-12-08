@@ -34,6 +34,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
+    /**
+     * Prompt string shown in the shell.
+     */
+    public static final String DQO_PROMPT = "dqo.ai> ";
+
     private final SystemRegistry systemRegistry;
     private final LineReader cliLineReader;
 
@@ -51,28 +56,23 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
      */
     @Override
     public Integer call() throws Exception {
-        String prompt = new AttributedStringBuilder().append("dqo.ai> ", AttributedStyle.DEFAULT.foreground(4)).toAnsi();
+        String prompt = new AttributedStringBuilder().append(DQO_PROMPT, AttributedStyle.DEFAULT.foreground(4)).toAnsi();
         String rightPrompt = null;
-//        boolean completeInWord = cliLineReader.isSet(LineReader.Option.COMPLETE_IN_WORD);
 
         // start the shell and process input until the user quits with Ctrl-D
         String line = null;
         while (true) {
             try {
 				systemRegistry.cleanUp();
-//                cliLineReader.setAutosuggestion(LineReader.SuggestionType.COMPLETER);
-//                cliLineReader.option(LineReader.Option.COMPLETE_IN_WORD, completeInWord);
-//                cliLineReader.option(LineReader.Option.AUTO_MENU, true);
-//                cliLineReader.option(LineReader.Option.AUTO_MENU_LIST, false);
 
-                InputCapturingCompleter.enable();
-                line = cliLineReader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
+                try {
+                    InputCapturingCompleter.enable();
+                    line = cliLineReader.readLine(prompt, rightPrompt, (MaskingCallback) null, null);
+                }
+                finally {
+                    InputCapturingCompleter.disable();
+                }
 
-//                cliLineReader.setAutosuggestion(LineReader.SuggestionType.NONE);
-//                cliLineReader.option(LineReader.Option.COMPLETE_IN_WORD, false);
-//                cliLineReader.option(LineReader.Option.AUTO_MENU, false);
-//                cliLineReader.option(LineReader.Option.AUTO_MENU_LIST, false);
-                InputCapturingCompleter.disable();
 				systemRegistry.execute(line);
             } catch (UserInterruptException e) {
                 // Ignore
