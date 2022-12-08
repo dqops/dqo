@@ -75,7 +75,8 @@ public class DataStreamsTableController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
-        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(connectionName, schemaName, tableName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(userHomeContext, connectionName, schemaName, tableName);
         if (dataStreamMapping == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -114,7 +115,8 @@ public class DataStreamsTableController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data stream name") @PathVariable String dataStreamName) {
-        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(connectionName, schemaName, tableName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(userHomeContext, connectionName, schemaName, tableName);
         if (dataStreamMapping == null || !dataStreamMapping.containsKey(dataStreamName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -163,7 +165,8 @@ public class DataStreamsTableController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(connectionName, schemaName, tableName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(userHomeContext, connectionName, schemaName, tableName);
         if (dataStreamMapping == null || !dataStreamMapping.containsKey(dataStreamName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -180,6 +183,7 @@ public class DataStreamsTableController {
             dataStreamMapping.remove(dataStreamName);
         }
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
@@ -205,8 +209,8 @@ public class DataStreamsTableController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data stream name") @PathVariable String dataStreamName) {
-
-        TableSpec tableSpec = this.readTableSpec(connectionName, schemaName, tableName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -229,12 +233,13 @@ public class DataStreamsTableController {
             tableSpec.setDataStreams(newMapping);
         }
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
 
     /**
-     * Delets a specific data stream.
+     * Deletes a specific data stream.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -262,7 +267,8 @@ public class DataStreamsTableController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(connectionName, schemaName, tableName);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DataStreamMappingSpecMap dataStreamMapping = this.readDataStreamMapping(userHomeContext, connectionName, schemaName, tableName);
         if (dataStreamMapping == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
@@ -270,18 +276,19 @@ public class DataStreamsTableController {
         // If data stream is not found, return success (idempotence).
         dataStreamMapping.remove(dataStreamName);
 
+        userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
      * Reads the specification of a certain table, given its access path.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
+     * @param userHomeContext User-home context.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
      * @return TableSpec of the requested table. Null if not found.
      */
-    protected TableSpec readTableSpec(String connectionName, String schemaName, String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    protected TableSpec readTableSpec(UserHomeContext userHomeContext, String connectionName, String schemaName, String tableName) {
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -301,13 +308,14 @@ public class DataStreamsTableController {
 
     /**
      * Reads the data stream mappings on a certain table, given its access path.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
+     * @param userHomeContext User-home context.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
      * @return Data stream mappings on the requested table. Null if not found.
      */
-    protected DataStreamMappingSpecMap readDataStreamMapping(String connectionName, String schemaName, String tableName) {
-        TableSpec tableSpec = this.readTableSpec(connectionName, schemaName, tableName);
+    protected DataStreamMappingSpecMap readDataStreamMapping(UserHomeContext userHomeContext, String connectionName, String schemaName, String tableName) {
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return null;
         }
