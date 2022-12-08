@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,4 +40,7 @@ public class SchemaModel {
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
+    private ImportTablesQueueJobParameters importTableJobParameters;
 }

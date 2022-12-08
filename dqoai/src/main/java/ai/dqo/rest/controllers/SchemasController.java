@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
@@ -88,6 +89,11 @@ public class SchemasController {
                 setConnectionName(connectionName);
                 setSchemaTableName(s + ".*");
                 setEnabled(true);
+            }});
+            setImportTableJobParameters(new ImportTablesQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaName(s);
             }});
         }});
 
