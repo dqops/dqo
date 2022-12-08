@@ -2,7 +2,7 @@
 SELECT
     100.0 * SUM(
         CASE
-            WHEN LOWER ({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0') THEN 1
+            WHEN LOWER ({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0') THEN 1
             ELSE 0
         END
     )/COUNT(*) AS actual_value

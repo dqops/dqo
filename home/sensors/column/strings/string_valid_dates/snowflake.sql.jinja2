@@ -1,8 +1,8 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 SELECT
     100.0 * SUM(
-        WHEN
-            SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL THEN 1
+        CASE
+            WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL THEN 1
             ELSE 0
         END
     ) / COUNT(*) AS actual_value
