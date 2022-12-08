@@ -12,37 +12,37 @@ const TableHeader = () => {
   return (
     <>
       <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-lg" />
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-lg" />
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
         <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b border-r font-semibold bg-gray-400 text-lg"
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b border-r font-semibold bg-gray-400"
           colSpan={2}
         >
           Failing check
         </td>
         <td className="w-5 border-b" />
         <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b font-semibold bg-gray-400 text-lg"
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b font-semibold bg-gray-400"
           colSpan={2}
         >
           Passing check
         </td>
       </tr>
       <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-lg">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400">
           Data quality check
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400 text-lg">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400">
           Sensor parameters
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100 text-lg">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
           Error threshold
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100 text-lg">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100">
           Fatal threshold
         </td>
         <td className="w-5 border-b" />
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100 text-lg">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
           Warning threshold
         </td>
       </tr>
@@ -95,7 +95,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
                   className="py-2 px-4 bg-gray-50 border-b border-t"
                   colSpan={2}
                 >
-                  <div className="text-lg font-semibold text-gray-700 capitalize">
+                  <div className="font-semibold text-gray-700 capitalize">
                     {category.category}
                   </div>
                 </td>
