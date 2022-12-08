@@ -35,8 +35,8 @@ public class SchemaRemoteModel {
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
-    @JsonPropertyDescription("Is the schema imported.")
-    private boolean isImported;
+    @JsonPropertyDescription("Has the schema been imported.")
+    private boolean alreadyImported;
 
     @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
     private ImportTablesQueueJobParameters importTableJobParameters;

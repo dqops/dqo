@@ -78,9 +78,9 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
                 <td className="py-2 px-4 text-left">{item.schemaName}</td>
                 <td className="py-2 px-4 text-left">
                   <SvgIcon
-                    name={item.imported ? 'check' : 'close'}
+                    name={item.alreadyImported ? 'check' : 'close'}
                     className={
-                      item.imported ? 'text-green-700' : 'text-red-700'
+                      item.alreadyImported ? 'text-green-700' : 'text-red-700'
                     }
                     width={30}
                     height={22}
