@@ -32,6 +32,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCh
 import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -67,6 +68,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_string_surrounded_by_whitespace_percent", o -> o.dailyCheckpointMaxStringSurroundedByWhitespacePercent);
             put("daily_checkpoint_min_string_parsable_to_float_percent", o -> o.dailyCheckpointMinStringParsableToFloatPercent);
             put("daily_checkpoint_min_string_valid_usa_zipcode_percent", o -> o.dailyCheckpointMinStringValidUsaZipcodePercent);
+            put("daily_checkpoint_min_string_valid_usa_phone_percent", o -> o.dailyCheckpointMinStringValidUsaPhonePercent);
+
         }
     };
 
@@ -117,6 +120,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinStringValidUsaZipcodePercentCheckSpec dailyCheckpointMinStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec dailyCheckpointMinStringValidUsaPhonePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -404,6 +410,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidUsaZipcodePercent, dailyCheckpointMinStringValidUsaZipcodePercent));
         this.dailyCheckpointMinStringValidUsaZipcodePercent = dailyCheckpointMinStringValidUsaZipcodePercent;
         propagateHierarchyIdToField(dailyCheckpointMinStringValidUsaZipcodePercent, "daily_checkpoint_min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getDailyCheckpointMinStringValidUsaPhonePercent() {
+        return dailyCheckpointMinStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param dailyCheckpointMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setDailyCheckpointMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec dailyCheckpointMinStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidUsaPhonePercent, dailyCheckpointMinStringValidUsaPhonePercent));
+        this.dailyCheckpointMinStringValidUsaPhonePercent = dailyCheckpointMinStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(dailyCheckpointMinStringValidUsaPhonePercent, "daily_checkpoint_min_string_valid_usa_phone_percent");
     }
 
     /**
