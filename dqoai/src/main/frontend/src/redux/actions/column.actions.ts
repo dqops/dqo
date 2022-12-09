@@ -299,7 +299,9 @@ export const getColumnChecksUi =
         connectionName,
         schemaName,
         tableName,
-        columnName
+        columnName,
+        '',
+        ''
       );
       dispatch(getColumnChecksUISuccess(res.data));
     } catch (err) {

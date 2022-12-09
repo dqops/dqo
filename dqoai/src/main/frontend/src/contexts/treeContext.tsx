@@ -288,7 +288,9 @@ function TreeProvider(props: any) {
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
-      columnNode?.label ?? ''
+      columnNode?.label ?? '',
+      '',
+      ''
     );
     const items: CustomTreeNode[] = [];
     res.data.categories?.forEach((category) => {

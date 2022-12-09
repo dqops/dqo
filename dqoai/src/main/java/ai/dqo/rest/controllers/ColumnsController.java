@@ -47,6 +47,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.swing.text.html.Option;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
@@ -472,25 +473,34 @@ public class ColumnsController {
 
     /**
      * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
+     * Optionally filter checks by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return UI friendly data quality ad-hoc check list on a requested column.
+     * @param checkCategory  (Optional) Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly model of data quality ad-hoc checks on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
-    @ApiOperation(value = "getColumnAdHocChecksUI", notes = "Return a UI friendly model of column level data quality ad-hoc checks on a column", response = UIAllChecksModel.class)
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getColumnAdHocChecksUI", notes = "Return a UI friendly model of data quality ad-hoc checks on a column", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+            @ApiResponse(code = 500, message = "Internal iServer Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnAdHocChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Column name") @PathVariable String columnName) {
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam(value = "Check category", required = false) @PathVariable(required = false) String checkCategory,
+            @ApiParam(value = "Check name", required = false) @PathVariable(required = false) String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -516,7 +526,6 @@ public class ColumnsController {
         if (tempChecks == null) {
             tempChecks = new ColumnAdHocCheckCategoriesSpec();
         }
-        
         ColumnAdHocCheckCategoriesSpec checks = tempChecks;
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -524,6 +533,8 @@ public class ColumnsController {
             setColumnName(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
             setEnabled(true);
         }};
 
