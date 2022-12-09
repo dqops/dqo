@@ -526,7 +526,8 @@ function TreeProvider(props: any) {
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
-        columnNode?.label ?? ''
+        columnNode?.label ?? '',
+          '', ''
       );
       JobApiClient.runChecks(res.data.run_checks_job_template);
       return;

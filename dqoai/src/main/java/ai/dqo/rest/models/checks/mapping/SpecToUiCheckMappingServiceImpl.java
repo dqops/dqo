@@ -65,7 +65,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI friendly model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
      * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI friendly model of data quality checks' container.
      */
@@ -94,12 +94,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations.
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     @Override
-    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                                    CheckSearchFilters runChecksTemplate) {
+    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec) {
         UIAllChecksBasicModel uiAllChecksBasicModel = new UIAllChecksBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
@@ -117,7 +115,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for all data quality checks for one category.
      * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
-     * @param runChecksTemplate       Run check job template.
+     * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param defaultDataStreamName   Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
      */
