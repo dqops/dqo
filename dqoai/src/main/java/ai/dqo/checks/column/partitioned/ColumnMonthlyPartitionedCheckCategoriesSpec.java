@@ -23,6 +23,7 @@ import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedC
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -54,6 +55,8 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
+            put("pii", o -> o.pii);
+
         }
     };
 
@@ -81,6 +84,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeMonthlyPartitionedChecksSpec datetime;
+
+    @JsonPropertyDescription("Monthly partitioned checks of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiMonthlyPartitionedChecksSpec pii;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -170,6 +178,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of monthly Personal Identifiable Information (PII) data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnPiiMonthlyPartitionedChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of monthly Personal Identifiable Information (PII) data quality partitioned checks.
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiMonthlyPartitionedChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
