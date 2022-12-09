@@ -22,7 +22,7 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsTimeSeriesData;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsTimeSeriesMap;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.rules.*;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
@@ -65,7 +65,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     /**
      * Evaluate rules for data quality checks.
      *
-     * @param checkExecutionContext   Check execution context.
+     * @param executionContext   Check execution context.
      * @param checkSpec               Check specification with a list of rules.
      * @param sensorRunParameters     Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
@@ -74,7 +74,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      * @return Rule evaluation results as a table.
      */
     @Override
-    public RuleEvaluationResult evaluateRules(CheckExecutionContext checkExecutionContext,
+    public RuleEvaluationResult evaluateRules(ExecutionContext executionContext,
                                               AbstractCheckSpec checkSpec,
                                               SensorExecutionRunParameters sensorRunParameters,
                                               SensorReadoutsNormalizedResult normalizedSensorResults,
@@ -90,7 +90,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
         String ruleDefinitionName = checkSpec.getRuleDefinitionName();
-        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleDefinitionName);
+        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
         RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
 
         for (TableSlice dimensionTableSlice : dimensionTimeSeriesSlices) {
@@ -163,7 +163,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersFatal);
+                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal);
 
                     if (!ruleExecutionResultFatal.isPassed()) {
                         highestSeverity = 3;
@@ -183,7 +183,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersError);
+                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError);
 
                     if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
                         highestSeverity = 2;
@@ -203,7 +203,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersWarning);
+                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning);
 
                     if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
                         highestSeverity = 1;
@@ -235,7 +235,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
     /**
      * Evaluate rules for sensor rules
-     * @param checkExecutionContext Check execution context.
+     * @param executionContext Check execution context.
      * @param checkSpec Check specification with a list of rules.
      * @param sensorRunParameters Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
@@ -244,7 +244,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      * @return Rule evaluation results as a table.
      */
     @Deprecated
-    public RuleEvaluationResult evaluateLegacyRules(CheckExecutionContext checkExecutionContext,
+    public RuleEvaluationResult evaluateLegacyRules(ExecutionContext executionContext,
                                                     AbstractCheckDeprecatedSpec checkSpec,
                                                     SensorExecutionRunParameters sensorRunParameters,
                                                     SensorReadoutsNormalizedResult normalizedSensorResults,
@@ -331,7 +331,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                     if (highRule != null) {
                         RuleExecutionRunParameters ruleRunParametersHigh = new RuleExecutionRunParameters(actualValue, highRule, timePeriodLocal, previousDataPoints, ruleTimeWindow);
-                        RuleExecutionResult ruleExecutionResultHigh = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersHigh);
+                        RuleExecutionResult ruleExecutionResultHigh = this.ruleRunner.executeRule(executionContext, ruleRunParametersHigh);
 
                         if (!ruleExecutionResultHigh.isPassed()) {
                             highestSeverity = 3;
@@ -351,7 +351,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                     if (mediumRule != null) {
                         RuleExecutionRunParameters ruleRunParametersMedium = new RuleExecutionRunParameters(actualValue, mediumRule, timePeriodLocal, previousDataPoints, ruleTimeWindow);
-                        RuleExecutionResult ruleExecutionResultMedium = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersMedium);
+                        RuleExecutionResult ruleExecutionResultMedium = this.ruleRunner.executeRule(executionContext, ruleRunParametersMedium);
 
                         if (highestSeverity == null && !ruleExecutionResultMedium.isPassed()) {
                             highestSeverity = 2;
@@ -371,7 +371,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                     if (lowRule != null) {
                         RuleExecutionRunParameters ruleRunParametersLow = new RuleExecutionRunParameters(actualValue, lowRule, timePeriodLocal, previousDataPoints, ruleTimeWindow);
-                        RuleExecutionResult ruleExecutionResultLow = this.ruleRunner.executeRule(checkExecutionContext, ruleRunParametersLow);
+                        RuleExecutionResult ruleExecutionResultLow = this.ruleRunner.executeRule(executionContext, ruleRunParametersLow);
 
                         if (highestSeverity == null && !ruleExecutionResultLow.isPassed()) {
                             highestSeverity = 1;

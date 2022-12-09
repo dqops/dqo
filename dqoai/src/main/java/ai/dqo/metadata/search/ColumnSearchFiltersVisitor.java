@@ -246,7 +246,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {

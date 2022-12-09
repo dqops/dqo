@@ -30,7 +30,7 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeService;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
@@ -125,24 +125,24 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
     /**
      * Executes data quality checks. Reports progress and saves the results.
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param checkSearchFilters Check search filters to find the right checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
-    public CheckExecutionSummary executeChecks(CheckExecutionContext checkExecutionContext,
-											   CheckSearchFilters checkSearchFilters,
-											   CheckExecutionProgressListener progressListener,
-											   boolean dummySensorExecution) {
-        UserHome userHome = checkExecutionContext.getUserHomeContext().getUserHome();
+    public CheckExecutionSummary executeChecks(ExecutionContext executionContext,
+                                               CheckSearchFilters checkSearchFilters,
+                                               CheckExecutionProgressListener progressListener,
+                                               boolean dummySensorExecution) {
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
         for (TableWrapper targetTable :  targetTables) {
             // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
-			executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     dummySensorExecution, checkExecutionSummary);
         }
 
@@ -154,16 +154,16 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     /**
      * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
      *
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule        Target schedule to match, when finding checks that should be executed.
      * @param progressListener      Progress listener that receives progress calls.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
-    public CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
-                                               RunChecksCronSchedule targetSchedule,
-                                               CheckExecutionProgressListener progressListener) {
-        UserHome userHome = checkExecutionContext.getUserHomeContext().getUserHome();
+    public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
+                                                          RunChecksCronSchedule targetSchedule,
+                                                          CheckExecutionProgressListener progressListener) {
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
@@ -177,7 +177,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toString());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            executeChecksOnTable(checkExecutionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+            executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
                     false, checkExecutionSummary);
         }
 
@@ -188,7 +188,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
     /**
      * Execute checks on a single table.
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param userHome User home with all metadata and checks.
      * @param connectionWrapper  Target connection.
      * @param targetTable Target table.
@@ -197,7 +197,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
      */
-    public void executeChecksOnTable(CheckExecutionContext checkExecutionContext,
+    public void executeChecksOnTable(ExecutionContext executionContext,
                                      UserHome userHome,
                                      ConnectionWrapper connectionWrapper,
                                      TableWrapper targetTable,
@@ -233,7 +233,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec);
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
 
-                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(checkExecutionContext,
+                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
                         sensorRunParameters, progressListener, dummySensorExecution);
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
                 if (sensorResult.getResultTable().rowCount() == 0) {
@@ -260,7 +260,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(minTimePeriod.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results for merging
                 }
                 else {
-                    RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleDefinitionName);
+                    RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
                     LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
@@ -274,7 +274,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
 
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
-                            checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                            executionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
                     progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                     allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());
@@ -312,7 +312,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
     /**
      * Execute checks on a single table.
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param userHome User home with all metadata and checks.
      * @param connectionWrapper  Target connection.
      * @param targetTable Target table.
@@ -321,7 +321,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
      */
-    public void executeLegacyChecksOnTable(CheckExecutionContext checkExecutionContext,
+    public void executeLegacyChecksOnTable(ExecutionContext executionContext,
                                            UserHome userHome,
                                            ConnectionWrapper connectionWrapper,
                                            TableWrapper targetTable,
@@ -365,7 +365,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec);
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
 
-                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(checkExecutionContext,
+                SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
                         sensorRunParameters, progressListener, dummySensorExecution);
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
                 if (sensorResult.getResultTable().rowCount() == 0) {
@@ -392,7 +392,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic results
 
                 RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateLegacyRules(
-                        checkExecutionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
+                        executionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
                 progressListener.onRulesExecuted(new RulesExecutedEvent(tableSpec, sensorRunParameters, normalizedSensorResults, ruleEvaluationResult));
 
                 allRuleEvaluationResultsTable.append(ruleEvaluationResult.getRuleResultsTable());

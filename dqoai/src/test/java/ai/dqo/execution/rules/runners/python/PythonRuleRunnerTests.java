@@ -20,7 +20,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
@@ -40,7 +40,7 @@ public class PythonRuleRunnerTests extends BaseTest {
     private PythonCallerService pythonCallerService;
     private DqoConfigurationProperties dqoConfigurationProperties;
     private HomeLocationFindServiceImpl homeLocationFinder;
-    private CheckExecutionContext inMemoryCheckContext;
+    private ExecutionContext inMemoryCheckContext;
 
     /**
      * Called before each test.

@@ -19,7 +19,7 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.SourceConnection;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -64,7 +64,7 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     /**
      * Executes a sensor and returns the sensor result.
      *
-     * @param checkExecutionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param executionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
      * @param sensorRunParameters   Sensor run parameters - connection, table, column, sensor parameters.
      * @param sensorDefinitions     Sensor definition (both the core sensor definition and the provider specific sensor definition).
      * @param progressListener      Progress listener that receives events when the sensor is executed.
@@ -72,14 +72,14 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * @return Sensor result.
      */
     @Override
-    public SensorExecutionResult executeSensor(CheckExecutionContext checkExecutionContext,
-											   SensorExecutionRunParameters sensorRunParameters,
-											   SensorDefinitionFindResult sensorDefinitions,
-											   CheckExecutionProgressListener progressListener,
-											   boolean dummySensorExecution) {
+    public SensorExecutionResult executeSensor(ExecutionContext executionContext,
+                                               SensorExecutionRunParameters sensorRunParameters,
+                                               SensorDefinitionFindResult sensorDefinitions,
+                                               CheckExecutionProgressListener progressListener,
+                                               boolean dummySensorExecution) {
         JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
                 sensorRunParameters, sensorDefinitions);
-        String renderedSql = this.jinjaTemplateRenderService.renderTemplate(checkExecutionContext, sensorDefinitions,
+        String renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinitions,
                 templateRenderParameters, progressListener);
 
         if (!dummySensorExecution) {

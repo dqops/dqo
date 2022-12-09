@@ -26,7 +26,7 @@ import ai.dqo.data.readouts.normalization.SensorResultNormalizeServiceImpl;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactoryObjectMother;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.execution.rules.DataQualityRuleRunner;
@@ -64,7 +64,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     private TableSpec tableSpec;
     private TableMinRowCountCheckSpec checkSpec;
     private SensorExecutionRunParameters sensorExecutionRunParameters;
-    private CheckExecutionContext checkExecutionContext;
+    private ExecutionContext executionContext;
     private CheckExecutionProgressListenerStub progressListener;
     private SensorExecutionResult sensorExecutionResult;
     private SensorReadoutsSnapshot sensorReadoutsSnapshot;
@@ -83,8 +83,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl());
 		this.normalizeService = new SensorResultNormalizeServiceImpl();
 		this.table = Table.create("results");
-		checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-		userHome = checkExecutionContext.getUserHomeContext().getUserHome();
+		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+		userHome = executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
 		this.utcZone = connectionWrapper.getSpec().getJavaTimeZoneId();
@@ -113,7 +113,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleParametersSpec(11L));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -138,7 +138,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
         this.checkSpec.setWarning(new MinCountRuleParametersSpec(11L));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -163,7 +163,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -188,7 +188,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -213,7 +213,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -238,7 +238,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(11));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -265,7 +265,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -292,7 +292,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -319,7 +319,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(12));
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -346,7 +346,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		this.checkSpec.setError(new MinCountRule0ParametersSpec(11));
 		this.checkSpec.setFatal(new MinCountRuleParametersSpec(10));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -371,7 +371,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleParametersSpec(14));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();
@@ -408,7 +408,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 				this.sensorExecutionResult, TimeSeriesGradient.DAY, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleParametersSpec(12));
 
-        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(checkExecutionContext, this.checkSpec,
+        RuleEvaluationResult evaluationResult = this.sut.evaluateRules(executionContext, this.checkSpec,
 				this.sensorExecutionRunParameters, normalizedResult, this.sensorReadoutsSnapshot, progressListener);
 
         Table resultTable = evaluationResult.getRuleResultsTable();

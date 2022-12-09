@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors.runners;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -27,14 +27,14 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 public abstract class AbstractSensorRunner {
     /**
      * Executes a sensor and returns the sensor result.
-     * @param checkExecutionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param executionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
      * @param sensorRunParameters   Sensor run parameters - connection, table, column, sensor parameters.
      * @param sensorDefinition      Sensor definition (both the core sensor definition and the provider specific sensor definition).
      * @param progressListener      Progress listener that receives events when the sensor is executed.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Sensor result.
      */
-    public abstract SensorExecutionResult executeSensor(CheckExecutionContext checkExecutionContext,
+    public abstract SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                         SensorExecutionRunParameters sensorRunParameters,
                                                         SensorDefinitionFindResult sensorDefinition,
                                                         CheckExecutionProgressListener progressListener,

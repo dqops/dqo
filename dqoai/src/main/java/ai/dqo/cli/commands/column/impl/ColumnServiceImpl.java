@@ -66,19 +66,19 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param tabularOutputFormat Tabular output format.
-	 * @param dimensions Dimensions filter.
+	 * @param tags Dimensions filter.
 	 * @param labels Labels filter.
 	 * @return Cli operation status.
 	 */
 	@Override
-	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
+	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] tags, String[] labels) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
 		columnSearchFilters.setColumnName(columnName);
 		columnSearchFilters.setSchemaTableName(tableName);
 		columnSearchFilters.setConnectionName(connectionName);
-		columnSearchFilters.setDimensions(dimensions);
+		columnSearchFilters.setTags(tags);
 		columnSearchFilters.setLabels(labels);
 
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();

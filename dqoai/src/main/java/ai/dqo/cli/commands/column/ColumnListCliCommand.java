@@ -71,9 +71,9 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName = "*";
 
-	@CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter",
+	@CommandLine.Option(names = {"-tg", "--tags"}, description = "Data stream tag filter",
 			required = false)
-	private String[] dimensions;
+	private String[] tags;
 
 	@CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
 	private String[] labels;
@@ -114,16 +114,16 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	 * Returns the dimensions filter.
 	 * @return Dimensions filter.
 	 */
-	public String[] getDimensions() {
-		return dimensions;
+	public String[] getTags() {
+		return tags;
 	}
 
 	/**
 	 * Sets the dimensions filter.
-	 * @param dimensions Dimensions filter.
+	 * @param tags Dimensions filter.
 	 */
-	public void setDimensions(String[] dimensions) {
-		this.dimensions = dimensions;
+	public void setTags(String[] tags) {
+		this.tags = tags;
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	@Override
 	public Integer call() throws Exception {
 
-		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName, this.getOutputFormat(), dimensions, labels);
+		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName, this.getOutputFormat(), tags, labels);
 
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {

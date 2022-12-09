@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules.runners;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
@@ -26,12 +26,12 @@ import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 public abstract class AbstractRuleRunner {
     /**
      * Executes a rule that evaluates a value and checks if it is valid.
-     * @param checkExecutionContext Check execution context with access to the DQO_HOME and user home.
+     * @param executionContext Check execution context with access to the DQO_HOME and user home.
      * @param ruleRunParameters Rule run parameters with the values to be sent to the rule as parameters.
      * @param ruleDefinitionFindResult Rule definition find result to identity a rule (like a python module) that will be executed.
      * @return Rule evaluation result.
      */
-    public abstract RuleExecutionResult executeRule(CheckExecutionContext checkExecutionContext,
-                                           RuleExecutionRunParameters ruleRunParameters,
-                                           RuleDefinitionFindResult ruleDefinitionFindResult);
+    public abstract RuleExecutionResult executeRule(ExecutionContext executionContext,
+                                                    RuleExecutionRunParameters ruleRunParameters,
+                                                    RuleDefinitionFindResult ruleDefinitionFindResult);
 }

@@ -28,6 +28,7 @@ import java.util.Set;
 /**
  * Visitor for {@link CheckSearchFilters} that finds the correct nodes.
  */
+@Deprecated
 public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
     private final CheckSearchFilters filters;
 

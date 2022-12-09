@@ -17,7 +17,7 @@ package ai.dqo.execution.sensors.finder;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.storage.localfiles.HomeType;
@@ -52,9 +52,9 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
     void findProviderSensorDefinition_whenDefinitionPresentInDqoHome_thenReturnsDefinition() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
 
-        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(checkExecutionContext, "table/consistency/row_count", ProviderType.bigquery);
+        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, "table/consistency/row_count", ProviderType.bigquery);
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getSensorDefinitionSpec());
@@ -69,9 +69,9 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
     void findProviderSensorDefinition_whenUnknownSensor_thenReturnsNull() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
 
-        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(checkExecutionContext, "table/category/missingsensor", ProviderType.bigquery);
+        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, "table/category/missingsensor", ProviderType.bigquery);
 
         Assertions.assertNull(result);
     }
@@ -80,7 +80,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
     void findProviderSensorDefinition_whenSensorRedefinedInUserHome_thenReturnsDefinitionFromUserHome() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
         UserHome userHome = inMemoryFileHomeContext.getUserHome();
         final String sensorName = "table/consistency/row_count";
         SensorDefinitionWrapper userSensorDef = userHome.getSensors().createAndAddNew(sensorName);
@@ -89,7 +89,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotNull(userProviderSensor.getSpec());
         userProviderSensor.setSqlTemplate("select 1 from tab");
 
-        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(checkExecutionContext, sensorName, ProviderType.bigquery);
+        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, sensorName, ProviderType.bigquery);
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getSensorDefinitionSpec());
@@ -104,13 +104,13 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
     void findProviderSensorDefinition_whenSensorRedefinedInUserHomeButMissingRequestedProviderImplementation_thenReturnsDefinitionFromDqoHome() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
         UserHome userHome = inMemoryFileHomeContext.getUserHome();
         final String sensorName = "table/consistency/row_count";
         SensorDefinitionWrapper userSensorDef = userHome.getSensors().createAndAddNew(sensorName);
         Assertions.assertNotNull(userSensorDef.getSpec());
 
-        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(checkExecutionContext, sensorName, ProviderType.bigquery);
+        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, sensorName, ProviderType.bigquery);
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getSensorDefinitionSpec());

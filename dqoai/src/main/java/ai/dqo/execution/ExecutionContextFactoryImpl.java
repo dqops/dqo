@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  * Check execution context factory. Opens the dqo home context and the user home context.
  */
 @Component
-public class CheckExecutionContextFactoryImpl implements CheckExecutionContextFactory {
+public class ExecutionContextFactoryImpl implements ExecutionContextFactory {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoHomeContextFactory dqoHomeContextFactory;
 
@@ -35,26 +35,26 @@ public class CheckExecutionContextFactoryImpl implements CheckExecutionContextFa
      * @param dqoHomeContextFactory Dqo home context factory.
      */
     @Autowired
-    public CheckExecutionContextFactoryImpl(UserHomeContextFactory userHomeContextFactory,
-											DqoHomeContextFactory dqoHomeContextFactory) {
+    public ExecutionContextFactoryImpl(UserHomeContextFactory userHomeContextFactory,
+                                       DqoHomeContextFactory dqoHomeContextFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
     }
 
     /**
-     * Creates a new check execution context by opening the user home context and the dqo system home context.
-     * @return Check execution context.
+     * Creates a new execution context by opening the user home context and the dqo system home context.
+     * @return Execution context.
      */
-    public CheckExecutionContext create() {
-        return new CheckExecutionContext(this.userHomeContextFactory.openLocalUserHome(), this.dqoHomeContextFactory.openLocalDqoHome());
+    public ExecutionContext create() {
+        return new ExecutionContext(this.userHomeContextFactory.openLocalUserHome(), this.dqoHomeContextFactory.openLocalDqoHome());
     }
 
     /**
-     * Creates a new check execution context by using a given user context.
+     * Creates a new execution context by using a given user context.
      * @param userHomeContext User home context.
-     * @return Check execution context.
+     * @return Execution context.
      */
-    public CheckExecutionContext create(UserHomeContext userHomeContext) {
-        return new CheckExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
+    public ExecutionContext create(UserHomeContext userHomeContext) {
+        return new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome());
     }
 }

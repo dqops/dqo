@@ -20,17 +20,18 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 
 /**
  * Object that stores a current reference to the dqo come and user home to look up definitions.
+ * It is provided as a context to run checks and profilers.
  */
-public class CheckExecutionContext {
+public class ExecutionContext {
     private final UserHomeContext userHomeContext;
     private final DqoHomeContext dqoHomeContext;
 
     /**
-     * Creates a check execution context with references to the user home and dqo come.
+     * Creates a check/profiler/.. execution context with references to the user home and dqo come.
      * @param userHomeContext User home context.
      * @param dqoHomeContext Dqo application home context.
      */
-    public CheckExecutionContext(UserHomeContext userHomeContext, DqoHomeContext dqoHomeContext) {
+    public ExecutionContext(UserHomeContext userHomeContext, DqoHomeContext dqoHomeContext) {
         this.userHomeContext = userHomeContext;
         this.dqoHomeContext = dqoHomeContext;
     }

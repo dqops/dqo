@@ -20,9 +20,9 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import java.util.Arrays;
 
 /**
- * Data stream search matcher for CLI commands.
+ * Data stream tags search matcher for CLI commands.
  */
-public class DataStreamsMappingSearchMatcher {
+public class DataStreamsTagsSearchMatcher {
 	/**
 	 * Returns a boolean value if filters fit spec.
 	 * @param level Data stream level value.
@@ -84,11 +84,11 @@ public class DataStreamsMappingSearchMatcher {
 	 * @return Boolean value if filters fit spec.
 	 */
 	static boolean matchAllColumnDataStreams(ColumnSearchFilters columnSearchFilters, DataStreamMappingSpec dataStreamsMappingSpec) {
-		String[] dimensions = columnSearchFilters.getDimensions();
-		if (dimensions == null) {
+		String[] tags = columnSearchFilters.getTags();
+		if (tags == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamsMappingSpec));
+		return Arrays.stream(tags).allMatch(tag -> matchDataStreamsMapping(tag, dataStreamsMappingSpec));
 	}
 
 	/**
@@ -98,10 +98,23 @@ public class DataStreamsMappingSearchMatcher {
 	 * @return Boolean value if filters fit spec.
 	 */
 	static boolean matchAllCheckDataStreamsMapping(CheckSearchFilters checkSearchFilters, DataStreamMappingSpec dataStreamMappingSpec) {
-		String[] dimensions = checkSearchFilters.getDimensions();
-		if (dimensions == null) {
+		String[] tags = checkSearchFilters.getTags();
+		if (tags == null) {
 			return true;
 		}
-		return Arrays.stream(dimensions).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
+		return Arrays.stream(tags).allMatch(tag -> matchDataStreamsMapping(tag, dataStreamMappingSpec));
+	}
+
+	/**
+	 * Returns a boolean value if filters fit spec.
+	 * @param tags Array of required tags.
+	 * @param dataStreamMappingSpec Data streams mapping spec.
+	 * @return Boolean value if filters fit spec.
+	 */
+	static boolean matchAllRequiredTags(String[] tags, DataStreamMappingSpec dataStreamMappingSpec) {
+		if (tags == null) {
+			return true;
+		}
+		return Arrays.stream(tags).allMatch(dimension -> matchDataStreamsMapping(dimension, dataStreamMappingSpec));
 	}
 }

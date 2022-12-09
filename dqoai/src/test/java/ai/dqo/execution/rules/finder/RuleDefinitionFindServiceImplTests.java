@@ -17,7 +17,7 @@ package ai.dqo.execution.rules.finder;
 
 import ai.dqo.BaseTest;
 import ai.dqo.core.filesystem.virtual.FileContent;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.storage.localfiles.HomeType;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -51,9 +51,9 @@ public class RuleDefinitionFindServiceImplTests extends BaseTest {
     void findRuleDefinition_whenRulePresentInDqoHome_thenReturnsDefinition() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
 
-        RuleDefinitionFindResult result = this.sut.findRule(checkExecutionContext, "comparison/min_value");
+        RuleDefinitionFindResult result = this.sut.findRule(executionContext, "comparison/min_value");
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getRuleDefinitionSpec());
@@ -66,9 +66,9 @@ public class RuleDefinitionFindServiceImplTests extends BaseTest {
     void findRuleDefinition_whenUnknownRule_thenReturnsNull() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
 
-        RuleDefinitionFindResult result = this.sut.findRule(checkExecutionContext, "comparison/missingsensor");
+        RuleDefinitionFindResult result = this.sut.findRule(executionContext, "comparison/missingsensor");
 
         Assertions.assertNull(result);
     }
@@ -77,13 +77,13 @@ public class RuleDefinitionFindServiceImplTests extends BaseTest {
     void findRuleDefinition_whenRuleRedefinedInUserHome_thenReturnsDefinitionFromUserHome() {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
         UserHome userHome = inMemoryFileHomeContext.getUserHome();
         final String ruleName = "comparison/min_value";
         RuleDefinitionWrapper userRuleDef = userHome.getRules().createAndAddNew(ruleName);
         userRuleDef.setRulePythonModuleContent(new FileContent("def fun()"));
 
-        RuleDefinitionFindResult result = this.sut.findRule(checkExecutionContext, "comparison/min_value");
+        RuleDefinitionFindResult result = this.sut.findRule(executionContext, "comparison/min_value");
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getRuleDefinitionSpec());

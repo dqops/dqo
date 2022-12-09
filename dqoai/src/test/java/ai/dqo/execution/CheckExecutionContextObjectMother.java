@@ -28,11 +28,11 @@ public class CheckExecutionContextObjectMother {
      * Create a check execution context with an empty, in-memory home context and a real dqo context.
      * @return Check execution context.
      */
-    public static CheckExecutionContext createWithInMemoryUserContext() {
+    public static ExecutionContext createWithInMemoryUserContext() {
         UserHomeContext userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(userHomeContext, dqoHomeContext);
-        return checkExecutionContext;
+        ExecutionContext executionContext = new ExecutionContext(userHomeContext, dqoHomeContext);
+        return executionContext;
     }
 
     /**
@@ -40,10 +40,10 @@ public class CheckExecutionContextObjectMother {
      * @param recreateTemporaryHomeFolder Recreate (clean) the testable user home context.
      * @return Check execution context.
      */
-    public static CheckExecutionContext createTestableUserContext(boolean recreateTemporaryHomeFolder) {
+    public static ExecutionContext createTestableUserContext(boolean recreateTemporaryHomeFolder) {
         UserHomeContext userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(recreateTemporaryHomeFolder);
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(userHomeContext, dqoHomeContext);
-        return checkExecutionContext;
+        ExecutionContext executionContext = new ExecutionContext(userHomeContext, dqoHomeContext);
+        return executionContext;
     }
 }

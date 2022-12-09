@@ -17,7 +17,7 @@ package ai.dqo.execution.rules.finder;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.HomeType;
@@ -32,12 +32,12 @@ import org.springframework.stereotype.Component;
 public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService {
     /**
      * Finds a rule definition for a named rule.
-     * @param checkExecutionContext Check execution context with access to the DQO_HOME and the user home.
+     * @param executionContext Check execution context with access to the DQO_HOME and the user home.
      * @param ruleName Rule name with or without the .py file extension.
      * @return Rule definition find result or null when the rule was not found.
      */
-    public RuleDefinitionFindResult findRule(CheckExecutionContext checkExecutionContext, String ruleName) {
-        UserHome userHome = checkExecutionContext.getUserHomeContext().getUserHome();
+    public RuleDefinitionFindResult findRule(ExecutionContext executionContext, String ruleName) {
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
         // remove the optional .py file extension
         String bareRuleName = ruleName.endsWith(SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY) ?
@@ -57,7 +57,7 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
             return userRuleResult;
         }
 
-        DqoHome dqoHome = checkExecutionContext.getDqoHomeContext().getDqoHome();
+        DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
         RuleDefinitionWrapper dqoRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(bareRuleName, true);
         if (dqoRuleDefinitionWrapper != null) {
             RuleDefinitionFindResult dqoRuleResult = new RuleDefinitionFindResult() {{

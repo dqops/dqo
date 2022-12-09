@@ -45,10 +45,14 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.profiling.AbstractProfilerCategorySpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -762,6 +766,42 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a profiler check instance.
+     *
+     * @param profileSpec Profiler instance.
+     * @param parameter   Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public <S extends AbstractSensorParametersSpec> TreeNodeTraversalResult accept(AbstractProfilerSpec profileSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of profiling checks (a profiling category) instance.
+     *
+     * @param profileCategorySpec Profiling category instance that contains profilers.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractProfilerCategorySpec profileCategorySpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a root container of profiling checks (a profiling category) instance.
+     *
+     * @param rootProfilerContainerSpec Profiling root container instance that contains profilers.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

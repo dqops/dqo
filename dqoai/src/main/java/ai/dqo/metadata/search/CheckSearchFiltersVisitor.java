@@ -288,7 +288,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedDataStream)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedDataStream)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {

@@ -28,6 +28,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.profiling.column.ColumnProfilerRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -54,6 +55,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
+            put("profiler", o -> o.profiler);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -82,6 +84,11 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPartitionedChecksRootSpec partitionedChecks;
+
+    @JsonPropertyDescription("Custom configuration of a column level profiler. Enables customization of the profiler settings when the profiler is analysing this column.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnProfilerRootCategoriesSpec profiler;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -202,6 +209,24 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns a custom configuration of a column level profiler for this column.
+     * @return Custom profiler instance or null when the default (built-in) configuration settings should be used.
+     */
+    public ColumnProfilerRootCategoriesSpec getProfiler() {
+        return profiler;
+    }
+
+    /**
+     * Sets a reference to a custom profiler configuration on a column level.
+     * @param profiler Custom profiler configuration.
+     */
+    public void setProfiler(ColumnProfilerRootCategoriesSpec profiler) {
+        setDirtyIf(!Objects.equals(this.profiler, profiler));
+        this.profiler = profiler;
+        propagateHierarchyIdToField(profiler, "profiler");
+    }
+
+    /**
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
@@ -314,6 +339,11 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
             }
 
+            if (cloned.profiler != null) {
+                Cloner cloner = new Cloner();
+                cloned.profiler = cloner.deepClone(cloned.profiler);
+            }
+
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -349,6 +379,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
+            cloned.profiler = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
@@ -379,6 +410,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.labels = null;
+            cloned.profiler = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
