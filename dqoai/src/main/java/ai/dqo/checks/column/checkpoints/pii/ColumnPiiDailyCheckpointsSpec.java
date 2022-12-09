@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints.pii;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,31 @@ import java.util.Objects;
 public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_checkpoint_max_contains_usa_phone_percent", o -> o.dailyCheckpointMaxContainsUsaPhonePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxPiiContainsUsaPhonePercentCheckSpec dailyCheckpointMaxContainsUsaPhonePercent;
+
+    /**
+     * Returns a maximum rows that contains USA phone number percent check.
+     * @return Maximum rows that contains USA phone number percent check.
+     */
+    public ColumnMaxPiiContainsUsaPhonePercentCheckSpec getDailyCheckpointMaxContainsUsaPhonePercent() {
+        return dailyCheckpointMaxContainsUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA phone number percent check.
+     * @param dailyCheckpointMaxContainsUsaPhonePercent Maximum rows that contains USA phone number percent check.
+     */
+    public void setDailyCheckpointMaxContainsUsaPhonePercent(ColumnMaxPiiContainsUsaPhonePercentCheckSpec dailyCheckpointMaxContainsUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxContainsUsaPhonePercent, dailyCheckpointMaxContainsUsaPhonePercent));
+        this.dailyCheckpointMaxContainsUsaPhonePercent = dailyCheckpointMaxContainsUsaPhonePercent;
+        propagateHierarchyIdToField(dailyCheckpointMaxContainsUsaPhonePercent, "daily_checkpoint_max_contains_usa_phone_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

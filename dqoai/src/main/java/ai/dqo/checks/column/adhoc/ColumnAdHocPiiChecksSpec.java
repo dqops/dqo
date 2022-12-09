@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,32 @@ import java.util.Objects;
 public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocPiiChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("max_contains_usa_phone_percent", o -> o.maxContainsUsaPhonePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxPiiContainsUsaPhonePercentCheckSpec maxContainsUsaPhonePercent;
+
+    /**
+     * Returns a maximum rows that contains USA phone number percent check.
+     * @return Maximum rows that contains USA phone number percent check.
+     */
+    public ColumnMaxPiiContainsUsaPhonePercentCheckSpec getMaxContainsUsaPhonePercent() {
+        return maxContainsUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA phone number percent check.
+     * @param maxContainsUsaPhonePercent Maximum rows that contains USA phone number percent check.
+     */
+    public void setMaxContainsUsaPhonePercent(ColumnMaxPiiContainsUsaPhonePercentCheckSpec maxContainsUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxContainsUsaPhonePercent, maxContainsUsaPhonePercent));
+        this.maxContainsUsaPhonePercent = maxContainsUsaPhonePercent;
+        propagateHierarchyIdToField(maxContainsUsaPhonePercent, "max_contains_usa_phone_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.
