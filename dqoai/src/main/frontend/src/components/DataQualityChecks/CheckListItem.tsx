@@ -46,6 +46,10 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
     if (check?.configured) {
       setExpanded(!expanded);
       const initTabs = [
+        {
+          label: 'Check Settings',
+          value: 'check-settings'
+        },
         ...(check?.supports_data_streams
           ? [
               {
