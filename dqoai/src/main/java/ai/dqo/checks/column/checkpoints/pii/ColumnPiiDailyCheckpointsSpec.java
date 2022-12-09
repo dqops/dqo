@@ -17,6 +17,7 @@ package ai.dqo.checks.column.checkpoints.pii;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,12 +38,16 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_max_contains_usa_phone_percent", o -> o.dailyCheckpointMaxContainsUsaPhonePercent);
+            put("daily_checkpoint_max_contains_usa_zipcode_percent", o -> o.dailyCheckpointMaxContainsUsaZipcodePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxPiiContainsUsaPhonePercentCheckSpec dailyCheckpointMaxContainsUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec dailyCheckpointMaxContainsUsaZipcodePercent;
 
     /**
      * Returns a maximum rows that contains USA phone number percent check.
@@ -60,6 +65,24 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxContainsUsaPhonePercent, dailyCheckpointMaxContainsUsaPhonePercent));
         this.dailyCheckpointMaxContainsUsaPhonePercent = dailyCheckpointMaxContainsUsaPhonePercent;
         propagateHierarchyIdToField(dailyCheckpointMaxContainsUsaPhonePercent, "daily_checkpoint_max_contains_usa_phone_percent");
+    }
+
+    /**
+     * Returns a maximum rows that contains USA zip code percent check.
+     * @return Maximum rows that contains USA zip code percent check.
+     */
+    public ColumnMaxPiiContainsUsaZipcodePercentCheckSpec getDailyCheckpointMaxContainsUsaZipcodePercent() {
+        return dailyCheckpointMaxContainsUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA zip code percent check.
+     * @param dailyCheckpointMaxContainsUsaZipcodePercent Maximum rows that contains USA zip code percent check.
+     */
+    public void setDailyCheckpointMaxContainsUsaZipcodePercent(ColumnMaxPiiContainsUsaZipcodePercentCheckSpec dailyCheckpointMaxContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxContainsUsaZipcodePercent, dailyCheckpointMaxContainsUsaZipcodePercent));
+        this.dailyCheckpointMaxContainsUsaZipcodePercent = dailyCheckpointMaxContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(dailyCheckpointMaxContainsUsaZipcodePercent, "daily_checkpoint_max_contains_usa_zipcode_percent");
     }
 
     /**

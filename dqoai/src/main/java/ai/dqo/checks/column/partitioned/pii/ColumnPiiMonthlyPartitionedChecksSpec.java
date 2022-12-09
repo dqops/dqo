@@ -17,6 +17,7 @@ package ai.dqo.checks.column.partitioned.pii;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,12 +38,16 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_max_contains_usa_phone_percent", o -> o.monthlyPartitionMaxContainsUsaPhonePercent);
+            put("monthly_partition_max_contains_usa_zipcode_percent", o -> o.monthlyPartitionMaxContainsUsaZipcodePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxPiiContainsUsaPhonePercentCheckSpec monthlyPartitionMaxContainsUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec monthlyPartitionMaxContainsUsaZipcodePercent;
 
     /**
      * Returns a maximum rows that contains USA phone number percentage check.
@@ -60,6 +65,24 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxContainsUsaPhonePercent, monthlyPartitionMaxContainsUsaPhonePercent));
         this.monthlyPartitionMaxContainsUsaPhonePercent = monthlyPartitionMaxContainsUsaPhonePercent;
         propagateHierarchyIdToField(monthlyPartitionMaxContainsUsaPhonePercent, "monthly_partition_max_contains_usa_phone_percent");
+    }
+
+    /**
+     * Returns a maximum rows that contains USA zip code percentage check.
+     * @return Maximum rows that contains USA zip code percentage check.
+     */
+    public ColumnMaxPiiContainsUsaZipcodePercentCheckSpec getMonthlyPartitionMaxContainsUsaZipcodePercent() {
+        return monthlyPartitionMaxContainsUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA zip code percentage check.
+     * @param monthlyPartitionMaxContainsUsaZipcodePercent Maximum rows that contains USA zip code percentage check.
+     */
+    public void setMonthlyPartitionMaxContainsUsaZipcodePercent(ColumnMaxPiiContainsUsaZipcodePercentCheckSpec monthlyPartitionMaxContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxContainsUsaZipcodePercent, monthlyPartitionMaxContainsUsaZipcodePercent));
+        this.monthlyPartitionMaxContainsUsaZipcodePercent = monthlyPartitionMaxContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(monthlyPartitionMaxContainsUsaZipcodePercent, "monthly_partition_max_contains_usa_zipcode_percent");
     }
 
     /**
