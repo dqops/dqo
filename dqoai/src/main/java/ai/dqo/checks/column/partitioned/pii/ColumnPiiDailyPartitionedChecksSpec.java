@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.pii;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,9 +36,31 @@ import java.util.Objects;
 public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_partition_max_contains_usa_phone_percent", o -> o.dailyPartitionMaxContainsUsaPhonePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxPiiContainsUsaPhonePercentCheckSpec dailyPartitionMaxContainsUsaPhonePercent;
+
+    /**
+     * Returns a maximum rows that contains USA phone number percentage check.
+     * @return Maximum rows that contains USA phone number percentage check.
+     */
+    public ColumnMaxPiiContainsUsaPhonePercentCheckSpec getDailyPartitionMaxContainsUsaPhonePercent() {
+        return dailyPartitionMaxContainsUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA phone number percentage check.
+     * @param dailyPartitionMaxContainsUsaPhonePercent Maximum rows that contains USA phone number percentage check.
+     */
+    public void setDailyPartitionMaxContainsUsaPhonePercent(ColumnMaxPiiContainsUsaPhonePercentCheckSpec dailyPartitionMaxContainsUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxContainsUsaPhonePercent, dailyPartitionMaxContainsUsaPhonePercent));
+        this.dailyPartitionMaxContainsUsaPhonePercent = dailyPartitionMaxContainsUsaPhonePercent;
+        propagateHierarchyIdToField(dailyPartitionMaxContainsUsaPhonePercent, "daily_partition_max_contains_usa_phone_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
