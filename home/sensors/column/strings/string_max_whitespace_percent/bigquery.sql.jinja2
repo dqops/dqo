@@ -2,7 +2,7 @@
 SELECT
     100.0 * SUM(
         CASE
-            WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_target_column('analyzed_table')}} <> '' AND TRIM({{ lib.render_target_column('analyzed_table')}}) = '' THEN 1
+            WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> '' AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = '' THEN 1
             ELSE 0
         END
     ) /COUNT(*) AS actual_value
