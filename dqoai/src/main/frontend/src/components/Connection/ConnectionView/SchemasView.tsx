@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import qs from 'query-string';
+import { useHistory, useLocation } from 'react-router-dom';
 
 interface ISchemasViewProps {
   connectionName: string;
@@ -16,6 +18,8 @@ interface ISchemasViewProps {
 const SchemasView = ({ connectionName }: ISchemasViewProps) => {
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
+  const history = useHistory();
+  const location = useLocation();
 
   const dispatch = useActionDispatch();
 
@@ -45,6 +49,16 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
     );
   };
 
+  const goToSchemas = () => {
+    const params = qs.parse(location.search);
+    const searchQuery = qs.stringify({
+      ...params,
+      tab: 'schemas',
+      source: true
+    });
+    history.replace(`/?${searchQuery}`);
+  };
+
   return (
     <div className="py-4 px-8">
       <ConnectionActionGroup />
@@ -62,6 +76,8 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
               <td className="py-2 px-4 text-left">
                 {!isExist(item) && (
                   <Button
+                    className="!py-2 !rounded-md"
+                    textSize="sm"
                     label="Import tables"
                     color="primary"
                     onClick={() => onImportTables(item)}
@@ -72,6 +88,13 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
           ))}
         </tbody>
       </table>
+      <Button
+        variant="contained"
+        color="primary"
+        label="Import more schemas"
+        className="mt-4"
+        onClick={goToSchemas}
+      />
     </div>
   );
 };
