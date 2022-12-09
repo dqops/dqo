@@ -45,25 +45,34 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
   const openCheckSettings = () => {
     if (check?.configured) {
       setExpanded(!expanded);
-      setActiveTab('data-streams');
-      setTabs([
-        {
-          label: 'Data streams override',
-          value: 'data-streams'
-        },
+      const initTabs = [
+        ...(check?.supports_data_streams
+          ? [
+              {
+                label: 'Data streams override',
+                value: 'data-streams'
+              }
+            ]
+          : []),
         {
           label: 'Schedule override',
           value: 'schedule'
         },
-        {
-          label: 'Time series override',
-          value: 'time'
-        },
+        ...(check?.supports_time_series
+          ? [
+              {
+                label: 'Time series override',
+                value: 'time'
+              }
+            ]
+          : []),
         {
           label: 'Comments',
           value: 'comments'
         }
-      ]);
+      ];
+      setTabs(initTabs);
+      setActiveTab(initTabs[0].value);
     }
   };
 
