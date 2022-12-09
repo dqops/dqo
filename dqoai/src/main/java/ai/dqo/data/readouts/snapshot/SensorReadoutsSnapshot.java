@@ -17,7 +17,7 @@ package ai.dqo.data.readouts.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
@@ -60,8 +60,8 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
         return new FileStorageSettings(DqoRoot.DATA_SENSOR_READOUTS,
                 BuiltInFolderNames.SENSOR_READOUTS,
                 PARQUET_FILE_NAME,
-                SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME,
-                SensorReadoutsNormalizedResult.ID_COLUMN_NAME,
+                SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,
+                SensorReadoutsColumnNames.ID_COLUMN_NAME,
                 TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
     }
 
@@ -80,18 +80,18 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
         Table allLoadedData = this.getAllData();
 
         if (allLoadedData != null) {
-            TableSliceGroup tableSlices = allLoadedData.splitOn(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                    SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
+            TableSliceGroup tableSlices = allLoadedData.splitOn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME,
+                    SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
             
             for (TableSlice tableSlice : tableSlices) {
                 Table timeSeriesTable = tableSlice.asTable();
-                LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME);
-                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME);
+                LongColumn checkHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+                LongColumn dataStreamHashColumn = (LongColumn) timeSeriesTable.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
                 long checkHashId = checkHashColumn.get(0); // the first row has the value
                 long dataStreamHash = dataStreamHashColumn.get(0);
 
                 SensorReadoutTimeSeriesKey timeSeriesKey = new SensorReadoutTimeSeriesKey(checkHashId, dataStreamHash);
-                Table sortedTimeSeriesTable = timeSeriesTable.sortOn(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME);
+                Table sortedTimeSeriesTable = timeSeriesTable.sortOn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
                 SensorReadoutsTimeSeriesData timeSeriesData = new SensorReadoutsTimeSeriesData(timeSeriesKey, sortedTimeSeriesTable);
 				this.timeSeriesMap.add(timeSeriesData);
             }
