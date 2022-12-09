@@ -23,6 +23,7 @@ import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericDailyCheckpointsSpe
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.pii.ColumnPiiDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -55,6 +56,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("strings", o -> o.strings);
            put("uniqueness", o -> o.uniqueness);
            put("datetime", o -> o.datetime);
+           put("pii", o -> o.pii);
         }
     };
 
@@ -82,6 +84,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyCheckpointsSpec datetime;
+
+    @JsonPropertyDescription("Daily checkpoints of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiDailyCheckpointsSpec pii;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -171,6 +178,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnPiiDailyCheckpointsSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of Personal Identifiable Information (PII) data quality checks (checkpoints).
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiDailyCheckpointsSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        this.propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
