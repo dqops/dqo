@@ -16,26 +16,12 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
+import ai.dqo.checks.column.strings.*;
 import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -69,6 +55,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
             put("min_string_valid_usa_zipcode_percent", o -> o.minStringValidUsaZipcodePercent);
+            put("min_strings_in_set_count", o -> o.minStringsInSetCount);
+            put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
 
         }
     };
@@ -120,6 +108,12 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringValidUsaZipcodePercentCheckSpec minStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinStringsInSetCountCheckSpec minStringsInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringsInSetPercentCheckSpec minStringsInSetPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -407,6 +401,42 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringValidUsaZipcodePercent, minStringValidUsaZipcodePercent));
         this.minStringValidUsaZipcodePercent = minStringValidUsaZipcodePercent;
         propagateHierarchyIdToField(minStringValidUsaZipcodePercent, "min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnMinStringsInSetCountCheckSpec getMinStringsInSetCount() {
+        return minStringsInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set count check.
+     * @param minStringsInSetCount Minimum strings in set count check.
+     */
+    public void setMinStringsInSetCount(ColumnMinStringsInSetCountCheckSpec minStringsInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.minStringsInSetCount, minStringsInSetCount));
+        this.minStringsInSetCount = minStringsInSetCount;
+        propagateHierarchyIdToField(minStringsInSetCount, "min_strings_in_set_count");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnMinStringsInSetPercentCheckSpec getMinStringsInSetPercent() {
+        return minStringsInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set percent check.
+     * @param minStringsInSetPercent Minimum strings in set percent check.
+     */
+    public void setMinStringsInSetPercent(ColumnMinStringsInSetPercentCheckSpec minStringsInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringsInSetPercent, minStringsInSetPercent));
+        this.minStringsInSetPercent = minStringsInSetPercent;
+        propagateHierarchyIdToField(minStringsInSetPercent, "min_strings_in_set_percent");
     }
 
     /**
