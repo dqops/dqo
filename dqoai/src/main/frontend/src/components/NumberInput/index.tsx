@@ -4,7 +4,6 @@ import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
-import Input from '../Input';
 
 interface INumberInputProps {
   className?: string;
@@ -38,6 +37,10 @@ const NumberInput = ({
   error
 }: INumberInputProps) => {
   const handleChange = (e: any) => {
+    if (e.target.value === '') {
+      onChange(e.target.value);
+      return;
+    }
     if (onChange) {
       onChange(Number(e.target.value));
     }
