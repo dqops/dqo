@@ -24,6 +24,7 @@ import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChe
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -56,6 +57,8 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+
         }
     };
 
@@ -83,6 +86,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyPartitionedChecksSpec datetime;
+
+    @JsonPropertyDescription("Daily partitioned checks of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiDailyPartitionedChecksSpec pii;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -172,6 +180,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnPiiDailyPartitionedChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiDailyPartitionedChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
