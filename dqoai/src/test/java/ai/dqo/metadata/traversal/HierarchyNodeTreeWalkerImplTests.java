@@ -148,7 +148,7 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
          */
         @Override
         public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
-            return TreeNodeTraversalResult.traverseChildNode(selected);
+            return TreeNodeTraversalResult.traverseSelectedChildNodes(selected);
         }
 
         /**

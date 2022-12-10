@@ -27,7 +27,7 @@ import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.data.readouts.normalization.SensorResultNormalizeService;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationService;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
@@ -43,6 +43,8 @@ import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
+import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
+import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -76,7 +78,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory;
     private final DataQualitySensorRunner dataQualitySensorRunner;
     private final ConnectionProviderRegistry connectionProviderRegistry;
-    private final SensorResultNormalizeService sensorResultNormalizeService;
+    private final SensorReadoutsNormalizationService sensorReadoutsNormalizationService;
     private final RuleEvaluationService ruleEvaluationService;
     private final SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
     private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
@@ -90,7 +92,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param sensorExecutionRunParametersFactory Sensor execution run parameters factory that expands parameters.
      * @param dataQualitySensorRunner Data quality sensor runner that executes sensors one by one.
      * @param connectionProviderRegistry Connection provider registry.
-     * @param sensorResultNormalizeService Sensor dataset parse service.
+     * @param sensorReadoutsNormalizationService Sensor dataset parse service.
      * @param ruleEvaluationService  Rule evaluation service.
      * @param sensorReadoutsSnapshotFactory Sensor readouts storage service.
      * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
@@ -103,7 +105,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory,
                                      DataQualitySensorRunner dataQualitySensorRunner,
                                      ConnectionProviderRegistry connectionProviderRegistry,
-                                     SensorResultNormalizeService sensorResultNormalizeService,
+                                     SensorReadoutsNormalizationService sensorReadoutsNormalizationService,
                                      RuleEvaluationService ruleEvaluationService,
                                      SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
                                      RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
@@ -114,7 +116,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
         this.connectionProviderRegistry = connectionProviderRegistry;
-        this.sensorResultNormalizeService = sensorResultNormalizeService;
+        this.sensorReadoutsNormalizationService = sensorReadoutsNormalizationService;
         this.ruleEvaluationService = ruleEvaluationService;
         this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
@@ -205,7 +207,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      CheckExecutionProgressListener progressListener,
                                      boolean dummySensorExecution,
                                      CheckExecutionSummary checkExecutionSummary) {
-        Collection<AbstractCheckSpec> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
             checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
@@ -226,7 +228,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         int errorsCount = 0;
         int fatalsCount = 0;
 
-        for (AbstractCheckSpec checkSpec : checks) {
+        for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
             checksCount++;
 
             try {
@@ -236,6 +238,11 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
                         sensorRunParameters, progressListener, dummySensorExecution);
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
+
+                if (!sensorResult.isSuccess()) {
+                    continue; // error reporting will be done later
+                }
+
                 if (sensorResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
                 }
@@ -244,7 +251,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
 
                 // TODO: normalization service must support empty time gradient that will not truncate the time (for ad-hoc checks)
-                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
+                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
                         sensorResult, effectiveTimeSeries.getTimeGradient(), sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
@@ -267,10 +274,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), effectiveTimeSeries.getTimeGradient());
 
-                    // TODO: get a shared read lock for the time of loading file, must remember the names, modification dates of loaded parquet files,
-                    // we could also take a shared read lock and hold it until saving (because a sync operation could be started in the middle of running sensors),
-                    // however it will not help us - it will only delay the sync operation and it will be executed as the first write lock just before write,
-                    // so we need to support just optimistic locking and verify the snapshot (parquet file dates - not modified) just before overwritting parquet files
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
 
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
@@ -288,7 +291,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             catch (Exception ex) {
                 // TODO: append a special error row instead of appending the readout row...
 
-                throw new CheckExecutionFailed("Check failed to execute", ex);
+                throw new CheckExecutionFailedException("Check failed to execute", ex);
             }
 
             // TODO: we can consider flushing results here if we run out of memory (too many results)
@@ -375,7 +378,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getEffectiveTimeSeries();
 
-                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorResultNormalizeService.normalizeResults(
+                SensorReadoutsNormalizedResult normalizedSensorResults = this.sensorReadoutsNormalizationService.normalizeResults(
                         sensorResult, effectiveTimeSeries.getTimeGradient(), sensorRunParameters);
                 progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
                         tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
@@ -405,7 +408,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             catch (Exception ex) {
                 // TODO: append a special error row instead of appending the readout row...
 
-                throw new CheckExecutionFailed("Check failed to execute", ex);
+                throw new CheckExecutionFailedException("Check failed to execute", ex);
             }
 
             // TODO: we can consider flushing results here if we run out of memory (too many results)
@@ -444,7 +447,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param checkSpec Check specification.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckSpec checkSpec) {
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckSpec<?,?,?,?> checkSpec) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
@@ -467,7 +470,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column &&
                 Strings.isNullOrEmpty(timeSeriesConfigurationSpec.getTimestampColumn())) {
             // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
-            throw new CheckExecutionFailed("Data quality check " + checkSpec.getHierarchyId().toString() + " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
+            throw new CheckExecutionFailedException("Data quality check " + checkSpec.getHierarchyId().toString() + " cannot be executed because the timestamp column is not configured for date/time partitioned data quality checks. Configure the name of the columns in the \"timestamp_columns\" node on the table level (.dqotable.yaml file).");
         }
 
         Optional<HierarchyNode> checkCategoryRootProvider = Lists.reverse(nodesOnPath)

@@ -17,6 +17,7 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
 /**
  * Data quality sensor run service. Executes a sensor, reads the sensor values and returns it for further processing (rule evaluation).
@@ -32,6 +33,6 @@ public interface DataQualitySensorRunner {
      */
     SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                         SensorExecutionRunParameters sensorRunParameters,
-                                        CheckExecutionProgressListener progressListener,
+                                        SensorExecutionProgressListener progressListener,
                                         boolean dummySensorExecution);
 }

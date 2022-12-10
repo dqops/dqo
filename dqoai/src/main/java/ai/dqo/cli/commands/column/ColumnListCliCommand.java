@@ -30,6 +30,7 @@ import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -40,7 +41,7 @@ import picocli.CommandLine;
  * Cli command to list columns.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List columns which match filters")
 public class ColumnListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private final ColumnService columnService;

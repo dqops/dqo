@@ -26,6 +26,7 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -34,7 +35,7 @@ import picocli.CommandLine;
  * "rule edit" 2nd level CLI command that edits rule template.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit rule that match filters")
 public class RuleEditCliCommand extends BaseCommand implements ICommand {
 	private final RuleService ruleService;

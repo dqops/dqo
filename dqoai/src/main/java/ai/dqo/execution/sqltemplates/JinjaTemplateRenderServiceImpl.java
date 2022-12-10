@@ -17,10 +17,10 @@ package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.checks.progress.BeforeSqlTemplateRenderEvent;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.SqlTemplateRenderedRenderedEvent;
+import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
+import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.utils.python.PythonCallerService;
 import ai.dqo.utils.python.PythonExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
     public String renderTemplate(ExecutionContext executionContext,
                                  SensorDefinitionFindResult sensorFindResult,
                                  JinjaTemplateRenderParameters templateRenderParameters,
-                                 CheckExecutionProgressListener progressListener) {
+                                 SensorExecutionProgressListener progressListener) {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(sensorFindResult.getSqlTemplateText());
         inputDto.setHomeType(sensorFindResult.getHome());

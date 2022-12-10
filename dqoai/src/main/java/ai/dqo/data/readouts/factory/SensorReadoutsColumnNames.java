@@ -1,6 +1,6 @@
 package ai.dqo.data.readouts.factory;
 
-import ai.dqo.data.CommonColumnNames;
+import ai.dqo.data.normalization.CommonColumnNames;
 
 /**
  * Constants with the column names in the sensor readout parquet tables.

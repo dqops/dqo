@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.checks.progress;
+package ai.dqo.execution.sensors.progress;
 
+import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderInput;
 
 /**

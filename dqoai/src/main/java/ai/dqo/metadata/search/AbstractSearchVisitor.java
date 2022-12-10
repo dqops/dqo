@@ -669,7 +669,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec checkSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> checkSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -777,7 +777,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public <S extends AbstractSensorParametersSpec> TreeNodeTraversalResult accept(AbstractProfilerSpec profileSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractProfilerSpec<?> profileSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

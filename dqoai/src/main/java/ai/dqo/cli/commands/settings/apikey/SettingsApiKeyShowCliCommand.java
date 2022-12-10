@@ -22,6 +22,7 @@ import ai.dqo.cli.commands.settings.impl.SettingsService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -30,7 +31,7 @@ import picocli.CommandLine;
  * Cli command to show a api key to settings.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", description = "Show api key")
 public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
 	private final SettingsService settingsService;

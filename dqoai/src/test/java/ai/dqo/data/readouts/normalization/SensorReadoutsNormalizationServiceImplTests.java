@@ -21,6 +21,7 @@ import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -47,8 +48,8 @@ import java.time.temporal.WeekFields;
 import java.util.Locale;
 
 @SpringBootTest
-public class SensorResultNormalizeServiceImplTests extends BaseTest {
-    private SensorResultNormalizeServiceImpl sut;
+public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
+    private SensorReadoutsNormalizationServiceImpl sut;
     private ZoneId utcZone;
     private Table table;
     private UserHomeImpl userHome;
@@ -67,7 +68,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new SensorResultNormalizeServiceImpl();
+		this.sut = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl());
 		this.table = Table.create("results");
 		userHome = UserHomeObjectMother.createBareUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
@@ -80,6 +81,7 @@ public class SensorResultNormalizeServiceImplTests extends BaseTest {
 		tableSpec.getChecks().getStandard().setMinRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
+                null,
                 CheckType.ADHOC,
                 null, // time series
                 null, // data stream mapping

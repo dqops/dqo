@@ -58,7 +58,7 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
         if (connectionWrapper == null) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**

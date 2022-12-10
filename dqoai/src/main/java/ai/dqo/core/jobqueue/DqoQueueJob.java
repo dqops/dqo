@@ -35,8 +35,9 @@ public abstract class DqoQueueJob<T> {
             T result = this.onExecute(jobExecutionContext);
             this.future.complete(result);
         }
-        catch (Exception ex){
+        catch (Exception ex) {
             this.future.completeExceptionally(ex);
+            throw new DqoQueueJobExecutionException(ex);
         }
     }
 

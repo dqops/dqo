@@ -59,7 +59,7 @@ public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(ruleDefinitionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(ruleDefinitionWrapper);
     }
 
     /**

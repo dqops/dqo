@@ -32,7 +32,14 @@ import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import ai.dqo.execution.profiler.ProfilerExecutionSummary;
+import ai.dqo.execution.profiler.RunProfilersQueueJob;
+import ai.dqo.execution.profiler.RunProfilersQueueJobParameters;
+import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListener;
+import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListenerProvider;
+import ai.dqo.execution.profiler.progress.ProfilerExecutionReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ProfilerSearchFilters;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +48,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,6 +62,7 @@ public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
+    private ProfilerExecutionProgressListenerProvider profilerExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
 
@@ -62,6 +71,7 @@ public class JobsController {
      * @param dqoQueueJobFactory DQO queue job factory used to create new instances of jobs.
      * @param dqoJobQueue Job queue used to publish or review running jobs.
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
+     * @param profilerExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param queueConfigurationProperties Queue configuration parameters.
      */
@@ -69,11 +79,13 @@ public class JobsController {
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
                           DqoJobQueue dqoJobQueue,
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
+                          ProfilerExecutionProgressListenerProvider profilerExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                           DqoQueueConfigurationProperties queueConfigurationProperties) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
+        this.profilerExecutionProgressListenerProvider = profilerExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.queueConfigurationProperties = queueConfigurationProperties;
     }
@@ -103,6 +115,34 @@ public class JobsController {
         runChecksJob.setParameters(runChecksQueueJobParameters);
 
         PushJobResult<CheckExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runChecksJob);
+        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Starts a new background job that will run selected data profilers.
+     * @param profilerSearchFilters Data profiler filters.
+     * @return Job summary response with the identity of the started job.
+     */
+    @PostMapping("/runprofilers")
+    @ApiOperation(value = "runProfilers", notes = "Starts a new background job that will run selected data profilers", response = DqoQueueJobId.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New job that will run data profilers was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoQueueJobId>> runProfilers(
+            @ApiParam("Data profilers filter") @RequestBody ProfilerSearchFilters profilerSearchFilters) {
+        RunProfilersQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
+        ProfilerExecutionProgressListener progressListener = this.profilerExecutionProgressListenerProvider.getProgressListener(
+                ProfilerExecutionReportingMode.silent, false);
+        RunProfilersQueueJobParameters runProfilersQueueJobParameters = new RunProfilersQueueJobParameters(
+                profilerSearchFilters,
+                progressListener,
+                false);
+        runProfilersJob.setParameters(runProfilersQueueJobParameters);
+
+        PushJobResult<ProfilerExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -139,9 +179,16 @@ public class JobsController {
     })
     public ResponseEntity<Mono<DqoJobQueueIncrementalSnapshotModel>> getJobChangesSince(
             @ApiParam("Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
-        Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
-                sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
-        return new ResponseEntity<>(incrementalJobChanges, HttpStatus.OK); // 200
+        try {
+            Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
+                    sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
+            Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
+                    error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(new ArrayList<>(), sequenceNumber)));
+            return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
+        }
+        catch (Exception ex) {
+            return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(new ArrayList<>(), sequenceNumber)), HttpStatus.OK);
+        }
     }
 
     /**

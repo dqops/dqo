@@ -20,14 +20,15 @@ import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.SourceConnection;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.ExecutingSqlOnConnectionEvent;
+import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.DateTimeColumn;
@@ -41,6 +42,7 @@ import java.time.LocalDateTime;
  * Sensor runner that transforms an SQL template and executes a generated SQL on a connection.
  */
 @Component
+@Slf4j
 public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     /**
      * Sensor runner class name.
@@ -75,27 +77,34 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
     public SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                SensorExecutionRunParameters sensorRunParameters,
                                                SensorDefinitionFindResult sensorDefinitions,
-                                               CheckExecutionProgressListener progressListener,
+                                               SensorExecutionProgressListener progressListener,
                                                boolean dummySensorExecution) {
-        JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
-                sensorRunParameters, sensorDefinitions);
-        String renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinitions,
-                templateRenderParameters, progressListener);
+        String renderedSql = null;
+        try {
+            JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
+                    sensorRunParameters, sensorDefinitions);
+            renderedSql = this.jinjaTemplateRenderService.renderTemplate(executionContext, sensorDefinitions,
+                    templateRenderParameters, progressListener);
 
-        if (!dummySensorExecution) {
-            ConnectionSpec connectionSpec = sensorRunParameters.getConnection();
-            progressListener.onExecutingSqlOnConnection(new ExecutingSqlOnConnectionEvent(sensorRunParameters,
-                    sensorDefinitions, connectionSpec, renderedSql));
+            if (!dummySensorExecution) {
+                ConnectionSpec connectionSpec = sensorRunParameters.getConnection();
+                progressListener.onExecutingSqlOnConnection(new ExecutingSqlOnConnectionEvent(sensorRunParameters,
+                        sensorDefinitions, connectionSpec, renderedSql));
 
-            ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-            try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
-                Table sensorResultRows = sourceConnection.executeQuery(renderedSql);
-                return new SensorExecutionResult(sensorRunParameters, sensorResultRows);
+                ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
+                try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                    Table sensorResultRows = sourceConnection.executeQuery(renderedSql);
+                    return new SensorExecutionResult(sensorRunParameters, sensorResultRows);
+                }
             }
-        }
 
-        Table dummyResultTable = createDummyResultTable(sensorRunParameters);
-        return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
+            Table dummyResultTable = createDummyResultTable(sensorRunParameters);
+            return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
+        }
+        catch (Exception exception) {
+            log.debug("Sensor failed to execute a query :" + renderedSql, exception);
+            return new SensorExecutionResult(sensorRunParameters, exception);
+        }
     }
 
     /**

@@ -232,7 +232,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -247,7 +247,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -261,8 +261,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         standard.setMinRowCount(check);
 		table.setSpec(tableSpec);
 
-        ArrayList<AbstractCheckSpec> expectedList = new ArrayList<>();
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        ArrayList<AbstractCheckSpec<?,?,?,?>> expectedList = new ArrayList<>();
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 

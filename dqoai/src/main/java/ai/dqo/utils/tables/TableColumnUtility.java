@@ -118,6 +118,38 @@ public final class TableColumnUtility {
     }
 
     /**
+     * Retrieves or adds and returns a date column from a table.
+     * @param table Table.
+     * @param columnName Column name.
+     * @return Existing column or just added column.
+     */
+    public static DateColumn getOrAddDateColumn(Table table, String columnName) {
+        if (table.containsColumn(columnName)) {
+            return (DateColumn) table.column(columnName);
+        }
+
+        DateColumn newColumn = DateColumn.create(columnName);
+        table.addColumns(newColumn);
+        return newColumn;
+    }
+
+    /**
+     * Retrieves or adds and returns a time column from a table.
+     * @param table Table.
+     * @param columnName Column name.
+     * @return Existing column or just added column.
+     */
+    public static TimeColumn getOrAddTimeColumn(Table table, String columnName) {
+        if (table.containsColumn(columnName)) {
+            return (TimeColumn) table.column(columnName);
+        }
+
+        TimeColumn newColumn = TimeColumn.create(columnName);
+        table.addColumns(newColumn);
+        return newColumn;
+    }
+
+    /**
      * Retrieves or adds and returns an instant column from a table.
      * @param table Table.
      * @param columnName Column name.

@@ -33,6 +33,7 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -40,7 +41,7 @@ import tech.tablesaw.api.*;
 import java.util.Collection;
 
 @Service
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ColumnServiceImpl implements ColumnService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final TerminalReader terminalReader;

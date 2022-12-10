@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -27,7 +28,7 @@ import picocli.CommandLine;
  * 2st level CLI command "cloud login" to log in to the DQO Cloud.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "login", description = "Logs in or registers an account at DQO Cloud")
 public class CloudLoginCliCommand extends BaseCommand implements ICommand {
     private CloudLoginService cloudLoginService;

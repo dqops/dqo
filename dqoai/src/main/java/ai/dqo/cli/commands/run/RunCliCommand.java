@@ -23,6 +23,7 @@ import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizatio
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -31,7 +32,7 @@ import picocli.CommandLine;
  * "run" 1st level CLI command - starts DQO in a server mode.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", description = "Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks.")
 public class RunCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;

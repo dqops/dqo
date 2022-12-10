@@ -22,6 +22,7 @@ import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizatio
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -30,7 +31,7 @@ import picocli.CommandLine;
  * "scheduler start" 2nd level CLI command - starts a scheduler that will run checks.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "start", description = "Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
 public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;

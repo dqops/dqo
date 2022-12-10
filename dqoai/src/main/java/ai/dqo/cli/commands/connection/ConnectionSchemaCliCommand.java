@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.connection.schema.ConnectionSchemaListCliCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -25,7 +26,7 @@ import picocli.CommandLine;
  * "connection schema" 2nd level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "schema", description = "Show connection schemas", subcommands = {
 		ConnectionSchemaListCliCommand.class
 })

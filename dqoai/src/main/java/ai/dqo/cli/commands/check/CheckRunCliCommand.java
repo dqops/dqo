@@ -37,6 +37,7 @@ import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -47,7 +48,7 @@ import picocli.CommandLine;
  * "check run" 2nd level CLI command that executes data quality checks.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private final TerminalWriter terminalWriter;

@@ -40,6 +40,7 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -53,7 +54,7 @@ import java.util.stream.Collectors;
  * Table metadata import service.
  */
 @Service
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TableServiceImpl implements TableService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;

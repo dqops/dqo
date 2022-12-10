@@ -20,10 +20,10 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -47,6 +47,8 @@ public class SensorExecutionRunParameters {
     private CheckType checkType;
     @JsonIgnore
     private AbstractCheckSpec<?,?,?,?> check;
+    @JsonIgnore
+    private AbstractProfilerSpec<?> profiler;
     private TimeSeriesConfigurationSpec timeSeries;
     private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
@@ -61,7 +63,8 @@ public class SensorExecutionRunParameters {
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Column specification.
-     * @param check Check specification.
+     * @param check Check specification (when a quality check is executed).
+     * @param profiler Profiler specification (when a profiler is executed).
      * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param dataStreams Effective data streams configuration.
@@ -73,6 +76,7 @@ public class SensorExecutionRunParameters {
 			TableSpec table,
 			ColumnSpec column,
 			AbstractCheckSpec check,
+            AbstractProfilerSpec profiler,
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             DataStreamMappingSpec dataStreams,
@@ -82,6 +86,7 @@ public class SensorExecutionRunParameters {
         this.table = table;
         this.column = column;
         this.check = check;
+        this.profiler = profiler;
         this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.dataStreams = dataStreams;
@@ -152,6 +157,22 @@ public class SensorExecutionRunParameters {
      */
     public void setCheck(AbstractCheckSpec<?,?,?,?> check) {
         this.check = check;
+    }
+
+    /**
+     * Returns the profiler instance that is executed.
+     * @return Profiler instance.
+     */
+    public AbstractProfilerSpec<?> getProfiler() {
+        return profiler;
+    }
+
+    /**
+     * Sets the profiler instance.
+     * @param profiler Profiler instance.
+     */
+    public void setProfiler(AbstractProfilerSpec<?> profiler) {
+        this.profiler = profiler;
     }
 
     /**
@@ -278,6 +299,6 @@ public class SensorExecutionRunParameters {
             return this.timeSeries;
         }
 
-        return TimeSeriesConfigurationSpec.createDefault();
+        return TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
     }
 }

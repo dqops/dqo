@@ -48,7 +48,7 @@ public interface HierarchyNodeTreeSearcher {
      * @param checkSearchFilters Search filters.
      * @return Collection of check nodes that passed the filter.
      */
-    Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
+    Collection<AbstractCheckSpec<?, ?, ?, ?>> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
 
     /**
      * Search for profilers in the tree.
@@ -56,7 +56,7 @@ public interface HierarchyNodeTreeSearcher {
      * @param profilerSearchFilters Search filters.
      * @return Collection of profilers nodes that passed the filter.
      */
-    Collection<AbstractProfilerSpec> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters);
+    Collection<AbstractProfilerSpec<?>> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters);
 
     /**
      * Search for connection in the tree.

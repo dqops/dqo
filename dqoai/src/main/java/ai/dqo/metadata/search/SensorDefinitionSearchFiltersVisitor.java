@@ -59,7 +59,7 @@ public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor 
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(sensorDefinitionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(sensorDefinitionWrapper);
     }
 
     /**

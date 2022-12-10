@@ -21,6 +21,7 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
+import ai.dqo.execution.profiler.RunProfilersQueueJob;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,16 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public RunChecksQueueJob createRunChecksJob() {
         return this.beanFactory.getBean(RunChecksQueueJob.class);
+    }
+
+    /**
+     * Creates a job that runs profilers.
+     *
+     * @return New run profilers job.
+     */
+    @Override
+    public RunProfilersQueueJob createRunProfilersJob() {
+        return this.beanFactory.getBean(RunProfilersQueueJob.class);
     }
 
     /**

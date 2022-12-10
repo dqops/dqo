@@ -16,10 +16,13 @@
 package ai.dqo.profiling;
 
 import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -106,4 +109,39 @@ public abstract class AbstractProfilerSpec<S extends AbstractSensorParametersSpe
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
+    /**
+     * Returns the profiling category name retrieved from the category field name used to store a container of profiler categories
+     * in the metadata.
+     * @return Profiler category name.
+     */
+    @JsonIgnore
+    public String getCategoryName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns the data profiler name (YAML compliant) that is used as a field name on a profiler category class.
+     * @return Profiler name, for example "row_count", etc.
+     */
+    @JsonIgnore
+    public String getProfilerName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+        return hierarchyId.getLast().toString();
+    }
+
+    /**
+     * Returns the data scope that this profiler supports. The value decides if the whole table is analyzed or each data stream defined by the default
+     * data stream mapping on a table is analyzed.
+     * @return Data scope to analyze: the whole table or each data stream separately.
+     */
+    @JsonIgnore
+    public abstract ProfilerDataScope getDataScope();
 }

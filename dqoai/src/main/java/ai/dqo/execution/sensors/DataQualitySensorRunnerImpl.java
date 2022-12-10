@@ -20,6 +20,7 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
@@ -54,7 +55,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
      */
     public SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                SensorExecutionRunParameters sensorRunParameters,
-                                               CheckExecutionProgressListener progressListener,
+                                               SensorExecutionProgressListener progressListener,
                                                boolean dummySensorExecution) {
         String sensorName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();

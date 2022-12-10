@@ -18,15 +18,15 @@ package ai.dqo.execution.checks;
 /**
  * Exception thrown when a single data quality check cannot be executed.
  */
-public class CheckExecutionFailed extends RuntimeException {
-    public CheckExecutionFailed() {
+public class CheckExecutionFailedException extends RuntimeException {
+    public CheckExecutionFailedException() {
     }
 
-    public CheckExecutionFailed(String message) {
+    public CheckExecutionFailedException(String message) {
         super(message);
     }
 
-    public CheckExecutionFailed(String message, Throwable cause) {
+    public CheckExecutionFailedException(String message, Throwable cause) {
         super(message, cause);
     }
 }

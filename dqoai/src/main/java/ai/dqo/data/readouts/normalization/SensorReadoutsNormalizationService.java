@@ -23,7 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
  * Service that parses datasets with results returned by a sensor query.
  * Detects column types (data stream level columns), describes the metadata of the result. Also fixes missing information, adds a data_stream_hash column with a hash of all data stream levels.
  */
-public interface SensorResultNormalizeService {
+public interface SensorReadoutsNormalizationService {
     /**
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.

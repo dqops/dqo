@@ -31,9 +31,9 @@ public enum TreeTraverseAction {
     SKIP_CHILDREN,
 
     /**
-     * Traverse just one named child and skip all it's sibling nodes.
+     * Traverse only selected nodes and skip all it's sibling nodes.
      */
-    TRAVERSE_ONE_CHILD,
+    TRAVERSE_SELECTED_CHILDREN,
 
     /**
      * Stop the hierarchy tree traversal, we have found what we are looking for (usually when searching for the first occurrence of a matching node).

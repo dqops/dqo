@@ -20,6 +20,7 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
 /**
  * Base abstract class for sensor runners. Executes a sensor given a target data quality check.
@@ -37,6 +38,6 @@ public abstract class AbstractSensorRunner {
     public abstract SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                         SensorExecutionRunParameters sensorRunParameters,
                                                         SensorDefinitionFindResult sensorDefinition,
-                                                        CheckExecutionProgressListener progressListener,
+                                                        SensorExecutionProgressListener progressListener,
                                                         boolean dummySensorExecution);
 }

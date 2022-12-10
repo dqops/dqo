@@ -63,7 +63,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -115,7 +115,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -203,7 +203,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**

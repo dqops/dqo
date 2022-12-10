@@ -16,7 +16,6 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -64,7 +63,7 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -116,7 +115,7 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -204,7 +203,7 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**

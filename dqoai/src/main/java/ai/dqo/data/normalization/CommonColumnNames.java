@@ -1,4 +1,4 @@
-package ai.dqo.data;
+package ai.dqo.data.normalization;
 
 /**
  * Constants with the column names of common columns that are present across different parquet tables, have the same meaning
@@ -89,4 +89,9 @@ public final class CommonColumnNames {
      * Column name for a sensor duration in milliseconds.
      */
     public static final String DURATION_MS_COLUMN_NAME = "duration_ms";
+
+    /**
+     * Column name for an error message.
+     */
+    public static final String ERROR_MESSAGE_COLUMN_NAME = "error_message";
 }

@@ -50,7 +50,6 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -468,7 +467,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(AbstractCheckSpec checkSpec, P parameter);
+    R accept(AbstractCheckSpec<?,?,?,?> checkSpec, P parameter);
 
     /**
      * Accepts a container of categories of data quality checks.
@@ -540,7 +539,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    <S extends AbstractSensorParametersSpec> R accept(AbstractProfilerSpec profileSpec, P parameter);
+    R accept(AbstractProfilerSpec<?> profileSpec, P parameter);
 
     /**
      * Accepts a container of profiling checks (a profiling category) instance.

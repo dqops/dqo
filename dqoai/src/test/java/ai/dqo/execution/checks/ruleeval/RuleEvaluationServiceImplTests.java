@@ -21,9 +21,10 @@ import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.data.readouts.normalization.SensorResultNormalizeServiceImpl;
+import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactoryObjectMother;
@@ -58,7 +59,7 @@ import java.time.ZoneId;
 @SpringBootTest
 public class RuleEvaluationServiceImplTests extends BaseTest {
     private RuleEvaluationServiceImpl sut;
-    private SensorResultNormalizeServiceImpl normalizeService;
+    private SensorReadoutsNormalizationServiceImpl normalizeService;
     private ZoneId utcZone;
     private Table table;
     private UserHome userHome;
@@ -82,7 +83,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         super.setUp();
         DataQualityRuleRunner ruleRunner = DataQualityRuleRunnerObjectMother.getDefault();
 		this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl());
-		this.normalizeService = new SensorResultNormalizeServiceImpl();
+		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl());
 		this.table = Table.create("results");
 		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
 		userHome = executionContext.getUserHomeContext().getUserHome();
@@ -96,8 +97,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		tableSpec.getChecks().getStandard().setMinRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
+                null,
                 CheckType.ADHOC,
-                TimeSeriesConfigurationSpec.createDefault(),
+                TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));

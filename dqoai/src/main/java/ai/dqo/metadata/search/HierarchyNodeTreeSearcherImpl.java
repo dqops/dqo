@@ -77,7 +77,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of check nodes that passed the filter.
      */
     @Override
-    public Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
+    public Collection<AbstractCheckSpec<?,?,?,?>> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
         CheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
@@ -86,7 +86,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
-        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractCheckSpec<?,?,?,?>>)(ArrayList<?>)matchingNodes;
     }
 
     /**
@@ -97,7 +97,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of profilers nodes that passed the filter.
      */
     @Override
-    public Collection<AbstractProfilerSpec> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters) {
+    public Collection<AbstractProfilerSpec<?>> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters) {
         ProfilerSearchFiltersVisitor searchFilterVisitor = profilerSearchFilters.createProfilerSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
@@ -106,7 +106,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
-        return (List<AbstractProfilerSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractProfilerSpec<?>>)(ArrayList<?>)matchingNodes;
     }
 
     /**

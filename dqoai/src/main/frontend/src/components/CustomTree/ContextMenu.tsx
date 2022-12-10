@@ -16,7 +16,7 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
-  const { refreshNode, runChecks } = useTree();
+  const { refreshNode, runChecks, runProfilers } = useTree();
   const [open, setOpen] = useState(false);
 
   const handleRefresh = () => {
@@ -26,6 +26,11 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
 
   const handleRunChecks = () => {
     runChecks(node);
+    setOpen(false);
+  };
+
+  const handleRunProfilers = () => {
+    runProfilers(node);
     setOpen(false);
   };
 
@@ -49,22 +54,20 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
         <div>
-          {[TREE_LEVEL.DATABASE, TREE_LEVEL.TABLE, TREE_LEVEL.COLUMN].includes(
+          <div
+            className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+            onClick={handleRunChecks}
+          >
+            Run checks
+          </div>
+          {[TREE_LEVEL.DATABASE, TREE_LEVEL.SCHEMA, TREE_LEVEL.TABLE, TREE_LEVEL.COLUMN].includes(
             node.level
           ) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => openConfirm(node)}
+              onClick={handleRunProfilers}
             >
-              Delete
-            </div>
-          )}
-          {node.level !== TREE_LEVEL.COLUMNS && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunChecks}
-            >
-              Run checks
+              Run profilers
             </div>
           )}
           <div
@@ -84,7 +87,17 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               Copy full name
             </div>
           )}
-        </div>
+          {[TREE_LEVEL.DATABASE, TREE_LEVEL.TABLE, TREE_LEVEL.COLUMN].includes(
+            node.level
+          ) && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => openConfirm(node)}
+            >
+              Delete
+            </div>
+          )}
+       </div>
       </PopoverContent>
     </Popover>
   );

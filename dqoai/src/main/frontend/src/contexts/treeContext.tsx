@@ -41,7 +41,8 @@ function TreeProvider(props: any) {
         items: [],
         level: TREE_LEVEL.DATABASE,
         tooltip: item.connection_name,
-        run_checks_job_template: item.run_checks_job_template
+        run_checks_job_template: item.run_checks_job_template,
+        run_profilers_job_template: item.run_profiler_job_template
       }))
     );
   };
@@ -54,7 +55,8 @@ function TreeProvider(props: any) {
       items: [],
       level: TREE_LEVEL.DATABASE,
       tooltip: connection.connection_name,
-      run_checks_job_template: connection.run_checks_job_template
+      run_checks_job_template: connection.run_checks_job_template,
+      run_profilers_job_template: connection.run_profiler_job_template
     };
     setTreeData([...treeData, newNode]);
     await changeActiveTab(newNode);
@@ -94,7 +96,8 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${node?.label}.${schema.schema_name}`,
-      run_checks_job_template: schema.run_checks_job_template
+      run_checks_job_template: schema.run_checks_job_template,
+      run_profilers_job_template: schema.run_profiler_job_template
     }));
 
     resetTreeData(node, items);
@@ -112,7 +115,8 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
       hasCheck: table?.has_any_configured_checks,
-      run_checks_job_template: table.run_checks_job_template
+      run_checks_job_template: table.run_checks_job_template,
+      run_profilers_job_template: table.run_profiler_job_template
     }));
     resetTreeData(node, items);
   };
@@ -243,7 +247,8 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
       hasCheck: column?.has_any_configured_checks,
-      run_checks_job_template: column.run_checks_job_template
+      run_checks_job_template: column.run_checks_job_template,
+      run_profilers_job_template: column.run_profiler_job_template
     }));
     resetTreeData(node, items);
   };
@@ -570,6 +575,13 @@ function TreeProvider(props: any) {
     }
   };
 
+  const runProfilers = async (node: CustomTreeNode) => {
+    if (node.run_profilers_job_template) {
+      JobApiClient.runProfilers(node.run_profilers_job_template);
+      return;
+    }
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -592,6 +604,7 @@ function TreeProvider(props: any) {
         removeNode,
         refreshNode,
         runChecks,
+        runProfilers,
         addConnection
       }}
       {...props}

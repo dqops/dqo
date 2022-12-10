@@ -15,6 +15,7 @@
  */
 package ai.dqo.profiling.column.nulls;
 
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
@@ -73,5 +74,16 @@ public class ColumnNullsCountProfilerSpec extends AbstractProfilerSpec<ColumnNul
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the data scope that this profiler supports. The value decides if the whole table is analyzed or each data stream defined by the default
+     * data stream mapping on a table is analyzed.
+     *
+     * @return Data scope to analyze: the whole table or each data stream separately.
+     */
+    @Override
+    public ProfilerDataScope getDataScope() {
+        return ProfilerDataScope.table;
     }
 }

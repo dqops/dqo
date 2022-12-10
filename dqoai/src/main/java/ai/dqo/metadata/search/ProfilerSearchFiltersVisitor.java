@@ -68,7 +68,7 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -120,7 +120,7 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -184,10 +184,9 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
             if (tableSpec.getHierarchyId() != null) {
                 profiler.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "profiler"));
             }
-            accept(profiler, parameter);
         }
 
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(profiler, tableSpec.getColumns());
     }
 
     /**
@@ -214,7 +213,7 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**
@@ -259,10 +258,9 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
             if (columnSpec.getHierarchyId() != null) {
                 profiler.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "profiler"));
             }
-            accept(profiler, parameter);
         }
 
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(profiler);
     }
 
     /**
@@ -273,7 +271,7 @@ public class ProfilerSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractProfilerSpec abstractProfilerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractProfilerSpec<?> abstractProfilerSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         AbstractSensorParametersSpec sensorParameters = abstractProfilerSpec.getParameters();
