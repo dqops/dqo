@@ -2,6 +2,7 @@ package ai.dqo.execution.profiler;
 
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
+import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.data.profilingresults.normalization.ProfilingResultsNormalizationService;
@@ -23,16 +24,15 @@ import ai.dqo.metadata.search.ProfilerSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.profiling.AbstractProfilerSpec;
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -77,6 +77,7 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
      * @param executionContext Check/profiler execution context with access to the user home and dqo home.
      * @param profilerSearchFilters Profiler search filters to find the right checks.
      * @param progressListener Progress listener that receives progress calls.
+     * @param profilerDataScope Profiler data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Profiler summary table with the count of executed and successful profile executions for each table.
      */
@@ -84,6 +85,7 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
     public ProfilerExecutionSummary executeProfilers(ExecutionContext executionContext,
                                                      ProfilerSearchFilters profilerSearchFilters,
                                                      ProfilerExecutionProgressListener progressListener,
+                                                     ProfilerDataScope profilerDataScope,
                                                      boolean dummySensorExecution) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, profilerSearchFilters);
@@ -93,7 +95,7 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
         for (TableWrapper targetTable :  targetTables) {
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
             executeProfilersOnTable(executionContext, userHome, connectionWrapper, targetTable, profilerSearchFilters, progressListener,
-                    dummySensorExecution, profilerExecutionSummary, profilingSessionStartAt);
+                    dummySensorExecution, profilerExecutionSummary, profilingSessionStartAt, profilerDataScope);
         }
 
         progressListener.onProfilersExecutionFinished(new ProfilersExecutionFinishedEvent(profilerExecutionSummary));
@@ -123,6 +125,7 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param profilerExecutionSummary Target object to gather the profiler execution summary information for the table.
      * @param profilingSessionStartAt Timestamp when the profiling session started. All profiler results will be saved with the same timestamp.
+     * @param profilerDataScope Profiler data scope to analyze - the whole table or each data stream separately.
      */
     public void executeProfilersOnTable(ExecutionContext executionContext,
                                         UserHome userHome,
@@ -132,7 +135,8 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
                                         ProfilerExecutionProgressListener progressListener,
                                         boolean dummySensorExecution,
                                         ProfilerExecutionSummary profilerExecutionSummary,
-                                        LocalDateTime profilingSessionStartAt) {
+                                        LocalDateTime profilingSessionStartAt,
+                                        ProfilerDataScope profilerDataScope) {
         Collection<AbstractProfilerSpec<?>> profilers = this.hierarchyNodeTreeSearcher.findProfilers(targetTable, profilerSearchFilters);
         if (profilers.size() == 0) {
             profilerExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0);
@@ -154,7 +158,11 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
             profilersExecuted++;
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, profilerSpec);
+                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, profilerSpec, profilerDataScope);
+                if (!profilerSupportsTarget(profilerSpec, sensorRunParameters)) {
+                    continue; // the profiler does not support that target
+                }
+
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
 
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
@@ -177,7 +185,7 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
                     }
                 }
 
-                if (profilerSpec.getDataScope() == ProfilerDataScope.data_stream && sensorResult.isSuccess() && sensorResult.getResultTable().rowCount() == 0) {
+                if (profilerDataScope == ProfilerDataScope.data_stream && sensorResult.isSuccess() && sensorResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor, probably an incremental time window too small or no data in the table
                 }
                 profilerResults += sensorResult.getResultTable() != null ? sensorResult.getResultTable().rowCount() : 0;
@@ -211,12 +219,48 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
     }
 
     /**
+     * Verify the profiler supported data types against the data types in the data source.
+     * @param profilerSpec Profiler specification.
+     * @param sensorRunParameters Sensor run parameters.
+     * @return True - the profiler could be executed, false - not supported on this data type.
+     */
+    public boolean profilerSupportsTarget(AbstractProfilerSpec<?> profilerSpec, SensorExecutionRunParameters sensorRunParameters) {
+        if (sensorRunParameters.getColumn() == null) {
+            return true; // this is not a column level profiler, should work
+        }
+
+        ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
+        if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
+            return false; // the data type not known, we cannot risk failing the profiler, skipping
+        }
+
+        DataTypeCategory[] supportedDataTypes = profilerSpec.getSupportedDataTypes();
+        if (supportedDataTypes == null) {
+            return true; // all data types supported
+        }
+
+        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(sensorRunParameters.getConnection().getProviderType());
+        DataTypeCategory targetColumnTypeCategory = connectionProvider.detectColumnType(typeSnapshot);
+
+        for (DataTypeCategory supportedDataType : supportedDataTypes) {
+            if (targetColumnTypeCategory == supportedDataType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a sensor run parameters from the profiler specification. Retrieves the connection, table, column and sensor parameters.
      * @param userHome User home with the metadata.
      * @param profilerSpec Profiler specification.
+     * @param profilerDataScope Profiler data scope to analyze - the whole table or each data stream separately.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractProfilerSpec<?> profilerSpec) {
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome,
+                                                                   AbstractProfilerSpec<?> profilerSpec,
+                                                                   ProfilerDataScope profilerDataScope) {
         HierarchyId checkHierarchyId = profilerSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
@@ -225,7 +269,6 @@ public class ProfilerExecutionServiceImpl implements ProfilerExecutionService {
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(connectionSpec);
         TableSpec tableSpec = tableWrapper.getSpec();
-        ProfilerDataScope profilerDataScope = profilerSpec.getDataScope();
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
                 connectionSpec, tableSpec, columnSpec, profilerSpec, profilerDataScope, dialectSettings);

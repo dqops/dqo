@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.nulls;
+package ai.dqo.profiling.column.uniqueness;
 
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
+import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueValuesCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column null count profiler.
+ * Column profiler that counts distinct column values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsCountProfilerSpec extends AbstractProfilerSpec<ColumnNullsNullCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsCountProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
+public class ColumnUniquenessUniqueValuesCountProfilerSpec extends AbstractProfilerSpec<ColumnUniquenessUniqueValuesCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniqueValuesCountProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnNullsCountProfilerSpec extends AbstractProfilerSpec<ColumnNul
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullCountSensorParametersSpec parameters = new ColumnNullsNullCountSensorParametersSpec();
+    private ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters = new ColumnUniquenessUniqueValuesCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNullCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessUniqueValuesCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsCountProfilerSpec extends AbstractProfilerSpec<ColumnNul
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNullCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -77,13 +77,13 @@ public class ColumnNullsCountProfilerSpec extends AbstractProfilerSpec<ColumnNul
     }
 
     /**
-     * Returns the data scope that this profiler supports. The value decides if the whole table is analyzed or each data stream defined by the default
-     * data stream mapping on a table is analyzed.
+     * Returns the array of supported data type categories that the profiler supports.
+     * Table level sensors should return null because table level profilers do not operate on columns and are not sensitive to the profiled column's type.
      *
-     * @return Data scope to analyze: the whole table or each data stream separately.
+     * @return Array of supported data types or null when the profiler has no limitations.
      */
     @Override
-    public ProfilerDataScope getDataScope() {
-        return ProfilerDataScope.table;
+    public DataTypeCategory[] getSupportedDataTypes() {
+        return DataTypeCategory.COMPARABLE;
     }
 }

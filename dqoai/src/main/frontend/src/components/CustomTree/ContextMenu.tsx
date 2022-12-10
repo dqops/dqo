@@ -18,7 +18,7 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
-  const { refreshNode, runChecks, runProfilers } = useTree();
+  const { refreshNode, runChecks, runProfilersOnTable } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
@@ -32,8 +32,8 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     setOpen(false);
   };
 
-  const handleRunProfilers = () => {
-    runProfilers(node);
+  const handleRunProfilersOnTable = () => {
+    runProfilersOnTable(node);
     setOpen(false);
   };
 
@@ -83,7 +83,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           ) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunProfilers}
+              onClick={handleRunProfilersOnTable}
             >
               Run profilers
             </div>

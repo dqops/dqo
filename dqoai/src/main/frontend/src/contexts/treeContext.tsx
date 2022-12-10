@@ -575,9 +575,9 @@ function TreeProvider(props: any) {
     }
   };
 
-  const runProfilers = async (node: CustomTreeNode) => {
+  const runProfilersOnTable = async (node: CustomTreeNode) => {
     if (node.run_profilers_job_template) {
-      JobApiClient.runProfilers(node.run_profilers_job_template);
+      JobApiClient.runProfilersOnTable(node.run_profilers_job_template);
       return;
     }
   };
@@ -604,7 +604,7 @@ function TreeProvider(props: any) {
         removeNode,
         refreshNode,
         runChecks,
-        runProfilers,
+        runProfilersOnTable,
         addConnection
       }}
       {...props}

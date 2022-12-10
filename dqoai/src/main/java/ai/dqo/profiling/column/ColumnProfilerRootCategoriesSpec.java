@@ -20,6 +20,9 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
 import ai.dqo.profiling.ProfilerTarget;
 import ai.dqo.profiling.column.nulls.ColumnNullsProfilersSpec;
+import ai.dqo.profiling.column.range.ColumnRangeProfilersSpec;
+import ai.dqo.profiling.column.strings.ColumnStringsProfilersSpec;
+import ai.dqo.profiling.column.uniqueness.ColumnUniquenessProfilersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,6 +43,9 @@ public class ColumnProfilerRootCategoriesSpec extends AbstractRootProfilerContai
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilerRootCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootProfilerContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
+            put("range", o -> o.range);
         }
     };
 
@@ -47,6 +53,21 @@ public class ColumnProfilerRootCategoriesSpec extends AbstractRootProfilerContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsProfilersSpec nulls = new ColumnNullsProfilersSpec();
+
+    @JsonPropertyDescription("Configuration of string (text) profilers on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsProfilersSpec strings = new ColumnStringsProfilersSpec();
+
+    @JsonPropertyDescription("Configuration of profilers that analyse uniqueness of values (distinct count).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessProfilersSpec uniqueness = new ColumnUniquenessProfilersSpec();
+
+    @JsonPropertyDescription("Configuration of profilers that analyse the range of values (min, max).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnRangeProfilersSpec range = new ColumnRangeProfilersSpec();
 
     /**
      * Returns the configuration of null detection profilers.
@@ -64,6 +85,60 @@ public class ColumnProfilerRootCategoriesSpec extends AbstractRootProfilerContai
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the configuration of string (text) profilers that analyse text columns.
+     * @return Strings profilers specification.
+     */
+    public ColumnStringsProfilersSpec getStrings() {
+        return strings;
+    }
+
+    /**
+     * Sets a reference to a string (text) profilers category.
+     * @param strings Container of string profilers.
+     */
+    public void setStrings(ColumnStringsProfilersSpec strings) {
+        this.setDirtyIf(!Objects.equals(this.strings, strings));
+        this.strings = strings;
+        this.propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the configuration of uniqueness profilers.
+     * @return Uniqueness profilers.
+     */
+    public ColumnUniquenessProfilersSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets a reference to a uniqueness profiler container.
+     * @param uniqueness Uniqueness profilers.
+     */
+    public void setUniqueness(ColumnUniquenessProfilersSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the configuration of range profilers (min, max, etc.).
+     * @return Range profilers configuration.
+     */
+    public ColumnRangeProfilersSpec getRange() {
+        return range;
+    }
+
+    /**
+     * Sets a reference to a range profiler configuration.
+     * @param range Range profilers.
+     */
+    public void setRange(ColumnRangeProfilersSpec range) {
+        this.setDirtyIf(!Objects.equals(this.range, range));
+        this.range = range;
+        this.propagateHierarchyIdToField(range, "range");
     }
 
     /**

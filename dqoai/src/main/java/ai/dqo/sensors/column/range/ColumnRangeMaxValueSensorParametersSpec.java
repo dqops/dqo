@@ -13,25 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.table.validity;
+package ai.dqo.sensors.column.range;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
+import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that executes a row count query on a table for validity checks.
+ * Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
+ * The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-@Deprecated
-public class TableValidityRowCountSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableValidityRowCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class ColumnRangeMaxValueSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMaxValueSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -53,6 +53,6 @@ public class TableValidityRowCountSensorParametersSpec extends AbstractTableSens
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/validity/row_count";
+        return "column/range/max_value";
     }
 }

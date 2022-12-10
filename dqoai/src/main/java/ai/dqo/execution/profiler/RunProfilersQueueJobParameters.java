@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.profiler;
 
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListener;
 import ai.dqo.metadata.search.ProfilerSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,21 +27,28 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RunProfilersQueueJobParameters {
     private ProfilerSearchFilters profilerSearchFilters;
+    private ProfilerDataScope dataScope = ProfilerDataScope.table;
     @JsonIgnore
     private ProfilerExecutionProgressListener progressListener;
     private boolean dummySensorExecution;
+
+    public RunProfilersQueueJobParameters() {
+    }
 
     /**
      * Creates profiler run parameters.
      * @param profilerSearchFilters Profiler search filters.
      * @param progressListener Progress listener to receive events during the profiler execution.
+     * @param dataScope Profiler data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
     public RunProfilersQueueJobParameters(ProfilerSearchFilters profilerSearchFilters,
                                           ProfilerExecutionProgressListener progressListener,
+                                          ProfilerDataScope dataScope,
                                           boolean dummySensorExecution) {
         this.profilerSearchFilters = profilerSearchFilters;
         this.progressListener = progressListener;
+        this.dataScope = dataScope;
         this.dummySensorExecution = dummySensorExecution;
     }
 
@@ -58,6 +66,14 @@ public class RunProfilersQueueJobParameters {
      */
     public ProfilerExecutionProgressListener getProgressListener() {
         return progressListener;
+    }
+
+    /**
+     * Returns the profiler data scope (whole table or each data stream separately).
+     * @return Data scope configuration.
+     */
+    public ProfilerDataScope getDataScope() {
+        return dataScope;
     }
 
     /**

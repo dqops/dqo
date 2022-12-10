@@ -15,9 +15,12 @@
  */
 package ai.dqo.profiling.table.standard;
 
+import ai.dqo.connectors.DataTypeCategory;
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractProfilerCategorySpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -29,39 +32,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Category of standard table level profilers.
+ * Table row count profiler.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardProfilersSpec extends AbstractProfilerCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardProfilersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerCategorySpec.FIELDS) {
+public class TableStandardRowCountProfilerSpec extends AbstractProfilerSpec<TableStandardRowCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
-            put("row_count", o -> o.rowCount);
         }
     };
 
-    @JsonPropertyDescription("Configuration of the row count profiler.")
+    @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountProfilerSpec rowCount = new TableStandardRowCountProfilerSpec();
+    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
 
     /**
-     * Returns the row count profiler specification.
-     * @return Row count profiler.
+     * Returns the configuration of the sensor that performs profiling.
+     * @return Sensor specification.
      */
-    public TableStandardRowCountProfilerSpec getRowCount() {
-        return rowCount;
+    @Override
+    public TableStandardRowCountSensorParametersSpec getParameters() {
+        return parameters;
     }
 
     /**
-     * Sets a reference to a row count profiler.
-     * @param rowCount Row count profiler.
+     * Sets the sensor parameters instance.
+     * @param parameters Sensor parameters instance.
      */
-    public void setRowCount(TableStandardRowCountProfilerSpec rowCount) {
-        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-        this.propagateHierarchyIdToField(rowCount, "row_count");
+    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters;
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -72,5 +75,16 @@ public class TableStandardProfilersSpec extends AbstractProfilerCategorySpec {
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the array of supported data type categories that the profiler supports.
+     * Table level sensors should return null because table level profilers do not operate on columns and are not sensitive to the profiled column's type.
+     *
+     * @return Array of supported data types or null when the profiler has no limitations.
+     */
+    @Override
+    public DataTypeCategory[] getSupportedDataTypes() {
+        return null;
     }
 }

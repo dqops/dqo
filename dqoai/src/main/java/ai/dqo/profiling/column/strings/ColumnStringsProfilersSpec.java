@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.table.standard;
+package ai.dqo.profiling.column.strings;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -29,39 +29,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Category of standard table level profilers.
+ * Category of column level profilers that are analysing strings.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardProfilersSpec extends AbstractProfilerCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardProfilersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerCategorySpec.FIELDS) {
+public class ColumnStringsProfilersSpec extends AbstractProfilerCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsProfilersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerCategorySpec.FIELDS) {
         {
-            put("row_count", o -> o.rowCount);
+            put("string_max_length", o -> o.stringMaxLength);
         }
     };
 
-    @JsonPropertyDescription("Configuration of the row count profiler.")
+    @JsonPropertyDescription("Configuration of the profiler that finds the maximum string length.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountProfilerSpec rowCount = new TableStandardRowCountProfilerSpec();
+    private ColumnStringsMaxLengthProfilerSpec stringMaxLength = new ColumnStringsMaxLengthProfilerSpec();
 
     /**
-     * Returns the row count profiler specification.
-     * @return Row count profiler.
+     * Returns the profiler configuration that finds the length of the longest string.
+     * @return Profiler for the max length.
      */
-    public TableStandardRowCountProfilerSpec getRowCount() {
-        return rowCount;
+    public ColumnStringsMaxLengthProfilerSpec getStringMaxLength() {
+        return stringMaxLength;
     }
 
     /**
-     * Sets a reference to a row count profiler.
-     * @param rowCount Row count profiler.
+     * Sets a reference to a max string length profiler.
+     * @param stringMaxLength Max string length profiler.
      */
-    public void setRowCount(TableStandardRowCountProfilerSpec rowCount) {
-        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-        this.propagateHierarchyIdToField(rowCount, "row_count");
+    public void setStringMaxLength(ColumnStringsMaxLengthProfilerSpec stringMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMaxLength, stringMaxLength));
+        this.stringMaxLength = stringMaxLength;
+        this.propagateHierarchyIdToField(stringMaxLength, "string_max_length");
     }
 
     /**

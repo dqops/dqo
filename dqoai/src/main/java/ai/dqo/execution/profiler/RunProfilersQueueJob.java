@@ -20,6 +20,7 @@ import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.checks.CheckExecutionSummary;
@@ -76,6 +77,7 @@ public class RunProfilersQueueJob extends DqoQueueJob<ProfilerExecutionSummary> 
                 executionContext,
                 this.parameters.getProfilerSearchFilters(),
                 this.parameters.getProgressListener(),
+                this.parameters.getDataScope(),
                 this.parameters.isDummySensorExecution());
         return profilerExecutionSummary;
     }

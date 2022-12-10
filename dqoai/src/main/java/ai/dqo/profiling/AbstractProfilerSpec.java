@@ -15,8 +15,8 @@
  */
 package ai.dqo.profiling;
 
+import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
@@ -138,10 +138,10 @@ public abstract class AbstractProfilerSpec<S extends AbstractSensorParametersSpe
     }
 
     /**
-     * Returns the data scope that this profiler supports. The value decides if the whole table is analyzed or each data stream defined by the default
-     * data stream mapping on a table is analyzed.
-     * @return Data scope to analyze: the whole table or each data stream separately.
+     * Returns the array of supported data type categories that the profiler supports.
+     * Table level sensors should return null because table level profilers do not operate on columns and are not sensitive to the profiled column's type.
+     * @return Array of supported data types or null when the profiler has no limitations.
      */
     @JsonIgnore
-    public abstract ProfilerDataScope getDataScope();
+    public abstract DataTypeCategory[] getSupportedDataTypes(); // TODO: the list of supported data types could be moved to the sensor definition yaml to support full extensibility
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.table.standard;
+package ai.dqo.profiling.column.uniqueness;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -29,39 +29,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Category of standard table level profilers.
+ * Category of column level profilers that are analysing uniqueness.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardProfilersSpec extends AbstractProfilerCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardProfilersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerCategorySpec.FIELDS) {
+public class ColumnUniquenessProfilersSpec extends AbstractProfilerCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessProfilersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerCategorySpec.FIELDS) {
         {
-            put("row_count", o -> o.rowCount);
+            put("unique_values_count", o -> o.uniqueValuesCount);
         }
     };
 
-    @JsonPropertyDescription("Configuration of the row count profiler.")
+    @JsonPropertyDescription("Configuration of the profiler that counts unique (distinct) column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountProfilerSpec rowCount = new TableStandardRowCountProfilerSpec();
+    private ColumnUniquenessUniqueValuesCountProfilerSpec uniqueValuesCount = new ColumnUniquenessUniqueValuesCountProfilerSpec();
 
     /**
-     * Returns the row count profiler specification.
-     * @return Row count profiler.
+     * Returns the profiler configuration that counts unique (distinct) values.
+     * @return Profiler for the distinct count.
      */
-    public TableStandardRowCountProfilerSpec getRowCount() {
-        return rowCount;
+    public ColumnUniquenessUniqueValuesCountProfilerSpec getUniqueValuesCount() {
+        return uniqueValuesCount;
     }
 
     /**
-     * Sets a reference to a row count profiler.
-     * @param rowCount Row count profiler.
+     * Sets a reference to a unique values count profiler.
+     * @param uniqueValuesCount Unique (distinct) values count profiler.
      */
-    public void setRowCount(TableStandardRowCountProfilerSpec rowCount) {
-        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-        this.propagateHierarchyIdToField(rowCount, "row_count");
+    public void setUniqueValuesCount(ColumnUniquenessUniqueValuesCountProfilerSpec uniqueValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.uniqueValuesCount, uniqueValuesCount));
+        this.uniqueValuesCount = uniqueValuesCount;
+        this.propagateHierarchyIdToField(uniqueValuesCount, "unique_values_count");
     }
 
     /**
