@@ -101,14 +101,6 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
               error: {
                 ...check.rule?.error,
                 configured: true
-              },
-              fatal: {
-                ...check.rule?.fatal,
-                configured: true
-              },
-              warning: {
-                ...check.rule?.warning,
-                configured: true
               }
             }
           }
