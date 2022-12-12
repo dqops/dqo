@@ -473,20 +473,13 @@ public class ColumnsController {
 
     /**
      * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
-     * Optionally filter checks by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param checkCategory  (Optional) Check category.
-     * @param checkName      (Optional) Check name.
      * @return UI friendly model of data quality ad-hoc checks on a requested column.
      */
-    @GetMapping(value = {
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui",
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/{checkCategory}",
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/{checkCategory}/{checkName}"
-    })
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
     @ApiOperation(value = "getColumnAdHocChecksUI", notes = "Return a UI friendly model of data quality ad-hoc checks on a column", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -498,9 +491,7 @@ public class ColumnsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam(value = "Check category", required = false) @PathVariable(required = false) String checkCategory,
-            @ApiParam(value = "Check name", required = false) @PathVariable(required = false) String checkName) {
+            @ApiParam("Column name") @PathVariable String columnName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -533,8 +524,6 @@ public class ColumnsController {
             setColumnName(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
-            setCheckCategory(checkCategory);
-            setCheckName(checkName);
             setEnabled(true);
         }};
 
@@ -553,7 +542,7 @@ public class ColumnsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality checkpoints list on a requested column for a requested time partition.
+     * @return UI friendly model of data quality checkpoints on a requested column for a requested time partition.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui")
     @ApiOperation(value = "getColumnCheckpointsUI", notes = "Return a UI friendly model of column level data quality checkpoints on a column", response = UIAllChecksModel.class)
@@ -634,7 +623,7 @@ public class ColumnsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality partitioned checks list on a requested column for a requested time partition.
+     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time partition.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui")
     @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UIAllChecksModel.class)
@@ -707,6 +696,7 @@ public class ColumnsController {
         );
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
+
 
     /**
      * Retrieves a simplistic UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
@@ -891,6 +881,260 @@ public class ColumnsController {
 
         UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(partitionedChecksPartition);
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
+    }
+
+
+    /**
+     * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @param checkCategory  Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly model of data quality ad-hoc checks on a requested column.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getColumnAdHocChecksUIFilter", notes = "Return a UI friendly model of data quality ad-hoc checks on a column filtered by category and check name", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found"),
+            @ApiResponse(code = 500, message = "Internal iServer Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getColumnAdHocChecksUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ColumnAdHocCheckCategoriesSpec tempChecks = columnSpec.getChecks();
+        if (tempChecks == null) {
+            tempChecks = new ColumnAdHocCheckCategoriesSpec();
+        }
+        ColumnAdHocCheckCategoriesSpec checks = tempChecks;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumnName(columnName);
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+                checks,
+                checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName()
+        );
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time partition, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @param timePartition  Time partition.
+     * @param checkCategory  Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly model of data quality checkpoints on a requested column for a requested time partition, filtered by category and check name.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getColumnCheckpointsUIFilter", notes = "Return a UI friendly model of column level data quality checkpoints on a column filtered by category and check name", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UI model of column level data quality checkpoints on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getColumnCheckpointsUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(
+                columnSpec.getCheckpoints(),
+                ColumnCheckpointsSpec::new);
+
+        AbstractRootChecksContainerSpec tempCheckpointsPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempCheckpointsPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getDaily(),
+                        ColumnDailyCheckpointCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempCheckpointsPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getMonthly(),
+                        ColumnMonthlyCheckpointCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec checkpointsPartition = tempCheckpointsPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumnName(columnName);
+            setCheckType(checkpointsPartition.getCheckType());
+            setTimeScale(checkpointsPartition.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+                checkpointsPartition,
+                checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName()
+        );
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time partition, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @param timePartition  Time partition.
+     * @param checkCategory  (Optional) Check category.
+     * @param checkName      Check name.
+     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time partition, filtered by category and check name.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getColumnPartitionedChecksUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(
+                columnSpec.getPartitionedChecks(),
+                ColumnPartitionedChecksRootSpec::new);
+
+        AbstractRootChecksContainerSpec tempPartitionedChecksPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getDaily(),
+                        ColumnDailyPartitionedCheckCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getMonthly(),
+                        ColumnMonthlyPartitionedCheckCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec partitionedChecksPartition = tempPartitionedChecksPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumnName(columnName);
+            setCheckType(partitionedChecksPartition.getCheckType());
+            setTimeScale(partitionedChecksPartition.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+                partitionedChecksPartition,
+                checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName()
+        );
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
 

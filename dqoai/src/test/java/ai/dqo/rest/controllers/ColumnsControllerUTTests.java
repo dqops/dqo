@@ -147,9 +147,7 @@ public class ColumnsControllerUTTests extends BaseTest {
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                columnSpec.getColumnName(),
-                null,
-                null);
+                columnSpec.getColumnName());
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
