@@ -19,6 +19,7 @@ import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMinLengthSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsMaxLengthProfilerSpec extends AbstractProfilerSpec<ColumnStringsStringMinLengthSensorParametersSpec> {
+public class ColumnStringsMaxLengthProfilerSpec extends AbstractProfilerSpec<ColumnStringsStringMaxLengthSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsMaxLengthProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
         }
@@ -45,14 +46,14 @@ public class ColumnStringsMaxLengthProfilerSpec extends AbstractProfilerSpec<Col
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinLengthSensorParametersSpec parameters = new ColumnStringsStringMinLengthSensorParametersSpec();
+    private ColumnStringsStringMaxLengthSensorParametersSpec parameters = new ColumnStringsStringMaxLengthSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnStringsStringMinLengthSensorParametersSpec getParameters() {
+    public ColumnStringsStringMaxLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +61,7 @@ public class ColumnStringsMaxLengthProfilerSpec extends AbstractProfilerSpec<Col
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnStringsStringMinLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringMaxLengthSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
