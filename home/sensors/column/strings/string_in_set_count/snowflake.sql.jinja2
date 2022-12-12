@@ -5,7 +5,13 @@ SELECT
         ELSE
             SUM(
                 CASE
-                    WHEN ({{lib.render_in_set(parameters.values_type, parameters.values_list)}}) THEN 1
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN (   {%- for i in parameters.values -%}
+                                                                                    {%- if not loop.last -%}
+                                                                                        {{lib.make_text_constant(i)}}{{", "}}
+                                                                                    {%- else -%}
+                                                                                        {{lib.make_text_constant(i)}}
+                                                                                    {%- endif -%}
+                                                                                {%- endfor -%} )) IS TRUE THEN 1
                     ELSE 0
                 END
             )

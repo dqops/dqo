@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.column.strings;
+package ai.dqo.sensors.column.numeric;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -33,20 +33,20 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringInSetCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringInSetCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnNumericNumbersInSetCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericNumbersInSetCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private List<String> values;
+    private List<Long> values;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getValues() {
+    public List<Long> getValues() {
         return values;
     }
 
@@ -54,7 +54,7 @@ public class ColumnStringsStringInSetCountSensorParametersSpec extends AbstractC
      * Sets a List given from user.
      * @param values values given from user.
      */
-    public void setValues(List<String> values) {
+    public void setValues(List<Long> values) {
         this.setDirtyIf(!Objects.equals(this.values, values));
         this.values = values;
     }
@@ -76,6 +76,6 @@ public class ColumnStringsStringInSetCountSensorParametersSpec extends AbstractC
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_in_set_count";
+        return "column/strings/numbers_in_set_count";
     }
 }

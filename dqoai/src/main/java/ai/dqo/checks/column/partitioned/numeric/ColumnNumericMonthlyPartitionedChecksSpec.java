@@ -18,6 +18,8 @@ package ai.dqo.checks.column.partitioned.numeric;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,6 +40,8 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("monthly_partition_max_negative_count", o -> o.monthlyPartitionMaxNegativeCount);
             put("monthly_partition_max_negative_percent", o -> o.monthlyPartitionMaxNegativePercent);
+            put("monthly_partition_min_numbers_in_set_count", o -> o.monthlyPartitionMinNumbersInSetCount);
+            put("monthly_partition_min_numbers_in_set_percent", o -> o.monthlyPartitionMinNumbersInSetPercent);
         }
     };
 
@@ -46,6 +50,12 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxNegativePercentCheckSpec monthlyPartitionMaxNegativePercent;
+    
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinNumbersInSetCountCheckSpec monthlyPartitionMinNumbersInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinNumbersInSetPercentCheckSpec monthlyPartitionMinNumbersInSetPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -83,6 +93,42 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         propagateHierarchyIdToField(monthlyPartitionMaxNegativePercent, "monthly_partition_max_negative_percent");
     }
 
+    /**
+     * Returns a minimum Numbers in set count check.
+     * @return Minimum Numbers in set count check.
+     */
+    public ColumnMinNumbersInSetCountCheckSpec getMonthlyPartitionMinNumbersInSetCount() {
+        return monthlyPartitionMinNumbersInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set count check.
+     * @param monthlyPartitionMinNumbersInSetCount Minimum Numbers in set count check.
+     */
+    public void setMonthlyPartitionMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec monthlyPartitionMinNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinNumbersInSetCount, monthlyPartitionMinNumbersInSetCount));
+        this.monthlyPartitionMinNumbersInSetCount = monthlyPartitionMinNumbersInSetCount;
+        propagateHierarchyIdToField(monthlyPartitionMinNumbersInSetCount, "monthly_partition_min_numbers_in_set_count");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinNumbersInSetPercentCheckSpec getMonthlyPartitionMinNumbersInSetPercent() {
+        return monthlyPartitionMinNumbersInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param monthlyPartitionMinNumbersInSetPercent Minimum Numbers in set percent check.
+     */
+    public void setMonthlyPartitionMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec monthlyPartitionMinNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinNumbersInSetPercent, monthlyPartitionMinNumbersInSetPercent));
+        this.monthlyPartitionMinNumbersInSetPercent = monthlyPartitionMinNumbersInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinNumbersInSetPercent, "monthly_partition_min_numbers_in_set_percent");
+    }
+    
     /**
      * Returns the child map on the spec class with all fields.
      *

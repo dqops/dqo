@@ -40,23 +40,23 @@ public class ColumnStringsStringInSetPercentSensorParametersSpec extends Abstrac
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private List<String> stringsList;
+    private List<String> values;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getStringsList() {
-        return stringsList;
+    public List<String> getValues() {
+        return values;
     }
 
     /**
      * Sets a List given from user.
-     * @param stringsList values given from user.
+     * @param values values given from user.
      */
-    public void setStringsList(List<String> stringsList) {
-        this.setDirtyIf(!Objects.equals(this.stringsList, stringsList));
-        this.stringsList = stringsList;
+    public void setValues(List<String> values) {
+        this.setDirtyIf(!Objects.equals(this.values, values));
+        this.values = values;
     }
 
     /**

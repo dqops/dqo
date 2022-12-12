@@ -18,6 +18,8 @@ package ai.dqo.checks.column.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +41,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_negative_count", o -> o.maxNegativeCount);
             put("max_negative_percent", o -> o.maxNegativePercent);
+            put("min_numbers_in_set_count", o -> o.minNumbersInSetCount);
+            put("min_numbers_in_set_percent", o -> o.minNumbersInSetPercent);
         }
     };
 
@@ -47,6 +51,12 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxNegativePercentCheckSpec maxNegativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinNumbersInSetCountCheckSpec minNumbersInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinNumbersInSetPercentCheckSpec minNumbersInSetPercent;
 
     /**
      * Returns a maximum negative count check.
@@ -84,6 +94,42 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(maxNegativePercent, "max_negative_percent");
     }
 
+    /**
+     * Returns a minimum Numbers in set count check.
+     * @return Minimum Numbers in set count check.
+     */
+    public ColumnMinNumbersInSetCountCheckSpec getMinNumbersInSetCount() {
+        return minNumbersInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set count check.
+     * @param minNumbersInSetCount Minimum Numbers in set count check.
+     */
+    public void setMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec minNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.minNumbersInSetCount, minNumbersInSetCount));
+        this.minNumbersInSetCount = minNumbersInSetCount;
+        propagateHierarchyIdToField(minNumbersInSetCount, "min_numbers_in_set_count");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinNumbersInSetPercentCheckSpec getMinNumbersInSetPercent() {
+        return minNumbersInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param minNumbersInSetPercent Minimum Numbers in set percent check.
+     */
+    public void setMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec minNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.minNumbersInSetPercent, minNumbersInSetPercent));
+        this.minNumbersInSetPercent = minNumbersInSetPercent;
+        propagateHierarchyIdToField(minNumbersInSetPercent, "min_numbers_in_set_percent");
+    }
+    
     /**
      * Returns the child map on the spec class with all fields.
      *
