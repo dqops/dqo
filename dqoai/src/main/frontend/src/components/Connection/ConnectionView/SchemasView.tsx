@@ -71,7 +71,10 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
         </thead>
         <tbody>
           {schemas.map((item) => (
-            <tr key={item.schema_name} className="mb-3">
+            <tr
+              key={item.schema_name}
+              className="border-b border-gray-300 last:border-b-0"
+            >
               <td className="py-2 px-4 text-left">{item.schema_name}</td>
               <td className="py-2 px-4 text-left">
                 {!isExist(item) && (
