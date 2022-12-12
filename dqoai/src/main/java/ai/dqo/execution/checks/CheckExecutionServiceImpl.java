@@ -240,7 +240,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
 
                 if (!sensorResult.isSuccess()) {
-                    continue; // error reporting will be done later
+                    throw new CheckExecutionFailedException("Check " + checkSpec.getCheckName() + " failed: " + sensorResult.getException().getMessage(), sensorResult.getException());
+//                    continue; // error reporting will be done later
                 }
 
                 if (sensorResult.getResultTable().rowCount() == 0) {

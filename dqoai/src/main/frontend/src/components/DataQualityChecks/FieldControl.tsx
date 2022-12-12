@@ -21,7 +21,7 @@ const FieldControl = ({
 }: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
-  const tooltip = field?.definition?.help_hext;
+  const tooltip = field?.definition?.help_text;
 
   const value: any = useMemo(() => {
     switch (field.definition?.data_type) {

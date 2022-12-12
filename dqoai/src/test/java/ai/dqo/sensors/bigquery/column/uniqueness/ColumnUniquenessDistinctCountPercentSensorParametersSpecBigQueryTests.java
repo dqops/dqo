@@ -35,6 +35,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -273,11 +274,15 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
         Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+                                SELECT
+                                    CASE
+                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN 100.0
+                                        ELSE 100.0 * COUNT(DISTINCT analyzed_table.`id`) /
+                                                     COUNT(analyzed_table.`id`)
+                                    END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
+                                FROM %s AS analyzed_table
+                                GROUP BY time_period
+                                ORDER BY time_period""",
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }

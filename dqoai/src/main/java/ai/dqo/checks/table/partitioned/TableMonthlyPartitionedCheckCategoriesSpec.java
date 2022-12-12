@@ -18,6 +18,7 @@ package ai.dqo.checks.table.partitioned;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -47,6 +48,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
+            put("sql", o -> o.sql);
         }
     };
 
@@ -54,6 +56,11 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardMonthlyPartitionedChecksSpec standard;
+
+    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every month of data separately")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlMonthlyPartitionedSpec sql;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -71,6 +78,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
         this.propagateHierarchyIdToField(standard, "standard");
+    }
+
+    /**
+     * Returns the container of custom SQL checks.
+     * @return Custom sql checks.
+     */
+    public TableSqlMonthlyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Container of custom SQL checks.
+     */
+    public void setSql(TableSqlMonthlyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

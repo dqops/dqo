@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.reflection;
 
+import ai.dqo.metadata.fields.DisplayHint;
 import ai.dqo.metadata.fields.ParameterDataType;
 
 import java.lang.reflect.Constructor;
@@ -34,6 +35,7 @@ public class FieldInfo {
     private String helpText;
     private Class<?> clazz;
     private ParameterDataType dataType;
+    private DisplayHint displayHint;
     private Map<String, EnumValueInfo> enumValuesByName;
     private Method getterMethod;
     private Method setterMethod;
@@ -135,6 +137,22 @@ public class FieldInfo {
      */
     public void setDataType(ParameterDataType dataType) {
         this.dataType = dataType;
+    }
+
+    /**
+     * Returns an optional display hint.
+     * @return Optional display hint.
+     */
+    public DisplayHint getDisplayHint() {
+        return displayHint;
+    }
+
+    /**
+     * Sets an optional display hint.
+     * @param displayHint Display hint.
+     */
+    public void setDisplayHint(DisplayHint displayHint) {
+        this.displayHint = displayHint;
     }
 
     /**

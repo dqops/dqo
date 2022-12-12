@@ -18,7 +18,7 @@ package ai.dqo.execution.checks.ruleeval;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;

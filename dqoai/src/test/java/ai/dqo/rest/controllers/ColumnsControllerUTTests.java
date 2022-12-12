@@ -22,7 +22,7 @@ import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
-import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
@@ -41,7 +41,6 @@ import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -152,7 +151,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -170,7 +169,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -188,7 +187,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @Test
@@ -204,7 +203,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -222,7 +221,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -240,7 +239,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @Test

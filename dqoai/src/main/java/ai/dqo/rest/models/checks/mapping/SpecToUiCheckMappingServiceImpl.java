@@ -451,7 +451,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         parameterDefinitionSpec.setDataType(fieldInfo.getDataType());
         parameterDefinitionSpec.setFieldName(fieldInfo.getClassFieldName());
         parameterDefinitionSpec.setDisplayName(fieldInfo.getDisplayName());
-        parameterDefinitionSpec.setHelpHext(fieldInfo.getHelpText());
+        parameterDefinitionSpec.setHelpText(fieldInfo.getHelpText());
+        parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());
         if (fieldInfo.getDataType() == ParameterDataType.enum_type) {
             List<String> supportedEnumValues = fieldInfo.getEnumValuesByName().values()
                     .stream().map(e -> e.getYamlName())

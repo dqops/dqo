@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checks.nulls;
+package ai.dqo.checks.column.checkspecs.sql;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRuleParametersSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullPercentSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxValueRuleParametersSpec;
+import ai.dqo.sensors.column.sql.ColumnSqlAggregatedExpressionSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,44 +32,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+ * Column level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNullsPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNullsPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheckSpec<ColumnSqlAggregatedExpressionSensorParametersSpec,
+        MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlAggregatedExpressionMaxValueCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullPercentSensorParametersSpec parameters = new ColumnNullsNullPercentSensorParametersSpec();
+    private ColumnSqlAggregatedExpressionSensorParametersSpec parameters = new ColumnSqlAggregatedExpressionSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule2ParametersSpec error;
+    private MaxValueRuleParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule1ParametersSpec warning;
+    private MaxValueRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule5ParametersSpec fatal;
+    private MaxValueRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNullPercentSensorParametersSpec getParameters() {
+    public ColumnSqlAggregatedExpressionSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,10 +77,10 @@ public class ColumnMaxNullsPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNullPercentSensorParametersSpec parameters) {
-        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(ColumnSqlAggregatedExpressionSensorParametersSpec parameters) {
+		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-        this.propagateHierarchyIdToField(parameters, "parameters");
+		this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -92,7 +89,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule2ParametersSpec getError() {
+    public MaxValueRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -100,7 +97,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule2ParametersSpec error) {
+    public void setError(MaxValueRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -112,7 +109,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule1ParametersSpec getWarning() {
+    public MaxValueRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -120,7 +117,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxValueRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -132,7 +129,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxPercentRule5ParametersSpec getFatal() {
+    public MaxValueRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -140,7 +137,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
+    public void setFatal(MaxValueRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -163,6 +160,6 @@ public class ColumnMaxNullsPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.COMPLETENESS;
+        return DefaultDataQualityDimensions.REASONABLENESS;
     }
 }

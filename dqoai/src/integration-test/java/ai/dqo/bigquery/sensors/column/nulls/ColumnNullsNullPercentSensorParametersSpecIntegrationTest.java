@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.nulls;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsPercentCheckSpec;;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsPercentCheckSpec;;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
