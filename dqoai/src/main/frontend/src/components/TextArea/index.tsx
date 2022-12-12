@@ -3,6 +3,7 @@ import React, { ChangeEvent, FocusEvent } from 'react';
 import clsx from 'clsx';
 
 import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
 
 interface ITextAreaProps {
   className?: string;
@@ -17,6 +18,8 @@ interface ITextAreaProps {
   onClear?: () => void;
   rows?: number;
   dataTestId?: string;
+  tooltipText?: string;
+  disabled?: boolean;
 }
 
 const TextArea = ({
@@ -31,14 +34,29 @@ const TextArea = ({
   onBlur,
   onClear,
   rows,
-  dataTestId
+  dataTestId,
+  tooltipText,
+  disabled
 }: ITextAreaProps) => (
   <div>
     <label
       htmlFor={name}
-      className="block text-base font-regular text-blue-dark-700 mb-1"
+      className="block text-base font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
     >
-      {label}
+      <span>{label}</span>
+      {!!tooltipText && (
+        <Tooltip
+          content={tooltipText}
+          className="max-w-80 py-4 px-4 bg-gray-800"
+        >
+          <div>
+            <SvgIcon
+              name="info"
+              className="w-4 h-4 text-blue-700 cursor-pointer"
+            />
+          </div>
+        </Tooltip>
+      )}
     </label>
     <div className="relative">
       <textarea
@@ -46,16 +64,15 @@ const TextArea = ({
         name={name}
         placeholder={placeholder}
         className={clsx(
-          error
-            ? 'border border-red-500'
-            : 'focus:border-green-400 border-transparent',
-          'placeholder-gray-500 py-2.5 px-3 bg-gray-50 text-gray-500 focus:text-purple-700 border border-transparent focus:outline-none block min-w-40 w-full shadow-sm sm:text-base rounded-md',
+          error ? 'border border-red-500' : 'focus:border-green-400',
+          'placeholder-gray-500 py-2.5 px-3 bg-white text-gray-700 border border-gray-300 focus:outline-none block min-w-40 w-full shadow-sm sm:text-base rounded-md',
           className
         )}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
         rows={rows}
+        disabled={disabled}
       />
       {value && (
         <SvgIcon
