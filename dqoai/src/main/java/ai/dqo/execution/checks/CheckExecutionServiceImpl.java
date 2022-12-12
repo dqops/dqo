@@ -23,6 +23,7 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.notifications.NotificationService;
 import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
@@ -62,6 +63,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
@@ -85,6 +87,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
     private final UserHomeLockManager userHomeLockManager;
     private final RuleDefinitionFindService ruleDefinitionFindService;
+    private final NotificationService notificationService;
 
     /**
      * Creates a data quality check execution service.
@@ -99,6 +102,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      * @param userHomeLockManager User home lock manager - used to ensure synchronized access to data files.
      * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
+     * @param notificationService Notification service - sends notifications about new issues.
      */
     @Autowired
     public CheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -111,7 +115,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
                                      UserHomeLockManager userHomeLockManager,
-                                     RuleDefinitionFindService ruleDefinitionFindService) {
+                                     RuleDefinitionFindService ruleDefinitionFindService,
+                                     NotificationService notificationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -123,6 +128,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
         this.userHomeLockManager = userHomeLockManager;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
+        this.notificationService = notificationService;
     }
 
     /**
@@ -276,6 +282,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), effectiveTimeSeries.getTimeGradient());
 
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
+                    ruleResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
 
                     RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
                             executionContext, checkSpec, sensorRunParameters, normalizedSensorResults, sensorReadoutsSnapshot, progressListener);
@@ -312,6 +319,11 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
                 passedRules, warningsCount, errorsCount, fatalsCount);
+
+        if (this.notificationService != null && (warningsCount > 0 || errorsCount > 0 || fatalsCount > 0)) {
+            Mono<Void> notificationMono = this.notificationService.detectNewIssuesAndSendNotification(connectionWrapper.getSpec(), tableSpec, ruleResultsSnapshot);
+            notificationMono.block(); // TODO: fire and forget
+        }
     }
 
     /**

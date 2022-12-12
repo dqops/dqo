@@ -41,6 +41,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -802,6 +803,18 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a notification settings object.
+     *
+     * @param notificationSettingsSpec Notification settings.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(NotificationSettingsSpec notificationSettingsSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

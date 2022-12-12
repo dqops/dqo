@@ -26,6 +26,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -58,6 +59,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 			put("snowflake", o -> o.snowflake);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
+            put("notifications", o -> o.notifications);
         }
     };
 
@@ -99,6 +101,12 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec schedule;
+
+    @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private NotificationSettingsSpec notifications;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -348,6 +356,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the notification settings.
+     * @return Notification settings.
+     */
+    public NotificationSettingsSpec getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * Sets a new configuration of notifications.
+     * @param notifications New notification settings.
+     */
+    public void setNotifications(NotificationSettingsSpec notifications) {
+        setDirtyIf(!Objects.equals(this.notifications, notifications));
+        this.notifications = notifications;
+        propagateHierarchyIdToField(notifications, "notifications");
+    }
+
+    /**
      * Returns a collection of comments for this connection.
      * @return List of comments (or null).
      */
@@ -464,6 +490,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.schedule != null) {
                 cloned.schedule = cloned.schedule.clone();
             }
+            if (cloned.notifications != null) {
+                cloned.notifications = cloned.notifications.clone();
+            }
             if (cloned.properties != null) {
                 cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
             }
@@ -499,6 +528,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
             }
+            if (cloned.notifications != null) {
+                cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
+            }
             cloned.comments = null;
             cloned.schedule = null; // we probably don't need it here
             cloned.originalProperties = null;
@@ -520,6 +552,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
             cloned.schedule = null;
+            cloned.notifications = null;
             cloned.originalProperties = null;
             return cloned;
         }

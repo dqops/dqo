@@ -46,7 +46,7 @@ public class RuleEvaluationResult {
      * Creates a rule evaluation result table.
      * @param ruleResultsTable Rule result table, will be modified and additional columns will be added.
      */
-    private RuleEvaluationResult(Table ruleResultsTable) {
+    public RuleEvaluationResult(Table ruleResultsTable) {
         this.ruleResultsTable = ruleResultsTable;
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
