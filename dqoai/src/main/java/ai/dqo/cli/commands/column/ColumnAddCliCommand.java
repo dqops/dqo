@@ -29,6 +29,7 @@ import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -37,7 +38,7 @@ import picocli.CommandLine;
  * Cli command to add a new column.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", description = "Add a column with specified details")
 public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
 	private final ColumnService columnService;

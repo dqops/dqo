@@ -18,6 +18,7 @@ package ai.dqo.checks.table.checkpoints;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -47,6 +48,7 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("standard", o -> o.standard);
+           put("sql", o -> o.sql);
         }
     };
 
@@ -54,6 +56,11 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardDailyCheckpointSpec standard;
+
+    @JsonPropertyDescription("Daily checkpoints of custom SQL checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlDailyCheckpointSpec sql;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -71,6 +78,24 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
 		this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
 		this.propagateHierarchyIdToField(standard, "standard");
+    }
+
+    /**
+     * Returns a container of table level custom SQL checkpoints.
+     * @return Custom sql checkpoints.
+     */
+    public TableSqlDailyCheckpointSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checkpoints.
+     * @param sql Custom sql checkpoints.
+     */
+    public void setSql(TableSqlDailyCheckpointSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

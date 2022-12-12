@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.rule;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,7 +25,7 @@ import picocli.CommandLine;
  * "rule" 1st level CLI command - a grouping command for editing sensor templates.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "rule", description = "Edit sensor template", subcommands = RuleEditCliCommand.class)
 public class RuleCliCommand extends BaseCommand {
 }

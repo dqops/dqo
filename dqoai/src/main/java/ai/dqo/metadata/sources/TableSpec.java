@@ -28,6 +28,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.profiling.table.TableProfilerRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -57,6 +58,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
+            put("profiler", o -> o.profiler);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -119,6 +121,11 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TablePartitionedChecksRootSpec partitionedChecks = new TablePartitionedChecksRootSpec();
+
+    @JsonPropertyDescription("Configuration of table level data profilers. Configures which profilers are enabled and how they are configured.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableProfilerRootCategoriesSpec profiler;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -318,6 +325,24 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns a configuration of the table profiler (if any changes were applied).
+     * @return Configuration of the table level profiler.
+     */
+    public TableProfilerRootCategoriesSpec getProfiler() {
+        return profiler;
+    }
+
+    /**
+     * Sets a new configuration of a table level profiler.
+     * @param profiler Table level profiler.
+     */
+    public void setProfiler(TableProfilerRootCategoriesSpec profiler) {
+        setDirtyIf(!Objects.equals(this.profiler, profiler));
+        this.profiler = profiler;
+        propagateHierarchyIdToField(profiler, "profiler");
+    }
+
+    /**
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
@@ -461,6 +486,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
+            cloned.profiler = null;
             if (cloned.target != null) {
                 cloned.target = cloned.target.expandAndTrim(secretValueProvider);
             }
@@ -498,6 +524,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;
+            cloned.profiler = null;
             cloned.columns = this.columns.trim();
             return cloned;
         }
@@ -527,6 +554,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.comments = null;
             cloned.scheduleOverride = null;
             cloned.columns = null;
+            cloned.profiler = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

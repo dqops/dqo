@@ -66,6 +66,10 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     const params = qs.parse(location.search);
     if (params.tab) {
       setActiveTab(params.tab as string);
+      setTabMap({
+        ...tabMap,
+        [pageTab]: params.tab
+      });
     }
     if (params.source) {
       setShowMetaData(true);

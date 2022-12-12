@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 
 /**
  * Data quality rule runner that picks the right rule implementation and executes a rule.
@@ -23,9 +23,9 @@ import ai.dqo.execution.CheckExecutionContext;
 public interface DataQualityRuleRunner {
     /**
      * Executes a rule and returns the rule evaluation result.
-     * @param checkExecutionContext Check execution context that provides access to the user home and dqo home.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
      * @param ruleRunParameters Rule run parameters (rule parameters, additional data that the rule requires).
      * @return Rule execution result with the severity status.
      */
-    RuleExecutionResult executeRule(CheckExecutionContext checkExecutionContext, RuleExecutionRunParameters ruleRunParameters);
+    RuleExecutionResult executeRule(ExecutionContext executionContext, RuleExecutionRunParameters ruleRunParameters);
 }

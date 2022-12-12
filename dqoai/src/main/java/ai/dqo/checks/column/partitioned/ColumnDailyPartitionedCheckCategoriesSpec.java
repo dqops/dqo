@@ -21,9 +21,11 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -56,6 +58,8 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
         }
     };
 
@@ -83,6 +87,16 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyPartitionedChecksSpec datetime;
+
+    @JsonPropertyDescription("Daily partitioned checks of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiDailyPartitionedChecksSpec pii;
+
+    @JsonPropertyDescription("Daily partitioned checks using custom SQL expressions evaluated on the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlDailyPartitionedSpec sql;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -172,6 +186,42 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnPiiDailyPartitionedChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiDailyPartitionedChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns a container of custom SQL checks on a column.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlDailyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Custom SQL checks.
+     */
+    public void setSql(ColumnSqlDailyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

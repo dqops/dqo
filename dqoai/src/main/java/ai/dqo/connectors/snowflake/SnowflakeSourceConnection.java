@@ -22,6 +22,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Component;
  * Snowflake source connection.
  */
 @Component("snowflake-connection")
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
     /**
      * Injection constructor for the snowflake connection.

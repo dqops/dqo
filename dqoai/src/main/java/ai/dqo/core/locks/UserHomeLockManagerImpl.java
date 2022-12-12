@@ -48,6 +48,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
             put(DqoRoot.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(DqoRoot.DATA_SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(DqoRoot.DATA_RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.DATA_PROFILING_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }
 
@@ -61,6 +62,9 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     @Override
     public AcquiredSharedReadLock lockSharedRead(DqoRoot scope) {
         ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
+        if (readerWriterLockHolder == null) {
+            throw new UnsupportedOperationException("Locking for DQO Root " + scope + " is not supported.");
+        }
         return readerWriterLockHolder.lockSharedRead();
     }
 
@@ -74,6 +78,9 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     @Override
     public AcquiredExclusiveWriteLock lockExclusiveWrite(DqoRoot scope) {
         ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(scope);
+        if (readerWriterLockHolder == null) {
+            throw new UnsupportedOperationException("Locking for DQO Root " + scope + " is not supported.");
+        }
         return readerWriterLockHolder.lockExclusiveWrite();
     }
 }

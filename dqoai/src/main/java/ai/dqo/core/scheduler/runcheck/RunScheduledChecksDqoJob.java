@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.core.scheduler.runcheck;
 
 import ai.dqo.cli.terminal.TerminalTableWritter;
@@ -10,8 +25,8 @@ import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
-import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.execution.CheckExecutionContextFactory;
+import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.checks.CheckExecutionService;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
@@ -30,7 +45,7 @@ import org.springframework.stereotype.Component;
 public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
     private JobSchedulerService jobSchedulerService;
     private CheckExecutionService checkExecutionService;
-    private CheckExecutionContextFactory checkExecutionContextFactory;
+    private ExecutionContextFactory executionContextFactory;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
     private TerminalTableWritter terminalTableWritter;
@@ -40,7 +55,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * Creates a dqo job that runs checks scheduled for one cron expression.
      * @param jobSchedulerService Job scheduler service - used to ask for the reporting mode.
      * @param checkExecutionService Check execution service that runs the data quality checks.
-     * @param checkExecutionContextFactory Check execution context that will create a context - opening the local user home.
+     * @param executionContextFactory Check execution context that will create a context - opening the local user home.
      * @param checkExecutionProgressListenerProvider Check execution progress listener used to get the correct logger.
      * @param schedulerFileSynchronizationService Scheduler file synchronization service.
      * @param terminalTableWriter Terminal table writer - used to write the summary information about the progress to the console.
@@ -48,13 +63,13 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
     @Autowired
     public RunScheduledChecksDqoJob(JobSchedulerService jobSchedulerService,
                                     CheckExecutionService checkExecutionService,
-                                    CheckExecutionContextFactory checkExecutionContextFactory,
+                                    ExecutionContextFactory executionContextFactory,
                                     CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                                     SchedulerFileSynchronizationService schedulerFileSynchronizationService,
                                     TerminalTableWritter terminalTableWriter) {
         this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionService = checkExecutionService;
-        this.checkExecutionContextFactory = checkExecutionContextFactory;
+        this.executionContextFactory = executionContextFactory;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.schedulerFileSynchronizationService = schedulerFileSynchronizationService;
         this.terminalTableWritter = terminalTableWriter;
@@ -89,12 +104,12 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
 
         this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // synchronize the data before running the checks, just in case that the files were removed remotely
 
-        CheckExecutionContext checkExecutionContext = this.checkExecutionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create();
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
-                checkExecutionContext, this.cronSchedule, progressListener);
+                executionContext, this.cronSchedule, progressListener);
 
         this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
 

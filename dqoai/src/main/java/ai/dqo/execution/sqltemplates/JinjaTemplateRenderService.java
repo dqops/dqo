@@ -15,9 +15,10 @@
  */
 package ai.dqo.execution.sqltemplates;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
 /**
  * SQL template rendering service that will populate the template with the parameters.
@@ -33,14 +34,14 @@ public interface JinjaTemplateRenderService {
 
     /**
      * Render a template for a sensor definition that was found in the user home or dqo home. This method prefers to use disk based template loading.
-     * @param checkExecutionContext Check execution context with paths to the user home and dqo home.
+     * @param executionContext Check execution context with paths to the user home and dqo home.
      * @param sensorFindResult Sensor definition (template) find result.
      * @param templateRenderParameters Template rendering parameters that are passed to the jinja2 template file and are usable in the template code.
      * @param progressListener Progress listener that receives information about rendered templates.
      * @return Rendered SQL template.
      */
-    String renderTemplate(CheckExecutionContext checkExecutionContext,
+    String renderTemplate(ExecutionContext executionContext,
                           SensorDefinitionFindResult sensorFindResult,
                           JinjaTemplateRenderParameters templateRenderParameters,
-                          CheckExecutionProgressListener progressListener);
+                          SensorExecutionProgressListener progressListener);
 }

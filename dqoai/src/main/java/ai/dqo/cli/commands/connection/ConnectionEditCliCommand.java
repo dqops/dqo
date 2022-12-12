@@ -22,6 +22,7 @@ import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -30,7 +31,7 @@ import picocli.CommandLine;
  * Cli command to edit a table.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit connection which match filters")
 public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 	private final TerminalReader terminalReader;

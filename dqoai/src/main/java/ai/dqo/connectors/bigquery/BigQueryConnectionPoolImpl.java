@@ -27,6 +27,7 @@ import com.google.cloud.bigquery.BigQueryOptions;
 import com.google.common.base.MoreObjects;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * BigQuery connection pool that supports multiple connections.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
     /**
      * Data sources cache.

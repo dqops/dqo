@@ -51,6 +51,8 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("strings", o -> o.strings);
 			put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
         }
     };
 
@@ -78,6 +80,16 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocDatetimeChecksSpec datetime;
+
+    @JsonPropertyDescription("Configuration of Personal Identifiable Information (PII) checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocPiiChecksSpec pii;
+
+    @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocSqlChecksSpec sql;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -167,6 +179,42 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the Personal Identifiable Information (PII) check configuration on a column level.
+     * @return Personal Identifiable Information (PII) check configuration.
+     */
+    public ColumnAdHocPiiChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the Personal Identifiable Information (PII) check configuration on a column level.
+     * @param pii New Personal Identifiable Information (PII) checks configuration.
+     */
+    public void setPii(ColumnAdHocPiiChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        this.propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns the configuration of custom SQL checks.
+     * @return Configuration of custom sql checks.
+     */
+    public ColumnAdHocSqlChecksSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to the configuration of custom SQL checks.
+     * @param sql Custom sql checks.
+     */
+    public void setSql(ColumnAdHocSqlChecksSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

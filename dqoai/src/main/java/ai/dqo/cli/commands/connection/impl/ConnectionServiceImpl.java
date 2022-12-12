@@ -211,7 +211,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
             tableSearchFilters.setSchemaTableName(schemaName + ".*");
-            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
@@ -295,7 +295,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
             tableSearchFilters.setConnectionName(connectionName);
-            tableSearchFilters.setDimensions(dimensions);
+            tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 
             HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();

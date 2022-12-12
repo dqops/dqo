@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.table;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,7 +25,7 @@ import picocli.CommandLine;
  * "table" 1st level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "table", description = "Modify or list tables", subcommands = {
         TableImportCliCommand.class,
         TableEditCliCommand.class,

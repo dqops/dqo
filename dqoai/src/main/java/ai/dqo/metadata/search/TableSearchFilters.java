@@ -30,7 +30,7 @@ public class TableSearchFilters {
     private String connectionName;
     private String schemaTableName;
     private Boolean enabled = true;
-    private String[] dimensions;
+    private String[] tags;
     private String[] labels;
 
     /**
@@ -92,19 +92,19 @@ public class TableSearchFilters {
     }
 
     /**
-     * Returns the dimension name search patterns.
-     * @return Dimension search patterns.
+     * Returns the data stream hierarchy tag name search patterns.
+     * @return data stream hierarchy tag search patterns.
      */
-    public String[] getDimensions() {
-        return dimensions;
+    public String[] getTags() {
+        return tags;
     }
 
     /**
-     * Sets the dimension search patterns.
-     * @param dimensions dimension search patterns.
+     * Sets the data stream hierarchy tag search patterns.
+     * @param tags data stream hierarchy tag search patterns.
      */
-    public void setDimensions(String[] dimensions) {
-        this.dimensions = dimensions;
+    public void setTags(String[] tags) {
+        this.tags = tags;
     }
 
     /**

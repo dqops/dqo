@@ -53,10 +53,13 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
     private String displayName;
 
     @JsonPropertyDescription("Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.")
-    private String helpHext;
+    private String helpText;
 
     @JsonPropertyDescription("Parameter data type.")
     private ParameterDataType dataType;
+
+    @JsonPropertyDescription("UI control display hint.")
+    private DisplayHint displayHint;
 
     @JsonPropertyDescription("True when the value for the parameter must be provided.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -107,17 +110,17 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
      * Returns the help text (hint) that will be shown to the user.
      * @return Help text.
      */
-    public String getHelpHext() {
-        return helpHext;
+    public String getHelpText() {
+        return helpText;
     }
 
     /**
      * Sets the help text (hint) to be shown to the user.
-     * @param helpHext New help text.
+     * @param helpText New help text.
      */
-    public void setHelpHext(String helpHext) {
-        this.setDirtyIf(!Objects.equals(this.helpHext, helpHext));
-        this.helpHext = helpHext;
+    public void setHelpText(String helpText) {
+        this.setDirtyIf(!Objects.equals(this.helpText, helpText));
+        this.helpText = helpText;
     }
 
     /**
@@ -152,6 +155,23 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
     public void setDataType(ParameterDataType dataType) {
         this.setDirtyIf(this.dataType != dataType);
         this.dataType = dataType;
+    }
+
+    /**
+     * Returns an additional display hint for the type of control to use in UI.
+     * @return Display hint.
+     */
+    public DisplayHint getDisplayHint() {
+        return displayHint;
+    }
+
+    /**
+     * Sets an additional display hint used to display the field in UI.
+     * @param displayHint Additional display hint.
+     */
+    public void setDisplayHint(DisplayHint displayHint) {
+        this.setDirtyIf(this.displayHint != displayHint);
+        this.displayHint = displayHint;
     }
 
     /**

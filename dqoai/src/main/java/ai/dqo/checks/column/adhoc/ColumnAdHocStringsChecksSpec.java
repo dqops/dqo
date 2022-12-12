@@ -17,11 +17,8 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.*;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -55,6 +52,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
             put("min_string_valid_usa_zipcode_percent", o -> o.minStringValidUsaZipcodePercent);
+            put("min_string_valid_usa_phone_percent", o -> o.minStringValidUsaPhonePercent);
             put("min_strings_in_set_count", o -> o.minStringsInSetCount);
             put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
 
@@ -108,6 +106,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringValidUsaZipcodePercentCheckSpec minStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec minStringValidUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec minStringsInSetCount;
@@ -401,6 +402,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringValidUsaZipcodePercent, minStringValidUsaZipcodePercent));
         this.minStringValidUsaZipcodePercent = minStringValidUsaZipcodePercent;
         propagateHierarchyIdToField(minStringValidUsaZipcodePercent, "min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getMinStringValidUsaPhonePercent() {
+        return minStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param minStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec minStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidUsaPhonePercent, minStringValidUsaPhonePercent));
+        this.minStringValidUsaPhonePercent = minStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(minStringValidUsaPhonePercent, "min_string_valid_usa_phone_percent");
     }
 
     /**

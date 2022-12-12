@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.rules.runners.AbstractRuleRunner;
@@ -45,19 +45,19 @@ public class DataQualityRuleRunnerImpl implements DataQualityRuleRunner {
 
     /**
      * Executes a rule and returns the rule evaluation result.
-     * @param checkExecutionContext Check execution context that provides access to the user home and dqo home.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
      * @param ruleRunParameters Rule run parameters (rule parameters, additional data that the rule requires).
      * @return Rule execution result with the severity status.
      */
-    public RuleExecutionResult executeRule(CheckExecutionContext checkExecutionContext, RuleExecutionRunParameters ruleRunParameters) {
+    public RuleExecutionResult executeRule(ExecutionContext executionContext, RuleExecutionRunParameters ruleRunParameters) {
         String ruleName = ruleRunParameters.getParameters().getRuleDefinitionName();
 
-        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleName);
+        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
         RuleDefinitionSpec ruleDefinitionSpec = ruleFindResult.getRuleDefinitionSpec();
         AbstractRuleRunner ruleRunner = this.ruleRunnerFactory.getRuleRunner(ruleDefinitionSpec.getType(),
                 ruleDefinitionSpec.getJavaClassName());
 
-        RuleExecutionResult result = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleFindResult);
+        RuleExecutionResult result = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleFindResult);
         return result;
     }
 }

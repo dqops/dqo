@@ -17,8 +17,6 @@ package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.*;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -54,6 +52,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_string_surrounded_by_whitespace_percent", o -> o.monthlyPartitionMaxStringSurroundedByWhitespacePercent);
             put("monthly_partition_min_string_parsable_to_float_percent", o -> o.monthlyPartitionMinStringParsableToFloatPercent);
             put("monthly_partition_min_string_valid_usa_zipcode_percent", o -> o.monthlyPartitionMinStringValidUsaZipcodePercent);
+            put("monthly_partition_min_string_valid_usa_phone_percent", o -> o.monthlyPartitionMinStringValidUsaPhonePercent);
             put("monthly_partition_min_strings_in_set_count", o -> o.monthlyPartitionMinStringsInSetCount);
             put("monthly_partition_min_strings_in_set_percent", o -> o.monthlyPartitionMinStringsInSetPercent);
         }
@@ -106,6 +105,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringValidUsaZipcodePercentCheckSpec monthlyPartitionMinStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec monthlyPartitionMinStringValidUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec monthlyPartitionMinStringsInSetCount;
@@ -403,6 +405,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidUsaZipcodePercent, monthlyPartitionMinStringValidUsaZipcodePercent));
         this.monthlyPartitionMinStringValidUsaZipcodePercent = monthlyPartitionMinStringValidUsaZipcodePercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringValidUsaZipcodePercent, "monthly_partition_min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent  check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getMonthlyPartitionMinStringValidUsaPhonePercent() {
+        return monthlyPartitionMinStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param monthlyPartitionMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setMonthlyPartitionMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec monthlyPartitionMinStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidUsaPhonePercent, monthlyPartitionMinStringValidUsaPhonePercent));
+        this.monthlyPartitionMinStringValidUsaPhonePercent = monthlyPartitionMinStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidUsaPhonePercent, "monthly_partition_min_string_valid_usa_phone_percent");
     }
 
     /**

@@ -16,7 +16,7 @@
 
 import { TreeNode } from '@naisutech/react-tree/types/Tree';
 import { TREE_LEVEL } from '../enums';
-import { CheckSearchFilters } from '../../api';
+import { CheckSearchFilters, ProfilerSearchFilters } from '../../api';
 
 export interface CustomTreeNode extends TreeNode {
   level: TREE_LEVEL;
@@ -25,4 +25,5 @@ export interface CustomTreeNode extends TreeNode {
   tooltip?: string;
   hasCheck?: boolean;
   run_checks_job_template?: CheckSearchFilters;
+  run_profilers_job_template?: ProfilerSearchFilters;
 }

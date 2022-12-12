@@ -12,13 +12,15 @@ interface IConnectionActionGroupProps {
   onUpdate?: () => void;
   isUpdating?: boolean;
   isUpdated?: boolean;
+  onImport?: () => void;
 }
 
 const ConnectionActionGroup = ({
   isUpdated,
   isUpdating,
   isDisabled,
-  onUpdate
+  onUpdate,
+  onImport
 }: IConnectionActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { connectionBasic } = useSelector(
@@ -43,6 +45,10 @@ const ConnectionActionGroup = ({
       source: true
     });
     history.replace(`/?${searchQuery}`);
+
+    if (onImport) {
+      onImport();
+    }
   };
 
   return (

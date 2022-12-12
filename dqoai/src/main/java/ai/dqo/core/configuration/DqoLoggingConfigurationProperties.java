@@ -29,7 +29,7 @@ public class DqoLoggingConfigurationProperties implements Cloneable {
     /**
      * The default logging pattern used in logs inside the user home's .logs folder.
      */
-    public static final String DEFAULT_PATTERN = "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n";
+    public static final String DEFAULT_PATTERN = "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%xException%n";
 
     /**
      * Default maximum number of old files that are stored.

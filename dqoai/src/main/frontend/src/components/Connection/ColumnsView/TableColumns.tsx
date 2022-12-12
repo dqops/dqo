@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient } from '../../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel } from '../../../api';
+import { ColumnProfileModel } from '../../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -17,14 +17,14 @@ const TableColumns = ({
   schemaName,
   tableName
 }: ITableColumnsProps) => {
-  const [columns, setColumns] = useState<ColumnBasicModel[]>();
+  const [columns, setColumns] = useState<ColumnProfileModel[]>();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedColumn, setSelectedColumn] = useState<ColumnBasicModel>();
+  const [selectedColumn, setSelectedColumn] = useState<ColumnProfileModel>();
 
   const fetchColumns = async () => {
     try {
-      const res: AxiosResponse<ColumnBasicModel[]> =
-        await ColumnApiClient.getColumns(connectionName, schemaName, tableName);
+      const res: AxiosResponse<ColumnProfileModel[]> =
+        await ColumnApiClient.getProfiledColumns(connectionName, schemaName, tableName);
       setColumns(res.data);
     } catch (err) {
       console.error(err);
@@ -35,7 +35,7 @@ const TableColumns = ({
     fetchColumns().then();
   }, []);
 
-  const onRemoveColumn = (column: ColumnBasicModel) => {
+  const onRemoveColumn = (column: ColumnProfileModel) => {
     setIsOpen(true);
     setSelectedColumn(column);
   };
@@ -52,6 +52,16 @@ const TableColumns = ({
     }
   };
 
+  const renderValue = (value: any) => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (typeof value === 'object') {
+      return value.toString();
+    }
+    return value;
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -64,6 +74,9 @@ const TableColumns = ({
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Scale
+          </th>
+          <th className="border-b border-gray-100 text-left px-4 py-2">
+            Profiler metrics
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Action
@@ -86,6 +99,21 @@ const TableColumns = ({
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.scale}
+              </td>
+              <td className="border-b border-gray-100 text-left px-4 py-2">
+                {column?.metrics && (
+                  <table>
+                    <tbody>
+                      {column?.metrics?.map((metric, index) => (
+                        <tr key={index}>
+                          <td className="px-2">{metric.category}</td>
+                          <td className="px-2">{metric.profiler}</td>
+                          <td className="px-2 truncate">{renderValue(metric.result)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 <IconButton

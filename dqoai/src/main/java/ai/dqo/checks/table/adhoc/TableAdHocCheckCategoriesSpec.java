@@ -50,7 +50,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
-//            put("validity", o -> o.validity);
+            put("sql", o -> o.sql);
 //            put("consistency", o -> o.consistency);
             put("timeliness", o -> o.timeliness);
 //            put("custom", o -> o.custom);
@@ -62,12 +62,6 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAdHocStandardChecksSpec standard;
 
-//    @JsonPropertyDescription("Configuration of validity checks on a table level. Validity checks verify hard rules on the data using static rules, like a minimum row count.")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    @Deprecated
-//    private BuiltInTableValidityChecksSpec validity = new BuiltInTableValidityChecksSpec();
-
 //    @JsonPropertyDescription("Configuration of consistency checks on a table level. Consistency checks detect anomalies like rapid row count changes.")
 //    @JsonInclude(JsonInclude.Include.NON_EMPTY)
 //    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -78,7 +72,12 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     @Deprecated
-    private BuiltInTableTimelinessChecksSpec timeliness = new BuiltInTableTimelinessChecksSpec();
+    private BuiltInTableTimelinessChecksSpec timeliness;
+
+    @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAdHocSqlChecksSpec sql;
 
 //    @JsonPropertyDescription("Custom data quality checks configured as a dictionary of sensors. Pick a friendly (business relevant) sensor name as a key and configure the sensor and rules for it.")
 //    @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -104,23 +103,6 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         this.propagateHierarchyIdToField(standard, "standard");
     }
 
-//    /**
-//     * Returns the validity check configuration on a table level.
-//     * @return Validity check configuration.
-//     */
-//    public BuiltInTableValidityChecksSpec getValidity() {
-//        return validity;
-//    }
-//
-//    /**
-//     * Sets the validity check configuration on a table level.
-//     * @param validity New validity checks configuration.
-//     */
-//    public void setValidity(BuiltInTableValidityChecksSpec validity) {
-//		this.setDirtyIf(!Objects.equals(this.validity, validity));
-//        this.validity = validity;
-//		this.propagateHierarchyIdToField(validity, "validity");
-//    }
 
 //    /**
 //     * Built-in consistency checks that verify if the table data changes in a steady way.
@@ -158,7 +140,25 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         this.propagateHierarchyIdToField(timeliness, "timeliness");
     }
 
-//    /**
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAdHocSqlChecksSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a custom sql checks container.
+     * @param sql Custom sql checks.
+     */
+    public void setSql(TableAdHocSqlChecksSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    //    /**
 //     * Returns a dictionary of custom sensors.
 //     * @return Custom sensors map.
 //     */

@@ -16,13 +16,9 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
-import ai.dqo.checks.table.consistency.TableConsistencyRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -232,7 +228,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -247,7 +243,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 
@@ -261,8 +257,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         standard.setMinRowCount(check);
 		table.setSpec(tableSpec);
 
-        ArrayList<AbstractCheckSpec> expectedList = new ArrayList<>();
-        Collection<AbstractCheckSpec> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
+        ArrayList<AbstractCheckSpec<?,?,?,?>> expectedList = new ArrayList<>();
+        Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
         Assertions.assertEquals(checkSpecCollection, expectedList);
     }
 

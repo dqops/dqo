@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.sensors.progress.*;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import tech.tablesaw.api.Table;

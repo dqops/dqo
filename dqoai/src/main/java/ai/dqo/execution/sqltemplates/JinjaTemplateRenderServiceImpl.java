@@ -16,11 +16,11 @@
 package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.execution.checks.progress.BeforeSqlTemplateRenderEvent;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.SqlTemplateRenderedRenderedEvent;
+import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
+import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.utils.python.PythonCallerService;
 import ai.dqo.utils.python.PythonExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,17 +72,17 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
     /**
      * Render a template for a sensor definition that was found in the user home or dqo home. This method prefers to use disk based template loading.
      *
-     * @param checkExecutionContext    Check execution context with paths to the user home and dqo home.
+     * @param executionContext    Check execution context with paths to the user home and dqo home.
      * @param sensorFindResult         Sensor definition (template) find result.
      * @param templateRenderParameters Template rendering parameters that are passed to the jinja2 template file and are usable in the template code.
      * @param progressListener         Progress listener that receives information about rendered templates.
      * @return Rendered SQL template.
      */
     @Override
-    public String renderTemplate(CheckExecutionContext checkExecutionContext,
-								 SensorDefinitionFindResult sensorFindResult,
-								 JinjaTemplateRenderParameters templateRenderParameters,
-								 CheckExecutionProgressListener progressListener) {
+    public String renderTemplate(ExecutionContext executionContext,
+                                 SensorDefinitionFindResult sensorFindResult,
+                                 JinjaTemplateRenderParameters templateRenderParameters,
+                                 SensorExecutionProgressListener progressListener) {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(sensorFindResult.getSqlTemplateText());
         inputDto.setHomeType(sensorFindResult.getHome());
@@ -90,7 +90,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
                 sensorFindResult.getTemplateFilePath().toString().replace('\\', '/')
                 : null;
         inputDto.setTemplateHomePath(relativePathToTemplate);
-        Path userHomePhysicalPath = checkExecutionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
+        Path userHomePhysicalPath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
         if (userHomePhysicalPath != null) {
             inputDto.setUserHomePath(userHomePhysicalPath.toString().replace('\\', '/'));
         }

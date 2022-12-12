@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,7 +25,7 @@ import picocli.CommandLine;
  * "column" 1st level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "column", description = "Modify and list columns",subcommands = {
 		ColumnAddCliCommand.class,
 		ColumnRemoveCliCommand.class,

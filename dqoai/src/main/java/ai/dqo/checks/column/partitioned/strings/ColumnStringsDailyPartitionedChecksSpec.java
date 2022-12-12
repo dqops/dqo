@@ -17,8 +17,6 @@ package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.strings.*;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -54,6 +52,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_string_surrounded_by_whitespace_percent", o -> o.dailyPartitionMaxStringSurroundedByWhitespacePercent);
             put("daily_partition_min_string_parsable_to_float_percent", o -> o.dailyPartitionMinStringParsableToFloatPercent);
             put("daily_partition_min_string_valid_usa_zipcode_percent", o -> o.dailyPartitionMinStringValidUsaZipcodePercent);
+            put("daily_partition_min_string_valid_usa_phone_percent", o -> o.dailyPartitionMinStringValidUsaPhonePercent);
             put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
             put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
         }
@@ -106,6 +105,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringValidUsaZipcodePercentCheckSpec dailyPartitionMinStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount;
@@ -401,6 +403,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaZipcodePercent, dailyPartitionMinStringValidUsaZipcodePercent));
         this.dailyPartitionMinStringValidUsaZipcodePercent = dailyPartitionMinStringValidUsaZipcodePercent;
         propagateHierarchyIdToField(dailyPartitionMinStringValidUsaZipcodePercent, "daily_partition_min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent  check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getDailyPartitionMinStringValidUsaPhonePercent() {
+        return dailyPartitionMinStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param dailyPartitionMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setDailyPartitionMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaPhonePercent, dailyPartitionMinStringValidUsaPhonePercent));
+        this.dailyPartitionMinStringValidUsaPhonePercent = dailyPartitionMinStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidUsaPhonePercent, "daily_partition_min_string_valid_usa_phone_percent");
     }
 
     /**

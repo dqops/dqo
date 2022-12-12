@@ -21,6 +21,7 @@ import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -29,7 +30,7 @@ import picocli.CommandLine;
  * 3st level CLI command "cloud sync all" to synchronize all the files the DQO user home.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "all", description = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)")
 public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;

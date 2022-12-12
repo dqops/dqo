@@ -82,7 +82,47 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   <td className="px-2 truncate">{renderValue(value)}</td>
                 </tr>
               ))}
-
+             {job?.parameters?.importSchemaParameters &&(
+              <>
+                <tr>
+                  <td className="px-2 capitalize">Connection Name</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importSchemaParameters?.connectionName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2 capitalize">Schema Name</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importSchemaParameters?.schemaName}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="px-2 capitalize align-top">Tables pattern</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.importSchemaParameters?.tableNamePattern}
+                  </td>
+                </tr>
+              </>
+            )}
+            {job?.parameters?.synchronizeRootFolderParameters &&(
+              <>
+                <tr>
+                  <td className="px-2 capitalize">Synchronized folder</td>
+                  <td className="px-2 truncate">
+                    {job?.parameters?.synchronizeRootFolderParameters?.rootType}
+                  </td>
+                </tr>
+              </>
+            )}
+            {job?.parameters?.runProfilersParameters?.profilerSearchFilters &&
+              Object.entries(
+                job?.parameters?.runProfilersParameters?.profilerSearchFilters
+              ).map(([key, value], index) => (
+                <tr key={index}>
+                  <td className="px-2 capitalize">{key}</td>
+                  <td className="px-2 truncate">{renderValue(value)}</td>
+                </tr>
+              ))}
             {job?.parameters?.importTableParameters && (
               <>
                 <tr>
