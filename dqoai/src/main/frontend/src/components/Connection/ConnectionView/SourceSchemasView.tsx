@@ -13,6 +13,7 @@ import { toggleMenu } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
+import SourceTablesView from './SourceTablesView';
 
 interface ISourceSchemasViewProps {
   connectionName: string;
@@ -21,6 +22,8 @@ interface ISourceSchemasViewProps {
 const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+
+  const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
   const { jobs } = useSelector((state: IRootState) => state.job);
 
   const dispatch = useActionDispatch();
@@ -39,6 +42,7 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
   const onImportTables = (schema: SchemaRemoteModel) => {
     JobApiClient.importTables(schema.importTableJobParameters);
     dispatch(toggleMenu(true));
+    setSelectedSchema(schema);
   };
 
   const isExist = (schema: SchemaRemoteModel) => {
@@ -49,12 +53,22 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
       )
     );
     return (
-      job &&
+      !!job &&
       (job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        DqoJobHistoryEntryModelStatusEnum.running ||
-        DqoJobHistoryEntryModelStatusEnum.waiting)
+        job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
     );
   };
+
+  if (selectedSchema) {
+    return (
+      <SourceTablesView
+        connectionName={connectionName}
+        schemaName={selectedSchema.schemaName ?? ''}
+        onBack={() => setSelectedSchema(undefined)}
+      />
+    );
+  }
 
   return (
     <div className="py-4 px-8">
