@@ -74,7 +74,10 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
           </thead>
           <tbody>
             {schemas.map((item) => (
-              <tr key={item.schemaName} className="mb-3">
+              <tr
+                key={item.schemaName}
+                className="border-b border-gray-300 last:border-b-0"
+              >
                 <td className="py-2 px-4 text-left">{item.schemaName}</td>
                 <td className="py-2 px-4 text-left">
                   <SvgIcon
