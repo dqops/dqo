@@ -17,6 +17,7 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,12 +38,17 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocPiiChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_contains_usa_phone_percent", o -> o.maxContainsUsaPhonePercent);
+            put("max_contains_usa_zipcode_percent", o -> o.maxContainsUsaZipcodePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
     private ColumnMaxPiiContainsUsaPhonePercentCheckSpec maxContainsUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
+    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec maxContainsUsaZipcodePercent;
+
 
     /**
      * Returns a maximum rows that contains USA phone number percent check.
@@ -62,6 +68,23 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(maxContainsUsaPhonePercent, "max_contains_usa_phone_percent");
     }
 
+    /**
+     * Returns a maximum rows that contains USA zip code percent check.
+     * @return Maximum rows that contains USA zip code percent check.
+     */
+    public ColumnMaxPiiContainsUsaZipcodePercentCheckSpec getMaxContainsUsaZipcodePercent() {
+        return maxContainsUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum rows that contains USA zip code percent check.
+     * @param maxContainsUsaZipcodePercent Maximum rows that contains USA zip code percent check.
+     */
+    public void setMaxContainsUsaZipcodePercent(ColumnMaxPiiContainsUsaZipcodePercentCheckSpec maxContainsUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.maxContainsUsaZipcodePercent, maxContainsUsaZipcodePercent));
+        this.maxContainsUsaZipcodePercent = maxContainsUsaZipcodePercent;
+        propagateHierarchyIdToField(maxContainsUsaZipcodePercent, "max_contains_usa_zipcode_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
