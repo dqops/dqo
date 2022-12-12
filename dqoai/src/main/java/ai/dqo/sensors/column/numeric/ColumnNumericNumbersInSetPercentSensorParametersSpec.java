@@ -40,13 +40,13 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpec extends Abstra
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private List<String> values;
+    private List<Long> values;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getValues() {
+    public List<Long> getValues() {
         return values;
     }
 
@@ -54,7 +54,7 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpec extends Abstra
      * Sets a List given from user.
      * @param values values given from user.
      */
-    public void setValues(List<String> values) {
+    public void setValues(List<Long> values) {
         this.setDirtyIf(!Objects.equals(this.values, values));
         this.values = values;
     }
