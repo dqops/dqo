@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
-import { ParameterDefinitionSpecDataTypeEnum, UIFieldModel } from '../../api';
+import {
+  ParameterDefinitionSpecDataTypeEnum,
+  ParameterDefinitionSpecDisplayHintEnum,
+  UIFieldModel
+} from '../../api';
 import Checkbox from '../Checkbox';
 import Input from '../Input';
 import NumberInput from '../NumberInput';
@@ -7,6 +11,7 @@ import Select from '../Select';
 import ObjectField from '../ObjectField';
 import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
+import TextArea from '../TextArea';
 
 interface ISensorParametersFieldSettingsProps {
   field: UIFieldModel;
@@ -59,6 +64,9 @@ const FieldControl = ({
 
   const isInvalid = !field.optional && !value && value !== 0 && !disabled;
 
+  if (label === 'sql_condition') {
+    console.log('-------', field);
+  }
   return (
     <div>
       {type === 'boolean' && (
@@ -72,15 +80,31 @@ const FieldControl = ({
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
-        <Input
-          label={label}
-          value={value}
-          tooltipText={tooltip}
-          className="!h-8 !min-w-30 !max-w-30"
-          onChange={(e) => handleChange({ string_value: e.target.value })}
-          disabled={disabled}
-          error={isInvalid}
-        />
+        <>
+          {field.definition?.display_hint ===
+          ParameterDefinitionSpecDisplayHintEnum.textarea ? (
+            <TextArea
+              label={label}
+              value={value}
+              tooltipText={tooltip}
+              className=""
+              onChange={(e) => handleChange({ string_value: e.target.value })}
+              disabled={disabled}
+              error={isInvalid}
+              rows={1}
+            />
+          ) : (
+            <Input
+              label={label}
+              value={value}
+              tooltipText={tooltip}
+              className="!h-8 !min-w-30 !max-w-30"
+              onChange={(e) => handleChange({ string_value: e.target.value })}
+              disabled={disabled}
+              error={isInvalid}
+            />
+          )}
+        </>
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.integer && (
         <NumberInput
