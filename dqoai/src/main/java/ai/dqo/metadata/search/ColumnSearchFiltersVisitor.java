@@ -58,7 +58,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -110,7 +110,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -199,7 +199,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**
@@ -246,7 +246,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {

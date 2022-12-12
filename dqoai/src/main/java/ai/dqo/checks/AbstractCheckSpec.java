@@ -39,12 +39,12 @@ import java.util.Objects;
 
 /**
  * Base class for a data quality check. A check is a pair of a sensor (that reads a value by querying the data) and a rule that validates the value returned by the sensor.
- * @param <R1> Alerting threshold rule parameters type.
+ * @param <RError> Alerting threshold rule parameters type.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, R1 extends AbstractRuleParametersSpec, R2 extends AbstractRuleParametersSpec, R3 extends AbstractRuleParametersSpec>
+public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RError extends AbstractRuleParametersSpec, RWarning extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
             extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -251,19 +251,19 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      * @return Default "error" alerting thresholds.
      */
-    public abstract R1 getError();
+    public abstract RError getError();
 
     /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      * @return Warning severity rule parameters.
      */
-    public abstract R2 getWarning();
+    public abstract RWarning getWarning();
 
     /**
      * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
      * @return Fatal severity rule parameters.
      */
-    public abstract R3 getFatal();
+    public abstract RFatal getFatal();
 
     /**
      * Creates and returns a copy of this object.

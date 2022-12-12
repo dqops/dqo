@@ -25,6 +25,7 @@ import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
 import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -33,7 +34,7 @@ import picocli.CommandLine;
  * Cli command to set a api key to settings.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", description = "Set api key")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
 	private final SettingsService settingsService;

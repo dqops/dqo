@@ -15,7 +15,6 @@
  */
 package ai.dqo.data.readouts.factory;
 
-import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
@@ -32,41 +31,41 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
     public Table createEmptySensorReadoutsTable(String tableName) {
         Table table = Table.create(tableName);
         table.addColumns(
-                StringColumn.create(SensorReadoutsNormalizedResult.ID_COLUMN_NAME),
-                DoubleColumn.create(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME),
-                DoubleColumn.create(SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.TIME_GRADIENT_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "3"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "4"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "5"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "6"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "7"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "8"),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9"),
-                LongColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.DATA_STREAM_NAME_COLUMN_NAME),
-                LongColumn.create(SensorReadoutsNormalizedResult.CONNECTION_HASH_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.CONNECTION_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.PROVIDER_COLUMN_NAME),
-                LongColumn.create(SensorReadoutsNormalizedResult.TABLE_HASH_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.SCHEMA_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.TABLE_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.TABLE_STAGE_COLUMN_NAME),
-                LongColumn.create(SensorReadoutsNormalizedResult.COLUMN_HASH_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.COLUMN_NAME_COLUMN_NAME),
-                LongColumn.create(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.CHECK_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.CHECK_DISPLAY_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.CHECK_TYPE_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.CHECK_CATEGORY_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.QUALITY_DIMENSION_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.SENSOR_NAME_COLUMN_NAME),
-                StringColumn.create(SensorReadoutsNormalizedResult.TIME_SERIES_ID_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsNormalizedResult.EXECUTED_AT_COLUMN_NAME),
-                IntColumn.create(SensorReadoutsNormalizedResult.DURATION_MS_COLUMN_NAME)
+                StringColumn.create(SensorReadoutsColumnNames.ID_COLUMN_NAME),
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "3"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "4"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "5"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "6"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "7"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "8"),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9"),
+                LongColumn.create(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
+                LongColumn.create(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME),
+                LongColumn.create(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME),
+                LongColumn.create(SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME),
+                LongColumn.create(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME),
+                StringColumn.create(SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME),
+                IntColumn.create(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME)
         );
 
         return table;

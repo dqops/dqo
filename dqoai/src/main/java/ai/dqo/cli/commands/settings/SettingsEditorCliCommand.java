@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.settings.editor.SettingsEditorRemoveCliCommand;
 import ai.dqo.cli.commands.settings.editor.SettingsEditorSetCliCommand;
 import ai.dqo.cli.commands.settings.editor.SettingsEditorShowCliCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -27,7 +28,7 @@ import picocli.CommandLine;
  * Cli settings editor base command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "editor", description = "Set or show editor settings", subcommands = {
 		SettingsEditorSetCliCommand.class,
 		SettingsEditorRemoveCliCommand.class,

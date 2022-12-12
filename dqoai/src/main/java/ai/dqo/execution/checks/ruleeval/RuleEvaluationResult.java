@@ -15,7 +15,9 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -26,51 +28,6 @@ import java.util.Objects;
  * Object that contains a dataset (table) with the result of evaluating a rule.
  */
 public class RuleEvaluationResult {
-    /**
-     * Rule severity (0, 1, 2, 3) for none, low, medium and high alerts.
-     */
-    public static final String SEVERITY_COLUMN_NAME = "severity";
-
-    /**
-     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
-     */
-    public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";
-
-    /**
-     * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality SLA.
-     */
-    public static final String INCLUDE_IN_SLA_COLUMN_NAME = "include_in_sla";
-
-    /**
-     * Column name for the warning lower bound, returned by the fatal severity rule.
-     */
-    public static final String FATAL_LOWER_BOUND_COLUMN_NAME = "fatal_lower_bound";
-
-    /**
-     * Column name for the fatal upper bound, returned by the fatal severity rule.
-     */
-    public static final String FATAL_UPPER_BOUND_COLUMN_NAME = "fatal_upper_bound";
-
-    /**
-     * Column name for the error lower bound, returned by the error (medium) severity rule.
-     */
-    public static final String ERROR_LOWER_BOUND_COLUMN_NAME = "error_lower_bound";
-
-    /**
-     * Column name for the error upper bound, returned by the error severity rule.
-     */
-    public static final String ERROR_UPPER_BOUND_COLUMN_NAME = "error_upper_bound";
-
-    /**
-     * Column name for the warning lower bound, returned by the warning severity rule.
-     */
-    public static final String WARNING_LOWER_BOUND_COLUMN_NAME = "warning_lower_bound";
-
-    /**
-     * Column name for the warning upper bound, returned by the warning severity rule.
-     */
-    public static final String WARNING_UPPER_BOUND_COLUMN_NAME = "warning_upper_bound";
-
     private final Table ruleResultsTable;
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
@@ -91,17 +48,17 @@ public class RuleEvaluationResult {
      */
     private RuleEvaluationResult(Table ruleResultsTable) {
         this.ruleResultsTable = ruleResultsTable;
-        this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
-        this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsNormalizedResult.EXPECTED_VALUE_COLUMN_NAME);
-		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, SEVERITY_COLUMN_NAME);
-        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_KPI_COLUMN_NAME);
-        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, INCLUDE_IN_SLA_COLUMN_NAME);
-		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, FATAL_LOWER_BOUND_COLUMN_NAME);
-		this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, FATAL_UPPER_BOUND_COLUMN_NAME);
-		this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, ERROR_LOWER_BOUND_COLUMN_NAME);
-		this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, ERROR_UPPER_BOUND_COLUMN_NAME);
-		this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, WARNING_LOWER_BOUND_COLUMN_NAME);
-		this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, WARNING_UPPER_BOUND_COLUMN_NAME);
+        this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, RuleResultsColumnNames.SEVERITY_COLUMN_NAME);
+        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, RuleResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
+        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, RuleResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
+		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
+		this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
+		this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
+		this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
+		this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
+		this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
     }
 
     /**

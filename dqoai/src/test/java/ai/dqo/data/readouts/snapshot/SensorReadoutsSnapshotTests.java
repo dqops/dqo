@@ -23,9 +23,9 @@ import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionStorageServiceImpl;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -103,12 +103,12 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(2, table.rowCount());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
+        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
     }
 
     @Test
@@ -140,15 +140,15 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
+        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(2));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
+        Assertions.assertEquals(10.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(2));
         Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(2));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(2));
     }
 
     @Test
@@ -165,14 +165,14 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        Assertions.assertEquals(10.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
         Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(1));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
+        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
         Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME).get(2));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
+        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(2));
         Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME).get(2));
+                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(2));
     }
 }

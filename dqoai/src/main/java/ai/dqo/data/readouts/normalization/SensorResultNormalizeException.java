@@ -18,7 +18,7 @@ package ai.dqo.data.readouts.normalization;
 import tech.tablesaw.api.Table;
 
 /**
- * Exception thrown by {@link SensorResultNormalizeServiceImpl} when the sensor returned an invalid dataset that cannot be processed.
+ * Exception thrown by {@link SensorReadoutsNormalizationServiceImpl} when the sensor returned an invalid dataset that cannot be processed.
  */
 public class SensorResultNormalizeException extends RuntimeException {
     private final Table resultsTable;

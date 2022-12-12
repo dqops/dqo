@@ -59,7 +59,7 @@ dqo:
   logging:
     enable-user-home-logging: true
     max-history: 7
-    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n"
+    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%xException%n"
     total-size-cap: 10mb
   storage:
     gcp:
@@ -77,6 +77,8 @@ dqo:
   core:
     print-stack-trace: true
     lock-wait-timeout-seconds: 900
+  profiler:
+    truncated-strings-length: 50
   queue:
     threads: 10
     keep-finished-jobs-history-seconds: 3600

@@ -477,4 +477,34 @@ public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
 
         return maxConfiguredLevel;
     }
+
+    /**
+     * Retrieves a data stream hierarchy level at a given index.
+     * @param levelIndex Hierarchy level index in the rage 1..9.
+     * @return Data stream level configuration.
+     */
+    public DataStreamLevelSpec getLevel(int levelIndex) {
+        switch (levelIndex) {
+            case 1:
+                return this.level1;
+            case 2:
+                return this.level2;
+            case 3:
+                return this.level3;
+            case 4:
+                return this.level4;
+            case 5:
+                return this.level5;
+            case 6:
+                return this.level6;
+            case 7:
+                return this.level7;
+            case 8:
+                return this.level8;
+            case 9:
+                return this.level9;
+        }
+
+        throw new IllegalArgumentException("Data stream level out of range, must be 1..9, but was: " + levelIndex);
+    }
 }

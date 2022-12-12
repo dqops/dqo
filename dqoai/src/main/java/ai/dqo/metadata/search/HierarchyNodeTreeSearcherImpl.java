@@ -26,6 +26,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
+import ai.dqo.profiling.AbstractProfilerSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +57,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @param checkSearchFilters Search filters.
      * @return Collection of check nodes that passed the filter.
      */
+    @Deprecated
     public Collection<AbstractCheckDeprecatedSpec> findLegacyChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
         LegacyCheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createLegacyCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
@@ -75,7 +77,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of check nodes that passed the filter.
      */
     @Override
-    public Collection<AbstractCheckSpec> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
+    public Collection<AbstractCheckSpec<?,?,?,?>> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
         CheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createCheckSearchFilterVisitor();
         ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
         LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
@@ -84,7 +86,27 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 searchParameterObject));
 
-        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractCheckSpec<?,?,?,?>>)(ArrayList<?>)matchingNodes;
+    }
+
+    /**
+     * Search for profilers in the tree.
+     *
+     * @param startNode             Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
+     * @param profilerSearchFilters Search filters.
+     * @return Collection of profilers nodes that passed the filter.
+     */
+    @Override
+    public Collection<AbstractProfilerSpec<?>> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters) {
+        ProfilerSearchFiltersVisitor searchFilterVisitor = profilerSearchFilters.createProfilerSearchFilterVisitor();
+        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
+        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject);
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
+                searchParameterObject));
+
+        return (List<AbstractProfilerSpec<?>>)(ArrayList<?>)matchingNodes;
     }
 
     /**

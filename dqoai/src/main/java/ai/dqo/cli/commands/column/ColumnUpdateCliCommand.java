@@ -29,6 +29,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -37,7 +38,7 @@ import picocli.CommandLine;
  * Cli command to update a column.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", description = "Update column or columns which match filters")
 public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private final ColumnService columnService;

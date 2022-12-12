@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.readouts.normalization;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 
@@ -23,142 +24,6 @@ import tech.tablesaw.api.*;
  * The columns are normalized.
  */
 public class SensorReadoutsNormalizedResult {
-    /**
-     * Column name for a check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
-     */
-    public static final String ID_COLUMN_NAME = "id";
-
-    /**
-     * Column name that stores the actual value: actual_value.
-     */
-    public static final String ACTUAL_VALUE_COLUMN_NAME = "actual_value";
-
-    /**
-     * Column name that stores the expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks).
-     */
-    public static final String EXPECTED_VALUE_COLUMN_NAME = "expected_value";
-
-    /**
-     * Column name that stores the time period of the sensor readout (timestamp): timestamp_period.
-     */
-    public static final String TIME_PERIOD_COLUMN_NAME = "time_period";
-
-    /**
-     * Column name for a time gradient.
-     */
-    public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
-
-    /**
-     * Column name prefix for the data stream columns: stream_level_.
-     */
-    public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = "stream_level_";
-
-    /**
-     * Column name for a data stream hash, it is a hash of the data stream level names.
-     */
-    public static final String DATA_STREAM_HASH_COLUMN_NAME = "data_stream_hash";
-
-    /**
-     * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
-     */
-    public static final String DATA_STREAM_NAME_COLUMN_NAME = "data_stream_name";
-
-    /**
-     * Column name for a connection hash.
-     */
-    public static final String CONNECTION_HASH_COLUMN_NAME = "connection_hash";
-
-    /**
-     * Column name for a connection name.
-     */
-    public static final String CONNECTION_NAME_COLUMN_NAME = "connection_name";
-
-    /**
-     * Column name for a provider name.
-     */
-    public static final String PROVIDER_COLUMN_NAME = "provider";
-
-    /**
-     * Column name for a table hash.
-     */
-    public static final String TABLE_HASH_COLUMN_NAME = "table_hash";
-
-    /**
-     * Column name for a table schema.
-     */
-    public static final String SCHEMA_NAME_COLUMN_NAME = "schema_name";
-
-    /**
-     * Column name for a table name.
-     */
-    public static final String TABLE_NAME_COLUMN_NAME = "table_name";
-
-    /**
-     * Column name for a table stage.
-     */
-    public static final String TABLE_STAGE_COLUMN_NAME = "table_stage";
-
-    /**
-     * Column name for a column hash.
-     */
-    public static final String COLUMN_HASH_COLUMN_NAME = "column_hash";
-
-    /**
-     * Column name for a column name.
-     */
-    public static final String COLUMN_NAME_COLUMN_NAME = "column_name";
-
-    /**
-     * Column name for a check hash.
-     */
-    public static final String CHECK_HASH_COLUMN_NAME = "check_hash";
-
-    /**
-     * Column name for a check name.
-     */
-    public static final String CHECK_NAME_COLUMN_NAME = "check_name";
-
-    /**
-     * Column name for a check display name.
-     */
-    public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
-
-    /**
-     * Column name for a check type (adhoc, checkpoint, partitioned).
-     */
-    public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
-
-    /**
-     * Column name for a check category.
-     */
-    public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
-
-    /**
-     * Column name for a data quality dimension.
-     */
-    public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
-
-    /**
-     * Column name for a sensor name.
-     */
-    public static final String SENSOR_NAME_COLUMN_NAME = "sensor_name";
-
-    /**
-     * Column name for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
-     */
-    public static final String TIME_SERIES_ID_COLUMN_NAME = "time_series_id";
-
-    /**
-     * Column name for a sensor executed at timestamp.
-     */
-    public static final String EXECUTED_AT_COLUMN_NAME = "executed_at";
-
-    /**
-     * Column name for a sensor duration in milliseconds.
-     */
-    public static final String DURATION_MS_COLUMN_NAME = "duration_ms";
-
-
     private final Table table;
     private final StringColumn idColumn;
     private final DoubleColumn actualValueColumn;
@@ -194,32 +59,32 @@ public class SensorReadoutsNormalizedResult {
      */
     public SensorReadoutsNormalizedResult(Table table) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, ID_COLUMN_NAME);
-        this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn (table, ACTUAL_VALUE_COLUMN_NAME);
-        this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(table, EXPECTED_VALUE_COLUMN_NAME);
-        this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, TIME_PERIOD_COLUMN_NAME);
-        this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, TIME_GRADIENT_COLUMN_NAME);
-        this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, DATA_STREAM_HASH_COLUMN_NAME);
-        this.dataStreamNameColumn = TableColumnUtility.getOrAddStringColumn(table, DATA_STREAM_NAME_COLUMN_NAME);
-        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, CONNECTION_HASH_COLUMN_NAME);
-        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, CONNECTION_NAME_COLUMN_NAME);
-        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, PROVIDER_COLUMN_NAME);
-        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, TABLE_HASH_COLUMN_NAME);
-        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, SCHEMA_NAME_COLUMN_NAME);
-        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, TABLE_NAME_COLUMN_NAME);
-        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, TABLE_STAGE_COLUMN_NAME);
-        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, COLUMN_HASH_COLUMN_NAME);
-        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, COLUMN_NAME_COLUMN_NAME);
-        this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, CHECK_HASH_COLUMN_NAME);
-        this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, CHECK_NAME_COLUMN_NAME);
-        this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, CHECK_DISPLAY_NAME_COLUMN_NAME);
-        this.checkTypeColumn = TableColumnUtility.getOrAddStringColumn(table, CHECK_TYPE_COLUMN_NAME);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, CHECK_CATEGORY_COLUMN_NAME);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddStringColumn(table, QUALITY_DIMENSION_COLUMN_NAME);
-        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, SENSOR_NAME_COLUMN_NAME);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, TIME_SERIES_ID_COLUMN_NAME);
-        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, EXECUTED_AT_COLUMN_NAME);
-        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, DURATION_MS_COLUMN_NAME);
+        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.ID_COLUMN_NAME);
+        this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn (table, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(table, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+        this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
+        this.dataStreamNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME);
+        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME);
+        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
+        this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME);
+        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME);
+        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME);
+        this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME);
+        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+        this.checkTypeColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
     }
 
     /**

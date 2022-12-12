@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules.finder;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -35,8 +35,8 @@ public class RuleDefinitionFindResultObjectMother {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
 
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
-        RuleDefinitionFindResult ruleDefinitionFindResult = ruleDefinitionFindService.findRule(checkExecutionContext, ruleName);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        RuleDefinitionFindResult ruleDefinitionFindResult = ruleDefinitionFindService.findRule(executionContext, ruleName);
         return ruleDefinitionFindResult;
     }
 
@@ -50,8 +50,8 @@ public class RuleDefinitionFindResultObjectMother {
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
 
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(userHomeContext, dqoHomeContext);
-        RuleDefinitionFindResult ruleDefinitionFindResult = ruleDefinitionFindService.findRule(checkExecutionContext, ruleName);
+        ExecutionContext executionContext = new ExecutionContext(userHomeContext, dqoHomeContext);
+        RuleDefinitionFindResult ruleDefinitionFindResult = ruleDefinitionFindService.findRule(executionContext, ruleName);
         return ruleDefinitionFindResult;
     }
 }

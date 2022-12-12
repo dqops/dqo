@@ -63,7 +63,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new ColumnSpec(),
                 null,
                 new TableConsistencyRowCountSensorParametersSpec(),
-                TimeSeriesConfigurationSpec.createDefault(),
+                TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),

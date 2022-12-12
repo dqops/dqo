@@ -25,6 +25,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
@@ -37,7 +38,7 @@ import java.util.NoSuchElementException;
  * Snowflake source connection provider.
  */
 @Component("snowflake-provider")
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SnowflakeConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
     private final ProviderDialectSettings dialectSettings = new ProviderDialectSettings("\"", "\"", "\"\"", true);

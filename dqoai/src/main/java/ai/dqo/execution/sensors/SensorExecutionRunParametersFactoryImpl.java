@@ -20,12 +20,14 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,9 +75,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                null, null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
-
 
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
@@ -89,10 +90,11 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
+    @Override
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
-                                                               AbstractCheckSpec check,
+                                                               AbstractCheckSpec<?,?,?,?> check,
                                                                CheckType checkType,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                ProviderDialectSettings dialectSettings) {
@@ -106,6 +108,36 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 expandedTable.getDataStreams().get(check.getDataStream()) : null;
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                check, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                check, null, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);
+    }
+
+    /**
+     * Creates a sensor parameters object for a profiler. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param profiler Profiler specification.
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    @Override
+    public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
+                                                               TableSpec table,
+                                                               ColumnSpec column,
+                                                               AbstractProfilerSpec<?> profiler,
+                                                               ProfilerDataScope profilerDataScope,
+                                                               ProviderDialectSettings dialectSettings) {
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
+        AbstractSensorParametersSpec sensorParameters = profiler.getParameters().expandAndTrim(this.secretValueProvider);
+
+        TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
+        DataStreamMappingSpec dataStreams = profilerDataScope == ProfilerDataScope.table ? null :
+                expandedTable.getDataStreams().getFirstDataStreamMapping();
+
+        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
+                null, profiler, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

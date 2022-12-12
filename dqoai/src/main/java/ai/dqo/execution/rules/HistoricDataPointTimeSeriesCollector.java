@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
@@ -52,8 +52,8 @@ public class HistoricDataPointTimeSeriesCollector {
 												TimeSeriesGradient gradient,
 												ZoneId timeZoneId) {
         this.timeSeriesData = timeSeriesData;
-		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsNormalizedResult.TIME_PERIOD_COLUMN_NAME);
-		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME);
+		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.gradient = gradient;
         this.timeZoneId = timeZoneId;
     }

@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.sql.ColumnSqlDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeDailyCheckpointsSpec;
@@ -57,6 +58,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("uniqueness", o -> o.uniqueness);
            put("datetime", o -> o.datetime);
            put("pii", o -> o.pii);
+           put("sql", o -> o.sql);
         }
     };
 
@@ -89,6 +91,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiDailyCheckpointsSpec pii;
+
+    @JsonPropertyDescription("Daily checkpoints of custom SQL checks in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlDailyCheckpointsSpec sql;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -196,6 +203,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
         this.propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns the container of custom SQL checks that use custom SQL expressions in checks.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlDailyCheckpointsSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Custom SQL checks.
+     */
+    public void setSql(ColumnSqlDailyCheckpointsSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

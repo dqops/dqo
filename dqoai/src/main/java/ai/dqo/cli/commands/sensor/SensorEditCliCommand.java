@@ -28,6 +28,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ProviderType;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -36,7 +37,7 @@ import picocli.CommandLine;
  * "sensor edit" 2nd level CLI command that edits sensor template.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit sensor that match filters")
 public class SensorEditCliCommand extends BaseCommand implements ICommand {
 	private final SensorService sensorService;

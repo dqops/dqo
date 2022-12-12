@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
@@ -55,8 +56,9 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-
+            put("sql", o -> o.sql);
         }
     };
 
@@ -89,6 +91,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiMonthlyPartitionedChecksSpec pii;
+
+    @JsonPropertyDescription("Monthly partitioned checks using custom SQL expressions and conditions on the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlMonthlyPartitionedSpec sql;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -196,6 +203,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
         propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns a container of custom SQL checks on a column.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlMonthlyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Custom SQL checks container.
+     */
+    public void setSql(ColumnSqlMonthlyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

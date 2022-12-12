@@ -15,9 +15,7 @@
  */
 package ai.dqo.utils.reflection;
 
-import ai.dqo.metadata.fields.ControlType;
-import ai.dqo.metadata.fields.DisplayName;
-import ai.dqo.metadata.fields.ParameterDataType;
+import ai.dqo.metadata.fields.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -124,6 +122,8 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(JsonPropertyDescription.class).value() : null;
         String displayName = field.isAnnotationPresent(DisplayName.class) ?
                 field.getAnnotation(DisplayName.class).value() : null;
+        DisplayHint displayHint = field.isAnnotationPresent(ControlDisplayHint.class) ?
+                field.getAnnotation(ControlDisplayHint.class).value() : null;
 
         PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
         String yamlFieldName = snakeCaseStrategy.translate(fieldName);
@@ -136,6 +136,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setHelpText(helpText);
             setDirectField(targetClass == field.getDeclaringClass());
             setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
+            setDisplayHint(displayHint);
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?

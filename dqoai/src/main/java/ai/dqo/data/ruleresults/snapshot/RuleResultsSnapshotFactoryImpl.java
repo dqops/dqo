@@ -48,6 +48,7 @@ public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactor
      * @param physicalTableName Physical table name.
      * @return Rule results snapshot connected to a storage service.
      */
+    @Override
     public RuleResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
         Table newRuleResults = this.ruleResultsTableFactory.createEmptyRuleResultsTable("new_rule_results");
         return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, newRuleResults);

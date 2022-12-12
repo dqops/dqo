@@ -15,6 +15,8 @@
  */
 package ai.dqo.execution.checks.progress;
 
+import ai.dqo.execution.sensors.progress.*;
+
 import java.util.ArrayList;
 import java.util.List;
 

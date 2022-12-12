@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class TableValidityRowCountSensorParametersSpec extends AbstractTableSensorParametersSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableValidityRowCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {

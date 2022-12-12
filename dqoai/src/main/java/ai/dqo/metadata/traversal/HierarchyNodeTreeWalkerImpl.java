@@ -18,6 +18,8 @@ package ai.dqo.metadata.traversal;
 import ai.dqo.metadata.id.HierarchyNode;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Hierarchy tree node traversal helper. Walks the hierarchy tree.
  */
@@ -53,9 +55,18 @@ public class HierarchyNodeTreeWalkerImpl implements HierarchyNodeTreeWalker {
             return false;
         }
 
-        if (action == TreeTraverseAction.TRAVERSE_ONE_CHILD) {
-            HierarchyNode selectedChild = result.getSelectedChild();
-            return traverseHierarchyNodeTree(selectedChild, onNodeTraverse);
+        if (action == TreeTraverseAction.TRAVERSE_SELECTED_CHILDREN) {
+            List<HierarchyNode> selectedChildren = result.getSelectedChildren();
+            for (HierarchyNode selectedChildNode : selectedChildren) {
+                if (selectedChildNode == null) {
+                    continue;
+                }
+
+                if (!traverseHierarchyNodeTree(selectedChildNode, onNodeTraverse)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         throw new IllegalArgumentException("Unknown traversal action.");

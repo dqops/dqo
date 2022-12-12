@@ -29,6 +29,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.StringPatternComparer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -38,7 +39,7 @@ import tech.tablesaw.api.Table;
  * CLI command "table import" that retrieves a list of tables from the source metadata and imports those tables.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "import", description = "Import tables from a specified database")
 public class TableImportCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private final TerminalReader terminalReader;

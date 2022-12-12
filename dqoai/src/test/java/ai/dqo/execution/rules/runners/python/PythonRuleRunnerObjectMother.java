@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules.runners.python;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.RuleExecutionResult;
@@ -52,12 +52,12 @@ public class PythonRuleRunnerObjectMother {
      */
     public static RuleExecutionResult executeBuiltInRule(double actualValue, AbstractRuleParametersSpec ruleParameters) {
         PythonRuleRunner ruleRunner = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.DAY);
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
-        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleDefinitionFindResult);
+        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
         return ruleExecutionResult;
     }
@@ -77,11 +77,11 @@ public class PythonRuleRunnerObjectMother {
 														 HistoricDataPoint[] previousReadouts,
 														 RuleTimeWindowSettingsSpec timeWindowSettingsSpec) {
         PythonRuleRunner ruleRunner = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec);
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
-        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleDefinitionFindResult);
+        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
         return ruleExecutionResult;
     }

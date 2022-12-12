@@ -43,6 +43,9 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.profiling.AbstractProfilerCategorySpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
@@ -464,7 +467,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(AbstractCheckSpec checkSpec, P parameter);
+    R accept(AbstractCheckSpec<?,?,?,?> checkSpec, P parameter);
 
     /**
      * Accepts a container of categories of data quality checks.
@@ -529,4 +532,28 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, P parameter);
+
+    /**
+     * Accepts a profiler check instance.
+     * @param profileSpec Profiler instance.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractProfilerSpec<?> profileSpec, P parameter);
+
+    /**
+     * Accepts a container of profiling checks (a profiling category) instance.
+     * @param profileCategorySpec Profiling category instance that contains profilers.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractProfilerCategorySpec profileCategorySpec, P parameter);
+
+    /**
+     * Accepts a root container of profiling checks (a profiling category) instance.
+     * @param rootProfilerContainerSpec Profiling root container instance that contains profilers.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, P parameter);
 }

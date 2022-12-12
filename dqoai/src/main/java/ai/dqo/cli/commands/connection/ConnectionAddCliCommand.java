@@ -26,6 +26,7 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -36,7 +37,7 @@ import java.util.LinkedHashMap;
  * Cli command to add a new connection.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", description = "Add connection with specified details")
 public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
     private final ConnectionService connectionService;

@@ -18,7 +18,7 @@ package ai.dqo.execution.sqltemplates;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -87,10 +87,10 @@ public class JinjaTemplateRenderServiceObjectMother {
                         renderParameters.getConnection().getProviderType());
 
         JinjaTemplateRenderServiceImpl renderService = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
 
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        String renderedText = renderService.renderTemplate(checkExecutionContext, sensorDefinitions, renderParameters, progressListener);
+        String renderedText = renderService.renderTemplate(executionContext, sensorDefinitions, renderParameters, progressListener);
         return renderedText;
     }
 }

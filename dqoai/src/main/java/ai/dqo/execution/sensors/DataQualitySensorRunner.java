@@ -15,8 +15,9 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
 /**
  * Data quality sensor run service. Executes a sensor, reads the sensor values and returns it for further processing (rule evaluation).
@@ -24,14 +25,14 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 public interface DataQualitySensorRunner {
     /**
      * Executes a sensor and returns the sensor result as a table returned from the query.
-     * @param checkExecutionContext Check execution context that provides access to the user home and dqo home.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Sensor execution result with the query result from the sensor.
      */
-    SensorExecutionResult executeSensor(CheckExecutionContext checkExecutionContext,
+    SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                         SensorExecutionRunParameters sensorRunParameters,
-                                        CheckExecutionProgressListener progressListener,
+                                        SensorExecutionProgressListener progressListener,
                                         boolean dummySensorExecution);
 }

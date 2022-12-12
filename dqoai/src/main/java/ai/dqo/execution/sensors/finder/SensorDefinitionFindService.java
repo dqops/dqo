@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.finder;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 
 /**
  * Provider sensor definition wrapper finder. Tries to find a sensor definition for a given provider first in the user home, then in the DQO_HOME (built-in sensors).
@@ -26,11 +26,11 @@ public interface SensorDefinitionFindService {
      * Finds a provider specific sensor definition of a given sensor and provider type.
      * First tries to find a custom sensor definition (or a built-in sensor definition override in the user home).
      * If a sensor implementation was not found in the user home then finds the definition in the default dqo home.
-     * @param checkExecutionContext Check execution context with references to both the user home and dqo home.
+     * @param executionContext Check execution context with references to both the user home and dqo home.
      * @param sensorName Sensor name.
      * @param providerType Provider type.
      * @return Provider sensor definition.
      */
     SensorDefinitionFindResult findProviderSensorDefinition(
-            CheckExecutionContext checkExecutionContext, String sensorName, ProviderType providerType);
+            ExecutionContext executionContext, String sensorName, ProviderType providerType);
 }

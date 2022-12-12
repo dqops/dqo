@@ -48,6 +48,7 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
      * @param physicalTableName Physical table name.
      * @return Sensor readouts snapshot connected to a storage service.
      */
+    @Override
     public SensorReadoutsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
         Table newSensorReadouts = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable("new_sensor_readouts");
         return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, newSensorReadouts);

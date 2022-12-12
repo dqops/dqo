@@ -23,6 +23,7 @@ import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -33,7 +34,7 @@ import picocli.CommandLine;
  * "connection schema list" 3nd level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List schemas in source connection")
 public class ConnectionSchemaListCliCommand extends BaseCommand implements ICommand {
 	private final ConnectionService connectionService;

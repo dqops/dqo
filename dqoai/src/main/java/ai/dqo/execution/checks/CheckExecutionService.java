@@ -17,7 +17,7 @@ package ai.dqo.execution.checks;
 
 
 import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
 
@@ -27,25 +27,25 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 public interface CheckExecutionService {
     /**
      * Executes data quality checks. Reports progress and saves the results.
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param checkSearchFilters Check search filters to find the right checks.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
-    CheckExecutionSummary executeChecks(CheckExecutionContext checkExecutionContext,
-                       CheckSearchFilters checkSearchFilters,
-                       CheckExecutionProgressListener progressListener,
-                       boolean dummySensorExecution);
+    CheckExecutionSummary executeChecks(ExecutionContext executionContext,
+                                        CheckSearchFilters checkSearchFilters,
+                                        CheckExecutionProgressListener progressListener,
+                                        boolean dummySensorExecution);
 
     /**
      * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
-     * @param checkExecutionContext Check execution context with access to the user home and dqo home.
+     * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule Target schedule to match, when finding checks that should be executed.
      * @param progressListener Progress listener that receives progress calls.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
-    CheckExecutionSummary executeChecksForSchedule(CheckExecutionContext checkExecutionContext,
-                                        RunChecksCronSchedule targetSchedule,
-                                        CheckExecutionProgressListener progressListener);
+    CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
+                                                   RunChecksCronSchedule targetSchedule,
+                                                   CheckExecutionProgressListener progressListener);
 }

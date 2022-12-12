@@ -28,6 +28,7 @@ import com.google.cloud.bigquery.DatasetId;
 import com.google.cloud.bigquery.Table;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
@@ -41,7 +42,7 @@ import java.util.Objects;
  * Big query connection.
  */
 @Component("bigquery-connection")
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     private BigQuery bigQueryService;
     private final BigQuerySqlRunner bigQuerySqlRunner;
