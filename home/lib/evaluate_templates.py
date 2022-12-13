@@ -18,6 +18,7 @@ import json
 import sys
 import traceback
 from pathlib import Path
+from datetime import datetime
 import streaming
 from jinja2 import Environment, FileSystemLoader, ChainableUndefined
 
@@ -32,6 +33,7 @@ class TemplateRunner:
 
     def process_template_request(self, request):
         try:
+            parsing_started_at = datetime.now()
             template_parameters = request.get("parameters")
             template_id = None
             template_text = request.get("template_text")
@@ -58,19 +60,27 @@ class TemplateRunner:
                     self.templates[template_id] = template_object
                 else:
                     template_object = self.templates[template_id]
+            parsing_millis = int((datetime.now() - parsing_started_at).total_seconds() * 1000)
 
+            rendering_started_at = datetime.now()
             rendered_result = template_object.render(**template_parameters)
-            return {"template": template_id, "parameters": template_parameters, "result": rendered_result}
+            rendering_millis = int((datetime.now() - rendering_started_at).total_seconds() * 1000)
+            return {"template": template_id, "parameters": template_parameters, "result": rendered_result,
+                    "parsing_template_millis" : parsing_millis, "rendering_millis": rendering_millis}
         except Exception as ex:
             return {"template": template_id, "parameters": template_parameters, "error": traceback.format_exc()}
 
 
 def main():
     template_runner = TemplateRunner()
-    for request in streaming.stream_json_dicts(sys.stdin):
+    for request, receiving_millis in streaming.stream_json_dicts(sys.stdin):
+        started_at = datetime.now()
         response = template_runner.process_template_request(request)
+        response["receiving_millis"] = receiving_millis
+        response["total_processing_millis"] = int((datetime.now() - started_at).total_seconds() * 1000.0) + receiving_millis
         sys.stdout.write(json.dumps(response))
         sys.stdout.write("\n")
+#        sys.stdout.write(" " * 1024)  # padding
         sys.stdout.flush()
 
 

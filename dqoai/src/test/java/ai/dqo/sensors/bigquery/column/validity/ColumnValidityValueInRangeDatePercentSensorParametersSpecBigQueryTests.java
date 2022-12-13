@@ -109,6 +109,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setIncludeMaxValue(false);
 
         runParameters.setTimeSeries(null);
+
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
         Assertions.assertEquals(String.format("""

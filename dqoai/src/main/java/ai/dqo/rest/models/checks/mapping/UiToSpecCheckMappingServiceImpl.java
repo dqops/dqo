@@ -315,6 +315,9 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
                 case string_list_type:
                     fieldInfo.setFieldValue(fieldModel.getStringListValue(), targetParametersSpec);
                     break;
+                case integer_list_type:
+                    fieldInfo.setFieldValue(fieldModel.getIntegerListValue(), targetParametersSpec);
+                    break;
                 case date_type:
                     fieldInfo.setFieldValue(fieldModel.getDateValue(), targetParametersSpec);
                     break;

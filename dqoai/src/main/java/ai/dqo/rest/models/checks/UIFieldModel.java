@@ -68,6 +68,9 @@ public class UIFieldModel {
     @JsonPropertyDescription("Field value for an array (list) of strings.")
     private List<String> stringListValue;
 
+    @JsonPropertyDescription("Field value for an array (list) of integers, using 64 bit integers.")
+    private List<Long> integerListValue;
+
     @JsonPropertyDescription("Field value for an date.")
     private LocalDate dateValue;
 }

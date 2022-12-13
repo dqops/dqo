@@ -471,6 +471,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 case string_list_type:
                     fieldModel.setStringListValue((List<String>) fieldValue);
                     break;
+                case integer_list_type:
+                    fieldModel.setIntegerListValue((List<Long>) fieldValue);
+                    break;
                 case date_type:
                     fieldModel.setDateValue((LocalDate) fieldValue);
                     break;

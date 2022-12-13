@@ -21,7 +21,7 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextCache;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextCache;
 import ai.dqo.metadata.userhome.UserHome;
@@ -54,8 +54,8 @@ public class SensorNameCompleter implements Iterable<String> {
 						UserHomeContext userHomeContext = userHomeContextCache.getCachedLocalUserHome();
 						UserHome userHome = userHomeContext.getUserHome();
 
-						DqoHomeContextCache dqoHomeContextCache = beanFactory.getBean(DqoHomeContextCache.class);
-						DqoHomeContext dqoHomeContext = dqoHomeContextCache.getCachedLocalDqoHome();
+						DqoHomeContextFactory dqoHomeContextCache = beanFactory.getBean(DqoHomeContextFactory.class);
+						DqoHomeContext dqoHomeContext = dqoHomeContextCache.openLocalDqoHome();
 						DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
 						SensorDefinitionList userHomeSensors = userHome.getSensors();

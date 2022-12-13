@@ -19,22 +19,19 @@ import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
 import ai.dqo.utils.serialization.YamlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
-import static ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryImpl.CACHE_DURATION_SECONDS;
 
 /**
  * Creates a DQO_HOME come context and loads the home model from the file system.
  */
 @Component
-public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory, DqoHomeContextCache {
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     private final YamlSerializer yamlSerializer;
     private final LocalFileSystemFactory localFileSystemFactory;
-    private DqoHomeContext cachedDqoHomeContext;
-    private Instant cachedAt;
+    private DqoHomeContext sharedDqoHomeContext;
 
     @Autowired
     public DqoHomeContextFactoryImpl(YamlSerializer yamlSerializer, LocalFileSystemFactory localFileSystemFactory) {
@@ -43,36 +40,29 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory, DqoHome
     }
 
     /**
-     * Opens a local home context, loads the files from the local file system.
+     * Opens and returns a shared DQO user home.
      * @return Dqo home context with an active DQO_HOME home model that is backed by the local home file system.
      */
     @Override
     public DqoHomeContext openLocalDqoHome() {
+        synchronized (this) {
+            if (this.sharedDqoHomeContext == null) {
+                this.sharedDqoHomeContext = loadNewLocalDqoHome();
+            }
+
+            return this.sharedDqoHomeContext;
+        }
+    }
+
+    /**
+     * Loads a new DQO user home context, accessing the files again.
+     * @return New instance of a DQO home context with an active DQO_HOME home model that is backed by the local home file system.
+     */
+    public DqoHomeContext loadNewLocalDqoHome() {
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalDqoHome();
         DqoHomeContext dqoHomeContext = new DqoHomeContext(homeRoot);
         FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, this.yamlSerializer);
         dqoHomeContext.setDqoHome(fileDqoHomeModel);
-        dqoHomeContext.setDqoModelCache(this);
         return dqoHomeContext;
-    }
-
-    @Override
-    public void invalidateCache() {
-        this.cachedDqoHomeContext = null;
-        this.cachedAt = null;
-    }
-
-    @Override
-    public DqoHomeContext getCachedLocalDqoHome() {
-        if (this.cachedAt != null && this.cachedDqoHomeContext != null &&
-                this.cachedAt.plus(CACHE_DURATION_SECONDS, ChronoUnit.SECONDS).isAfter(Instant.now())) {
-            return this.cachedDqoHomeContext;
-        }
-
-        DqoHomeContext cachedDqoHomeContext = openLocalDqoHome();
-        this.cachedDqoHomeContext = cachedDqoHomeContext;
-        this.cachedAt = Instant.now();
-
-        return cachedDqoHomeContext;
     }
 }

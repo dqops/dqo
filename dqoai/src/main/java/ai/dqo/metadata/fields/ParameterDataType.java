@@ -51,6 +51,9 @@ public enum ParameterDataType {
     @JsonProperty("string_list")
     string_list_type,
 
+    @JsonProperty("integer_list")
+    integer_list_type,
+
     @JsonProperty("object")
     object_type
 }

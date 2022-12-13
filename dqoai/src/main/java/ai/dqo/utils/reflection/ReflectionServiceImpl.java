@@ -152,12 +152,23 @@ public class ReflectionServiceImpl implements ReflectionService {
                         .map(e -> createEnumValue((Enum<?>) e))
                         .collect(Collectors.toMap(e -> e.getJavaName(), e -> e));
                 fieldInfo.setEnumValuesByName(enumDictionary);
-            } else if (fieldType == List.class && ((ParameterizedType)field.getGenericType()).getActualTypeArguments()[0] == String.class) {
-                parameterDataType = ParameterDataType.string_list_type;
-                try {
-                    Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
-                    fieldInfo.setConstructor(emptyConstructor);
-                } catch (NoSuchMethodException e) {
+            } else if (fieldType == List.class) {
+                Type listParameterType = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+                if (listParameterType == String.class) {
+                    parameterDataType = ParameterDataType.string_list_type;
+                    try {
+                        Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
+                        fieldInfo.setConstructor(emptyConstructor);
+                    } catch (NoSuchMethodException e) {
+                    }
+                }
+                else if (listParameterType == Long.class) {
+                    parameterDataType = ParameterDataType.integer_list_type;
+                    try {
+                        Constructor<?> emptyConstructor = ArrayList.class.getDeclaredConstructor();
+                        fieldInfo.setConstructor(emptyConstructor);
+                    } catch (NoSuchMethodException e) {
+                    }
                 }
             }
             else {
