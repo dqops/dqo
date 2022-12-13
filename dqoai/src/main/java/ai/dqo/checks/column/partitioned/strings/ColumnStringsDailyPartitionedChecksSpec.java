@@ -16,27 +16,7 @@
 package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -75,7 +55,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_valid_usa_phone_percent", o -> o.dailyPartitionMinStringValidUsaPhonePercent);
             put("daily_partition_min_string_valid_country_code_percent", o -> o.dailyPartitionMinStringValidCountryCodePercent);
             put("daily_partition_min_string_valid_currency_code_percent", o -> o.dailyPartitionMinStringValidCurrencyCodePercent);
-
+            put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
+            put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
         }
     };
 
@@ -135,6 +116,12 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinValidCurrencyCodePercentCheckSpec dailyPartitionMinStringValidCurrencyCodePercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringsInSetPercentCheckSpec dailyPartitionMinStringsInSetPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -478,6 +465,42 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCurrencyCodePercent, dailyPartitionMinStringValidCurrencyCodePercent));
         this.dailyPartitionMinStringValidCurrencyCodePercent = dailyPartitionMinStringValidCurrencyCodePercent;
         propagateHierarchyIdToField(dailyPartitionMinStringValidCurrencyCodePercent, "daily_partition_min_string_valid_currency_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnMinStringsInSetCountCheckSpec getDailyPartitionMinStringsInSetCount() {
+        return dailyPartitionMinStringsInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set count check.
+     * @param dailyPartitionMinStringsInSetCount Minimum strings in set count check.
+     */
+    public void setDailyPartitionMinStringsInSetCount(ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringsInSetCount, dailyPartitionMinStringsInSetCount));
+        this.dailyPartitionMinStringsInSetCount = dailyPartitionMinStringsInSetCount;
+        propagateHierarchyIdToField(dailyPartitionMinStringsInSetCount, "daily_partition_min_strings_in_set_count");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnMinStringsInSetPercentCheckSpec getDailyPartitionMinStringsInSetPercent() {
+        return dailyPartitionMinStringsInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set percent check.
+     * @param dailyPartitionMinStringsInSetPercent Minimum strings in set percent check.
+     */
+    public void setDailyPartitionMinStringsInSetPercent(ColumnMinStringsInSetPercentCheckSpec dailyPartitionMinStringsInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringsInSetPercent, dailyPartitionMinStringsInSetPercent));
+        this.dailyPartitionMinStringsInSetPercent = dailyPartitionMinStringsInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringsInSetPercent, "daily_partition_min_strings_in_set_percent");
     }
 
     /**

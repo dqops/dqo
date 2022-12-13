@@ -18,6 +18,8 @@ package ai.dqo.checks.column.partitioned.numeric;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,6 +40,8 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
             put("daily_partition_max_negative_percent", o -> o.dailyPartitionMaxNegativePercent);
+            put("daily_partition_min_numbers_in_set_count", o -> o.dailyPartitionMinNumbersInSetCount);
+            put("daily_partition_min_numbers_in_set_percent", o -> o.dailyPartitionMinNumbersInSetPercent);
         }
     };
 
@@ -46,6 +50,12 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxNegativePercentCheckSpec dailyPartitionMaxNegativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinNumbersInSetCountCheckSpec dailyPartitionMinNumbersInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinNumbersInSetPercentCheckSpec dailyPartitionMinNumbersInSetPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -83,6 +93,42 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         propagateHierarchyIdToField(dailyPartitionMaxNegativePercent, "daily_partition_max_negative_percent");
     }
 
+    /**
+     * Returns a minimum Numbers in set count check.
+     * @return Minimum Numbers in set count check.
+     */
+    public ColumnMinNumbersInSetCountCheckSpec getDailyPartitionMinNumbersInSetCount() {
+        return dailyPartitionMinNumbersInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set count check.
+     * @param dailyPartitionMinNumbersInSetCount Minimum Numbers in set count check.
+     */
+    public void setDailyPartitionMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec dailyPartitionMinNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinNumbersInSetCount, dailyPartitionMinNumbersInSetCount));
+        this.dailyPartitionMinNumbersInSetCount = dailyPartitionMinNumbersInSetCount;
+        propagateHierarchyIdToField(dailyPartitionMinNumbersInSetCount, "daily_partition_min_numbers_in_set_count");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinNumbersInSetPercentCheckSpec getDailyPartitionMinNumbersInSetPercent() {
+        return dailyPartitionMinNumbersInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyPartitionMinNumbersInSetPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyPartitionMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec dailyPartitionMinNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinNumbersInSetPercent, dailyPartitionMinNumbersInSetPercent));
+        this.dailyPartitionMinNumbersInSetPercent = dailyPartitionMinNumbersInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionMinNumbersInSetPercent, "daily_partition_min_numbers_in_set_percent");
+    }
+    
     /**
      * Returns the child map on the spec class with all fields.
      *
