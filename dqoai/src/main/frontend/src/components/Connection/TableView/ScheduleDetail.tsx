@@ -24,7 +24,7 @@ const ScheduleDetail = ({
   schemaName,
   tableName
 }: IScheduleDetailProps) => {
-  const [mode, setMode] = useState('minutes');
+  const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
   const [updatedSchedule, setUpdatedSchedule] =
@@ -63,6 +63,9 @@ const ScheduleDetail = ({
     }
     if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
+    }
+    if (!e.target.value) {
+      handleChange({ cron_expression: '' });
     }
   };
 
@@ -116,7 +119,7 @@ const ScheduleDetail = ({
           </td>
           <td className="px-4 py-2">
             <Input
-              value={schedule?.cron_expression}
+              value={updatedSchedule?.cron_expression}
               onChange={(e) =>
                 handleChange({ cron_expression: e.target.value })
               }
@@ -129,13 +132,21 @@ const ScheduleDetail = ({
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={schedule?.disabled}
+              checked={updatedSchedule?.disabled}
               onChange={(value) => handleChange({ disabled: value })}
             />
           </td>
         </tr>
       </table>
       <div className="flex flex-col">
+        <Radio
+          id="unconfigured"
+          name="mode"
+          value=""
+          label="Scheduled check execution not configured on a table level"
+          checked={mode === ''}
+          onChange={onChangeMode}
+        />
         <Radio
           id="minutes"
           name="mode"
