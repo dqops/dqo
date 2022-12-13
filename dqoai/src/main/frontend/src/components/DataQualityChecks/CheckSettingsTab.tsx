@@ -4,8 +4,11 @@ import { DataStreamBasicModel, UICheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataStreamsApi } from '../../services/apiClient';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'query-string';
+import { useTree } from '../../contexts/treeContext';
+import { findTreeNode } from '../../utils/tree';
+import { TREE_LEVEL } from '../../shared/enums';
 
 interface ICheckSettingsTabProps {
   check?: UICheckModel;
@@ -16,18 +19,17 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   const location = useLocation();
   const params: any = qs.parse(location.search);
   const { connection, schema, table } = params;
-  const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>(
-    []
-  );
+  const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
+  const { activeTab, treeData, changeActiveTab } = useTree();
+  const activeNode = findTreeNode(treeData, activeTab);
+  const history = useHistory();
 
   useEffect(() => {
-    DataStreamsApi.getDataStreams(
-      connection ?? '',
-      schema ?? '',
-      table
-    ).then((res) => {
-      setDataStreams(res.data);
-    });
+    DataStreamsApi.getDataStreams(connection ?? '', schema ?? '', table).then(
+      (res) => {
+        setDataStreams(res.data);
+      }
+    );
   }, []);
 
   const options = useMemo(() => {
@@ -42,6 +44,23 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
       }))
     ];
   }, [dataStreams]);
+
+  const onAddDataStream = () => {
+    if (activeNode?.level !== TREE_LEVEL.TABLE) {
+      let node = activeNode;
+      while (node?.level !== TREE_LEVEL.TABLE) {
+        node = findTreeNode(treeData, node?.parentId ?? '');
+      }
+      changeActiveTab(node, true);
+    }
+    const searchQuery = qs.stringify({
+      connection,
+      schema,
+      table,
+      tab: 'data-streams'
+    });
+    history.replace(`/?${searchQuery}`);
+  };
 
   return (
     <div>
@@ -69,7 +88,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     onChange={(value) =>
                       onChange({ ...check, data_stream: value })
                     }
-                    onAdd={() => {}}
+                    onAdd={onAddDataStream}
                     addLabel="Add new data stream"
                   />
                   <Checkbox
