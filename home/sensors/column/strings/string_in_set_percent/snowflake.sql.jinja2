@@ -16,7 +16,7 @@
 
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN NULL
+        100.0 * WHEN COUNT(*) = 0 THEN NULL
         ELSE
             SUM(
                 CASE
