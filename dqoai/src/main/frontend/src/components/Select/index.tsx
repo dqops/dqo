@@ -28,6 +28,9 @@ interface SelectProps {
   tooltipText?: string;
   disabled?: boolean;
   error?: boolean;
+  menuClassName?: string;
+  onAdd?: () => void;
+  addLabel?: string;
 }
 
 const Select = ({
@@ -40,7 +43,10 @@ const Select = ({
   triggerClassName,
   tooltipText,
   disabled,
-  error
+  error,
+  menuClassName,
+  onAdd,
+  addLabel
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -103,7 +109,12 @@ const Select = ({
           </div>
         </MenuHandler>
         {!disabled && (
-          <MenuList className="z-50 min-w-40 bg-gray-50 !p-0 max-h-80 overflow-auto">
+          <MenuList
+            className={clsx(
+              'z-50 min-w-40 bg-gray-50 !p-0 max-h-80 overflow-auto',
+              menuClassName
+            )}
+          >
             {options.map((option, index) => (
               <MenuItem
                 data-testid="select-option"
@@ -115,6 +126,19 @@ const Select = ({
                 {option.label}
               </MenuItem>
             ))}
+            {onAdd && (
+              <MenuItem
+                data-testid="select-option"
+                className="py-2 px-4 hover:bg-gray-300 cursor-pointer whitespace-nowrap text-gray-700 text-sm !rounded-none"
+                onClick={onAdd}
+                style={{ minWidth: menuWidth }}
+              >
+                <div className="flex space-x-1">
+                  <SvgIcon name="add" className="w-4 h-4" />
+                  <div>{addLabel}</div>
+                </div>
+              </MenuItem>
+            )}
           </MenuList>
         )}
       </Menu>

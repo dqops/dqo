@@ -53,6 +53,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
             put("min_string_valid_usa_zipcode_percent", o -> o.minStringValidUsaZipcodePercent);
             put("min_string_valid_usa_phone_percent", o -> o.minStringValidUsaPhonePercent);
+            put("min_string_valid_country_code_percent", o -> o.minStringValidCountryCodePercent);
+            put("min_string_valid_currency_code_percent", o -> o.minStringValidCurrencyCodePercent);
             put("min_strings_in_set_count", o -> o.minStringsInSetCount);
             put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
 
@@ -109,6 +111,12 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringValidUsaPhonePercentCheckSpec minStringValidUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValidCountryCodePercentCheckSpec minStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec minStringValidCurrencyCodePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec minStringsInSetCount;
@@ -420,6 +428,42 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringValidUsaPhonePercent, minStringValidUsaPhonePercent));
         this.minStringValidUsaPhonePercent = minStringValidUsaPhonePercent;
         propagateHierarchyIdToField(minStringValidUsaPhonePercent, "min_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent check.
+     */
+    public ColumnMinValidCountryCodePercentCheckSpec getMinStringValidCountryCodePercent() {
+        return minStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param minStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec minStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidCountryCodePercent, minStringValidCountryCodePercent));
+        this.minStringValidCountryCodePercent = minStringValidCountryCodePercent;
+        propagateHierarchyIdToField(minStringValidCountryCodePercent, "min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getMinStringValidCurrencyCodePercent() {
+        return minStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param minStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec minStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.minStringValidCurrencyCodePercent, minStringValidCurrencyCodePercent));
+        this.minStringValidCurrencyCodePercent = minStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(minStringValidCurrencyCodePercent, "min_string_valid_currency_code_percent");
     }
 
     /**

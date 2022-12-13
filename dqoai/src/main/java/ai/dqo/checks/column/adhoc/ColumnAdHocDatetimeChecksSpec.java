@@ -37,7 +37,6 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocDatetimeChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_datetime_values_in_future_percent", o -> o.maxDatetimeValuesInFuturePercent);
-
         }
     };
 

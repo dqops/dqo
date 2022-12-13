@@ -79,6 +79,7 @@ dqo:
     lock-wait-timeout-seconds: 900
   profiler:
     truncated-strings-length: 50
+    viewed-profile-age-months: 3
   queue:
     threads: 10
     keep-finished-jobs-history-seconds: 3600

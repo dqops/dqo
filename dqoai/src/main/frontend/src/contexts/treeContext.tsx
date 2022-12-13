@@ -344,7 +344,7 @@ function TreeProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (node: CustomTreeNode) => {
+  const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
     if (node.level === TREE_LEVEL.CHECK) {
       return;
     }
@@ -359,9 +359,9 @@ function TreeProvider(props: any) {
       };
 
       if (activeTab) {
-        const newTabs = tabs.map((item) =>
-          item.value === activeTab ? newTab : item
-        );
+        const newTabs = isNew
+          ? [...tabs, newTab]
+          : tabs.map((item) => (item.value === activeTab ? newTab : item));
         setTabs(newTabs);
       } else {
         setTabs([newTab]);

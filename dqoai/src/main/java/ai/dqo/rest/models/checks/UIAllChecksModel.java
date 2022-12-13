@@ -33,7 +33,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIAllChecksModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by categories.")
-public class UIAllChecksModel extends AbstractUIAllChecksModel {
+public class UIAllChecksModel {
     @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
     private List<UIQualityCategoryModel> categories = new ArrayList<>();
 

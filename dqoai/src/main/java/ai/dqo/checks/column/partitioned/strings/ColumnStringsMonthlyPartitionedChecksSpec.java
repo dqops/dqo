@@ -53,6 +53,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_string_parsable_to_float_percent", o -> o.monthlyPartitionMinStringParsableToFloatPercent);
             put("monthly_partition_min_string_valid_usa_zipcode_percent", o -> o.monthlyPartitionMinStringValidUsaZipcodePercent);
             put("monthly_partition_min_string_valid_usa_phone_percent", o -> o.monthlyPartitionMinStringValidUsaPhonePercent);
+            put("monthly_partition_min_string_valid_country_code_percent", o -> o.monthlyPartitionMinStringValidCountryCodePercent);
+            put("monthly_partition_min_string_valid_currency_code_percent", o -> o.monthlyPartitionMinStringValidCurrencyCodePercent);
             put("monthly_partition_min_strings_in_set_count", o -> o.monthlyPartitionMinStringsInSetCount);
             put("monthly_partition_min_strings_in_set_percent", o -> o.monthlyPartitionMinStringsInSetPercent);
         }
@@ -108,6 +110,12 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinStringValidUsaPhonePercentCheckSpec monthlyPartitionMinStringValidUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinValidCountryCodePercentCheckSpec monthlyPartitionMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec monthlyPartitionMinStringValidCurrencyCodePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec monthlyPartitionMinStringsInSetCount;
@@ -423,6 +431,42 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidUsaPhonePercent, monthlyPartitionMinStringValidUsaPhonePercent));
         this.monthlyPartitionMinStringValidUsaPhonePercent = monthlyPartitionMinStringValidUsaPhonePercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringValidUsaPhonePercent, "monthly_partition_min_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent  check.
+     */
+    public ColumnMinValidCountryCodePercentCheckSpec getMonthlyPartitionMinStringValidCountryCodePercent() {
+        return monthlyPartitionMinStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param monthlyPartitionMinStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setMonthlyPartitionMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec monthlyPartitionMinStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidCountryCodePercent, monthlyPartitionMinStringValidCountryCodePercent));
+        this.monthlyPartitionMinStringValidCountryCodePercent = monthlyPartitionMinStringValidCountryCodePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidCountryCodePercent, "monthly_partition_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent  check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getMonthlyPartitionMinStringValidCurrencyCodePercent() {
+        return monthlyPartitionMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param monthlyPartitionMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setMonthlyPartitionMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec monthlyPartitionMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidCurrencyCodePercent, monthlyPartitionMinStringValidCurrencyCodePercent));
+        this.monthlyPartitionMinStringValidCurrencyCodePercent = monthlyPartitionMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidCurrencyCodePercent, "monthly_partition_min_string_valid_currency_code_percent");
     }
 
     /**

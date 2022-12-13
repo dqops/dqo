@@ -1,5 +1,6 @@
 package ai.dqo.data.profilingresults.services;
 
+import ai.dqo.core.configuration.DqoProfilerConfigurationProperties;
 import ai.dqo.data.profilingresults.factory.ProfilingResultDataType;
 import ai.dqo.data.profilingresults.factory.ProfilingResultsColumnNames;
 import ai.dqo.data.profilingresults.services.models.ProfilerMetricModel;
@@ -23,17 +24,19 @@ import java.time.temporal.ChronoUnit;
  */
 @Service
 public class ProfilerDataServiceImpl implements ProfilerDataService {
-    public static final long PROFILER_DATA_SNAPSHOT_MONTHS = 3;
-
     private final ProfilingResultsSnapshotFactory profilingResultsSnapshotFactory;
+    private final DqoProfilerConfigurationProperties profilerConfigurationProperties;
 
     /**
      * Creates a profiler data management service.
      * @param profilingResultsSnapshotFactory Profiler results snapshot factory.
+     * @param profilerConfigurationProperties Profiler configuration properties.
      */
     @Autowired
-    public ProfilerDataServiceImpl(ProfilingResultsSnapshotFactory profilingResultsSnapshotFactory) {
+    public ProfilerDataServiceImpl(ProfilingResultsSnapshotFactory profilingResultsSnapshotFactory,
+                                   DqoProfilerConfigurationProperties profilerConfigurationProperties) {
         this.profilingResultsSnapshotFactory = profilingResultsSnapshotFactory;
+        this.profilerConfigurationProperties = profilerConfigurationProperties;
     }
 
     /**
@@ -48,12 +51,7 @@ public class ProfilerDataServiceImpl implements ProfilerDataService {
                                                                              PhysicalTableName physicalTableName,
                                                                              String dataStreamName) {
         ProfilerResultsForTableModel tableProfilerResults = new ProfilerResultsForTableModel();
-        ProfilingResultsSnapshot profilingResultsSnapshot = this.profilingResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        LocalDate todayDate = LocalDate.now();
-        LocalDate startDate = todayDate.minus(PROFILER_DATA_SNAPSHOT_MONTHS, ChronoUnit.DAYS);
-        profilingResultsSnapshot.ensureMonthsAreLoaded(startDate, todayDate);
-
-        Table allData = profilingResultsSnapshot.getAllData();
+        Table allData = loadProfilerResultsForTable(connectionName, physicalTableName);
         if (allData == null) {
             return tableProfilerResults; // no profiling data
         }
@@ -72,8 +70,8 @@ public class ProfilerDataServiceImpl implements ProfilerDataService {
             if (columnNameColumn.isMissing(i)) {
                 // table level
 
-                if (!tableProfilerResults.getMetrics().stream()
-                        .anyMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getProfiler(), profiler))) {
+                if (tableProfilerResults.getMetrics().stream()
+                        .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getProfiler(), profiler))) {
                     tableProfilerResults.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
@@ -81,18 +79,78 @@ public class ProfilerDataServiceImpl implements ProfilerDataService {
                 String columnName = columnNameColumn.get(i);
                 ProfilerResultsForColumnModel columnModel = tableProfilerResults.getColumns().get(columnName);
                 if (columnModel == null) {
-                    columnModel = new ProfilerResultsForColumnModel(columnName);
+                    columnModel = new ProfilerResultsForColumnModel(connectionName, physicalTableName, columnName);
                     tableProfilerResults.getColumns().put(columnName, columnModel);
                 }
 
-                if (!columnModel.getMetrics().stream()
-                        .anyMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getProfiler(), profiler))) {
+                if (columnModel.getMetrics().stream()
+                        .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getProfiler(), profiler))) {
                     columnModel.getMetrics().add(createMetricModel(sortedResults.row(i)));
                 }
             }
         }
 
         return tableProfilerResults;
+    }
+
+    /**
+     * Retrieves the most recent table profiler results for a given column.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Full table name (schema and table).
+     * @param columName         Column name.
+     * @param dataStreamName    Data stream name.
+     * @return Profiler results for the given table.
+     */
+    @Override
+    public ProfilerResultsForColumnModel getMostRecentProfilerMetricsForColumn(String connectionName,
+                                                                               PhysicalTableName physicalTableName,
+                                                                               String columName,
+                                                                               String dataStreamName) {
+        ProfilerResultsForColumnModel columnProfilerResults = new ProfilerResultsForColumnModel(connectionName, physicalTableName, columName);
+        Table allData = loadProfilerResultsForTable(connectionName, physicalTableName);
+        if (allData == null) {
+            return columnProfilerResults; // no profiling data
+        }
+        Table selectedDataStreamData = allData.where(allData.stringColumn(ProfilingResultsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
+                .and(allData.stringColumn(ProfilingResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName)));
+        Table sortedResults = selectedDataStreamData.sortDescendingOn(ProfilingResultsColumnNames.PROFILED_AT_COLUMN_NAME);
+
+        StringColumn categoryColumn = sortedResults.stringColumn(ProfilingResultsColumnNames.PROFILER_CATEGORY_COLUMN_NAME);
+        StringColumn profilerNameColumn = sortedResults.stringColumn(ProfilingResultsColumnNames.PROFILER_NAME_COLUMN_NAME);
+
+        int rowCount = sortedResults.rowCount();
+        for (int i = 0; i < rowCount ; i++) {
+            String category = categoryColumn.get(i);
+            String profiler = profilerNameColumn.get(i);
+            if (columnProfilerResults.getMetrics().stream()
+                    .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getProfiler(), profiler))) {
+                columnProfilerResults.getMetrics().add(createMetricModel(sortedResults.row(i)));
+            }
+        }
+
+        return columnProfilerResults;
+    }
+
+    /**
+     * Loads profiler results for a given table. Profiler results from the number of months limited by a profiler configuration parameter
+     * {@link DqoProfilerConfigurationProperties#getViewedProfileAgeMonths()} are loaded.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @return Table with results or null when no profiler results were found.
+     */
+    protected Table loadProfilerResultsForTable(String connectionName, PhysicalTableName physicalTableName) {
+        ProfilingResultsSnapshot profilingResultsSnapshot = this.profilingResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        LocalDate todayDate = LocalDate.now();
+        int monthsToLoad = this.profilerConfigurationProperties.getViewedProfileAgeMonths() - 1;
+        if (monthsToLoad < 0 || monthsToLoad > 36) {
+            monthsToLoad = 3;
+        }
+        LocalDate startDate = todayDate.minus(monthsToLoad, ChronoUnit.MONTHS);
+        profilingResultsSnapshot.ensureMonthsAreLoaded(startDate, todayDate);
+
+        Table allData = profilingResultsSnapshot.getAllData();
+        return allData;
     }
 
     /**

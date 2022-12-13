@@ -25,9 +25,9 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.rest.models.metadata.DataStreamTableBasicModel;
-import ai.dqo.rest.models.metadata.DataStreamTableModel;
-import ai.dqo.rest.models.metadata.DataStreamTableTrimmedModel;
+import ai.dqo.rest.models.metadata.DataStreamBasicModel;
+import ai.dqo.rest.models.metadata.DataStreamModel;
+import ai.dqo.rest.models.metadata.DataStreamTrimmedModel;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -45,8 +45,8 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @SpringBootTest
-public class DataStreamsTableControllerUTTests extends BaseTest {
-    private DataStreamsTableController sut;
+public class DataStreamsControllerUTTests extends BaseTest {
+    private DataStreamsController sut;
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
@@ -64,7 +64,7 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
     protected void setUp() throws Throwable {
         super.setUp();
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataStreamsTableController(this.userHomeContextFactory);
+        this.sut = new DataStreamsController(this.userHomeContextFactory);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day,
@@ -91,13 +91,13 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
     void getDataStreams_whenSampleTableRequested_thenReturnsListOfDataStreams() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Flux<DataStreamTableBasicModel>> responseEntity = this.sut.getDataStreams(
+        ResponseEntity<Flux<DataStreamBasicModel>> responseEntity = this.sut.getDataStreams(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        List<DataStreamTableBasicModel> result = responseEntity.getBody().collectList().block();
+        List<DataStreamBasicModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(2, result.size());
         Assertions.assertEquals(
@@ -112,14 +112,14 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec sampleTableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<DataStreamTableModel>> responseEntity = this.sut.getDataStream(
+        ResponseEntity<Mono<DataStreamModel>> responseEntity = this.sut.getDataStream(
                 this.sampleTable.getConnectionName(),
                 sampleTableSpec.getTarget().getSchemaName(),
                 sampleTableSpec.getTarget().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        DataStreamTableModel result = responseEntity.getBody().block();
+        DataStreamModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.getDataStreamName(), dataStreamName);
         Assertions.assertEquals(result.getSpec(), sampleTableSpec.getDataStreams().get(dataStreamName));
@@ -143,7 +143,7 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
                 sampleTableSpec.getTarget().getSchemaName(),
                 sampleTableSpec.getTarget().getTableName(),
                 dataStreamName,
-                new DataStreamTableTrimmedModel() {{
+                new DataStreamTrimmedModel() {{
                     setDataStreamName(newName);
                     setSpec(newSpec);
                 }});
@@ -177,7 +177,7 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
                 sampleTableSpec.getTarget().getSchemaName(),
                 sampleTableSpec.getTarget().getTableName(),
                 DATASTREAM_NAME_1,
-                new DataStreamTableTrimmedModel() {{
+                new DataStreamTrimmedModel() {{
                     setDataStreamName(substitutableName);
                     setSpec(newSpec);
                 }});
@@ -210,7 +210,7 @@ public class DataStreamsTableControllerUTTests extends BaseTest {
                 sampleTableSpec.getTarget().getSchemaName(),
                 sampleTableSpec.getTarget().getTableName(),
                 dataStreamName,
-                new DataStreamTableTrimmedModel() {{
+                new DataStreamTrimmedModel() {{
                     setDataStreamName(null);
                     setSpec(newSpec);
                 }});

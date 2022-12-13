@@ -53,6 +53,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_parsable_to_float_percent", o -> o.dailyPartitionMinStringParsableToFloatPercent);
             put("daily_partition_min_string_valid_usa_zipcode_percent", o -> o.dailyPartitionMinStringValidUsaZipcodePercent);
             put("daily_partition_min_string_valid_usa_phone_percent", o -> o.dailyPartitionMinStringValidUsaPhonePercent);
+            put("daily_partition_min_string_valid_country_code_percent", o -> o.dailyPartitionMinStringValidCountryCodePercent);
+            put("daily_partition_min_string_valid_currency_code_percent", o -> o.dailyPartitionMinStringValidCurrencyCodePercent);
             put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
             put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
         }
@@ -108,6 +110,12 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec dailyPartitionMinStringValidCurrencyCodePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
     private ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount;
@@ -421,6 +429,42 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaPhonePercent, dailyPartitionMinStringValidUsaPhonePercent));
         this.dailyPartitionMinStringValidUsaPhonePercent = dailyPartitionMinStringValidUsaPhonePercent;
         propagateHierarchyIdToField(dailyPartitionMinStringValidUsaPhonePercent, "daily_partition_min_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent  check.
+     */
+    public ColumnMinValidCountryCodePercentCheckSpec getDailyPartitionMinStringValidCountryCodePercent() {
+        return dailyPartitionMinStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param dailyPartitionMinStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setDailyPartitionMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCountryCodePercent, dailyPartitionMinStringValidCountryCodePercent));
+        this.dailyPartitionMinStringValidCountryCodePercent = dailyPartitionMinStringValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidCountryCodePercent, "daily_partition_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent  check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getDailyPartitionMinStringValidCurrencyCodePercent() {
+        return dailyPartitionMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param dailyPartitionMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setDailyPartitionMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec dailyPartitionMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCurrencyCodePercent, dailyPartitionMinStringValidCurrencyCodePercent));
+        this.dailyPartitionMinStringValidCurrencyCodePercent = dailyPartitionMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidCurrencyCodePercent, "daily_partition_min_string_valid_currency_code_percent");
     }
 
     /**

@@ -27,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoProfilerConfigurationProperties implements Cloneable {
     private int truncatedStringsLength = 50;
+    private int viewedProfileAgeMonths = 3;
 
     /**
      * Returns the length of a the results returned by a profiler (for min, max operations) on string columns.
@@ -42,6 +43,22 @@ public class DqoProfilerConfigurationProperties implements Cloneable {
      */
     public void setTruncatedStringsLength(int truncatedStringsLength) {
         this.truncatedStringsLength = truncatedStringsLength;
+    }
+
+    /**
+     * Returns the number of full months with profiler results that are scanned and shown. Older profiler results are not shown in UI.
+     * @return Showed oldest profiler results.
+     */
+    public int getViewedProfileAgeMonths() {
+        return viewedProfileAgeMonths;
+    }
+
+    /**
+     * Sets the number of months (monthly partitions) that are loaded to be shown on the profile tabs.
+     * @param viewedProfileAgeMonths Number of monthly partitions that are scanned.
+     */
+    public void setViewedProfileAgeMonths(int viewedProfileAgeMonths) {
+        this.viewedProfileAgeMonths = viewedProfileAgeMonths;
     }
 
     /**
