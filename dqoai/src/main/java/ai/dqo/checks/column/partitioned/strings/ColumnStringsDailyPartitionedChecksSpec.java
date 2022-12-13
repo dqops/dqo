@@ -35,6 +35,7 @@ import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespacePercent
 import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -71,6 +72,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_parsable_to_float_percent", o -> o.dailyPartitionMinStringParsableToFloatPercent);
             put("daily_partition_min_string_valid_usa_zipcode_percent", o -> o.dailyPartitionMinStringValidUsaZipcodePercent);
             put("daily_partition_min_string_valid_usa_phone_percent", o -> o.dailyPartitionMinStringValidUsaPhonePercent);
+            put("daily_partition_min_string_valid_country_code_percent", o -> o.dailyPartitionMinStringValidCountryCodePercent);
 
         }
     };
@@ -125,6 +127,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -432,6 +437,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaPhonePercent, dailyPartitionMinStringValidUsaPhonePercent));
         this.dailyPartitionMinStringValidUsaPhonePercent = dailyPartitionMinStringValidUsaPhonePercent;
         propagateHierarchyIdToField(dailyPartitionMinStringValidUsaPhonePercent, "daily_partition_min_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent  check.
+     */
+    public ColumnMinValidCountryCodePercentCheckSpec getDailyPartitionMinStringValidCountryCodePercent() {
+        return dailyPartitionMinStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param dailyPartitionMinStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setDailyPartitionMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCountryCodePercent, dailyPartitionMinStringValidCountryCodePercent));
+        this.dailyPartitionMinStringValidCountryCodePercent = dailyPartitionMinStringValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidCountryCodePercent, "daily_partition_min_string_valid_country_code_percent");
     }
 
     /**
