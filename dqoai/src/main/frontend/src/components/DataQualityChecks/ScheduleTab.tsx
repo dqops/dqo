@@ -59,19 +59,10 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
     setHour(val);
   };
 
-  const isDisabled = !schedule;
+  const isDisabled = schedule?.disabled;
 
   return (
     <div className={isDisabled ? 'text-gray-700' : ''}>
-      <div className="px-4">
-        <Checkbox
-          checked={!!schedule}
-          // onChange={(value) => {}}
-          onChange={(value) => (value ? onChange({}) : onChange(undefined))}
-          label="Configure a custom schedule for a data quality check"
-        />
-      </div>
-
       <table className="mb-6">
         <tr>
           <td className="px-4 py-2">
@@ -95,7 +86,6 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
             <Checkbox
               checked={schedule?.disabled}
               onChange={(value) => handleChange({ disabled: value })}
-              disabled={isDisabled}
             />
           </td>
         </tr>
