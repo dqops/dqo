@@ -64,9 +64,6 @@ const FieldControl = ({
 
   const isInvalid = !field.optional && !value && value !== 0 && !disabled;
 
-  if (label === 'sql_condition') {
-    console.log('-------', field);
-  }
   return (
     <div>
       {type === 'boolean' && (
