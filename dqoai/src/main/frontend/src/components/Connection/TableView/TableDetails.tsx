@@ -79,7 +79,7 @@ const TableDetails = ({
             <td className="px-4 py-2">{updatedTableBasic?.target?.table_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Disable</td>
+            <td className="px-4 py-2">Disable data quality checks</td>
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleChange({ disabled: value })}
