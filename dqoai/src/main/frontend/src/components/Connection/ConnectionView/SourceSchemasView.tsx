@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { JobApiClient, SourceSchemasApi } from '../../../services/apiClient';
+import { SourceSchemasApi } from '../../../services/apiClient';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   SchemaRemoteModel
@@ -8,8 +8,6 @@ import SvgIcon from '../../SvgIcon';
 import Button from '../../Button';
 import Loader from '../../Loader';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleMenu } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
@@ -26,8 +24,6 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
   const { jobs } = useSelector((state: IRootState) => state.job);
 
-  const dispatch = useActionDispatch();
-
   useEffect(() => {
     setLoading(true);
     SourceSchemasApi.getRemoteSchemas(connectionName)
@@ -40,8 +36,6 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
   }, [connectionName]);
 
   const onImportTables = (schema: SchemaRemoteModel) => {
-    JobApiClient.importTables(schema.importTableJobParameters);
-    dispatch(toggleMenu(true));
     setSelectedSchema(schema);
   };
 
