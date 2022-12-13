@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
-import { UICheckModel } from '../../api';
+import { DataStreamTableBasicModel, UICheckModel } from '../../api';
 import TextArea from '../TextArea';
+import Select from '../Select';
+import { DataStreamsTableApi } from '../../services/apiClient';
+import { useLocation } from 'react-router-dom';
+import qs from 'query-string';
 
 interface ICheckSettingsTabProps {
   check?: UICheckModel;
@@ -9,6 +13,36 @@ interface ICheckSettingsTabProps {
 }
 
 const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
+  const location = useLocation();
+  const params: any = qs.parse(location.search);
+  const { connection, schema, table } = params;
+  const [dataStreams, setDataStreams] = useState<DataStreamTableBasicModel[]>(
+    []
+  );
+
+  useEffect(() => {
+    DataStreamsTableApi.getDataStreams(
+      connection ?? '',
+      schema ?? '',
+      table
+    ).then((res) => {
+      setDataStreams(res.data);
+    });
+  }, []);
+
+  const options = useMemo(() => {
+    return [
+      {
+        label: 'None',
+        value: ''
+      },
+      ...dataStreams.map((item) => ({
+        label: item.data_stream_name ?? '',
+        value: item.data_stream_name ?? ''
+      }))
+    ];
+  }, [dataStreams]);
+
   return (
     <div>
       <div className="">
@@ -21,6 +55,30 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                   checked={check?.disabled}
                   onChange={(value) => onChange({ ...check, disabled: value })}
                 />
+              </td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 w-60">Custom data stream</td>
+              <td className="px-4 py-2">
+                <div className="flex items-center space-x-2">
+                  <Select
+                    className="w-50"
+                    menuClassName="min-w-50"
+                    options={options}
+                    value={check?.data_stream}
+                    onChange={(value) =>
+                      onChange({ ...check, data_stream: value })
+                    }
+                    onAdd={() => {}}
+                    addLabel="Add new data stream"
+                  />
+                  <Checkbox
+                    onChange={(value) =>
+                      onChange({ ...check, supports_data_streams: value })
+                    }
+                    checked={check?.supports_data_streams}
+                  />
+                </div>
               </td>
             </tr>
             <tr>
