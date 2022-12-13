@@ -66,6 +66,8 @@ public class SensorExecutionResult {
         this.finishedAt = Instant.now();
         this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
         this.success = false;
+        this.resultTable = Table.create("error");
+        this.resultTable.appendRow(); // one placeholder row added, so we can use error result in the sensor readout normalization service to make the error row
     }
 
     /**

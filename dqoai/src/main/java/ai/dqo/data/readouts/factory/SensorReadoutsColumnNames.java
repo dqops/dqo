@@ -7,11 +7,6 @@ import ai.dqo.data.normalization.CommonColumnNames;
  */
 public class SensorReadoutsColumnNames {
     /**
-     * Column name for a sensor executed at timestamp.
-     */
-    public static final String EXECUTED_AT_COLUMN_NAME = CommonColumnNames.EXECUTED_AT_COLUMN_NAME;
-
-    /**
      * Column name for a check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
@@ -140,4 +135,9 @@ public class SensorReadoutsColumnNames {
      * Column name for a sensor duration in milliseconds.
      */
     public static final String DURATION_MS_COLUMN_NAME = CommonColumnNames.DURATION_MS_COLUMN_NAME;
+
+    /**
+     * Column name for a sensor executed at timestamp.
+     */
+    public static final String EXECUTED_AT_COLUMN_NAME = CommonColumnNames.EXECUTED_AT_COLUMN_NAME;
 }

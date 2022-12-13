@@ -49,6 +49,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
             put(DqoRoot.DATA_SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(DqoRoot.DATA_RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
             put(DqoRoot.DATA_PROFILING_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.DATA_ERRORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }
 

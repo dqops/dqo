@@ -55,6 +55,11 @@ public final class BuiltInFolderNames {
     public static final String PROFILING_RESULTS = "profiling_results";
 
     /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the errors are stored.
+     */
+    public static final String ERRORS = "errors";
+
+    /**
      * Local index folder.
      */
     public static final String INDEX = ".index";
