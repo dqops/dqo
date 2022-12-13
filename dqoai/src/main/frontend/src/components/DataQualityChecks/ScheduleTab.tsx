@@ -11,7 +11,7 @@ interface IScheduleTabProps {
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
-  const [mode, setMode] = useState(schedule ? 'minutes' : '');
+  const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
 
@@ -33,6 +33,9 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
     }
     if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
+    }
+    if (!e.target.value) {
+      handleChange({ cron_expression: '' });
     }
   };
 
@@ -98,6 +101,14 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
         </tr>
       </table>
       <div className="flex flex-col">
+        <Radio
+          id="unconfigured"
+          name="mode"
+          value=""
+          label="Custom check execution schedule not configured for this check"
+          checked={mode === ''}
+          onChange={onChangeMode}
+        />
         <Radio
           id="minutes"
           name="mode"
