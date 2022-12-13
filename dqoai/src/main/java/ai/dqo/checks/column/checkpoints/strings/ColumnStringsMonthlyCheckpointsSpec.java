@@ -35,6 +35,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSp
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -72,6 +73,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_min_string_valid_usa_zipcode_percent", o -> o.monthlyCheckpointMinStringValidUsaZipcodePercent);
             put("monthly_checkpoint_min_string_valid_usa_phone_percent", o -> o.monthlyCheckpointMinStringValidUsaPhonePercent);
             put("monthly_checkpoint_min_string_valid_country_code_percent", o -> o.monthlyCheckpointMinStringValidCountryCodePercent);
+            put("monthly_checkpoint_min_string_valid_currency_code_percent", o -> o.monthlyCheckpointMinStringValidCurrencyCodePercent);
 
         }
     };
@@ -129,6 +131,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinValidCountryCodePercentCheckSpec monthlyCheckpointMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec monthlyCheckpointMinStringValidCurrencyCodePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -451,6 +456,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidCountryCodePercent, monthlyCheckpointMinStringValidCountryCodePercent));
         this.monthlyCheckpointMinStringValidCountryCodePercent = monthlyCheckpointMinStringValidCountryCodePercent;
         propagateHierarchyIdToField(monthlyCheckpointMinStringValidCountryCodePercent, "monthly_checkpoint_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getMonthlyCheckpointMinStringValidCurrencyCodePercent() {
+        return monthlyCheckpointMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param monthlyCheckpointMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setMonthlyCheckpointMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec monthlyCheckpointMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidCurrencyCodePercent, monthlyCheckpointMinStringValidCurrencyCodePercent));
+        this.monthlyCheckpointMinStringValidCurrencyCodePercent = monthlyCheckpointMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinStringValidCurrencyCodePercent, "monthly_checkpoint_min_string_valid_currency_code_percent");
     }
 
     /**

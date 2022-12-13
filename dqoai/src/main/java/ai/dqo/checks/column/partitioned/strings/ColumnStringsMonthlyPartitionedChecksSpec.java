@@ -36,6 +36,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSp
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -73,6 +74,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_string_valid_usa_zipcode_percent", o -> o.monthlyPartitionMinStringValidUsaZipcodePercent);
             put("monthly_partition_min_string_valid_usa_phone_percent", o -> o.monthlyPartitionMinStringValidUsaPhonePercent);
             put("monthly_partition_min_string_valid_country_code_percent", o -> o.monthlyPartitionMinStringValidCountryCodePercent);
+            put("monthly_partition_min_string_valid_currency_code_percent", o -> o.monthlyPartitionMinStringValidCurrencyCodePercent);
 
         }
     };
@@ -130,6 +132,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinValidCountryCodePercentCheckSpec monthlyPartitionMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec monthlyPartitionMinStringValidCurrencyCodePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -457,6 +462,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidCountryCodePercent, monthlyPartitionMinStringValidCountryCodePercent));
         this.monthlyPartitionMinStringValidCountryCodePercent = monthlyPartitionMinStringValidCountryCodePercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringValidCountryCodePercent, "monthly_partition_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent  check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getMonthlyPartitionMinStringValidCurrencyCodePercent() {
+        return monthlyPartitionMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param monthlyPartitionMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setMonthlyPartitionMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec monthlyPartitionMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringValidCurrencyCodePercent, monthlyPartitionMinStringValidCurrencyCodePercent));
+        this.monthlyPartitionMinStringValidCurrencyCodePercent = monthlyPartitionMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinStringValidCurrencyCodePercent, "monthly_partition_min_string_valid_currency_code_percent");
     }
 
     /**
