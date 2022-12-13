@@ -29,8 +29,8 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DataStreamTableModel", description = "Table-level data stream model containing nested objects")
-public class DataStreamTableModel {
+@ApiModel(value = "DataStreamModel", description = "Data stream model containing nested objects")
+public class DataStreamModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 

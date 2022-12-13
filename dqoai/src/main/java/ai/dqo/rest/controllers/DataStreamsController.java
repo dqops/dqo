@@ -21,9 +21,9 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.DataStreamTableBasicModel;
-import ai.dqo.rest.models.metadata.DataStreamTableModel;
-import ai.dqo.rest.models.metadata.DataStreamTableTrimmedModel;
+import ai.dqo.rest.models.metadata.DataStreamBasicModel;
+import ai.dqo.rest.models.metadata.DataStreamModel;
+import ai.dqo.rest.models.metadata.DataStreamTrimmedModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -42,8 +42,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "DataStreamsTable", description = "Manages data streams on a table")
-public class DataStreamsTableController {
+@Api(value = "DataStreams", description = "Manages data streams on a table")
+public class DataStreamsController {
     private UserHomeContextFactory userHomeContextFactory;
 
     /**
@@ -51,7 +51,7 @@ public class DataStreamsTableController {
      * @param userHomeContextFactory      User home context factory.
      */
     @Autowired
-    public DataStreamsTableController(UserHomeContextFactory userHomeContextFactory) {
+    public DataStreamsController(UserHomeContextFactory userHomeContextFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
@@ -63,14 +63,14 @@ public class DataStreamsTableController {
      * @return List of basic models of data streams on the table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams")
-    @ApiOperation(value = "getDataStreams", notes = "Returns a list of data streams on the table", response = DataStreamTableBasicModel[].class)
+    @ApiOperation(value = "getDataStreams", notes = "Returns a list of data streams on the table", response = DataStreamBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DataStreamTableBasicModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = DataStreamBasicModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<DataStreamTableBasicModel>> getDataStreams(
+    public ResponseEntity<Flux<DataStreamBasicModel>> getDataStreams(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -80,9 +80,9 @@ public class DataStreamsTableController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        List<DataStreamTableBasicModel> result = new LinkedList<>();
+        List<DataStreamBasicModel> result = new LinkedList<>();
         for (String dataStreamName : dataStreamMapping.keySet()) {
-            result.add(new DataStreamTableBasicModel(){{
+            result.add(new DataStreamBasicModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
                 setTableName(tableName);
@@ -102,14 +102,14 @@ public class DataStreamsTableController {
      * @return Model of the data stream containing all configurations.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
-    @ApiOperation(value = "getDataStream", notes = "Returns a model of the data stream", response = DataStreamTableModel.class)
+    @ApiOperation(value = "getDataStream", notes = "Returns a model of the data stream", response = DataStreamModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DataStreamTableModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = DataStreamModel[].class),
             @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DataStreamTableModel>> getDataStream(
+    public ResponseEntity<Mono<DataStreamModel>> getDataStream(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -120,7 +120,7 @@ public class DataStreamsTableController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        DataStreamTableModel result = new DataStreamTableModel(){{
+        DataStreamModel result = new DataStreamModel(){{
             setConnectionName(connectionName);
             setSchemaName(schemaName);
             setTableName(tableName);
@@ -155,7 +155,7 @@ public class DataStreamsTableController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data stream name") @PathVariable String dataStreamName,
-            @ApiParam("Data stream trimmed model") @RequestBody DataStreamTableTrimmedModel dataStreamModel) {
+            @ApiParam("Data stream trimmed model") @RequestBody DataStreamTrimmedModel dataStreamModel) {
         if (Strings.isNullOrEmpty(connectionName)     ||
                 Strings.isNullOrEmpty(schemaName)     ||
                 Strings.isNullOrEmpty(tableName)      ||

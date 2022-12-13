@@ -15,7 +15,6 @@
  */
 package ai.dqo.rest.models.metadata;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,16 +23,22 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Data stream on a table model with trimmed access path.
+ * Basic model for data streams on a table, returned by the rest api.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DataStreamTableTrimmedModel", description = "Table-level data stream model with trimmed path")
-public class DataStreamTableTrimmedModel {
+@ApiModel(value = "DataStreamBasicModel", description = "Basic data stream model not containing nested objects")
+public class DataStreamBasicModel {
+    @JsonPropertyDescription("Connection name.")
+    private String connectionName;
+
+    @JsonPropertyDescription("Schema name.")
+    private String schemaName;
+
+    @JsonPropertyDescription("Table name.")
+    private String tableName;
+
     @JsonPropertyDescription("Data stream name.")
     private String dataStreamName;
-
-    @JsonPropertyDescription("Data stream specification.")
-    private DataStreamMappingSpec spec;
 }

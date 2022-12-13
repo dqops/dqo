@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
-import { DataStreamTableBasicModel, UICheckModel } from '../../api';
+import { DataStreamBasicModel, UICheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
-import { DataStreamsTableApi } from '../../services/apiClient';
+import { DataStreamsApi } from '../../services/apiClient';
 import { useLocation } from 'react-router-dom';
 import qs from 'query-string';
 
@@ -16,12 +16,12 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   const location = useLocation();
   const params: any = qs.parse(location.search);
   const { connection, schema, table } = params;
-  const [dataStreams, setDataStreams] = useState<DataStreamTableBasicModel[]>(
+  const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>(
     []
   );
 
   useEffect(() => {
-    DataStreamsTableApi.getDataStreams(
+    DataStreamsApi.getDataStreams(
       connection ?? '',
       schema ?? '',
       table
