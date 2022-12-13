@@ -18,7 +18,7 @@ interface IScheduleDetailProps {
 }
 
 const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
-  const [mode, setMode] = useState('minutes');
+  const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
   const [isUpdated, setIsUpdated] = useState(false);
@@ -67,6 +67,9 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
     if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
     }
+    if (!e.target.value) {
+      handleChange({ cron_expression: '' });
+    }
   };
 
   const onChangeMinutes = (val: number) => {
@@ -103,7 +106,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           </td>
           <td className="px-4 py-2">
             <Input
-              value={schedule?.cron_expression}
+              value={updatedSchedule?.cron_expression}
               onChange={(e) =>
                 handleChange({ cron_expression: e.target.value })
               }
@@ -116,13 +119,21 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={schedule?.disabled}
+              checked={updatedSchedule?.disabled}
               onChange={(value) => handleChange({ disabled: value })}
             />
           </td>
         </tr>
       </table>
       <div className="flex flex-col">
+        <Radio
+          id="unconfigured"
+          name="mode"
+          value=""
+          label="Scheduled check execution not configured for all tables from this connection"
+          checked={mode === ''}
+          onChange={onChangeMode}
+        />
         <Radio
           id="minutes"
           name="mode"
