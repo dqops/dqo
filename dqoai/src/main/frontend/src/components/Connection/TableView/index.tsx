@@ -3,7 +3,7 @@ import SvgIcon from '../../SvgIcon';
 import Tabs from '../../Tabs';
 import TableDetails from './TableDetails';
 import ScheduleDetail from './ScheduleDetail';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import qs from 'query-string';
 import { useTree } from '../../../contexts/treeContext';
 import TimestampsView from './TimestampsView';
@@ -67,6 +67,7 @@ const TableView = ({
   const [activeTab, setActiveTab] = useState('table');
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     const searchQuery = qs.stringify({
@@ -80,6 +81,13 @@ const TableView = ({
 
   const onChangeTab = (tab: string) => {
     setActiveTab(tab);
+    const searchQuery = qs.stringify({
+      connection: connectionName,
+      schema: schemaName,
+      table: tableName,
+      tab
+    });
+    history.replace(`/?${searchQuery}`);
     setTabMap({
       ...tabMap,
       [pageTab]: tab
@@ -93,6 +101,17 @@ const TableView = ({
       setActiveTab('table');
     }
   }, [pageTab, tabMap]);
+
+  useEffect(() => {
+    const params = qs.parse(location.search);
+    if (params.tab) {
+      setActiveTab(params.tab as string);
+      setTabMap({
+        ...tabMap,
+        [pageTab]: params.tab
+      });
+    }
+  }, [location.search]);
 
   return (
     <div className="relative">
