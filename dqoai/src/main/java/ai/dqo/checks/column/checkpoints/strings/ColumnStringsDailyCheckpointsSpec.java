@@ -34,6 +34,7 @@ import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSp
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -71,6 +72,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_min_string_valid_usa_zipcode_percent", o -> o.dailyCheckpointMinStringValidUsaZipcodePercent);
             put("daily_checkpoint_min_string_valid_usa_phone_percent", o -> o.dailyCheckpointMinStringValidUsaPhonePercent);
             put("daily_checkpoint_min_string_valid_country_code_percent", o -> o.dailyCheckpointMinStringValidCountryCodePercent);
+            put("daily_checkpoint_min_string_valid_currency_code_percent", o -> o.dailyCheckpointMinStringValidCurrencyCodePercent);
 
         }
     };
@@ -127,6 +129,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     private ColumnMinStringValidUsaPhonePercentCheckSpec dailyCheckpointMinStringValidUsaPhonePercent;
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinValidCountryCodePercentCheckSpec dailyCheckpointMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec dailyCheckpointMinStringValidCurrencyCodePercent;
 
     /**
      * Returns a maximum string length below check.
@@ -450,6 +455,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidCountryCodePercent, dailyCheckpointMinStringValidCountryCodePercent));
         this.dailyCheckpointMinStringValidCountryCodePercent = dailyCheckpointMinStringValidCountryCodePercent;
         propagateHierarchyIdToField(dailyCheckpointMinStringValidCountryCodePercent, "daily_checkpoint_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getDailyCheckpointMinStringValidCurrencyCodePercent() {
+        return dailyCheckpointMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param dailyCheckpointMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setDailyCheckpointMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec dailyCheckpointMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidCurrencyCodePercent, dailyCheckpointMinStringValidCurrencyCodePercent));
+        this.dailyCheckpointMinStringValidCurrencyCodePercent = dailyCheckpointMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyCheckpointMinStringValidCurrencyCodePercent, "daily_checkpoint_min_string_valid_currency_code_percent");
     }
 
     /**
