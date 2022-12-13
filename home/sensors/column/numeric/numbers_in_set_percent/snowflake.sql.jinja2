@@ -1,11 +1,20 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+
+{%- macro extract_in_list(values_list) -%}
+    {%- if values_list|length == 0 -%}
+        (NULL)
+    {%- else -%}
+        {{values_list|join(', ')}}
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
     CASE
         WHEN COUNT(*) = 0 THEN NULL
         ELSE
-            100.0 * SUM(
+            SUM(
                 CASE
-                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{parameters.values|join(', ')}})) IS TRUE THEN 1
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) IS TRUE THEN 1
                     ELSE 0
                 END
             )/COUNT(*)

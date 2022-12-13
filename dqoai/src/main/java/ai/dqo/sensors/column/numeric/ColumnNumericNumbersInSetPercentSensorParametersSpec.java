@@ -76,6 +76,6 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpec extends Abstra
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/numbers/string_in_set_percent";
+        return "column/numeric/numbers_in_set_percent";
     }
 }

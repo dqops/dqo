@@ -1,17 +1,26 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{%- macro extract_in_list(values_list) -%}
+    {%- if values_list|length == 0 -%}
+        (NULL)
+    {%- else -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
     CASE
         WHEN COUNT(*) = 0 THEN NULL
         ELSE
             SUM(
                 CASE
-                    WHEN ({{lib.render_target_column('analyzed_table')}} IN (   {%- for i in parameters.values -%}
-                                                                                    {%- if not loop.last -%}
-                                                                                        {{lib.make_text_constant(i)}}{{", "}}
-                                                                                    {%- else -%}
-                                                                                        {{lib.make_text_constant(i)}}
-                                                                                    {%- endif -%}
-                                                                                {%- endfor -%} )) IS TRUE THEN 1
+                    WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) IS TRUE THEN 1
                     ELSE 0
                 END
             )

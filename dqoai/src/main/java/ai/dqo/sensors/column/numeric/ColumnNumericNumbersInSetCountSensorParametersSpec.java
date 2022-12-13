@@ -76,6 +76,6 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpec extends Abstract
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/numbers_in_set_count";
+        return "column/numeric/numbers_in_set_count";
     }
 }
