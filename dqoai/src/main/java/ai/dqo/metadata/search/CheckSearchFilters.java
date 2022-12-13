@@ -39,11 +39,11 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     private String columnName;
-    private String checkName;
-    private String sensorName;
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String checkCategory;
+    private String checkName;
+    private String sensorName;
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> checkHierarchyIds;

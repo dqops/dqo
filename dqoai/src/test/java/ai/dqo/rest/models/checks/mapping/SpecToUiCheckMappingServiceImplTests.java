@@ -100,7 +100,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
         UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), null);
-        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiBasicModel);
         Assertions.assertEquals(3, uiBasicModel.getCategories().size());
@@ -115,7 +115,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
         UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), null);
-        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiBasicModel);
         Assertions.assertEquals(7, uiBasicModel.getCategories().size());

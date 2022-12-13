@@ -65,7 +65,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI friendly model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations.
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
      * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI friendly model of data quality checks' container.
      */
@@ -75,17 +75,14 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                           String defaultDataStreamName) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
+        Optional<String> categoryNameFilter = Optional.ofNullable(uiAllChecksModel.getRunChecksJobTemplate().getCheckCategory());
+        List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
 
-        for (FieldInfo dimensionFieldInfo : dimensionsFields) {
-            if (Objects.equals(dimensionFieldInfo.getClassFieldName(), "custom")) {
-                // skipping custom categories
-                continue;
-            }
-
-            Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryModel categoryModel = createCategoryModel(dimensionFieldInfo,
+        for (FieldInfo categoryFieldInfo : categoryFields) {
+            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            UIQualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
                     categoryFieldValue, runChecksTemplate, defaultDataStreamName);
             uiAllChecksModel.getCategories().add(categoryModel);
         }
@@ -97,27 +94,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations.
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     @Override
-    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                                    CheckSearchFilters runChecksTemplate) {
-        // TODO: Handling runChecksTemplate.
-        //       (Think about hierarchy. If checks should by design be also in basic model,
-        //        maybe setting them should be done on the abstract class.)
+    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec) {
         UIAllChecksBasicModel uiAllChecksBasicModel = new UIAllChecksBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        List<FieldInfo> dimensionsFields = checkCategoriesClassInfo.getFields();
+        List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
 
-        for (FieldInfo dimensionFieldInfo : dimensionsFields) {
-            if (Objects.equals(dimensionFieldInfo.getClassFieldName(), "custom")) {
-                // skipping custom categories
-                continue;
-            }
-
-            Object categoryFieldValue = dimensionFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryBasicModel categoryModel = createCategoryBasicModel(dimensionFieldInfo, categoryFieldValue);
+        for (FieldInfo categoryFieldInfo : categoryFields) {
+            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            UIQualityCategoryBasicModel categoryModel = createCategoryBasicModel(categoryFieldInfo, categoryFieldValue);
             uiAllChecksBasicModel.getCategories().add(categoryModel);
         }
 
@@ -126,32 +113,28 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
     /**
      * Creates a UI model for all data quality checks for one category.
-     * @param dimensionFieldInfo      Field info for the category field.
+     * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
-     * @param runChecksTemplate Run check job template.
-     * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
-     * @return UI model for a category with all quality checks.
+     * @param runChecksTemplate       Run check job template, acting as a filtering template.
+     * @param defaultDataStreamName   Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
+     * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
      */
-    protected UIQualityCategoryModel createCategoryModel(FieldInfo dimensionFieldInfo,
+    protected UIQualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                          Object checkCategoryParentNode,
                                                          CheckSearchFilters runChecksTemplate,
                                                          String defaultDataStreamName) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
-        categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
-        categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
+        categoryModel.setCategory(categoryFieldInfo.getDisplayName());
+        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
         CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
-        runChecksCategoryTemplate.setCheckCategory(dimensionFieldInfo.getYamlFieldName());
+        runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        List<FieldInfo> checksFields = checkListClassInfo.getFields();
+        Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate().getCheckName());
+        List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
         for (FieldInfo checkFieldInfo : checksFields) {
-            if (checkFieldInfo.getClassFieldName().equals("custom")) {
-                // skipping custom checks for the moment
-                continue;
-            }
-
             AbstractSpec checkSpecObjectNullable = (AbstractSpec)checkFieldInfo.getFieldValue(checkCategoryParentNode);
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
@@ -189,14 +172,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        List<FieldInfo> checksFields = checkListClassInfo.getFields();
+        List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
 
         for (FieldInfo checkFieldInfo : checksFields) {
-            if (checkFieldInfo.getClassFieldName().equals("custom")) {
-                // skipping custom checks for the moment
-                continue;
-            }
-
             boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
 
             UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
@@ -502,5 +480,29 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         }
 
         return fieldModel;
+    }
+
+    /**
+     * Gets a list of field infos from class info, with an optional filter for field name.
+     * @param classInfo     ClassInfo object.
+     * @param requiredField Name of the requested field.
+     * @return A list of fields in class, optionally filtered.
+     */
+    protected List<FieldInfo> getFilteredFieldInfo(ClassInfo classInfo, Optional<String> requiredField) {
+        List<FieldInfo> fields = new ArrayList<>();
+
+        if (requiredField.isPresent()) {
+            FieldInfo fieldInfo = classInfo.getField(requiredField.get());
+            if (fieldInfo != null) {
+                fields.add(fieldInfo);
+            }
+        } else {
+            classInfo.getFields().stream()
+                    // skipping custom checks for the moment
+                    .filter(fieldInfo -> !fieldInfo.getClassFieldName().equals("custom"))
+                    .forEachOrdered(fields::add);
+        }
+
+        return fields;
     }
 }
