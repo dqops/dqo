@@ -61,7 +61,12 @@ const TableCommentView = ({
         isUpdated={isUpdated}
         isUpdating={isUpdating}
       />
-      <CommentsView comments={updatedComments} onChange={handleChange} />
+      <CommentsView
+        isUpdated={isUpdated}
+        setIsUpdated={setIsUpdated}
+        comments={updatedComments}
+        onChange={handleChange}
+      />
     </div>
   );
 };
