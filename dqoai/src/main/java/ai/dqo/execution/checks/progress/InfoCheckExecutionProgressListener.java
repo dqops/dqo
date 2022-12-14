@@ -90,7 +90,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
      * @param event Log event.
      */
     @Override
-    public void onRulesExecuted(RulesExecutedEvent event) {
+    public void onRuleExecuted(RuleExecutedEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
@@ -118,7 +118,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
      * @param event Log event.
      */
     @Override
-    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event) {
+    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
 
     }
 
@@ -128,7 +128,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
      * @param event Log event.
      */
     @Override
-    public void onTableChecksProcessingFinished(TableChecksProcessingFinished event) {
+    public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
 
     }
 

@@ -24,7 +24,7 @@ import java.util.Collection;
 /**
  * Progress event raised after all checks for a table were executed, rules evaluated and the results written which ends the check execution for that table (no more work).
  */
-public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
+public class TableChecksProcessingFinishedEvent extends CheckExecutionProgressEvent {
     private final ConnectionWrapper connectionWrapper;
     private final TableSpec tableSpec;
     private final Collection<AbstractCheckSpec<?,?,?,?>> checks;
@@ -34,6 +34,8 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     private final int warningsCount;
     private final int errorsCount;
     private final int fatalCount;
+    private final int sensorsFailedCount;
+    private final int rulesFailedCount;
 
     /**
      * Creates a progress event.
@@ -42,9 +44,10 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      * @param tableSpec Target table.
      * @param checks    Collection of checks that were executed.
      */
-    public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec<?,?,?,?>> checks,
-                                         int checksCount, int sensorResultsCount, int passedRules,
-                                         int warningsCount, int errorsCount, int fatalCount) {
+    public TableChecksProcessingFinishedEvent(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec<?,?,?,?>> checks,
+                                              int checksCount, int sensorResultsCount, int passedRules,
+                                              int warningsCount, int errorsCount, int fatalCount,
+                                              int sensorsFailedCount, int rulesFailedCount) {
         this.connectionWrapper = connectionWrapper;
         this.tableSpec = tableSpec;
         this.checks = checks;
@@ -54,6 +57,8 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
         this.warningsCount = warningsCount;
         this.errorsCount = errorsCount;
         this.fatalCount = fatalCount;
+        this.sensorsFailedCount = sensorsFailedCount;
+        this.rulesFailedCount = rulesFailedCount;
     }
 
     /**
@@ -128,5 +133,21 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      */
     public int getFatalCount() {
         return fatalCount;
+    }
+
+    /**
+     * Returns the number of sensors that failed to execute.
+     * @return Number of sensors that failed to execute.
+     */
+    public int getSensorsFailedCount() {
+        return sensorsFailedCount;
+    }
+
+    /**
+     * Returns the number of rules that failed to evaluate (but the sensors managed to execute).
+     * @return Number of rules that failed to evaluate.
+     */
+    public int getRulesFailedCount() {
+        return rulesFailedCount;
     }
 }

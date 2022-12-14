@@ -62,7 +62,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         int resultsRowCount = resultsTable.rowCount();
         ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
-        DoubleColumn normalizedActualValueColumn = makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        if (actualValueColumn != null && sensorExecutionResult.isSuccess()) {
+            throw new SensorResultNormalizeException(resultsTable,
+                    "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
+        }
+        DoubleColumn normalizedActualValueColumn = actualValueColumn != null ?
+                makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) :
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount);
         normalizedActualValueColumn.setMissingTo(0.0);
         normalizedResults.addColumns(normalizedActualValueColumn);
 
@@ -222,10 +229,6 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      */
     public DoubleColumn makeNormalizedDoubleColumn(Table resultsTable, String columnName) {
         Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, columnName);
-        if (currentColumn == null) {
-            throw new SensorResultNormalizeException(resultsTable,
-                    "Missing '" + columnName + "' column, the sensor query must return this column");
-        }
 
         if (currentColumn instanceof DoubleColumn) {
             return ((DoubleColumn)currentColumn).copy();

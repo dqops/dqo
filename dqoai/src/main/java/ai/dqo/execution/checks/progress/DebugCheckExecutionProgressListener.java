@@ -16,10 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
-import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
-import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
-import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
+import ai.dqo.execution.sensors.progress.*;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -68,6 +65,23 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     }
 
     /**
+     * Called after a sensor was executed but failed.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSensorFailed(SensorFailedEvent event) {
+        renderEventHeader();
+        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
+        String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
+        this.terminalWriter.writeLine(String.format("Sensor failed with an error for a check %s on the table %s using a sensor definition %s",
+                checkName, tableName, sensorDefinitionName));
+        this.terminalWriter.writeLine("Error message: " + event.getSensorExecutionException().getMessage());
+        renderEventFooter();
+    }
+
+    /**
      * Called after sensor results returned from the sensor were normalized to a standard tabular format.
      *
      * @param event Log event.
@@ -83,7 +97,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onRulesExecuted(RulesExecutedEvent event) {
+    public void onRuleExecuted(RuleExecutedEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
@@ -98,6 +112,22 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
         tableSample.removeColumnsWithMissingValues();
         this.terminalWriter.writeTable(tableSample, true);
 
+        renderEventFooter();
+    }
+
+    /**
+     * Called after data quality rule were executed for all rows of normalized sensor results, but the rule failed with an exception.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onRuleFailed(RuleFailedEvent event) {
+        renderEventHeader();
+        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
+        this.terminalWriter.writeLine(String.format("Rule evaluation failed with an error for a check %s on the table %s using a rule definition %s",
+                checkName, tableName, event.getRuleDefinitionName()));
+        this.terminalWriter.writeLine("Error message: " + event.getRuleExecutionException().getMessage());
         renderEventFooter();
     }
 
@@ -117,7 +147,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event) {
+    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
 
     }
 
@@ -127,7 +157,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onTableChecksProcessingFinished(TableChecksProcessingFinished event) {
+    public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
 
     }
 

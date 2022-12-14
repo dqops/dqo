@@ -93,8 +93,28 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onRulesExecuted(RulesExecutedEvent event) {
+    public void onRuleExecuted(RuleExecutedEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called after data quality rule were executed for all rows of normalized sensor results, but the rule failed with an exception.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onRuleFailed(RuleFailedEvent event) {
+        this.events.add(event);
+    }
+
+    /**
+     * Called after a sensor was executed but failed.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSensorFailed(SensorFailedEvent event) {
+        this.events.add(event);
     }
 
     /**
@@ -113,8 +133,18 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event) {
+    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called before errors are saved.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSavingErrors(SavingErrorsEvent event) {
+        this.events.add(event);
     }
 
     /**
@@ -123,7 +153,7 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onTableChecksProcessingFinished(TableChecksProcessingFinished event) {
+    public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
 		this.events.add(event);
     }
 

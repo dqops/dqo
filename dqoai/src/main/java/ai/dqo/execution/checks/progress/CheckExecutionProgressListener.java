@@ -46,10 +46,16 @@ public interface CheckExecutionProgressListener extends SensorExecutionProgressL
     void onSensorResultsNormalized(SensorResultsNormalizedEvent event);
 
     /**
-     * Called after data quality rules were executed for all rows of normalized sensor results.
+     * Called after data quality rule was executed for all rows of normalized sensor results.
      * @param event Log event.
      */
-    void onRulesExecuted(RulesExecutedEvent event);
+    void onRuleExecuted(RuleExecutedEvent event);
+
+    /**
+     * Called after data quality rule were executed for all rows of normalized sensor results, but the rule failed with an exception.
+     * @param event Log event.
+     */
+    void onRuleFailed(RuleFailedEvent event);
 
     /**
      * Called before the sensor results are saved for later use (they may be used later for time series calculation).
@@ -61,13 +67,19 @@ public interface CheckExecutionProgressListener extends SensorExecutionProgressL
      * Called before rule evaluation results are saved.
      * @param event Log event.
      */
-    void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event);
+    void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event);
+
+    /**
+     * Called before errors are saved.
+     * @param event Log event.
+     */
+    void onSavingErrors(SavingErrorsEvent event);
 
     /**
      * Called after all checks for a table were executed, rules evaluated and the results written which ends the check execution for that table (no more work).
      * @param event Log event.
      */
-    void onTableChecksProcessingFinished(TableChecksProcessingFinished event);
+    void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event);
 
     /**
      * Called after all data quality checks were executed.

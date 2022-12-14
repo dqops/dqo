@@ -15,8 +15,10 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 
 import java.time.Instant;
@@ -67,6 +69,7 @@ public class SensorExecutionResult {
         this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
         this.success = false;
         this.resultTable = Table.create("error");
+        this.resultTable.addColumns(DoubleColumn.create(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
         this.resultTable.appendRow(); // one placeholder row added, so we can use error result in the sensor readout normalization service to make the error row
     }
 
