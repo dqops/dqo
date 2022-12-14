@@ -18,6 +18,7 @@ package ai.dqo.checks.column.checkpoints;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.checkpoints.bool.ColumnBoolMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlMonthlyCheckpointsSpec;
@@ -59,6 +60,8 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("datetime", o -> o.datetime);
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
+           put("bool", o -> o.bool);
+
         }
     };
 
@@ -92,10 +95,15 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiMonthlyCheckpointsSpec pii;
 
-    @JsonPropertyDescription("Daily checkpoints of custom SQL checks in the column")
+    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlMonthlyCheckpointsSpec sql;
+
+    @JsonPropertyDescription("Monthly checkpoints of booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolMonthlyCheckpointsSpec bool;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -222,6 +230,25 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
     }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnBoolMonthlyCheckpointsSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets the container of booleans data quality checks (checkpoints).
+     * @param bool New booleans checks.
+     */
+    public void setBool(ColumnBoolMonthlyCheckpointsSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        this.propagateHierarchyIdToField(bool, "bool");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

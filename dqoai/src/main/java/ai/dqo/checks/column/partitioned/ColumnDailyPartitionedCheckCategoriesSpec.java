@@ -26,6 +26,7 @@ import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChe
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -60,6 +61,8 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+
         }
     };
 
@@ -97,6 +100,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlDailyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Daily partitioned checks for booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolDailyPartitionedChecksSpec bool;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -222,6 +230,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom boolean checks on a column.
+     * @return Custom boolean checks.
+     */
+    public ColumnBoolDailyPartitionedChecksSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets a reference to a container of custom boolean checks.
+     * @param bool Custom boolean checks.
+     */
+    public void setBool(ColumnBoolDailyPartitionedChecksSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        propagateHierarchyIdToField(bool, "bool");
     }
 
     /**

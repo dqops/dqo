@@ -25,6 +25,7 @@ import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpe
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.pii.ColumnPiiDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.bool.ColumnBoolDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -59,6 +60,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("datetime", o -> o.datetime);
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
+           put("bool", o -> o.bool);
         }
     };
 
@@ -96,6 +98,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlDailyCheckpointsSpec sql;
+
+    @JsonPropertyDescription("Daily checkpoints of booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolDailyCheckpointsSpec bool;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -221,6 +228,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnBoolDailyCheckpointsSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets the container of booleans data quality checks (checkpoints).
+     * @param bool New booleans checks.
+     */
+    public void setBool(ColumnBoolDailyCheckpointsSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        this.propagateHierarchyIdToField(bool, "bool");
     }
 
     /**
