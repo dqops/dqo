@@ -10,7 +10,10 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.DateTimeColumn;
+import tech.tablesaw.api.LongColumn;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
 

@@ -15,7 +15,6 @@
  */
 package ai.dqo.data.storage;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 

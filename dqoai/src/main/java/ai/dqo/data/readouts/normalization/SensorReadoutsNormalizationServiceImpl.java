@@ -21,22 +21,14 @@ import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
-import com.google.common.base.Strings;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
-import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Service that parses datasets with results returned by a sensor query.

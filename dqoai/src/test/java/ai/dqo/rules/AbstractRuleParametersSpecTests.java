@@ -17,9 +17,7 @@ package ai.dqo.rules;
 
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest

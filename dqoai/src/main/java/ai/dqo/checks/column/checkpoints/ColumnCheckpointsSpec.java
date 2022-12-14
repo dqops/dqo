@@ -15,7 +15,6 @@
  */
 package ai.dqo.checks.column.checkpoints;
 
-import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.*;

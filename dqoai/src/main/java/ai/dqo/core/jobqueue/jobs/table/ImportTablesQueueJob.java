@@ -15,7 +15,10 @@
  */
 package ai.dqo.core.jobqueue.jobs.table;
 
-import ai.dqo.connectors.*;
+import ai.dqo.connectors.ConnectionProvider;
+import ai.dqo.connectors.ConnectionProviderRegistry;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.connectors.SourceConnection;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
@@ -28,9 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.StringColumn;
+import tech.tablesaw.api.Table;
 
-import java.util.HashSet;
 import java.util.List;
 
 /**

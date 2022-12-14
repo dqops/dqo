@@ -23,7 +23,6 @@ import ai.dqo.core.filesystem.synchronization.FileSystemChangeSet;
 import ai.dqo.core.filesystem.synchronization.FileSystemSynchronizationService;
 import ai.dqo.core.filesystem.synchronization.SynchronizationResult;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
-import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
 import ai.dqo.metadata.fileindices.FileLocation;

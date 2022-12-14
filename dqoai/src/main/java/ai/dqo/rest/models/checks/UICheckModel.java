@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

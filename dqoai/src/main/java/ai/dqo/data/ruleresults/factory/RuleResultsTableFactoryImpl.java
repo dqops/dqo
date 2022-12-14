@@ -18,7 +18,10 @@ package ai.dqo.data.ruleresults.factory;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.BooleanColumn;
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.IntColumn;
+import tech.tablesaw.api.Table;
 
 /**
  * Factory that creates an empty tablesaw table for storing the rule evaluation results. The table schema is configured.

@@ -16,7 +16,6 @@
 package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 

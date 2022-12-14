@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.execution.sensors.progress.*;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
 /**
  * Interface implemented by a check execution progress listener that shows the progress of the sensor execution.

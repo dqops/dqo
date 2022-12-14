@@ -15,11 +15,15 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.*;
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
-import ai.dqo.metadata.groupings.*;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.sampledata.SampleTableMetadata;

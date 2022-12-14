@@ -16,7 +16,6 @@
 package ai.dqo.profiling.table.standard;
 
 import ai.dqo.connectors.DataTypeCategory;
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;

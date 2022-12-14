@@ -23,8 +23,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
 /**
  * Column level sensor that calculates the percent of values that fit to a USA phone regex in a column.
  */
