@@ -25,6 +25,7 @@ import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedC
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -59,6 +60,8 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+
         }
     };
 
@@ -96,6 +99,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlMonthlyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned checks for booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolMonthlyPartitionedChecksSpec bool;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -221,6 +229,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom boolean checks on a column.
+     * @return Custom boolean checks.
+     */
+    public ColumnBoolMonthlyPartitionedChecksSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets a reference to a container of custom boolean checks.
+     * @param bool Custom boolean checks.
+     */
+    public void setBool(ColumnBoolMonthlyPartitionedChecksSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        propagateHierarchyIdToField(bool, "bool");
     }
 
     /**
