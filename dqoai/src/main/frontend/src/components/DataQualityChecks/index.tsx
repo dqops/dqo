@@ -2,10 +2,12 @@ import React from 'react';
 import { UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
 import { useTree } from '../../contexts/treeContext';
+import clsx from 'clsx';
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
   onChange: (ui: UIAllChecksModel) => void;
+  className?: string;
 }
 
 const TableHeader = () => {
@@ -50,7 +52,7 @@ const TableHeader = () => {
   );
 };
 
-const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
+const DataQualityChecks = ({ checksUI, onChange, className }: IDataQualityChecksProps) => {
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
     check: UICheckModel,
@@ -82,7 +84,7 @@ const DataQualityChecks = ({ checksUI, onChange }: IDataQualityChecksProps) => {
 
   return (
     <div
-      className="p-4 max-h-table overflow-auto"
+      className={clsx(className, 'p-4 max-h-table overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
       <table className="w-full">
