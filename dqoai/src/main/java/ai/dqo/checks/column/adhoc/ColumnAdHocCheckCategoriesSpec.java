@@ -53,6 +53,8 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+
         }
     };
 
@@ -90,6 +92,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocSqlChecksSpec sql;
+
+    @JsonPropertyDescription("Configuration of booleans checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocBoolChecksSpec bool;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -215,6 +222,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns the booleans check configuration on a column level.
+     * @return Boolean check configuration.
+     */
+    public ColumnAdHocBoolChecksSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets the boolean check configuration on a column level.
+     * @param bool New boolean checks configuration.
+     */
+    public void setBool(ColumnAdHocBoolChecksSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        this.propagateHierarchyIdToField(bool, "bool");
     }
 
     /**
