@@ -20,14 +20,15 @@ const theme: ReactTreeTheme = {
       border: 'none'
     },
     folder: {
-      hoverBgColor: '#E1E5E9'
+      hoverBgColor: '#E1E5E9',
+      background: '#ff0000'
     },
     icons: {
       leafColor: '#2D3748',
       folderColor: '#2D3748'
     }
   }
-};
+} as any;
 
 const CustomTree = () => {
   const { changeActiveTab, treeData, openNodes, toggleOpenNode } = useTree();
@@ -77,7 +78,7 @@ const CustomTree = () => {
 
     return (
       <div
-        className="flex space-x-2 py-1 flex-1"
+        className="flex space-x-2 py-1 flex-1 w-full"
         onClick={() => handleNodeClick(node)}
       >
         <SvgIcon

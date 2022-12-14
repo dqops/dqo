@@ -147,12 +147,14 @@ const CheckpointsView = ({
           <DataQualityChecks
             checksUI={updatedDailyCheckpoints}
             onChange={onDailyCheckpointsChange}
+            className="max-h-checks"
           />
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
             checksUI={updatedMonthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
+            className="max-h-checks"
           />
         )}
       </div>
