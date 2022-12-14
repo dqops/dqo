@@ -95,4 +95,11 @@ public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseIntegratio
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_time_series, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_string_test_data_IsCreated_thenPutItInBigquery() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
 }
