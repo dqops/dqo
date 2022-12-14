@@ -28,16 +28,23 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.utils.browser.OpenBrowserFailedException;
 import ai.dqo.utils.browser.OpenBrowserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Service that will open a browser and log in to the DQO cloud.
  */
 @Component
+@Slf4j
 public class CloudLoginServiceImpl implements CloudLoginService {
     private UserHomeContextFactory userHomeContextFactory;
     private OpenBrowserService openBrowserService;
@@ -95,8 +102,13 @@ public class CloudLoginServiceImpl implements CloudLoginService {
                 terminalWriter.writeLine("The login url cannot be opened in your browser, message: " + oex.getMessage());
             }
 
+            Duration waitDuration = Duration.of(this.dqoCloudConfigurationProperties.getApiKeyPickupTimeoutSeconds(), ChronoUnit.SECONDS);
+            Instant startTime = Instant.now();
+            Instant timeoutTime = startTime.plus(waitDuration);
+            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalReader.waitForConsoleInput(waitDuration);
+
             // now waiting for the api key...
-            for (int retry = 0; retry < this.dqoCloudConfigurationProperties.getMaxKeyPickRetries(); retry++) {
+            while (Instant.now().isBefore(timeoutTime) && !waitForConsoleInputMono.isDone()) {
                 try {
                     String apiKey = apiKeyRequestApi.pickApiKey(apiKeyRequest);
 
@@ -104,20 +116,20 @@ public class CloudLoginServiceImpl implements CloudLoginService {
 
                     terminalWriter.writeLine("API Key: " + apiKey);
                     terminalWriter.writeLine("DQO Cloud API Key was retrieved and stored in the settings.");
+                    waitForConsoleInputMono.cancel(true);
                     return true;
                 }
                 catch (RestClientException ex) {
                     // ignore... it is probably the not found error, because the api key was not yet issued
-//                    terminalWriter.writeLine(ex.getMessage());
+                    log.debug("API key pickup error: " + ex.getMessage(), ex);
                 }
 
-                Character character = this.terminalReader.tryReadChar(1000);
-                if (character != null) {
-                    this.terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
-                    break;
-                }
+                Thread.sleep(this.dqoCloudConfigurationProperties.getApiKeyPickupRetryDelayMillis());
+            }
 
-               //this.terminalWriter.writeLine("Trying to get the api key...");
+            if (waitForConsoleInputMono.isDone() && Objects.equals(true, waitForConsoleInputMono.get())) {
+                this.terminalReader.tryReadChar(0); // read that character that was typed
+                this.terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
             }
         }
         catch (Exception ex) {

@@ -30,7 +30,8 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private String apiKeyRequestUrl;
     private String uiBaseUrl;
     private String restApiBaseUrl;
-    private int maxKeyPickRetries = 10 * 60; // we have a 1 second delay, so it is around 10 minutes
+    private int apiKeyPickupTimeoutSeconds = 10 * 60;
+    private int apiKeyPickupRetryDelayMillis = 1000;
 
     /**
      * Returns the DQO Cloud API Key that was configured in an environment variable or in a configuration file.
@@ -66,19 +67,35 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the maximum number of retries to get the api key.
-     * @return Number of retries.
+     * Returns the api key pickup timeout that the console is waiting, given in seconds.
+     * @return Api key pickup timeout.
      */
-    public int getMaxKeyPickRetries() {
-        return maxKeyPickRetries;
+    public int getApiKeyPickupTimeoutSeconds() {
+        return apiKeyPickupTimeoutSeconds;
     }
 
     /**
-     * Sets the number of retries.
-     * @param maxKeyPickRetries Number of retries.
+     * Sets the api key pickup timeout, in seconds.
+     * @param apiKeyPickupTimeoutSeconds Api key pickup timeout.
      */
-    public void setMaxKeyPickRetries(int maxKeyPickRetries) {
-        this.maxKeyPickRetries = maxKeyPickRetries;
+    public void setApiKeyPickupTimeoutSeconds(int apiKeyPickupTimeoutSeconds) {
+        this.apiKeyPickupTimeoutSeconds = apiKeyPickupTimeoutSeconds;
+    }
+
+    /**
+     * Returns the number of milliseconds between retries to pick up a new api key.
+     * @return Retry wait time.
+     */
+    public int getApiKeyPickupRetryDelayMillis() {
+        return apiKeyPickupRetryDelayMillis;
+    }
+
+    /**
+     * Sets the retry wait time between calls to pick up a new api key.
+     * @param apiKeyPickupRetryDelayMillis Api key wait time between rest api calls to the cloud dqo.
+     */
+    public void setApiKeyPickupRetryDelayMillis(int apiKeyPickupRetryDelayMillis) {
+        this.apiKeyPickupRetryDelayMillis = apiKeyPickupRetryDelayMillis;
     }
 
     /**
