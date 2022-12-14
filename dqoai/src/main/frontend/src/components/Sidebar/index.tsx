@@ -6,6 +6,7 @@ import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import CustomTree from '../CustomTree';
 import { useTree } from '../../contexts/treeContext';
+import Tree from '../Tree';
 
 const Sidebar = () => {
   const history = useHistory();
@@ -60,7 +61,8 @@ const Sidebar = () => {
           onClick={() => history.push('/create')}
         />
       </div>
-      <CustomTree />
+      {/*<CustomTree />*/}
+      <Tree />
       <div
         className="cursor-ew-resize fixed top-0 bottom-0 w-2 transform -translate-x-1/2 z-50"
         onMouseDown={startResizing}
