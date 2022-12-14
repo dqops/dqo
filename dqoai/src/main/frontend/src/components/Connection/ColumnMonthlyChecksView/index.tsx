@@ -91,7 +91,11 @@ const ColumnMonthlyChecksView = ({
         />
       </div>
       <div>
-        <DataQualityChecks checksUI={updatedChecksUI} onChange={onChangeUI} />
+        <DataQualityChecks
+          className="max-h-checks-1"
+          checksUI={updatedChecksUI}
+          onChange={onChangeUI}
+        />
       </div>
     </div>
   );

@@ -123,12 +123,14 @@ const PartitionedChecks = ({
           <DataQualityChecks
             checksUI={updatedDailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
+            className="max-h-checks"
           />
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
             checksUI={updatedMonthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
+            className="max-h-checks"
           />
         )}
       </div>
