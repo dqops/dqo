@@ -15,6 +15,8 @@
  */
 package ai.dqo.metadata.groupings;
 
+import ai.dqo.checks.CheckTimeScale;
+
 /**
  * Object mother for TimeSeriesConfigurationSpec.
  */
@@ -42,6 +44,57 @@ public class TimeSeriesConfigurationSpecObjectMother {
         timeSeries.setMode(TimeSeriesMode.timestamp_column);
         timeSeries.setTimestampColumn(timestampColumnName);
         timeSeries.setTimeGradient(gradient);
+        return timeSeries;
+    }
+
+    /**
+     * Creates a current time time series for an adhoc check.
+     * @return Time series.
+     */
+    public static TimeSeriesConfigurationSpec createTimeSeriesForAdhoc() {
+        TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
+        timeSeries.setMode(TimeSeriesMode.current_time);
+        timeSeries.setTimeGradient(TimeSeriesGradient.MILLISECOND);
+        return timeSeries;
+    }
+
+    /**
+     * Creates a current time time series for a checkpoint (daily or monthly).
+     * @param checkTimeScale Check time scale.
+     * @return Time series.
+     */
+    public static TimeSeriesConfigurationSpec createTimeSeriesForCheckpoint(CheckTimeScale checkTimeScale) {
+        TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
+        timeSeries.setMode(TimeSeriesMode.current_time);
+        switch (checkTimeScale) {
+            case daily:
+                timeSeries.setTimeGradient(TimeSeriesGradient.DAY);
+                break;
+            case monthly:
+                timeSeries.setTimeGradient(TimeSeriesGradient.MONTH);
+                break;
+        }
+        return timeSeries;
+    }
+
+    /**
+     * Creates a current time time series for a date partitioned check (daily or monthly).
+     * @param checkTimeScale Check time scale.
+     * @param datePartitioningColumn Column name with a date that is used for date partitioning.
+     * @return Time series.
+     */
+    public static TimeSeriesConfigurationSpec createTimeSeriesForPartitionedCheck(CheckTimeScale checkTimeScale, String datePartitioningColumn) {
+        TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
+        timeSeries.setMode(TimeSeriesMode.timestamp_column);
+        timeSeries.setTimestampColumn(datePartitioningColumn);
+        switch (checkTimeScale) {
+            case daily:
+                timeSeries.setTimeGradient(TimeSeriesGradient.DAY);
+                break;
+            case monthly:
+                timeSeries.setTimeGradient(TimeSeriesGradient.MONTH);
+                break;
+        }
         return timeSeries;
     }
 }

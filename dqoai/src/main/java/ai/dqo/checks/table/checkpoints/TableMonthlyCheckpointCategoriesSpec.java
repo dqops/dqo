@@ -18,6 +18,7 @@ package ai.dqo.checks.table.checkpoints;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.checkpoints.sql.TableSqlMonthlyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -47,6 +48,7 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
+            put("sql", o -> o.sql);
         }
     };
 
@@ -54,6 +56,11 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardMonthlyCheckpointSpec standard;
+
+    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlMonthlyCheckpointSpec sql;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -71,6 +78,24 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
         this.propagateHierarchyIdToField(standard, "standard");
+    }
+
+    /**
+     * Returns a container of custom sql checkpoints.
+     * @return Container of custom sql checkpoints.
+     */
+    public TableSqlMonthlyCheckpointSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checkpoints.
+     * @param sql Custom sql checkpoints.
+     */
+    public void setSql(TableSqlMonthlyCheckpointSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

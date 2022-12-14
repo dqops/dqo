@@ -15,10 +15,12 @@
  */
 package ai.dqo.execution.checks.progress;
 
+import ai.dqo.execution.sensors.progress.*;
+
 /**
  * Interface implemented by a check execution progress listener that shows the progress of the sensor execution.
  */
-public interface CheckExecutionProgressListener {
+public interface CheckExecutionProgressListener extends SensorExecutionProgressListener {
     /**
      * Returns the flag that says if the summary should be printed.
      * @return true when the summary will be printed, false otherwise.
@@ -36,18 +38,6 @@ public interface CheckExecutionProgressListener {
      * @param event Log event.
      */
     void onExecuteChecksOnTableStart(ExecuteChecksOnTableStartEvent event);
-
-    /**
-     * Called before a sensor is executed for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
-     * @param event Log event.
-     */
-    void onExecutingSensor(ExecutingSensorEvent event);
-
-    /**
-     * Called after a sensor was executed and returned raw (not normalized) results.
-     * @param event Log event.
-     */
-    void onSensorExecuted(SensorExecutedEvent event);
 
     /**
      * Called after sensor results returned from the sensor were normalized to a standard tabular format.
@@ -78,24 +68,6 @@ public interface CheckExecutionProgressListener {
      * @param event Log event.
      */
     void onTableChecksProcessingFinished(TableChecksProcessingFinished event);
-
-    /**
-     * Called before SQL template is expanded (rendered).
-     * @param event Log event.
-     */
-    void onBeforeSqlTemplateRender(BeforeSqlTemplateRenderEvent event);
-
-    /**
-     * Called after an SQL template was rendered from a Jinja2 template.
-     * @param event Log event.
-     */
-    void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event);
-
-    /**
-     * Called before a sensor SQL is executed on a connection.
-     * @param event Log event.
-     */
-    void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event);
 
     /**
      * Called after all data quality checks were executed.

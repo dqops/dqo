@@ -59,7 +59,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecBigQueryTe
 		this.sut = new ColumnValidityValueInRangeDatePercentSensorParametersSpec();
 		this.checkSpec = new ColumnValidityValueInRangeDatePercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date", this.checkSpec);
         this.sut = (ColumnValidityValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 
@@ -109,6 +109,7 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.sut.setIncludeMaxValue(false);
 
         runParameters.setTimeSeries(null);
+
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
         Assertions.assertEquals(String.format("""

@@ -25,6 +25,7 @@ import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +43,9 @@ import static org.quartz.JobBuilder.newJob;
  * Job scheduling root class that manages an instance of a Quartz scheduler.
  */
 @Component
+@Slf4j
 public class JobSchedulerServiceImpl implements JobSchedulerService {
-    private static final Logger LOG = LoggerFactory.getLogger(JobSchedulerServiceImpl.class);
-
+    private boolean started;
     private Scheduler scheduler;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
     private SchedulerFactoryBean schedulerFactory;
@@ -98,6 +99,16 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     }
 
     /**
+     * Checks if the job scheduler is started.
+     *
+     * @return True - the job scheduler is running, false - it is not started.
+     */
+    @Override
+    public boolean isStarted() {
+        return this.started;
+    }
+
+    /**
      * Initializes and starts the scheduler.
      * @param synchronizationMode Cloud sync reporting mode.
      * @param checkRunReportingMode Check execution reporting mode.
@@ -106,8 +117,17 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     public void start(FileSystemSynchronizationReportingMode synchronizationMode, CheckRunReportingMode checkRunReportingMode) {
         this.synchronizationMode = synchronizationMode;
         this.checkRunReportingMode = checkRunReportingMode;
+
+        log.debug(String.format("Starting the job scheduler, synchronization mode: %s, check run mode: %s",
+                synchronizationMode, checkRunReportingMode));
+
+        if (this.started) {
+            return;
+        }
+
         createAndStartScheduler();
         defineDefaultJobs();
+        this.started = true;
     }
 
     /**
@@ -125,7 +145,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.schedulerFactory.start();
         }
         catch (Exception ex) {
-            LOG.error("Failed to start the job scheduler because " + ex.getMessage(), ex);
+            log.error("Failed to start the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -157,7 +177,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
             this.scheduler.scheduleJob(scanMetadataTrigger);
         } catch (SchedulerException ex) {
-            LOG.error("Failed to define the default jobs because " + ex.getMessage(), ex);
+            log.error("Failed to define the default jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -168,6 +188,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     @Override
     @PreDestroy
     public void shutdown() {
+        if (!this.started) {
+            return;
+        }
+
+        log.debug("Shutting down the job scheduler");
+
         try {
             if (this.scheduler != null) {
                 List<? extends Trigger> triggersOfRunChecks = this.scheduler.getTriggersOfJob(JobKeys.RUN_CHECKS);
@@ -189,8 +215,11 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             this.scheduler = null;
         }
         catch (Exception ex) {
-            LOG.error("Failed to stop the job scheduler because " + ex.getMessage(), ex);
+            log.error("Failed to stop the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
+        }
+        finally {
+            this.started = false;
         }
     }
 
@@ -199,11 +228,13 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
      */
     @Override
     public void triggerMetadataSynchronization() {
+        log.debug("Triggering the SYNCHRONIZE_METADATA job on the job scheduler.");
+
         try {
             this.scheduler.triggerJob(JobKeys.SYNCHRONIZE_METADATA);
         }
         catch (Exception ex) {
-            LOG.error("Failed to trigger the metadata synchronization in the job scheduler because " + ex.getMessage(), ex);
+            log.error("Failed to trigger the metadata synchronization in the job scheduler because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -237,7 +268,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             return schedulesCollection;
         }
         catch (Exception ex) {
-            LOG.error("Failed to list active schedules in the job scheduler " + ex.getMessage(), ex);
+            log.error("Failed to list active schedules in the job scheduler " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
     }
@@ -256,7 +287,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
             triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
         }
         catch (Exception ex) {
-            LOG.error("Failed to list scheduled jobs because " + ex.getMessage(), ex);
+            log.error("Failed to list scheduled jobs because " + ex.getMessage(), ex);
             throw new JobSchedulerException(ex);
         }
 
@@ -268,7 +299,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                     this.scheduler.unscheduleJob(trigger.getKey());
                 }
                 catch (Exception ex) {
-                    LOG.error("Failed to unschedule a job because " + ex.getMessage(), ex);
+                    log.error("Failed to unschedule a job because " + ex.getMessage(), ex);
                     if (firstException != null) {
                         firstException = ex;
                     }
@@ -284,7 +315,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 }
             }
             catch (Exception ex) {
-                LOG.error("Failed to schedule a job because " + ex.getMessage(), ex);
+                log.error("Failed to schedule a job because " + ex.getMessage(), ex);
                 if (firstException != null) {
                     firstException = ex;
                 }
@@ -292,7 +323,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         if (firstException != null) {
-            LOG.error("Failed to activate new schedules the job scheduler because " + firstException.getMessage(), firstException);
+            log.error("Failed to activate new schedules the job scheduler because " + firstException.getMessage(), firstException);
             throw new JobSchedulerException(firstException);
         }
     }

@@ -7,11 +7,11 @@ import NumberInput from '../NumberInput';
 
 interface IScheduleTabProps {
   schedule?: RecurringScheduleSpec;
-  onChange: (item: RecurringScheduleSpec) => void;
+  onChange: (item?: RecurringScheduleSpec) => void;
 }
 
 const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
-  const [mode, setMode] = useState(schedule ? 'minutes' : '');
+  const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
 
@@ -33,6 +33,9 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
     }
     if (e.target.value === 'day') {
       handleChange({ cron_expression: `${hour} ${minutes} * * *` });
+    }
+    if (!e.target.value) {
+      handleChange({ cron_expression: '' });
     }
   };
 
@@ -56,18 +59,10 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
     setHour(val);
   };
 
-  const isDisabled = !schedule;
+  const isDisabled = schedule?.disabled;
 
   return (
     <div className={isDisabled ? 'text-gray-700' : ''}>
-      <div className="px-4">
-        <Checkbox
-          checked={!!schedule}
-          onChange={(value) => {}}
-          label="Configure a custom schedule for a data quality check"
-        />
-      </div>
-
       <table className="mb-6">
         <tr>
           <td className="px-4 py-2">
@@ -91,12 +86,19 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
             <Checkbox
               checked={schedule?.disabled}
               onChange={(value) => handleChange({ disabled: value })}
-              disabled={isDisabled}
             />
           </td>
         </tr>
       </table>
       <div className="flex flex-col">
+        <Radio
+          id="unconfigured"
+          name="mode"
+          value=""
+          label="Custom check execution schedule not configured for this check"
+          checked={mode === ''}
+          onChange={onChangeMode}
+        />
         <Radio
           id="minutes"
           name="mode"

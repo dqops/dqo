@@ -54,7 +54,7 @@ public class TableRelevanceMovingWeekAverageSensorParametersSpecBigQueryTests ex
         this.sut = new TableRelevanceMovingWeekAverageSensorParametersSpec();
         this.checkSpec = new TableRelevanceMovingWeekAverageCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableAndCheck(
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableAndLegacyCheck(
                 this.userHomeContext.getUserHome(),
                 BigQueryConnectionSpecObjectMother.CONNECTION_NAME,
                 BigQueryTableSpecObjectMother.DATASET_NAME,

@@ -18,6 +18,7 @@ package ai.dqo.checks.table.partitioned;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -47,6 +48,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
+            put("sql", o -> o.sql);
         }
     };
 
@@ -54,6 +56,11 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardDailyPartitionedChecksSpec standard;
+
+    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlDailyPartitionedSpec sql;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -71,6 +78,24 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
         this.propagateHierarchyIdToField(standard, "standard");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableSqlDailyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param sql Container of custom sql checks.
+     */
+    public void setSql(TableSqlDailyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

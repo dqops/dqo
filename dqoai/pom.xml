@@ -88,6 +88,94 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>com.github.kongchen</groupId>
+						<artifactId>swagger-maven-plugin</artifactId>
+						<version>3.1.8</version>
+						<configuration>
+							<apiSources>
+								<apiSource>
+									<springmvc>true</springmvc>
+									<locations>ai.dqo.rest.controllers</locations>
+									<schemes>http</schemes>
+									<host>localhost:8888</host>
+									<basePath>/</basePath>
+									<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
+									<swaggerFileName>dqo-ui-swagger</swaggerFileName>
+									<outputFormats>JSON,YAML</outputFormats>
+									<info>
+										<title>DQO.ai</title>
+										<version>v1</version>
+										<description>DQO.AI REST API</description>
+										<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
+										<contact>
+											<email>support@dqo.ai</email>
+											<name>DQO.ai Support</name>
+											<url>https://dqo.ai</url>
+										</contact>
+										<license>
+											<url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
+											<name>Apache 2.0</name>
+										</license>
+									</info>
+									<securityDefinitions>
+										<securityDefinition>
+											<json>/securityDefinitions.json</json>
+										</securityDefinition>
+									</securityDefinitions>
+								</apiSource>
+							</apiSources>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<version>6.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+									<generatorName>typescript-axios</generatorName>
+									<output>${project.basedir}/src/main/frontend/src/api</output>
+									<configOptions>
+										<supportsES6>true</supportsES6>
+										<withInterfaces>true</withInterfaces>
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}/src/main/frontend/src/api</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>com.github.eirslett</groupId>
 						<artifactId>frontend-maven-plugin</artifactId>
 						<version>1.12.1</version>
@@ -305,16 +393,6 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>3.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
@@ -521,7 +599,7 @@
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.6.8</version>
+			<version>1.6.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -590,6 +668,11 @@
 			<artifactId>snowflake-jdbc</artifactId>
 			<version>3.13.24</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>swagger-ui-dist</artifactId>
+			<version>4.15.5</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
 		</dependency>
 
 		<!-- test dependencies -->
@@ -741,49 +824,24 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.kongchen</groupId>
-				<artifactId>swagger-maven-plugin</artifactId>
-				<version>3.1.8</version>
-				<configuration>
-					<apiSources>
-						<apiSource>
-							<springmvc>true</springmvc>
-							<locations>ai.dqo.rest.controllers</locations>
-							<schemes>http</schemes>
-							<host>localhost:8888</host>
-							<basePath>/</basePath>
-							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
-							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
-							<outputFormats>JSON,YAML</outputFormats>
-							<info>
-								<title>DQO.ai</title>
-								<version>v1</version>
-								<description>DQO.AI REST API</description>
-								<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
-								<contact>
-									<email>support@dqo.ai</email>
-									<name>DQO.ai Support</name>
-									<url>https://dqo.ai</url>
-								</contact>
-								<license>
-									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-									<name>Apache 2.0</name>
-								</license>
-							</info>
-							<securityDefinitions>
-								<securityDefinition>
-									<json>/securityDefinitions.json</json>
-								</securityDefinition>
-							</securityDefinitions>
-						</apiSource>
-					</apiSources>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
 				<executions>
 					<execution>
-						<phase>compile</phase>
+						<id>copy-swagger-json</id>
+						<phase>process-classes</phase>
 						<goals>
-							<goal>generate</goal>
+							<goal>copy-resources</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target/swagger</directory>
+								</resource>
+							</resources>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -843,47 +901,6 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.2.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
-							<generatorName>typescript-axios</generatorName>
-							<output>${project.basedir}/src/main/frontend/src/api</output>
-							<configOptions>
-								<supportsES6>true</supportsES6>
-								<withInterfaces>true</withInterfaces>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
-							<arguments>
-								<argument>${project.basedir}/src/main/frontend/src/api</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

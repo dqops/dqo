@@ -22,7 +22,7 @@ import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
@@ -33,6 +33,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.TableBasicModel;
@@ -147,7 +148,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.getCategories().size());
+        Assertions.assertEquals(3, result.getCategories().size());
     }
 
     @Test
@@ -222,7 +223,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.getCategories().size());
+        Assertions.assertEquals(3, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -238,7 +239,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getCategories().size());
+        Assertions.assertEquals(2, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -254,7 +255,54 @@ public class TablesControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1, result.getCategories().size());
+        Assertions.assertEquals(2, result.getCategories().size());
+    }
+
+    @Test
+    void getTableAdHocChecksUIBasic_whenTableRequested_thenReturnsAdHocChecksUiBasic() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        TableSpec tableSpec = this.sampleTable.getTableSpec();
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableAdHocChecksUIBasic(
+                this.sampleTable.getConnectionName(),
+                tableSpec.getTarget().getSchemaName(),
+                tableSpec.getTarget().getTableName());
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(3, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @EnumSource(CheckTimeScale.class)
+    void getTableCheckpointsUIBasic_whenTableRequested_thenReturnsCheckpointsUiBasic(CheckTimeScale timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableCheckpointsUIBasic(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                timePartition);
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @EnumSource(CheckTimeScale.class)
+    void getTablePartitionedChecksUIBasic_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                timePartition);
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2, result.getCategories().size());
     }
     
     @Test

@@ -19,18 +19,23 @@ import { Dispatch } from 'redux';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { CONNECTION_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { ConnectionBasicModel } from '../../api';
+import {
+  CommentSpec,
+  ConnectionBasicModel,
+  DataStreamMappingSpec,
+  RecurringScheduleSpec
+} from '../../api';
 
 export const getConnectionsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS
 });
 
-export const getConnectionsSuccess = (data: any) => ({
+export const getConnectionsSuccess = (data: ConnectionBasicModel[]) => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS_SUCCESS,
   data
 });
 
-export const getConnectionsFailed = (error: any) => ({
+export const getConnectionsFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS_ERROR,
   error
 });
@@ -55,12 +60,12 @@ export const getConnectionBasicRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_BASIC
 });
 
-export const getConnectionBasicSuccess = (data: any) => ({
+export const getConnectionBasicSuccess = (data: ConnectionBasicModel) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_BASIC_SUCCESS,
   data
 });
 
-export const getConnectionBasicFailed = (error: any) => ({
+export const getConnectionBasicFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR,
   error
 });
@@ -84,13 +89,14 @@ export const updateConnectionBasicSuccess = () => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS
 });
 
-export const updateConnectionBasicFailed = (error: any) => ({
+export const updateConnectionBasicFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_ERROR,
   error
 });
 
 export const updateConnectionBasic =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+  (connectionName: string, data: ConnectionBasicModel) =>
+  async (dispatch: Dispatch) => {
     dispatch(updateConnectionBasicRequest());
     try {
       await ConnectionApiClient.updateConnectionBasic(connectionName, data);
@@ -104,12 +110,12 @@ export const getConnectionScheduleRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE
 });
 
-export const getConnectionScheduleSuccess = (data: any) => ({
+export const getConnectionScheduleSuccess = (data: RecurringScheduleSpec) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_SUCCESS,
   data
 });
 
-export const getConnectionScheduleFailed = (error: any) => ({
+export const getConnectionScheduleFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_ERROR,
   error
 });
@@ -135,13 +141,14 @@ export const updateConnectionScheduleSuccess = () => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_SUCCESS
 });
 
-export const updateConnectionScheduleFailed = (error: any) => ({
+export const updateConnectionScheduleFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_ERROR,
   error
 });
 
 export const updateConnectionSchedule =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+  (connectionName: string, data: RecurringScheduleSpec) =>
+  async (dispatch: Dispatch) => {
     dispatch(updateConnectionScheduleRequest());
     try {
       await ConnectionApiClient.updateConnectionSchedule(connectionName, data);
@@ -151,70 +158,16 @@ export const updateConnectionSchedule =
     }
   };
 
-export const getConnectionTimeRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME
-});
-
-export const getConnectionTimeSuccess = (data: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME_SUCCESS,
-  data
-});
-
-export const getConnectionTimeFailed = (error: any) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_TIME_ERROR,
-  error
-});
-
-export const getConnectionTime =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionTimeRequest());
-    try {
-      const res = await ConnectionApiClient.getConnectionDefaultTimeSeries(
-        connectionName
-      );
-      dispatch(getConnectionTimeSuccess(res.data));
-    } catch (err) {
-      dispatch(getConnectionTimeFailed(err));
-    }
-  };
-
-export const updateConnectionTimeRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME
-});
-
-export const updateConnectionTimeSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME_SUCCESS
-});
-
-export const updateConnectionTimeFailed = (error: any) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_TIME_ERROR,
-  error
-});
-
-export const updateConnectionTime =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
-    dispatch(updateConnectionTimeRequest());
-    try {
-      await ConnectionApiClient.updateConnectionDefaultTimeSeries(
-        connectionName,
-        data
-      );
-      dispatch(updateConnectionTimeSuccess());
-    } catch (err) {
-      dispatch(updateConnectionTimeFailed(err));
-    }
-  };
-
 export const getConnectionCommentsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS
 });
 
-export const getConnectionCommentsSuccess = (data: any) => ({
+export const getConnectionCommentsSuccess = (data: CommentSpec[]) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS_SUCCESS,
   data
 });
 
-export const getConnectionCommentsFailed = (error: any) => ({
+export const getConnectionCommentsFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS_ERROR,
   error
 });
@@ -240,13 +193,14 @@ export const updateConnectionCommentsSuccess = () => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_SUCCESS
 });
 
-export const updateConnectionCommentsFailed = (error: any) => ({
+export const updateConnectionCommentsFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_ERROR,
   error
 });
 
 export const updateConnectionComments =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+  (connectionName: string, data: CommentSpec[]) =>
+  async (dispatch: Dispatch) => {
     dispatch(updateConnectionCommentsRequest());
     try {
       await ConnectionApiClient.updateConnectionComments(connectionName, data);
@@ -260,12 +214,12 @@ export const getConnectionLabelsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_LABELS
 });
 
-export const getConnectionLabelsSuccess = (data: any) => ({
+export const getConnectionLabelsSuccess = (data: string[]) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_LABELS_SUCCESS,
   data
 });
 
-export const getConnectionLabelsFailed = (error: any) => ({
+export const getConnectionLabelsFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_LABELS_ERROR,
   error
 });
@@ -289,13 +243,13 @@ export const updateConnectionLabelsSuccess = () => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_SUCCESS
 });
 
-export const updateConnectionLabelsFailed = (error: any) => ({
+export const updateConnectionLabelsFailed = (error: unknown) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_ERROR,
   error
 });
 
 export const updateConnectionLabels =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+  (connectionName: string, data: string[]) => async (dispatch: Dispatch) => {
     dispatch(updateConnectionLabelsRequest());
     try {
       await ConnectionApiClient.updateConnectionLabels(connectionName, data);
@@ -309,12 +263,16 @@ export const getConnectionDefaultDataStreamsMappingRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
 });
 
-export const getConnectionDefaultDataStreamsMappingSuccess = (data: any) => ({
+export const getConnectionDefaultDataStreamsMappingSuccess = (
+  data: DataStreamMappingSpec
+) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
   data
 });
 
-export const getConnectionDefaultDataStreamsMappingFailed = (error: any) => ({
+export const getConnectionDefaultDataStreamsMappingFailed = (
+  error: unknown
+) => ({
   type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
@@ -342,14 +300,15 @@ export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
 });
 
 export const updateConnectionDefaultDataStreamsMappingFailed = (
-  error: any
+  error: unknown
 ) => ({
   type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const updateConnectionDefaultDataStreamsMapping =
-  (connectionName: string, data: any) => async (dispatch: Dispatch) => {
+  (connectionName: string, data: DataStreamMappingSpec) =>
+  async (dispatch: Dispatch) => {
     dispatch(updateConnectionDefaultDataStreamsMappingRequest());
     try {
       await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(

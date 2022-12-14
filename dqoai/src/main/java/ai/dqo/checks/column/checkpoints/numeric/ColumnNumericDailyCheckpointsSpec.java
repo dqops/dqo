@@ -18,6 +18,8 @@ package ai.dqo.checks.column.checkpoints.numeric;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,6 +40,8 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         {
             put("daily_checkpoint_max_negative_count", o -> o.dailyCheckpointMaxNegativeCount);
             put("daily_checkpoint_max_negative_percent", o -> o.dailyCheckpointMaxNegativePercent);
+            put("daily_checkpoint_min_numbers_in_set_count", o -> o.dailyCheckpointMinNumbersInSetCount);
+            put("daily_checkpoint_min_numbers_in_set_percent", o -> o.dailyCheckpointMinNumbersInSetPercent);
         }
     };
 
@@ -46,6 +50,12 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxNegativePercentCheckSpec dailyCheckpointMaxNegativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinNumbersInSetCountCheckSpec dailyCheckpointMinNumbersInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinNumbersInSetPercentCheckSpec dailyCheckpointMinNumbersInSetPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -83,6 +93,42 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         propagateHierarchyIdToField(dailyCheckpointMaxNegativePercent, "daily_checkpoint_max_negative_percent");
     }
 
+    /**
+     * Returns a minimum Numbers in set count check.
+     * @return Minimum Numbers in set count check.
+     */
+    public ColumnMinNumbersInSetCountCheckSpec getDailyCheckpointMinNumbersInSetCount() {
+        return dailyCheckpointMinNumbersInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set count check.
+     * @param dailyCheckpointMinNumbersInSetCount Minimum Numbers in set count check.
+     */
+    public void setDailyCheckpointMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec dailyCheckpointMinNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinNumbersInSetCount, dailyCheckpointMinNumbersInSetCount));
+        this.dailyCheckpointMinNumbersInSetCount = dailyCheckpointMinNumbersInSetCount;
+        propagateHierarchyIdToField(dailyCheckpointMinNumbersInSetCount, "daily_checkpoint_min_numbers_in_set_count");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinNumbersInSetPercentCheckSpec getDailyCheckpointMinNumbersInSetPercent() {
+        return dailyCheckpointMinNumbersInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyCheckpointMinNumbersInSetPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyCheckpointMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec dailyCheckpointMinNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinNumbersInSetPercent, dailyCheckpointMinNumbersInSetPercent));
+        this.dailyCheckpointMinNumbersInSetPercent = dailyCheckpointMinNumbersInSetPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinNumbersInSetPercent, "daily_checkpoint_min_numbers_in_set_percent");
+    }
+    
     /**
      * Returns the child map on the spec class with all fields.
      *

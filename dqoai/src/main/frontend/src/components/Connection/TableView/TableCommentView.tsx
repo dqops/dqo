@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CommentsView from '../CommentsView';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { CommentSpec } from '../../../api';
@@ -61,7 +61,12 @@ const TableCommentView = ({
         isUpdated={isUpdated}
         isUpdating={isUpdating}
       />
-      <CommentsView comments={updatedComments} onChange={handleChange} />
+      <CommentsView
+        isUpdated={isUpdated}
+        setIsUpdated={setIsUpdated}
+        comments={updatedComments}
+        onChange={handleChange}
+      />
     </div>
   );
 };

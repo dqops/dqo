@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.metadata.groupings;
 
 import ai.dqo.BaseTest;
@@ -24,9 +39,9 @@ public class DataStreamLevelSpecTests extends BaseTest {
     }
 
     @Test
-    void getSource_whenNewObject_thenHasDefaultValueStaticValue() {
+    void getSource_whenNewObject_thenHasDefaultValueTag() {
         Assertions.assertNotNull(this.sut.getSource());
-        Assertions.assertEquals(DataStreamLevelSource.STATIC_VALUE, this.sut.getSource());
+        Assertions.assertEquals(DataStreamLevelSource.TAG, this.sut.getSource());
     }
 
     @Test
@@ -36,13 +51,13 @@ public class DataStreamLevelSpecTests extends BaseTest {
 
     @Test
     void isDefault_whenSourceConfigured_thenReturnsFalse() {
-        this.sut.setSource(DataStreamLevelSource.STATIC_VALUE);
+        this.sut.setSource(DataStreamLevelSource.TAG);
         Assertions.assertFalse(this.sut.isDefault());
     }
 
     @Test
     void isDefault_whenStaticValueConfigured_thenReturnsFalse() {
-        this.sut.setStaticValue("abc");
+        this.sut.setTag("abc");
         Assertions.assertFalse(this.sut.isDefault());
     }
 

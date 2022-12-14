@@ -15,6 +15,11 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
+import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
+import ai.dqo.core.configuration.DqoLoggingConfigurationPropertiesObjectMother;
+import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.utils.BeanFactoryObjectMother;
 
 /**
@@ -24,7 +29,22 @@ public class LocalUserHomeCreatorObjectMother {
     private static boolean isInitialized;
 
     /**
-     * Returns the default (singleton) implementation of the local dqo user home creator.
+     * Returns a new instance of a dqo user home creator with a customized configuration to disable logging inside the .logs folder.
+     * @return Non-logging dqo user home creator.
+     */
+    public static LocalUserHomeCreator createNewNoLogging() {
+        HomeLocationFindService homeLocationFindService = BeanFactoryObjectMother.getBeanFactory().getBean(HomeLocationFindService.class);
+        TerminalReader terminalReader = BeanFactoryObjectMother.getBeanFactory().getBean(TerminalReader.class);
+        TerminalWriter terminalWriter = BeanFactoryObjectMother.getBeanFactory().getBean(TerminalWriter.class);
+        DqoLoggingConfigurationProperties noLoggingConfiguration = DqoLoggingConfigurationPropertiesObjectMother.getNoLoggingConfiguration();
+        LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
+                homeLocationFindService, terminalReader, terminalWriter, noLoggingConfiguration);
+        return localUserHomeCreator;
+    }
+
+    /**
+     * Returns the default (singleton) implementation of the local dqo user home creator. It should not be used to more than once
+     * to initialize the user home because it will set up a file logger.
      * @return Default dqo user home creator.
      */
     public static LocalUserHomeCreator getDefault() {
@@ -36,7 +56,7 @@ public class LocalUserHomeCreatorObjectMother {
      * @param pathToUserHome Path to a dqo user home to initialize.
      */
     public static void initializeDqoUserHomeAt(String pathToUserHome) {
-        LocalUserHomeCreator localUserHomeCreator = getDefault();
+        LocalUserHomeCreator localUserHomeCreator = createNewNoLogging();
         localUserHomeCreator.initializeDqoUserHome(pathToUserHome);
     }
 

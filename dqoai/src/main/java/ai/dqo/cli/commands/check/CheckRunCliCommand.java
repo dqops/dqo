@@ -37,6 +37,7 @@ import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -47,7 +48,7 @@ import picocli.CommandLine;
  * "check run" 2nd level CLI command that executes data quality checks.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private final TerminalWriter terminalWriter;
@@ -117,9 +118,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-ds", "--data-stream-level"}, description = "Data stream level filter",
+    @CommandLine.Option(names = {"-tag", "--data-stream-level-tag"}, description = "Data stream hierarchy level filter (tag)",
             required = false)
-    private String[] dimensions;
+    private String[] tags;
 
     @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
     private String[] labels;
@@ -272,6 +273,38 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns an array of data stream hierarchy tags that must be assigned.
+     * @return Array of data stream hierarchy tags.
+     */
+    public String[] getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets an array of required tags on the data stream hierarchy.
+     * @param tags Tags on the hierarchy.
+     */
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Sets the array of required labels to be assigned to target objects or their parents.
+     * @return Array of labels.
+     */
+    public String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * Sets a reference to an array with required labels.
+     * @param labels Array with required labels.
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
+    /**
      * Is the dummy run enabled.
      * @return Dummy run is enabled.
      */
@@ -321,7 +354,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setTimeScale(this.timeScale);
         filters.setCheckCategory(this.checkCategory);
         filters.setEnabled(this.enabled);
-        filters.setDimensions(this.dimensions);
+        filters.setTags(this.tags);
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);

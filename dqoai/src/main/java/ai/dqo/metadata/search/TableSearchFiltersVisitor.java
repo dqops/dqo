@@ -15,7 +15,6 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
@@ -58,7 +57,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -72,7 +71,6 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        parameter.getDataStreamSearcherObject().setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -108,7 +106,7 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -133,9 +131,6 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             dataStreamSearcherObject.setTableDataStreams(tableWrapper.getSpec().getDataStreams());
         }
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getTableDataStreams() != null
-                ? dataStreamSearcherObject.getTableDataStreams()
-                : dataStreamSearcherObject.getConnectionDataStreams();
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getTableLabels() != null) {
@@ -146,9 +141,6 @@ public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllTableDataStreams(this.filters, overridenDataStreams)) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
         if (!LabelsSearchMatcher.matchTableLabels(this.filters, overridenLabels)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }

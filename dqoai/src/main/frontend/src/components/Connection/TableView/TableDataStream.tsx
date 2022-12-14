@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './TableActionGroup';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableDataStreamMapping,
-  updateTableDataStreamMapping
+  getTableDefaultDataStreamMapping,
+  updateTableDefaultDataStreamMapping
 } from '../../../redux/actions/table.actions';
 import { DataStreamMappingSpec } from '../../../api';
 import { useSelector } from 'react-redux';
@@ -34,12 +34,17 @@ const TableDataStream = ({
   }, [dataStreamsMapping]);
 
   useEffect(() => {
-    dispatch(getTableDataStreamMapping(connectionName, schemaName, tableName));
+    dispatch(
+      getTableDefaultDataStreamMapping(connectionName, schemaName, tableName)
+    );
   }, []);
 
   const onUpdate = async () => {
+    if (!updatedDataStreamMapping) {
+      return;
+    }
     await dispatch(
-      updateTableDataStreamMapping(
+      updateTableDefaultDataStreamMapping(
         connectionName,
         schemaName,
         tableName,
@@ -47,7 +52,7 @@ const TableDataStream = ({
       )
     );
     await dispatch(
-      getTableDataStreamMapping(connectionName, schemaName, tableName)
+      getTableDefaultDataStreamMapping(connectionName, schemaName, tableName)
     );
     setIsUpdated(false);
   };

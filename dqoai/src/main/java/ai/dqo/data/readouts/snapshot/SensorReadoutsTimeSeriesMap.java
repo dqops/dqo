@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.readouts.snapshot;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,34 @@ import java.util.Map;
  */
 public class SensorReadoutsTimeSeriesMap {
     private final Map<SensorReadoutTimeSeriesKey, SensorReadoutsTimeSeriesData> entries = new HashMap<>();
+    private LocalDate firstLoadedMonth;
+    private LocalDate lastLoadedMonth;
+
+    /**
+     * Create a time series map.
+     * @param firstLoadedMonth The date of the first loaded month.
+     * @param lastLoadedMonth The date of the last loaded month.
+     */
+    public SensorReadoutsTimeSeriesMap(LocalDate firstLoadedMonth, LocalDate lastLoadedMonth) {
+        this.firstLoadedMonth = firstLoadedMonth;
+        this.lastLoadedMonth = lastLoadedMonth;
+    }
+
+    /**
+     * Returns the date of the first loaded month.
+     * @return The date of the first loaded month.
+     */
+    public LocalDate getFirstLoadedMonth() {
+        return firstLoadedMonth;
+    }
+
+    /**
+     * Returns the date of the last loaded month.
+     * @return The date of the last loaded month.
+     */
+    public LocalDate getLastLoadedMonth() {
+        return lastLoadedMonth;
+    }
 
     /**
      * Returns a known time series for the given key or null when no historic data for this time series is present.

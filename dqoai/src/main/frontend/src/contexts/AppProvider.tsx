@@ -1,9 +1,14 @@
 import React from 'react';
 
 import { TreeProvider } from './treeContext';
+import { NotificationProvider } from './notificationContext';
 
 function AppProvider({ children }: { children: any }) {
-  return <TreeProvider>{children}</TreeProvider>;
+  return (
+    <NotificationProvider>
+      <TreeProvider>{children}</TreeProvider>
+    </NotificationProvider>
+  );
 }
 
 export default AppProvider;

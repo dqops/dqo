@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../../Button';
+import ConfirmDialog from './ConfirmDialog';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { ColumnApiClient } from '../../../services/apiClient';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -14,8 +18,28 @@ const ColumnActionGroup = ({
   isDisabled,
   onUpdate
 }: IActionGroupProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { columnBasic } = useSelector((state: IRootState) => state.column);
+
+  const removeColumn = async () => {
+    if (columnBasic) {
+      await ColumnApiClient.deleteColumn(
+        columnBasic?.connection_name ?? '',
+        columnBasic?.table?.schemaName ?? '',
+        columnBasic.table?.tableName ?? '',
+        columnBasic.column_name ?? ''
+      );
+    }
+  };
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
+      <Button
+        variant="text"
+        color="info"
+        label="Delete"
+        onClick={() => setIsOpen(true)}
+      />
       <Button
         color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
         variant="contained"
@@ -24,6 +48,12 @@ const ColumnActionGroup = ({
         onClick={onUpdate}
         loading={isUpdating}
         disabled={isDisabled}
+      />
+      <ConfirmDialog
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        column={columnBasic}
+        onConfirm={removeColumn}
       />
     </div>
   );

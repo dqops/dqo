@@ -62,7 +62,7 @@ public class ColumnValidityNumericalTypePercentSensorParametersSpecIntegrationTe
 
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "numerical_type_string_column", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "numerical_type_string_column", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

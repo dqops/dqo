@@ -62,7 +62,7 @@ public class ColumnValidityNonNegativePercentSensorParametersSpecIntegrationTest
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithPositiveValues_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -74,7 +74,7 @@ public class ColumnValidityNonNegativePercentSensorParametersSpecIntegrationTest
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithNegativeValues_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "value", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "value", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

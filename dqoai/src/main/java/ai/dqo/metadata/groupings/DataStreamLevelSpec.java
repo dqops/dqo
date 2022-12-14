@@ -22,14 +22,12 @@ import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -46,11 +44,11 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
         }
     };
 
-    @JsonPropertyDescription("Hardcoded data stream level value. Assign a hardcoded (static) data stream level value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
-    private DataStreamLevelSource source = DataStreamLevelSource.STATIC_VALUE;
+    @JsonPropertyDescription("The source of the data stream level value. The default stream level source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    private DataStreamLevelSource source = DataStreamLevelSource.TAG;
 
-    @JsonPropertyDescription("Hardcoded data stream level value. Assign a hardcoded (static) data stream level value when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
-    private String staticValue;
+    @JsonPropertyDescription("Data stream tag. Assign a hardcoded (static) data stream level value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
+    private String tag;
 
     @JsonPropertyDescription("Column name that contains a dynamic data stream level value (for dynamic data-driven data streams). Sensor queries will be extended with a GROUP BY {data stream level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.")
     @ControlType(ParameterDataType.column_name_type)
@@ -80,17 +78,17 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
      * Returns a static value assigned to a data stream level.
      * @return Static data stream level value.
      */
-    public String getStaticValue() {
-        return staticValue;
+    public String getTag() {
+        return tag;
     }
 
     /**
      * Sets a new static value of the data stream level.
-     * @param staticValue Static data stream level value.
+     * @param tag Static data stream level value.
      */
-    public void setStaticValue(String staticValue) {
-		setDirtyIf(!Objects.equals(this.staticValue, staticValue));
-        this.staticValue = staticValue;
+    public void setTag(String tag) {
+		setDirtyIf(!Objects.equals(this.tag, tag));
+        this.tag = tag;
     }
 
     /**
@@ -170,7 +168,7 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
     public DataStreamLevelSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.clone();
-            cloned.staticValue = secretValueProvider.expandValue(cloned.staticValue);
+            cloned.tag = secretValueProvider.expandValue(cloned.tag);
             cloned.column = secretValueProvider.expandValue(cloned.column);
             return cloned;
         }

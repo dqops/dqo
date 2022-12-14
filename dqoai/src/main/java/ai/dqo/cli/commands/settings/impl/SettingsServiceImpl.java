@@ -73,7 +73,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.setEditorName(editorName);
 		settings.setEditorPath(editorPath);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully set editor name");
+		cliOperationStatus.setSuccessMessage("Successfully set editor name");
 
 		return cliOperationStatus;
 	}
@@ -104,7 +104,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.setEditorName(null);
 		settings.setEditorPath(null);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully removed editor");
+		cliOperationStatus.setSuccessMessage("Successfully removed editor");
 
 		return cliOperationStatus;
 	}
@@ -133,7 +133,7 @@ public class SettingsServiceImpl implements SettingsService {
 			cliOperationStatus.setFailedMessage(String.format("Editor name is not set"));
 			return cliOperationStatus;
 		}
-		cliOperationStatus.setSuccesMessage(String.format("Set editor is: %s\nEditor path is: %s", editorName, editorPath));
+		cliOperationStatus.setSuccessMessage(String.format("Set editor is: %s\nEditor path is: %s", editorName, editorPath));
 
 		return cliOperationStatus;
 	}
@@ -161,7 +161,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.setStatus(InstanceStatus.ADDED);
 		userHomeContext.flush();
 
-		cliOperationStatus.setSuccesMessage("Successfully initialized settings file");
+		cliOperationStatus.setSuccessMessage("Successfully initialized settings file");
 		return cliOperationStatus;
 	}
 
@@ -183,7 +183,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.markForDeletion();
 		userHomeContext.flush();
 
-		cliOperationStatus.setSuccesMessage("Successfully removed settings file");
+		cliOperationStatus.setSuccessMessage("Successfully removed settings file");
 		return cliOperationStatus;
 	}
 
@@ -208,7 +208,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(key);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully set api key");
+		cliOperationStatus.setSuccessMessage("Successfully set api key");
 
 		return cliOperationStatus;
 	}
@@ -239,7 +239,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(null);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully removed api key");
+		cliOperationStatus.setSuccessMessage("Successfully removed api key");
 
 		return cliOperationStatus;
 	}
@@ -267,7 +267,7 @@ public class SettingsServiceImpl implements SettingsService {
 			cliOperationStatus.setFailedMessage(String.format("Api key is not set"));
 			return cliOperationStatus;
 		}
-		cliOperationStatus.setSuccesMessage(String.format("Set api key is: %s", key));
+		cliOperationStatus.setSuccessMessage(String.format("Set api key is: %s", key));
 		return cliOperationStatus;
 	}
 

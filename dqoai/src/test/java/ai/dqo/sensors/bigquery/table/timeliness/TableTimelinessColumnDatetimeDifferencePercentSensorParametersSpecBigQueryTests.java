@@ -57,7 +57,7 @@ public class TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpecB
         this.sut = new TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec();
         this.checkSpec = new TableTimelinessColumnDatetimeDifferencePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         this.sut = (TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec) runParameters.getSensorParameters();
 
     }

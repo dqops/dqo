@@ -33,6 +33,7 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -40,7 +41,7 @@ import tech.tablesaw.api.*;
 import java.util.Collection;
 
 @Service
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ColumnServiceImpl implements ColumnService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final TerminalReader terminalReader;
@@ -66,19 +67,19 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param tabularOutputFormat Tabular output format.
-	 * @param dimensions Dimensions filter.
+	 * @param tags Dimensions filter.
 	 * @param labels Labels filter.
 	 * @return Cli operation status.
 	 */
 	@Override
-	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
+	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] tags, String[] labels) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
 		columnSearchFilters.setColumnName(columnName);
 		columnSearchFilters.setSchemaTableName(tableName);
 		columnSearchFilters.setConnectionName(connectionName);
-		columnSearchFilters.setDimensions(dimensions);
+		columnSearchFilters.setTags(tags);
 		columnSearchFilters.setLabels(labels);
 
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
@@ -166,7 +167,7 @@ public class ColumnServiceImpl implements ColumnService {
 
 		table.getSpec().getColumns().put(columnName, columnSpec);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage(String.format("Column %s was successfully added.", columnName));
+		cliOperationStatus.setSuccessMessage(String.format("Column %s was successfully added.", columnName));
 		return cliOperationStatus;
 	}
 
@@ -216,7 +217,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
 	}
 
@@ -259,7 +260,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully updated %d columns.", columnSpecs.size()));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
 	}
 
@@ -307,7 +308,7 @@ public class ColumnServiceImpl implements ColumnService {
 				}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully renamed column %s.", columnName));
+		cliOperationStatus.setSuccessMessage(String.format("Successfully renamed column %s.", columnName));
 		return cliOperationStatus;
 	}
 
@@ -361,7 +362,7 @@ public class ColumnServiceImpl implements ColumnService {
 			}
 		);
 
-		cliOperationStatus.setSuccesMessage(String.format("Successfully %s %d columns.",
+		cliOperationStatus.setSuccessMessage(String.format("Successfully %s %d columns.",
 															disable ? "disabled" : "enabled", columnSpecs.size()));
 		return cliOperationStatus;
 	}

@@ -18,6 +18,7 @@ package ai.dqo.connectors;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ import java.util.Locale;
  * Connection registry that returns connection providers for dialects.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class ConnectionProviderRegistryImpl implements ConnectionProviderRegistry {
     private final BeanFactory beanFactory;
 

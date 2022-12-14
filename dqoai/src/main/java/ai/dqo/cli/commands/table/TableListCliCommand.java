@@ -28,6 +28,7 @@ import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -39,7 +40,7 @@ import picocli.CommandLine;
  * Cli command to list tables.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List tables which match filters")
 public class TableListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private final TableService tableImportService;

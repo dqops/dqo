@@ -15,6 +15,8 @@
  */
 package ai.dqo.core.configuration;
 
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +28,27 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dqo.scheduler")
 @EqualsAndHashCode(callSuper = false)
 public class DqoSchedulerConfigurationProperties implements Cloneable {
+    private Boolean start;
     private String scanMetadataCronSchedule;
     private boolean enableCloudSync = true;
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
+    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
+
+    /**
+     * Returns the flag if the scheduler should be started on startup (true), disabled permanently (false) or null when it should not be started, unless the application is started with a "run" command.
+     * @return True - start the scheduler instantly, false - never start automatically, null - start only when the "run" command was called.
+     */
+    public Boolean getStart() {
+        return start;
+    }
+
+    /**
+     * Sets the flag if the scheduler should be started on the application startup or disabled.
+     * @param start True - start the scheduler instantly, false - never start automatically, null - start only when the "run" command was called.
+     */
+    public void setStart(Boolean start) {
+        this.start = start;
+    }
 
     /**
      * Returns the default cron expression used to scan the metadata for new schedules to run data quality checks.
@@ -59,6 +80,38 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
      */
     public void setEnableCloudSync(boolean enableCloudSync) {
         this.enableCloudSync = enableCloudSync;
+    }
+
+    /**
+     * Returns the default console logging mode for reporting the progress of cloud sync to the console.
+     * @return Reporting mode for a repeating cloud sync command.
+     */
+    public FileSystemSynchronizationReportingMode getSynchronizationMode() {
+        return synchronizationMode;
+    }
+
+    /**
+     * Sets the console logging mode for cloud sync operations performed by the scheduler.
+     * @param synchronizationMode Console logging mode for cloud sync operations.
+     */
+    public void setSynchronizationMode(FileSystemSynchronizationReportingMode synchronizationMode) {
+        this.synchronizationMode = synchronizationMode;
+    }
+
+    /**
+     * Returns the console logging mode used when the scheduler runs checks as jobs.
+     * @return Check run logging mode.
+     */
+    public CheckRunReportingMode getCheckRunMode() {
+        return checkRunMode;
+    }
+
+    /**
+     * Sets the console logging mode for "run checks" jobs executed by the scheduler.
+     * @param checkRunMode Check run console logging mode.
+     */
+    public void setCheckRunMode(CheckRunReportingMode checkRunMode) {
+        this.checkRunMode = checkRunMode;
     }
 
     @Override

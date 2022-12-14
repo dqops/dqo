@@ -66,7 +66,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecIntegra
         this.sut.setMinLength(3);
         this.sut.setMaxLength(5);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -81,7 +81,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecIntegra
         this.sut.setMinLength(6);
         this.sut.setMaxLength(10);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -96,7 +96,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecIntegra
         this.sut.setMinLength(2);
         this.sut.setMaxLength(5);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string_int", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string_int", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -111,7 +111,7 @@ public class ColumnValidityStringLengthInRangePercentSensorParametersSpecIntegra
         this.sut.setMinLength(2);
         this.sut.setMaxLength(5);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "count_0", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "count_0", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
 

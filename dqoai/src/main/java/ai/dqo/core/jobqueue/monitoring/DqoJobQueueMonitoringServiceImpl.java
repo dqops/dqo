@@ -1,8 +1,24 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
+import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +74,51 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
      */
     @Override
     public void start() {
-        if (started) {
+        if (this.started) {
             return;
         }
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<DqoJobChange> dqoJobChangeModelFlux = this.jobUpdateSink.asFlux();
-        dqoJobChangeModelFlux.publishOn(Schedulers.parallel())
+        dqoJobChangeModelFlux.subscribeOn(Schedulers.parallel())
+                .doOnComplete(() -> releaseAwaitingClients())
                 .subscribe(jobModel -> onJobChange(jobModel));
 
         this.started = true;
+    }
+
+    /**
+     * Releases any awaiting clients.
+     */
+    protected void releaseAwaitingClients() {
+        List<CompletableFuture<Long>> awaitingClients;
+
+        synchronized (this.lock) {
+            awaitingClients = this.waitingClients.values().stream().collect(Collectors.toList());
+            this.waitingClients.clear();
+        }
+
+        for (CompletableFuture<Long> awaitingClientFuture :  awaitingClients) {
+            awaitingClientFuture.completeExceptionally(new DqoQueueJobExecutionException("DQO job queue was stopped"));
+        }
+    }
+
+    /**
+     * Stops the queue monitoring. All calls to get a list of jobs will fail after the queue monitor was stopped.
+     */
+    @Override
+    public void stop() {
+        if (!this.started) {
+            return;
+        }
+
+        try {
+            Sinks.Many<DqoJobChange> currentSink = this.jobUpdateSink;
+            this.jobUpdateSink = null;
+            currentSink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
+        }
+        finally {
+            this.started = false;
+        }
     }
 
     /**
@@ -188,6 +240,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         CompletableFuture<DqoJobQueueIncrementalSnapshotModel> waitForChangeFuture = null;
 
         synchronized (this.lock) {
+            if (!this.started) {
+                throw new DqoQueueJobExecutionException("Queue is stopped");
+            }
+
             changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId();
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
@@ -197,7 +253,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
                 this.waitingClients.put(changeSequence, completableFuture);
                 waitForChangeFuture = completableFuture.handleAsync((result, ex) -> {
-                    this.waitingClients.remove(changeSequence);
+                    synchronized (this.lock) {
+                        this.waitingClients.remove(changeSequence);
+                    }
                     if (result == null) {
                         return new DqoJobQueueIncrementalSnapshotModel(null, changeSequence);
                     }

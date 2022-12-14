@@ -59,10 +59,13 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
     decoder = JSONDecoder(object_hook=ObjectHook)
     buf = ""
     ex = None
+    started_at = None
     while True:
         block = file_obj.read(buf_size)
         if not block:
             break
+        if not started_at:
+            started_at = datetime.now()
         buf += block
         pos = 0
         while True:
@@ -70,6 +73,10 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
             if not match:
                 break
             pos = match.start()
+
+            if not started_at and pos < len(block):
+                started_at = datetime.now()
+
             try:
                 obj, pos = decoder.raw_decode(buf, pos)
             except JSONDecodeError as e:
@@ -77,8 +84,11 @@ def stream_json_objects(file_obj: TextIO, buf_size=1024):
                 break
             else:
                 ex = None
-                yield obj
+                duration_millis = int((datetime.now() - started_at).total_seconds() * 1000)
+                started_at = None
+                yield obj, duration_millis
         buf = buf[pos:]
+        started_at = None
     if ex is not None:
         raise ex
 
@@ -87,10 +97,13 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
     decoder = JSONDecoder()
     buf = ""
     ex = None
+    started_at = None
     while True:
         block = file_obj.read(buf_size)
         if not block:
             break
+        if not started_at:
+            started_at = datetime.now()
         buf += block
         pos = 0
         while True:
@@ -98,6 +111,10 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
             if not match:
                 break
             pos = match.start()
+
+            if not started_at and pos < len(block):
+                started_at = datetime.now()
+
             try:
                 obj, pos = decoder.raw_decode(buf, pos)
             except JSONDecodeError as e:
@@ -105,7 +122,10 @@ def stream_json_dicts(file_obj: TextIO, buf_size=1024):
                 break
             else:
                 ex = None
-                yield obj
+                duration_millis = int((datetime.now() - started_at).total_seconds() * 1000)
+                started_at = None
+                yield obj, duration_millis
         buf = buf[pos:]
+        started_at = None
     if ex is not None:
         raise ex

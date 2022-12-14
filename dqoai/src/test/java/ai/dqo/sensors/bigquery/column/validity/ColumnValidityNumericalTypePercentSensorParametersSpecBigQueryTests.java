@@ -57,7 +57,7 @@ public class ColumnValidityNumericalTypePercentSensorParametersSpecBigQueryTests
 		this.sut = new ColumnValidityNumericalTypePercentSensorParametersSpec();
 		this.checkSpec = new ColumnValidityNumericalTypePercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "numerical_type_string_column", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "numerical_type_string_column", this.checkSpec);
     }
 
     @Test

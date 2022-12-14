@@ -45,6 +45,7 @@ const SelectInput = ({
     if (onChange) {
       onChange(option.value);
     }
+    setIsChanged(false);
     closeMenu();
   };
 

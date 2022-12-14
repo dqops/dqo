@@ -15,6 +15,9 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
+import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ProfilerSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -22,11 +25,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.SchemaModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +65,7 @@ public class SchemasController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Flux<SchemaModel>> getSchemas(
-            @Parameter(description = "Connection name") @PathVariable String connectionName) {
+            @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -86,6 +85,23 @@ public class SchemasController {
         Stream<SchemaModel> modelStream = schemaNameList.stream().map(s -> new SchemaModel() {{
             setConnectionName(connectionName);
             setSchemaName(s);
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+                setEnabled(true);
+            }});
+            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+                setEnabled(true);
+            }});
+            setImportTableJobParameters(new ImportTablesQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaName(s);
+            }});
         }});
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);

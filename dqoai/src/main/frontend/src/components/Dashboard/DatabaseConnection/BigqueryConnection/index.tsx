@@ -25,20 +25,20 @@ const options = [
 ];
 
 interface IBigqueryConnectionProps {
-  spec?: BigQueryParametersSpec;
-  onChange?: any;
+  bigquery?: BigQueryParametersSpec;
+  onChange?: (obj: BigQueryParametersSpec) => void;
 }
 
 const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
-  spec,
+  bigquery,
   onChange
 }) => {
-  const handleChange = (obj: any) => {
+  const handleChange = (obj: Partial<BigQueryParametersSpec>) => {
+    if (!onChange) return;
+
     onChange({
-      bigquery: {
-        ...spec,
-        ...obj
-      }
+      ...bigquery,
+      ...obj
     });
   };
 
@@ -48,47 +48,47 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         label="Source GCP project ID"
         className="mb-4"
         name="source_project_id"
-        value={spec?.source_project_id}
+        value={bigquery?.source_project_id}
         onChange={(e) => handleChange({ source_project_id: e.target.value })}
       />
       <Input
         label="Billing GCP project ID"
         className="mb-4"
         name="billing_project_id"
-        value={spec?.billing_project_id}
+        value={bigquery?.billing_project_id}
         onChange={(e) => handleChange({ billing_project_id: e.target.value })}
       />
       <Select
         label="Authentication mode to the Google Cloud"
         options={options}
         className="mb-4"
-        value={spec?.authentication_mode}
+        value={bigquery?.authentication_mode}
         onChange={(value) => handleChange({ authentication_mode: value })}
       />
-      {spec?.authentication_mode ===
+      {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
         <Input
           label="JSON key content"
           className="mb-4"
           name="json_key_content"
-          value={spec?.json_key_content}
+          value={bigquery?.json_key_content}
           onChange={(e) => handleChange({ json_key_content: e.target.value })}
         />
       )}
-      {spec?.authentication_mode ===
+      {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_path && (
         <Input
           label="A path to the JSON key file"
           className="mb-4"
           name="json_key_path"
-          value={spec?.json_key_path}
+          value={bigquery?.json_key_path}
           onChange={(e) => handleChange({ json_key_path: e.target.value })}
         />
       )}
       <Input
         label="Quota GCP project ID"
         name="quota_project_id"
-        value={spec?.quota_project_id}
+        value={bigquery?.quota_project_id}
         onChange={(e) => handleChange({ quota_project_id: e.target.value })}
       />
     </SectionWrapper>

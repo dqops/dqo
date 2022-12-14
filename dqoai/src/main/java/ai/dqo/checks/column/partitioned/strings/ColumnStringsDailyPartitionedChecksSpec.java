@@ -16,21 +16,7 @@
 package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringLengthAboveCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderCountCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringBooleanPlaceholderPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMaxStringSurroundedByWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -63,7 +49,14 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_boolean_placeholder_percent", o -> o.dailyPartitionMinStringBooleanPlaceholderPercent);
             put("daily_partition_min_string_parsable_to_integer_percent", o -> o.dailyPartitionMinStringParsableToIntegerPercent);
             put("daily_partition_max_string_surrounded_by_whitespace_count", o -> o.dailyPartitionMaxStringSurroundedByWhitespaceCount);
-
+            put("daily_partition_max_string_surrounded_by_whitespace_percent", o -> o.dailyPartitionMaxStringSurroundedByWhitespacePercent);
+            put("daily_partition_min_string_parsable_to_float_percent", o -> o.dailyPartitionMinStringParsableToFloatPercent);
+            put("daily_partition_min_string_valid_usa_zipcode_percent", o -> o.dailyPartitionMinStringValidUsaZipcodePercent);
+            put("daily_partition_min_string_valid_usa_phone_percent", o -> o.dailyPartitionMinStringValidUsaPhonePercent);
+            put("daily_partition_min_string_valid_country_code_percent", o -> o.dailyPartitionMinStringValidCountryCodePercent);
+            put("daily_partition_min_string_valid_currency_code_percent", o -> o.dailyPartitionMinStringValidCurrencyCodePercent);
+            put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
+            put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
         }
     };
 
@@ -106,9 +99,32 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinStringParsableToIntegerPercentCheckSpec dailyPartitionMinStringParsableToIntegerPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringParsableToFloatPercentCheckSpec dailyPartitionMinStringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringValidUsaZipcodePercentCheckSpec dailyPartitionMinStringValidUsaZipcodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidCurrencyCodePercentCheckSpec dailyPartitionMinStringValidCurrencyCodePercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
+    private ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinStringsInSetPercentCheckSpec dailyPartitionMinStringsInSetPercent;
+
     /**
      * Returns a maximum string length below  check.
-     *
      * @return Maximum string length below  check.
      */
     public ColumnMaxStringLengthBelowCheckSpec getDailyPartitionMaxStringLengthBelow() {
@@ -335,10 +351,156 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets a new definition of a maximum string surrounded by whitespace count check.
      * @param dailyPartitionMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
      */
-    public void setdailyPartitionMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespaceCount) {
+    public void setDailyPartitionMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyPartitionMaxStringSurroundedByWhitespaceCount) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespaceCount, dailyPartitionMaxStringSurroundedByWhitespaceCount));
         this.dailyPartitionMaxStringSurroundedByWhitespaceCount = dailyPartitionMaxStringSurroundedByWhitespaceCount;
         propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespaceCount, "daily_partition_max_string_surrounded_by_whitespace_count");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace percent check.
+     *
+     * @return Maximum string surrounded by whitespace percent check.
+     */
+    public ColumnMaxStringSurroundedByWhitespacePercentCheckSpec getDailyPartitionMaxStringSurroundedByWhitespacePercent() {
+        return dailyPartitionMaxStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string surrounded by whitespace percent check.
+     *
+     * @param dailyPartitionMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     */
+    public void setDailyPartitionMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyPartitionMaxStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxStringSurroundedByWhitespacePercent, dailyPartitionMaxStringSurroundedByWhitespacePercent));
+        this.dailyPartitionMaxStringSurroundedByWhitespacePercent = dailyPartitionMaxStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyPartitionMaxStringSurroundedByWhitespacePercent, "daily_partition_max_string_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to float percent check.
+     * @return Minimum string parsable to float percent  check.
+     */
+    public ColumnMinStringParsableToFloatPercentCheckSpec getDailyPartitionMinStringParsableToFloatPercent() {
+        return dailyPartitionMinStringParsableToFloatPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to float percent check.
+     * @param dailyPartitionMinStringParsableToFloatPercent Minimum string parsable to float percent check.
+     */
+    public void setDailyPartitionMinStringParsableToFloatPercent(ColumnMinStringParsableToFloatPercentCheckSpec dailyPartitionMinStringParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringParsableToFloatPercent, dailyPartitionMinStringParsableToFloatPercent));
+        this.dailyPartitionMinStringParsableToFloatPercent = dailyPartitionMinStringParsableToFloatPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringParsableToFloatPercent, "daily_partition_min_string_parsable_to_float_percent");
+    }
+
+    /**
+     * Returns a minimum string valid usa zip code percent check.
+     * @return Minimum string valid usa zip code percent  check.
+     */
+    public ColumnMinStringValidUsaZipcodePercentCheckSpec getDailyPartitionMinStringValidUsaZipcodePercent() {
+        return dailyPartitionMinStringValidUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid usa zip code percent check.
+     * @param dailyPartitionMinStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
+     */
+    public void setDailyPartitionMinStringValidUsaZipcodePercent(ColumnMinStringValidUsaZipcodePercentCheckSpec dailyPartitionMinStringValidUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaZipcodePercent, dailyPartitionMinStringValidUsaZipcodePercent));
+        this.dailyPartitionMinStringValidUsaZipcodePercent = dailyPartitionMinStringValidUsaZipcodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidUsaZipcodePercent, "daily_partition_min_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent  check.
+     */
+    public ColumnMinStringValidUsaPhonePercentCheckSpec getDailyPartitionMinStringValidUsaPhonePercent() {
+        return dailyPartitionMinStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param dailyPartitionMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setDailyPartitionMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec dailyPartitionMinStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidUsaPhonePercent, dailyPartitionMinStringValidUsaPhonePercent));
+        this.dailyPartitionMinStringValidUsaPhonePercent = dailyPartitionMinStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidUsaPhonePercent, "daily_partition_min_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent  check.
+     */
+    public ColumnMinValidCountryCodePercentCheckSpec getDailyPartitionMinStringValidCountryCodePercent() {
+        return dailyPartitionMinStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param dailyPartitionMinStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setDailyPartitionMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec dailyPartitionMinStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCountryCodePercent, dailyPartitionMinStringValidCountryCodePercent));
+        this.dailyPartitionMinStringValidCountryCodePercent = dailyPartitionMinStringValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidCountryCodePercent, "daily_partition_min_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent  check.
+     */
+    public ColumnMinValidCurrencyCodePercentCheckSpec getDailyPartitionMinStringValidCurrencyCodePercent() {
+        return dailyPartitionMinStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param dailyPartitionMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setDailyPartitionMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec dailyPartitionMinStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringValidCurrencyCodePercent, dailyPartitionMinStringValidCurrencyCodePercent));
+        this.dailyPartitionMinStringValidCurrencyCodePercent = dailyPartitionMinStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringValidCurrencyCodePercent, "daily_partition_min_string_valid_currency_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnMinStringsInSetCountCheckSpec getDailyPartitionMinStringsInSetCount() {
+        return dailyPartitionMinStringsInSetCount;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set count check.
+     * @param dailyPartitionMinStringsInSetCount Minimum strings in set count check.
+     */
+    public void setDailyPartitionMinStringsInSetCount(ColumnMinStringsInSetCountCheckSpec dailyPartitionMinStringsInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringsInSetCount, dailyPartitionMinStringsInSetCount));
+        this.dailyPartitionMinStringsInSetCount = dailyPartitionMinStringsInSetCount;
+        propagateHierarchyIdToField(dailyPartitionMinStringsInSetCount, "daily_partition_min_strings_in_set_count");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnMinStringsInSetPercentCheckSpec getDailyPartitionMinStringsInSetPercent() {
+        return dailyPartitionMinStringsInSetPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum strings in set percent check.
+     * @param dailyPartitionMinStringsInSetPercent Minimum strings in set percent check.
+     */
+    public void setDailyPartitionMinStringsInSetPercent(ColumnMinStringsInSetPercentCheckSpec dailyPartitionMinStringsInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringsInSetPercent, dailyPartitionMinStringsInSetPercent));
+        this.dailyPartitionMinStringsInSetPercent = dailyPartitionMinStringsInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionMinStringsInSetPercent, "daily_partition_min_strings_in_set_percent");
     }
 
     /**

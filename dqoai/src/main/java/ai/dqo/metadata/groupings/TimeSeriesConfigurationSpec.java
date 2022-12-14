@@ -17,8 +17,6 @@ package ai.dqo.metadata.groupings;
 
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.fields.ControlType;
-import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -69,9 +67,10 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneab
      * Creates a default time series configuration (current time, no date/time rounding).
      * @return Default time series configuration.
      */
-    public static TimeSeriesConfigurationSpec createDefault() {
+    public static TimeSeriesConfigurationSpec createCurrentTimeMilliseconds() {
         return new TimeSeriesConfigurationSpec() {{
 			setMode(TimeSeriesMode.current_time);
+            setTimeGradient(TimeSeriesGradient.MILLISECOND);
         }};
     }
 

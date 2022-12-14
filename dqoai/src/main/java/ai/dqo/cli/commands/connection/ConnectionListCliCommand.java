@@ -27,6 +27,7 @@ import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.api.client.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;
@@ -39,7 +40,7 @@ import picocli.CommandLine;
  * "connection list" 2nd level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List connections which match filters")
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private final ConnectionService connectionService;

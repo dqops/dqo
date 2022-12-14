@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.scheduler;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,7 +25,7 @@ import picocli.CommandLine;
  * "scheduler" 1st level CLI command - a grouping command for controlling the job scheduler.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "scheduler", description = "Controls the repeating task scheduler by starting, stopping or running a foreground job scheduler.",
         subcommands = {
             SchedulerStartCliCommand.class,

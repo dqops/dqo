@@ -38,6 +38,10 @@ const ChecksView = ({
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
+
     await dispatch(
       updateTableAdHocChecksUI(
         connectionName,
@@ -76,6 +80,7 @@ const ChecksView = ({
         <DataQualityChecks
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
+          className="max-h-checks-1"
         />
       </div>
     </div>

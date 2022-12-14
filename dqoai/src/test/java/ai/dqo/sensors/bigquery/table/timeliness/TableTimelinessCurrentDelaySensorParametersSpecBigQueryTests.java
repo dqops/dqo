@@ -58,7 +58,7 @@ public class TableTimelinessCurrentDelaySensorParametersSpecBigQueryTests extend
         this.sut = new TableTimelinessCurrentDelaySensorParametersSpec();
         this.checkSpec = new TableTimelinessCurrentDelayCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "datetime_col", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "datetime_col", this.checkSpec);
         this.sut = (TableTimelinessCurrentDelaySensorParametersSpec) runParameters.getSensorParameters();
     }
 

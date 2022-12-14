@@ -22,11 +22,11 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -54,12 +54,12 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("comments", o -> o.comments);
-			put("default_time_series", o -> o.defaultTimeSeries);
-			put("default_data_streams", o -> o.defaultDataStreams);
+			put("default_data_stream_mapping", o -> o.defaultDataStreamMapping);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
+            put("notifications", o -> o.notifications);
         }
     };
 
@@ -90,24 +90,23 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
 
-    @JsonPropertyDescription("Default time series source configuration for all tables. Chooses the source for the time series for all tables. The configuration may be overridden on table, column and check levels. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private TimeSeriesConfigurationSpec defaultTimeSeries;
-
     @JsonPropertyDescription("Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DataStreamMappingSpec defaultDataStreams;
+    private DataStreamMappingSpec defaultDataStreamMapping;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec schedule;
+
+    @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private NotificationSettingsSpec notifications;
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -357,6 +356,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the notification settings.
+     * @return Notification settings.
+     */
+    public NotificationSettingsSpec getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * Sets a new configuration of notifications.
+     * @param notifications New notification settings.
+     */
+    public void setNotifications(NotificationSettingsSpec notifications) {
+        setDirtyIf(!Objects.equals(this.notifications, notifications));
+        this.notifications = notifications;
+        propagateHierarchyIdToField(notifications, "notifications");
+    }
+
+    /**
      * Returns a collection of comments for this connection.
      * @return List of comments (or null).
      */
@@ -375,41 +392,21 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the time series configuration for all tables on the connection.
-     * @return Time series configuration.
-     */
-    @Deprecated
-    public TimeSeriesConfigurationSpec getDefaultTimeSeries() {
-        return defaultTimeSeries;
-    }
-
-    /**
-     * Sets a new time series configuration for all tables on the connection.
-     * @param defaultTimeSeries New time series configuration.
-     */
-    @Deprecated
-    public void setDefaultTimeSeries(TimeSeriesConfigurationSpec defaultTimeSeries) {
-		setDirtyIf(!Objects.equals(this.defaultTimeSeries, defaultTimeSeries));
-        this.defaultTimeSeries = defaultTimeSeries;
-		propagateHierarchyIdToField(defaultTimeSeries, "default_time_series");
-    }
-
-    /**
      * Returns the default data streams configuration for all tables on the connection.
      * @return Default data streams configuration.
      */
-    public DataStreamMappingSpec getDefaultDataStreams() {
-        return defaultDataStreams;
+    public DataStreamMappingSpec getDefaultDataStreamMapping() {
+        return defaultDataStreamMapping;
     }
 
     /**
      * Returns the default data streams configuration for all tables on this connection.
-     * @param defaultDataStreams Data streams configuration.
+     * @param defaultDataStreamMapping Data streams configuration.
      */
-    public void setDefaultDataStreams(DataStreamMappingSpec defaultDataStreams) {
-		setDirtyIf(!Objects.equals(this.defaultDataStreams, defaultDataStreams));
-        this.defaultDataStreams = defaultDataStreams;
-		propagateHierarchyIdToField(defaultDataStreams, "default_data_streams");
+    public void setDefaultDataStreamMapping(DataStreamMappingSpec defaultDataStreamMapping) {
+		setDirtyIf(!Objects.equals(this.defaultDataStreamMapping, defaultDataStreamMapping));
+        this.defaultDataStreamMapping = defaultDataStreamMapping;
+		propagateHierarchyIdToField(defaultDataStreamMapping, "default_data_stream_mapping");
     }
 
     /**
@@ -484,17 +481,17 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.clone();
             }
-            if (cloned.defaultDataStreams != null) {
-                cloned.defaultDataStreams = cloned.defaultDataStreams.clone();
-            }
-            if (cloned.defaultTimeSeries != null) {
-                cloned.defaultTimeSeries = cloned.defaultTimeSeries.clone();
+            if (cloned.defaultDataStreamMapping != null) {
+                cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.clone();
             }
             if (cloned.comments != null) {
                 cloned.comments = cloned.comments.clone();
             }
             if (cloned.schedule != null) {
                 cloned.schedule = cloned.schedule.clone();
+            }
+            if (cloned.notifications != null) {
+                cloned.notifications = cloned.notifications.clone();
             }
             if (cloned.properties != null) {
                 cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
@@ -522,17 +519,17 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             cloned.user = secretValueProvider.expandValue(cloned.user);
             cloned.password = secretValueProvider.expandValue(cloned.password);
             cloned.properties = secretValueProvider.expandProperties(cloned.properties);
-            if (cloned.defaultTimeSeries != null) {
-                cloned.defaultTimeSeries = cloned.defaultTimeSeries.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.defaultDataStreams != null) {
-                cloned.defaultDataStreams = cloned.defaultDataStreams.expandAndTrim(secretValueProvider);
+            if (cloned.defaultDataStreamMapping != null) {
+                cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.expandAndTrim(secretValueProvider);
             }
             if (cloned.bigquery != null) {
                 cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider);
             }
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.notifications != null) {
+                cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
             }
             cloned.comments = null;
             cloned.schedule = null; // we probably don't need it here
@@ -552,10 +549,10 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public ConnectionSpec trim() {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
-            cloned.defaultTimeSeries = null;
-            cloned.defaultDataStreams = null;
+            cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
             cloned.schedule = null;
+            cloned.notifications = null;
             cloned.originalProperties = null;
             return cloned;
         }

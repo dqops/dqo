@@ -96,7 +96,7 @@ class RuleRunner:
 
 def main():
     rule_runner = RuleRunner()
-    for request in streaming.stream_json_objects(sys.stdin):
+    for request, duration_millis in streaming.stream_json_objects(sys.stdin):
         response = rule_runner.process_rule_request(request)
         sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")

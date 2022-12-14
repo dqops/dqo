@@ -58,7 +58,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
@@ -72,11 +72,9 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
 
-        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
-
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
-        dataStreamSearcherObject.setConnectionDataStreams(connectionWrapper.getSpec().getDefaultDataStreams());
+
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -112,7 +110,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
@@ -201,7 +199,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**
@@ -219,7 +217,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setColumnDataStreams(columnSpec.getDataStreamsOverride());
 
         if (enabledFilter != null) {
             if (enabledFilter && columnSpec.isDisabled()) {
@@ -230,14 +227,11 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        labelsSearcherObject.setTableLabels(columnSpec.getLabels());
-        dataStreamSearcherObject.setTableDataStreams(columnSpec.getDataStreamsOverride());
+        labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        DataStreamMappingSpec overridenDataStreams = dataStreamSearcherObject.getColumnDataStreams() != null
-                ? dataStreamSearcherObject.getColumnDataStreams()
-                : dataStreamSearcherObject.getTableDataStreams() != null
-                ? dataStreamSearcherObject.getTableDataStreams()
-                : dataStreamSearcherObject.getConnectionDataStreams();
+        DataStreamMappingSpec overriddenDataStreams =
+                dataStreamSearcherObject.getTableDataStreams() != null ?
+                dataStreamSearcherObject.getTableDataStreams().getFirstDataStreamMapping() : null;
         LabelSetSpec overridenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -252,7 +246,7 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
             overridenLabels.addAll(labelsSearcherObject.getConnectionLabels());
         }
 
-        if (!DataStreamsMappingSearchMatcher.matchAllColumnDataStreams(this.filters, overridenDataStreams)) {
+        if (!DataStreamsTagsSearchMatcher.matchAllColumnDataStreams(this.filters, overriddenDataStreams)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (!LabelsSearchMatcher.matchColumnLabels(this.filters, overridenLabels)) {

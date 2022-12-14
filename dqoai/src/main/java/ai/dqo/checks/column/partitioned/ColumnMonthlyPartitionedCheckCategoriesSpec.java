@@ -20,7 +20,12 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -51,6 +56,12 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+
         }
     };
 
@@ -68,6 +79,31 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Monthly partitioned checks of uniqueness values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessMonthlyPartitionedChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Monthly partitioned checks of datetime values in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeMonthlyPartitionedChecksSpec datetime;
+
+    @JsonPropertyDescription("Monthly partitioned checks of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiMonthlyPartitionedChecksSpec pii;
+
+    @JsonPropertyDescription("Monthly partitioned checks using custom SQL expressions and conditions on the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlMonthlyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned checks for booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolMonthlyPartitionedChecksSpec bool;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -121,6 +157,96 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the container of monthly uniqueness data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnUniquenessMonthlyPartitionedChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of monthly uniqueness data quality partitioned checks.
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessMonthlyPartitionedChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the container of monthly datetime data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnDatetimeMonthlyPartitionedChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of monthly datetime data quality partitioned checks.
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeMonthlyPartitionedChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of monthly Personal Identifiable Information (PII) data quality partitioned checks.
+     * @return Container of row standard monthly data quality partitioned checks.
+     */
+    public ColumnPiiMonthlyPartitionedChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of monthly Personal Identifiable Information (PII) data quality partitioned checks.
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiMonthlyPartitionedChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns a container of custom SQL checks on a column.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlMonthlyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Custom SQL checks container.
+     */
+    public void setSql(ColumnSqlMonthlyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom boolean checks on a column.
+     * @return Custom boolean checks.
+     */
+    public ColumnBoolMonthlyPartitionedChecksSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets a reference to a container of custom boolean checks.
+     * @param bool Custom boolean checks.
+     */
+    public void setBool(ColumnBoolMonthlyPartitionedChecksSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        propagateHierarchyIdToField(bool, "bool");
     }
 
     /**

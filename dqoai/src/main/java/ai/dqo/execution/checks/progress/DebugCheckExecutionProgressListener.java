@@ -16,6 +16,10 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
+import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
+import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
+import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

@@ -36,6 +36,16 @@ public enum DqoRoot {
     DATA_RULE_RESULTS,
 
     /**
+     * Parquet files with the profiling results (profiler results).
+     */
+    DATA_PROFILING_RESULTS,
+
+    /**
+     * Parquet files with the errors.
+     */
+    DATA_ERRORS,
+
+    /**
      * Source metadata files (connections, tables).
      */
     SOURCES,
@@ -80,6 +90,12 @@ public enum DqoRoot {
             }
             else if (Objects.equals(folder2, BuiltInFolderNames.RULE_RESULTS)) {
                 return DATA_RULE_RESULTS;
+            }
+            else if (Objects.equals(folder2, BuiltInFolderNames.PROFILING_RESULTS)) {
+                return DATA_PROFILING_RESULTS;
+            }
+            else if (Objects.equals(folder2, BuiltInFolderNames.ERRORS)) {
+                return DATA_ERRORS;
             }
         }
 

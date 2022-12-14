@@ -36,7 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 
@@ -72,7 +71,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         this.sut.setValuesType(BuiltInListFormats.STRING);
         this.sut.setValuesList(valuesList);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         System.out.println(runParameters);
@@ -112,7 +111,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         this.sut.setValuesType(BuiltInListFormats.STRING);
         this.sut.setValuesList(valuesList);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();

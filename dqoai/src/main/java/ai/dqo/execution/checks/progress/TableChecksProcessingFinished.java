@@ -27,7 +27,7 @@ import java.util.Collection;
 public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
     private final ConnectionWrapper connectionWrapper;
     private final TableSpec tableSpec;
-    private final Collection<AbstractCheckSpec> checks;
+    private final Collection<AbstractCheckSpec<?,?,?,?>> checks;
     private final int checksCount;
     private final int sensorResultsCount;
     private final int passedRules;
@@ -42,7 +42,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      * @param tableSpec Target table.
      * @param checks    Collection of checks that were executed.
      */
-    public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec> checks,
+    public TableChecksProcessingFinished(ConnectionWrapper connectionWrapper, TableSpec tableSpec, Collection<AbstractCheckSpec<?,?,?,?>> checks,
                                          int checksCount, int sensorResultsCount, int passedRules,
                                          int warningsCount, int errorsCount, int fatalCount) {
         this.connectionWrapper = connectionWrapper;
@@ -78,7 +78,7 @@ public class TableChecksProcessingFinished extends CheckExecutionProgressEvent {
      *
      * @return Collection of checks that were executed.
      */
-    public Collection<AbstractCheckSpec> getChecks() {
+    public Collection<AbstractCheckSpec<?,?,?,?>> getChecks() {
         return checks;
     }
 

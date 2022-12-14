@@ -27,6 +27,7 @@ import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -35,7 +36,7 @@ import picocli.CommandLine;
  * Cli command to enable a column.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "enable", description = "Enable column or columns which match filters")
 public class ColumnEnableCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private final ColumnService columnService;

@@ -16,7 +16,6 @@
 package ai.dqo.data.ruleresults.factory;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
-import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -47,15 +46,15 @@ public class RuleResultsTableFactoryImpl implements RuleResultsTableFactory {
     public Table createEmptyRuleResultsTable(String tableName) {
         Table table = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
         table.addColumns(
-                IntColumn.create(RuleEvaluationResult.SEVERITY_COLUMN_NAME),
-                BooleanColumn.create(RuleEvaluationResult.INCLUDE_IN_KPI_COLUMN_NAME),
-                BooleanColumn.create(RuleEvaluationResult.INCLUDE_IN_SLA_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.FATAL_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.FATAL_UPPER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.ERROR_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.ERROR_UPPER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.WARNING_LOWER_BOUND_COLUMN_NAME),
-                DoubleColumn.create(RuleEvaluationResult.WARNING_UPPER_BOUND_COLUMN_NAME)
+                IntColumn.create(RuleResultsColumnNames.SEVERITY_COLUMN_NAME),
+                BooleanColumn.create(RuleResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME),
+                BooleanColumn.create(RuleResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME),
+                DoubleColumn.create(RuleResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME)
         );
 
         return table;

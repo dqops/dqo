@@ -21,7 +21,12 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -52,6 +57,12 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+
         }
     };
 
@@ -69,6 +80,31 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Daily partitioned checks of uniqueness in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessDailyPartitionedChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Daily partitioned checks of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeDailyPartitionedChecksSpec datetime;
+
+    @JsonPropertyDescription("Daily partitioned checks of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiDailyPartitionedChecksSpec pii;
+
+    @JsonPropertyDescription("Daily partitioned checks using custom SQL expressions evaluated on the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlDailyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Daily partitioned checks for booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolDailyPartitionedChecksSpec bool;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -122,6 +158,96 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the container of daily uniqueness data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnUniquenessDailyPartitionedChecksSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of daily uniqueness data quality partitioned checks.
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessDailyPartitionedChecksSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the container of daily datetime data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnDatetimeDailyPartitionedChecksSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of daily datetime data quality partitioned checks.
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeDailyPartitionedChecksSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @return Container of row standard daily data quality partitioned checks.
+     */
+    public ColumnPiiDailyPartitionedChecksSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of daily Personal Identifiable Information (PII) data quality partitioned checks.
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiDailyPartitionedChecksSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns a container of custom SQL checks on a column.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlDailyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Custom SQL checks.
+     */
+    public void setSql(ColumnSqlDailyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom boolean checks on a column.
+     * @return Custom boolean checks.
+     */
+    public ColumnBoolDailyPartitionedChecksSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets a reference to a container of custom boolean checks.
+     * @param bool Custom boolean checks.
+     */
+    public void setBool(ColumnBoolDailyPartitionedChecksSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        propagateHierarchyIdToField(bool, "bool");
     }
 
     /**

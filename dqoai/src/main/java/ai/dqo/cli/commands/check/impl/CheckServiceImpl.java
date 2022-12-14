@@ -17,9 +17,6 @@ package ai.dqo.cli.commands.check.impl;
 
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
-import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.execution.CheckExecutionContextFactory;
-import ai.dqo.execution.checks.CheckExecutionService;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;

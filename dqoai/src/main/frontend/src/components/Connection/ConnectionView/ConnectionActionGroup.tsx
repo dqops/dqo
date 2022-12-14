@@ -4,30 +4,50 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
+import qs from 'query-string';
+import { useHistory, useLocation } from 'react-router-dom';
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
-  onUpdate: () => void;
+  onUpdate?: () => void;
   isUpdating?: boolean;
   isUpdated?: boolean;
+  onImport?: () => void;
 }
 
 const ConnectionActionGroup = ({
   isUpdated,
   isUpdating,
   isDisabled,
-  onUpdate
+  onUpdate,
+  onImport
 }: IConnectionActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { connectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
+  const location = useLocation();
+  const history = useHistory();
 
   const removeConnection = async () => {
     if (connectionBasic) {
       await ConnectionApiClient.deleteConnection(
         connectionBasic.connection_name ?? ''
       );
+    }
+  };
+  const goToSchemas = () => {
+    const params = qs.parse(location.search);
+
+    const searchQuery = qs.stringify({
+      ...params,
+      tab: 'schemas',
+      source: true
+    });
+    history.replace(`/?${searchQuery}`);
+
+    if (onImport) {
+      onImport();
     }
   };
 
@@ -40,14 +60,22 @@ const ConnectionActionGroup = ({
         onClick={() => setIsOpen(true)}
       />
       <Button
-        color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
-        variant="contained"
-        label="Save"
-        className="w-40"
-        onClick={onUpdate}
-        loading={isUpdating}
-        disabled={isDisabled}
+        label="Import metadata"
+        color="info"
+        variant="text"
+        onClick={goToSchemas}
       />
+      {onUpdate && (
+        <Button
+          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
+          disabled={isDisabled}
+        />
+      )}
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}

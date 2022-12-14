@@ -73,8 +73,8 @@
         {%- for attribute in data_streams -%}
             {{ ', ' }}
             {%- with data_streams_level = data_streams[attribute] -%}
-                {%- if data_streams_level.source == 'static_value' -%}
-                    {{ make_text_constant(data_streams_level.static_value) }}
+                {%- if data_streams_level.source == 'tag' -%}
+                    {{ make_text_constant(data_streams_level.tag) }}
                 {%- elif data_streams_level.source == 'column_value' -%}
                     {{ table_alias_prefix }}.{{ quote_identifier(data_streams_level.column) }}
                 {%- endif -%}

@@ -1,9 +1,27 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
+import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
+import ai.dqo.execution.profiler.RunProfilersQueueJob;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,6 +53,16 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
+     * Creates a job that runs profilers.
+     *
+     * @return New run profilers job.
+     */
+    @Override
+    public RunProfilersQueueJob createRunProfilersJob() {
+        return this.beanFactory.getBean(RunProfilersQueueJob.class);
+    }
+
+    /**
      * Creates a DQO Cloud synchronization job that will synchronize one folder in the user home.
      *
      * @return Cloud synchronization job for one folder.
@@ -62,5 +90,25 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public RunScheduledChecksDqoJob createRunScheduledChecksJob() {
         return this.beanFactory.getBean(RunScheduledChecksDqoJob.class);
+    }
+
+    /**
+     * Creates a job that imports tables from a schema in a source database.
+     *
+     * @return Schema import job.
+     */
+    @Override
+    public ImportSchemaQueueJob createImportSchemaJob() {
+        return this.beanFactory.getBean(ImportSchemaQueueJob.class);
+    }
+
+    /**
+     * Creates a job that imports tables from a schema in a source database.
+     *
+     * @return Import tables import job.
+     */
+    @Override
+    public ImportTablesQueueJob createImportTablesJob() {
+        return this.beanFactory.getBean(ImportTablesQueueJob.class);
     }
 }

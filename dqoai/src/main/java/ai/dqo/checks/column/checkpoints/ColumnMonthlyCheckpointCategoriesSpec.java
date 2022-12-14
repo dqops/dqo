@@ -18,9 +18,14 @@ package ai.dqo.checks.column.checkpoints;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.checkpoints.bool.ColumnBoolMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.numeric.ColumnNumericMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.sql.ColumnSqlMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.datetime.ColumnDatetimeMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.pii.ColumnPiiMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -51,6 +56,12 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("nulls", o -> o.nulls);
            put("numeric", o -> o.numeric);
            put("strings", o -> o.strings);
+           put("uniqueness", o -> o.uniqueness);
+           put("datetime", o -> o.datetime);
+           put("pii", o -> o.pii);
+           put("sql", o -> o.sql);
+           put("bool", o -> o.bool);
+
         }
     };
 
@@ -64,10 +75,35 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyCheckpointsSpec numeric;
 
-    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
+    @JsonPropertyDescription("Monthly checkpoints of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyCheckpointsSpec strings;
+
+    @JsonPropertyDescription("Monthly checkpoints of uniqueness in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnUniquenessMonthlyCheckpointsSpec uniqueness;
+
+    @JsonPropertyDescription("Monthly checkpoints of datetime in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnDatetimeMonthlyCheckpointsSpec datetime;
+
+    @JsonPropertyDescription("Monthly checkpoints of Personal Identifiable Information (PII) in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPiiMonthlyCheckpointsSpec pii;
+
+    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSqlMonthlyCheckpointsSpec sql;
+
+    @JsonPropertyDescription("Monthly checkpoints of booleans in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBoolMonthlyCheckpointsSpec bool;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -122,6 +158,97 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
     }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnUniquenessMonthlyCheckpointsSpec getUniqueness() {
+        return uniqueness;
+    }
+
+    /**
+     * Sets the container of uniqueness data quality checks (checkpoints).
+     * @param uniqueness New uniqueness checks.
+     */
+    public void setUniqueness(ColumnUniquenessMonthlyCheckpointsSpec uniqueness) {
+        this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
+        this.uniqueness = uniqueness;
+        this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnDatetimeMonthlyCheckpointsSpec getDatetime() {
+        return datetime;
+    }
+
+    /**
+     * Sets the container of datetime data quality checks (checkpoints).
+     * @param datetime New datetime checks.
+     */
+    public void setDatetime(ColumnDatetimeMonthlyCheckpointsSpec datetime) {
+        this.setDirtyIf(!Objects.equals(this.datetime, datetime));
+        this.datetime = datetime;
+        this.propagateHierarchyIdToField(datetime, "datetime");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnPiiMonthlyCheckpointsSpec getPii() {
+        return pii;
+    }
+
+    /**
+     * Sets the container of Personal Identifiable Information (PII) data quality checks (checkpoints).
+     * @param pii New Personal Identifiable Information (PII) checks.
+     */
+    public void setPii(ColumnPiiMonthlyCheckpointsSpec pii) {
+        this.setDirtyIf(!Objects.equals(this.pii, pii));
+        this.pii = pii;
+        this.propagateHierarchyIdToField(pii, "pii");
+    }
+
+    /**
+     * Returns a container of custom SQL checks.
+     * @return Custom SQL checks.
+     */
+    public ColumnSqlMonthlyCheckpointsSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container with custom SQL checks.
+     * @param sql Custom SQL checks.
+     */
+    public void setSql(ColumnSqlMonthlyCheckpointsSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnBoolMonthlyCheckpointsSpec getBool() {
+        return bool;
+    }
+
+    /**
+     * Sets the container of booleans data quality checks (checkpoints).
+     * @param bool New booleans checks.
+     */
+    public void setBool(ColumnBoolMonthlyCheckpointsSpec bool) {
+        this.setDirtyIf(!Objects.equals(this.bool, bool));
+        this.bool = bool;
+        this.propagateHierarchyIdToField(bool, "bool");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

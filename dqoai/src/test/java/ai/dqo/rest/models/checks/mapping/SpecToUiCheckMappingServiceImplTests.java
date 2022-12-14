@@ -18,13 +18,21 @@ package ai.dqo.rest.models.checks.mapping;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.UICheckModel;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
+import ai.dqo.rest.models.checks.basic.UICheckBasicModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
@@ -46,18 +54,75 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(2, uiModel.getCategories().size());
+        Assertions.assertEquals(3, uiModel.getCategories().size());
     }
 
     @Test
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters());
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getCategories().size());
+        Assertions.assertEquals(7, uiModel.getCategories().size());
+    }
+
+    private Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>>
+    extractCheckNamesFromUIModels(UIAllChecksModel uiModel, UIAllChecksBasicModel uiBasicModel) {
+        Iterable<Map.Entry<String, Iterable<String>>> categoryToChecksModel =
+                uiModel.getCategories().stream().map(
+                        uiQualityCategoryModel -> new AbstractMap.SimpleEntry<String, Iterable<String>>(
+                                uiQualityCategoryModel.getCategory(),
+                                uiQualityCategoryModel.getChecks()
+                                        .stream()
+                                        .map(UICheckModel::getCheckName)
+                                        .collect(Collectors.toList())
+                        )
+                ).collect(Collectors.toList());
+
+        Iterable<Map.Entry<String, Iterable<String>>> categoryToChecksBasicModel =
+                uiBasicModel.getCategories().stream().map(
+                        uiQualityCategoryModel -> new AbstractMap.SimpleEntry<String, Iterable<String>>(
+                                uiQualityCategoryModel.getCategory(),
+                                uiQualityCategoryModel.getChecks()
+                                        .stream()
+                                        .map(UICheckBasicModel::getCheckName)
+                                        .collect(Collectors.toList())
+                        )
+                ).collect(Collectors.toList());
+
+        return new AbstractMap.SimpleEntry<>(categoryToChecksModel, categoryToChecksBasicModel);
+    }
+
+    @Test
+    void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
+        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), null);
+        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec);
+
+        Assertions.assertNotNull(uiBasicModel);
+        Assertions.assertEquals(3, uiBasicModel.getCategories().size());
+
+        Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>> names =
+                extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+
+        Assertions.assertIterableEquals(names.getKey(), names.getValue());
+    }
+
+    @Test
+    void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
+        ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), null);
+        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec);
+
+        Assertions.assertNotNull(uiBasicModel);
+        Assertions.assertEquals(7, uiBasicModel.getCategories().size());
+
+        Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>> names =
+                extractCheckNamesFromUIModels(uiModel, uiBasicModel);
+
+        Assertions.assertIterableEquals(names.getKey(), names.getValue());
     }
 }

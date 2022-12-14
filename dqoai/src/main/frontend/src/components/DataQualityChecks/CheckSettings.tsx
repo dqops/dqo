@@ -9,6 +9,7 @@ import { ITab } from './CheckListItem';
 import SvgIcon from '../SvgIcon';
 import IconButton from '../IconButton';
 import { DataStreamLevelSpec, UICheckModel } from '../../api';
+import CheckSettingsTab from './CheckSettingsTab';
 
 interface ICheckSettingsProps {
   check?: UICheckModel;
@@ -75,6 +76,9 @@ const CheckSettings = ({
         </IconButton>
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         <div className="pt-5">
+          {activeTab === 'check-settings' && (
+            <CheckSettingsTab check={check} onChange={onChange} />
+          )}
           {activeTab === 'data-streams' && (
             <div>
               {Array(9)

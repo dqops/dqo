@@ -50,6 +50,16 @@ public final class BuiltInFolderNames {
     public static final String RULE_RESULTS = "rule_results";
 
     /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the profiling results are stored.
+     */
+    public static final String PROFILING_RESULTS = "profiling_results";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the errors are stored.
+     */
+    public static final String ERRORS = "errors";
+
+    /**
      * Local index folder.
      */
     public static final String INDEX = ".index";
@@ -58,4 +68,9 @@ public final class BuiltInFolderNames {
      * Credentials folder to store local credentials that are not stored in the repository.
      */
     public static final String CREDENTIALS = ".credentials";
+
+    /**
+     * Local log folder inside the user home that stores logs.
+     */
+    public static final String LOGS = ".logs";
 }

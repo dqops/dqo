@@ -22,7 +22,7 @@ import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
-import ai.dqo.checks.column.checks.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
@@ -34,13 +34,13 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -79,7 +79,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService);
         UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new ColumnsController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService);
+        this.sut = new ColumnsController(this.userHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, null);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
@@ -151,7 +151,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -169,7 +169,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(2, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -187,7 +187,59 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, result.getCategories().size());
+        Assertions.assertEquals(7, result.getCategories().size());
+    }
+
+    @Test
+    void getColumnAdHocChecksUIBasic_whenColumnFromSampleTableRequested_thenReturnsAdHocChecksUiBasic() {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnAdHocChecksUIBasic(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName());
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(7, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @EnumSource(CheckTimeScale.class)
+    void getColumnCheckpointsUIBasic_whenColumnFromSampleTableRequested_thenReturnsCheckpointsUiBasic(CheckTimeScale timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnCheckpointsUIBasic(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                timePartition);
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(7, result.getCategories().size());
+    }
+
+    @ParameterizedTest
+    @EnumSource(CheckTimeScale.class)
+    void getColumnPartitionedChecksUIBasic_whenColumnFromSampleTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
+        UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
+        ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
+
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnPartitionedChecksUIBasic(
+                this.sampleTable.getConnectionName(),
+                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
+                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                columnSpec.getColumnName(),
+                timePartition);
+
+        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(7, result.getCategories().size());
     }
 
     @Test

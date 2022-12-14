@@ -61,7 +61,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
         this.sut = new ColumnValidityValuesInSetPercentSensorParametersSpec();
         this.checkSpec = new ColumnValidityValuesInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_string", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string", this.checkSpec);
         this.sut = (ColumnValidityValuesInSetPercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 

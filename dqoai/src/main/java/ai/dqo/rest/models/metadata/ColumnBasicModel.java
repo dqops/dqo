@@ -15,6 +15,8 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ProfilerSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -58,6 +60,12 @@ public class ColumnBasicModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.")
+    private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this column.")
+    private ProfilerSearchFilters runProfilerJobTemplate;
+
     /**
      * Creates a basic column model from a column specification by cherry-picking relevant fields.
      * This model is used for the column list screen and it has even less fields.
@@ -78,6 +86,20 @@ public class ColumnBasicModel {
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setEnabled(true);
+            }});
+            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setEnabled(true);
+            }});
         }};
     }
 

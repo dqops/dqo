@@ -33,14 +33,13 @@ const DataStreamLevelItem = ({
         <div className="">
           <RadioButton
             checked={
-              dataStreamLevel?.source ===
-              DataStreamLevelSpecSourceEnum.static_value
+              dataStreamLevel?.source === DataStreamLevelSpecSourceEnum.tag
             }
-            label="Static Value"
+            label="Tag"
             onClick={() =>
               onChange({
                 ...dataStreamLevel,
-                source: DataStreamLevelSpecSourceEnum.static_value
+                source: DataStreamLevelSpecSourceEnum.tag
               })
             }
           />
@@ -48,16 +47,15 @@ const DataStreamLevelItem = ({
         <div className="flex-1">
           <Input
             className="h-8"
-            value={dataStreamLevel?.static_value}
+            value={dataStreamLevel?.tag}
             onChange={(e) =>
               onChange({
                 ...dataStreamLevel,
-                static_value: e.target.value
+                tag: e.target.value
               })
             }
             disabled={
-              dataStreamLevel?.source !==
-              DataStreamLevelSpecSourceEnum.static_value
+              dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.tag
             }
           />
         </div>

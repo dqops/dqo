@@ -134,6 +134,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         checkSpec.setDisabled(checkModel.isDisabled());
         checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
+        checkSpec.setDataStream(checkModel.getDataStream());
 
         updateFieldValues(checkModel.getSensorParameters(), checkSpec.getParameters());
 
@@ -313,6 +314,9 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
                     break;
                 case string_list_type:
                     fieldInfo.setFieldValue(fieldModel.getStringListValue(), targetParametersSpec);
+                    break;
+                case integer_list_type:
+                    fieldInfo.setFieldValue(fieldModel.getIntegerListValue(), targetParametersSpec);
                     break;
                 case date_type:
                     fieldInfo.setFieldValue(fieldModel.getDateValue(), targetParametersSpec);

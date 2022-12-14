@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 
@@ -29,7 +29,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 public interface RuleEvaluationService {
     /**
      * Evaluate rules for sensor rules
-     * @param checkExecutionContext Check execution context.
+     * @param executionContext Check execution context.
      * @param checkSpec Check specification with a list of rules.
      * @param sensorRunParameters Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
@@ -37,7 +37,7 @@ public interface RuleEvaluationService {
      * @param progressListener Progress listener that receives events that notify about the rule evaluation.
      * @return Rule evaluation results as a table.
      */
-    RuleEvaluationResult evaluateLegacyRules(CheckExecutionContext checkExecutionContext,
+    RuleEvaluationResult evaluateLegacyRules(ExecutionContext executionContext,
                                              AbstractCheckDeprecatedSpec checkSpec,
                                              SensorExecutionRunParameters sensorRunParameters,
                                              SensorReadoutsNormalizedResult normalizedSensorResults,
@@ -46,7 +46,7 @@ public interface RuleEvaluationService {
 
     /**
      * Evaluate rules for data quality checks.
-     * @param checkExecutionContext Check execution context.
+     * @param executionContext Check execution context.
      * @param checkSpec Check specification with a list of rules.
      * @param sensorRunParameters Sensor run parameters (connection, table, check spec, etc).
      * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
@@ -54,7 +54,7 @@ public interface RuleEvaluationService {
      * @param progressListener Progress listener that receives events that notify about the rule evaluation.
      * @return Rule evaluation results as a table.
      */
-    RuleEvaluationResult evaluateRules(CheckExecutionContext checkExecutionContext,
+    RuleEvaluationResult evaluateRules(ExecutionContext executionContext,
                                        AbstractCheckSpec checkSpec,
                                        SensorExecutionRunParameters sensorRunParameters,
                                        SensorReadoutsNormalizedResult normalizedSensorResults,

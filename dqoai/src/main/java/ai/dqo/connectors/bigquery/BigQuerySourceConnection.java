@@ -28,6 +28,7 @@ import com.google.cloud.bigquery.DatasetId;
 import com.google.cloud.bigquery.Table;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
@@ -41,7 +42,7 @@ import java.util.Objects;
  * Big query connection.
  */
 @Component("bigquery-connection")
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     private BigQuery bigQueryService;
     private final BigQuerySqlRunner bigQuerySqlRunner;
@@ -236,7 +237,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
         sqlBuilder.append(dialectSettings.quoteIdentifier(schemaName));
         sqlBuilder.append(".INFORMATION_SCHEMA.COLUMNS ");
 
-        if (tableNames.size() > 0) {
+        if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append("WHERE table_name IN (");
             for (int ti = 0; ti < tableNames.size(); ti++) {
                 String tableName = tableNames.get(ti);

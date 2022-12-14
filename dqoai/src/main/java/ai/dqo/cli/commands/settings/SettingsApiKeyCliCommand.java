@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.settings.apikey.SettingsApiKeyRemoveCliCommand;
 import ai.dqo.cli.commands.settings.apikey.SettingsApiKeySetCliCommand;
 import ai.dqo.cli.commands.settings.apikey.SettingsApiKeyShowCliCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -27,7 +28,7 @@ import picocli.CommandLine;
  * Cli settings Api key base command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "apikey", description = "Set or show api key", subcommands = {
 		SettingsApiKeySetCliCommand.class,
 		SettingsApiKeyRemoveCliCommand.class,

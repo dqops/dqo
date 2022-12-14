@@ -38,16 +38,22 @@ import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
 import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.profiling.AbstractProfilerCategorySpec;
+import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -664,7 +670,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec checkSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> checkSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -749,6 +755,66 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map (hashtable) of named data stream mappings.
+     *
+     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a profiler check instance.
+     *
+     * @param profileSpec Profiler instance.
+     * @param parameter   Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractProfilerSpec<?> profileSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of profiling checks (a profiling category) instance.
+     *
+     * @param profileCategorySpec Profiling category instance that contains profilers.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractProfilerCategorySpec profileCategorySpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a root container of profiling checks (a profiling category) instance.
+     *
+     * @param rootProfilerContainerSpec Profiling root container instance that contains profilers.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a notification settings object.
+     *
+     * @param notificationSettingsSpec Notification settings.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(NotificationSettingsSpec notificationSettingsSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

@@ -17,7 +17,7 @@ package ai.dqo.utils.tables;
 
 import ai.dqo.BaseTest;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
-import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,16 +44,16 @@ public class TableMergeUtilityTests extends BaseTest {
 		this.currentTable = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("current");
 		this.newTable = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new");
 		this.joinColumnNames = new String[] {
-                SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME,
-                SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME
+                SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME,
+                SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME
         };
     }
 
     void addRows(Table targetTable, long checkId, long dimensionId, double actualValue) {
         Row row = targetTable.appendRow();
-        row.setDouble(SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME, actualValue);
-        row.setLong(SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME, checkId);
-        row.setLong(SensorReadoutsNormalizedResult.DATA_STREAM_HASH_COLUMN_NAME, dimensionId);
+        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        row.setLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, checkId);
+        row.setLong(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME, dimensionId);
     }
 
     @Test
@@ -63,8 +63,8 @@ public class TableMergeUtilityTests extends BaseTest {
         Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
 
         Assertions.assertEquals(1, merged.rowCount());
-        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("15", merged.getString(0, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("15", merged.getString(0, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
     }
 
     @Test
@@ -75,11 +75,11 @@ public class TableMergeUtilityTests extends BaseTest {
         Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
 
         Assertions.assertEquals(2, merged.rowCount());
-        Assertions.assertEquals("11", merged.getString(0, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("16", merged.getString(0, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("11", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("16", merged.getString(0, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
 
-        Assertions.assertEquals("10", merged.getString(1, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("15", merged.getString(1, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("10", merged.getString(1, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("15", merged.getString(1, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
     }
 
     @Test
@@ -90,11 +90,11 @@ public class TableMergeUtilityTests extends BaseTest {
         Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
 
         Assertions.assertEquals(2, merged.rowCount());
-        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("16", merged.getString(0, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("16", merged.getString(0, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
 
-        Assertions.assertEquals("10", merged.getString(1, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("15", merged.getString(1, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("10", merged.getString(1, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("15", merged.getString(1, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class TableMergeUtilityTests extends BaseTest {
         Table merged = TableMergeUtility.mergeNewResults(this.currentTable, this.newTable, this.joinColumnNames);
 
         Assertions.assertEquals(1, merged.rowCount());
-        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsNormalizedResult.CHECK_HASH_COLUMN_NAME));
-        Assertions.assertEquals("15", merged.getString(0, SensorReadoutsNormalizedResult.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertEquals("10", merged.getString(0, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME));
+        Assertions.assertEquals("15", merged.getString(0, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
     }
 }

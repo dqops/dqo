@@ -35,6 +35,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		this.sut = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
     }
 
     @Test
@@ -273,11 +274,15 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
         Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+                                SELECT
+                                    CASE
+                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN 100.0
+                                        ELSE 100.0 * COUNT(DISTINCT analyzed_table.`id`) /
+                                                     COUNT(analyzed_table.`id`)
+                                    END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
+                                FROM %s AS analyzed_table
+                                GROUP BY time_period
+                                ORDER BY time_period""",
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -417,7 +422,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("FR")));
+                        DataStreamLevelSpecObjectMother.createTag("FR")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -436,7 +441,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
         runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("IT")));
+                        DataStreamLevelSpecObjectMother.createTag("IT")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -454,7 +459,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
     void renderSensor_whenLevel1StaticStringAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -472,7 +477,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
     void renderSensor_whenLevel1StaticStringWithQuoteAndNoTimeSeries_thenRendersCorrectSql() {
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
-                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createStaticValue("DE's")));
+                DataStreamMappingSpecObjectMother.create(DataStreamLevelSpecObjectMother.createTag("DE's")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -491,8 +496,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -511,9 +516,9 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(null);
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("DE"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("DE"),
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -533,8 +538,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         null,
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("PL"),
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -553,8 +558,8 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createCurrentTimeSeries(TimeSeriesGradient.DAY));
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createStaticValue("US"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("PL")));
+                        DataStreamLevelSpecObjectMother.createTag("US"),
+                        DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
@@ -574,7 +579,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("country"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 

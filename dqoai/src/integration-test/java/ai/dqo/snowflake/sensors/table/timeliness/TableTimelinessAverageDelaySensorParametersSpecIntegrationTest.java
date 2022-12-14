@@ -68,7 +68,7 @@ public class TableTimelinessAverageDelaySensorParametersSpecIntegrationTest exte
         this.sut.setColumn1("date1");
         this.sut.setColumn2("date2");
         this.sut.setTimeScale(BuiltInTimeScale.DAY);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimestampColumnTimeSeries("date2", TimeSeriesGradient.DAY));
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -84,7 +84,7 @@ public class TableTimelinessAverageDelaySensorParametersSpecIntegrationTest exte
         this.sut.setColumn1("date1");
         this.sut.setColumn2("date2");
         this.sut.setTimeScale(BuiltInTimeScale.DAY);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimestampColumnTimeSeries("date2", TimeSeriesGradient.DAY));
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

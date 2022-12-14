@@ -22,7 +22,7 @@ package ai.dqo.data.readouts.snapshot;
  */
 public class SensorReadoutTimeSeriesKey {
     private final long checkHashId;
-    private final long dimensionId;
+    private final long dataStreamHash;
 
     /**
      * Creates a time series key.
@@ -31,7 +31,7 @@ public class SensorReadoutTimeSeriesKey {
      */
     public SensorReadoutTimeSeriesKey(long checkHashId, long dataStreamId) {
         this.checkHashId = checkHashId;
-        this.dimensionId = dataStreamId;
+        this.dataStreamHash = dataStreamId;
     }
 
     /**
@@ -46,8 +46,8 @@ public class SensorReadoutTimeSeriesKey {
      * Returns the data series ID, which is a hash of the data stream level values.
      * @return Combined data stream id (hash).
      */
-    public long getDimensionId() {
-        return dimensionId;
+    public long getDataStreamHash() {
+        return dataStreamHash;
     }
 
     @Override
@@ -58,13 +58,13 @@ public class SensorReadoutTimeSeriesKey {
         SensorReadoutTimeSeriesKey that = (SensorReadoutTimeSeriesKey) o;
 
         if (checkHashId != that.checkHashId) return false;
-        return dimensionId == that.dimensionId;
+        return dataStreamHash == that.dataStreamHash;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (checkHashId ^ (checkHashId >>> 32));
-        result = 31 * result + (int) (dimensionId ^ (dimensionId >>> 32));
+        result = 31 * result + (int) (dataStreamHash ^ (dataStreamHash >>> 32));
         return result;
     }
 }

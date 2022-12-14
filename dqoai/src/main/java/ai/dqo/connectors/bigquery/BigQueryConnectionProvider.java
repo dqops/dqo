@@ -28,6 +28,7 @@ import com.google.auth.oauth2.UserCredentials;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
@@ -40,7 +41,7 @@ import java.util.NoSuchElementException;
  * Big query provider.
  */
 @Component("bigquery-provider")
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
     private final ProviderDialectSettings dialectSettings = new ProviderDialectSettings("`", "`", "``", false);

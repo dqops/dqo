@@ -20,14 +20,14 @@ package ai.dqo.metadata.groupings;
  */
 public class DataStreamLevelSpecObjectMother {
     /**
-     * Creates a data stream level mapping that uses a static, hardcoded value.
-     * @param value Static value.
+     * Creates a data stream level mapping that uses a static, hardcoded value (a tag).
+     * @param value Tag value.
      * @return Data stream level mapping.
      */
-    public static DataStreamLevelSpec createStaticValue(String value) {
+    public static DataStreamLevelSpec createTag(String value) {
         return new DataStreamLevelSpec() {{
-			setSource(DataStreamLevelSource.STATIC_VALUE);
-			setStaticValue(value);
+			setSource(DataStreamLevelSource.TAG);
+			setTag(value);
         }};
     }
 

@@ -16,7 +16,7 @@
 package ai.dqo.data.ruleresults.snapshot;
 
 import ai.dqo.data.ruleresults.factory.RuleResultsTableFactory;
-import ai.dqo.data.ruleresults.filestorage.RuleResultsFileStorageService;
+import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import tech.tablesaw.api.Table;
  */
 @Component
 public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactory {
-    private final RuleResultsFileStorageService storageService;
+    private final ParquetPartitionStorageService storageService;
     private final RuleResultsTableFactory ruleResultsTableFactory;
 
     /**
@@ -36,7 +36,7 @@ public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactor
      */
     @Autowired
     public RuleResultsSnapshotFactoryImpl(
-			RuleResultsFileStorageService storageService,
+            ParquetPartitionStorageService storageService,
 			RuleResultsTableFactory ruleResultsTableFactory) {
         this.storageService = storageService;
         this.ruleResultsTableFactory = ruleResultsTableFactory;
@@ -48,6 +48,7 @@ public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactor
      * @param physicalTableName Physical table name.
      * @return Rule results snapshot connected to a storage service.
      */
+    @Override
     public RuleResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
         Table newRuleResults = this.ruleResultsTableFactory.createEmptyRuleResultsTable("new_rule_results");
         return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, newRuleResults);

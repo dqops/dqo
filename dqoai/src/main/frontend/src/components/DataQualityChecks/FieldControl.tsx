@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
-import { ParameterDefinitionSpecDataTypeEnum, UIFieldModel } from '../../api';
+import {
+  ParameterDefinitionSpecDataTypeEnum,
+  ParameterDefinitionSpecDisplayHintEnum,
+  UIFieldModel
+} from '../../api';
 import Checkbox from '../Checkbox';
 import Input from '../Input';
 import NumberInput from '../NumberInput';
@@ -7,6 +11,7 @@ import Select from '../Select';
 import ObjectField from '../ObjectField';
 import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
+import TextArea from '../TextArea';
 
 interface ISensorParametersFieldSettingsProps {
   field: UIFieldModel;
@@ -21,7 +26,7 @@ const FieldControl = ({
 }: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
-  const tooltip = field?.definition?.help_hext;
+  const tooltip = field?.definition?.help_text;
 
   const value: any = useMemo(() => {
     switch (field.definition?.data_type) {
@@ -72,15 +77,31 @@ const FieldControl = ({
         />
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.string && (
-        <Input
-          label={label}
-          value={value}
-          tooltipText={tooltip}
-          className="!h-8 !min-w-30 !max-w-30"
-          onChange={(e) => handleChange({ string_value: e.target.value })}
-          disabled={disabled}
-          error={isInvalid}
-        />
+        <>
+          {field.definition?.display_hint ===
+          ParameterDefinitionSpecDisplayHintEnum.textarea ? (
+            <TextArea
+              label={label}
+              value={value}
+              tooltipText={tooltip}
+              className=""
+              onChange={(e) => handleChange({ string_value: e.target.value })}
+              disabled={disabled}
+              error={isInvalid}
+              rows={1}
+            />
+          ) : (
+            <Input
+              label={label}
+              value={value}
+              tooltipText={tooltip}
+              className="!h-8 !min-w-30 !max-w-30"
+              onChange={(e) => handleChange({ string_value: e.target.value })}
+              disabled={disabled}
+              error={isInvalid}
+            />
+          )}
+        </>
       )}
       {type === ParameterDefinitionSpecDataTypeEnum.integer && (
         <NumberInput

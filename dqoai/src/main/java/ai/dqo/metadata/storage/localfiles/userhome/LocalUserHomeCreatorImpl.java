@@ -17,10 +17,18 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.metadata.storage.localfiles.SpecFileNames;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.core.rolling.RollingFileAppender;
+import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
+import ch.qos.logback.core.util.FileSize;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,20 +44,24 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
+    private DqoLoggingConfigurationProperties loggingConfigurationProperties;
 
     /**
      * Default constructor called by the IoC container.
      * @param homeLocationFindService User home location finder.
      * @param terminalReader Terminal reader - used to prompt the user before the default user home is created.
      * @param terminalWriter Terminal writer - used to notify the user that the default user home will not be created.
+     * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
                                     TerminalReader terminalReader,
-                                    TerminalWriter terminalWriter) {
+                                    TerminalWriter terminalWriter,
+                                    DqoLoggingConfigurationProperties loggingConfigurationProperties) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
+        this.loggingConfigurationProperties = loggingConfigurationProperties;
     }
 
     /**
@@ -141,6 +153,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
 //        initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
@@ -149,6 +162,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                         BuiltInFolderNames.CREDENTIALS + "/\n" +
                                 BuiltInFolderNames.DATA + "/\n" +
                                 BuiltInFolderNames.INDEX + "/\n" +
+                                BuiltInFolderNames.LOGS + "/\n" +
                                 SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 
                 Files.writeString(gitIgnorePath, gitIgnoreContent);
@@ -179,20 +193,73 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (this.isDefaultDqoUserHomeInitialized()) {
+            activateFileLoggingInUserHome();
             return;
         }
 
         if (isHeadless) {
             this.initializeDefaultDqoUserHome();
+            activateFileLoggingInUserHome();
         }
         else {
             if (this.terminalReader.promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
                 this.initializeDefaultDqoUserHome();
+                activateFileLoggingInUserHome();
                 return;
             }
 
             this.terminalWriter.writeLine("DQO user home will not be created, exiting.");
             System.exit(100);
         }
+    }
+
+    /**
+     * Activates logging inside the user home folder. Adds a rolling file logger that will write logs in this folder.
+     */
+    public void activateFileLoggingInUserHome() {
+        if (!this.loggingConfigurationProperties.isEnableUserHomeLogging()) {
+            return;
+        }
+
+        String userHomePath = this.homeLocationFindService.getUserHomePath();
+        Path logsFolderPath = Path.of(userHomePath).resolve(BuiltInFolderNames.LOGS);
+        if (!Files.exists(logsFolderPath)) {
+            initializeEmptyFolder(logsFolderPath);
+        }
+
+        final String logFileNameBase = "dqo-logs";
+        String currentLogFileName = logsFolderPath.resolve(logFileNameBase + ".log").toAbsolutePath().toString();
+        String historicLogFileName = logsFolderPath.resolve(logFileNameBase + "-%d{yyyy-MM-dd_HH}.log").toAbsolutePath().toString();
+
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        PatternLayoutEncoder layoutEncoder = new PatternLayoutEncoder();
+        layoutEncoder.setContext(loggerContext);
+        layoutEncoder.setPattern(this.loggingConfigurationProperties.getPattern());
+        layoutEncoder.start();
+
+        RollingFileAppender logFileAppender = new RollingFileAppender();
+        logFileAppender.setContext(loggerContext);
+        logFileAppender.setName("dqo-file-log");
+        logFileAppender.setEncoder(layoutEncoder);
+        logFileAppender.setAppend(true);
+        logFileAppender.setFile(currentLogFileName);
+
+        TimeBasedRollingPolicy logFilePolicy = new TimeBasedRollingPolicy();
+        logFilePolicy.setContext(loggerContext);
+        logFilePolicy.setParent(logFileAppender);
+        logFilePolicy.setFileNamePattern(historicLogFileName);
+        if (this.loggingConfigurationProperties.getMaxHistory() != null) {
+            logFilePolicy.setMaxHistory(this.loggingConfigurationProperties.getMaxHistory());
+        }
+        if (this.loggingConfigurationProperties.getTotalSizeCap() != null) {
+            logFilePolicy.setTotalSizeCap(FileSize.valueOf(this.loggingConfigurationProperties.getTotalSizeCap()));
+        }
+        logFilePolicy.start();
+
+        logFileAppender.setRollingPolicy(logFilePolicy);
+        logFileAppender.start();
+
+        Logger rootLogger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
+        rootLogger.addAppender(logFileAppender);
     }
 }

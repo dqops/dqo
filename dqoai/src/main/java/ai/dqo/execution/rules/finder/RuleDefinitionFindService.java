@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules.finder;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 
 /**
  * Rule definition search service. Finds the rule definition in the user come (custom definitions and overrides), then in the DQO_HOME (built-in rules).
@@ -23,9 +23,9 @@ import ai.dqo.execution.CheckExecutionContext;
 public interface RuleDefinitionFindService {
     /**
      * Finds a rule definition for a named rule.
-     * @param checkExecutionContext Check execution context with access to the DQO_HOME and user home.
+     * @param executionContext Check execution context with access to the DQO_HOME and user home.
      * @param ruleName Rule name wiht or without the .py file extension.
      * @return Rule definition find result or null when the rule was not found.
      */
-    RuleDefinitionFindResult findRule(CheckExecutionContext checkExecutionContext, String ruleName);
+    RuleDefinitionFindResult findRule(ExecutionContext executionContext, String ruleName);
 }

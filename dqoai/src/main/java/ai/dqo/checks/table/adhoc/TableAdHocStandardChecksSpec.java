@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

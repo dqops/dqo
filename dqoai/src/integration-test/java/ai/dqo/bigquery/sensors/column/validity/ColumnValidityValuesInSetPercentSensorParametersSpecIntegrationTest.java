@@ -71,7 +71,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         this.sut.setValuesType(BuiltInListFormats.STRING);
         this.sut.setValuesList(valuesList);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "length_int", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_int", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         System.out.println(runParameters);
@@ -113,7 +113,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         this.sut.setValuesType(BuiltInListFormats.STRING);
         this.sut.setValuesList(valuesList);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "strings_with_numbers", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
@@ -131,7 +131,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecIntegrationTest
         this.sut.setValuesType(BuiltInListFormats.DATE);
         this.sut.setValuesList(valuesList);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();

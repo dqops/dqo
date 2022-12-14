@@ -18,6 +18,8 @@ package ai.dqo.rest.models.metadata;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ProfilerSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -64,6 +66,12 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
 
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
+    private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this connection.")
+    private ProfilerSearchFilters runProfilerJobTemplate;
+
     /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
@@ -82,6 +90,16 @@ public class ConnectionBasicModel {
             setTimeZone(connectionSpec.getTimeZone());
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setEnabled(true);
+            }});
+            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setEnabled(true);
+            }});
         }};
     }
 

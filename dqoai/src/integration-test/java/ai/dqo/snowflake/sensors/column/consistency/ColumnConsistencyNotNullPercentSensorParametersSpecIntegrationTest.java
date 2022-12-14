@@ -62,7 +62,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecIntegrationTest 
 
     @Test
     void runSensor_whenSensorExecutedOnColumnWithPositiveValues_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date1", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date1", this.checkSpec);
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());

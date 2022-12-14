@@ -26,9 +26,9 @@ public class TreeNodeTraversalResultTests extends BaseTest {
     @Test
     void traverseChildNode_whenCalled_thenCreatesResultWithNavigationToChild() {
         TableSpec node = new TableSpec();
-        TreeNodeTraversalResult result = TreeNodeTraversalResult.traverseChildNode(node);
+        TreeNodeTraversalResult result = TreeNodeTraversalResult.traverseSelectedChildNodes(node);
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(TreeTraverseAction.TRAVERSE_ONE_CHILD, result.getAction());
-        Assertions.assertSame(node, result.getSelectedChild());
+        Assertions.assertEquals(TreeTraverseAction.TRAVERSE_SELECTED_CHILDREN, result.getAction());
+        Assertions.assertTrue(result.getSelectedChildren().contains(node));
     }
 }

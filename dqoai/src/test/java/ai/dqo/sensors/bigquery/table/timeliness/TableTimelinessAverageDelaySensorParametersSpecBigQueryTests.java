@@ -60,7 +60,7 @@ public class TableTimelinessAverageDelaySensorParametersSpecBigQueryTests extend
         this.sut = new TableTimelinessAverageDelaySensorParametersSpec();
         this.checkSpec = new TableTimelinessAverageDelayCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "id", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
         this.sut = (TableTimelinessAverageDelaySensorParametersSpec) runParameters.getSensorParameters();
 
     }

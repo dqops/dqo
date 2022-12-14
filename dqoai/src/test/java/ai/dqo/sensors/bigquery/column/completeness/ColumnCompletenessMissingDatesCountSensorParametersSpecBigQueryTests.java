@@ -61,7 +61,7 @@ public class ColumnCompletenessMissingDatesCountSensorParametersSpecBigQueryTest
         this.sut = new ColumnCompletenessMissingDatesCountSensorParametersSpec();
         this.checkSpec = new ColumnCompletenessMissingDatesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata,"date",this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata,"date",this.checkSpec);
 
     }
 

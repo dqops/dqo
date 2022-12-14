@@ -27,6 +27,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -35,7 +36,7 @@ import picocli.CommandLine;
  * Cli command to update table.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", description = "Update tables which match filters")
 public class TableUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private final TableService tableImportService;

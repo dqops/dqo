@@ -39,12 +39,12 @@ import java.util.Objects;
 
 /**
  * Base class for a data quality check. A check is a pair of a sensor (that reads a value by querying the data) and a rule that validates the value returned by the sensor.
- * @param <R1> Alerting threshold rule parameters type.
+ * @param <RError> Alerting threshold rule parameters type.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, R1 extends AbstractRuleParametersSpec, R2 extends AbstractRuleParametersSpec, R3 extends AbstractRuleParametersSpec>
+public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RError extends AbstractRuleParametersSpec, RWarning extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
             extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -84,9 +84,13 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qualityDimension;
 
-    @JsonPropertyDescription("Dat quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
+    @JsonPropertyDescription("Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String displayName;
+
+    @JsonPropertyDescription("Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String dataStream;
 
     /**
      * Returns the schedule configuration for running the checks automatically.
@@ -210,6 +214,22 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
+     * Returns the name of a named data stream that is defined on the parent table level and should be used on this check.
+     * @return Data stream level.
+     */
+    public String getDataStream() {
+        return dataStream;
+    }
+
+    /**
+     * Sets a data stream name to be used for this check.
+     * @param dataStream Data stream name.
+     */
+    public void setDataStream(String dataStream) {
+        this.dataStream = dataStream;
+    }
+
+    /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
@@ -231,19 +251,19 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      * @return Default "error" alerting thresholds.
      */
-    public abstract R1 getError();
+    public abstract RError getError();
 
     /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      * @return Warning severity rule parameters.
      */
-    public abstract R2 getWarning();
+    public abstract RWarning getWarning();
 
     /**
      * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
      * @return Fatal severity rule parameters.
      */
-    public abstract R3 getFatal();
+    public abstract RFatal getFatal();
 
     /**
      * Creates and returns a copy of this object.

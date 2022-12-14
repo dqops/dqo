@@ -23,6 +23,12 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.*;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
+import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.search.StringPatternComparer;
@@ -34,20 +40,21 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
  * Table metadata import service.
  */
 @Service
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TableServiceImpl implements TableService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;
@@ -56,6 +63,8 @@ public class TableServiceImpl implements TableService {
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final TerminalTableWritter terminalTableWritter;
     private final OutputFormatService outputFormatService;
+    private final DqoJobQueue dqoJobQueue;
+    private final DqoQueueJobFactory dqoQueueJobFactory;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -64,7 +73,9 @@ public class TableServiceImpl implements TableService {
                             TerminalWriter terminalWriter,
                             SecretValueProvider secretValueProvider,
                             TerminalTableWritter terminalTableWritter,
-                            OutputFormatService outputFormatService) {
+                            OutputFormatService outputFormatService,
+                            DqoJobQueue dqoJobQueue,
+                            DqoQueueJobFactory dqoQueueJobFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
@@ -72,6 +83,8 @@ public class TableServiceImpl implements TableService {
         this.secretValueProvider = secretValueProvider;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
+        this.dqoJobQueue = dqoJobQueue;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
     }
 
     /**
@@ -141,74 +154,31 @@ public class TableServiceImpl implements TableService {
     }
 
     /**
-     * Filters table spec list by filter name.
-     * @param baseSpecs list of table specs.
-     * @param tableFilterName table filter name.
-     * @return Table with a list of filtered tables.
-     */
-    private List<TableSpec> filterTableSpecs(List<TableSpec> baseSpecs, String tableFilterName) {
-        List<TableSpec>resultList = new ArrayList<>();
-        for (TableSpec spec: baseSpecs) {
-            PhysicalTableName physicalTableName = spec.getTarget().toPhysicalTableName();
-            String sourceTableName = physicalTableName.getTableName();
-            if(fitsTableFilterName(sourceTableName, tableFilterName)) {
-                resultList.add(spec);
-            }
-        }
-        return resultList;
-    }
-
-    /**
      * Imports all tables to the connection from a given schema name.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
+     * @param tableName Optional table name pattern.
      * @return Cli operation status.
      */
     public CliOperationStatus importTables(String connectionName, String schemaName, String tableName) {
-        CliOperationStatus cliOperationStatus = new CliOperationStatus();
+        ImportSchemaQueueJob importSchemaJob = this.dqoQueueJobFactory.createImportSchemaJob();
+        ImportSchemaQueueJobParameters importParameters = new ImportSchemaQueueJobParameters(
+                connectionName, schemaName, tableName);
+        importSchemaJob.setImportParameters(importParameters);
 
-        if (tableName == null) {
-            tableName = "*";
-        }
+        PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        ConnectionList connections = userHome.getConnections();
+        try {
+            ImportSchemaQueueJobResult importSchemaQueueJobResult = pushJobResult.getFuture().get(); // TODO: add import timeout to stop blocking the CLI and run the import in the background after a while
 
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            cliOperationStatus.setFailedMessage("Connection was not found");
-            return cliOperationStatus;
-        }
-
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
-
-        ProviderType providerType = expandedConnectionSpec.getProviderType();
-        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
-            List<SourceTableModel> tableModels = sourceConnection.listTables(schemaName);
-            if (tableModels.size() == 0) {
-                cliOperationStatus.setFailedMessage("No tables found in the data source");
-                return cliOperationStatus;
-            }
-
-            List<String> tableNames = tableModels.stream()
-                    .map(tm -> tm.getTableName().getTableName())
-                    .collect(Collectors.toList());
-
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(schemaName, tableNames);
-            sourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableName);
-
-            TableList currentTablesColl = connectionWrapper.getTables();
-            currentTablesColl.importTables(sourceTableSpecs);
-            userHomeContext.flush();
-
-            Table resultTable = createDatasetTableFromTableSpecs(sourceTableSpecs);
-
-            cliOperationStatus.setTable(resultTable);
-            cliOperationStatus.setSuccess(true);
-            return cliOperationStatus;
+            CliOperationStatus importSuccessStatus = new CliOperationStatus();
+            importSuccessStatus.setTable(importSchemaQueueJobResult.getImportedTables());
+            importSuccessStatus.setSuccess(true);
+            return importSuccessStatus;
+        } catch (ExecutionException | InterruptedException e) {
+            CliOperationStatus importFailedStatus = new CliOperationStatus();
+            importFailedStatus.setFailedMessage(e.getMessage()); // TODO: probably the actual exception from the job is in an inner exception
+            return importFailedStatus;
         }
     }
 
@@ -256,7 +226,7 @@ public class TableServiceImpl implements TableService {
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
         tableSearchFilters.setConnectionName(connectionName);
         tableSearchFilters.setSchemaTableName(tableName);
-        tableSearchFilters.setDimensions(dimensions);
+        tableSearchFilters.setTags(dimensions);
         tableSearchFilters.setLabels(labels);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
@@ -290,26 +260,6 @@ public class TableServiceImpl implements TableService {
     }
 
     /**
-     * Creates a tablesaw table with a list of physical tables that will be imported.
-     * @param sourceTableSpecs List of source tables to be imported.
-     * @return Dataset with a summary of the import.
-     */
-    public Table createDatasetTableFromTableSpecs(List<TableSpec> sourceTableSpecs) {
-        Table resultTable = Table.create().addColumns(
-                StringColumn.create("Schema name"),
-                StringColumn.create("Table name"),
-                IntColumn.create("Column count"));
-
-        for( TableSpec sourceTableSpec : sourceTableSpecs) {
-            Row row = resultTable.appendRow();
-            row.setString(0, sourceTableSpec.getTarget().getSchemaName());
-            row.setString(1, sourceTableSpec.getTarget().getTableName());
-            row.setInt(2, sourceTableSpec.getColumns().size());
-        }
-        return resultTable;
-    }
-
-    /**
      * Adds a table to the connection from a given schema and table name.
      * @param connectionName Connection name.
      * @param schemaName Schema name.
@@ -335,7 +285,7 @@ public class TableServiceImpl implements TableService {
             return cliOperationStatus;
         }
         userHomeContext.flush();
-        cliOperationStatus.setSuccesMessage(String.format("Table %s was successfully added.", physicalTableName.toBaseFileName()));
+        cliOperationStatus.setSuccessMessage(String.format("Table %s was successfully added.", physicalTableName.toBaseFileName()));
         return cliOperationStatus;
     }
 
@@ -381,7 +331,7 @@ public class TableServiceImpl implements TableService {
                 }
         );
 
-        cliOperationStatus.setSuccesMessage(String.format("Successfully removed %d tables", tableWrappers.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d tables", tableWrappers.size()));
         return cliOperationStatus;
     }
 
@@ -407,7 +357,7 @@ public class TableServiceImpl implements TableService {
             return cliOperationStatus;
         }
 
-        cliOperationStatus.setSuccesMessage(String.format("Table %s.%s was successfully updated.", schemaName, tableName));
+        cliOperationStatus.setSuccessMessage(String.format("Table %s.%s was successfully updated.", schemaName, tableName));
         return cliOperationStatus;
     }
 

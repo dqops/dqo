@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -27,7 +28,7 @@ import picocli.CommandLine;
  * "scheduler stop" 2nd level CLI command - stops a scheduler that was previously started.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "stop", description = "Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.")
 public class SchedulerStopCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;

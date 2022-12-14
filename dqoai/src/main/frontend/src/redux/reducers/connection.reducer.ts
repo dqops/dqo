@@ -143,41 +143,6 @@ const connectionReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case CONNECTION_ACTION.GET_CONNECTION_TIME:
-      return {
-        ...state,
-        loading: true
-      };
-    case CONNECTION_ACTION.GET_CONNECTION_TIME_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        timeSeries: action.data,
-        error: null
-      };
-    case CONNECTION_ACTION.GET_CONNECTION_TIME_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.error
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME:
-      return {
-        ...state,
-        isUpdating: true
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME_SUCCESS:
-      return {
-        ...state,
-        isUpdating: false,
-        error: null
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_TIME_ERROR:
-      return {
-        ...state,
-        isUpdating: false,
-        error: action.error
-      };
     case CONNECTION_ACTION.GET_CONNECTION_COMMENTS:
       return {
         ...state,

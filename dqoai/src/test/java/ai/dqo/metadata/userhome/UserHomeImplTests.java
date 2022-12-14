@@ -17,9 +17,7 @@ package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checks.standard.TableMinRowCountCheckSpec;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
-import ai.dqo.checks.table.consistency.TableConsistencyRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;

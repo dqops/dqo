@@ -21,7 +21,11 @@ import {
   Configuration,
   SchemasApiFactory,
   TablesApiFactory,
-  ColumnsApiFactory, JobsApiFactory
+  ColumnsApiFactory,
+  JobsApiFactory,
+  SourceSchemasControllerApiFactory,
+  SourceTablesControllerApiFactory,
+  DataStreamsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -45,3 +49,21 @@ export const ColumnApiClient = ColumnsApiFactory(
 );
 
 export const JobApiClient = JobsApiFactory(new Configuration(), '', axios);
+
+export const SourceSchemasApi = SourceSchemasControllerApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const SourceTableApi = SourceTablesControllerApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const DataStreamsApi = DataStreamsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);

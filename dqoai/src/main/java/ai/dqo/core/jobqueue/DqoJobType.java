@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.core.jobqueue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,6 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum DqoJobType {
     @JsonProperty("run checks")
     RUN_CHECKS,
+
+    @JsonProperty("run profilers")
+    RUN_PROFILERS,
 
     @JsonProperty("queue thread shutdown")
     QUEUE_THREAD_SHUTDOWN,
@@ -20,4 +38,13 @@ public enum DqoJobType {
 
     @JsonProperty("run scheduled checks by cron")
     RUN_SCHEDULED_CHECKS_CRON,
+
+    @JsonProperty("import schema")
+    IMPORT_SCHEMA,
+
+    @JsonProperty("import selected tables")
+    IMPORT_TABLES,
+
+//    @JsonProperty("import table")
+//    IMPORT_TABLE,
 }

@@ -47,6 +47,9 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
   };
 
   const onUpdate = async () => {
+    if (!updatedConnectionBasic) {
+      return;
+    }
     await dispatch(
       updateConnectionBasic(connectionName, updatedConnectionBasic)
     );
@@ -89,7 +92,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
         {updatedConnectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
-            spec={updatedConnectionBasic?.bigquery}
+            bigquery={updatedConnectionBasic?.bigquery}
             onChange={onChange}
           />
         )}

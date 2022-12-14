@@ -28,7 +28,10 @@ import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
+import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -109,6 +112,22 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "This parameter is effective only in CLI mode.", defaultValue = "WARN")
     private org.slf4j.event.Level loggingLevelAiDqo;
 
+    @CommandLine.Option(names = {"--dqo.logging.enable-user-home-logging"},
+            description = "Enables file logging inside the DQO User Home's .logs folder.", defaultValue = "true")
+    private boolean enableUserHomeLogging;
+
+    @CommandLine.Option(names = {"--dqo.logging.max-history"},
+            description = "Sets the maximum number of log files that could be stored (archived) in the .logs folder.", defaultValue = "7")
+    private Integer maxHistory;
+
+    @CommandLine.Option(names = {"--dqo.logging.pattern"},
+            description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)
+    private String pattern;
+
+    @CommandLine.Option(names = {"--dqo.logging.total-size-cap"},
+            description = "Total log file size cap.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
+    private String totalSizeCap;
+
     @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},
             description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "120")
@@ -116,7 +135,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.python.interpreter"},
             description = "Python interpreter command line name, like 'python' or 'python3'. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "python")
+                    "This parameter is effective only in CLI mode.", defaultValue = "python3")
     private String dqoPythonInterpreter;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
@@ -142,12 +161,15 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
             description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "900")
-    private Long lockWaitTimeoutSeconds;
+    private Long dqoLockWaitTimeoutSeconds;
 
     @CommandLine.Option(names = {"--dqo.queue.threads"},
             description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")
-    private Long queueThreads;
+    private Long dqoQueueThreads;
 
+    @CommandLine.Option(names = {"--dqo.scheduler.start"},
+            description = "Starts the job scheduler on startup (true) or disables the job scheduler (false).")
+    private Boolean dqoSchedulerStart;
 
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
             description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +
@@ -158,6 +180,19 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "*/10 * * * *")
     private String dqoSchedulerScanMetadataCronSchedule;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.synchronization-mode"},
+            description = "Configures the console logging mode for the '\"cloud sync all\" operations performed by the job scheduler in the background.", defaultValue = "silent")
+    private FileSystemSynchronizationReportingMode dqoSchedulerSynchronizationMode;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.check-run-mode"},
+            description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
+    private CheckRunReportingMode dqoSchedulerCheckRunMode;
+
+    @CommandLine.Option(names = {"--spring.config.location"},
+            description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
+                    "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")
+    private String springConfigLocation;
 
     /**
      * This field will capture all remaining parameters that could be also in the form "--name" and should be captured by Spring to update the configuration parameters.

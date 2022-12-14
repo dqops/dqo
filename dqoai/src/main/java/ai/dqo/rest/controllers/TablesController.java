@@ -17,7 +17,6 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
@@ -27,7 +26,6 @@ import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
@@ -35,17 +33,14 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingService;
 import ai.dqo.rest.models.checks.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,9 +68,9 @@ public class TablesController {
 
     /**
      * Creates an instance of a controller by injecting dependencies.
-     * @param userHomeContextFactory      User home context factory.
-     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
-     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
+     * @param userHomeContextFactory           User home context factory.
+     * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
+     * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
      */
     @Autowired
     public TablesController(UserHomeContextFactory userHomeContextFactory,
@@ -101,8 +96,8 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<TableBasicModel>> getTables(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -141,9 +136,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableModel>> getTable(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -185,9 +180,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableBasicModel>> getTableBasic(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -210,24 +205,24 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the time series configuration for a table given a connection name and a table names.
+     * Retrieves the default (first) data streams configuration for a table given a connection name and a table names.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Time series configuration for the requested table.
+     * @return Default data streams configuration for the requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/timeseries")
-    @ApiOperation(value = "getTableTimeSeries", notes = "Return the time series configuration for a table", response = TimeSeriesConfigurationSpec.class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "getTableDefaultDataStreamsMapping", notes = "Return the default (first) data streams mapping for a table", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Table's time series configuration returned", response = TimeSeriesConfigurationSpec.class),
+            @ApiResponse(code = 200, message = "Default data streams mapping for a table returned", response = DataStreamMappingSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TimeSeriesConfigurationSpec>> getTableTimeSeries(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDefaultDataStreamsMapping(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -244,47 +239,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        TimeSeriesConfigurationSpec timeSeries = tableSpec.getTimeSeries();
-
-        return new ResponseEntity<>(Mono.justOrEmpty(timeSeries), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Retrieves the data streams configuration for a table given a connection name and a table names.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @return Data streams configuration for the requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
-    @ApiOperation(value = "getTableDataStreamsMapping", notes = "Return the data streams mapping for a table", response = DataStreamMappingSpec.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Data streams mapping for a table returned", response = DataStreamMappingSpec.class),
-            @ApiResponse(code = 404, message = "Connection or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<DataStreamMappingSpec>> getTableDataStreamsMapping(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableSpec tableSpec = tableWrapper.getSpec();
-        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams();
+        DataStreamMappingSpec dataStreamsSpec = tableSpec.getDataStreams().getFirstDataStreamMapping();
 
         return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
     }
@@ -305,9 +260,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<RecurringScheduleSpec>> getTableScheduleOverride(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -345,9 +300,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<LabelSetSpec>> getTableLabels(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -385,9 +340,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<CommentsListSpec>> getTableComments(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -409,30 +364,7 @@ public class TablesController {
         return new ResponseEntity<>(Mono.justOrEmpty(comments), HttpStatus.OK); // 200
     }
 
-    protected <T extends AbstractRootChecksContainerSpec> T getTableGenericChecks(
-            Function<TableSpec, T> extractorFromSpec,
-            String connectionName,
-            String schemaName,
-            String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return null;
-        }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return null;
-        }
-
-        TableSpec tableSpec = tableWrapper.getSpec();
-        return extractorFromSpec.apply(tableSpec);
-    }
-
+    
     /**
      * Retrieves the configuration of data quality checks on a table given a connection name and a table names.
      * @param connectionName Connection name.
@@ -449,17 +381,31 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableAdHocChecks(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
-        TableAdHocCheckCategoriesSpec checks =
-                this.getTableGenericChecks(TableSpec::getChecks, connectionName, schemaName, tableName);
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        if (checks == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else {
-            return new ResponseEntity<>(Mono.just(checks), HttpStatus.OK); // 200
         }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        
+        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
+        return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
     /**
@@ -469,10 +415,6 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Daily data quality checkpoints on a requested table.
      */
-    // TODO: I think it's a little bit too "magic values"-like,
-    //       but I don't see another way to ensure the proper return type.
-    //       Probably best to leave it in here and do
-    //       a structural refactoring when we isolate the logic.
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/daily")
     @ApiOperation(value = "getTableCheckpointsDaily", notes = "Return the configuration of daily table level data quality checkpoints on a table", response = TableDailyCheckpointCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
@@ -482,22 +424,31 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableDailyCheckpointCategoriesSpec>> getTableCheckpointsDaily(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        TableDailyCheckpointCategoriesSpec dailyCheckpoints =
-                this.getTableGenericChecks(
-                        spec -> spec.getCheckpoints().getDaily(),
-                        connectionName,
-                        schemaName,
-                        tableName);
-
-        if (dailyCheckpoints == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else {
-            return new ResponseEntity<>(Mono.just(dailyCheckpoints), HttpStatus.OK); // 200
         }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        
+        TableDailyCheckpointCategoriesSpec dailyCheckpoints = tableSpec.getCheckpoints().getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyCheckpoints), HttpStatus.OK); // 200
     }
 
     /**
@@ -516,22 +467,31 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableMonthlyCheckpointCategoriesSpec>> getTableCheckpointsMonthly(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        TableMonthlyCheckpointCategoriesSpec monthlyCheckpoints =
-                this.getTableGenericChecks(
-                        spec -> spec.getCheckpoints().getMonthly(),
-                        connectionName,
-                        schemaName,
-                        tableName);
-
-        if (monthlyCheckpoints == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else {
-            return new ResponseEntity<>(Mono.just(monthlyCheckpoints), HttpStatus.OK); // 200
         }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableMonthlyCheckpointCategoriesSpec monthlyCheckpoints = tableSpec.getCheckpoints().getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyCheckpoints), HttpStatus.OK); // 200
     }
     
     /**
@@ -550,19 +510,31 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksDaily(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
-        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks =
-                this.getTableGenericChecks(
-                        spec -> spec.getPartitionedChecks().getDaily(),
-                        connectionName, schemaName, tableName);
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        if (dailyPartitionedChecks == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else {
-            return new ResponseEntity<>(Mono.just(dailyPartitionedChecks), HttpStatus.OK); // 200
         }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = tableSpec.getPartitionedChecks().getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitionedChecks), HttpStatus.OK); // 200
     }
 
     /**
@@ -581,105 +553,101 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<TableMonthlyPartitionedCheckCategoriesSpec>> getTablePartitionedChecksMonthly(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
-        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks =
-                this.getTableGenericChecks(
-                        spec -> spec.getPartitionedChecks().getMonthly(),
-                        connectionName, schemaName, tableName);
-
-        if (monthlyPartitionedChecks == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        } else {
-            return new ResponseEntity<>(Mono.just(monthlyPartitionedChecks), HttpStatus.OK); // 200
-        }
-    }
-    
-    protected <T extends AbstractRootChecksContainerSpec> UIAllChecksModel getTableGenericChecksUI(
-            Function<TableSpec, T> tableSpecToRootCheck,
-            String connectionName,
-            String schemaName,
-            String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
         ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
-            return null;
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
                 new PhysicalTableName(schemaName, tableName), true);
         if (tableWrapper == null) {
-            return null;
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        T rootChecks = tableSpecToRootCheck.apply(tableSpec);
-        if (rootChecks == null) {
-            return null;
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setCheckType(rootChecks.getCheckType());
-            setTimeScale(rootChecks.getCheckTimeScale());
-            setEnabled(true);
-        }};
-
-        return this.specToUiCheckMappingService.createUiModel(rootChecks, checkSearchFilters);
+        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = tableSpec.getPartitionedChecks().getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitionedChecks), HttpStatus.OK); // 200
     }
 
+
     /**
-     * Retrieves the configuration of data quality ad-hoc checks for a UI friendly mode on a table given a connection name and a table name.
+     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality ad-hoc check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getTableAdHocChecksUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
-        UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
-                spec -> {
-                    TableAdHocCheckCategoriesSpec checks = spec.getChecks();
-                    return checks != null ? checks : new TableAdHocCheckCategoriesSpec();
-                },
-                connectionName,
-                schemaName,
-                tableName
-        );
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-        if (checksUiModel == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableAdHocCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
+                tableSpec.getChecks(),
+                TableAdHocCheckCategoriesSpec::new);
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+                checks, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of data quality checkpoints for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * Retrieves the configuration of data quality checkpoints as a UI friendly model on a table given a connection name, a table name, and a time partition.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality checkpoint configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui")
-    @ApiOperation(value = "getTableCheckpointsUI", notes = "Return a UI friendly model of table level data quality checkpoints on a table for a given time partition", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableCheckpointsUI", notes = "Return a UI friendly model of configurations for table level data quality checkpoints on a table for a given time partition", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksModel.class),
@@ -687,92 +655,536 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getTableCheckpointsUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
-        UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
-                spec -> {
-                    TableCheckpointsSpec checkpoints = spec.getCheckpoints();
-                    if (checkpoints == null) {
-                        checkpoints = new TableCheckpointsSpec();
-                    }
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-                    switch (timePartition) {
-                        case daily:
-                            TableDailyCheckpointCategoriesSpec checkpointsDaily = checkpoints.getDaily();
-                            return (checkpointsDaily != null) ? checkpointsDaily : new TableDailyCheckpointCategoriesSpec();
-
-                        case monthly:
-                            TableMonthlyCheckpointCategoriesSpec checkpointsMonthly = checkpoints.getMonthly();
-                            return (checkpointsMonthly != null) ? checkpointsMonthly : new TableMonthlyCheckpointCategoriesSpec();
-                    }
-                    return null;
-                },
-                connectionName,
-                schemaName,
-                tableName
-        );
-
-        if (checksUiModel == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
+
+        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempCheckpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getDaily(),
+                        TableDailyCheckpointCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempCheckpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getMonthly(),
+                        TableMonthlyCheckpointCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec checkpointPartition = tempCheckpointPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checkpointPartition.getCheckType());
+            setTimeScale(checkpointPartition.getCheckTimeScale());
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checkpointPartition, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of data quality partitioned checks for a UI friendly mode on a table given a connection name, a table name, and a time partition.
+     * Retrieves the configuration of data quality partitioned checks as a UI friendly model on a table given a connection name, a table name, and a time partition.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timePartition  Time partition.
-     * @return UI friendly data quality ad-hoc check list on a requested table.
+     * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui")
-    @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned check on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getTablePartitionedChecksUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition) {
-        UIAllChecksModel checksUiModel = this.getTableGenericChecksUI(
-                spec -> {
-                    TablePartitionedChecksRootSpec partitionedChecks = spec.getPartitionedChecks();
-                    if (partitionedChecks == null) {
-                        partitionedChecks = new TablePartitionedChecksRootSpec();
-                    }
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
 
-                    switch (timePartition) {
-                        case daily:
-                            TableDailyPartitionedCheckCategoriesSpec partitionedChecksDaily = partitionedChecks.getDaily();
-                            return (partitionedChecksDaily != null) ? partitionedChecksDaily : new TableDailyPartitionedCheckCategoriesSpec();
-
-                        case monthly:
-                            TableMonthlyPartitionedCheckCategoriesSpec partitionedChecksMonthly = partitionedChecks.getMonthly();
-                            return (partitionedChecksMonthly != null) ? partitionedChecksMonthly : new TableMonthlyPartitionedCheckCategoriesSpec();
-                    }
-                    return null;
-                },
-                connectionName,
-                schemaName,
-                tableName
-        );
-
-        if (checksUiModel == null) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-        else {
-            return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+
+        AbstractRootChecksContainerSpec tempPartitionedCheckPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempPartitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getDaily(),
+                        TableDailyPartitionedCheckCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempPartitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getMonthly(),
+                        TableMonthlyPartitionedCheckCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec partitionedCheckPartition = tempPartitionedCheckPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(partitionedCheckPartition.getCheckType());
+            setTimeScale(partitionedCheckPartition.getCheckTimeScale());
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(partitionedCheckPartition, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
+
+
+    /**
+     * Retrieves a simplistic list of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Simplistic UI friendly data quality ad-hoc checks list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/basic")
+    @ApiOperation(value = "getTableAdHocChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level data quality ad-hoc checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableAdHocChecksUIBasic(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableAdHocCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
+                tableSpec.getChecks(),
+                TableAdHocCheckCategoriesSpec::new);
+
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a simplistic list of data quality checkpoints as a UI friendly model on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @return Simplistic UI friendly data quality checkpoints list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui/basic")
+    @ApiOperation(value = "getTableCheckpointsUIBasic", notes = "Return a simplistic UI friendly model of table level data quality checkpoints on a table for a given time partition", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableCheckpointsUIBasic(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
+
+        AbstractRootChecksContainerSpec checkpointPartition = null;
+        switch (timePartition) {
+            case daily:
+                checkpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getDaily(),
+                        TableDailyCheckpointCategoriesSpec::new);
+                break;
+
+            case monthly:
+                checkpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getMonthly(),
+                        TableMonthlyCheckpointCategoriesSpec::new);
+                break;
+        }
+
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checkpointPartition);
+        return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality partitioned checks as a UI friendly model on a table given a connection name, a table name, and a time partition.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui/basic")
+    @ApiOperation(value = "getTablePartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time partition", response = UIAllChecksBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of table level {timePartition} data quality partitioned checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTablePartitionedChecksUIBasic(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+
+        AbstractRootChecksContainerSpec partitionedCheckPartition = null;
+        switch (timePartition) {
+            case daily:
+                partitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getDaily(),
+                        TableDailyPartitionedCheckCategoriesSpec::new);
+                break;
+
+            case monthly:
+                partitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getMonthly(),
+                        TableMonthlyPartitionedCheckCategoriesSpec::new);
+                break;
+        }
+
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(partitionedCheckPartition);
+        return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
+    }
+
+
+
+    /**
+     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param checkCategory  Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly data quality ad-hoc check configuration list on a requested table, filtered by category and check name.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getTableAdHocChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table passing a filter", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableAdHocChecksUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableAdHocCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
+                tableSpec.getChecks(),
+                TableAdHocCheckCategoriesSpec::new);
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+                checks, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality checkpoints as a UI friendly model on a table given a connection name, a table name, and a time partition, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @param checkCategory  Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly data quality checkpoint configuration list on a requested table.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timePartition}/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getTableCheckpointsUIFilter", notes = "Return a UI friendly model of configurations for table level data quality checkpoints on a table for a given time partition, filtered by category and check name.", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality checkpoints on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableCheckpointsUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
+
+        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempCheckpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getDaily(),
+                        TableDailyCheckpointCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempCheckpointPartition = Objects.requireNonNullElseGet(
+                        checkpoints.getMonthly(),
+                        TableMonthlyCheckpointCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec checkpointPartition = tempCheckpointPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(checkpointPartition.getCheckType());
+            setTimeScale(checkpointPartition.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(checkpointPartition, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality partitioned checks as a UI friendly model on a table given a connection name, a table name, and a time partition, filtered by category and check name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param timePartition  Time partition.
+     * @param checkCategory  Check category.
+     * @param checkName      (Optional) Check name.
+     * @return UI friendly data quality partitioned check configuration list on a requested table, filtered by category and check name.
+     */
+    @GetMapping(value = {
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}",
+            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}/{checkName}"
+    })
+    @ApiOperation(value = "getTablePartitionedChecksUIFilter", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time partition, filtered by category and check name.", response = UIAllChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of table level {timePartition} data quality partitioned checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found or time partition invalid"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UIAllChecksModel>> getTablePartitionedChecksUIFilter(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Check category") @PathVariable String checkCategory,
+            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+
+        AbstractRootChecksContainerSpec tempPartitionedCheckPartition = null;
+        switch (timePartition) {
+            case daily:
+                tempPartitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getDaily(),
+                        TableDailyPartitionedCheckCategoriesSpec::new);
+                break;
+
+            case monthly:
+                tempPartitionedCheckPartition = Objects.requireNonNullElseGet(
+                        partitionedChecks.getMonthly(),
+                        TableMonthlyPartitionedCheckCategoriesSpec::new);
+                break;
+        }
+
+        final AbstractRootChecksContainerSpec partitionedCheckPartition = tempPartitionedCheckPartition;
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
+            setConnectionName(connectionWrapper.getName());
+            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setCheckType(partitionedCheckPartition.getCheckType());
+            setTimeScale(partitionedCheckPartition.getCheckTimeScale());
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setEnabled(true);
+        }};
+
+        UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(partitionedCheckPartition, checkSearchFilters,
+                tableSpec.getDataStreams().getFirstDataStreamMappingName());
+        return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+
 
     /**
      * Creates (adds) a new table.
@@ -793,10 +1205,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> createTable(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Table specification") @RequestBody TableSpec tableSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table specification") @RequestBody TableSpec tableSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -852,10 +1264,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTable(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Full table specification") @RequestBody TableSpec tableSpec) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Full table specification") @RequestBody TableSpec tableSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -910,10 +1322,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableBasic(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Table basic model with the updated settings") @RequestBody TableBasicModel tableBasicModel) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table basic model with the updated settings") @RequestBody TableBasicModel tableBasicModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -951,85 +1363,28 @@ public class TablesController {
     }
 
     /**
-     * Updates the time series configuration of an existing table.
-     * @param connectionName              Connection name.
-     * @param schemaName                  Schema name.
-     * @param tableName                   Table name.
-     * @param timeSeriesConfigurationSpec New time series configuration or null (an empty optional).
-     * @return Empty response.
-     */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/timeseries")
-    @ApiOperation(value = "updateTableTimeSeries", notes = "Updates the time series configuration of an existing table.")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's time series configuration successfully updated"),
-            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table not found"),
-            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> updateTableTimeSeries(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time series configuration to store or an empty object to clear the time series configuration")
-                @RequestBody Optional<TimeSeriesConfigurationSpec> timeSeriesConfigurationSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
-
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
-
-        // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (timeSeriesConfigurationSpec.isPresent()) {
-            tableSpec.setTimeSeries(timeSeriesConfigurationSpec.get());
-        } else {
-            tableSpec.setTimeSeries(null);
-        }
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
-
-    /**
-     * Updates the data streams mapping of an existing table.
+     * Updates the default (first) data streams mapping of an existing table.
      * @param connectionName         Connection name.
      * @param schemaName             Schema name.
      * @param tableName              Table name.
-     * @param dataStreamsMappingSpec New data streams mapping or null (an empty optional).
+     * @param dataStreamsMappingSpec New default data streams mapping or null (an empty optional).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreamsmapping")
-    @ApiOperation(value = "updateTableDataStreamsMapping", notes = "Updates the data streams mapping at a table level.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping")
+    @ApiOperation(value = "updateTableDefaultDataStreamsMapping", notes = "Updates the default data streams mapping at a table level.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's data streams mapping successfully updated"),
+            @ApiResponse(code = 204, message = "Table's default data streams mapping successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableDataStreamsMapping(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Data streams mapping to store or an empty object to clear the data streams mapping on a table level")
+    public ResponseEntity<Mono<?>> updateTableDefaultDataStreamsMapping(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Default data streams mapping to store or an empty object to clear the data streams mapping on a table level")
             @RequestBody Optional<DataStreamMappingSpec> dataStreamsMappingSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1055,9 +1410,9 @@ public class TablesController {
         // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         if (dataStreamsMappingSpec.isPresent()) {
-            tableSpec.setDataStreams(dataStreamsMappingSpec.get());
+            tableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamsMappingSpec.get());
         } else {
-            tableSpec.setDataStreams(new DataStreamMappingSpec());
+            tableSpec.getDataStreams().setFirstDataStreamMapping(null); // will remove the first mapping
         }
         userHomeContext.flush();
 
@@ -1083,10 +1438,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableScheduleOverride(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
             @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1140,10 +1495,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableLabels(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "List of labels to attach (replace) on a table or an empty object to clear the list of labels on a table")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("List of labels to attach (replace) on a table or an empty object to clear the list of labels on a table")
             @RequestBody Optional<LabelSetSpec> labelSetSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1197,10 +1552,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableComments(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table")
             @RequestBody Optional<CommentsListSpec> commentsListSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1282,10 +1637,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableAdHocChecks(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of table level data quality ad-hoc checks to store or an empty object to remove all data quality ad-hoc checks on the table level (column level ad-hoc checks are preserved).")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Configuration of table level data quality ad-hoc checks to store or an empty object to remove all data quality ad-hoc checks on the table level (column level ad-hoc checks are preserved).")
             @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableAdHocCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1332,10 +1687,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableCheckpointsDaily(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of daily table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Configuration of daily table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
             @RequestBody Optional<TableDailyCheckpointCategoriesSpec> tableDailyCheckpointsSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1384,10 +1739,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableCheckpointsMonthly(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of monthly table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Configuration of monthly table level data quality checkpoints to store or an empty object to remove all data quality checkpoints on the table level (column level checkpoints are preserved).")
             @RequestBody Optional<TableMonthlyCheckpointCategoriesSpec> tableMonthlyCheckpointsSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1436,10 +1791,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTablePartitionedChecksDaily(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
             @RequestBody Optional<TableDailyPartitionedCheckCategoriesSpec> tableDailyPartitionedChecksSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1488,10 +1843,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTablePartitionedChecksMonthly(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
             @RequestBody Optional<TableMonthlyPartitionedCheckCategoriesSpec> tableMonthlyPartitionedChecksSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1577,10 +1932,10 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableAdHocChecksUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "UI model with the changes to be applied to the data quality ad-hoc checks configuration.")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("UI model with the changes to be applied to the data quality ad-hoc checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1624,11 +1979,11 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTableCheckpointsUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition,
-            @Parameter(description = "UI model with the changes to be applied to the data quality checkpoints configuration.")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("UI model with the changes to be applied to the data quality checkpoints configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1691,11 +2046,11 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateTablePartitionedChecksUI(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName,
-            @Parameter(description = "Time partition") @PathVariable CheckTimeScale timePartition,
-            @Parameter(description = "UI model with the changes to be applied to the data quality partitioned checks configuration.")
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("UI model with the changes to be applied to the data quality partitioned checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1754,9 +2109,9 @@ public class TablesController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> deleteTable(
-            @Parameter(description = "Connection name") @PathVariable String connectionName,
-            @Parameter(description = "Schema name") @PathVariable String schemaName,
-            @Parameter(description = "Table name") @PathVariable String tableName) {
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1776,5 +2131,28 @@ public class TablesController {
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+
+    protected TableSpec getTableSpec(
+            String connectionName,
+            String schemaName,
+            String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return null;
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return null;
+        }
+
+        return tableWrapper.getSpec();
     }
 }

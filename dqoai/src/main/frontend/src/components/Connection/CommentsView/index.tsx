@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import CommentItem from './CommentItem';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
@@ -10,12 +10,16 @@ interface ICommentsViewProps {
   comments: CommentSpec[];
   onChange: (comments: CommentSpec[]) => void;
   className?: string;
+  isUpdated?: boolean;
+  setIsUpdated?: (value: boolean) => void;
 }
 
 const CommentsView = ({
   comments,
   onChange,
-  className
+  className,
+  isUpdated,
+  setIsUpdated
 }: ICommentsViewProps) => {
   const [text, setText] = useState('');
 
@@ -48,6 +52,13 @@ const CommentsView = ({
     onChange(comments.filter((item, index) => index !== key));
   };
 
+  const onChangeText = (e: ChangeEvent<HTMLInputElement>) => {
+    setText(e.target.value);
+    if (!isUpdated && setIsUpdated) {
+      setIsUpdated(true);
+    }
+  };
+
   return (
     <div className="p-4">
       <table className={clsx('my-6 w-full', className)}>
@@ -72,11 +83,7 @@ const CommentsView = ({
       </table>
       <div className="flex items-center space-x-4">
         <div className="flex-1">
-          <Input
-            className="h-10"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
+          <Input className="h-10" value={text} onChange={onChangeText} />
         </div>
         <IconButton className="w-10 h-10" onClick={onAdd}>
           <SvgIcon name="add" className="w-6" />

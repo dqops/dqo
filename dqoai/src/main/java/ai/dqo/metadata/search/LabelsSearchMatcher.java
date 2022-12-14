@@ -116,4 +116,22 @@ public class LabelsSearchMatcher {
 		}
 		return true;
 	}
+
+	/**
+	 * Returns a boolean value if filters fit spec.
+	 * @param requiredLabels Array of required labels.
+	 * @param labels Label set spec.
+	 * @return Boolean value if filters fit spec.
+	 */
+	public static boolean hasAllLabels(String[] requiredLabels, LabelSetSpec labels) {
+		if (requiredLabels == null) {
+			return true;
+		}
+		for (String label : requiredLabels) {
+			if (!containsPattern(label, labels)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

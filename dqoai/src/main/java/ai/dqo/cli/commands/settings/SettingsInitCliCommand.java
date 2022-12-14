@@ -24,6 +24,7 @@ import ai.dqo.cli.commands.settings.impl.SettingsService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -36,7 +37,7 @@ import static java.lang.Integer.parseInt;
  * Cli command to init settings yaml.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "init", description = "Init settings file in user home")
 public class SettingsInitCliCommand extends BaseCommand implements ICommand {
 	private final SettingsService settingsService;

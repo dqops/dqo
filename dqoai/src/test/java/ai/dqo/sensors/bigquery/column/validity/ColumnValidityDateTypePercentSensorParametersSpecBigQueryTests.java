@@ -63,7 +63,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
         this.sut = new ColumnValidityDateTypePercentSensorParametersSpec();
         this.checkSpec = new ColumnValidityDateTypePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndCheck(sampleTableMetadata, "date", this.checkSpec);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date", this.checkSpec);
         this.sut = (ColumnValidityDateTypePercentSensorParametersSpec) runParameters.getSensorParameters();
     }
 
@@ -176,7 +176,7 @@ public class ColumnValidityDateTypePercentSensorParametersSpecBigQueryTests exte
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("country"),
-                        DataStreamLevelSpecObjectMother.createStaticValue("UK")));
+                        DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
