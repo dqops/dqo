@@ -15,7 +15,11 @@
  */
 package ai.dqo.cli.terminal;
 
+import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
+
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Terminal input reader that prompts the user to enter information from the terminal and the command line.
@@ -97,6 +101,13 @@ public interface TerminalReader {
      * @return Character that was read.
      */
     Character tryReadChar(long timeoutMillis);
+
+    /**
+     * Starts a background job that will wait for any input on the console.
+     * @param waitDuration Wait duration.
+     * @return Completable future that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
+     */
+    CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration);
 
     /**
      * Hangs on waiting for the user to confirm that the application should exit.

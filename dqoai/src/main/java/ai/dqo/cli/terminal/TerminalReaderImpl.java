@@ -21,11 +21,16 @@ import org.jline.terminal.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Terminal input reader used to ask the user to provide answers.
@@ -289,15 +294,41 @@ public class TerminalReaderImpl implements TerminalReader {
     public Character tryReadChar(long timeoutMillis) {
         try {
             Terminal terminal = this.lineReader.getTerminal();
-            int readResult = terminal.reader().read(timeoutMillis);
+
+            int readResult = terminal.reader().peek(timeoutMillis);
             if (readResult <= 0) {
                 return null;
             }
-            return (char)readResult;
+            return (char)terminal.reader().read();
         }
         catch (IOException ioe) {
             return null;
         }
+    }
+
+    /**
+     * Starts a background job that will wait for any input on the console.
+     * @param waitDuration Wait duration.
+     * @return Mono that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
+     */
+    @Override
+    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
+        CompletableFuture<Boolean> waitForAnyInputFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                Terminal terminal = this.lineReader.getTerminal();
+
+                long waitDurationMillis = waitDuration.toMillis();
+                int readResult = terminal.reader().peek(waitDurationMillis);
+                if (readResult <= 0) {
+                    return false;
+                }
+                return true;
+            } catch (IOException ioe) {
+                return false;
+            }
+        });
+
+        return waitForAnyInputFuture;
     }
 
     /**

@@ -71,6 +71,8 @@ dqo:
     #ui-base-url: http://localhost:3000
     #rest-api-base-url: http://localhost:8080
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
+    api-key-pickup-timeout-seconds: 600
+    api-key-pickup-retry-delay-millis: 1000
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
