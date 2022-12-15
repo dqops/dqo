@@ -320,3 +320,57 @@ export const updateConnectionDefaultDataStreamsMapping =
       dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
     }
   };
+
+export const setUpdatedConnectionBasic = (
+  connectionBasic?: ConnectionBasicModel
+) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC,
+  connectionBasic
+});
+
+export const setIsUpdatedConnectionBasic = (isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_CONNECTION_BASIC,
+  isUpdated
+});
+
+export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_SCHEDULE,
+  schedule
+});
+
+export const setIsUpdatedSchedule = (isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE,
+  isUpdated
+});
+
+export const setUpdatedComments = (comments?: CommentSpec[]) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_COMMENTS,
+  comments
+});
+
+export const setIsUpdatedComments = (isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_COMMENTS,
+  isUpdated
+});
+
+export const setUpdatedLabels = (labels?: string[]) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_LABELS,
+  labels
+});
+
+export const setIsUpdatedLabels = (isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_LABELS,
+  isUpdated
+});
+
+export const setUpdatedDataStreamsMapping = (
+  dataStreamsMapping?: DataStreamMappingSpec
+) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_DATA_STREAMS,
+  dataStreamsMapping
+});
+
+export const setIsUpdatedDataStreamsMapping = (isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_DATA_STREAMS,
+  isUpdated
+});

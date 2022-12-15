@@ -36,6 +36,16 @@ export interface IConnectionState {
   comments: CommentSpec[];
   defaultDataStreams?: DataStreamMappingSpec;
   labels: string[];
+  updatedConnectionBasic?: ConnectionBasicModel;
+  isUpdatedConnectionBasic?: boolean;
+  updatedSchedule?: RecurringScheduleSpec;
+  isUpdatedSchedule?: boolean;
+  updatedComments?: CommentSpec[];
+  isUpdatedComments?: boolean;
+  updatedLabels?: string[];
+  isUpdatedLabels?: boolean;
+  updatedDataStreamsMapping?: DataStreamMappingSpec;
+  isUpdatedDataStreamsMapping?: boolean;
 }
 
 const initialState: IConnectionState = {
@@ -78,6 +88,7 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         connectionBasic: action.data,
+        updatedConnectionBasic: action.data,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR:
@@ -118,6 +129,7 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         schedule: action.data,
+        updatedSchedule: action.data,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_ERROR:
@@ -153,6 +165,7 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         comments: action.data,
+        updatedComments: action.data,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_COMMENTS_ERROR:
@@ -247,6 +260,56 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         isUpdating: false,
         error: action.error
+      };
+    case CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC:
+      return {
+        ...state,
+        updatedConnectionBasic: action.connectionBasic
+      };
+    case CONNECTION_ACTION.SET_IS_UPDATED_CONNECTION_BASIC:
+      return {
+        ...state,
+        isUpdatedConnectionBasic: action.isUpdated
+      };
+    case CONNECTION_ACTION.SET_UPDATED_SCHEDULE:
+      return {
+        ...state,
+        updatedSchedule: action.schedule
+      };
+    case CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE:
+      return {
+        ...state,
+        isUpdatedSchedule: action.isUpdated
+      };
+    case CONNECTION_ACTION.SET_UPDATED_COMMENTS:
+      return {
+        ...state,
+        updatedComments: action.comments
+      };
+    case CONNECTION_ACTION.SET_IS_UPDATED_COMMENTS:
+      return {
+        ...state,
+        isUpdatedComments: action.isUpdated
+      };
+    case CONNECTION_ACTION.SET_UPDATED_LABELS:
+      return {
+        ...state,
+        updatedLabels: action.labels
+      };
+    case CONNECTION_ACTION.SET_IS_UPDATED_LABELS:
+      return {
+        ...state,
+        isUpdatedLabels: action.isUpdated
+      };
+    case CONNECTION_ACTION.SET_UPDATED_DATA_STREAMS:
+      return {
+        ...state,
+        updatedDataStreamsMapping: action.dataStreamsMapping
+      };
+    case CONNECTION_ACTION.SET_IS_UPDATED_DATA_STREAMS:
+      return {
+        ...state,
+        isUpdatedDataStreamsMapping: action.isUpdated
       };
     default:
       return state;

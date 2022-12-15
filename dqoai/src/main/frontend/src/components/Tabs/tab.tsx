@@ -5,6 +5,7 @@ import SvgIcon from '../SvgIcon';
 export interface TabOption {
   label: string;
   value: string;
+  isUpdated?: boolean;
 }
 
 export interface TabProps {
@@ -32,7 +33,10 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
       }`}
       onClick={() => onChange && onChange(tab)}
     >
-      <div className="truncate max-w-40 capitalize">{tab.label}</div>
+      <div className="truncate max-w-40 capitalize">
+        {tab.label}
+        {tab.isUpdated ? '*' : ''}
+      </div>
       {closable && active && (
         <SvgIcon
           name="close"

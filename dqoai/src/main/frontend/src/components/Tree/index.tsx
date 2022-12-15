@@ -65,33 +65,31 @@ const Tree = () => {
           )}
         >
           {renderIcon(node)}
-          <div>
-            <div
-              className="flex space-x-2 py-1 flex-1 w-full"
-              onClick={() => handleNodeClick(node)}
+          <div
+            className="flex space-x-2 py-1 flex-1 w-full"
+            onClick={() => handleNodeClick(node)}
+          >
+            <SvgIcon
+              name={getIcon(node.level)}
+              className={clsx('w-4 shrink-0 min-w-4')}
+            />
+            <Tooltip
+              content={node.tooltip}
+              className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
+              placement="top-start"
             >
-              <SvgIcon
-                name={getIcon(node.level)}
-                className={clsx('w-4 shrink-0 min-w-4')}
-              />
-              <Tooltip
-                content={node.tooltip}
-                className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
-                placement="top-start"
-              >
-                <div className="flex flex-1 justify-between items-center">
-                  <div
-                    className={clsx(
-                      `text-black flex-1 truncate mr-7`,
-                      node.hasCheck ? 'font-bold' : ''
-                    )}
-                  >
-                    {node.label}
-                  </div>
-                  <ContextMenu node={node} openConfirm={openConfirm} />
+              <div className="flex flex-1 justify-between items-center">
+                <div
+                  className={clsx(
+                    `text-black flex-1 truncate mr-7`,
+                    node.hasCheck ? 'font-bold' : ''
+                  )}
+                >
+                  {node.label}
                 </div>
-              </Tooltip>
-            </div>
+                <ContextMenu node={node} openConfirm={openConfirm} />
+              </div>
+            </Tooltip>
           </div>
         </div>
         {node.open && <div>{renderTree(node.id.toString(), deep + 1)}</div>}

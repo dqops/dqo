@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
 import NumberInput from '../../NumberInput';
 import {
   getConnectionSchedule,
+  setIsUpdatedSchedule,
+  setUpdatedSchedule,
   updateConnectionSchedule
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -21,29 +22,27 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const [updatedSchedule, setUpdatedSchedule] =
-    useState<RecurringScheduleSpec>();
-
-  const { schedule, isUpdating } = useSelector(
+  const { updatedSchedule, isUpdatedSchedule } = useSelector(
     (state: IRootState) => state.connection
   );
 
+  const { isUpdating } = useSelector((state: IRootState) => state.connection);
+
   const handleChange = (obj: any) => {
-    setIsUpdated(true);
-    setUpdatedSchedule({
-      ...updatedSchedule,
-      ...obj
-    });
+    dispatch(setIsUpdatedSchedule(true));
+    dispatch(
+      setUpdatedSchedule({
+        ...updatedSchedule,
+        ...obj
+      })
+    );
   };
 
   useEffect(() => {
-    setUpdatedSchedule(schedule);
-  }, [schedule]);
-
-  useEffect(() => {
-    dispatch(getConnectionSchedule(connectionName));
+    if (!updatedSchedule) {
+      dispatch(getConnectionSchedule(connectionName));
+    }
   }, [connectionName]);
 
   const onUpdate = async () => {
@@ -52,7 +51,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
     }
     await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
     await dispatch(getConnectionSchedule(connectionName));
-    setIsUpdated(false);
+    dispatch(setIsUpdatedSchedule(false));
   };
 
   const onChangeMode = (e: any) => {
@@ -96,7 +95,7 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
     <div className="p-4">
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedSchedule}
         isUpdating={isUpdating}
       />
       <table className="mb-6">
