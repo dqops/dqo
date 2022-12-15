@@ -4,7 +4,7 @@ SELECT CASE
         ELSE 100.0 * SUM(
             CASE
                 WHEN REGEXP_CONTAINS(SAFE_CAST(
-                    {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$") IS TRUE THEN 1
+                    {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$") IS TRUE THEN 1
                 ELSE 0
             END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
