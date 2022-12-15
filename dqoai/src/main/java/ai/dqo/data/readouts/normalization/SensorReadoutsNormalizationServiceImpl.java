@@ -63,7 +63,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
         Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        if (actualValueColumn != null && sensorExecutionResult.isSuccess()) {
+        if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
             throw new SensorResultNormalizeException(resultsTable,
                     "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
         }
