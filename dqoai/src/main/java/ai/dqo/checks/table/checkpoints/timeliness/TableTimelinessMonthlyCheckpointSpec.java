@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package ai.dqo.checks.table.checkpoints.timeliness;
-
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;

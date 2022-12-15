@@ -42,22 +42,22 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         }
     };
 
-    @JsonPropertyDescription("Minimum row count check for each monthly partition or each month of data")
+    @JsonPropertyDescription("Calculates maximum days since the most recent event")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent;
 
     /**
-     * Returns the minimum row count check configuration.
-     * @return Minimum row count check specification.
+     * Returns a maximum days since the most recent event check configuration.
+     * @return Maximum days since the most recent event check configuration.
      */
     public TableMaxDaysSinceMostRecentEventCheckSpec getMonthlyPartitionMaxDaysSinceMostRecentEvent() {
         return monthlyPartitionMaxDaysSinceMostRecentEvent;
     }
 
     /**
-     * Sets the minimum row count.
-     * @param monthlyPartitionMaxDaysSinceMostRecentEvent New row count check.
+     * Sets a maximum days since the most recent event.
+     * @param monthlyPartitionMaxDaysSinceMostRecentEvent New maximum days since the most recent event check.
      */
     public void setMonthlyPartitionMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent) {
 		this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysSinceMostRecentEvent, monthlyPartitionMaxDaysSinceMostRecentEvent));

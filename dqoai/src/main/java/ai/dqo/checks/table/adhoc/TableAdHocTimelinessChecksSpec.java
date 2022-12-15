@@ -40,20 +40,20 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the minimum row count is met on a table level.")
+    @JsonPropertyDescription("Calculates maximum days since the most recent event")
     private TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent;
 
     /**
-     * Returns a minimum row count check.
-     * @return Min row count check.
+     * Returns a maximum days since the most recent event check configuration.
+     * @return Maximum days since the most recent event check.
      */
     public TableMaxDaysSinceMostRecentEventCheckSpec getMaxDaysSinceMostRecentEvent() {
         return maxDaysSinceMostRecentEvent;
     }
 
     /**
-     * Sets a new definition of a min row count check.
-     * @param maxDaysSinceMostRecentEvent Min row count check.
+     * Sets a maximum days since the most recent event.
+     * @param maxDaysSinceMostRecentEvent Maximum days since the most recent event check.
      */
     public void setMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent) {
         this.setDirtyIf(!Objects.equals(this.maxDaysSinceMostRecentEvent, maxDaysSinceMostRecentEvent));

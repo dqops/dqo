@@ -20,6 +20,8 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlMonthlyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
+import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessDailyCheckpointSpec;
+import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessMonthlyCheckpointSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -49,6 +51,7 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         {
             put("standard", o -> o.standard);
             put("sql", o -> o.sql);
+            put("timeliness", o -> o.timeliness);
         }
     };
 
@@ -61,6 +64,11 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyCheckpointSpec sql;
+
+    @JsonPropertyDescription("Monthly checkpoints of timeliness checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableTimelinessMonthlyCheckpointSpec timeliness;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -96,6 +104,24 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of table level timeliness checkpoints.
+     * @return Custom timeliness checkpoints.
+     */
+    public TableTimelinessMonthlyCheckpointSpec getTimeliness() {
+        return timeliness;
+    }
+
+    /**
+     * Sets a reference to a container of timeliness checkpoints.
+     * @param timeliness Custom timeliness checkpoints.
+     */
+    public void setTimeliness(TableTimelinessMonthlyCheckpointSpec timeliness) {
+        this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
+        this.timeliness = timeliness;
+        this.propagateHierarchyIdToField(timeliness, "timeliness");
     }
 
     /**

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package ai.dqo.checks.table.checkpoints.timeliness;
-
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -42,13 +41,13 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
         }
     };
 
-    @JsonPropertyDescription("Daily checkpoint calculating maximum days since the most recent event")
+    @JsonPropertyDescription("Calculates maximum days since the most recent event")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyCheckpointMaxDaysSinceMostRecentEvent;
 
     /**
-     * Returns the maximum days since the most recent event check configuration.
+     * Returns a maximum days since the most recent event check configuration.
      * @return Maximum days since the most recent event check configuration.
      */
     public TableMaxDaysSinceMostRecentEventCheckSpec getDailyCheckpointMaxDaysSinceMostRecentEvent() {
@@ -56,7 +55,7 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
     }
 
     /**
-     * Sets the maximum days since the most recent event.
+     * Sets a maximum days since the most recent event.
      * @param dailyCheckpointMaxDaysSinceMostRecentEvent New maximum days since the most recent event check.
      */
     public void setDailyCheckpointMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec dailyCheckpointMaxDaysSinceMostRecentEvent) {

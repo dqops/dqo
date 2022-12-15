@@ -42,22 +42,22 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Minimum row count check for each daily partition")
+    @JsonPropertyDescription("Calculates maximum days since the most recent event")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyPartitionMaxDaysSinceMostRecentEvent;
 
     /**
-     * Returns the minimum row count check configuration.
-     * @return Minimum row count check specification.
+     * Returns a maximum days since the most recent event check configuration.
+     * @return Maximum days since the most recent event check configuration.
      */
     public TableMaxDaysSinceMostRecentEventCheckSpec getDailyPartitionMaxDaysSinceMostRecentEvent() {
         return dailyPartitionMaxDaysSinceMostRecentEvent;
     }
 
     /**
-     * Sets the minimum row count.
-     * @param dailyPartitionMaxDaysSinceMostRecentEvent New row count check.
+     * Sets a maximum days since the most recent event.
+     * @param dailyPartitionMaxDaysSinceMostRecentEvent New maximum days since the most recent event check.
      */
     public void setDailyPartitionMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec dailyPartitionMaxDaysSinceMostRecentEvent) {
 		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysSinceMostRecentEvent, dailyPartitionMaxDaysSinceMostRecentEvent));
