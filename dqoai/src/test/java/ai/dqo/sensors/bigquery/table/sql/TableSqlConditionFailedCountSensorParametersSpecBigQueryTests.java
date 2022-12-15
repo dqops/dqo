@@ -173,7 +173,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
                              THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), month) AS time_period
+                ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -265,7 +265,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
                              THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), month) AS time_period
+                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -368,7 +368,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
                              THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), month) AS time_period
+                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
