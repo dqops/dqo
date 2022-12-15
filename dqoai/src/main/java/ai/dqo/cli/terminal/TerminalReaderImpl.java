@@ -28,6 +28,9 @@ import java.time.Duration;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Terminal input reader used to ask the user to provide answers.
@@ -345,6 +348,29 @@ public class TerminalReaderImpl implements TerminalReader {
                     return;
                 }
             }
+        }
+    }
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     * Waits for up to <code>waitDuration</code>.
+     *
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     * @param waitDuration Wait duration. The method will return false when the timeout elapsed.
+     * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
+     */
+    @Override
+    public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
+        this.writer.writeLine(startMessage);
+        this.writer.writeLine("Press any key key to stop the application.");
+
+        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
+        try {
+            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
+            return wasExitedByUser;
+        }
+        catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
         }
     }
 }

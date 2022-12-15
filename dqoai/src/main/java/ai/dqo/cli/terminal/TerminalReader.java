@@ -113,4 +113,13 @@ public interface TerminalReader {
      * @param startMessage Message to show before waiting for the user to confirm the exit.
      */
     void waitForExit(String startMessage);
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     * Waits for up to <code>waitDuration</code>.
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     * @param waitDuration Wait duration. The method will return false when the timeout elapsed.
+     * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
+     */
+    boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration);
 }
