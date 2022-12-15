@@ -71,7 +71,6 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
         DoubleColumn normalizedActualValueColumn = makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        normalizedActualValueColumn.setMissingTo(0.0);
         normalizedResults.addColumns(normalizedActualValueColumn);
 
         if (resultsTable.containsColumn(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {

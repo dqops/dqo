@@ -15,12 +15,13 @@
  */
 package ai.dqo.data.profilingresults.normalization;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import tech.tablesaw.api.Table;
 
 /**
  * Exception thrown by {@link ProfilingResultsNormalizationServiceImpl} when the profiler returned an invalid dataset that cannot be processed.
  */
-public class ProfilerResultsNormalizeException extends RuntimeException {
+public class ProfilerResultsNormalizeException extends DqoRuntimeException {
     private final Table resultsTable;
 
     /**

@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors.jdbc;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when a connection to a JDBC source failed.
  */
-public class JdbcConnectionFailedException extends RuntimeException {
+public class JdbcConnectionFailedException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

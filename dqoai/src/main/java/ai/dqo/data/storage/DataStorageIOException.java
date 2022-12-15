@@ -15,10 +15,12 @@
  */
 package ai.dqo.data.storage;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception that wraps an {@link java.io.IOException} for IO related issues when a sensor result or alert result files cannot be loaded or saved.
  */
-public class DataStorageIOException extends RuntimeException {
+public class DataStorageIOException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

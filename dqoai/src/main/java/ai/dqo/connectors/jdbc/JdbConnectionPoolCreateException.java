@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors.jdbc;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when it was not possible to create a connection.
  */
-public class JdbConnectionPoolCreateException extends RuntimeException {
+public class JdbConnectionPoolCreateException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

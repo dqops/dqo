@@ -16,11 +16,12 @@
 package ai.dqo.metadata.basespecs;
 
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 
 /**
  * Exception throw when a specification object is invalid.
  */
-public class InvalidSpecificationException extends RuntimeException {
+public class InvalidSpecificationException extends DqoRuntimeException {
     private HierarchyNode node;
 
     /**

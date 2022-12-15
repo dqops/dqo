@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.locks;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when the wait time to acquire a lock was exceeded and the lock was not acquired.
  */
-public class LockWaitTimeoutException extends RuntimeException {
+public class LockWaitTimeoutException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

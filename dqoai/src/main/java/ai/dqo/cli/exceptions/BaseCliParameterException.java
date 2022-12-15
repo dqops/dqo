@@ -15,10 +15,12 @@
  */
 package ai.dqo.cli.exceptions;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Base class for CLI exceptions.
  */
-public abstract class BaseCliParameterException extends RuntimeException {
+public abstract class BaseCliParameterException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
