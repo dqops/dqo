@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.partitioned.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,13 +42,13 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
     };
 
     @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent;
+    private ColumnMaxDateValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent;
 
     /**
      * Returns a maximum datetime values in future percentage check.
      * @return Maximum datetime values in future percentage check.
      */
-    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getDailyPartitionMaxDatetimeValuesInFuturePercent() {
+    public ColumnMaxDateValuesInFuturePercentCheckSpec getDailyPartitionMaxDatetimeValuesInFuturePercent() {
         return dailyPartitionMaxDatetimeValuesInFuturePercent;
     }
 
@@ -56,7 +56,7 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
      * Sets a new definition of a maximum datetime values in future percentage check.
      * @param dailyPartitionMaxDatetimeValuesInFuturePercent Maximum datetime values in future percentage check.
      */
-    public void setDailyPartitionMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent) {
+    public void setDailyPartitionMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDatetimeValuesInFuturePercent, dailyPartitionMaxDatetimeValuesInFuturePercent));
         this.dailyPartitionMaxDatetimeValuesInFuturePercent = dailyPartitionMaxDatetimeValuesInFuturePercent;
         propagateHierarchyIdToField(dailyPartitionMaxDatetimeValuesInFuturePercent, "daily_partition_max_datetime_values_in_future_percent");

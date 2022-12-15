@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,13 +41,13 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
     };
 
     @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage.")
-    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent;
+    private ColumnMaxDateValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent;
 
     /**
      * Returns a maximum datetime values in future percent check.
      * @return Maximum datetime values in future percent check.
      */
-    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getMaxDatetimeValuesInFuturePercent() {
+    public ColumnMaxDateValuesInFuturePercentCheckSpec getMaxDatetimeValuesInFuturePercent() {
         return maxDatetimeValuesInFuturePercent;
     }
 
@@ -55,7 +55,7 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new definition of a maximum datetime values in future percent check.
      * @param maxDatetimeValuesInFuturePercent Maximum datetime values in future percent check.
      */
-    public void setMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent) {
+    public void setMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent) {
         this.setDirtyIf(!Objects.equals(this.maxDatetimeValuesInFuturePercent, maxDatetimeValuesInFuturePercent));
         this.maxDatetimeValuesInFuturePercent = maxDatetimeValuesInFuturePercent;
         propagateHierarchyIdToField(maxDatetimeValuesInFuturePercent, "max_datetime_values_in_future_percent");

@@ -24,25 +24,25 @@
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC(CAST({{value}} AS date), year)
+        DATE_TRUNC(CAST({{value}} AS DATE), YEAR)
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC(CAST({{value}} AS date), quarter)
+        DATE_TRUNC(CAST({{value}} AS DATE), QUARTER)
     {%- elif part == 'month' -%}
-        DATE_TRUNC(CAST({{value}} AS date), month)
+        DATE_TRUNC(CAST({{value}} AS DATE), MONTH)
     {%- elif part == 'week' -%}
-        DATE_TRUNC(CAST({{value}} AS date), week)
+        DATE_TRUNC(CAST({{value}} AS DATE), WEEK)
     {%- elif part == 'day' -%}
         {%- if datatype == 'DATE' -%}
             {{value}}
         {%- else -%}
-            CAST({{value}} AS date)
+            CAST({{value}} AS DATE)
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        DATETIME_TRUNC(CAST({{value}} AS datetime), hour)
+        DATETIME_TRUNC(CAST({{value}} AS DATETIME), HOUR)
     {%- elif part == 'millisecond' -%}
-        CAST({{value}} AS datetime)
+        CAST({{value}} AS DATETIME)
     {%- else -%}
-        CAST({{value}} AS date)
+        CAST({{value}} AS DATE)
     {%- endif -%}
 {% endmacro %}
 
@@ -57,7 +57,7 @@
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
         {%- else -%}
-          <INVALID TIME SERIES MODE: {{time_series.mode}}>
+          <INVALID TIME SERIES MODE: {{time_series.mode}}/>
         {%- endif -%}
     {%- endif -%}
 {% endmacro %}
@@ -136,7 +136,7 @@ ORDER BY {{ render_grouping_column_names() }}
                    SAFE_CAST(MAX(analyzed_table.{{ col }}) AS TIMESTAMP),
                    {{ time_scale }})
     {%- else -%}
-    <INVALID DATA TYPE: {{table.columns[col].type_snapshot.column_type}}>
+    <INVALID DATA TYPE: {{table.columns[col].type_snapshot.column_type}}/>
     {%- endif -%}
 {%- endmacro %}
 
@@ -158,7 +158,7 @@ ORDER BY {{ render_grouping_column_names() }}
     {%- elif target_column_data_type == 'DATETIME' or target_column_data_type == 'TIMESTAMP' or target_column_data_type == 'STRING'-%}
 SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
-<INVALID DATA TYPE: {{target_column_data_type}}>
+<INVALID DATA TYPE: {{target_column_data_type}}/>
     {%- endif -%}
 {% endmacro %}
 
@@ -241,9 +241,9 @@ SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
 
 {%- macro render_in_set(values_type, values_list) -%}
     {%- if values_type == target_column_data_type -%}
-        {{render_target_column('analyzed_table')}} in {{extract_in_list(values_type,values_list)}}
+        {{render_target_column('analyzed_table')}} IN {{extract_in_list(values_type,values_list)}}
     {%- else -%}
-        CAST({{render_target_column('analyzed_table')}} AS {{values_type}}) in {{extract_in_list(values_type,values_list)}}
+        CAST({{render_target_column('analyzed_table')}} AS {{values_type}}) IN {{extract_in_list(values_type,values_list)}}
     {%- endif -%}
 {% endmacro %}
 

@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of rows with a datetime value in future column value.
+ * Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec 
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/datetime_max_datetime_values_in_future_percent";
+        return "column/datetime/datetime_max_date_values_in_future_percent";
     }
 }
