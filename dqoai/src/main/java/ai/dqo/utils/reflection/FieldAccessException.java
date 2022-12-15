@@ -15,10 +15,12 @@
  */
 package ai.dqo.utils.reflection;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when reading or writing to a field value failed.
  */
-public class FieldAccessException extends RuntimeException {
+public class FieldAccessException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message and
      * cause.  <p>Note that the detail message associated with

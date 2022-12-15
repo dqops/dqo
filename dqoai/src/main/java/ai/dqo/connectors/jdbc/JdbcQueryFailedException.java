@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors.jdbc;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when a jdbc query failed.
  */
-public class JdbcQueryFailedException extends RuntimeException {
+public class JdbcQueryFailedException extends DqoRuntimeException {
     private final String sql;
     private final String connectionName;
 

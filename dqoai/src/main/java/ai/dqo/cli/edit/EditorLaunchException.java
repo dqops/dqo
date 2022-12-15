@@ -15,10 +15,12 @@
  */
 package ai.dqo.cli.edit;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when an editor failed to start.
  */
-public class EditorLaunchException extends RuntimeException {
+public class EditorLaunchException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

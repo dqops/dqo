@@ -15,10 +15,12 @@
  */
 package ai.dqo.execution.checks;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when a single data quality check cannot be executed.
  */
-public class CheckExecutionFailedException extends RuntimeException {
+public class CheckExecutionFailedException extends DqoRuntimeException {
     public CheckExecutionFailedException() {
     }
 

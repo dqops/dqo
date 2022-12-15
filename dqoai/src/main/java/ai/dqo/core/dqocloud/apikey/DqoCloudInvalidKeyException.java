@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.dqocloud.apikey;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown if the API Key is invalid.
  */
-public class DqoCloudInvalidKeyException extends RuntimeException {
+public class DqoCloudInvalidKeyException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a

@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when the configuration of the job queue is invalid.
  */
-public class InvalidQueueConfigurationException extends RuntimeException {
+public class InvalidQueueConfigurationException extends DqoRuntimeException {
     public InvalidQueueConfigurationException(String message) {
         super(message);
     }

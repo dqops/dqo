@@ -15,12 +15,14 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.contract;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 import java.nio.file.Path;
 
 /**
  * Exception thrown when it was not possible to read the metadata a file.
  */
-public class FileMetadataReadException extends RuntimeException {
+public class FileMetadataReadException extends DqoRuntimeException {
     private Path filePath;
 
     public FileMetadataReadException(Path filePath, String message, Throwable cause) {

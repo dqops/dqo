@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Local file system exception that is thrown for any I/O errors related to the local file system.
  */
-public class LocalFileSystemException extends RuntimeException {
+public class LocalFileSystemException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

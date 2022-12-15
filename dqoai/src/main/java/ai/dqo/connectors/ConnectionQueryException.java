@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when an operation on a source connection has failed.
  */
-public class ConnectionQueryException extends RuntimeException {
+public class ConnectionQueryException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

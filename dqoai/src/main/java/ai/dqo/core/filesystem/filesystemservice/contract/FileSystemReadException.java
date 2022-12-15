@@ -15,12 +15,14 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.contract;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 import java.nio.file.Path;
 
 /**
  * Exception thrown when it was not possible to read a file from a file system service.
  */
-public class FileSystemReadException extends RuntimeException {
+public class FileSystemReadException extends DqoRuntimeException {
     private Path filePath;
 
     public FileSystemReadException(Path filePath, String message, Throwable cause) {

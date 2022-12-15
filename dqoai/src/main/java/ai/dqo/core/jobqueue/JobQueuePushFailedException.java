@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when the job queue cannot accept a job.
  */
-public class JobQueuePushFailedException extends RuntimeException {
+public class JobQueuePushFailedException extends DqoRuntimeException {
     public JobQueuePushFailedException(String message, Throwable cause) {
         super(message, cause);
     }

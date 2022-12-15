@@ -15,12 +15,14 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.contract;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 import java.nio.file.Path;
 
 /**
  * Exception thrown when a file system service failed to write a change to a file system.
  */
-public class FileSystemChangeException extends RuntimeException {
+public class FileSystemChangeException extends DqoRuntimeException {
     private Path filePath;
 
     public FileSystemChangeException(Path filePath, String message) {

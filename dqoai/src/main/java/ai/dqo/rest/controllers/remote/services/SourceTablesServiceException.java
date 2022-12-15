@@ -15,10 +15,12 @@
  */
 package ai.dqo.rest.controllers.remote.services;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception wrapper over errors raised in {@link SourceTablesService}.
  */
-public class SourceTablesServiceException extends RuntimeException {
+public class SourceTablesServiceException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a

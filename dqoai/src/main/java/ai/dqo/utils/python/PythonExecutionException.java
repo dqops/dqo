@@ -15,10 +15,12 @@
  */
 package ai.dqo.utils.python;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when calling python script failed.
  */
-public class PythonExecutionException extends RuntimeException {
+public class PythonExecutionException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

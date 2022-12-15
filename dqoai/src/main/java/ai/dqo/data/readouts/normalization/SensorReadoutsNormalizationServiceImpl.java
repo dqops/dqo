@@ -70,7 +70,6 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         DoubleColumn normalizedActualValueColumn = actualValueColumn != null ?
                 makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) :
                 DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount);
-        normalizedActualValueColumn.setMissingTo(0.0);
         normalizedResults.addColumns(normalizedActualValueColumn);
 
         if (resultsTable.containsColumn(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {

@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.secrets;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when an expansion of a secret value failed, for example an environment variable was not found.
  */
-public class SecretExpandFailedException extends RuntimeException {
+public class SecretExpandFailedException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

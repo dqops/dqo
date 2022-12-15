@@ -15,10 +15,12 @@
  */
 package ai.dqo.utils.browser;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when opening an url in a browse failed.
  */
-public class OpenBrowserFailedException extends RuntimeException {
+public class OpenBrowserFailedException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

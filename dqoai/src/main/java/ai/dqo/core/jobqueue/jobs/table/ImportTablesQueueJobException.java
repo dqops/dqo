@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.jobqueue.jobs.table;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown by {@link ImportTablesQueueJob} when importing tables failed.
  */
-public class ImportTablesQueueJobException extends RuntimeException {
+public class ImportTablesQueueJobException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a

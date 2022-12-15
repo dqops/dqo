@@ -15,10 +15,12 @@
  */
 package ai.dqo.core.filesystem.metadata;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when a mutating change was performed on a frozen file system metadata object.
  */
-public class FileSystemMetadataFrozenException extends RuntimeException {
+public class FileSystemMetadataFrozenException extends DqoRuntimeException {
     private FolderMetadata folderMetadata;
 
     /**
