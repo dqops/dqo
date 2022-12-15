@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  ConnectionBasicModel,
-  ConnectionSpecProviderTypeEnum
-} from '../../../api';
+import React, { useEffect } from 'react';
+import { ConnectionSpecProviderTypeEnum } from '../../../api';
 import Input from '../../Input';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
@@ -10,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
+  setIsUpdatedConnectionBasic,
+  setUpdatedConnectionBasic,
   updateConnectionBasic
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -22,28 +21,27 @@ interface IConnectionDetailProps {
 const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
   connectionName
 }) => {
-  const [updatedConnectionBasic, setUpdatedConnectionBasic] =
-    useState<ConnectionBasicModel>();
-  const [isUpdated, setIsUpdated] = useState(false);
-  const { connectionBasic, isUpdating } = useSelector(
+  const { updatedConnectionBasic, isUpdatedConnectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
+
+  const { isUpdating } = useSelector((state: IRootState) => state.connection);
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    setUpdatedConnectionBasic(connectionBasic);
-  }, [connectionBasic]);
-
-  useEffect(() => {
-    dispatch(getConnectionBasic(connectionName));
+    if (!updatedConnectionBasic) {
+      dispatch(getConnectionBasic(connectionName));
+    }
   }, [connectionName]);
 
   const onChange = (obj: any) => {
-    setUpdatedConnectionBasic({
-      ...updatedConnectionBasic,
-      ...obj
-    });
-    setIsUpdated(true);
+    dispatch(
+      setUpdatedConnectionBasic({
+        ...updatedConnectionBasic,
+        ...obj
+      })
+    );
+    dispatch(setIsUpdatedConnectionBasic(true));
   };
 
   const onUpdate = async () => {
@@ -54,7 +52,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
       updateConnectionBasic(connectionName, updatedConnectionBasic)
     );
     await dispatch(getConnectionBasic(connectionName));
-    setIsUpdated(false);
+    dispatch(setIsUpdatedConnectionBasic(false));
   };
 
   return (
@@ -62,7 +60,7 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedConnectionBasic}
       />
       <table className="mb-6">
         <tbody>
