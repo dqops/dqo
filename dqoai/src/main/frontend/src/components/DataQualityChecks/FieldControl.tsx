@@ -12,6 +12,7 @@ import ObjectField from '../ObjectField';
 import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
 import TextArea from '../TextArea';
+import IntegerListField from '../IntegerListField';
 
 interface ISensorParametersFieldSettingsProps {
   field: UIFieldModel;
@@ -44,6 +45,8 @@ const FieldControl = ({
         return field.long_value;
       case ParameterDefinitionSpecDataTypeEnum.string_list:
         return field.string_list_value || [];
+      case ParameterDefinitionSpecDataTypeEnum.integer_list:
+        return field.integer_list_value || [];
       case ParameterDefinitionSpecDataTypeEnum.enum:
         return field.enum_value;
       case ParameterDefinitionSpecDataTypeEnum.instant:
@@ -162,6 +165,17 @@ const FieldControl = ({
           tooltipText={tooltip}
           onChange={(value: string[]) =>
             handleChange({ string_list_value: value })
+          }
+        />
+      )}
+      {field?.definition?.data_type ===
+        ParameterDefinitionSpecDataTypeEnum.integer_list && (
+        <IntegerListField
+          value={value}
+          label={label}
+          tooltipText={tooltip}
+          onChange={(value: number[]) =>
+            handleChange({ integer_list_value: value })
           }
         />
       )}
