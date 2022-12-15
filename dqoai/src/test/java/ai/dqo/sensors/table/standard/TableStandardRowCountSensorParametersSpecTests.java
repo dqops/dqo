@@ -18,7 +18,6 @@ package ai.dqo.sensors.table.standard;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.sensors.table.validity.TableValidityRowCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

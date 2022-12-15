@@ -16,8 +16,8 @@
 package ai.dqo.execution.checks;
 
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
-import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.DqoJobType;
+import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.ExecutionContext;

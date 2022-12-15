@@ -21,12 +21,10 @@ import ai.dqo.metadata.sources.TableOwnerSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
 import ai.dqo.metadata.sources.TimestampColumnsSpec;
-import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 

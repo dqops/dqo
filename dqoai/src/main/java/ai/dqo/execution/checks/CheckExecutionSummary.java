@@ -34,6 +34,7 @@ public class CheckExecutionSummary {
     private final IntColumn errorsCountColumn;
     private final IntColumn fatalErrorsCountColumn;
     private final IntColumn sensorResultsColumn;
+    private final IntColumn executionErrorsCountColumn;
     private final Table summaryTable;
 
     /**
@@ -57,6 +58,8 @@ public class CheckExecutionSummary {
 		this.summaryTable.addColumns(errorsCountColumn);
 		fatalErrorsCountColumn = IntColumn.create("Fatal errors");
 		this.summaryTable.addColumns(fatalErrorsCountColumn);
+        executionErrorsCountColumn = IntColumn.create("Execution errors");
+        this.summaryTable.addColumns(executionErrorsCountColumn);
     }
 
     /**
@@ -132,6 +135,14 @@ public class CheckExecutionSummary {
     }
 
     /**
+     * Returns the column that has a count of checks that failed to execute due to an error (network, credentials, metadata, sensor bug, rule bug).
+     * @return Column with the number of execution errors count.
+     */
+    public IntColumn getExecutionErrorsCountColumn() {
+        return executionErrorsCountColumn;
+    }
+
+    /**
      * Adds a table check summary row.
      * @param connection Connection wrapper.
      * @param tableSpec Table specification.
@@ -141,9 +152,10 @@ public class CheckExecutionSummary {
      * @param warningsCount Count of warning severity alerts.
      * @param errorsCount Count of errors (normal, medium) severity alerts.
      * @param fatalErrorsCount Count of fatal (high) severity alerts.
+     * @param executionErrorsCount Count of check execution errors (checks that failed to execute correctly).
      */
     public void reportTableStats(ConnectionWrapper connection, TableSpec tableSpec, int checksExecuted, int sensorResults, int validResults,
-								 int warningsCount, int errorsCount, int fatalErrorsCount) {
+								 int warningsCount, int errorsCount, int fatalErrorsCount, int executionErrorsCount) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
 		this.tableColumn.set(row.getRowNumber(), tableSpec.getTarget().toPhysicalTableName().toString());
@@ -153,6 +165,7 @@ public class CheckExecutionSummary {
 		this.warningsCountColumn.set(row.getRowNumber(), warningsCount);
 		this.errorsCountColumn.set(row.getRowNumber(), errorsCount);
 		this.fatalErrorsCountColumn.set(row.getRowNumber(), fatalErrorsCount);
+        this.executionErrorsCountColumn.set(row.getRowNumber(), executionErrorsCount);
     }
 
     /**
@@ -168,7 +181,7 @@ public class CheckExecutionSummary {
      * @return Number of warnings.
      */
     public int getWarningSeverityIssuesCount() {
-        return this.warningsCountColumn.isGreaterThan(0).size();
+        return (int)this.warningsCountColumn.sum();
     }
 
     /**
@@ -176,7 +189,7 @@ public class CheckExecutionSummary {
      * @return Number of error severity alerts (default alerts).
      */
     public int getErrorSeverityIssuesCount() {
-        return this.errorsCountColumn.isGreaterThan(0).size();
+        return (int)this.errorsCountColumn.sum();
     }
 
     /**
@@ -184,6 +197,14 @@ public class CheckExecutionSummary {
      * @return Number of fatal severity errors.
      */
     public int getFatalSeverityIssuesCount() {
-        return this.fatalErrorsCountColumn.isGreaterThan(0).size();
+        return (int)this.fatalErrorsCountColumn.sum();
+    }
+
+    /**
+     * Returns the total count of checks that failed to execute.
+     * @return Total count of execution errors (checks failed to execute).
+     */
+    public int getTotalExecutionErrorsCount() {
+        return (int)this.executionErrorsCountColumn.sum();
     }
 }

@@ -21,7 +21,6 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.sampledata.files.CsvSampleFilesObjectMother;
 import ai.dqo.sampledata.files.SampleTableFromCsv;

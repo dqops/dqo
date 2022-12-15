@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Model object with the profiler results for a column.

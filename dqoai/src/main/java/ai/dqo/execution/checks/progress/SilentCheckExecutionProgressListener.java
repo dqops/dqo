@@ -107,6 +107,16 @@ public class SilentCheckExecutionProgressListener implements CheckExecutionProgr
     }
 
     /**
+     * Called after a sensor was executed but failed.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSensorFailed(SensorFailedEvent event) {
+
+    }
+
+    /**
      * Called after sensor results returned from the sensor were normalized to a standard tabular format.
      *
      * @param event Log event.
@@ -122,7 +132,17 @@ public class SilentCheckExecutionProgressListener implements CheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onRulesExecuted(RulesExecutedEvent event) {
+    public void onRuleExecuted(RuleExecutedEvent event) {
+
+    }
+
+    /**
+     * Called after data quality rule were executed for all rows of normalized sensor results, but the rule failed with an exception.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onRuleFailed(RuleFailedEvent event) {
 
     }
 
@@ -142,7 +162,17 @@ public class SilentCheckExecutionProgressListener implements CheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event) {
+    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
+
+    }
+
+    /**
+     * Called before errors are saved.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSavingErrors(SavingErrorsEvent event) {
 
     }
 
@@ -152,7 +182,7 @@ public class SilentCheckExecutionProgressListener implements CheckExecutionProgr
      * @param event Log event.
      */
     @Override
-    public void onTableChecksProcessingFinished(TableChecksProcessingFinished event) {
+    public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
 
     }
 

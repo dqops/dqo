@@ -53,7 +53,6 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;

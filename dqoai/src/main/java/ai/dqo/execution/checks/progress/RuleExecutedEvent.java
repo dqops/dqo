@@ -23,7 +23,7 @@ import ai.dqo.metadata.sources.TableSpec;
 /**
  * Progress event raised after data quality rules were executed for all rows of normalized sensor results.
  */
-public class RulesExecutedEvent extends CheckExecutionProgressEvent {
+public class RuleExecutedEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
     private final SensorExecutionRunParameters sensorRunParameters;
     private final SensorReadoutsNormalizedResult normalizedSensorResults;
@@ -37,10 +37,10 @@ public class RulesExecutedEvent extends CheckExecutionProgressEvent {
      * @param normalizedSensorResults Normalized sensor results that were passed to the rule evaluation.
      * @param ruleEvaluationResult    Rule evaluation results with one or more rows for each sensor value (a check may have multiple rules, one rule generates one result).
      */
-    public RulesExecutedEvent(TableSpec tableSpec,
-							  SensorExecutionRunParameters sensorRunParameters,
-							  SensorReadoutsNormalizedResult normalizedSensorResults,
-							  RuleEvaluationResult ruleEvaluationResult) {
+    public RuleExecutedEvent(TableSpec tableSpec,
+                             SensorExecutionRunParameters sensorRunParameters,
+                             SensorReadoutsNormalizedResult normalizedSensorResults,
+                             RuleEvaluationResult ruleEvaluationResult) {
         this.tableSpec = tableSpec;
         this.sensorRunParameters = sensorRunParameters;
         this.normalizedSensorResults = normalizedSensorResults;

@@ -18,7 +18,6 @@ package ai.dqo.utils.reflection;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import org.junit.jupiter.api.Assertions;

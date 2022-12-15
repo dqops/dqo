@@ -16,8 +16,6 @@
 package ai.dqo.checks.column.partitioned.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
 import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
 import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
 import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;

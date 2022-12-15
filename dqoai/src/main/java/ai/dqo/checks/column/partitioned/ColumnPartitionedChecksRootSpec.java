@@ -16,8 +16,6 @@
 package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.*;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;

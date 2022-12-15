@@ -42,7 +42,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.DATABASE,
         tooltip: item.connection_name,
         run_checks_job_template: item.run_checks_job_template,
-        run_profilers_job_template: item.run_profiler_job_template
+        run_profilers_job_template: item.run_profiler_job_template,
+        open: false
       }))
     );
   };
@@ -56,7 +57,8 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.DATABASE,
       tooltip: connection.connection_name,
       run_checks_job_template: connection.run_checks_job_template,
-      run_profilers_job_template: connection.run_profiler_job_template
+      run_profilers_job_template: connection.run_profiler_job_template,
+      open: false
     };
     setTreeData([...treeData, newNode]);
     await changeActiveTab(newNode);
@@ -75,12 +77,16 @@ function TreeProvider(props: any) {
       ),
       node.id
     ]);
-    const newTreeData = treeData.filter(
-      (item) =>
-        item.id === node.id ||
-        item.level === node.level ||
-        item.parentId !== node.id
-    );
+    const newTreeData = treeData
+      .filter(
+        (item) =>
+          item.id === node.id ||
+          item.level === node.level ||
+          item.parentId !== node.id
+      )
+      .map((item) =>
+        item.id === node.id ? { ...item, open: !item.open } : item
+      );
     setTreeData([...newTreeData, ...items]);
   };
 
@@ -97,7 +103,8 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema.run_checks_job_template,
-      run_profilers_job_template: schema.run_profiler_job_template
+      run_profilers_job_template: schema.run_profiler_job_template,
+      open: false
     }));
 
     resetTreeData(node, items);
@@ -116,7 +123,8 @@ function TreeProvider(props: any) {
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
       hasCheck: table?.has_any_configured_checks,
       run_checks_job_template: table.run_checks_job_template,
-      run_profilers_job_template: table.run_profiler_job_template
+      run_profilers_job_template: table.run_profiler_job_template,
+      open: false
     }));
     resetTreeData(node, items);
   };
@@ -131,7 +139,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMNS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} columns`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} columns`,
+        open: false
       },
       {
         id: `${node.id}.checks`,
@@ -139,7 +148,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`,
+        open: false
       },
       {
         id: `${node.id}.dailyCheck`,
@@ -147,7 +157,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_DAILY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`,
+        open: false
       },
       {
         id: `${node.id}.monthlyCheck`,
@@ -155,7 +166,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`,
+        open: false
       },
       {
         id: `${node.id}.dailyPartitionedChecks`,
@@ -163,7 +175,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`,
+        open: false
       },
       {
         id: `${node.id}.monthlyPartitionedChecks`,
@@ -171,7 +184,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`,
+        open: false
       }
     ];
 
@@ -191,7 +205,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMN_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`,
+        open: false
       },
       {
         id: `${node.id}.dailyCheck`,
@@ -199,7 +214,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`,
+        open: false
       },
       {
         id: `${node.id}.monthlyCheck`,
@@ -207,7 +223,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`,
+        open: false
       },
       {
         id: `${node.id}.dailyPartitionedChecks`,
@@ -215,7 +232,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`,
+        open: false
       },
       {
         id: `${node.id}.monthlyPartitionedChecks`,
@@ -223,7 +241,8 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`,
+        open: false
       }
     ];
     resetTreeData(node, items);
@@ -248,7 +267,8 @@ function TreeProvider(props: any) {
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
       hasCheck: column?.has_any_configured_checks,
       run_checks_job_template: column.run_checks_job_template,
-      run_profilers_job_template: column.run_profiler_job_template
+      run_profilers_job_template: column.run_profiler_job_template,
+      open: false
     }));
     resetTreeData(node, items);
   };
@@ -271,7 +291,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.CHECK,
           parentId: node.id,
           tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`,
-          items: []
+          items: [],
+          open: false
         });
       });
     });
@@ -299,7 +320,8 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.CHECK,
           parentId: node.id,
           tooltip: `${category.category}_${check?.check_name} for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`,
-          items: []
+          items: [],
+          open: false
         });
       });
     });
@@ -309,7 +331,11 @@ function TreeProvider(props: any) {
   const toggleOpenNode = async (id: TreeNodeId) => {
     if (openNodes.includes(id)) {
       setOpenNodes(openNodes.filter((item) => item !== id));
-      setTreeData(treeData.filter((item) => item.parentId !== id));
+      setTreeData(
+        treeData
+          .filter((item) => item.parentId !== id)
+          .map((item) => (item.id === id ? { ...item, open: false } : item))
+      );
     } else {
       const newTreeData = [...treeData];
       const node = findTreeNode(newTreeData, id);

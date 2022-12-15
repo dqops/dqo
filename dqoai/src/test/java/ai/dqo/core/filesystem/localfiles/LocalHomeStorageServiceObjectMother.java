@@ -16,7 +16,6 @@
 package ai.dqo.core.filesystem.localfiles;
 
 import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.core.locks.UserHomeLockManagerImpl;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;

@@ -10,8 +10,8 @@ import ai.dqo.data.profilingresults.normalization.ProfilingResultsNormalizedResu
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshot;
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.profiler.progress.ProfilersExecutionFinishedEvent;
 import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListener;
+import ai.dqo.execution.profiler.progress.ProfilersExecutionFinishedEvent;
 import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;

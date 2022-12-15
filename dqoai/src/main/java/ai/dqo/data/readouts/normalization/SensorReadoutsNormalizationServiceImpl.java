@@ -21,22 +21,14 @@ import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
-import com.google.common.base.Strings;
-import com.google.common.hash.HashCode;
-import com.google.common.hash.Hashing;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
 
-import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
@@ -70,7 +62,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         int resultsRowCount = resultsTable.rowCount();
         ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
-        DoubleColumn normalizedActualValueColumn = makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
+            throw new SensorResultNormalizeException(resultsTable,
+                    "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
+        }
+        DoubleColumn normalizedActualValueColumn = actualValueColumn != null ?
+                makeNormalizedDoubleColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME) :
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, resultsRowCount);
         normalizedResults.addColumns(normalizedActualValueColumn);
 
         if (resultsTable.containsColumn(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME)) {
@@ -229,10 +228,6 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      */
     public DoubleColumn makeNormalizedDoubleColumn(Table resultsTable, String columnName) {
         Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, columnName);
-        if (currentColumn == null) {
-            throw new SensorResultNormalizeException(resultsTable,
-                    "Missing '" + columnName + "' column, the sensor query must return this column");
-        }
 
         if (currentColumn instanceof DoubleColumn) {
             return ((DoubleColumn)currentColumn).copy();

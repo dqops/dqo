@@ -15,7 +15,6 @@
  */
 package ai.dqo.profiling;
 
-import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;

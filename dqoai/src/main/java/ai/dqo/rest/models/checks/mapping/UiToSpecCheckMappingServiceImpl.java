@@ -15,9 +15,9 @@
  */
 package ai.dqo.rest.models.checks.mapping;
 
+import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;

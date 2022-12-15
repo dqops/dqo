@@ -18,6 +18,12 @@ public interface SensorExecutionProgressListener {
     void onSensorExecuted(SensorExecutedEvent event);
 
     /**
+     * Called after a sensor was executed but failed.
+     * @param event Log event.
+     */
+    void onSensorFailed(SensorFailedEvent event);
+
+    /**
      * Called before SQL template is expanded (rendered).
      * @param event Log event.
      */

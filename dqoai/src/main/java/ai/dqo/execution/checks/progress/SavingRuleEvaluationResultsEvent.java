@@ -21,7 +21,7 @@ import ai.dqo.metadata.sources.TableSpec;
 /**
  * Progress event raised before rule evaluation results are saved.
  */
-public class SavingRuleEvaluationResults extends CheckExecutionProgressEvent {
+public class SavingRuleEvaluationResultsEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
     private final RuleResultsSnapshot ruleResultsSnapshot;
 
@@ -31,7 +31,7 @@ public class SavingRuleEvaluationResults extends CheckExecutionProgressEvent {
      * @param tableSpec                     Target table.
      * @param ruleResultsSnapshot           Rule evaluation results (snapshot).
      */
-    public SavingRuleEvaluationResults(TableSpec tableSpec, RuleResultsSnapshot ruleResultsSnapshot) {
+    public SavingRuleEvaluationResultsEvent(TableSpec tableSpec, RuleResultsSnapshot ruleResultsSnapshot) {
         this.tableSpec = tableSpec;
         this.ruleResultsSnapshot = ruleResultsSnapshot;
     }

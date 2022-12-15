@@ -19,12 +19,9 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-
-import java.util.Objects;
 
 /**
  * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.

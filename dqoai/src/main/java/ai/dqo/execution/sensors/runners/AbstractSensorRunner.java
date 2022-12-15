@@ -16,7 +16,6 @@
 package ai.dqo.execution.sensors.runners;
 
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;

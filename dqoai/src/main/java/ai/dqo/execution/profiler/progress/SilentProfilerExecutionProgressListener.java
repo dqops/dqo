@@ -65,6 +65,16 @@ public class SilentProfilerExecutionProgressListener implements ProfilerExecutio
     }
 
     /**
+     * Called after a sensor was executed but failed.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSensorFailed(SensorFailedEvent event) {
+
+    }
+
+    /**
      * Called before SQL template is expanded (rendered).
      *
      * @param event Log event.

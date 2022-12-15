@@ -17,10 +17,10 @@ package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
-import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
+import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.utils.python.PythonCallerService;
 import ai.dqo.utils.python.PythonExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;

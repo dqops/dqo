@@ -20,7 +20,6 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinLengthSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

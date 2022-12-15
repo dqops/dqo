@@ -15,7 +15,6 @@
  */
 package ai.dqo.connectors.bigquery;
 
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
 

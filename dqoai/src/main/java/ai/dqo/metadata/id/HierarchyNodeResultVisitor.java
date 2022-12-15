@@ -16,12 +16,12 @@
 package ai.dqo.metadata.id;
 
 import ai.dqo.checks.*;
-import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
