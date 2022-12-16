@@ -37,12 +37,16 @@ public class ColumnBoolDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_min_true_percent", o -> o.dailyCheckpointMinTruePercent);
+            put("daily_checkpoint_min_false_percent", o -> o.dailyCheckpointMinFalsePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinTruePercentCheckSpec dailyCheckpointMinTruePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinFalsePercentCheckSpec dailyCheckpointMinFalsePercent;
 
     /**
      * Returns a minimum true percent check.
@@ -60,6 +64,24 @@ public class ColumnBoolDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinTruePercent, dailyCheckpointMinTruePercent));
         this.dailyCheckpointMinTruePercent = dailyCheckpointMinTruePercent;
         propagateHierarchyIdToField(dailyCheckpointMinTruePercent, "daily_checkpoint_min_true_percent");
+    }
+
+    /**
+     * Returns a minimum false percent check.
+     * @return Minimum false percent check.
+     */
+    public ColumnMinFalsePercentCheckSpec getDailyCheckpointMinFalsePercent() {
+        return dailyCheckpointMinFalsePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum false percent check.
+     * @param dailyCheckpointMinFalsePercent Minimum false percent check.
+     */
+    public void setDailyCheckpointMinFalsePercent(ColumnMinFalsePercentCheckSpec dailyCheckpointMinFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinFalsePercent, dailyCheckpointMinFalsePercent));
+        this.dailyCheckpointMinFalsePercent = dailyCheckpointMinFalsePercent;
+        propagateHierarchyIdToField(dailyCheckpointMinFalsePercent, "daily_checkpoint_min_false_percent");
     }
 
     /**

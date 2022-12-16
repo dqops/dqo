@@ -37,12 +37,16 @@ public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategor
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_min_true_percent", o -> o.monthlyPartitionMinTruePercent);
+            put("monthly_partition_min_false_percent", o -> o.monthlyPartitionMinFalsePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinTruePercentCheckSpec monthlyPartitionMinTruePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinFalsePercentCheckSpec monthlyPartitionMinFalsePercent;
 
     /**
      * Returns a minimum true check.
@@ -60,6 +64,24 @@ public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinTruePercent, monthlyPartitionMinTruePercent));
         this.monthlyPartitionMinTruePercent = monthlyPartitionMinTruePercent;
         propagateHierarchyIdToField(monthlyPartitionMinTruePercent, "monthly_partition_min_true_percent");
+    }
+
+    /**
+     * Returns a minimum false check.
+     * @return Minimum false check.
+     */
+    public ColumnMinFalsePercentCheckSpec getMonthlyPartitionMinFalsePercent() {
+        return monthlyPartitionMinFalsePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum false check.
+     * @param monthlyPartitionMinFalsePercent Minimum false check.
+     */
+    public void setMonthlyPartitionMinFalsePercent(ColumnMinFalsePercentCheckSpec monthlyPartitionMinFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinFalsePercent, monthlyPartitionMinFalsePercent));
+        this.monthlyPartitionMinFalsePercent = monthlyPartitionMinFalsePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinFalsePercent, "monthly_partition_min_false_percent");
     }
 
     /**
