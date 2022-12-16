@@ -647,3 +647,52 @@ export const updateColumnMonthlyPartitionedChecks =
       dispatch(updateColumnMonthlyPartitionedChecksFailed(err));
     }
   };
+
+export const setUpdatedColumnBasic = (column?: ColumnBasicModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_COLUMN_BASIC,
+  column
+});
+
+export const setUpdatedComments = (comments?: CommentSpec[]) => ({
+  type: COLUMN_ACTION.SET_UPDATED_COMMENTS,
+  comments
+});
+
+export const setIsUpdatedComments = (isUpdated?: boolean) => ({
+  type: COLUMN_ACTION.SET_IS_UPDATED_COMMENTS,
+  isUpdated
+});
+
+export const setUpdatedLabels = (labels?: string[]) => ({
+  type: COLUMN_ACTION.SET_UPDATED_LABELS,
+  labels
+});
+
+export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI,
+  checksUI
+});
+
+export const setUpdatedDailyCheckPoints = (checksUI?: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_COLUMN_DAILY_CHECKPOINTS,
+  checksUI
+});
+
+export const setUpdatedMonthlyCheckPoints = (checksUI?: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_COLUMN_MONTHLY_CHECKPOINTS,
+  checksUI
+});
+
+export const setUpdatedDailyPartitionedChecks = (
+  checksUI?: UIAllChecksModel
+) => ({
+  type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS,
+  checksUI
+});
+
+export const setUpdatedMonthlyPartitionedChecks = (
+  checksUI?: UIAllChecksModel
+) => ({
+  type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
+  checksUI
+});

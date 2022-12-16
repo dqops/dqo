@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -6,6 +6,7 @@ import ColumnActionGroup from './ColumnActionGroup';
 import LabelsView from '../LabelsView';
 import {
   getColumnLabels,
+  setUpdatedLabels,
   updateColumnLabels
 } from '../../../redux/actions/column.actions';
 
@@ -22,22 +23,24 @@ const ColumnLabelsView = ({
   tableName,
   columnName
 }: IColumnLabelsViewProps) => {
-  const { labels, isUpdating } = useSelector(
+  const { labels, isUpdating, isUpdatedLabels, columnBasic } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const dispatch = useActionDispatch();
-  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    setUpdatedLabels(labels);
-  }, [labels]);
-
-  useEffect(() => {
-    dispatch(
-      getColumnLabels(connectionName, schemaName, tableName, columnName)
-    );
-  }, []);
+    if (
+      !labels?.length ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnLabels(connectionName, schemaName, tableName, columnName)
+      );
+    }
+  }, [labels, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     await dispatch(
@@ -46,7 +49,7 @@ const ColumnLabelsView = ({
         schemaName,
         tableName,
         columnName,
-        updatedLabels
+        labels
       )
     );
     await dispatch(
@@ -55,18 +58,17 @@ const ColumnLabelsView = ({
   };
 
   const handleChange = (value: string[]) => {
-    setUpdatedLabels(value);
-    setIsUpdated(true);
+    dispatch(setUpdatedLabels(value));
   };
 
   return (
     <div>
       <ColumnActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedLabels}
         isUpdating={isUpdating}
       />
-      <LabelsView labels={updatedLabels} onChange={handleChange} />
+      <LabelsView labels={labels} onChange={handleChange} />
     </div>
   );
 };
