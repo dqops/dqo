@@ -16,12 +16,16 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.bool.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Container of built-in preconfigured data quality checks on a column level that are checking for booleans.
@@ -32,9 +36,31 @@ import lombok.EqualsAndHashCode;
 public class ColumnAdHocBoolChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocBoolChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("min_true_percent", o -> o.minTruePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage.")
+    private ColumnMinTruePercentCheckSpec minTruePercent;
+
+    /**
+     * Returns a minimum true percent check.
+     * @return Minimum true percent check.
+     */
+    public ColumnMinTruePercentCheckSpec getMinTruePercent() {
+        return minTruePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum true percent check.
+     * @param minTruePercent Minimum true percent check.
+     */
+    public void setMinTruePercent(ColumnMinTruePercentCheckSpec minTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.minTruePercent, minTruePercent));
+        this.minTruePercent = minTruePercent;
+        propagateHierarchyIdToField(minTruePercent, "min_true_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

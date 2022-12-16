@@ -16,12 +16,16 @@
 package ai.dqo.checks.column.checkpoints.bool;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.bool.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.
@@ -32,9 +36,31 @@ import lombok.EqualsAndHashCode;
 public class ColumnBoolDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_checkpoint_min_true_percent", o -> o.dailyCheckpointMinTruePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinTruePercentCheckSpec dailyCheckpointMinTruePercent;
+
+    /**
+     * Returns a minimum true percent check.
+     * @return Minimum true percent check.
+     */
+    public ColumnMinTruePercentCheckSpec getDailyCheckpointMinTruePercent() {
+        return dailyCheckpointMinTruePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum true percent check.
+     * @param dailyCheckpointMinTruePercent Minimum true percent check.
+     */
+    public void setDailyCheckpointMinTruePercent(ColumnMinTruePercentCheckSpec dailyCheckpointMinTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinTruePercent, dailyCheckpointMinTruePercent));
+        this.dailyCheckpointMinTruePercent = dailyCheckpointMinTruePercent;
+        propagateHierarchyIdToField(dailyCheckpointMinTruePercent, "daily_checkpoint_min_true_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
