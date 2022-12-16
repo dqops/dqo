@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringParsableToIntegerPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,10 +39,10 @@ import tech.tablesaw.api.Table;
 ;
 
 @SpringBootTest
-public class ColumnStringsStringMinParsableToFloatPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec sut;
+public class ColumnStringsStringParsableToIntegerPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringParsableToIntegerPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringParsableToFloatPercentCheckSpec checkSpec;
+    private ColumnMinStringParsableToIntegerPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,8 +58,8 @@ public class ColumnStringsStringMinParsableToFloatPercentSensorParametersSpecInt
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinStringParsableToFloatPercentCheckSpec();
+		this.sut = new ColumnStringsStringParsableToIntegerPercentSensorParametersSpec();
+		this.checkSpec = new ColumnMinStringParsableToIntegerPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMinStringParsableToFloatPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringParsableToFloatPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,10 +39,10 @@ import tech.tablesaw.api.Table;
 ;
 
 @SpringBootTest
-public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec sut;
+public class ColumnStringsStringParsableToFloatPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringParsableToFloatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringNullPlaceholderPercentCheckSpec checkSpec;
+    private ColumnMinStringParsableToFloatPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,8 +58,8 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMaxStringNullPlaceholderPercentCheckSpec();
+		this.sut = new ColumnStringsStringParsableToFloatPercentSensorParametersSpec();
+		this.checkSpec = new ColumnMinStringParsableToFloatPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -73,7 +73,7 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -125,6 +125,6 @@ public class ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 }

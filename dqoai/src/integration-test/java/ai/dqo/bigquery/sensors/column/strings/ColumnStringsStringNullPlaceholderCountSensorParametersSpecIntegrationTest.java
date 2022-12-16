@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNullPlaceholderCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,8 +39,8 @@ import tech.tablesaw.api.Table;
 ;
 
 @SpringBootTest
-public class ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec sut;
+public class ColumnStringsStringNullPlaceholderCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringNullPlaceholderCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnMaxStringNullPlaceholderCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -58,7 +58,7 @@ public class ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpecInteg
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMaxNullPlaceholderCountSensorParametersSpec();
+		this.sut = new ColumnStringsStringNullPlaceholderCountSensorParametersSpec();
 		this.checkSpec = new ColumnMaxStringNullPlaceholderCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }

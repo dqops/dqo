@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringParsableToFloatPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringParsableToFloatPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringParsableToFloatPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -48,7 +48,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec parameters = new ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec();
+    private ColumnStringsStringParsableToFloatPercentSensorParametersSpec parameters = new ColumnStringsStringParsableToFloatPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to float strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringParsableToFloatPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinParsableToFloatPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringParsableToFloatPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
