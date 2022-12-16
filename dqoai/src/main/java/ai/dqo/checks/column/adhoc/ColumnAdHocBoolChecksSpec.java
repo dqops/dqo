@@ -37,12 +37,17 @@ public class ColumnAdHocBoolChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocBoolChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("min_true_percent", o -> o.minTruePercent);
+            put("min_false_percent", o -> o.minFalsePercent);
+
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage.")
     private ColumnMinTruePercentCheckSpec minTruePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage.")
+    private ColumnMinFalsePercentCheckSpec minFalsePercent;
 
     /**
      * Returns a minimum true percent check.
@@ -60,6 +65,24 @@ public class ColumnAdHocBoolChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minTruePercent, minTruePercent));
         this.minTruePercent = minTruePercent;
         propagateHierarchyIdToField(minTruePercent, "min_true_percent");
+    }
+
+    /**
+     * Returns a minimum false percent check.
+     * @return Minimum false percent check.
+     */
+    public ColumnMinFalsePercentCheckSpec getMinFalsePercent() {
+        return minFalsePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum false percent check.
+     * @param minFalsePercent Minimum false percent check.
+     */
+    public void setMinFalsePercent(ColumnMinFalsePercentCheckSpec minFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.minFalsePercent, minFalsePercent));
+        this.minFalsePercent = minFalsePercent;
+        propagateHierarchyIdToField(minFalsePercent, "min_false_percent");
     }
 
     /**

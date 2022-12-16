@@ -37,12 +37,16 @@ public class ColumnBoolMonthlyCheckpointsSpec extends AbstractCheckCategorySpec 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_checkpoint_min_true_percent", o -> o.monthlyCheckpointMinTruePercent);
+            put("monthly_checkpoint_min_false_percent", o -> o.monthlyCheckpointMinFalsePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinTruePercentCheckSpec monthlyCheckpointMinTruePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMinFalsePercentCheckSpec monthlyCheckpointMinFalsePercent;
 
     /**
      * Returns a minimum true percent check.
@@ -60,6 +64,24 @@ public class ColumnBoolMonthlyCheckpointsSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinTruePercent, monthlyCheckpointMinTruePercent));
         this.monthlyCheckpointMinTruePercent = monthlyCheckpointMinTruePercent;
         propagateHierarchyIdToField(monthlyCheckpointMinTruePercent, "monthly_checkpoint_min_true_percent");
+    }
+
+    /**
+     * Returns a minimum false percent check.
+     * @return Minimum false percent check.
+     */
+    public ColumnMinFalsePercentCheckSpec getMonthlyCheckpointMinFalsePercent() {
+        return monthlyCheckpointMinFalsePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum false percent check.
+     * @param monthlyCheckpointMinFalsePercent Minimum false percent check.
+     */
+    public void setMonthlyCheckpointMinFalsePercent(ColumnMinFalsePercentCheckSpec monthlyCheckpointMinFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinFalsePercent, monthlyCheckpointMinFalsePercent));
+        this.monthlyCheckpointMinFalsePercent = monthlyCheckpointMinFalsePercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinFalsePercent, "monthly_checkpoint_min_false_percent");
     }
 
     /**

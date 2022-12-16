@@ -37,12 +37,16 @@ public class ColumnBoolDailyPartitionedChecksSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_min_true_percent", o -> o.dailyPartitionMinTruePercent);
+            put("daily_partition_min_false_percent", o -> o.dailyPartitionMinFalsePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.")
     private ColumnMinTruePercentCheckSpec dailyPartitionMinTruePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinFalsePercentCheckSpec dailyPartitionMinFalsePercent;
 
     /**
      * Returns a minimum true check.
@@ -60,6 +64,24 @@ public class ColumnBoolDailyPartitionedChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinTruePercent, dailyPartitionMinTruePercent));
         this.dailyPartitionMinTruePercent = dailyPartitionMinTruePercent;
         propagateHierarchyIdToField(dailyPartitionMinTruePercent, "daily_partition_min_true_percent");
+    }
+
+    /**
+     * Returns a minimum false check.
+     * @return Minimum false check.
+     */
+    public ColumnMinFalsePercentCheckSpec getDailyPartitionMinFalsePercent() {
+        return dailyPartitionMinFalsePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum false check.
+     * @param dailyPartitionMinFalsePercent Minimum false check.
+     */
+    public void setDailyPartitionMinFalsePercent(ColumnMinFalsePercentCheckSpec dailyPartitionMinFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinFalsePercent, dailyPartitionMinFalsePercent));
+        this.dailyPartitionMinFalsePercent = dailyPartitionMinFalsePercent;
+        propagateHierarchyIdToField(dailyPartitionMinFalsePercent, "daily_partition_min_false_percent");
     }
 
     /**
