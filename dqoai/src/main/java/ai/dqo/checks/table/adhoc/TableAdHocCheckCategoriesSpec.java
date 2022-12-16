@@ -69,7 +69,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     @Deprecated
-    private BuiltInTableTimelinessChecksSpec timeliness;
+    private TableAdHocTimelinessChecksSpec timeliness;
 
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -123,7 +123,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Built-in timeliness checks that verify if the table data changes in a steady way.
      * @return Consistency data quality checks on a table level.
      */
-    public BuiltInTableTimelinessChecksSpec getTimeliness() {
+    public TableAdHocTimelinessChecksSpec getTimeliness() {
         return timeliness;
     }
 
@@ -131,7 +131,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Sets a new object with timeliness table level checks.
      * @param timeliness New consistency checks.
      */
-    public void setTimeliness(BuiltInTableTimelinessChecksSpec timeliness) {
+    public void setTimeliness(TableAdHocTimelinessChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
