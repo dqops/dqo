@@ -513,11 +513,13 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             if (cloned.target != null) {
                 cloned.target = cloned.target.clone();
             }
+            if (cloned.timestampColumns != null) {
+                cloned.timestampColumns = cloned.timestampColumns.clone();
+            }
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
-            cloned.timestampColumns = null;
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
