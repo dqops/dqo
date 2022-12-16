@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.datetime.ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec;
+import ai.dqo.sensors.column.datetime.ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of datetime values in future in a monitored column.
+ * Column level check that ensures that there are no more than a maximum percentage of date values in future in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxDatetimeValuesInFuturePercentCheckSpec
-        extends AbstractCheckSpec<ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxDatetimeValuesInFuturePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMaxDateValuesInFuturePercentCheckSpec
+        extends AbstractCheckSpec<ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxDateValuesInFuturePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnMaxDatetimeValuesInFuturePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec parameters = new ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec();
+    private ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec parameters = new ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum percentage of datetime values in future in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnMaxDatetimeValuesInFuturePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec getParameters() {
+    public ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnMaxDatetimeValuesInFuturePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnDatetimeMaxDatetimeValuesInFuturePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

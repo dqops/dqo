@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.checkpoints.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDatetimeValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,13 +42,13 @@ public class ColumnDatetimeDailyCheckpointsSpec extends AbstractCheckCategorySpe
     };
 
     @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyCheckpointMaxDatetimeValuesInFuturePercent;
+    private ColumnMaxDateValuesInFuturePercentCheckSpec dailyCheckpointMaxDatetimeValuesInFuturePercent;
 
     /**
      * Returns a maximum datetime values in future percent check.
      * @return Maximum datetime values in future percent check.
      */
-    public ColumnMaxDatetimeValuesInFuturePercentCheckSpec getDailyCheckpointMaxDatetimeValuesInFuturePercent() {
+    public ColumnMaxDateValuesInFuturePercentCheckSpec getDailyCheckpointMaxDatetimeValuesInFuturePercent() {
         return dailyCheckpointMaxDatetimeValuesInFuturePercent;
     }
 
@@ -56,7 +56,7 @@ public class ColumnDatetimeDailyCheckpointsSpec extends AbstractCheckCategorySpe
      * Sets a new definition of a maximum datetime values in future percent check.
      * @param dailyCheckpointMaxDatetimeValuesInFuturePercent Maximum datetime values in future percent check.
      */
-    public void setDailyCheckpointMaxDatetimeValuesInFuturePercent(ColumnMaxDatetimeValuesInFuturePercentCheckSpec dailyCheckpointMaxDatetimeValuesInFuturePercent) {
+    public void setDailyCheckpointMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec dailyCheckpointMaxDatetimeValuesInFuturePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDatetimeValuesInFuturePercent, dailyCheckpointMaxDatetimeValuesInFuturePercent));
         this.dailyCheckpointMaxDatetimeValuesInFuturePercent = dailyCheckpointMaxDatetimeValuesInFuturePercent;
         propagateHierarchyIdToField(dailyCheckpointMaxDatetimeValuesInFuturePercent, "daily_checkpoint_max_datetime_values_in_future_percent");

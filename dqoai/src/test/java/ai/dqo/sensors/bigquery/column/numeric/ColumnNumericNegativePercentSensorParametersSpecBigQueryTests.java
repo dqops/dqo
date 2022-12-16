@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2022 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.table.sql;
+package ai.dqo.sensors.bigquery.column.numeric;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableMaxSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,17 +30,17 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNegativePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests extends BaseTest {
-    private TableSqlConditionFailedCountSensorParametersSpec sut;
+public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnNumericNegativePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMaxSqlConditionFailedCountCheckSpec checkSpec;
+    private ColumnMaxNegativePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -53,35 +53,34 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
-        this.sut.setSqlCondition("{table}.`length_int` > 10000 AND {table}.`correct` = 1");
-        this.sut.setFilter("{table}.date > DATE(2022, 2, 4)");
+		this.sut = new ColumnNumericNegativePercentSensorParametersSpec();
+        this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableMaxSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new ColumnMaxNegativePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(this.sampleTableMetadata, this.checkSpec);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(this.sampleTableMetadata, this.checkSpec, timeScale);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
-        return SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(this.sampleTableMetadata, this.checkSpec, timeScale, timeSeriesColumn);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale, timeSeriesColumn);
+    }
+
+    private String getTableColumnName(SensorExecutionRunParameters runParameters) {
+        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
         // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
         return this.checkSpec.getParameters().getFilter();
-    }
-
-    private String getSubstitutedSqlCondition(String tableName) {
-        return this.checkSpec.getParameters().getSqlCondition().replace("{table}", tableName);
     }
 
     @Test
@@ -94,7 +93,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/sql/sql_condition_failed_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/numeric/negative_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -105,18 +104,20 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -137,20 +138,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date` AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -165,20 +168,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -193,20 +198,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date` AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -221,25 +228,27 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`length_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
             ORDER BY stream_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -252,25 +261,27 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                    DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`length_string` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -283,25 +294,27 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`date` AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`length_string` AS stream_level_1, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -327,20 +340,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -360,20 +375,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -393,20 +410,22 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN NOT (%s)
-                             THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s < 0 THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getSubstitutedSqlCondition("analyzed_table"),
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
