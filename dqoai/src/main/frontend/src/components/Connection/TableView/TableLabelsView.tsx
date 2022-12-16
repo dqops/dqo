@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   getTableLabels,
+  setUpdatedLabels,
   updateTableLabels
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -20,41 +21,41 @@ const TableLabelsView = ({
   schemaName,
   tableName
 }: ITableLabelsViewProps) => {
-  const { labels, isUpdating } = useSelector(
+  const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );
-  const [updatedLabels, setUpdatedLabels] = useState<string[]>([]);
   const dispatch = useActionDispatch();
-  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    setUpdatedLabels(labels);
-  }, [labels]);
-
-  useEffect(() => {
-    dispatch(getTableLabels(connectionName, schemaName, tableName));
-  }, []);
+    if (
+      !labels ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(getTableLabels(connectionName, schemaName, tableName));
+    }
+  }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableLabels(connectionName, schemaName, tableName, updatedLabels)
+      updateTableLabels(connectionName, schemaName, tableName, labels)
     );
     await dispatch(getTableLabels(connectionName, schemaName, tableName));
   };
 
   const handleChange = (value: string[]) => {
-    setUpdatedLabels(value);
-    setIsUpdated(true);
+    dispatch(setUpdatedLabels(value));
   };
 
   return (
     <div>
       <ActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedLabels}
         isUpdating={isUpdating}
       />
-      <LabelsView labels={updatedLabels} onChange={handleChange} />
+      <LabelsView labels={labels} onChange={handleChange} />
     </div>
   );
 };

@@ -748,3 +748,64 @@ export const updateTableMonthlyPartitionedChecks =
       dispatch(updateTableMonthlyPartitionedChecksFailed(err));
     }
   };
+
+export const setUpdatedTableBasic = (table?: TableBasicModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_TABLE_BASIC,
+  table
+});
+
+export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
+  type: TABLE_ACTION.SET_UPDATED_SCHEDULE,
+  schedule
+});
+
+export const setUpdatedComments = (comments?: CommentSpec[]) => ({
+  type: TABLE_ACTION.SET_UPDATED_COMMENTS,
+  comments
+});
+
+export const setIsUpdatedComments = (isUpdated?: boolean) => ({
+  type: TABLE_ACTION.SET_IS_UPDATED_COMMENTS,
+  isUpdated
+});
+
+export const setUpdatedLabels = (labels?: string[]) => ({
+  type: TABLE_ACTION.SET_UPDATED_LABELS,
+  labels
+});
+
+export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_CHECKS_UI,
+  checksUI
+});
+
+export const setUpdatedDailyCheckPoints = (checksUI?: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_TABLE_DAILY_CHECKPOINTS,
+  checksUI
+});
+
+export const setUpdatedMonthlyCheckPoints = (checksUI?: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_TABLE_MONTHLY_CHECKPOINTS,
+  checksUI
+});
+
+export const setUpdatedDailyPartitionedChecks = (
+  checksUI?: UIAllChecksModel
+) => ({
+  type: TABLE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS,
+  checksUI
+});
+
+export const setUpdatedMonthlyPartitionedChecks = (
+  checksUI?: UIAllChecksModel
+) => ({
+  type: TABLE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS,
+  checksUI
+});
+
+export const setUpdatedTableDataStreamsMapping = (
+  dataStreamsMapping?: DataStreamMappingSpec
+) => ({
+  type: TABLE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+  dataStreamsMapping
+});

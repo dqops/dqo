@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { RecurringScheduleSpec } from '../../../api';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import { Radio } from '@material-tailwind/react';
@@ -10,6 +9,7 @@ import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableSchedule,
+  setUpdatedSchedule,
   updateTableSchedule
 } from '../../../redux/actions/table.actions';
 
@@ -27,29 +27,30 @@ const ScheduleDetail = ({
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const [updatedSchedule, setUpdatedSchedule] =
-    useState<RecurringScheduleSpec>();
-  const [isUpdated, setIsUpdated] = useState(false);
 
-  const { schedule, isUpdating } = useSelector(
+  const { schedule, isUpdating, isUpdatedSchedule, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    dispatch(getTableSchedule(connectionName, schemaName, tableName));
-  }, []);
-
-  useEffect(() => {
-    setUpdatedSchedule(schedule);
-  }, [schedule]);
+    if (
+      !schedule ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(getTableSchedule(connectionName, schemaName, tableName));
+    }
+  }, [connectionName, schemaName, tableName, tableBasic]);
 
   const handleChange = (obj: any) => {
-    setUpdatedSchedule({
-      ...updatedSchedule,
-      ...obj
-    });
-    setIsUpdated(true);
+    dispatch(
+      setUpdatedSchedule({
+        ...schedule,
+        ...obj
+      })
+    );
   };
 
   const onChangeMode = (e: any) => {
@@ -90,26 +91,20 @@ const ScheduleDetail = ({
   };
 
   const onUpdate = async () => {
-    if (!updatedSchedule) {
+    if (!schedule) {
       return;
     }
     await dispatch(
-      updateTableSchedule(
-        connectionName,
-        schemaName,
-        tableName,
-        updatedSchedule
-      )
+      updateTableSchedule(connectionName, schemaName, tableName, schedule)
     );
     await dispatch(getTableSchedule(connectionName, schemaName, tableName));
-    setIsUpdated(false);
   };
 
   return (
     <div className="p-4">
       <ActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedSchedule}
         isUpdating={isUpdating}
       />
       <table className="mb-6">
@@ -119,7 +114,7 @@ const ScheduleDetail = ({
           </td>
           <td className="px-4 py-2">
             <Input
-              value={updatedSchedule?.cron_expression}
+              value={schedule?.cron_expression}
               onChange={(e) =>
                 handleChange({ cron_expression: e.target.value })
               }
@@ -132,7 +127,7 @@ const ScheduleDetail = ({
           </td>
           <td className="px-4 py-2">
             <Checkbox
-              checked={updatedSchedule?.disabled}
+              checked={schedule?.disabled}
               onChange={(value) => handleChange({ disabled: value })}
             />
           </td>

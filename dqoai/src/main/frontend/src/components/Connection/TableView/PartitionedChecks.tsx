@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
-import { UIAllChecksModel } from '../../../api';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import TableActionGroup from './TableActionGroup';
 import {
   getTableDailyPartitionedChecks,
   getTableMonthlyPartitionedChecks,
+  setUpdatedDailyPartitionedChecks,
+  setUpdatedMonthlyPartitionedChecks,
   updateTableDailyPartitionedChecks,
   updateTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { UIAllChecksModel } from '../../../api';
+import TableActionGroup from './TableActionGroup';
 
-const tabs = [
+interface ITablePartitionedChecksViewProps {
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
+}
+
+const initTabs = [
   {
     label: 'Daily',
     value: 'daily'
@@ -24,95 +32,115 @@ const tabs = [
   }
 ];
 
-interface IPartitionedChecksProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const PartitionedChecks = ({
+const TablePartitionedChecksView = ({
   connectionName,
   schemaName,
   tableName
-}: IPartitionedChecksProps) => {
+}: ITablePartitionedChecksViewProps) => {
   const [activeTab, setActiveTab] = useState('daily');
-
-  const [updatedDailyPartitionedChecks, setUpdatedDailyPartitionedChecks] =
-    useState<UIAllChecksModel>();
-  const [updatedMonthlyPartitionedChecks, setUpdatedMonthlyPartitionedChecks] =
-    useState<UIAllChecksModel>();
-  const [isUpdated, setIsUpdated] = useState(false);
+  const [tabs, setTabs] = useState(initTabs);
 
   const dispatch = useActionDispatch();
 
-  const { dailyPartitionedChecks, monthlyPartitionedChecks, isUpdating } =
-    useSelector((state: IRootState) => state.table);
+  const {
+    tableBasic,
+    dailyPartitionedChecks,
+    monthlyPartitionedChecks,
+    isUpdatedDailyPartitionedChecks,
+    isUpdatedMonthlyPartitionedChecks,
+    isUpdating
+  } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
-    setUpdatedDailyPartitionedChecks(dailyPartitionedChecks);
-  }, [dailyPartitionedChecks]);
-
-  useEffect(() => {
-    setUpdatedMonthlyPartitionedChecks(monthlyPartitionedChecks);
-  }, [monthlyPartitionedChecks]);
-
-  useEffect(() => {
-    dispatch(
-      getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
-    );
-    dispatch(
-      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
-    );
-  }, [connectionName, schemaName, tableName, connectionName]);
+    if (
+      !dailyPartitionedChecks ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(
+        getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+      );
+    }
+    if (
+      !monthlyPartitionedChecks ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(
+        getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+      );
+    }
+  }, [connectionName, schemaName, tableName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     if (activeTab === 'daily') {
-      if (!updatedDailyPartitionedChecks) return;
+      if (!dailyPartitionedChecks) return;
 
       await dispatch(
         updateTableDailyPartitionedChecks(
           connectionName,
           schemaName,
           tableName,
-          updatedDailyPartitionedChecks
+          dailyPartitionedChecks
         )
       );
       await dispatch(
         getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
       );
     } else {
-      if (!updatedMonthlyPartitionedChecks) return;
+      if (!monthlyPartitionedChecks) return;
 
       await dispatch(
         updateTableMonthlyPartitionedChecks(
           connectionName,
           schemaName,
           tableName,
-          updatedMonthlyPartitionedChecks
+          monthlyPartitionedChecks
         )
       );
       await dispatch(
         getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
       );
     }
-    setIsUpdated(false);
   };
 
   const onDailyPartitionedChecksChange = (ui: UIAllChecksModel) => {
-    setUpdatedDailyPartitionedChecks(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedDailyPartitionedChecks(ui));
   };
 
   const onMonthlyPartitionedChecksChange = (ui: UIAllChecksModel) => {
-    setUpdatedMonthlyPartitionedChecks(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedMonthlyPartitionedChecks(ui));
   };
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'daily'
+          ? { ...item, isUpdated: isUpdatedDailyPartitionedChecks }
+          : item
+      )
+    );
+  }, [isUpdatedDailyPartitionedChecks]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'monthly'
+          ? { ...item, isUpdated: isUpdatedMonthlyPartitionedChecks }
+          : item
+      )
+    );
+  }, [isUpdatedMonthlyPartitionedChecks]);
 
   return (
     <div className="py-2">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={
+          isUpdatedDailyPartitionedChecks || isUpdatedMonthlyPartitionedChecks
+        }
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
@@ -121,14 +149,14 @@ const PartitionedChecks = ({
       <div>
         {activeTab === 'daily' && (
           <DataQualityChecks
-            checksUI={updatedDailyPartitionedChecks}
+            checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
             className="max-h-checks"
           />
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
-            checksUI={updatedMonthlyPartitionedChecks}
+            checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
             className="max-h-checks"
           />
@@ -138,4 +166,4 @@ const PartitionedChecks = ({
   );
 };
 
-export default PartitionedChecks;
+export default TablePartitionedChecksView;
