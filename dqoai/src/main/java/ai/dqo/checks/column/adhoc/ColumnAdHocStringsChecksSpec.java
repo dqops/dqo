@@ -39,25 +39,28 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_string_length_below", o -> o.maxStringLengthBelow);
             put("min_string_length_above", o -> o.minStringLengthAbove);
             put("mean_string_length_between", o -> o.meanStringLengthBetween);
-            put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
+
             put("max_string_empty_count", o -> o.maxStringEmptyCount);
+            put("max_string_empty_percent", o -> o.maxStringEmptyPercent);
             put("max_string_whitespace_count", o -> o.maxStringWhitespaceCount);
             put("max_string_whitespace_percent", o -> o.maxStringWhitespacePercent);
-            put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
+            put("max_string_surrounded_by_whitespace_count", o -> o.maxStringSurroundedByWhitespaceCount);
+            put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
+
             put("max_string_null_placeholder_count", o -> o.maxStringNullPlaceholderCount);
             put("max_string_null_placeholder_percent", o -> o.maxStringNullPlaceholderPercent);
             put("min_string_boolean_placeholder_percent", o -> o.minStringBooleanPlaceholderPercent);
-            put("max_string_surrounded_by_whitespace_count", o -> o.maxStringSurroundedByWhitespaceCount);
             put("min_string_parsable_to_integer_percent", o -> o.minStringParsableToIntegerPercent);
-            put("max_string_surrounded_by_whitespace_percent", o -> o.maxStringSurroundedByWhitespacePercent);
             put("min_string_parsable_to_float_percent", o -> o.minStringParsableToFloatPercent);
+
+            put("min_strings_in_set_count", o -> o.minStringsInSetCount);
+            put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
+
+            put("min_string_valid_dates_percent", o -> o.minStringValidDatesPercent);
             put("min_string_valid_usa_zipcode_percent", o -> o.minStringValidUsaZipcodePercent);
             put("min_string_valid_usa_phone_percent", o -> o.minStringValidUsaPhonePercent);
             put("min_string_valid_country_code_percent", o -> o.minStringValidCountryCodePercent);
             put("min_string_valid_currency_code_percent", o -> o.minStringValidCurrencyCodePercent);
-            put("min_strings_in_set_count", o -> o.minStringsInSetCount);
-            put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
-
         }
     };
 
