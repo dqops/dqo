@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNullPlaceholderPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMaxStringNullPlaceholderPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringNullPlaceholderPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringNullPlaceholderPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +49,7 @@ public class ColumnMaxStringNullPlaceholderPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec parameters = new ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec();
+    private ColumnStringsStringNullPlaceholderPercentSensorParametersSpec parameters = new ColumnStringsStringNullPlaceholderPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with a null placeholder strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnMaxStringNullPlaceholderPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringNullPlaceholderPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnMaxStringNullPlaceholderPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMaxNullPlaceholderPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringNullPlaceholderPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
