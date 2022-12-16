@@ -11,13 +11,15 @@ import ConnectionCommentView from './ConnectionCommentView';
 import ConnectionLabelsView from './ConnectionLabelsView';
 import ConnectionDataStream from './ConnectionDataStream';
 import SchemasView from './SchemasView';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IConnectionViewProps {
   connectionName: string;
   nodeId: string;
 }
 
-const tabs = [
+const initTabs = [
   {
     label: 'Connection',
     value: 'connection'
@@ -45,11 +47,19 @@ const tabs = [
 ];
 
 const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
+  const [tabs, setTabs] = useState(initTabs);
   const [activeTab, setActiveTab] = useState('connection');
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
   const location = useLocation();
   const [showMetaData, setShowMetaData] = useState(false);
+  const {
+    isUpdatedConnectionBasic,
+    isUpdatedSchedule,
+    isUpdatedComments,
+    isUpdatedLabels,
+    isUpdatedDataStreamsMapping
+  } = useSelector((state: IRootState) => state.connection);
 
   useEffect(() => {
     const params = qs.parse(location.search);
@@ -128,6 +138,54 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       setActiveTab('connection');
     }
   }, [pageTab, tabMap]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'connection'
+          ? { ...item, isUpdated: isUpdatedConnectionBasic }
+          : item
+      )
+    );
+  }, [isUpdatedConnectionBasic]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'schedule'
+          ? { ...item, isUpdated: isUpdatedSchedule }
+          : item
+      )
+    );
+  }, [isUpdatedSchedule]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'comments'
+          ? { ...item, isUpdated: isUpdatedComments }
+          : item
+      )
+    );
+  }, [isUpdatedComments]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
+      )
+    );
+  }, [isUpdatedLabels]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'data-streams'
+          ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
+          : item
+      )
+    );
+  }, [isUpdatedDataStreamsMapping]);
 
   return (
     <div className="relative">

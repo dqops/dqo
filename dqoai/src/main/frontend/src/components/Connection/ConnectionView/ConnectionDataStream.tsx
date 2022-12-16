@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getConnectionDefaultDataStreamsMapping,
+  setIsUpdatedDataStreamsMapping,
+  setUpdatedDataStreamsMapping,
   updateConnectionDefaultDataStreamsMapping
 } from '../../../redux/actions/connection.actions';
 import { DataStreamMappingSpec } from '../../../api';
@@ -17,20 +19,14 @@ interface IConnectionDataStreamProps {
 const ConnectionDataStream = ({
   connectionName
 }: IConnectionDataStreamProps) => {
-  const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
-  const [updatedDataStreamsMapping, setUpdatedDataStreamsMapping] =
-    useState<DataStreamMappingSpec>();
-  const { isUpdating, defaultDataStreams } = useSelector(
-    (state: IRootState) => state.connection
-  );
+  const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
+    useSelector((state: IRootState) => state.connection);
 
   useEffect(() => {
-    setUpdatedDataStreamsMapping(defaultDataStreams);
-  }, [defaultDataStreams]);
-
-  useEffect(() => {
-    dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
+    if (!updatedDataStreamsMapping) {
+      dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
+    }
   }, [connectionName]);
 
   const onUpdate = async () => {
@@ -44,19 +40,19 @@ const ConnectionDataStream = ({
       )
     );
     await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
-    setIsUpdated(false);
+    dispatch(setIsUpdatedDataStreamsMapping(false));
   };
 
   const handleChange = (value: DataStreamMappingSpec) => {
-    setUpdatedDataStreamsMapping(value);
-    setIsUpdated(true);
+    dispatch(setUpdatedDataStreamsMapping(value));
+    dispatch(setIsUpdatedDataStreamsMapping(true));
   };
 
   return (
     <div>
       <ConnectionActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedDataStreamsMapping}
         isUpdating={isUpdating}
       />
       <DataStreamsMappingView
