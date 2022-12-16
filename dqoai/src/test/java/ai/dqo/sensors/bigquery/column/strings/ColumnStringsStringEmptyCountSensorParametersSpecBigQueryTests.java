@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,17 +30,17 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMeanLengthSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringEmptyCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringMeanLengthSensorParametersSpec sut;
+public class ColumnStringsStringEmptyCountSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnStringsStringEmptyCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMeanStringLengthBetweenCheckSpec checkSpec;
+    private ColumnMaxStringEmptyCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -53,12 +53,12 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnStringsStringMeanLengthSensorParametersSpec();
+		this.sut = new ColumnStringsStringEmptyCountSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMeanStringLengthBetweenCheckSpec();
+        this.checkSpec = new ColumnMaxStringEmptyCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -93,7 +93,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_mean_length", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/strings/string_empty_count", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -104,13 +104,19 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -132,8 +138,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -141,6 +152,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -156,8 +168,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -165,6 +182,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -180,8 +198,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -189,6 +212,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -209,8 +233,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`length_int` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -218,6 +247,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -236,8 +266,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`length_int` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -245,6 +280,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -263,8 +299,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`length_int` AS stream_level_1, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -272,6 +313,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -298,8 +340,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -307,6 +354,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -327,8 +375,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -336,6 +389,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
@@ -356,8 +410,13 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                AVG(
-                    LENGTH(%s)
+                SUM(
+                    CASE
+                        WHEN %s IS NOT NULL
+                        AND %s = ''
+                            THEN 1
+                        ELSE 0
+                    END
                 ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -365,6 +424,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecBigQueryTests exte
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
