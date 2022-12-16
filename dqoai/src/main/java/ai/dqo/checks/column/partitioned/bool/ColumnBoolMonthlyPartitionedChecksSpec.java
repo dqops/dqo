@@ -16,12 +16,16 @@
 package ai.dqo.checks.column.partitioned.bool;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.bool.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Container of built-in preconfigured data quality check points on a column level that are checking monthly partitions or rows for each month of data.
@@ -32,9 +36,31 @@ import lombok.EqualsAndHashCode;
 public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_partition_min_true_percent", o -> o.monthlyPartitionMinTruePercent);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinTruePercentCheckSpec monthlyPartitionMinTruePercent;
+
+    /**
+     * Returns a minimum true check.
+     * @return Minimum true check.
+     */
+    public ColumnMinTruePercentCheckSpec getMonthlyPartitionMinTruePercent() {
+        return monthlyPartitionMinTruePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum true check.
+     * @param monthlyPartitionMinTruePercent Minimum true check.
+     */
+    public void setMonthlyPartitionMinTruePercent(ColumnMinTruePercentCheckSpec monthlyPartitionMinTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinTruePercent, monthlyPartitionMinTruePercent));
+        this.monthlyPartitionMinTruePercent = monthlyPartitionMinTruePercent;
+        propagateHierarchyIdToField(monthlyPartitionMinTruePercent, "monthly_partition_min_true_percent");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
