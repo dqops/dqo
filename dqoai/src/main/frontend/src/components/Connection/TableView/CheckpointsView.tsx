@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Tabs from '../../Tabs';
-import { UIAllChecksModel } from '../../../api';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getTableDailyCheckpoints,
   getTableMonthlyCheckpoints,
+  setUpdatedDailyCheckPoints,
+  setUpdatedMonthlyCheckPoints,
   updateTableDailyCheckpoints,
   updateTableMonthlyCheckpoints
 } from '../../../redux/actions/table.actions';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 
-const tabs = [
+interface ICheckpointsViewProps {
+  connectionName: string;
+  schemaName: string;
+  tableName: string;
+}
+
+const initTabs = [
   {
     label: 'Daily',
     value: 'daily'
@@ -24,91 +32,110 @@ const tabs = [
   }
 ];
 
-interface ICheckpointsViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
 const CheckpointsView = ({
   connectionName,
   schemaName,
   tableName
 }: ICheckpointsViewProps) => {
   const [activeTab, setActiveTab] = useState('daily');
-  const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
-    useState<UIAllChecksModel>();
-  const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
-    useState<UIAllChecksModel>();
-  const [isUpdated, setIsUpdated] = useState(false);
-
+  const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
 
-  const { dailyCheckpoints, monthlyCheckpoints, isUpdating } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const {
+    tableBasic,
+    dailyCheckpoints,
+    monthlyCheckpoints,
+    isUpdatedDailyCheckpoints,
+    isUpdatedMonthlyCheckpoints,
+    isUpdating
+  } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
-    setUpdatedDailyCheckpoints(dailyCheckpoints);
-  }, [dailyCheckpoints]);
-
-  useEffect(() => {
-    setUpdatedMonthlyCheckpoints(monthlyCheckpoints);
-  }, [monthlyCheckpoints]);
-
-  useEffect(() => {
-    dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
-    dispatch(getTableMonthlyCheckpoints(connectionName, schemaName, tableName));
-  }, [connectionName, schemaName, tableName, connectionName]);
+    if (
+      !dailyCheckpoints ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
+    }
+    if (
+      !monthlyCheckpoints ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(
+        getTableMonthlyCheckpoints(connectionName, schemaName, tableName)
+      );
+    }
+  }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     if (activeTab === 'daily') {
-      if (!updatedDailyCheckpoints) return;
+      if (!dailyCheckpoints) return;
 
       await dispatch(
         updateTableDailyCheckpoints(
           connectionName,
           schemaName,
           tableName,
-          updatedDailyCheckpoints
+          dailyCheckpoints
         )
       );
       await dispatch(
         getTableDailyCheckpoints(connectionName, schemaName, tableName)
       );
     } else {
-      if (!updatedMonthlyCheckpoints) return;
+      if (!monthlyCheckpoints) return;
 
       await dispatch(
         updateTableMonthlyCheckpoints(
           connectionName,
           schemaName,
           tableName,
-          updatedMonthlyCheckpoints
+          monthlyCheckpoints
         )
       );
       await dispatch(
         getTableMonthlyCheckpoints(connectionName, schemaName, tableName)
       );
     }
-    setIsUpdated(false);
   };
 
   const onDailyCheckpointsChange = (ui: UIAllChecksModel) => {
-    setUpdatedDailyCheckpoints(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedDailyCheckPoints(ui));
   };
 
   const onMonthlyCheckpointsChange = (ui: UIAllChecksModel) => {
-    setUpdatedMonthlyCheckpoints(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedMonthlyCheckPoints(ui));
   };
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'daily'
+          ? { ...item, isUpdated: isUpdatedDailyCheckpoints }
+          : item
+      )
+    );
+  }, [isUpdatedDailyCheckpoints]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'monthly'
+          ? { ...item, isUpdated: isUpdatedMonthlyCheckpoints }
+          : item
+      )
+    );
+  }, [isUpdatedMonthlyCheckpoints]);
 
   return (
     <div className="py-2">
       <TableActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
@@ -117,14 +144,14 @@ const CheckpointsView = ({
       <div>
         {activeTab === 'daily' && (
           <DataQualityChecks
-            checksUI={updatedDailyCheckpoints}
+            checksUI={dailyCheckpoints}
             onChange={onDailyCheckpointsChange}
             className="max-h-checks"
           />
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
-            checksUI={updatedMonthlyCheckpoints}
+            checksUI={monthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
             className="max-h-checks"
           />

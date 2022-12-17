@@ -33,17 +33,27 @@ export interface ITableState {
   activeTable: string;
   tableBasic?: TableBasicModel;
   isUpdating: boolean;
+  isUpdatedTableBasic?: boolean;
   schedule?: RecurringScheduleSpec;
+  isUpdatedSchedule?: boolean;
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
+  isUpdatedComments?: boolean;
   labels: string[];
+  isUpdatedLabels?: boolean;
   checks?: TableAdHocCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
+  isUpdatedChecksUi?: boolean;
   dataStreamsMapping?: DataStreamMappingSpec;
+  isUpdatedDataStreamsMapping?: boolean;
   dailyCheckpoints?: UIAllChecksModel;
+  isUpdatedDailyCheckpoints?: boolean;
   monthlyCheckpoints?: UIAllChecksModel;
+  isUpdatedMonthlyCheckpoints?: boolean;
   dailyPartitionedChecks?: UIAllChecksModel;
+  isUpdatedDailyPartitionedChecks?: boolean;
   monthlyPartitionedChecks?: UIAllChecksModel;
+  isUpdatedMonthlyPartitionedChecks?: boolean;
 }
 
 const initialState: ITableState = {
@@ -86,6 +96,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         tableBasic: action.data,
+        isUpdatedTableBasic: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_BASIC_ERROR:
@@ -121,6 +132,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         schedule: action.data,
+        isUpdatedSchedule: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_SCHEDULE_ERROR:
@@ -156,6 +168,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         comments: action.data,
+        isUpdatedComments: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_COMMENTS_ERROR:
@@ -191,6 +204,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         labels: action.data,
+        isUpdatedLabels: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_LABELS_ERROR:
@@ -244,6 +258,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checksUI: action.data,
+        isUpdatedChecksUi: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR:
@@ -262,6 +277,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         dataStreamsMapping: action.data,
+        isUpdatedDataStreamsMapping: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
@@ -297,6 +313,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         dailyCheckpoints: action.data,
+        isUpdatedDailyCheckpoints: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR:
@@ -315,6 +332,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         monthlyCheckpoints: action.data,
+        isUpdatedMonthlyCheckpoints: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR:
@@ -333,6 +351,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         dailyPartitionedChecks: action.data,
+        isUpdatedDailyPartitionedChecks: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR:
@@ -351,6 +370,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         monthlyPartitionedChecks: action.data,
+        isUpdatedMonthlyPartitionedChecks: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR:
@@ -426,6 +446,71 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         isUpdating: false,
         error: action.error
+      };
+    case TABLE_ACTION.SET_UPDATED_TABLE_BASIC:
+      return {
+        ...state,
+        isUpdatedTableBasic: true,
+        tableBasic: action.table
+      };
+    case TABLE_ACTION.SET_UPDATED_SCHEDULE:
+      return {
+        ...state,
+        isUpdatedSchedule: true,
+        schedule: action.schedule
+      };
+    case TABLE_ACTION.SET_UPDATED_COMMENTS:
+      return {
+        ...state,
+        isUpdatedComments: true,
+        comments: action.comments
+      };
+    case TABLE_ACTION.SET_IS_UPDATED_COMMENTS:
+      return {
+        ...state,
+        isUpdatedComments: true
+      };
+    case TABLE_ACTION.SET_UPDATED_LABELS:
+      return {
+        ...state,
+        isUpdatedLabels: true,
+        labels: action.labels
+      };
+    case TABLE_ACTION.SET_UPDATED_CHECKS_UI:
+      return {
+        ...state,
+        isUpdatedChecksUi: true,
+        checksUI: action.checksUI
+      };
+    case TABLE_ACTION.SET_TABLE_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdatedDailyCheckpoints: true,
+        dailyCheckpoints: action.checksUI
+      };
+    case TABLE_ACTION.SET_TABLE_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdatedMonthlyCheckpoints: true,
+        monthlyCheckpoints: action.checksUI
+      };
+    case TABLE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        isUpdatedDailyPartitionedChecks: true,
+        dailyPartitionedChecks: action.checksUI
+      };
+    case TABLE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        isUpdatedMonthlyPartitionedChecks: true,
+        monthlyPartitionedChecks: action.checksUI
+      };
+    case TABLE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING:
+      return {
+        ...state,
+        isUpdatedDataStreamsMapping: true,
+        dataStreamsMapping: action.dataStreamsMapping
       };
     default:
       return state;
