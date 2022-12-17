@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import DataQualityChecks from '../../DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnChecksUi,
+  setUpdatedChecksUi,
   updateColumnCheckUI
 } from '../../../redux/actions/column.actions';
 
@@ -23,26 +24,27 @@ const AdhocView = ({
   tableName,
   columnName
 }: IAdhocViewProps) => {
-  const [isUpdated, setIsUpdated] = useState(false);
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-
-  const { checksUI, isUpdating } = useSelector(
+  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    dispatch(
-      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
-    );
-  }, []);
-
-  useEffect(() => {
-    setUpdatedChecksUI(checksUI);
-  }, [checksUI]);
+    if (
+      !checksUI ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnChecksUi(connectionName, schemaName, tableName, columnName)
+      );
+    }
+  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
-    if (!updatedChecksUI) {
+    if (!checksUI) {
       return;
     }
     await dispatch(
@@ -51,28 +53,26 @@ const AdhocView = ({
         schemaName,
         tableName,
         columnName,
-        updatedChecksUI
+        checksUI
       )
     );
     await dispatch(
       getColumnChecksUi(connectionName, schemaName, tableName, columnName)
     );
-    setIsUpdated(false);
   };
 
   const handleChange = (value: UIAllChecksModel) => {
-    setUpdatedChecksUI(value);
-    setIsUpdated(true);
+    dispatch(setUpdatedChecksUi(value));
   };
 
   return (
     <div>
       <ColumnActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
       />
-      <DataQualityChecks checksUI={updatedChecksUI} onChange={handleChange} />
+      <DataQualityChecks checksUI={checksUI} onChange={handleChange} />
     </div>
   );
 };

@@ -28,14 +28,22 @@ export interface IColumnState {
   error: any;
   activeColumn: string;
   columnBasic?: ColumnBasicModel;
+  isUpdatedColumnBasic?: boolean;
   isUpdating: boolean;
   comments: CommentSpec[];
+  isUpdatedComments?: boolean;
   labels: string[];
+  isUpdatedLabels?: boolean;
   checksUI?: UIAllChecksModel;
+  isUpdatedChecksUi?: boolean;
   dailyCheckpoints?: UIAllChecksModel;
+  isUpdatedDailyCheckpoints?: boolean;
   monthlyCheckpoints?: UIAllChecksModel;
+  isUpdatedMonthlyCheckpoints?: boolean;
   dailyPartitionedChecks?: UIAllChecksModel;
+  isUpdatedDailyPartitionedChecks?: boolean;
   monthlyPartitionedChecks?: UIAllChecksModel;
+  isUpdatedMonthlyPartitionedChecks?: boolean;
 }
 
 const initialState: IColumnState = {
@@ -45,7 +53,8 @@ const initialState: IColumnState = {
   activeColumn: '',
   isUpdating: false,
   comments: [],
-  labels: []
+  labels: [],
+  isUpdatedLabels: false
 };
 
 const columnReducer = (state = initialState, action: any) => {
@@ -78,6 +87,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         columnBasic: action.data,
+        isUpdatedColumnBasic: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_BASIC_ERROR:
@@ -113,6 +123,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         comments: action.data,
+        isUpdatedComments: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_COMMENTS_ERROR:
@@ -148,6 +159,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         labels: action.data,
+        isUpdatedLabels: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_LABELS_ERROR:
@@ -183,6 +195,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checksUI: action.data,
+        isUpdatedChecksUi: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_CHECKS_UI_ERROR:
@@ -201,6 +214,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         dailyCheckpoints: action.data,
+        isUpdatedDailyCheckpoints: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR:
@@ -219,6 +233,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         monthlyCheckpoints: action.data,
+        isUpdatedMonthlyCheckpoints: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR:
@@ -237,6 +252,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         dailyPartitionedChecks: action.data,
+        isUpdatedDailyPartitionedChecks: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR:
@@ -255,6 +271,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         monthlyPartitionedChecks: action.data,
+        isUpdatedMonthlyPartitionedChecks: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR:
@@ -330,6 +347,59 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         isUpdating: false,
         error: action.error
+      };
+    case COLUMN_ACTION.SET_UPDATED_COLUMN_BASIC:
+      return {
+        ...state,
+        isUpdatedColumnBasic: true,
+        columnBasic: action.column
+      };
+    case COLUMN_ACTION.SET_UPDATED_COMMENTS:
+      return {
+        ...state,
+        isUpdatedComments: true,
+        comments: action.comments
+      };
+    case COLUMN_ACTION.SET_IS_UPDATED_COMMENTS:
+      return {
+        ...state,
+        isUpdatedComments: true
+      };
+    case COLUMN_ACTION.SET_UPDATED_LABELS:
+      return {
+        ...state,
+        isUpdatedLabels: true,
+        labels: action.labels
+      };
+    case COLUMN_ACTION.SET_UPDATED_CHECKS_UI:
+      return {
+        ...state,
+        isUpdatedChecksUi: true,
+        checksUI: action.checksUI
+      };
+    case COLUMN_ACTION.SET_COLUMN_DAILY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdatedDailyCheckpoints: true,
+        dailyCheckpoints: action.checksUI
+      };
+    case COLUMN_ACTION.SET_COLUMN_MONTHLY_CHECKPOINTS:
+      return {
+        ...state,
+        isUpdatedMonthlyCheckpoints: true,
+        monthlyCheckpoints: action.checksUI
+      };
+    case COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS:
+      return {
+        ...state,
+        isUpdatedDailyPartitionedChecks: true,
+        dailyPartitionedChecks: action.checksUI
+      };
+    case COLUMN_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS:
+      return {
+        ...state,
+        isUpdatedMonthlyPartitionedChecks: true,
+        monthlyPartitionedChecks: action.checksUI
       };
     default:
       return state;

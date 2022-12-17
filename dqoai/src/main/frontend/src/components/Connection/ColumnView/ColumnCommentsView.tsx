@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CommentsView from '../CommentsView';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,8 @@ import { CommentSpec } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnComments,
+  setIsUpdatedComments,
+  setUpdatedComments,
   updateColumnComments
 } from '../../../redux/actions/column.actions';
 
@@ -23,22 +25,24 @@ const ColumnCommentsView = ({
   tableName,
   columnName
 }: IColumnCommentsViewProps) => {
-  const { comments, isUpdating } = useSelector(
+  const { columnBasic, comments, isUpdating, isUpdatedComments } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedComments, setUpdatedComments] = useState<CommentSpec[]>([]);
   const dispatch = useActionDispatch();
-  const [isUpdated, setIsUpdated] = useState(false);
 
   useEffect(() => {
-    setUpdatedComments(comments);
-  }, [comments]);
-
-  useEffect(() => {
-    dispatch(
-      getColumnComments(connectionName, schemaName, tableName, columnName)
-    );
-  }, []);
+    if (
+      !comments?.length ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnComments(connectionName, schemaName, tableName, columnName)
+      );
+    }
+  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     await dispatch(
@@ -47,31 +51,29 @@ const ColumnCommentsView = ({
         schemaName,
         tableName,
         columnName,
-        updatedComments
+        comments
       )
     );
     await dispatch(
       getColumnComments(connectionName, schemaName, tableName, columnName)
     );
-    setIsUpdated(false);
   };
 
   const handleChange = (value: CommentSpec[]) => {
-    setUpdatedComments(value);
-    setIsUpdated(true);
+    dispatch(setUpdatedComments(value));
   };
 
   return (
     <div>
       <ColumnActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedComments}
         isUpdating={isUpdating}
       />
       <CommentsView
-        isUpdated={isUpdated}
-        setIsUpdated={setIsUpdated}
-        comments={updatedComments}
+        isUpdated={isUpdatedComments}
+        setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
+        comments={comments}
         onChange={handleChange}
       />
     </div>
