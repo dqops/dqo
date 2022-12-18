@@ -26,6 +26,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
+import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +58,8 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
+        this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault());
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 
