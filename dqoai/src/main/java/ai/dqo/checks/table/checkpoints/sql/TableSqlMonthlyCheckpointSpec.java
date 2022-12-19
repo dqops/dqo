@@ -117,7 +117,7 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public void setMonthlyCheckpointMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_2) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_2, monthlyCheckpointMinSqlConditionPassedPercentOnTable_2));
         this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_2 = monthlyCheckpointMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(monthlyCheckpointMinSqlConditionPassedPercentOnTable_1, "monthly_checkpoint_min_sql_condition_passed_percent_on_table_2");
+        propagateHierarchyIdToField(monthlyCheckpointMinSqlConditionPassedPercentOnTable_2, "monthly_checkpoint_min_sql_condition_passed_percent_on_table_2");
     }
 
     /**

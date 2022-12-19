@@ -117,7 +117,7 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setDailyPartitionMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_2) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinSqlConditionPassedPercentOnTable_2, dailyPartitionMinSqlConditionPassedPercentOnTable_2));
         this.dailyPartitionMinSqlConditionPassedPercentOnTable_2 = dailyPartitionMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(dailyPartitionMinSqlConditionPassedPercentOnTable_1, "daily_partition_min_sql_condition_passed_percent_on_table_2");
+        propagateHierarchyIdToField(dailyPartitionMinSqlConditionPassedPercentOnTable_2, "daily_partition_min_sql_condition_passed_percent_on_table_2");
     }
 
     /**

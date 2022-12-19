@@ -117,7 +117,7 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setMonthlyPartitionMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnTable_2) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinSqlConditionPassedPercentOnTable_2, monthlyPartitionMinSqlConditionPassedPercentOnTable_2));
         this.monthlyPartitionMinSqlConditionPassedPercentOnTable_2 = monthlyPartitionMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(monthlyPartitionMinSqlConditionPassedPercentOnTable_1, "monthly_partition_min_sql_condition_passed_percent_on_table_2");
+        propagateHierarchyIdToField(monthlyPartitionMinSqlConditionPassedPercentOnTable_2, "monthly_partition_min_sql_condition_passed_percent_on_table_2");
     }
 
     /**
