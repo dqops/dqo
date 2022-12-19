@@ -41,7 +41,7 @@ const TextArea = ({
   <div>
     <label
       htmlFor={name}
-      className="block text-base font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
+      className="block text-sm font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
     >
       <span>{label}</span>
       {!!tooltipText && (
