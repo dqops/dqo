@@ -57,6 +57,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_string_valid_currency_code_percent", o -> o.dailyPartitionMinStringValidCurrencyCodePercent);
             put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
             put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
+            put("daily_partition_max_strings_invalid_email_count", o -> o.dailyPartitionMaxInvalidEmailCount);
+
         }
     };
 
@@ -122,6 +124,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringsInSetPercentCheckSpec dailyPartitionMinStringsInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxInvalidEmailCountCheckSpec dailyPartitionMaxInvalidEmailCount;
 
     /**
      * Returns a maximum string length below  check.
@@ -501,6 +506,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinStringsInSetPercent, dailyPartitionMinStringsInSetPercent));
         this.dailyPartitionMinStringsInSetPercent = dailyPartitionMinStringsInSetPercent;
         propagateHierarchyIdToField(dailyPartitionMinStringsInSetPercent, "daily_partition_min_strings_in_set_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnMaxInvalidEmailCountCheckSpec getDailyPartitionMaxInvalidEmailCount() {
+        return dailyPartitionMaxInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid email count check.
+     * @param dailyPartitionMaxInvalidEmailCount Maximum invalid email count check.
+     */
+    public void setDailyPartitionMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec dailyPartitionMaxInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxInvalidEmailCount, dailyPartitionMaxInvalidEmailCount));
+        this.dailyPartitionMaxInvalidEmailCount = dailyPartitionMaxInvalidEmailCount;
+        propagateHierarchyIdToField(dailyPartitionMaxInvalidEmailCount, "daily_partition_max_strings_invalid_email_count");
     }
 
     /**
