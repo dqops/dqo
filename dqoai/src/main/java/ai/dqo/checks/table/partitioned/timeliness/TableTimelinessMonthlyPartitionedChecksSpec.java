@@ -17,6 +17,7 @@ package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -39,6 +40,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
+           put("monthly_partition_max_days_since_most_recent_ingestion", o -> o.monthlyPartitionMaxDaysSinceMostRecentIngestion);
         }
     };
 
@@ -46,6 +48,11 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent;
+
+    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyPartitionMaxDaysSinceMostRecentIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -63,6 +70,24 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
 		this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysSinceMostRecentEvent, monthlyPartitionMaxDaysSinceMostRecentEvent));
         this.monthlyPartitionMaxDaysSinceMostRecentEvent = monthlyPartitionMaxDaysSinceMostRecentEvent;
 		this.propagateHierarchyIdToField(monthlyPartitionMaxDaysSinceMostRecentEvent, "monthly_partition_max_days_since_most_recent_event");
+    }
+
+    /**
+     * Returns a maximum days since the most recent ingestion check configuration.
+     * @return Maximum days since the most recent ingestion check configuration.
+     */
+    public TableMaxDaysSinceMostRecentIngestionCheckSpec getMonthlyPartitionMaxDaysSinceMostRecentIngestion() {
+        return monthlyPartitionMaxDaysSinceMostRecentIngestion;
+    }
+
+    /**
+     * Sets a maximum days since the most recent ingestion.
+     * @param monthlyPartitionMaxDaysSinceMostRecentIngestion New maximum days since the most recent ingestion check.
+     */
+    public void setMonthlyPartitionMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyPartitionMaxDaysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysSinceMostRecentIngestion, monthlyPartitionMaxDaysSinceMostRecentIngestion));
+        this.monthlyPartitionMaxDaysSinceMostRecentIngestion = monthlyPartitionMaxDaysSinceMostRecentIngestion;
+        this.propagateHierarchyIdToField(monthlyPartitionMaxDaysSinceMostRecentIngestion, "monthly_partition_max_days_since_most_recent_ingestion");
     }
 
     /**
