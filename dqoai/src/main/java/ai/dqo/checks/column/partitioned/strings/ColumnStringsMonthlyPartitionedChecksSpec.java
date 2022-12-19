@@ -57,6 +57,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_string_valid_currency_code_percent", o -> o.monthlyPartitionMinStringValidCurrencyCodePercent);
             put("monthly_partition_min_strings_in_set_count", o -> o.monthlyPartitionMinStringsInSetCount);
             put("monthly_partition_min_strings_in_set_percent", o -> o.monthlyPartitionMinStringsInSetPercent);
+            put("monthly_partition_max_strings_invalid_email_count", o -> o.monthlyPartitionMaxInvalidEmailCount);
+
         }
     };
 
@@ -122,6 +124,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringsInSetPercentCheckSpec monthlyPartitionMinStringsInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxInvalidEmailCountCheckSpec monthlyPartitionMaxInvalidEmailCount;
 
     /**
      * Returns a maximum string length below check.
@@ -503,6 +508,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinStringsInSetPercent, monthlyPartitionMinStringsInSetPercent));
         this.monthlyPartitionMinStringsInSetPercent = monthlyPartitionMinStringsInSetPercent;
         propagateHierarchyIdToField(monthlyPartitionMinStringsInSetPercent, "monthly_partition_min_strings_in_set_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnMaxInvalidEmailCountCheckSpec getMonthlyPartitionMaxInvalidEmailCount() {
+        return monthlyPartitionMaxInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid email count check.
+     * @param monthlyPartitionMaxInvalidEmailCount Maximum invalid email count check.
+     */
+    public void setMonthlyPartitionMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec monthlyPartitionMaxInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxInvalidEmailCount, monthlyPartitionMaxInvalidEmailCount));
+        this.monthlyPartitionMaxInvalidEmailCount = monthlyPartitionMaxInvalidEmailCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxInvalidEmailCount, "monthly_partition_max_strings_invalid_email_count");
     }
 
     /**

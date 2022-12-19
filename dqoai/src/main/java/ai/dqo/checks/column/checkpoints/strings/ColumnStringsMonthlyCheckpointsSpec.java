@@ -57,6 +57,8 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_min_string_valid_currency_code_percent", o -> o.monthlyCheckpointMinStringValidCurrencyCodePercent);
             put("monthly_checkpoint_min_strings_in_set_count", o -> o.monthlyCheckpointMinStringsInSetCount);
             put("monthly_checkpoint_min_strings_in_set_percent", o -> o.monthlyCheckpointMinStringsInSetPercent);
+            put("monthly_checkpoint_max_strings_invalid_email_count", o -> o.monthlyCheckpointMaxInvalidEmailCount);
+
         }
     };
 
@@ -122,6 +124,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringsInSetPercentCheckSpec monthlyCheckpointMinStringsInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxInvalidEmailCountCheckSpec monthlyCheckpointMaxInvalidEmailCount;
 
     /**
      * Returns a maximum string length below check.
@@ -498,6 +503,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringsInSetPercent, monthlyCheckpointMinStringsInSetPercent));
         this.monthlyCheckpointMinStringsInSetPercent = monthlyCheckpointMinStringsInSetPercent;
         propagateHierarchyIdToField(monthlyCheckpointMinStringsInSetPercent, "monthly_checkpoint_min_strings_in_set_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnMaxInvalidEmailCountCheckSpec getMonthlyCheckpointMaxInvalidEmailCount() {
+        return monthlyCheckpointMaxInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid email count check.
+     * @param monthlyCheckpointMaxInvalidEmailCount Maximum invalid email count check.
+     */
+    public void setMonthlyCheckpointMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec monthlyCheckpointMaxInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxInvalidEmailCount, monthlyCheckpointMaxInvalidEmailCount));
+        this.monthlyCheckpointMaxInvalidEmailCount = monthlyCheckpointMaxInvalidEmailCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxInvalidEmailCount, "monthly_checkpoint_max_strings_invalid_email_count");
     }
 
     /**
