@@ -29,7 +29,6 @@ export interface ITab {
 }
 
 const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
-  const [checked, setChecked] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);

@@ -6,7 +6,6 @@ import {
 } from '../../../api';
 import Select from '../../Select';
 import Input from '../../Input';
-import NumberInput from '../../NumberInput';
 
 interface IConnectionDetailProps {
   timeSeries?: TimeSeriesConfigurationSpec;

@@ -19,7 +19,6 @@ interface IDatabaseConnectionProps {
 }
 
 const DatabaseConnection = ({
-  onNext,
   database,
   onChange
 }: IDatabaseConnectionProps) => {
