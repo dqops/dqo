@@ -57,6 +57,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_string_valid_currency_code_percent", o -> o.minStringValidCurrencyCodePercent);
             put("min_strings_in_set_count", o -> o.minStringsInSetCount);
             put("min_strings_in_set_percent", o -> o.minStringsInSetPercent);
+            put("max_strings_invalid_email_count", o -> o.maxInvalidEmailCount);
 
         }
     };
@@ -123,6 +124,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringsInSetPercentCheckSpec minStringsInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxInvalidEmailCountCheckSpec maxInvalidEmailCount;
 
     /**
      * Returns a maximum string length below check.
@@ -500,6 +504,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minStringsInSetPercent, minStringsInSetPercent));
         this.minStringsInSetPercent = minStringsInSetPercent;
         propagateHierarchyIdToField(minStringsInSetPercent, "min_strings_in_set_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnMaxInvalidEmailCountCheckSpec getMaxInvalidEmailCount() {
+        return maxInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid email count check.
+     * @param maxInvalidEmailCount Maximum invalid email count check.
+     */
+    public void setMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec maxInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.maxInvalidEmailCount, maxInvalidEmailCount));
+        this.maxInvalidEmailCount = maxInvalidEmailCount;
+        propagateHierarchyIdToField(maxInvalidEmailCount, "max_strings_invalid_email_count");
     }
 
     /**
