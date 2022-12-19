@@ -15,3 +15,5 @@
 ///
 
 export const apiBaseUrl = 'http://localhost:8888';
+
+export const JOB_CHANGES_RETRY_INTERVAL = 10000;
