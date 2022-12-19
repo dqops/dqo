@@ -193,7 +193,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 name="info"
                 className="w-5 h-5 text-blue-700 cursor-pointer"
               />
-              <div>{check.check_name}</div>
+              <div className="text-sm">{check.check_name}</div>
             </div>
           </Tooltip>
         </td>

@@ -35,7 +35,7 @@ const Checkbox = ({
       />
       <span
         className={clsx(
-          'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center',
+          'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
           checked ? 'bg-blue-600 border-0' : 'border',
           error ? 'border-red-500' : 'border-gray-150'
         )}
