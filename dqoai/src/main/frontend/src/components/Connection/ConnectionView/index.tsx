@@ -119,6 +119,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     const params = qs.parse(location.search);
     const { source, ...data } = params;
 
+    console.log('source', source);
     const searchQuery = qs.stringify({
       ...data,
       tab
