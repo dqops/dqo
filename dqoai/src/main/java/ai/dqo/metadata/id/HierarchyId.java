@@ -15,6 +15,8 @@
  */
 package ai.dqo.metadata.id;
 
+import ai.dqo.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
@@ -185,5 +187,43 @@ public class HierarchyId {
      */
     public HierarchyIdModel toHierarchyIdModel() {
         return new HierarchyIdModel(this.elements);
+    }
+
+    /**
+     * Retrieves the connection name from a hierarchy id.
+     * @return Connection name or null when the hierarchy id is not within the connections hierarchy.
+     */
+    @JsonIgnore
+    public String getConnectionName() {
+        if (this.elements.length < 2) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        return (String)this.elements[1];
+    }
+
+    /**
+     * Retrieves the physical table name from a hierarchy id.
+     * @return Physical table name or null when the hierarchy id is not within the connections / [connection] / tables hierarchy.
+     */
+    @JsonIgnore
+    public PhysicalTableName getPhysicalTableName() {
+        if (this.elements.length < 4) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[2], "tables")) {
+            return null;
+        }
+
+        return (PhysicalTableName)this.elements[3];
     }
 }
