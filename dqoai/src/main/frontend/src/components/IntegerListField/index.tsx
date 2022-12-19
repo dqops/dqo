@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import SvgIcon from '../SvgIcon';
 import { Dialog, Tooltip } from '@material-tailwind/react';
-import LabelsView from '../Connection/LabelsView';
 import Button from '../Button';
 import NumbersView from '../Connection/NumbersView';
 
