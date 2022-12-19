@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,8 +39,8 @@ import tech.tablesaw.api.Table;
 ;
 
 @SpringBootTest
-public class ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec sut;
+public class ColumnStringsStringValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnMinStringValidUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -58,7 +58,7 @@ public class ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpecInt
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMinValidUsaZipcodePercentSensorParametersSpec();
+		this.sut = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
 		this.checkSpec = new ColumnMinStringValidUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
