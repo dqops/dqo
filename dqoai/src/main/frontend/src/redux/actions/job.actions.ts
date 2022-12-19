@@ -23,6 +23,7 @@ import {
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel
 } from '../../api';
+import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -74,6 +75,10 @@ export const getJobsChanges =
       dispatch(getJobsChangesSuccess(res.data));
     } catch (err) {
       dispatch(getJobsChangesFailed(err));
+      setTimeout(() => {
+        dispatch(getJobsChanges(sequenceNumber) as any);
+        return;
+      }, JOB_CHANGES_RETRY_INTERVAL);
     }
   };
 
