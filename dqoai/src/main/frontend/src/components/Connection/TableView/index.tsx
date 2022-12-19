@@ -13,6 +13,8 @@ import AdhocView from './AdhocView';
 import TableCommentView from './TableCommentView';
 import TableLabelsView from './TableLabelsView';
 import TableDataStream from './TableDataStream';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface ITableViewProps {
   connectionName: string;
@@ -20,7 +22,7 @@ interface ITableViewProps {
   tableName: string;
 }
 
-const tabs = [
+const initTabs = [
   {
     label: 'Table',
     value: 'table'
@@ -68,6 +70,19 @@ const TableView = ({
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
   const location = useLocation();
+  const [tabs, setTabs] = useState(initTabs);
+  const {
+    isUpdatedTableBasic,
+    isUpdatedComments,
+    isUpdatedLabels,
+    isUpdatedChecksUi,
+    isUpdatedDailyCheckpoints,
+    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyPartitionedChecks,
+    isUpdatedMonthlyPartitionedChecks,
+    isUpdatedSchedule,
+    isUpdatedDataStreamsMapping
+  } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
     const searchQuery = qs.stringify({
@@ -112,6 +127,93 @@ const TableView = ({
       });
     }
   }, [location.search]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'table'
+          ? { ...item, isUpdated: isUpdatedTableBasic }
+          : item
+      )
+    );
+  }, [isUpdatedTableBasic]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'schedule'
+          ? { ...item, isUpdated: isUpdatedSchedule }
+          : item
+      )
+    );
+  }, [isUpdatedSchedule]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'data-streams'
+          ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
+          : item
+      )
+    );
+  }, [isUpdatedDataStreamsMapping]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'comments'
+          ? { ...item, isUpdated: isUpdatedComments }
+          : item
+      )
+    );
+  }, [isUpdatedComments]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
+      )
+    );
+  }, [isUpdatedLabels]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'data-quality-checks'
+          ? { ...item, isUpdated: isUpdatedChecksUi }
+          : item
+      )
+    );
+  }, [isUpdatedChecksUi]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'checkpoints'
+          ? {
+              ...item,
+              isUpdated:
+                isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+            }
+          : item
+      )
+    );
+  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'partitioned-checks'
+          ? {
+              ...item,
+              isUpdated:
+                isUpdatedDailyPartitionedChecks ||
+                isUpdatedMonthlyPartitionedChecks
+            }
+          : item
+      )
+    );
+  }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
   return (
     <div className="relative">

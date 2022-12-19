@@ -28,6 +28,7 @@ import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionStorageServiceImpl;
+import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +60,8 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-        parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager);
+        parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault());
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, newRows);

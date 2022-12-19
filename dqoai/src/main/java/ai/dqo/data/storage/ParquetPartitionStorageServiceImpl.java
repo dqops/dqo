@@ -20,6 +20,7 @@ import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
+import ai.dqo.data.storage.parquet.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
@@ -27,6 +28,7 @@ import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriter;
+import org.apache.hadoop.conf.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DateTimeColumn;
@@ -49,18 +51,22 @@ import java.util.Map;
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
+    private HadoopConfigurationProvider hadoopConfigurationProvider;
 
     /**
      * Dependency injection constructor.
      * @param localDqoUserHomePathProvider DQO User home finder.
      * @param userHomeLockManager User home lock manager.
+     * @param hadoopConfigurationProvider Hadoop configuration provider.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
             LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
-            UserHomeLockManager userHomeLockManager) {
+            UserHomeLockManager userHomeLockManager,
+            HadoopConfigurationProvider hadoopConfigurationProvider) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
+        this.hadoopConfigurationProvider = hadoopConfigurationProvider;
     }
 
     /**
@@ -117,7 +123,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             TablesawParquetReadOptions readOptions = TablesawParquetReadOptions
                     .builder(targetParquetFile)
                     .build();
-            Table data = new TablesawParquetReader().read(readOptions);
+            Table data = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration()).read(readOptions);
 
             LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
             return loadedPartition;
@@ -237,13 +243,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
             }
 
-            TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
-                    .builder(targetParquetFile)
+            DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
+                    .dqoBuilder(targetParquetFile)
                     .withOverwrite(true)
                     .withCompressionCode(storageSettings.getCompressionCodec())
                     .build();
 
-            new TablesawParquetWriter().write(dataToSave, writeOptions);
+            Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
+            new DqoTablesawParquetWriter(hadoopConfiguration).write(dataToSave, writeOptions);
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);

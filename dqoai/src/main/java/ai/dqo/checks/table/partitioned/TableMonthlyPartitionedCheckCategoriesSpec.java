@@ -20,6 +20,8 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -49,6 +51,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         {
             put("standard", o -> o.standard);
             put("sql", o -> o.sql);
+            put("timeliness", o -> o.timeliness);
         }
     };
 
@@ -61,6 +64,11 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned timeliness checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableTimelinessMonthlyPartitionedChecksSpec timeliness;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -96,6 +104,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of table level timeliness checkpoints.
+     * @return Custom timeliness checkpoints.
+     */
+    public TableTimelinessMonthlyPartitionedChecksSpec getTimeliness() {
+        return timeliness;
+    }
+
+    /**
+     * Sets a reference to a container of timeliness checkpoints.
+     * @param timeliness Custom timeliness checkpoints.
+     */
+    public void setTimeliness(TableTimelinessMonthlyPartitionedChecksSpec timeliness) {
+        this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
+        this.timeliness = timeliness;
+        this.propagateHierarchyIdToField(timeliness, "timeliness");
     }
 
     /**

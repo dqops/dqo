@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { TableBasicModel } from '../../../api';
+import React, { useEffect } from 'react';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import ActionGroup from './TableActionGroup';
@@ -8,6 +7,7 @@ import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
+  setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
 
@@ -22,45 +22,46 @@ const TableDetails = ({
   schemaName,
   tableName
 }: ITableDetailsProps) => {
-  const [isUpdated, setIsUpdated] = useState(false);
-  const [updatedTableBasic, setUpdatedTableBasic] = useState<TableBasicModel>();
-  const { tableBasic, isUpdating } = useSelector(
+  const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    dispatch(getTableBasic(connectionName, schemaName, tableName));
-  }, []);
-
-  useEffect(() => {
-    setUpdatedTableBasic(tableBasic);
-  }, [tableBasic]);
+    if (
+      !tableBasic ||
+      tableBasic?.connection_name !== connectionName ||
+      tableBasic?.target?.schema_name !== schemaName ||
+      tableBasic?.target?.table_name !== tableName
+    ) {
+      dispatch(getTableBasic(connectionName, schemaName, tableName));
+    }
+  }, [connectionName, schemaName, tableName, tableBasic]);
 
   const handleChange = (obj: any) => {
-    setUpdatedTableBasic({
-      ...updatedTableBasic,
-      ...obj
-    });
-    setIsUpdated(true);
+    dispatch(
+      setUpdatedTableBasic({
+        ...tableBasic,
+        ...obj
+      })
+    );
   };
 
   const onUpdate = async () => {
-    if (!updatedTableBasic) {
+    if (!tableBasic) {
       return;
     }
     await dispatch(
-      updateTableBasic(connectionName, schemaName, tableName, updatedTableBasic)
+      updateTableBasic(connectionName, schemaName, tableName, tableBasic)
     );
     await dispatch(getTableBasic(connectionName, schemaName, tableName));
-    setIsUpdated(false);
   };
 
   return (
     <div className="p-4">
       <ActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedTableBasic}
         isUpdating={isUpdating}
       />
 
@@ -68,22 +69,22 @@ const TableDetails = ({
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>
-            <td className="px-4 py-2">{updatedTableBasic?.connection_name}</td>
+            <td className="px-4 py-2">{tableBasic?.connection_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Schema Name</td>
-            <td className="px-4 py-2">{updatedTableBasic?.target?.schema_name}</td>
+            <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Table Name</td>
-            <td className="px-4 py-2">{updatedTableBasic?.target?.table_name}</td>
+            <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Disable data quality checks</td>
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleChange({ disabled: value })}
-                checked={updatedTableBasic?.disabled}
+                checked={tableBasic?.disabled}
               />
             </td>
           </tr>
@@ -91,7 +92,7 @@ const TableDetails = ({
             <td className="px-4 py-2">Filter</td>
             <td className="px-4 py-2">
               <Input
-                value={updatedTableBasic?.filter}
+                value={tableBasic?.filter}
                 onChange={(e) => handleChange({ filter: e.target.value })}
               />
             </td>
@@ -100,23 +101,23 @@ const TableDetails = ({
             <td className="px-4 py-2">Stage</td>
             <td className="px-4 py-2">
               <Input
-                value={updatedTableBasic?.stage}
+                value={tableBasic?.stage}
                 onChange={(e) => handleChange({ stage: e.target.value })}
               />
             </td>
           </tr>
           <tr>
             <td className="px-4 py-2">Table Hash</td>
-            <td className="px-4 py-2">{updatedTableBasic?.table_hash}</td>
+            <td className="px-4 py-2">{tableBasic?.table_hash}</td>
           </tr>
-          {updatedTableBasic?.target?.properties && (
+          {tableBasic?.target?.properties && (
             <>
               <tr>
                 <td className="px-4 py-2 font-semibold" colSpan={2}>
                   Properties
                 </td>
               </tr>
-              {Object.entries(updatedTableBasic.target.properties).map(
+              {Object.entries(tableBasic.target.properties).map(
                 ([key, value], index) => (
                   <tr key={index}>
                     <td className="px-4 py-2">{key}</td>

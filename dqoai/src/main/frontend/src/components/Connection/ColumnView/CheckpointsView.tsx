@@ -5,6 +5,8 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnDailyCheckpoints,
   getColumnMonthlyCheckpoints,
+  setUpdatedDailyCheckPoints,
+  setUpdatedMonthlyCheckPoints,
   updateColumnDailyCheckpoints,
   updateColumnMonthlyCheckpoints
 } from '../../../redux/actions/column.actions';
@@ -20,7 +22,7 @@ interface ICheckpointsViewProps {
   columnName: string;
 }
 
-const tabs = [
+const initTabs = [
   {
     label: 'Daily',
     value: 'daily'
@@ -38,48 +40,56 @@ const CheckpointsView = ({
   columnName
 }: ICheckpointsViewProps) => {
   const [activeTab, setActiveTab] = useState('daily');
-  const [updatedDailyCheckpoints, setUpdatedDailyCheckpoints] =
-    useState<UIAllChecksModel>();
-  const [updatedMonthlyCheckpoints, setUpdatedMonthlyCheckpoints] =
-    useState<UIAllChecksModel>();
-  const [isUpdated, setIsUpdated] = useState(false);
-
+  const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
 
-  const { dailyCheckpoints, monthlyCheckpoints, isUpdating } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const {
+    columnBasic,
+    dailyCheckpoints,
+    monthlyCheckpoints,
+    isUpdatedDailyCheckpoints,
+    isUpdatedMonthlyCheckpoints,
+    isUpdating
+  } = useSelector((state: IRootState) => state.column);
 
   useEffect(() => {
-    setUpdatedDailyCheckpoints(dailyCheckpoints);
-  }, [dailyCheckpoints]);
-
-  useEffect(() => {
-    setUpdatedMonthlyCheckpoints(monthlyCheckpoints);
-  }, [monthlyCheckpoints]);
-
-  useEffect(() => {
-    dispatch(
-      getColumnDailyCheckpoints(
-        connectionName,
-        schemaName,
-        tableName,
-        columnName
-      )
-    );
-    dispatch(
-      getColumnMonthlyCheckpoints(
-        connectionName,
-        schemaName,
-        tableName,
-        columnName
-      )
-    );
-  }, [connectionName, schemaName, tableName, connectionName]);
+    if (
+      !dailyCheckpoints ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnDailyCheckpoints(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName
+        )
+      );
+    }
+    if (
+      !monthlyCheckpoints ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnMonthlyCheckpoints(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName
+        )
+      );
+    }
+  }, [connectionName, schemaName, tableName, columnName, columnBasic]);
 
   const onUpdate = async () => {
     if (activeTab === 'daily') {
-      if (!updatedDailyCheckpoints) return;
+      if (!dailyCheckpoints) return;
 
       await dispatch(
         updateColumnDailyCheckpoints(
@@ -87,7 +97,7 @@ const CheckpointsView = ({
           schemaName,
           tableName,
           columnName,
-          updatedDailyCheckpoints
+          dailyCheckpoints
         )
       );
       await dispatch(
@@ -99,7 +109,7 @@ const CheckpointsView = ({
         )
       );
     } else {
-      if (!updatedMonthlyCheckpoints) return;
+      if (!monthlyCheckpoints) return;
 
       await dispatch(
         updateColumnMonthlyCheckpoints(
@@ -107,7 +117,7 @@ const CheckpointsView = ({
           schemaName,
           tableName,
           columnName,
-          updatedMonthlyCheckpoints
+          monthlyCheckpoints
         )
       );
       await dispatch(
@@ -119,24 +129,41 @@ const CheckpointsView = ({
         )
       );
     }
-    setIsUpdated(false);
   };
 
   const onDailyCheckpointsChange = (ui: UIAllChecksModel) => {
-    setUpdatedDailyCheckpoints(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedDailyCheckPoints(ui));
   };
 
   const onMonthlyCheckpointsChange = (ui: UIAllChecksModel) => {
-    setUpdatedMonthlyCheckpoints(ui);
-    setIsUpdated(true);
+    dispatch(setUpdatedMonthlyCheckPoints(ui));
   };
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'daily'
+          ? { ...item, isUpdated: isUpdatedDailyCheckpoints }
+          : item
+      )
+    );
+  }, [isUpdatedDailyCheckpoints]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'monthly'
+          ? { ...item, isUpdated: isUpdatedMonthlyCheckpoints }
+          : item
+      )
+    );
+  }, [isUpdatedMonthlyCheckpoints]);
 
   return (
     <div className="py-2">
       <ColumnActionGroup
         onUpdate={onUpdate}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
@@ -145,14 +172,14 @@ const CheckpointsView = ({
       <div>
         {activeTab === 'daily' && (
           <DataQualityChecks
-            checksUI={updatedDailyCheckpoints}
+            checksUI={dailyCheckpoints}
             onChange={onDailyCheckpointsChange}
             className="max-h-checks"
           />
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
-            checksUI={updatedMonthlyCheckpoints}
+            checksUI={monthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
             className="max-h-checks"
           />

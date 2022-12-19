@@ -10,6 +10,8 @@ import ColumnLabelsView from './ColumnLabelsView';
 import CheckpointsView from './CheckpointsView';
 import ColumnAdhocView from './ColumnAdhocView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IColumnViewProps {
   connectionName: string;
@@ -18,7 +20,7 @@ interface IColumnViewProps {
   columnName: string;
 }
 
-const tabs = [
+const initTabs = [
   {
     label: 'Column',
     value: 'column'
@@ -52,9 +54,20 @@ const ColumnView = ({
   columnName
 }: IColumnViewProps) => {
   const [activeTab, setActiveTab] = useState('column');
+  const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
+  const {
+    isUpdatedColumnBasic,
+    isUpdatedComments,
+    isUpdatedLabels,
+    isUpdatedChecksUi,
+    isUpdatedDailyCheckpoints,
+    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyPartitionedChecks,
+    isUpdatedMonthlyPartitionedChecks
+  } = useSelector((state: IRootState) => state.column);
 
   useEffect(() => {
     const searchQuery = qs.stringify({
@@ -82,6 +95,73 @@ const ColumnView = ({
       [pageTab]: tab
     });
   };
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'column'
+          ? { ...item, isUpdated: isUpdatedColumnBasic }
+          : item
+      )
+    );
+  }, [isUpdatedColumnBasic]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'comments'
+          ? { ...item, isUpdated: isUpdatedComments }
+          : item
+      )
+    );
+  }, [isUpdatedComments]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
+      )
+    );
+  }, [isUpdatedLabels]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'data-quality-checks'
+          ? { ...item, isUpdated: isUpdatedChecksUi }
+          : item
+      )
+    );
+  }, [isUpdatedChecksUi]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'checkpoints'
+          ? {
+              ...item,
+              isUpdated:
+                isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+            }
+          : item
+      )
+    );
+  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'partitioned-checks'
+          ? {
+              ...item,
+              isUpdated:
+                isUpdatedDailyPartitionedChecks ||
+                isUpdatedMonthlyPartitionedChecks
+            }
+          : item
+      )
+    );
+  }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
   return (
     <div className="relative">
@@ -116,7 +196,7 @@ const ColumnView = ({
             connectionName={connectionName}
             schemaName={schemaName}
             tableName={tableName}
-            columnName={connectionName}
+            columnName={columnName}
           />
         )}
         {activeTab === 'data-quality-checks' && (

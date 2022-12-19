@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { ColumnBasicModel } from '../../../api';
+import React, { useEffect } from 'react';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import NumberInput from '../../NumberInput';
 import ColumnActionGroup from './ColumnActionGroup';
 import {
   getColumnBasic,
+  setUpdatedColumnBasic,
   updateColumnBasic
 } from '../../../redux/actions/column.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -26,42 +26,47 @@ const TableDetails = ({
   columnName
 }: IColumnDetailsProps) => {
   const dispatch = useActionDispatch();
-  const [updatedColumnBasic, setUpdatedColumnBasic] =
-    useState<ColumnBasicModel>();
-  const [isUpdated, setIsUpdated] = useState(false);
 
-  const { columnBasic, isUpdating } = useSelector(
+  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
     (state: IRootState) => state.column
   );
 
-  useEffect(() => {
-    setUpdatedColumnBasic(columnBasic);
-  }, [columnBasic]);
-
   const handleChange = (obj: any) => {
-    setUpdatedColumnBasic({
-      ...updatedColumnBasic,
-      ...obj
-    });
-    setIsUpdated(true);
+    dispatch(
+      setUpdatedColumnBasic({
+        ...columnBasic,
+        ...obj
+      })
+    );
   };
 
   const handleSnapTypeChange = (obj: any) => {
-    setUpdatedColumnBasic({
-      ...updatedColumnBasic,
-      type_snapshot: {
-        ...updatedColumnBasic?.type_snapshot,
-        ...obj
-      }
-    });
+    dispatch(
+      setUpdatedColumnBasic({
+        ...columnBasic,
+        type_snapshot: {
+          ...columnBasic?.type_snapshot,
+          ...obj
+        }
+      })
+    );
   };
 
   useEffect(() => {
-    dispatch(getColumnBasic(connectionName, schemaName, tableName, columnName));
-  }, []);
+    if (
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schemaName !== schemaName ||
+      columnBasic?.table?.tableName !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnBasic(connectionName, schemaName, tableName, columnName)
+      );
+    }
+  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
-    if (!updatedColumnBasic) {
+    if (!columnBasic) {
       return;
     }
     await dispatch(
@@ -70,9 +75,10 @@ const TableDetails = ({
         schemaName,
         tableName,
         columnName,
-        updatedColumnBasic
+        columnBasic
       )
     );
+    dispatch(getColumnBasic(connectionName, schemaName, tableName, columnName));
   };
 
   return (
@@ -80,36 +86,32 @@ const TableDetails = ({
       <ColumnActionGroup
         onUpdate={onUpdate}
         isUpdating={isUpdating}
-        isUpdated={isUpdated}
+        isUpdated={isUpdatedColumnBasic}
       />
       <table className="mb-6 mt-4 w-160">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>
-            <td className="px-4 py-2">{updatedColumnBasic?.connection_name}</td>
+            <td className="px-4 py-2">{columnBasic?.connection_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Schema Name</td>
-            <td className="px-4 py-2">
-              {updatedColumnBasic?.table?.schemaName}
-            </td>
+            <td className="px-4 py-2">{columnBasic?.table?.schemaName}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Table Name</td>
-            <td className="px-4 py-2">
-              {updatedColumnBasic?.table?.tableName}
-            </td>
+            <td className="px-4 py-2">{columnBasic?.table?.tableName}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Column Name</td>
-            <td className="px-4 py-2">{updatedColumnBasic?.column_name}</td>
+            <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Disable Data Quality Checks</td>
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleChange({ disabled: value })}
-                checked={updatedColumnBasic?.disabled}
+                checked={columnBasic?.disabled}
               />
             </td>
           </tr>
@@ -117,7 +119,7 @@ const TableDetails = ({
             <td className="px-4 py-2">Column Type</td>
             <td className="px-4 py-2">
               <Input
-                value={updatedColumnBasic?.type_snapshot?.column_type}
+                value={columnBasic?.type_snapshot?.column_type}
                 onChange={(e) =>
                   handleSnapTypeChange({ column_type: e.target.value })
                 }
@@ -129,7 +131,7 @@ const TableDetails = ({
             <td className="px-4 py-2">
               <Checkbox
                 onChange={(value) => handleSnapTypeChange({ nullable: value })}
-                checked={updatedColumnBasic?.type_snapshot?.nullable}
+                checked={columnBasic?.type_snapshot?.nullable}
               />
             </td>
           </tr>
@@ -137,7 +139,7 @@ const TableDetails = ({
             <td className="px-4 py-2">Length</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={updatedColumnBasic?.type_snapshot?.length || ''}
+                value={columnBasic?.type_snapshot?.length || ''}
                 onChange={(value) => handleSnapTypeChange({ length: value })}
               />
             </td>
@@ -146,7 +148,7 @@ const TableDetails = ({
             <td className="px-4 py-2">Scale</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={updatedColumnBasic?.type_snapshot?.scale}
+                value={columnBasic?.type_snapshot?.scale}
                 onChange={(value) => handleSnapTypeChange({ scale: value })}
               />
             </td>
@@ -155,7 +157,7 @@ const TableDetails = ({
             <td className="px-4 py-2">Precision</td>
             <td className="px-4 py-2">
               <NumberInput
-                value={updatedColumnBasic?.type_snapshot?.precision}
+                value={columnBasic?.type_snapshot?.precision}
                 onChange={(value) => handleSnapTypeChange({ precision: value })}
               />
             </td>
