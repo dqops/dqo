@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.pii.ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiContainsUsaPhonePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMaxPiiContainsUsaPhonePercentCheckSpec
-        extends AbstractCheckSpec<ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPiiContainsUsaPhonePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxPiiContainsUsaPhonePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -50,7 +50,7 @@ public class ColumnMaxPiiContainsUsaPhonePercentCheckSpec
     @JsonPropertyDescription("Numerical value in range percent sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec parameters = new ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec();
+    private ColumnPiiContainsUsaPhonePercentSensorParametersSpec parameters = new ColumnPiiContainsUsaPhonePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows that contains USA phone number in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnMaxPiiContainsUsaPhonePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec getParameters() {
+    public ColumnPiiContainsUsaPhonePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnMaxPiiContainsUsaPhonePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnPiiMaxContainsUsaPhonePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPiiContainsUsaPhonePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
