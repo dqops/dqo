@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("max_negative_percent", o -> o.maxNegativePercent);
             put("min_numbers_in_set_count", o -> o.minNumbersInSetCount);
             put("min_numbers_in_set_percent", o -> o.minNumbersInSetPercent);
+            put("min_values_in_range_numeric_percent", o -> o.minValuesInRangeNumericPercent);
+            put("min_values_in_range_integers_percent", o -> o.minValuesInRangeIntegersPercent);
         }
     };
 
@@ -57,6 +56,12 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinNumbersInSetPercentCheckSpec minNumbersInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeNumericPercentCheckSpec minValuesInRangeNumericPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeIntegersPercentCheckSpec minValuesInRangeIntegersPercent;
 
     /**
      * Returns a maximum negative count check.
@@ -128,6 +133,42 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minNumbersInSetPercent, minNumbersInSetPercent));
         this.minNumbersInSetPercent = minNumbersInSetPercent;
         propagateHierarchyIdToField(minNumbersInSetPercent, "min_numbers_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeNumericPercentCheckSpec getMinValuesInRangeNumericPercent() {
+        return minValuesInRangeNumericPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param minValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     */
+    public void setMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec minValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.minValuesInRangeNumericPercent, minValuesInRangeNumericPercent));
+        this.minValuesInRangeNumericPercent = minValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(minValuesInRangeNumericPercent, "min_values_in_range_numeric_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeIntegersPercentCheckSpec getMinValuesInRangeIntegersPercent() {
+        return minValuesInRangeIntegersPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param minValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     */
+    public void setMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec minValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.minValuesInRangeIntegersPercent, minValuesInRangeIntegersPercent));
+        this.minValuesInRangeIntegersPercent = minValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(minValuesInRangeIntegersPercent, "min_values_in_range_integers_percent");
     }
     
     /**

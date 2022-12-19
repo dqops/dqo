@@ -16,12 +16,11 @@
 package ai.dqo.checks.column.partitioned.numeric;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeNumericPercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -43,6 +42,8 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_negative_percent", o -> o.dailyPartitionMaxNegativePercent);
             put("daily_partition_min_numbers_in_set_count", o -> o.dailyPartitionMinNumbersInSetCount);
             put("daily_partition_min_numbers_in_set_percent", o -> o.dailyPartitionMinNumbersInSetPercent);
+            put("daily_partition_min_values_in_range_numeric_percent", o -> o.dailyPartitionMinValuesInRangeNumericPercent);
+            put("daily_partition_min_values_in_range_integers_percent", o -> o.dailyPartitionMinValuesInRangeIntegersPercent);
         }
     };
 
@@ -57,6 +58,12 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinNumbersInSetPercentCheckSpec dailyPartitionMinNumbersInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeNumericPercentCheckSpec dailyPartitionMinValuesInRangeNumericPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeIntegersPercentCheckSpec dailyPartitionMinValuesInRangeIntegersPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -129,7 +136,44 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.dailyPartitionMinNumbersInSetPercent = dailyPartitionMinNumbersInSetPercent;
         propagateHierarchyIdToField(dailyPartitionMinNumbersInSetPercent, "daily_partition_min_numbers_in_set_percent");
     }
-    
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeNumericPercentCheckSpec getDailyPartitionMinValuesInRangeNumericPercent() {
+        return dailyPartitionMinValuesInRangeNumericPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyPartitionMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyPartitionMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec dailyPartitionMinValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValuesInRangeNumericPercent, dailyPartitionMinValuesInRangeNumericPercent));
+        this.dailyPartitionMinValuesInRangeNumericPercent = dailyPartitionMinValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(dailyPartitionMinValuesInRangeNumericPercent, "daily_partition_min_values_in_range_numeric_percent");
+    }
+
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeIntegersPercentCheckSpec getDailyPartitionMinValuesInRangeIntegersPercent() {
+        return dailyPartitionMinValuesInRangeIntegersPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyPartitionMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyPartitionMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec dailyPartitionMinValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValuesInRangeIntegersPercent, dailyPartitionMinValuesInRangeIntegersPercent));
+        this.dailyPartitionMinValuesInRangeIntegersPercent = dailyPartitionMinValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(dailyPartitionMinValuesInRangeIntegersPercent, "daily_partition_min_values_in_range_integers_percent");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

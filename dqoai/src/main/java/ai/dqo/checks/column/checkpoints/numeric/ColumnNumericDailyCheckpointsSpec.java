@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.checkpoints.numeric;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,8 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_negative_percent", o -> o.dailyCheckpointMaxNegativePercent);
             put("daily_checkpoint_min_numbers_in_set_count", o -> o.dailyCheckpointMinNumbersInSetCount);
             put("daily_checkpoint_min_numbers_in_set_percent", o -> o.dailyCheckpointMinNumbersInSetPercent);
+            put("daily_checkpoint_min_values_in_range_numeric_percent", o -> o.dailyCheckpointMinValuesInRangeNumericPercent);
+            put("daily_checkpoint_min_values_in_range_integers_percent", o -> o.dailyCheckpointMinValuesInRangeIntegersPercent);
         }
     };
 
@@ -57,6 +56,12 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinNumbersInSetPercentCheckSpec dailyCheckpointMinNumbersInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeNumericPercentCheckSpec dailyCheckpointMinValuesInRangeNumericPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeIntegersPercentCheckSpec dailyCheckpointMinValuesInRangeIntegersPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -128,6 +133,42 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinNumbersInSetPercent, dailyCheckpointMinNumbersInSetPercent));
         this.dailyCheckpointMinNumbersInSetPercent = dailyCheckpointMinNumbersInSetPercent;
         propagateHierarchyIdToField(dailyCheckpointMinNumbersInSetPercent, "daily_checkpoint_min_numbers_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeNumericPercentCheckSpec getDailyCheckpointMinValuesInRangeNumericPercent() {
+        return dailyCheckpointMinValuesInRangeNumericPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyCheckpointMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyCheckpointMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec dailyCheckpointMinValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValuesInRangeNumericPercent, dailyCheckpointMinValuesInRangeNumericPercent));
+        this.dailyCheckpointMinValuesInRangeNumericPercent = dailyCheckpointMinValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinValuesInRangeNumericPercent, "daily_checkpoint_min_values_in_range_numeric_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeIntegersPercentCheckSpec getDailyCheckpointMinValuesInRangeIntegersPercent() {
+        return dailyCheckpointMinValuesInRangeIntegersPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param dailyCheckpointMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     */
+    public void setDailyCheckpointMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec dailyCheckpointMinValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValuesInRangeIntegersPercent, dailyCheckpointMinValuesInRangeIntegersPercent));
+        this.dailyCheckpointMinValuesInRangeIntegersPercent = dailyCheckpointMinValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinValuesInRangeIntegersPercent, "daily_checkpoint_min_values_in_range_integers_percent");
     }
     
     /**
