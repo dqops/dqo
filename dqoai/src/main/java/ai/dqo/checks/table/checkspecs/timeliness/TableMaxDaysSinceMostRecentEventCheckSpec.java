@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the min row count rule.
+ * Table level check that calculates the maximal number of days since the most recent event timestamp.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -44,12 +44,12 @@ public class TableMaxDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec
         }
     };
 
-    @JsonPropertyDescription("Row count sensor parameters")
+    @JsonPropertyDescription("Max days since most recent event sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessColumnMaxDaysSinceMostRecentEventSensorParametersSpec parameters = new TableTimelinessColumnMaxDaysSinceMostRecentEventSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;

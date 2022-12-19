@@ -1,0 +1,27 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{% macro render_data_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {%- if include_lower_bound and include_upper_bound -%}
+        {{ lib.render_target_column('analyzed_table') }} >= {{ lower_bound }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ upper_bound }}
+    {%- elif not include_lower_bound and include_upper_bound -%}
+        {{ lib.render_target_column('analyzed_table') }} > {{ lower_bound }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ upper_bound }}
+    {%- elif include_lower_bound and not include_upper_bound -%}
+        {{ lib.render_target_column('analyzed_table') }} >= {{ lower_bound }} AND {{ lib.render_target_column('analyzed_table') }} < {{ upper_bound }}
+    {%- else -%}
+        {{ lib.render_target_column('analyzed_table') }} > {{ lower_bound }} AND {{ lib.render_target_column('analyzed_table') }} < {{ upper_bound }}
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    100.0 * SUM(
+        CASE
+            WHEN {{ render_data_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+            ELSE 0
+        END
+    ) / COUNT(*) AS actual_value
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

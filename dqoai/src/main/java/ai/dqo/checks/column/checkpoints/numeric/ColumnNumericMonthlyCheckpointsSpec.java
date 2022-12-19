@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.checkpoints.numeric;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,8 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_negative_percent", o -> o.monthlyCheckpointMaxNegativePercent);
             put("monthly_checkpoint_min_numbers_in_set_count", o -> o.monthlyCheckpointMinNumbersInSetCount);
             put("monthly_checkpoint_min_numbers_in_set_percent", o -> o.monthlyCheckpointMinNumbersInSetPercent);
+            put("monthly_checkpoint_min_values_in_range_numeric_percent", o -> o.monthlyCheckpointMinValuesInRangeNumericPercent);
+            put("monthly_checkpoint_min_values_in_range_integers_percent", o -> o.monthlyCheckpointMinValuesInRangeIntegersPercent);
         }
     };
 
@@ -58,6 +57,12 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinNumbersInSetPercentCheckSpec monthlyCheckpointMinNumbersInSetPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeNumericPercentCheckSpec monthlyCheckpointMinValuesInRangeNumericPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeIntegersPercentCheckSpec monthlyCheckpointMinValuesInRangeIntegersPercent;
+    
     /**
      * Returns a maximum negative values count check.
      * @return Maximum negative values count check.
@@ -128,6 +133,42 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinNumbersInSetPercent, monthlyCheckpointMinNumbersInSetPercent));
         this.monthlyCheckpointMinNumbersInSetPercent = monthlyCheckpointMinNumbersInSetPercent;
         propagateHierarchyIdToField(monthlyCheckpointMinNumbersInSetPercent, "monthly_checkpoint_min_numbers_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeNumericPercentCheckSpec getMonthlyCheckpointMinValuesInRangeNumericPercent() {
+        return monthlyCheckpointMinValuesInRangeNumericPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param monthlyCheckpointMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     */
+    public void setMonthlyCheckpointMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec monthlyCheckpointMinValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinValuesInRangeNumericPercent, monthlyCheckpointMinValuesInRangeNumericPercent));
+        this.monthlyCheckpointMinValuesInRangeNumericPercent = monthlyCheckpointMinValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinValuesInRangeNumericPercent, "monthly_checkpoint_min_values_in_range_numeric_percent");
+    }
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeIntegersPercentCheckSpec getMonthlyCheckpointMinValuesInRangeIntegersPercent() {
+        return monthlyCheckpointMinValuesInRangeIntegersPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param monthlyCheckpointMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     */
+    public void setMonthlyCheckpointMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec monthlyCheckpointMinValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinValuesInRangeIntegersPercent, monthlyCheckpointMinValuesInRangeIntegersPercent));
+        this.monthlyCheckpointMinValuesInRangeIntegersPercent = monthlyCheckpointMinValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinValuesInRangeIntegersPercent, "monthly_checkpoint_min_values_in_range_integers_percent");
     }
     
     /**

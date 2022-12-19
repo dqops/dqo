@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsMinValidUsaPhonePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaPhonePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMinStringValidUsaPhonePercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsMinValidUsaPhonePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringValidUsaPhonePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringValidUsaPhonePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -50,7 +50,7 @@ public class ColumnMinStringValidUsaPhonePercentCheckSpec
     @JsonPropertyDescription("Numerical value in range percent sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMinValidUsaPhonePercentSensorParametersSpec parameters = new ColumnStringsMinValidUsaPhonePercentSensorParametersSpec();
+    private ColumnStringsStringValidUsaPhonePercentSensorParametersSpec parameters = new ColumnStringsStringValidUsaPhonePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnMinStringValidUsaPhonePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsMinValidUsaPhonePercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringValidUsaPhonePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnMinStringValidUsaPhonePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsMinValidUsaPhonePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValidUsaPhonePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
