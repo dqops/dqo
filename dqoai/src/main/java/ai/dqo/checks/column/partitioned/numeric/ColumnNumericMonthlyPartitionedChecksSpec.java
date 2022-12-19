@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.partitioned.numeric;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,8 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_negative_percent", o -> o.monthlyPartitionMaxNegativePercent);
             put("monthly_partition_min_numbers_in_set_count", o -> o.monthlyPartitionMinNumbersInSetCount);
             put("monthly_partition_min_numbers_in_set_percent", o -> o.monthlyPartitionMinNumbersInSetPercent);
+            put("monthly_partition_min_values_in_range_numeric_percent", o -> o.monthlyPartitionMinValuesInRangeNumericPercent);
+            put("monthly_partition_min_values_in_range_integers_percent", o -> o.monthlyPartitionMinValuesInRangeIntegersPercent);
         }
     };
 
@@ -57,6 +56,12 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinNumbersInSetPercentCheckSpec monthlyPartitionMinNumbersInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeNumericPercentCheckSpec monthlyPartitionMinValuesInRangeNumericPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnMinValuesInRangeIntegersPercentCheckSpec monthlyPartitionMinValuesInRangeIntegersPercent;
 
     /**
      * Returns a maximum negative values count check.
@@ -129,7 +134,44 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.monthlyPartitionMinNumbersInSetPercent = monthlyPartitionMinNumbersInSetPercent;
         propagateHierarchyIdToField(monthlyPartitionMinNumbersInSetPercent, "monthly_partition_min_numbers_in_set_percent");
     }
-    
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeNumericPercentCheckSpec getMonthlyPartitionMinValuesInRangeNumericPercent() {
+        return monthlyPartitionMinValuesInRangeNumericPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param monthlyPartitionMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     */
+    public void setMonthlyPartitionMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec monthlyPartitionMinValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinValuesInRangeNumericPercent, monthlyPartitionMinValuesInRangeNumericPercent));
+        this.monthlyPartitionMinValuesInRangeNumericPercent = monthlyPartitionMinValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinValuesInRangeNumericPercent, "monthly_partition_min_values_in_range_numeric_percent");
+    }
+
+
+    /**
+     * Returns a minimum Numbers in set percent check.
+     * @return Minimum Numbers in set percent check.
+     */
+    public ColumnMinValuesInRangeIntegersPercentCheckSpec getMonthlyPartitionMinValuesInRangeIntegersPercent() {
+        return monthlyPartitionMinValuesInRangeIntegersPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum Numbers in set percent check.
+     * @param monthlyPartitionMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     */
+    public void setMonthlyPartitionMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec monthlyPartitionMinValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinValuesInRangeIntegersPercent, monthlyPartitionMinValuesInRangeIntegersPercent));
+        this.monthlyPartitionMinValuesInRangeIntegersPercent = monthlyPartitionMinValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinValuesInRangeIntegersPercent, "monthly_partition_min_values_in_range_integers_percent");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *
