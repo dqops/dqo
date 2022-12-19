@@ -109,7 +109,7 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     public void setMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnTable_2) {
         this.setDirtyIf(!Objects.equals(this.minSqlConditionPassedPercentOnTable_2, minSqlConditionPassedPercentOnTable_2));
         this.minSqlConditionPassedPercentOnTable_2 = minSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(minSqlConditionPassedPercentOnTable_1, "min_sql_condition_passed_percent_on_table_2");
+        propagateHierarchyIdToField(minSqlConditionPassedPercentOnTable_2, "min_sql_condition_passed_percent_on_table_2");
     }
 
     /**

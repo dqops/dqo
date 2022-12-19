@@ -117,7 +117,7 @@ public class TableSqlDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public void setDailyCheckpointMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_2) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinSqlConditionPassedPercentOnTable_2, dailyCheckpointMinSqlConditionPassedPercentOnTable_2));
         this.dailyCheckpointMinSqlConditionPassedPercentOnTable_2 = dailyCheckpointMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(dailyCheckpointMinSqlConditionPassedPercentOnTable_1, "daily_checkpoint_min_sql_condition_passed_percent_on_table_2");
+        propagateHierarchyIdToField(dailyCheckpointMinSqlConditionPassedPercentOnTable_2, "daily_checkpoint_min_sql_condition_passed_percent_on_table_2");
     }
 
     /**
