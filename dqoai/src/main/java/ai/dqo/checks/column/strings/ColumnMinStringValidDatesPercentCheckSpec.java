@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidDatesSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidDatePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,13 +34,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+ * Column level check that ensures that there is at least a minimum number of valid dates in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMinStringValidDatesPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringValidDatesSensorParametersSpec, MinPercentRule98ParametersSpec,MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringValidDatePercentSensorParametersSpec, MinPercentRule98ParametersSpec,MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringValidDatesPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +49,7 @@ public class ColumnMinStringValidDatesPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringValidDatesSensorParametersSpec parameters = new ColumnStringsStringValidDatesSensorParametersSpec();
+    private ColumnStringsStringValidDatePercentSensorParametersSpec parameters = new ColumnStringsStringValidDatePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnMinStringValidDatesPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringValidDatesSensorParametersSpec getParameters() {
+    public ColumnStringsStringValidDatePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnMinStringValidDatesPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringValidDatesSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValidDatePercentSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
