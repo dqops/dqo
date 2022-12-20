@@ -2,11 +2,11 @@
 SELECT
     SUM(
         CASE
-            WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND
-                 NOT ({{ parameters.sql_condition |
+            WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+            AND NOT ({{ parameters.sql_condition |
                         replace('{column}', lib.render_target_column('analyzed_table')) |
                         replace('{table}', lib.render_target_table()) }})
-                 THEN 1
+                THEN 1
             ELSE 0
         END
     ) AS actual_value
