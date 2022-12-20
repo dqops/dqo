@@ -57,6 +57,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_min_string_valid_currency_code_percent", o -> o.dailyCheckpointMinStringValidCurrencyCodePercent);
             put("daily_checkpoint_min_strings_in_set_count", o -> o.dailyCheckpointMinStringsInSetCount);
             put("daily_checkpoint_min_strings_in_set_percent", o -> o.dailyCheckpointMinStringsInSetPercent);
+            put("daily_checkpoint_max_strings_invalid_email_count", o -> o.dailyCheckpointMaxInvalidEmailCount);
+
         }
     };
 
@@ -121,6 +123,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
     private ColumnMinStringsInSetPercentCheckSpec dailyCheckpointMinStringsInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxInvalidEmailCountCheckSpec dailyCheckpointMaxInvalidEmailCount;
 
     /**
      * Returns a maximum string length below check.
@@ -498,6 +503,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringsInSetPercent, dailyCheckpointMinStringsInSetPercent));
         this.dailyCheckpointMinStringsInSetPercent = dailyCheckpointMinStringsInSetPercent;
         propagateHierarchyIdToField(dailyCheckpointMinStringsInSetPercent, "daily_checkpoint_min_strings_in_set_percent");
+    }
+
+    /**
+     * Returns a maximum invalid email count check.
+     * @return Maximum invalid email count check.
+     */
+    public ColumnMaxInvalidEmailCountCheckSpec getDailyCheckpointMaxInvalidEmailCount() {
+        return dailyCheckpointMaxInvalidEmailCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid email count check.
+     * @param dailyCheckpointMaxInvalidEmailCount Maximum invalid email count check.
+     */
+    public void setDailyCheckpointMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec dailyCheckpointMaxInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxInvalidEmailCount, dailyCheckpointMaxInvalidEmailCount));
+        this.dailyCheckpointMaxInvalidEmailCount = dailyCheckpointMaxInvalidEmailCount;
+        propagateHierarchyIdToField(dailyCheckpointMaxInvalidEmailCount, "daily_checkpoint_max_strings_invalid_email_count");
     }
 
     /**

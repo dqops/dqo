@@ -29,7 +29,6 @@ export interface ITab {
 }
 
 const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
-  const [checked, setChecked] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
@@ -193,7 +192,7 @@ const CheckListItem = ({ check, onChange }: ICheckListItemProps) => {
                 name="info"
                 className="w-5 h-5 text-blue-700 cursor-pointer"
               />
-              <div>{check.check_name}</div>
+              <div className="text-sm">{check.check_name}</div>
             </div>
           </Tooltip>
         </td>

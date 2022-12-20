@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMinValidCurrencyCodePercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinValidCurrencyCodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +49,7 @@ public class ColumnMinValidCurrencyCodePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec parameters = new ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec();
+    private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec parameters = new ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with a valid currency code strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnMinValidCurrencyCodePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnMinValidCurrencyCodePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinValidCurrencyCodePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

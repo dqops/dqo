@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';

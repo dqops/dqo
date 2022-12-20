@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import DataStreamLevelItem from './DataStreamLevelItem';
 import ScheduleTab from './ScheduleTab';
 import TimeSeriesView from '../Connection/TimeSeriesView';
@@ -28,11 +28,6 @@ const CheckSettings = ({
   onClose,
   onChange
 }: ICheckSettingsProps) => {
-  const tab = useMemo(
-    () => tabs.find((item) => item.value === activeTab),
-    [tabs, activeTab]
-  );
-
   const getDataStreamLevel = (index: number) => {
     if (index === 0) return check?.data_streams_override?.level_1;
     if (index === 1) return check?.data_streams_override?.level_2;

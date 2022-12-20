@@ -4,7 +4,6 @@ import { useTree } from '../../contexts/treeContext';
 import SvgIcon from '../SvgIcon';
 import { TREE_LEVEL } from '../../shared/enums';
 import clsx from 'clsx';
-import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from './ContextMenu';
 import ConfirmDialog from './ConfirmDialog';
@@ -21,14 +20,13 @@ const theme: ReactTreeTheme = {
     },
     folder: {
       hoverBgColor: '#E1E5E9',
-      background: '#ff0000'
     },
     icons: {
       leafColor: '#2D3748',
       folderColor: '#2D3748'
     }
   }
-} as any;
+};
 
 const CustomTree = () => {
   const { changeActiveTab, treeData, openNodes, toggleOpenNode } = useTree();
@@ -106,9 +104,6 @@ const CustomTree = () => {
     );
   };
 
-  const onToggleSelectedNodes = (nodes: TreeNodeId[]) => {};
-  const onToggleOpenNodes = (nodes: TreeNodeId[]) => {};
-
   return (
     <div className="text-gray-100">
       <div className="">
@@ -116,8 +111,6 @@ const CustomTree = () => {
           nodes={treeData}
           RenderIcon={renderIcon}
           RenderNode={renderNode}
-          onToggleSelectedNodes={onToggleSelectedNodes}
-          onToggleOpenNodes={onToggleOpenNodes}
           openNodes={openNodes}
           theme="custom"
           themes={{

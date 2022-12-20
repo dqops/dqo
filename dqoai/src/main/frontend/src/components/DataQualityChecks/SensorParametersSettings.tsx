@@ -10,13 +10,16 @@ interface ISensorParametersSettingsProps {
 const SensorParametersSettings = ({
   parameters
 }: ISensorParametersSettingsProps) => {
+  
+  const onChangeDisabled = () => {};
+
   return (
     <div>
       <div className="">
         <div className="mb-3">
           <Checkbox
             checked={parameters?.disabled}
-            onChange={() => {}}
+            onChange={onChangeDisabled}
             label="Disabled"
           />
         </div>
