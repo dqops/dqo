@@ -54,6 +54,9 @@ export interface ITableState {
   isUpdatedDailyPartitionedChecks?: boolean;
   monthlyPartitionedChecks?: UIAllChecksModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
+  checksUIFilter?: UIAllChecksModel;
+  checkpointsUIFilter?: UIAllChecksModel;
+  partitionedChecksUIFilter?: UIAllChecksModel;
 }
 
 const initialState: ITableState = {
@@ -445,6 +448,60 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checksUIFilter: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checkpointsUIFilter: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        partitionedChecksUIFilter: action.data,
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
         error: action.error
       };
     case TABLE_ACTION.SET_UPDATED_TABLE_BASIC:

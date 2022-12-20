@@ -809,3 +809,107 @@ export const setUpdatedTableDataStreamsMapping = (
   type: TABLE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
   dataStreamsMapping
 });
+
+export const getTableAdHockChecksUIFilterRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER
+});
+
+export const getTableAdHockChecksUIFilterSuccess = (
+  data: UIAllChecksModel
+) => ({
+  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_SUCCESS,
+  data
+});
+
+export const getTableAdHockChecksUIFilterFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR,
+  error
+});
+
+export const getTableAdHockChecksUIFilter =
+  (connectionName: string, schemaName: string, tableName: string, category: string, checkName: string) =>
+    async (dispatch: Dispatch) => {
+      dispatch(getTableAdHockChecksUIFilterRequest());
+      try {
+        const res = await TableApiClient.getTableAdHocChecksUIFilter(
+          connectionName,
+          schemaName,
+          tableName,
+          category,
+          checkName
+        );
+        dispatch(getTableAdHockChecksUIFilterSuccess(res.data));
+      } catch (err) {
+        dispatch(getTableAdHockChecksUIFilterFailed(err));
+      }
+    };
+
+export const getTableCheckpointsUIFilterRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER
+});
+
+export const getTableCheckpointsUIFilterSuccess = (
+  data: UIAllChecksModel
+) => ({
+  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_SUCCESS,
+  data
+});
+
+export const getTableCheckpointsUIFilterFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_ERROR,
+  error
+});
+
+export const getTableCheckpointsUIFilter =
+  (connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+    async (dispatch: Dispatch) => {
+      dispatch(getTableCheckpointsUIFilterRequest());
+      try {
+        const res = await TableApiClient.getTableCheckpointsUIFilter(
+          connectionName,
+          schemaName,
+          tableName,
+          timePartitioned,
+          category,
+          checkName
+        );
+        dispatch(getTableCheckpointsUIFilterSuccess(res.data));
+      } catch (err) {
+        dispatch(getTableCheckpointsUIFilterFailed(err));
+      }
+    };
+
+export const getTablePartitionedChecksUIFilterRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER
+});
+
+export const getTablePartitionedChecksUIFilterSuccess = (
+  data: UIAllChecksModel
+) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
+  data
+});
+
+export const getTablePartitionedChecksUIFilterFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR,
+  error
+});
+
+export const getTablePartitionedChecksUIFilter =
+  (connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+    async (dispatch: Dispatch) => {
+      dispatch(getTablePartitionedChecksUIFilterRequest());
+      try {
+        const res = await TableApiClient.getTablePartitionedChecksUIFilter(
+          connectionName,
+          schemaName,
+          tableName,
+          timePartitioned,
+          category,
+          checkName
+        );
+        dispatch(getTablePartitionedChecksUIFilterSuccess(res.data));
+      } catch (err) {
+        dispatch(getTablePartitionedChecksUIFilterFailed(err));
+      }
+    };

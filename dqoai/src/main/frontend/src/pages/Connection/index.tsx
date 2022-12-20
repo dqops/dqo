@@ -20,6 +20,14 @@ import ColumnDailyChecksView from '../../components/Connection/ColumnDailyChecks
 import ColumnMonthlyChecksView from '../../components/Connection/ColumnMonthlyChecksView';
 import ColumnDailyPartitionedChecksView from '../../components/Connection/ColumnDailyPartitionedChecksView';
 import ColumnMonthlyPartitionedChecksView from '../../components/Connection/ColumnMonthlyPartitionedChecksView';
+import TableAdHockChecksUIFilterView from '../../components/Connection/TableAdHockChecksUIFilterView';
+import TableCheckpointsUIFilterView from '../../components/Connection/TableCheckpointsUIFilterView';
+import TablePartitionedChecksUIFilterView from '../../components/Connection/TablePartitionedChecksUIFilterView';
+import ColumnAdhocView from '../../components/Connection/ColumnView/ColumnAdhocView';
+import ColumnAdHockChecksUIFilterView from '../../components/Connection/ColumnAdHockChecksUIFilterView';
+import ColumnCheckpointsUIFilterView from '../../components/Connection/ColumnCheckpointsUIFilterView';
+import ColumnPartitionedChecksView from '../../components/Connection/ColumnView/ColumnPartitionedChecksView';
+import ColumnPartitionedChecksUIFilterView from '../../components/Connection/ColumnPartitionedChecksUIFilterView';
 
 const ConnectionPage = () => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData } =
@@ -95,6 +103,43 @@ const ConnectionPage = () => {
         tableName: tableNode?.label ?? '',
         columnName: columnNode?.label ?? ''
       };
+    } else if (activeNode?.level === TREE_LEVEL.CHECK) {
+      const parentNode = findTreeNode(treeData, activeNode?.parentId ?? '');
+      if (!parentNode) {
+        return;
+      }
+      if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(parentNode.level)) {
+        const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  
+        return {
+          connectionName: connectionNode?.label ?? '',
+          schemaName: schemaNode?.label ?? '',
+          tableName: tableNode?.label ?? '',
+          category: activeNode?.category ?? '',
+          checkName: activeNode?.label,
+          level: 'table',
+          parentNode,
+        };
+      } else {
+        const columnNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+        const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  
+        return {
+          connectionName: connectionNode?.label ?? '',
+          schemaName: schemaNode?.label ?? '',
+          tableName: tableNode?.label ?? '',
+          columnName: columnNode?.label ?? '',
+          category: activeNode?.category ?? '',
+          checkName: activeNode?.label,
+          level: 'column',
+          parentNode
+        };
+      }
     }
   }, [activeNode]);
 
@@ -219,6 +264,114 @@ const ConnectionPage = () => {
               schemaName={params?.schemaName ?? ''}
               tableName={params?.tableName ?? ''}
             />
+          )}
+          {activeNode?.level ===
+          TREE_LEVEL.CHECK && (
+            <>
+              {params?.parentNode?.level === TREE_LEVEL.TABLE_CHECKS && (
+                <TableAdHockChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.TABLE_DAILY_CHECKS && (
+                <TableCheckpointsUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="daily"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS && (
+                <TableCheckpointsUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="monthly"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS && (
+                <TablePartitionedChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="daily"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS && (
+                <TablePartitionedChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="monthly"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.COLUMN_CHECKS && (
+                <ColumnAdHockChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  columnName={params?.columnName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.COLUMN_DAILY_CHECKS && (
+                <ColumnCheckpointsUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  columnName={params?.columnName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="daily"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS && (
+                <ColumnCheckpointsUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  columnName={params?.columnName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="monthly"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS && (
+                <ColumnPartitionedChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  columnName={params?.columnName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="daily"
+                />
+              )}
+              {params?.parentNode?.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS && (
+                <ColumnPartitionedChecksUIFilterView
+                  connectionName={params?.connectionName ?? ''}
+                  schemaName={params?.schemaName ?? ''}
+                  tableName={params?.tableName ?? ''}
+                  columnName={params?.columnName ?? ''}
+                  category={params?.category ?? ''}
+                  checkName={params?.checkName ?? ''}
+                  timePartitioned="monthly"
+                />
+              )}
+            </>
           )}
         </div>
       </div>
