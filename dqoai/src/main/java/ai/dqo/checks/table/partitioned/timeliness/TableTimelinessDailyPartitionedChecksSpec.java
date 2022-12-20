@@ -16,6 +16,7 @@
 package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -39,6 +40,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("daily_partition_max_days_since_most_recent_event", o -> o.dailyPartitionMaxDaysSinceMostRecentEvent);
+           put("daily_partition_max_days_between_event_and_ingestion", o -> o.dailyPartitionMaxDaysBetweenEventAndIngestion);
         }
     };
 
@@ -46,6 +48,11 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyPartitionMaxDaysSinceMostRecentEvent;
+
+    @JsonPropertyDescription("Calculates maximum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMaxDaysBetweenEventAndIngestionCheckSpec dailyPartitionMaxDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -63,6 +70,24 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
 		this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysSinceMostRecentEvent, dailyPartitionMaxDaysSinceMostRecentEvent));
         this.dailyPartitionMaxDaysSinceMostRecentEvent = dailyPartitionMaxDaysSinceMostRecentEvent;
 		this.propagateHierarchyIdToField(dailyPartitionMaxDaysSinceMostRecentEvent, "daily_partition_max_days_since_most_recent_event");
+    }
+
+    /**
+     * Returns a maximum days between event and ingestion check configuration.
+     * @return Maximum days between event and ingestion check configuration.
+     */
+    public TableMaxDaysBetweenEventAndIngestionCheckSpec getDailyPartitionMaxDaysBetweenEventAndIngestion() {
+        return dailyPartitionMaxDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a maximum days between event and ingestion check configuration.
+     * @param dailyPartitionMaxDaysBetweenEventAndIngestion New maximum days between event and ingestion check.
+     */
+    public void setDailyPartitionMaxDaysBetweenEventAndIngestion(TableMaxDaysBetweenEventAndIngestionCheckSpec dailyPartitionMaxDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysBetweenEventAndIngestion, dailyPartitionMaxDaysBetweenEventAndIngestion));
+        this.dailyPartitionMaxDaysBetweenEventAndIngestion = dailyPartitionMaxDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(dailyPartitionMaxDaysBetweenEventAndIngestion, "daily_partition_max_days_between_event_and_ingestion");
     }
 
     /**

@@ -16,6 +16,7 @@
 package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -39,6 +40,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
+           put("monthly_partition_max_days_between_event_and_ingestion", o -> o.monthlyPartitionMaxDaysBetweenEventAndIngestion);
         }
     };
 
@@ -46,6 +48,11 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent;
+
+    @JsonPropertyDescription("Calculates maximum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMaxDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -65,6 +72,23 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
 		this.propagateHierarchyIdToField(monthlyPartitionMaxDaysSinceMostRecentEvent, "monthly_partition_max_days_since_most_recent_event");
     }
 
+    /**
+     * Returns a maximum days between event and ingestion check configuration.
+     * @return Maximum days between event and ingestion check configuration.
+     */
+    public TableMaxDaysBetweenEventAndIngestionCheckSpec getMonthlyPartitionMaxDaysBetweenEventAndIngestion() {
+        return monthlyPartitionMaxDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a maximum days between event and ingestion check configuration.
+     * @param monthlyPartitionMaxDaysBetweenEventAndIngestion New maximum days between event and ingestion check.
+     */
+    public void setMonthlyPartitionMaxDaysBetweenEventAndIngestion(TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMaxDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysBetweenEventAndIngestion, monthlyPartitionMaxDaysBetweenEventAndIngestion));
+        this.monthlyPartitionMaxDaysBetweenEventAndIngestion = monthlyPartitionMaxDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(monthlyPartitionMaxDaysBetweenEventAndIngestion, "monthly_partition_max_days_between_event_and_ingestion");
+    }
     /**
      * Returns the child map on the spec class with all fields.
      *
