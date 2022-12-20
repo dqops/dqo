@@ -421,9 +421,6 @@ function TreeProvider(props: any) {
   };
 
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
-    if (node.level === TREE_LEVEL.CHECK) {
-      return;
-    }
     const existTab = tabs.find((item) => item.value === node.id.toString());
     if (existTab) {
       setActiveTab(node.id.toString());
