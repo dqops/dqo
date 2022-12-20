@@ -58,6 +58,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_strings_in_set_count", o -> o.monthlyPartitionMinStringsInSetCount);
             put("monthly_partition_min_strings_in_set_percent", o -> o.monthlyPartitionMinStringsInSetPercent);
             put("monthly_partition_max_strings_invalid_email_count", o -> o.monthlyPartitionMaxInvalidEmailCount);
+            put("monthly_partition_min_valid_email_percent", o -> o.monthlyPartitionMinValidEmailPercent);
 
         }
     };
@@ -127,6 +128,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxInvalidEmailCountCheckSpec monthlyPartitionMaxInvalidEmailCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinValidEmailPercentCheckSpec monthlyPartitionMinValidEmailPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -526,6 +530,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxInvalidEmailCount, monthlyPartitionMaxInvalidEmailCount));
         this.monthlyPartitionMaxInvalidEmailCount = monthlyPartitionMaxInvalidEmailCount;
         propagateHierarchyIdToField(monthlyPartitionMaxInvalidEmailCount, "monthly_partition_max_strings_invalid_email_count");
+    }
+
+    /**
+     * Returns a minimum valid email percent check.
+     * @return Minimum valid email percent check.
+     */
+    public ColumnMinValidEmailPercentCheckSpec getMonthlyPartitionMinValidEmailPercent() {
+        return monthlyPartitionMinValidEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid email percent check.
+     * @param monthlyPartitionMinValidEmailPercent Minimum valid email percent check.
+     */
+    public void setMonthlyPartitionMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec monthlyPartitionMinValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinValidEmailPercent, monthlyPartitionMinValidEmailPercent));
+        this.monthlyPartitionMinValidEmailPercent = monthlyPartitionMinValidEmailPercent;
+        propagateHierarchyIdToField(monthlyPartitionMinValidEmailPercent, "monthly_partition_min_valid_email_percent");
     }
 
     /**

@@ -58,6 +58,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
             put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
             put("daily_partition_max_strings_invalid_email_count", o -> o.dailyPartitionMaxInvalidEmailCount);
+            put("daily_partition_min_valid_email_percent", o -> o.dailyPartitionMinValidEmailPercent);
 
         }
     };
@@ -127,6 +128,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInvalidEmailCountCheckSpec dailyPartitionMaxInvalidEmailCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidEmailPercentCheckSpec dailyPartitionMinValidEmailPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -524,6 +528,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxInvalidEmailCount, dailyPartitionMaxInvalidEmailCount));
         this.dailyPartitionMaxInvalidEmailCount = dailyPartitionMaxInvalidEmailCount;
         propagateHierarchyIdToField(dailyPartitionMaxInvalidEmailCount, "daily_partition_max_strings_invalid_email_count");
+    }
+
+    /**
+     * Returns a minimum valid email percent check.
+     * @return Minimum valid email percent check.
+     */
+    public ColumnMinValidEmailPercentCheckSpec getDailyPartitionMinValidEmailPercent() {
+        return dailyPartitionMinValidEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid email percent check.
+     * @param dailyPartitionMinValidEmailPercent Minimum valid email percent check.
+     */
+    public void setDailyPartitionMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec dailyPartitionMinValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValidEmailPercent, dailyPartitionMinValidEmailPercent));
+        this.dailyPartitionMinValidEmailPercent = dailyPartitionMinValidEmailPercent;
+        propagateHierarchyIdToField(dailyPartitionMinValidEmailPercent, "daily_partition_min_valid_email_percent");
     }
 
     /**
