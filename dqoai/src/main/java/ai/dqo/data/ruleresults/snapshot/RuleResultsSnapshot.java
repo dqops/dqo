@@ -48,6 +48,20 @@ public class RuleResultsSnapshot extends TableDataSnapshot {
     }
 
     /**
+     * Default constructor that creates a snapshot.
+     * @param connectionName Connection name.
+     * @param tableName Table name (schema.table).
+     * @param storageService Backend storage service used to load missing data and save the results.
+     * @param columnNames Column names that will be loaded.
+     */
+    public RuleResultsSnapshot(String connectionName,
+                               PhysicalTableName tableName,
+                               ParquetPartitionStorageService storageService,
+                               String[] columnNames) {
+        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), columnNames);
+    }
+
+    /**
      * Creates the storage settings for storing the rule results.
      * @return Storage settings.
      */

@@ -226,4 +226,33 @@ public class HierarchyId {
 
         return (PhysicalTableName)this.elements[3];
     }
+
+    /**
+     * Retrieves the column name from a hierarchy id.
+     * @return PColumn name or null when the hierarchy id is not within the connections / [connection] / tables / [tablename] / columns / [here is the column name] hierarchy.
+     */
+    @JsonIgnore
+    public String getColumnName() {
+        if (this.elements.length < 7) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[2], "tables")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[4], "spec")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[5], "columns")) {
+            return null;
+        }
+
+        return (String)this.elements[6];
+    }
 }

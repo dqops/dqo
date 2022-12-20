@@ -583,7 +583,6 @@ public class TablesController {
         return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitionedChecks), HttpStatus.OK); // 200
     }
 
-
     /**
      * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.

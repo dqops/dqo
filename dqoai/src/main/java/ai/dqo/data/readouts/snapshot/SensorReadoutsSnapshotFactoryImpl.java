@@ -53,4 +53,18 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
         Table newSensorReadouts = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable("new_sensor_readouts");
         return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, newSensorReadouts);
     }
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the sensor readout storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Rule result snapshot connected to a storage service.
+     */
+    @Override
+    public SensorReadoutsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+        return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+    }
 }

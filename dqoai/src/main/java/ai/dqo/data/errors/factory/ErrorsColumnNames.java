@@ -25,4 +25,18 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
      * Column name that stores the error timestamp using the local timestamp.
      */
     public static final String ERROR_TIMESTAMP_COLUMN_NAME = "error_timestamp";
+
+    /**
+     * List of column names that should be loaded from the parquet files when the recent error overview is needed.
+     */
+    public static final String[] COLUMN_NAMES_FOR_ERRORS_OVERVIEW = new String[] {
+            COLUMN_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            DATA_STREAM_NAME_COLUMN_NAME,
+            TIME_PERIOD_COLUMN_NAME
+    };
 }

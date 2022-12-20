@@ -36,12 +36,13 @@ public class TableDataSnapshot {
     private final ParquetPartitionStorageService storageService;
     private final FileStorageSettings storageSettings;
     private final TableDataChanges tableDataChanges;
+    private final String[] columnNames;
     private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
     private LocalDate firstLoadedMonth;
     private LocalDate lastLoadedMonth;
 
     /**
-     * Creates a new snapshot of data for a single parquet table with results for one connection and physical table.
+     * Creates a new writable snapshot of data for a single parquet table with results for one connection and physical table.
      * @param connectionName Connection name.
      * @param tableName Table name.
      * @param storageService Storage service dependency.
@@ -58,6 +59,30 @@ public class TableDataSnapshot {
         this.storageService = storageService;
         this.storageSettings = storageSettings;
         this.tableDataChanges = new TableDataChanges(newResults);
+        this.columnNames = null;
+    }
+
+    /**
+     * Creates a new read-only snapshot of data for a single parquet table with results for one connection and physical table.
+     * The tables loaded from parquet files will be limited to the set of columns in the <code>columnNames</code> list.
+     * @param connectionName Connection name.
+     * @param tableName Table name.
+     * @param storageService Storage service dependency.
+     * @param storageSettings Configuration of the storage settings (folder names, parquet file names, column names).
+     * @param columnNames Array of column names that will be loaded.
+     */
+    public TableDataSnapshot(String connectionName,
+                             PhysicalTableName tableName,
+                             ParquetPartitionStorageService storageService,
+                             FileStorageSettings storageSettings,
+                             String[] columnNames) {
+        assert columnNames != null && columnNames.length > 0;
+        this.connectionName = connectionName;
+        this.tableName = tableName;
+        this.storageService = storageService;
+        this.storageSettings = storageSettings;
+        this.tableDataChanges = null;
+        this.columnNames = columnNames;
     }
 
     /**
@@ -74,6 +99,15 @@ public class TableDataSnapshot {
      */
     public PhysicalTableName getTableName() {
         return tableName;
+    }
+
+    /**
+     * Returns an optional list of column names that should be loaded. Only read-only snapshot could use a subset of named columns.
+     * When the array of column names is null then all columns are loaded.
+     * @return Array of column names to load in read-only snapshots.
+     */
+    public String[] getColumnNames() {
+        return columnNames;
     }
 
     /**
@@ -147,7 +181,7 @@ public class TableDataSnapshot {
             this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
             this.lastLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings);
+                    this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.columnNames);
             if (this.loadedMonthlyPartitions == null) {
                 this.loadedMonthlyPartitions = new LinkedHashMap<>();
             }
@@ -161,7 +195,7 @@ public class TableDataSnapshot {
             this.firstLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(startMonth);
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings);
+                    this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.columnNames);
             this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
         }
 
@@ -172,7 +206,7 @@ public class TableDataSnapshot {
             this.lastLoadedMonth = truncatedEndMonth;
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
-                    this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings);
+                    this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.columnNames);
             this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
         }
     }
@@ -205,6 +239,10 @@ public class TableDataSnapshot {
      * Rows identified by an ID column are deleted.
      */
     public void save() {
+        if (this.columnNames != null) {
+            throw new DataStorageIOException("Read-only snapshots do not support saving.");
+        }
+
         if (this.loadedMonthlyPartitions == null && this.tableDataChanges.getNewOrChangedRows().rowCount() == 0) {
             if (this.tableDataChanges.getDeletedIds().size() == 0) {
                 return; // an empty snapshot, not loaded and has no changes

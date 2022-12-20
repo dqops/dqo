@@ -54,4 +54,18 @@ public class ProfilingResultsSnapshotFactoryImpl implements ProfilingResultsSnap
         Table newProfilingResultsTable = this.profilingResultsTableFactory.createEmptyProfilingResultsTable("new_profiling_results");
         return new ProfilingResultsSnapshot(connectionName, physicalTableName, this.storageService, newProfilingResultsTable);
     }
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the profiling results storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Profiling results snapshot connected to a storage service.
+     */
+    @Override
+    public ProfilingResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+        return new ProfilingResultsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+    }
 }
