@@ -18,6 +18,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -42,6 +43,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
            put("monthly_checkpoint_max_days_since_most_recent_event", o -> o.monthlyCheckpointMaxDaysSinceMostRecentEvent);
            put("monthly_checkpoint_max_days_since_most_recent_ingestion", o -> o.monthlyCheckpointMaxDaysSinceMostRecentIngestion);
            put("monthly_checkpoint_max_days_between_event_and_ingestion", o -> o.monthlyCheckpointMaxDaysBetweenEventAndIngestion);
+           put("monthly_checkpoint_min_days_between_event_and_ingestion", o -> o.monthlyCheckpointMinDaysBetweenEventAndIngestion);
         }
     };
 
@@ -59,6 +61,11 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyCheckpointMaxDaysBetweenEventAndIngestion;
+
+    @JsonPropertyDescription("Monthly checkpoint calculating minimum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMinDaysBetweenEventAndIngestionCheckSpec monthlyCheckpointMinDaysBetweenEventAndIngestion;
 
     /**
      * Returns the maximum days since the most recent event check configuration.
@@ -112,6 +119,24 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDaysBetweenEventAndIngestion, monthlyCheckpointMaxDaysBetweenEventAndIngestion));
         this.monthlyCheckpointMaxDaysBetweenEventAndIngestion = monthlyCheckpointMaxDaysBetweenEventAndIngestion;
         this.propagateHierarchyIdToField(monthlyCheckpointMaxDaysBetweenEventAndIngestion, "monthly_checkpoint_max_days_between_event_and_ingestion");
+    }
+
+    /**
+     * Returns a minimum days between event and ingestion check configuration.
+     * @return Minimum days between event and ingestion check configuration.
+     */
+    public TableMinDaysBetweenEventAndIngestionCheckSpec getMonthlyCheckpointMinDaysBetweenEventAndIngestion() {
+        return monthlyCheckpointMinDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a minimum days since the most recent event.
+     * @param monthlyCheckpointMinDaysBetweenEventAndIngestion New minimum days since the most recent event check.
+     */
+    public void setMonthlyCheckpointMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec monthlyCheckpointMinDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinDaysBetweenEventAndIngestion, monthlyCheckpointMinDaysBetweenEventAndIngestion));
+        this.monthlyCheckpointMinDaysBetweenEventAndIngestion = monthlyCheckpointMinDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(monthlyCheckpointMinDaysBetweenEventAndIngestion, "monthly_checkpoint_min_days_between_event_and_ingestion");
     }
 
         /**

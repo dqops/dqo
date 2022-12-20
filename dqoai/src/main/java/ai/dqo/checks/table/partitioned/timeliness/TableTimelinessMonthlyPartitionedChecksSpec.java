@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -43,6 +44,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
            put("monthly_partition_max_days_since_most_recent_ingestion", o -> o.monthlyPartitionMaxDaysSinceMostRecentIngestion);
            put("monthly_partition_max_days_between_event_and_ingestion", o -> o.monthlyPartitionMaxDaysBetweenEventAndIngestion);
+           put("monthly_partition_min_days_between_event_and_ingestion", o -> o.monthlyPartitionMinDaysBetweenEventAndIngestion);
         }
     };
 
@@ -60,6 +62,11 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMaxDaysBetweenEventAndIngestion;
+
+    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMinDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMinDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -114,6 +121,25 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         this.monthlyPartitionMaxDaysBetweenEventAndIngestion = monthlyPartitionMaxDaysBetweenEventAndIngestion;
         this.propagateHierarchyIdToField(monthlyPartitionMaxDaysBetweenEventAndIngestion, "monthly_partition_max_days_between_event_and_ingestion");
     }
+
+    /**
+     * Returns a minimum days between event and ingestion check configuration.
+     * @return Minimum days between event and ingestion check configuration.
+     */
+    public TableMinDaysBetweenEventAndIngestionCheckSpec getMonthlyPartitionMinDaysBetweenEventAndIngestion() {
+        return monthlyPartitionMinDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a minimum days between event and ingestion check configuration.
+     * @param monthlyPartitionMinDaysBetweenEventAndIngestion New minimum days between event and ingestion check.
+     */
+    public void setMonthlyPartitionMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMinDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinDaysBetweenEventAndIngestion, monthlyPartitionMinDaysBetweenEventAndIngestion));
+        this.monthlyPartitionMinDaysBetweenEventAndIngestion = monthlyPartitionMinDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(monthlyPartitionMinDaysBetweenEventAndIngestion, "monthly_partition_min_days_between_event_and_ingestion");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

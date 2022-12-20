@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -43,6 +44,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
            put("daily_partition_max_days_since_most_recent_event", o -> o.dailyPartitionMaxDaysSinceMostRecentEvent);
            put("daily_partition_max_days_since_most_recent_ingestion", o -> o.dailyPartitionMaxDaysSinceMostRecentIngestion);
            put("daily_partition_max_days_between_event_and_ingestion", o -> o.dailyPartitionMaxDaysBetweenEventAndIngestion);
+           put("daily_partition_min_days_between_event_and_ingestion", o -> o.dailyPartitionMinDaysBetweenEventAndIngestion);
         }
     };
 
@@ -60,6 +62,11 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysBetweenEventAndIngestionCheckSpec dailyPartitionMaxDaysBetweenEventAndIngestion;
+
+    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMinDaysBetweenEventAndIngestionCheckSpec dailyPartitionMinDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -113,6 +120,24 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysBetweenEventAndIngestion, dailyPartitionMaxDaysBetweenEventAndIngestion));
         this.dailyPartitionMaxDaysBetweenEventAndIngestion = dailyPartitionMaxDaysBetweenEventAndIngestion;
         this.propagateHierarchyIdToField(dailyPartitionMaxDaysBetweenEventAndIngestion, "daily_partition_max_days_between_event_and_ingestion");
+    }
+
+    /**
+     * Returns a minimum days between event and ingestion check configuration.
+     * @return Minimum days between event and ingestion check configuration.
+     */
+    public TableMinDaysBetweenEventAndIngestionCheckSpec getDailyPartitionMinDaysBetweenEventAndIngestion() {
+        return dailyPartitionMinDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a minimum days between event and ingestion check configuration.
+     * @param dailyPartitionMinDaysBetweenEventAndIngestion New minimum days between event and ingestion check.
+     */
+    public void setDailyPartitionMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec dailyPartitionMinDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinDaysBetweenEventAndIngestion, dailyPartitionMinDaysBetweenEventAndIngestion));
+        this.dailyPartitionMinDaysBetweenEventAndIngestion = dailyPartitionMinDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(dailyPartitionMinDaysBetweenEventAndIngestion, "daily_partition_min_days_between_event_and_ingestion");
     }
 
     /**

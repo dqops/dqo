@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +42,7 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
             put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
             put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
             put("max_days_between_event_and_ingestion", o -> o.maxDaysBetweenEventAndIngestion);
+            put("min_days_between_event_and_ingestion", o -> o.minDaysBetweenEventAndIngestion);
         }
     };
 
@@ -52,6 +54,9 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Calculates maximum days between event and ingestion")
     private TableMaxDaysBetweenEventAndIngestionCheckSpec maxDaysBetweenEventAndIngestion;
+
+    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
+    private TableMinDaysBetweenEventAndIngestionCheckSpec minDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -106,6 +111,24 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxDaysBetweenEventAndIngestion, maxDaysBetweenEventAndIngestion));
         this.maxDaysBetweenEventAndIngestion = maxDaysBetweenEventAndIngestion;
         propagateHierarchyIdToField(maxDaysBetweenEventAndIngestion, "max_days_between_event_and_ingestion");
+    }
+
+    /**
+     * Returns a minimum days between event and ingestion check configuration.
+     * @return Minimum days between event and ingestion check configuration.
+     */
+    public TableMinDaysBetweenEventAndIngestionCheckSpec getMinDaysBetweenEventAndIngestion() {
+        return minDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a minimum days between event and ingestion check configuration.
+     * @param minDaysBetweenEventAndIngestion Minimum days since the most recent event check.
+     */
+    public void setMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec minDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.minDaysBetweenEventAndIngestion, minDaysBetweenEventAndIngestion));
+        this.minDaysBetweenEventAndIngestion = minDaysBetweenEventAndIngestion;
+        propagateHierarchyIdToField(minDaysBetweenEventAndIngestion, "min_days_between_event_and_ingestion");
     }
 
     /**

@@ -18,6 +18,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -42,6 +43,7 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
            put("daily_checkpoint_max_days_since_most_recent_event", o -> o.dailyCheckpointMaxDaysSinceMostRecentEvent);
            put("daily_checkpoint_max_days_since_most_recent_ingestion", o -> o.dailyCheckpointMaxDaysSinceMostRecentIngestion);
            put("daily_checkpoint_max_days_between_event_and_ingestion", o -> o.dailyCheckpointMaxDaysBetweenEventAndIngestion);
+           put("daily_checkpoint_min_days_between_event_and_ingestion", o -> o.dailyCheckpointMinDaysBetweenEventAndIngestion);
         }
     };
 
@@ -59,6 +61,11 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysBetweenEventAndIngestionCheckSpec dailyCheckpointMaxDaysBetweenEventAndIngestion;
+
+    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMinDaysBetweenEventAndIngestionCheckSpec dailyCheckpointMinDaysBetweenEventAndIngestion;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -112,6 +119,24 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDaysBetweenEventAndIngestion, dailyCheckpointMaxDaysBetweenEventAndIngestion));
         this.dailyCheckpointMaxDaysBetweenEventAndIngestion = dailyCheckpointMaxDaysBetweenEventAndIngestion;
         this.propagateHierarchyIdToField(dailyCheckpointMaxDaysBetweenEventAndIngestion, "daily_checkpoint_max_days_between_event_and_ingestion");
+    }
+
+    /**
+     * Returns a minimum days between event and ingestion check configuration.
+     * @return Minimum days between event and ingestion check configuration.
+     */
+    public TableMinDaysBetweenEventAndIngestionCheckSpec getDailyCheckpointMinDaysBetweenEventAndIngestion() {
+        return dailyCheckpointMinDaysBetweenEventAndIngestion;
+    }
+
+    /**
+     * Sets a minimum days between event and ingestion check configuration.
+     * @param dailyCheckpointMinDaysBetweenEventAndIngestion New minimum days between event and ingestion check.
+     */
+    public void setDailyCheckpointMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec dailyCheckpointMinDaysBetweenEventAndIngestion) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinDaysBetweenEventAndIngestion, dailyCheckpointMinDaysBetweenEventAndIngestion));
+        this.dailyCheckpointMinDaysBetweenEventAndIngestion = dailyCheckpointMinDaysBetweenEventAndIngestion;
+        this.propagateHierarchyIdToField(dailyCheckpointMinDaysBetweenEventAndIngestion, "daily_checkpoint_min_days_between_event_and_ingestion");
     }
 
     /**
