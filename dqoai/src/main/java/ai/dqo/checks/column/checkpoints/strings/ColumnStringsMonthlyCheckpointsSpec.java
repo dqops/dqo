@@ -59,6 +59,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_min_strings_in_set_percent", o -> o.monthlyCheckpointMinStringsInSetPercent);
             put("monthly_checkpoint_max_strings_invalid_email_count", o -> o.monthlyCheckpointMaxInvalidEmailCount);
             put("monthly_checkpoint_min_valid_email_percent", o -> o.monthlyCheckpointMinValidEmailPercent);
+            put("monthly_checkpoint_max_not_match_regex_count", o -> o.monthlyCheckpointMaxNotMatchRegexCount);
 
         }
     };
@@ -131,6 +132,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinValidEmailPercentCheckSpec monthlyCheckpointMinValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMaxNotMatchRegexCountCheckSpec monthlyCheckpointMaxNotMatchRegexCount;
 
     /**
      * Returns a maximum string length below check.
@@ -543,6 +547,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinValidEmailPercent, monthlyCheckpointMinValidEmailPercent));
         this.monthlyCheckpointMinValidEmailPercent = monthlyCheckpointMinValidEmailPercent;
         propagateHierarchyIdToField(monthlyCheckpointMinValidEmailPercent, "monthly_checkpoint_min_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnMaxNotMatchRegexCountCheckSpec getMonthlyCheckpointMaxNotMatchRegexCount() {
+        return monthlyCheckpointMaxNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param monthlyCheckpointMaxNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setMonthlyCheckpointMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec monthlyCheckpointMaxNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNotMatchRegexCount, monthlyCheckpointMaxNotMatchRegexCount));
+        this.monthlyCheckpointMaxNotMatchRegexCount = monthlyCheckpointMaxNotMatchRegexCount;
+        propagateHierarchyIdToField(monthlyCheckpointMaxNotMatchRegexCount, "monthly_checkpoint_max_not_match_regex_count");
     }
 
     /**
