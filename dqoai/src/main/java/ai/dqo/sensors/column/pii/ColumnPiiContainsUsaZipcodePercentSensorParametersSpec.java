@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percent of values that contains a USA zip code number in a column.
+ * Column level sensor that calculates the percent of values that contain a USA zip code number in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnPiiMaxContainsUsaZipcodePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiMaxContainsUsaZipcodePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiContainsUsaZipcodePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class ColumnPiiMaxContainsUsaZipcodePercentSensorParametersSpec extends A
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/pii/pii_max_contains_usa_zipcode_percent";
+        return "column/pii/contains_usa_zipcode_percent";
     }
 }
