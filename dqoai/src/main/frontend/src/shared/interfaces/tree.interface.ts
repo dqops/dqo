@@ -27,4 +27,5 @@ export interface CustomTreeNode extends TreeNode {
   run_checks_job_template?: CheckSearchFilters;
   run_profilers_job_template?: ProfilerSearchFilters;
   open?: boolean;
+  category?: string;
 }
