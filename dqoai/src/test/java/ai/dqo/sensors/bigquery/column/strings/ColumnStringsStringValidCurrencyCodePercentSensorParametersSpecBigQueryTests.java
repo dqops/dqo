@@ -39,7 +39,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec sut;
-    private final String valuesString = "'ALL',\t'AFN',\t'ARS',\t'AWG',\t'AUD',\t'AZN',\t'BSD',\t'BBD',\t'BYN',\t'BZD',\t'BMD',\t'BOB',\t'BAM',\t'BWP',\t'BGN',\t'BRL',\t'BND',\t'KHR',\t'CAD',\t'KYD',\t'CLP',\t'CNY',\t'COP',\t'CRC',\t'HRK',\t'CUP',\t'CZK',\t'DKK',\t'DOP',\t'XCD',\t'EGP',\t'SVC',\t'EUR',\t'FKP',\t'FJD',\t'GHS',\t'GIP',\t'GTQ',\t'GGP',\t'GYD',\t'HNL',\t'HKD',\t'HUF',\t'ISK',\t'INR',\t'IDR',\t'IRR',\t'IMP',\t'ILS',\t'JMD',\t'JPY',\t'JEP',\t'KZT',\t'KPW',\t'KRW',\t'KGS',\t'LAK',\t'LBP',\t'LRD',\t'MKD',\t'MYR',\t'MUR',\t'MXN',\t'MNT',\t'MZN',\t'NAD',\t'NPR',\t'ANG',\t'NZD',\t'NIO',\t'NGN',\t'NOK',\t'OMR',\t'PKR',\t'PAB',\t'PYG',\t'PEN',\t'PHP',\t'PLN',\t'QAR',\t'RON',\t'RUB',\t'SHP',\t'SAR',\t'RSD',\t'SCR',\t'SGD',\t'SBD',\t'SOS',\t'ZAR',\t'LKR',\t'SEK',\t'CHF',\t'SRD',\t'SYP',\t'TWD',\t'THB',\t'TTD',\t'TRY',\t'TVD',\t'UAH',\t'AED',\t'GBP',\t'USD',\t'UYU',\t'UZS',\t'VEF',\t'VND',\t'YER',\t'ZWD',\t'Lek',\t'؋',\t'$',\t'ƒ',\t'₼',\t'Br',\t'BZ$',\t'$b',\t'KM',\t'P',\t'лв',\t'R$',\t'៛',\t'¥',\t'₡',\t'kn',\t'₱',\t'Kč',\t'kr',\t'RD$', '£',\t'€',\t'¢',\t'Q',\t'L',\t'Ft',\t'₹',\t'Rp',\t'﷼',\t'₪',\t'J$',\t'₩',\t'₭',\t'ден',\t'RM',\t'₨',\t'₮',\t'د.إ',\t'MT',\t'C$',\t'₦',\t'B/.',\t'Gs',\t'S/.', 'zł',\t'lei',\t'Дин.',\t'S',\t'R',\t'NT$',\t'฿',\t'TT$',\t'₺',\t'₴',\t'$U',\t'Bs',\t'₫', 'Z$'";
+    private final String valuesString = "'ALL',\t'AFN',\t'ARS',\t'AWG',\t'AUD',\t'AZN',\t'BSD',\t'BBD',\t'BYN',\t'BZD',\t'BMD',\t'BOB',\t'BAM',\t'BWP',\t'BGN',\t'BRL',\t'BND',\t'KHR',\t'CAD',\t'KYD',\t'CLP',\t'CNY',\t'COP',\t'CRC',\t'HRK',\t'CUP',\t'CZK',\t'DKK',\t'DOP',\t'XCD',\t'EGP',\t'SVC',\t'EUR',\t'FKP',\t'FJD',\t'GHS',\t'GIP',\t'GTQ',\t'GGP',\t'GYD',\t'HNL',\t'HKD',\t'HUF',\t'ISK',\t'INR',\t'IDR',\t'IRR',\t'IMP',\t'ILS',\t'JMD',\t'JPY',\t'JEP',\t'KZT',\t'KPW',\t'KRW',\t'KGS',\t'LAK',\t'LBP',\t'LRD',\t'MKD',\t'MYR',\t'MUR',\t'MXN',\t'MNT',\t'MZN',\t'NAD',\t'NPR',\t'ANG',\t'NZD',\t'NIO',\t'NGN',\t'NOK',\t'OMR',\t'PKR',\t'PAB',\t'PYG',\t'PEN',\t'PHP',\t'PLN',\t'QAR',\t'RON',\t'RUB',\t'SHP',\t'SAR',\t'RSD',\t'SCR',\t'SGD',\t'SBD',\t'SOS',\t'ZAR',\t'LKR',\t'SEK',\t'CHF',\t'SRD',\t'SYP',\t'TWD',\t'THB',\t'TTD',\t'TRY',\t'TVD',\t'UAH',\t'AED',\t'GBP',\t'USD',\t'UYU',\t'UZS',\t'VEF',\t'VND',\t'YER',\t'ZWD',\t'LEK',\t'؋',\t'$',\t'Ƒ',\t'₼',\t'BR',\t'BZ$',\t'$B',\t'KM',\t'P',\t'ЛВ',\t'R$',\t'៛',\t'¥',\t'₡',\t'KN',\t'₱',\t'KČ',\t'KR',\t'RD$', '£',\t'€',\t'¢',\t'Q',\t'L',\t'FT',\t'₹',\t'RP',\t'﷼',\t'₪',\t'J$',\t'₩',\t'₭',\t'ДЕН',\t'RM',\t'₨',\t'₮',\t'د.إ',\t'MT',\t'C$',\t'₦',\t'B/.',\t'GS',\t'S/.', 'ZŁ',\t'LEI',\t'ДИН.',\t'S',\t'R',\t'NT$',\t'฿',\t'TT$',\t'₺',\t'₴',\t'$U',\t'BS',\t'₫', 'Z$'";
     private UserHomeContext userHomeContext;
     private ColumnMinValidCurrencyCodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -95,6 +95,11 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
         Assertions.assertEquals("column/strings/string_valid_currency_code_percent", this.sut.getSensorDefinitionName());
+    }
+
+    @Test
+    void areValuesUppercase() {
+        Assertions.assertEquals(this.valuesString.toUpperCase(), this.valuesString);
     }
 
     @Test
