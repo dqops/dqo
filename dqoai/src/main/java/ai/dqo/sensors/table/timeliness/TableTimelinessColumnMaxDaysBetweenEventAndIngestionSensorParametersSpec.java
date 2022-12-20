@@ -52,6 +52,6 @@ public class TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParameter
      */
     @Override
     public String getSensorDefinitionName() {
-        return "/table/timeliness/max_days_between_event_and_ingestion";
+        return "table/timeliness/max_days_between_event_and_ingestion";
     }
 }
