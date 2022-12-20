@@ -1,11 +1,11 @@
 /*
- * Copyright © 2022 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.column.strings;
+package ai.dqo.sensors.bigquery.column.sql;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMinValueCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,18 +30,17 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.sql.ColumnSqlAggregatedExpressionSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec sut;
-    private final String valuesString = "'ALL',\t'AFN',\t'ARS',\t'AWG',\t'AUD',\t'AZN',\t'BSD',\t'BBD',\t'BYN',\t'BZD',\t'BMD',\t'BOB',\t'BAM',\t'BWP',\t'BGN',\t'BRL',\t'BND',\t'KHR',\t'CAD',\t'KYD',\t'CLP',\t'CNY',\t'COP',\t'CRC',\t'HRK',\t'CUP',\t'CZK',\t'DKK',\t'DOP',\t'XCD',\t'EGP',\t'SVC',\t'EUR',\t'FKP',\t'FJD',\t'GHS',\t'GIP',\t'GTQ',\t'GGP',\t'GYD',\t'HNL',\t'HKD',\t'HUF',\t'ISK',\t'INR',\t'IDR',\t'IRR',\t'IMP',\t'ILS',\t'JMD',\t'JPY',\t'JEP',\t'KZT',\t'KPW',\t'KRW',\t'KGS',\t'LAK',\t'LBP',\t'LRD',\t'MKD',\t'MYR',\t'MUR',\t'MXN',\t'MNT',\t'MZN',\t'NAD',\t'NPR',\t'ANG',\t'NZD',\t'NIO',\t'NGN',\t'NOK',\t'OMR',\t'PKR',\t'PAB',\t'PYG',\t'PEN',\t'PHP',\t'PLN',\t'QAR',\t'RON',\t'RUB',\t'SHP',\t'SAR',\t'RSD',\t'SCR',\t'SGD',\t'SBD',\t'SOS',\t'ZAR',\t'LKR',\t'SEK',\t'CHF',\t'SRD',\t'SYP',\t'TWD',\t'THB',\t'TTD',\t'TRY',\t'TVD',\t'UAH',\t'AED',\t'GBP',\t'USD',\t'UYU',\t'UZS',\t'VEF',\t'VND',\t'YER',\t'ZWD',\t'LEK',\t'؋',\t'$',\t'Ƒ',\t'₼',\t'BR',\t'BZ$',\t'$B',\t'KM',\t'P',\t'ЛВ',\t'R$',\t'៛',\t'¥',\t'₡',\t'KN',\t'₱',\t'KČ',\t'KR',\t'RD$', '£',\t'€',\t'¢',\t'Q',\t'L',\t'FT',\t'₹',\t'RP',\t'﷼',\t'₪',\t'J$',\t'₩',\t'₭',\t'ДЕН',\t'RM',\t'₨',\t'₮',\t'د.إ',\t'MT',\t'C$',\t'₦',\t'B/.',\t'GS',\t'S/.', 'ZŁ',\t'LEI',\t'ДИН.',\t'S',\t'R',\t'NT$',\t'฿',\t'TT$',\t'₺',\t'₴',\t'$U',\t'BS',\t'₫', 'Z$'";
+public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinValidCurrencyCodePercentCheckSpec checkSpec;
+    private ColumnSqlAggregatedExpressionMinValueCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -54,34 +53,48 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+		this.sut = new ColumnSqlAggregatedExpressionSensorParametersSpec();
+        this.sut.setSqlExpression("SUM({table}.{column})");
+        this.sut.setFilter("{table}.date > DATE(2022, 2, 4)");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinValidCurrencyCodePercentCheckSpec();
+        this.checkSpec = new ColumnSqlAggregatedExpressionMinValueCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_string", this.checkSpec);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "length_string", this.checkSpec, timeScale);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_string", this.checkSpec, timeScale, timeSeriesColumn);
-    }
-
-    private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale, timeSeriesColumn);
     }
 
     private String getSubstitutedFilter(String tableName) {
         // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
         return this.checkSpec.getParameters().getFilter();
+    }
+
+    private String getSubstitutedSqlExpression(SensorExecutionRunParameters runParameters, String tableName, String columnName) {
+        String fullTableName = String.format("`%s`.`%s`.`%s`.%s",
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                tableName);
+
+        String fullColumnName = String.format("`%s`", columnName);
+
+        return this.checkSpec.getParameters().getSqlExpression()
+                .replace("{table}", fullTableName).replace("{column}", fullColumnName);
+    }
+
+    private String getTableColumnName(SensorExecutionRunParameters runParameters) {
+        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
     }
 
     @Test
@@ -94,12 +107,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_valid_currency_code_percent", this.sut.getSensorDefinitionName());
-    }
-
-    @Test
-    void areValuesUppercase() {
-        Assertions.assertEquals(this.valuesString.toUpperCase(), this.valuesString);
+        Assertions.assertEquals("column/sql/sql_aggregated_expression", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -110,22 +118,12 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+                (%s) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -146,24 +144,14 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`date` AS time_period
+                (%s) AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -178,24 +166,14 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                (%s) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -210,24 +188,14 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`date` AS time_period
+                (%s) AS actual_value, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
             ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -242,29 +210,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`length_int` AS stream_level_1
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
             ORDER BY stream_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -277,29 +235,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                    DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`length_int` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -312,29 +260,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`length_int` AS stream_level_1, analyzed_table.`date` AS time_period
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
             ORDER BY stream_level_1, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -355,29 +293,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -392,29 +320,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -429,29 +347,19 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
                         DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
+                (%s) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_string` AS stream_level_3, analyzed_table.`date` AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
 
         Assertions.assertEquals(String.format(target_query,
-                this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.getSubstitutedSqlExpression(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),

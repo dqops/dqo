@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.column.strings;
+package ai.dqo.sensors.bigquery.column.pii;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,18 +30,18 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiContainsUsaZipcodePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec sut;
-    private final String valuesString = "'ALL',\t'AFN',\t'ARS',\t'AWG',\t'AUD',\t'AZN',\t'BSD',\t'BBD',\t'BYN',\t'BZD',\t'BMD',\t'BOB',\t'BAM',\t'BWP',\t'BGN',\t'BRL',\t'BND',\t'KHR',\t'CAD',\t'KYD',\t'CLP',\t'CNY',\t'COP',\t'CRC',\t'HRK',\t'CUP',\t'CZK',\t'DKK',\t'DOP',\t'XCD',\t'EGP',\t'SVC',\t'EUR',\t'FKP',\t'FJD',\t'GHS',\t'GIP',\t'GTQ',\t'GGP',\t'GYD',\t'HNL',\t'HKD',\t'HUF',\t'ISK',\t'INR',\t'IDR',\t'IRR',\t'IMP',\t'ILS',\t'JMD',\t'JPY',\t'JEP',\t'KZT',\t'KPW',\t'KRW',\t'KGS',\t'LAK',\t'LBP',\t'LRD',\t'MKD',\t'MYR',\t'MUR',\t'MXN',\t'MNT',\t'MZN',\t'NAD',\t'NPR',\t'ANG',\t'NZD',\t'NIO',\t'NGN',\t'NOK',\t'OMR',\t'PKR',\t'PAB',\t'PYG',\t'PEN',\t'PHP',\t'PLN',\t'QAR',\t'RON',\t'RUB',\t'SHP',\t'SAR',\t'RSD',\t'SCR',\t'SGD',\t'SBD',\t'SOS',\t'ZAR',\t'LKR',\t'SEK',\t'CHF',\t'SRD',\t'SYP',\t'TWD',\t'THB',\t'TTD',\t'TRY',\t'TVD',\t'UAH',\t'AED',\t'GBP',\t'USD',\t'UYU',\t'UZS',\t'VEF',\t'VND',\t'YER',\t'ZWD',\t'LEK',\t'؋',\t'$',\t'Ƒ',\t'₼',\t'BR',\t'BZ$',\t'$B',\t'KM',\t'P',\t'ЛВ',\t'R$',\t'៛',\t'¥',\t'₡',\t'KN',\t'₱',\t'KČ',\t'KR',\t'RD$', '£',\t'€',\t'¢',\t'Q',\t'L',\t'FT',\t'₹',\t'RP',\t'﷼',\t'₪',\t'J$',\t'₩',\t'₭',\t'ДЕН',\t'RM',\t'₨',\t'₮',\t'د.إ',\t'MT',\t'C$',\t'₦',\t'B/.',\t'GS',\t'S/.', 'ZŁ',\t'LEI',\t'ДИН.',\t'S',\t'R',\t'NT$',\t'฿',\t'TT$',\t'₺',\t'₴',\t'$U',\t'BS',\t'₫', 'Z$'";
+public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnPiiContainsUsaZipcodePercentSensorParametersSpec sut;
+    private final String sensorRegex = "r\"[0-9]{5}(?:-[0-9]{4})?\"";
     private UserHomeContext userHomeContext;
-    private ColumnMinValidCurrencyCodePercentCheckSpec checkSpec;
+    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -54,12 +54,12 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec();
+		this.sut = new ColumnPiiContainsUsaZipcodePercentSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinValidCurrencyCodePercentCheckSpec();
+        this.checkSpec = new ColumnMaxPiiContainsUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -94,12 +94,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_valid_currency_code_percent", this.sut.getSensorDefinitionName());
-    }
-
-    @Test
-    void areValuesUppercase() {
-        Assertions.assertEquals(this.valuesString.toUpperCase(), this.valuesString);
+        Assertions.assertEquals("column/pii/contains_usa_zipcode_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -114,8 +109,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -125,7 +122,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -150,8 +147,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -163,7 +162,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -182,8 +181,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -195,7 +196,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -214,8 +215,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -227,7 +230,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -251,8 +254,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -264,7 +269,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -286,8 +291,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -299,7 +306,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -321,8 +328,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -334,7 +343,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -364,8 +373,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -377,7 +388,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -401,8 +412,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -414,7 +427,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
@@ -438,8 +451,10 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN UPPER(%s) IN (%s)
-                                THEN 1
+                            WHEN REGEXP_CONTAINS(
+                                SAFE_CAST(%s AS STRING),
+                                %s
+                            ) THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
@@ -451,7 +466,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
-                this.valuesString,
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getTarget().getSchemaName(),
                 runParameters.getTable().getTarget().getTableName(),
