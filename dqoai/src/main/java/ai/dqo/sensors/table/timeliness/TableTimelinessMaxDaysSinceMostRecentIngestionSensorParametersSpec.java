@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessColumnMaxDaysSinceMostRecentIngestionSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessColumnMaxDaysSinceMostRecentIngestionSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableTimelinessMaxDaysSinceMostRecentIngestionSensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMaxDaysSinceMostRecentIngestionSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
