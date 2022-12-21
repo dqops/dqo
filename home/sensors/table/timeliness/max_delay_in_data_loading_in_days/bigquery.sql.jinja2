@@ -1,11 +1,13 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 SELECT
-    MAX(
-        TIMESTAMP_DIFF(
-            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP),
-            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP),
-            MILLISECOND
-        )
+    TIMESTAMP_DIFF(
+        MAX(
+            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP)
+        ),
+        MAX(
+            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+        ),
+        MILLISECOND
     )
     / 24.0 / 3600.0 / 1000.0 AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}

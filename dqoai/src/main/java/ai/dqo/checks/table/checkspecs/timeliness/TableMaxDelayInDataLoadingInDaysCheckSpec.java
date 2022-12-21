@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,8 +38,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMaxDaysBetweenEventAndIngestionCheckSpec extends AbstractCheckSpec<TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMaxDaysBetweenEventAndIngestionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableMaxDelayInDataLoadingInDaysCheckSpec extends AbstractCheckSpec<TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableMaxDelayInDataLoadingInDaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,7 +47,7 @@ public class TableMaxDaysBetweenEventAndIngestionCheckSpec extends AbstractCheck
     @JsonPropertyDescription("Max number of days between event and ingestion sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec parameters = new TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec();
+    private TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec parameters = new TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a max number of days between event and ingestion check that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class TableMaxDaysBetweenEventAndIngestionCheckSpec extends AbstractCheck
      * @return Sensor parameters.
      */
     @Override
-    public TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec getParameters() {
+    public TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class TableMaxDaysBetweenEventAndIngestionCheckSpec extends AbstractCheck
      * Sets a new max number of days between event and ingestion sensor parameter object.
      * @param parameters Max number of days between event and ingestion sensor parameters.
      */
-    public void setParameters(TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec parameters) {
+    public void setParameters(TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

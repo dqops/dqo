@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that runs a query calculating the maximal number of days between event timestamp and ingestion timestamp.
+ * Tabular sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class TableTimelinessColumnMaxDaysBetweenEventAndIngestionSensorParameter
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/max_days_between_event_and_ingestion";
+        return "table/timeliness/max_delay_in_data_loading_in_days";
     }
 }
