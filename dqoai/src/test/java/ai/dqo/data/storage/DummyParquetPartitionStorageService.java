@@ -32,10 +32,11 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      *
      * @param partitionId     Partition id.
      * @param storageSettings Storage settings that identify the target table type that is loaded.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     @Override
-    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings) {
+    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
         return new LoadedMonthlyPartition(partitionId, 0L, null);
     }
 
@@ -48,11 +49,12 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @param start           Start date, that is truncated to the beginning of the first loaded month.
      * @param end             End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
     public Map<ParquetPartitionId, LoadedMonthlyPartition> loadPartitionsForMonthsRange(
-            String connectionName, PhysicalTableName tableName, LocalDate start, LocalDate end, FileStorageSettings storageSettings) {
+            String connectionName, PhysicalTableName tableName, LocalDate start, LocalDate end, FileStorageSettings storageSettings, String[] columnNames) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
 
@@ -61,7 +63,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
-            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
             }

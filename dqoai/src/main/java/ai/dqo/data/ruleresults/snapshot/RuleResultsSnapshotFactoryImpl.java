@@ -53,4 +53,18 @@ public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactor
         Table newRuleResults = this.ruleResultsTableFactory.createEmptyRuleResultsTable("new_rule_results");
         return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, newRuleResults);
     }
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the sensor readout storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Rule result snapshot connected to a storage service.
+     */
+    @Override
+    public RuleResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+        return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+    }
 }

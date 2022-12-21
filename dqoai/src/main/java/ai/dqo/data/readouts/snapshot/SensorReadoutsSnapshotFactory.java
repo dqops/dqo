@@ -28,4 +28,14 @@ public interface SensorReadoutsSnapshotFactory {
      * @return Sensor readouts snapshot connected to a storage service.
      */
     SensorReadoutsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName);
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the sensor readout storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Rule result snapshot connected to a storage service.
+     */
+    SensorReadoutsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames);
 }

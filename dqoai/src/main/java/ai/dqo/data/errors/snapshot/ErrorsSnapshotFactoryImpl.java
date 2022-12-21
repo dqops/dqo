@@ -44,14 +44,28 @@ public class ErrorsSnapshotFactoryImpl implements ErrorsSnapshotFactory {
     }
 
     /**
-     * Creates an empty snapshot that is connected to the profiling result storage service that will load requested months on demand.
+     * Creates an empty snapshot that is connected to the errors storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
-     * @return Profiling results snapshot connected to a storage service.
+     * @return Errors snapshot connected to a storage service.
      */
     @Override
     public ErrorsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
         Table newErrorsTable = this.errorsTableFactory.createEmptyErrorsTable("new_errors_results");
         return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, newErrorsTable);
+    }
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the errors storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Errors snapshot connected to a storage service.
+     */
+    @Override
+    public ErrorsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+        return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
     }
 }

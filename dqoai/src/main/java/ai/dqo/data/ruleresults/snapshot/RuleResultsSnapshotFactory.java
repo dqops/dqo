@@ -18,14 +18,24 @@ package ai.dqo.data.ruleresults.snapshot;
 import ai.dqo.metadata.sources.PhysicalTableName;
 
 /**
- * Rule results (alerts) snapshot service. Creates snapshots connected to a persistent storage.
+ * Rule results (check results) snapshot service. Creates snapshots connected to a persistent storage.
  */
 public interface RuleResultsSnapshotFactory {
     /**
-     * Creates an empty snapshot that is connected to the sensor readout storage service that will load requested months on demand.
+     * Creates an empty snapshot that is connected to the check results storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
-     * @return Rule result snapshot connected to a storage service.
+     * @return Check result snapshot connected to a storage service.
      */
     RuleResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName);
+
+    /**
+     * Creates an empty, read-only snapshot that is connected to the check results storage service that will load requested months on demand.
+     * The snapshot contains only selected columns.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param columnNames Array of column names to load from parquet files. Other columns will not be loaded.
+     * @return Check result snapshot connected to a storage service.
+     */
+    RuleResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames);
 }

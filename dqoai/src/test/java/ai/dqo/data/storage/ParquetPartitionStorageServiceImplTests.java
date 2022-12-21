@@ -117,7 +117,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, 0L, null);
         this.sut.savePartition(loadedPartition, new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition= this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition= this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(reloadedPartition.getData());
         Assertions.assertNotEquals(0L, reloadedPartition.getLastModified());
 
@@ -125,6 +125,40 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         Assertions.assertEquals(sourceTable.rowCount(), loadedTable.rowCount());
         Assertions.assertEquals(sourceTable.columnCount(), loadedTable.columnCount());
         Assertions.assertEquals(20.5, loadedTable.column(normalizedResults.getActualValueColumn().name()).get(0));
+    }
+
+    @Test
+    void loadPartition_whenSubsetOfColumnsRequested_thenOnlyListedColumnsLoaded() {
+        SensorReadoutsNormalizedResult normalizedResults = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
+        Table sourceTable = normalizedResults.getTable();
+        Row row1 = sourceTable.appendRow();
+        normalizedResults.getActualValueColumn().set(row1.getRowNumber(), 20.5);
+        normalizedResults.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 40, 55));
+        normalizedResults.getTableNameColumn().set(row1.getRowNumber(), "tab1");
+        normalizedResults.getConnectionNameColumn().set(row1.getRowNumber(), "conn1");
+
+        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
+        LocalDate month = LocalDate.of(2022, 3, 1);
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                "connection",
+                tableName,
+                month);
+
+        LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, 0L, null);
+        this.sut.savePartition(loadedPartition, new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
+
+        LoadedMonthlyPartition reloadedPartition= this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings,
+                new String[] { SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME });
+        Assertions.assertNotNull(reloadedPartition.getData());
+
+        Table loadedTable = reloadedPartition.getData();
+        Assertions.assertEquals(sourceTable.rowCount(), loadedTable.rowCount());
+        Assertions.assertEquals(2, loadedTable.columnCount());
+        Assertions.assertEquals(20.5, loadedTable.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
+        Assertions.assertEquals("tab1", loadedTable.column(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME).get(0));
+        Assertions.assertTrue(loadedTable.containsColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
+        Assertions.assertFalse(loadedTable.containsColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
     }
 
     @Test
@@ -146,7 +180,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, 0L, null);
         this.sut.savePartition(loadedPartition, new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNull(reloadedPartition.getData());
         Assertions.assertEquals(0L, reloadedPartition.getLastModified()); // no file
     }
@@ -161,7 +195,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 tableName,
                 month);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
 
         Assertions.assertNotNull(reloadedPartition);
         Assertions.assertEquals(0L, reloadedPartition.getLastModified());
@@ -175,7 +209,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         LocalDate end = LocalDate.of(2022, 3, 1);
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonths = this.sut.loadPartitionsForMonthsRange(
-                "connection", tableName, start, end, this.sensorReadoutsStorageSettings);
+                "connection", tableName, start, end, this.sensorReadoutsStorageSettings, null);
 
         Assertions.assertEquals(3, loadedMonths.size());
         Assertions.assertTrue(loadedMonths.values().stream().allMatch(p -> p.getData() == null));
@@ -204,11 +238,11 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 "connection",
                 tableName,
                 month);
-        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNull(loadedPartition.getData()); // should be empty
         this.sut.savePartition(loadedPartition, new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Table table = reloadedPartition.getData();
         Assertions.assertNotNull(table);
         Assertions.assertEquals(1, table.rowCount());
@@ -234,7 +268,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 tableName,
                 month);
         this.sut.savePartition(new LoadedMonthlyPartition(partitionId), new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
-        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
 
         SensorReadoutsNormalizedResult normalizedResultsNew = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
         Table changesTable = normalizedResultsNew.getTable();
@@ -244,7 +278,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew.getIdColumn().set(row2.getRowNumber(), "id2");
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable), this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(reloadedPartition.getData());
         Assertions.assertNotEquals(0L, reloadedPartition.getLastModified());
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
@@ -271,7 +305,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 tableName,
                 month);
         this.sut.savePartition(new LoadedMonthlyPartition(partitionId), new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
-        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
 
         SensorReadoutsNormalizedResult normalizedResultsNew = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
         Table changesTable = normalizedResultsNew.getTable();
@@ -281,7 +315,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew.getIdColumn().set(row2.getRowNumber(), "id1");
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable), this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(reloadedPartition.getData());
         Assertions.assertNotEquals(0L, reloadedPartition.getLastModified());
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
@@ -312,7 +346,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 tableName,
                 month);
         this.sut.savePartition(new LoadedMonthlyPartition(partitionId), new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
-        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
 
         SensorReadoutsNormalizedResult normalizedResultsNew = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
         Table changesTable = normalizedResultsNew.getTable();
@@ -320,7 +354,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         tableDataChanges.getDeletedIds().add("id1");
         this.sut.savePartition(loadedPartition, tableDataChanges, this.sensorReadoutsStorageSettings);
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(reloadedPartition.getData());
         Assertions.assertNotEquals(0L, reloadedPartition.getLastModified());
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());
@@ -348,7 +382,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
                 tableName,
                 month);
         this.sut.savePartition(new LoadedMonthlyPartition(partitionId), new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
-        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
 
         SensorReadoutsNormalizedResult normalizedResultsNew1 = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
         Table changesTable1 = normalizedResultsNew1.getTable();
@@ -366,7 +400,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         normalizedResultsNew2.getIdColumn().set(row3.getRowNumber(), "id3");
         this.sut.savePartition(loadedPartition, new TableDataChanges(changesTable2), this.sensorReadoutsStorageSettings);  // saving a new row, having an old "loadedPartition" that does not have changes from "changesTable1"
 
-        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(reloadedPartition.getData());
         Assertions.assertNotEquals(0L, reloadedPartition.getLastModified());
         Assertions.assertNotEquals(loadedPartition.getLastModified(), reloadedPartition.getLastModified());

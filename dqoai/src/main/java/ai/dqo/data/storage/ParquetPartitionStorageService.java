@@ -19,6 +19,7 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -30,11 +31,13 @@ public interface ParquetPartitionStorageService {
      *
      * @param partitionId     Partition id.
      * @param storageSettings Storage settings that identify the target table type that is loaded.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     LoadedMonthlyPartition loadPartition(
             ParquetPartitionId partitionId,
-            FileStorageSettings storageSettings);
+            FileStorageSettings storageSettings,
+            String[] columnNames);
 
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>.
@@ -44,6 +47,7 @@ public interface ParquetPartitionStorageService {
      * @param start Start date, that is truncated to the beginning of the first loaded month.
      * @param end End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     Map<ParquetPartitionId, LoadedMonthlyPartition> loadPartitionsForMonthsRange(
@@ -51,7 +55,8 @@ public interface ParquetPartitionStorageService {
             PhysicalTableName tableName,
             LocalDate start,
             LocalDate end,
-            FileStorageSettings storageSettings);
+            FileStorageSettings storageSettings,
+            String[] columnNames);
 
     /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
