@@ -1,0 +1,32 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{% macro render_date_format(named_date_format) %}
+    {%- if named_date_format == 'ISO8601'-%}
+        '%Y-%m-%d'
+    {%- elif named_date_format == 'MonthDayYear' -%}
+        '%m/%d/%Y'
+    {%- elif named_date_format == 'DayMonthYear' -%}
+        '%d/%m/%Y'
+    {%- elif named_date_format == 'YearMonthDay'-%}
+        '%Y/%m/%d'
+    {%- elif named_date_format == 'MonthNameDayYear'-%}
+        '%b %d, %Y'
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT CASE
+ WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+ELSE
+ SUM(
+    CASE WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64) IS NOT NULL
+        OR SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) IS NOT NULL
+        OR SAFE.PARSE_DATE({{render_date_format(parameters.named_date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL THEN 0
+    ELSE 1
+END
+) END AS actual_value
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
