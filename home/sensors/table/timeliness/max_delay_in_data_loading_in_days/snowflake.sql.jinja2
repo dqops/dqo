@@ -2,10 +2,10 @@
 SELECT
     TIMESTAMP_DIFF(
         MAX(
-            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP)
+            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
         ),
         MAX(
-            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP)
         ),
         MILLISECOND
     )
