@@ -59,6 +59,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_strings_in_set_percent", o -> o.monthlyPartitionMinStringsInSetPercent);
             put("monthly_partition_max_strings_invalid_email_count", o -> o.monthlyPartitionMaxInvalidEmailCount);
             put("monthly_partition_min_valid_email_percent", o -> o.monthlyPartitionMinValidEmailPercent);
+            put("monthly_partition_max_not_match_regex_count", o -> o.monthlyPartitionMaxNotMatchRegexCount);
 
         }
     };
@@ -131,6 +132,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinValidEmailPercentCheckSpec monthlyPartitionMinValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxNotMatchRegexCountCheckSpec monthlyPartitionMaxNotMatchRegexCount;
 
     /**
      * Returns a maximum string length below check.
@@ -548,6 +552,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinValidEmailPercent, monthlyPartitionMinValidEmailPercent));
         this.monthlyPartitionMinValidEmailPercent = monthlyPartitionMinValidEmailPercent;
         propagateHierarchyIdToField(monthlyPartitionMinValidEmailPercent, "monthly_partition_min_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnMaxNotMatchRegexCountCheckSpec getMonthlyPartitionMaxNotMatchRegexCount() {
+        return monthlyPartitionMaxNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param monthlyPartitionMaxNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setMonthlyPartitionMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec monthlyPartitionMaxNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNotMatchRegexCount, monthlyPartitionMaxNotMatchRegexCount));
+        this.monthlyPartitionMaxNotMatchRegexCount = monthlyPartitionMaxNotMatchRegexCount;
+        propagateHierarchyIdToField(monthlyPartitionMaxNotMatchRegexCount, "monthly_partition_max_not_match_regex_count");
     }
 
     /**
