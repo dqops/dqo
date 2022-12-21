@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that runs a query calculating the minimal number of days between event timestamp and ingestion timestamp.
+ * Tabular sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessMinDaysBetweenEventAndIngestionSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMinDaysBetweenEventAndIngestionSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableTimelinessDaysSinceLastLoadSensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDaysSinceLastLoadSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class TableTimelinessMinDaysBetweenEventAndIngestionSensorParametersSpec 
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/min_days_between_event_and_ingestion";
+        return "table/timeliness/days_since_last_load";
     }
 }

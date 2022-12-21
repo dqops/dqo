@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -44,7 +44,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
            put("daily_partition_max_days_since_most_recent_event", o -> o.dailyPartitionMaxDaysSinceMostRecentEvent);
            put("daily_partition_max_days_since_most_recent_ingestion", o -> o.dailyPartitionMaxDaysSinceMostRecentIngestion);
            put("daily_partition_max_delay_in_data_loading_in_days", o -> o.dailyPartitionMaxDelayInDataLoadingInDays);
-           put("daily_partition_min_days_between_event_and_ingestion", o -> o.dailyPartitionMinDaysBetweenEventAndIngestion);
+           put("daily_partition_days_since_last_load", o -> o.dailyPartitionDaysSinceLastLoad);
         }
     };
 
@@ -63,10 +63,10 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDelayInDataLoadingInDaysCheckSpec dailyPartitionMaxDelayInDataLoadingInDays;
 
-    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
+    @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the current date and the maximum ingestion timestamp (the most recent data loading timestamp) (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinDaysBetweenEventAndIngestionCheckSpec dailyPartitionMinDaysBetweenEventAndIngestion;
+    private TableDaysSinceLastLoadCheckSpec dailyPartitionDaysSinceLastLoad;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -123,21 +123,21 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a minimum days between event and ingestion check configuration.
-     * @return Minimum days between event and ingestion check configuration.
+     * Returns a number of days since the last load check configuration.
+     * @return A number of days since the last load check configuration..
      */
-    public TableMinDaysBetweenEventAndIngestionCheckSpec getDailyPartitionMinDaysBetweenEventAndIngestion() {
-        return dailyPartitionMinDaysBetweenEventAndIngestion;
+    public TableDaysSinceLastLoadCheckSpec getDailyPartitionDaysSinceLastLoad() {
+        return dailyPartitionDaysSinceLastLoad;
     }
 
     /**
-     * Sets a minimum days between event and ingestion check configuration.
-     * @param dailyPartitionMinDaysBetweenEventAndIngestion New minimum days between event and ingestion check.
+     * Sets a number of days since the last load check configuration.
+     * @param dailyPartitionDaysSinceLastLoad A number of days since the last load check configuration.
      */
-    public void setDailyPartitionMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec dailyPartitionMinDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinDaysBetweenEventAndIngestion, dailyPartitionMinDaysBetweenEventAndIngestion));
-        this.dailyPartitionMinDaysBetweenEventAndIngestion = dailyPartitionMinDaysBetweenEventAndIngestion;
-        this.propagateHierarchyIdToField(dailyPartitionMinDaysBetweenEventAndIngestion, "daily_partition_min_days_between_event_and_ingestion");
+    public void setDailyPartitionDaysSinceLastLoad(TableDaysSinceLastLoadCheckSpec dailyPartitionDaysSinceLastLoad) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDaysSinceLastLoad, dailyPartitionDaysSinceLastLoad));
+        this.dailyPartitionDaysSinceLastLoad = dailyPartitionDaysSinceLastLoad;
+        this.propagateHierarchyIdToField(dailyPartitionDaysSinceLastLoad, "daily_partition_days_since_last_load");
     }
 
     /**

@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -42,7 +42,7 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
             put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
             put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
             put("max_delay_in_data_loading_in_days", o -> o.maxDelayInDataLoadingInDays);
-            put("min_days_between_event_and_ingestion", o -> o.minDaysBetweenEventAndIngestion);
+            put("days_since_last_load", o -> o.daysSinceLastLoad);
         }
     };
 
@@ -55,8 +55,8 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Calculates the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     private TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays;
 
-    @JsonPropertyDescription("Calculates minimum days between event and ingestion")
-    private TableMinDaysBetweenEventAndIngestionCheckSpec minDaysBetweenEventAndIngestion;
+    @JsonPropertyDescription("Calculates the time difference in days between the current date and the maximum ingestion timestamp (the most recent data loading timestamp) (staleness)")
+    private TableDaysSinceLastLoadCheckSpec daysSinceLastLoad;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -94,7 +94,6 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(maxDaysSinceMostRecentIngestion, "max_days_since_most_recent_ingestion");
     }
 
-
     /**
      * Returns a maximum delay in data loading in days check configuration.
      * @return Maximum delay in data loading in days check configuration.
@@ -114,21 +113,21 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a minimum days between event and ingestion check configuration.
-     * @return Minimum days between event and ingestion check configuration.
+     * Returns a number of days since the last load check configuration.
+     * @return A number of days since the last load check configuration.
      */
-    public TableMinDaysBetweenEventAndIngestionCheckSpec getMinDaysBetweenEventAndIngestion() {
-        return minDaysBetweenEventAndIngestion;
+    public TableDaysSinceLastLoadCheckSpec getDaysSinceLastLoad() {
+        return daysSinceLastLoad;
     }
 
     /**
-     * Sets a minimum days between event and ingestion check configuration.
-     * @param minDaysBetweenEventAndIngestion Minimum days since the most recent event check.
+     * Sets a number of days since the last load check configuration.
+     * @param daysSinceLastLoad  A number of days since the last load check configuration.
      */
-    public void setMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec minDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.minDaysBetweenEventAndIngestion, minDaysBetweenEventAndIngestion));
-        this.minDaysBetweenEventAndIngestion = minDaysBetweenEventAndIngestion;
-        propagateHierarchyIdToField(minDaysBetweenEventAndIngestion, "min_days_between_event_and_ingestion");
+    public void setDaysSinceLastLoad(TableDaysSinceLastLoadCheckSpec daysSinceLastLoad) {
+        this.setDirtyIf(!Objects.equals(this.daysSinceLastLoad, daysSinceLastLoad));
+        this.daysSinceLastLoad = daysSinceLastLoad;
+        propagateHierarchyIdToField(daysSinceLastLoad, "days_since_last_load");
     }
 
     /**

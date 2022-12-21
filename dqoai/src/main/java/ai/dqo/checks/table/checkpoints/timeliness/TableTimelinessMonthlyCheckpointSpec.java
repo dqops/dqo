@@ -18,7 +18,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -43,7 +43,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
            put("monthly_checkpoint_max_days_since_most_recent_event", o -> o.monthlyCheckpointMaxDaysSinceMostRecentEvent);
            put("monthly_checkpoint_max_days_since_most_recent_ingestion", o -> o.monthlyCheckpointMaxDaysSinceMostRecentIngestion);
            put("monthly_checkpoint_max_delay_in_data_loading_in_days", o -> o.monthlyCheckpointMaxDelayInDataLoadingInDays);
-           put("monthly_checkpoint_min_days_between_event_and_ingestion", o -> o.monthlyCheckpointMinDaysBetweenEventAndIngestion);
+           put("monthly_checkpoint_days_since_last_load", o -> o.monthlyCheckpointDaysSinceLastLoad);
         }
     };
 
@@ -62,10 +62,10 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDelayInDataLoadingInDaysCheckSpec monthlyCheckpointMaxDelayInDataLoadingInDays;
 
-    @JsonPropertyDescription("Monthly checkpoint calculating minimum days between event and ingestion")
+    @JsonPropertyDescription("Monthly checkpoint calculating the time difference in days between the current date and the maximum ingestion timestamp (the most recent data loading timestamp) (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinDaysBetweenEventAndIngestionCheckSpec monthlyCheckpointMinDaysBetweenEventAndIngestion;
+    private TableDaysSinceLastLoadCheckSpec monthlyCheckpointDaysSinceLastLoad;
 
     /**
      * Returns the maximum days since the most recent event check configuration.
@@ -122,21 +122,21 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     }
 
     /**
-     * Returns a minimum days between event and ingestion check configuration.
-     * @return Minimum days between event and ingestion check configuration.
+     * Returns a number of days since the last load check configuration.
+     * @return A number of days since the last load check configuration..
      */
-    public TableMinDaysBetweenEventAndIngestionCheckSpec getMonthlyCheckpointMinDaysBetweenEventAndIngestion() {
-        return monthlyCheckpointMinDaysBetweenEventAndIngestion;
+    public TableDaysSinceLastLoadCheckSpec getMonthlyCheckpointDaysSinceLastLoad() {
+        return monthlyCheckpointDaysSinceLastLoad;
     }
 
     /**
-     * Sets a minimum days since the most recent event.
-     * @param monthlyCheckpointMinDaysBetweenEventAndIngestion New minimum days since the most recent event check.
+     * Sets a number of days since the last load check configuration.
+     * @param monthlyCheckpointDaysSinceLastLoad A number of days since the last load check configuration.
      */
-    public void setMonthlyCheckpointMinDaysBetweenEventAndIngestion(TableMinDaysBetweenEventAndIngestionCheckSpec monthlyCheckpointMinDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinDaysBetweenEventAndIngestion, monthlyCheckpointMinDaysBetweenEventAndIngestion));
-        this.monthlyCheckpointMinDaysBetweenEventAndIngestion = monthlyCheckpointMinDaysBetweenEventAndIngestion;
-        this.propagateHierarchyIdToField(monthlyCheckpointMinDaysBetweenEventAndIngestion, "monthly_checkpoint_min_days_between_event_and_ingestion");
+    public void setMonthlyCheckpointDaysSinceLastLoad(TableDaysSinceLastLoadCheckSpec monthlyCheckpointDaysSinceLastLoad) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDaysSinceLastLoad, monthlyCheckpointDaysSinceLastLoad));
+        this.monthlyCheckpointDaysSinceLastLoad = monthlyCheckpointDaysSinceLastLoad;
+        this.propagateHierarchyIdToField(monthlyCheckpointDaysSinceLastLoad, "monthly_checkpoint_days_since_last_load");
     }
 
         /**

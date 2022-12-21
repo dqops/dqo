@@ -1,11 +1,17 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 SELECT
-    MIN(
-        TIMESTAMP_DIFF(
-            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP),
-            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP),
-            MILLISECOND
-        )
+    TIMESTAMP_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX(
+            CASE WHEN
+                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)  <= CURRENT_TIMESTAMP()
+            THEN
+                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+            ELSE
+                NULL
+            END
+        ),
+        MILLISECOND
     )
     / 24.0 / 3600.0 / 1000.0 AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
