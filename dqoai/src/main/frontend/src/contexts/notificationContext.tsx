@@ -26,7 +26,7 @@ function NotificationProvider({ children }: any) {
 
       setNotifications([...notifications, newNotification]);
       
-      if (response.status === 504) {
+      if (response.status > 500) {
         setIsOpen(true);
       }
       return Promise.reject(error);
