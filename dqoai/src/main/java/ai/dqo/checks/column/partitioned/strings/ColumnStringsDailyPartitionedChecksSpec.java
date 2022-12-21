@@ -60,6 +60,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_strings_invalid_email_count", o -> o.dailyPartitionMaxInvalidEmailCount);
             put("daily_partition_min_valid_email_percent", o -> o.dailyPartitionMinValidEmailPercent);
             put("daily_partition_max_not_match_regex_count", o -> o.dailyPartitionMaxNotMatchRegexCount);
+            put("daily_partition_min_regex_match_percent", o -> o.dailyPartitionMinRegexMatchPercent);
 
         }
     };
@@ -135,6 +136,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxNotMatchRegexCountCheckSpec dailyPartitionMaxNotMatchRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinRegexMatchPercentCheckSpec dailyPartitionMinRegexMatchPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -568,6 +572,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNotMatchRegexCount, dailyPartitionMaxNotMatchRegexCount));
         this.dailyPartitionMaxNotMatchRegexCount = dailyPartitionMaxNotMatchRegexCount;
         propagateHierarchyIdToField(dailyPartitionMaxNotMatchRegexCount, "daily_partition_max_not_match_regex_count");
+    }
+
+    /**
+     * Returns a minimum match regex percent check.
+     * @return Minimum match regex percent check.
+     */
+    public ColumnMinRegexMatchPercentCheckSpec getDailyPartitionMinRegexMatchPercent() {
+        return dailyPartitionMinRegexMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum match regex percent check.
+     * @param dailyPartitionMinRegexMatchPercent Minimum match regex percent check.
+     */
+    public void setDailyPartitionMinRegexMatchPercent(ColumnMinRegexMatchPercentCheckSpec dailyPartitionMinRegexMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinRegexMatchPercent, dailyPartitionMinRegexMatchPercent));
+        this.dailyPartitionMinRegexMatchPercent = dailyPartitionMinRegexMatchPercent;
+        propagateHierarchyIdToField(dailyPartitionMinRegexMatchPercent, "daily_partition_min_regex_match_percent");
     }
 
     /**
