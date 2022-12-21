@@ -104,10 +104,11 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * Reads the data of one monthly partition.
      * @param partitionId Partition id.
      * @param storageSettings Storage settings that identify the target table type that is loaded.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     @Override
-    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings) {
+    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
@@ -120,9 +121,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 return new LoadedMonthlyPartition(partitionId, 0L, null);
             }
 
-            TablesawParquetReadOptions readOptions = TablesawParquetReadOptions
-                    .builder(targetParquetFile)
-                    .build();
+            TablesawParquetReadOptions.Builder optionsBuilder = TablesawParquetReadOptions
+                    .builder(targetParquetFile);
+            if (columnNames != null) {
+                optionsBuilder = optionsBuilder.withOnlyTheseColumns(columnNames);
+            }
+            TablesawParquetReadOptions readOptions = optionsBuilder.build();
+
             Table data = new DqoTablesawParquetReader(this.hadoopConfigurationProvider.getHadoopConfiguration()).read(readOptions);
 
             LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
@@ -141,6 +146,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param start Start date, that is truncated to the beginning of the first loaded month.
      * @param end End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
@@ -149,7 +155,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             PhysicalTableName tableName,
             LocalDate start,
             LocalDate end,
-            FileStorageSettings storageSettings) {
+            FileStorageSettings storageSettings,
+            String[] columnNames) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
 
@@ -158,7 +165,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
-            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
             }

@@ -44,6 +44,9 @@ export interface IColumnState {
   isUpdatedDailyPartitionedChecks?: boolean;
   monthlyPartitionedChecks?: UIAllChecksModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
+  checksUIFilter?: UIAllChecksModel;
+  checkpointsUIFilter?: UIAllChecksModel;
+  partitionedChecksUIFilter?: UIAllChecksModel;
 }
 
 const initialState: IColumnState = {
@@ -401,6 +404,61 @@ const columnReducer = (state = initialState, action: any) => {
         isUpdatedMonthlyPartitionedChecks: true,
         monthlyPartitionedChecks: action.checksUI
       };
+    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checksUIFilter: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        checkpointsUIFilter: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        loading: true
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        partitionedChecksUIFilter: action.data,
+        error: null
+      };
+    case COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+  
     default:
       return state;
   }

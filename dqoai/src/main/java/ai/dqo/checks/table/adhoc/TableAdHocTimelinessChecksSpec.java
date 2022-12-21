@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
@@ -41,19 +41,19 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
             put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
-            put("max_days_between_event_and_ingestion", o -> o.maxDaysBetweenEventAndIngestion);
+            put("max_delay_in_data_loading_in_days", o -> o.maxDelayInDataLoadingInDays);
             put("min_days_between_event_and_ingestion", o -> o.minDaysBetweenEventAndIngestion);
         }
     };
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent event")
+    @JsonPropertyDescription("Calculates the maximum days since the most recent event timestamp")
     private TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Calculates the maximum days since the most recent ingestion timestamp")
     private TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion;
 
-    @JsonPropertyDescription("Calculates maximum days between event and ingestion")
-    private TableMaxDaysBetweenEventAndIngestionCheckSpec maxDaysBetweenEventAndIngestion;
+    @JsonPropertyDescription("Calculates the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
+    private TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays;
 
     @JsonPropertyDescription("Calculates minimum days between event and ingestion")
     private TableMinDaysBetweenEventAndIngestionCheckSpec minDaysBetweenEventAndIngestion;
@@ -96,21 +96,21 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
 
 
     /**
-     * Returns a maximum days between event and ingestion check configuration.
-     * @return Maximum days between event and ingestion check configuration.
+     * Returns a maximum delay in data loading in days check configuration.
+     * @return Maximum delay in data loading in days check configuration.
      */
-    public TableMaxDaysBetweenEventAndIngestionCheckSpec getMaxDaysBetweenEventAndIngestion() {
-        return maxDaysBetweenEventAndIngestion;
+    public TableMaxDelayInDataLoadingInDaysCheckSpec getMaxDelayInDataLoadingInDays() {
+        return maxDelayInDataLoadingInDays;
     }
 
     /**
-     * Sets a maximum days between event and ingestion check configuration.
-     * @param maxDaysBetweenEventAndIngestion Maximum days since the most recent event check.
+     * Sets a maximum delay in data loading in days check configuration.
+     * @param maxDelayInDataLoadingInDays Maximum delay in data loading in days check configuration.
      */
-    public void setMaxDaysBetweenEventAndIngestion(TableMaxDaysBetweenEventAndIngestionCheckSpec maxDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.maxDaysBetweenEventAndIngestion, maxDaysBetweenEventAndIngestion));
-        this.maxDaysBetweenEventAndIngestion = maxDaysBetweenEventAndIngestion;
-        propagateHierarchyIdToField(maxDaysBetweenEventAndIngestion, "max_days_between_event_and_ingestion");
+    public void setMaxDelayInDataLoadingInDays(TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays) {
+        this.setDirtyIf(!Objects.equals(this.maxDelayInDataLoadingInDays, maxDelayInDataLoadingInDays));
+        this.maxDelayInDataLoadingInDays = maxDelayInDataLoadingInDays;
+        propagateHierarchyIdToField(maxDelayInDataLoadingInDays, "max_delay_in_data_loading_in_days");
     }
 
     /**

@@ -16,6 +16,6 @@ public interface RuleResultsDataService {
      * @param loadParameters          Load parameters.
      * @return Overview of the check recent results.
      */
-    Collection<CheckResultsOverviewDataModel> readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                                          CheckResultsOverviewParameters loadParameters);
+    CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                                CheckResultsOverviewParameters loadParameters);
 }

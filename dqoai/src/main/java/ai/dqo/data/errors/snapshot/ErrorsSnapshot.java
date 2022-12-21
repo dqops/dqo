@@ -18,7 +18,7 @@ public class ErrorsSnapshot extends TableDataSnapshot {
     public static final String PARQUET_FILE_NAME = "errors.0.parquet.snappy";
 
     /**
-     * Default constructor that creates a snapshot.
+     * Default constructor that creates an error's snapshot.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
@@ -28,14 +28,28 @@ public class ErrorsSnapshot extends TableDataSnapshot {
                           PhysicalTableName tableName,
                           ParquetPartitionStorageService storageService,
                           Table newResults) {
-        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), newResults);
+        super(connectionName, tableName, storageService, createErrorsStorageSettings(), newResults);
     }
 
     /**
-     * Creates the storage settings for storing the rule results.
+     * Creates a read-only errors snapshot limited to a set of columns.
+     * @param connectionName Connection name.
+     * @param tableName Table name (schema.table).
+     * @param storageService Backend storage service used to load missing data and save the results.
+     * @param columnNames Column names that will be loaded.
+     */
+    public ErrorsSnapshot(String connectionName,
+                                    PhysicalTableName tableName,
+                                    ParquetPartitionStorageService storageService,
+                                    String[] columnNames) {
+        super(connectionName, tableName, storageService, createErrorsStorageSettings(), columnNames);
+    }
+
+    /**
+     * Creates the storage settings for storing the errors.
      * @return Storage settings.
      */
-    public static FileStorageSettings createRuleResultsStorageSettings() {
+    public static FileStorageSettings createErrorsStorageSettings() {
         return new FileStorageSettings(DqoRoot.DATA_PROFILING_RESULTS,
                 BuiltInFolderNames.ERRORS,
                 PARQUET_FILE_NAME,

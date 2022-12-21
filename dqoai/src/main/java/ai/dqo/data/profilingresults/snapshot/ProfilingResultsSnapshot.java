@@ -48,6 +48,20 @@ public class ProfilingResultsSnapshot extends TableDataSnapshot {
     }
 
     /**
+     * Creates a read-only profiling results snapshot limited to a set of columns.
+     * @param connectionName Connection name.
+     * @param tableName Table name (schema.table).
+     * @param storageService Backend storage service used to load missing data and save the results.
+     * @param columnNames Column names that will be loaded.
+     */
+    public ProfilingResultsSnapshot(String connectionName,
+                                    PhysicalTableName tableName,
+                                    ParquetPartitionStorageService storageService,
+                                    String[] columnNames) {
+        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), columnNames);
+    }
+
+    /**
      * Creates the storage settings for storing the rule results.
      * @return Storage settings.
      */

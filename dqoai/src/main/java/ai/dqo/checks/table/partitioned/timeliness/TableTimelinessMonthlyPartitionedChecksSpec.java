@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
@@ -43,25 +43,25 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         {
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
            put("monthly_partition_max_days_since_most_recent_ingestion", o -> o.monthlyPartitionMaxDaysSinceMostRecentIngestion);
-           put("monthly_partition_max_days_between_event_and_ingestion", o -> o.monthlyPartitionMaxDaysBetweenEventAndIngestion);
+           put("monthly_partition_max_delay_in_data_loading_in_days", o -> o.monthlyPartitionMaxDelayInDataLoadingInDays);
            put("monthly_partition_min_days_between_event_and_ingestion", o -> o.monthlyPartitionMinDaysBetweenEventAndIngestion);
         }
     };
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent event")
+    @JsonPropertyDescription("Monthly partition checkpoint calculating the maximum days since the most recent event")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Monthly partition checkpoint calculating the maximum days since the most recent ingestion")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyPartitionMaxDaysSinceMostRecentIngestion;
 
-    @JsonPropertyDescription("Calculates maximum days between event and ingestion")
+    @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMaxDaysBetweenEventAndIngestion;
+    private TableMaxDelayInDataLoadingInDaysCheckSpec monthlyPartitionMaxDelayInDataLoadingInDays;
 
     @JsonPropertyDescription("Calculates minimum days between event and ingestion")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -105,21 +105,21 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     }
 
     /**
-     * Returns a maximum days between event and ingestion check configuration.
-     * @return Maximum days between event and ingestion check configuration.
+     * Returns a maximum delay in data loading in days check configuration.
+     * @return Maximum delay in data loading in days check configuration.
      */
-    public TableMaxDaysBetweenEventAndIngestionCheckSpec getMonthlyPartitionMaxDaysBetweenEventAndIngestion() {
-        return monthlyPartitionMaxDaysBetweenEventAndIngestion;
+    public TableMaxDelayInDataLoadingInDaysCheckSpec getMonthlyPartitionMaxDelayInDataLoadingInDays() {
+        return monthlyPartitionMaxDelayInDataLoadingInDays;
     }
 
     /**
-     * Sets a maximum days between event and ingestion check configuration.
-     * @param monthlyPartitionMaxDaysBetweenEventAndIngestion New maximum days between event and ingestion check.
+     * SSets a maximum delay in data loading in days check configuration.
+     * @param monthlyPartitionMaxDelayInDataLoadingInDays Maximum delay in data loading in days check configuration.
      */
-    public void setMonthlyPartitionMaxDaysBetweenEventAndIngestion(TableMaxDaysBetweenEventAndIngestionCheckSpec monthlyPartitionMaxDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysBetweenEventAndIngestion, monthlyPartitionMaxDaysBetweenEventAndIngestion));
-        this.monthlyPartitionMaxDaysBetweenEventAndIngestion = monthlyPartitionMaxDaysBetweenEventAndIngestion;
-        this.propagateHierarchyIdToField(monthlyPartitionMaxDaysBetweenEventAndIngestion, "monthly_partition_max_days_between_event_and_ingestion");
+    public void setMonthlyPartitionMaxDelayInDataLoadingInDays(TableMaxDelayInDataLoadingInDaysCheckSpec monthlyPartitionMaxDelayInDataLoadingInDays) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDelayInDataLoadingInDays, monthlyPartitionMaxDelayInDataLoadingInDays));
+        this.monthlyPartitionMaxDelayInDataLoadingInDays = monthlyPartitionMaxDelayInDataLoadingInDays;
+        this.propagateHierarchyIdToField(monthlyPartitionMaxDelayInDataLoadingInDays, "monthly_partition_max_delay_in_data_loading_in_days");
     }
 
     /**

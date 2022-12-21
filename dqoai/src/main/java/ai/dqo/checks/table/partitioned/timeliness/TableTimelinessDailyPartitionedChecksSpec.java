@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.timeliness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysBetweenEventAndIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMinDaysBetweenEventAndIngestionCheckSpec;
@@ -43,25 +43,25 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         {
            put("daily_partition_max_days_since_most_recent_event", o -> o.dailyPartitionMaxDaysSinceMostRecentEvent);
            put("daily_partition_max_days_since_most_recent_ingestion", o -> o.dailyPartitionMaxDaysSinceMostRecentIngestion);
-           put("daily_partition_max_days_between_event_and_ingestion", o -> o.dailyPartitionMaxDaysBetweenEventAndIngestion);
+           put("daily_partition_max_delay_in_data_loading_in_days", o -> o.dailyPartitionMaxDelayInDataLoadingInDays);
            put("daily_partition_min_days_between_event_and_ingestion", o -> o.dailyPartitionMinDaysBetweenEventAndIngestion);
         }
     };
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent event")
+    @JsonPropertyDescription("Daily partition checkpoint calculating the maximum days since the most recent event timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyPartitionMaxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Daily partition checkpoint calculating the maximum days since the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentIngestionCheckSpec dailyPartitionMaxDaysSinceMostRecentIngestion;
 
-    @JsonPropertyDescription("Calculates maximum days between event and ingestion")
+    @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxDaysBetweenEventAndIngestionCheckSpec dailyPartitionMaxDaysBetweenEventAndIngestion;
+    private TableMaxDelayInDataLoadingInDaysCheckSpec dailyPartitionMaxDelayInDataLoadingInDays;
 
     @JsonPropertyDescription("Calculates minimum days between event and ingestion")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -105,21 +105,21 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a maximum days between event and ingestion check configuration.
-     * @return Maximum days between event and ingestion check configuration.
+     * Returns a maximum delay in data loading in days check configuration.
+     * @return Maximum delay in data loading in days check configuration.
      */
-    public TableMaxDaysBetweenEventAndIngestionCheckSpec getDailyPartitionMaxDaysBetweenEventAndIngestion() {
-        return dailyPartitionMaxDaysBetweenEventAndIngestion;
+    public TableMaxDelayInDataLoadingInDaysCheckSpec getDailyPartitionMaxDelayInDataLoadingInDays() {
+        return dailyPartitionMaxDelayInDataLoadingInDays;
     }
 
     /**
-     * Sets a maximum days between event and ingestion check configuration.
-     * @param dailyPartitionMaxDaysBetweenEventAndIngestion New maximum days between event and ingestion check.
+     * Sets a maximum delay in data loading in days check configuration.
+     * @param dailyPartitionMaxDelayInDataLoadingInDays Maximum delay in data loading in days check configuration.
      */
-    public void setDailyPartitionMaxDaysBetweenEventAndIngestion(TableMaxDaysBetweenEventAndIngestionCheckSpec dailyPartitionMaxDaysBetweenEventAndIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysBetweenEventAndIngestion, dailyPartitionMaxDaysBetweenEventAndIngestion));
-        this.dailyPartitionMaxDaysBetweenEventAndIngestion = dailyPartitionMaxDaysBetweenEventAndIngestion;
-        this.propagateHierarchyIdToField(dailyPartitionMaxDaysBetweenEventAndIngestion, "daily_partition_max_days_between_event_and_ingestion");
+    public void setDailyPartitionMaxDelayInDataLoadingInDays(TableMaxDelayInDataLoadingInDaysCheckSpec dailyPartitionMaxDelayInDataLoadingInDays) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDelayInDataLoadingInDays, dailyPartitionMaxDelayInDataLoadingInDays));
+        this.dailyPartitionMaxDelayInDataLoadingInDays = dailyPartitionMaxDelayInDataLoadingInDays;
+        this.propagateHierarchyIdToField(dailyPartitionMaxDelayInDataLoadingInDays, "daily_partition_max_delay_in_data_loading_in_days");
     }
 
     /**

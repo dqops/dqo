@@ -58,6 +58,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_strings_in_set_count", o -> o.dailyPartitionMinStringsInSetCount);
             put("daily_partition_min_strings_in_set_percent", o -> o.dailyPartitionMinStringsInSetPercent);
             put("daily_partition_max_strings_invalid_email_count", o -> o.dailyPartitionMaxInvalidEmailCount);
+            put("daily_partition_min_valid_email_percent", o -> o.dailyPartitionMinValidEmailPercent);
+            put("daily_partition_max_not_match_regex_count", o -> o.dailyPartitionMaxNotMatchRegexCount);
 
         }
     };
@@ -127,6 +129,12 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInvalidEmailCountCheckSpec dailyPartitionMaxInvalidEmailCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinValidEmailPercentCheckSpec dailyPartitionMinValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxNotMatchRegexCountCheckSpec dailyPartitionMaxNotMatchRegexCount;
 
     /**
      * Returns a maximum string length below  check.
@@ -524,6 +532,42 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxInvalidEmailCount, dailyPartitionMaxInvalidEmailCount));
         this.dailyPartitionMaxInvalidEmailCount = dailyPartitionMaxInvalidEmailCount;
         propagateHierarchyIdToField(dailyPartitionMaxInvalidEmailCount, "daily_partition_max_strings_invalid_email_count");
+    }
+
+    /**
+     * Returns a minimum valid email percent check.
+     * @return Minimum valid email percent check.
+     */
+    public ColumnMinValidEmailPercentCheckSpec getDailyPartitionMinValidEmailPercent() {
+        return dailyPartitionMinValidEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid email percent check.
+     * @param dailyPartitionMinValidEmailPercent Minimum valid email percent check.
+     */
+    public void setDailyPartitionMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec dailyPartitionMinValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValidEmailPercent, dailyPartitionMinValidEmailPercent));
+        this.dailyPartitionMinValidEmailPercent = dailyPartitionMinValidEmailPercent;
+        propagateHierarchyIdToField(dailyPartitionMinValidEmailPercent, "daily_partition_min_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnMaxNotMatchRegexCountCheckSpec getDailyPartitionMaxNotMatchRegexCount() {
+        return dailyPartitionMaxNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param dailyPartitionMaxNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setDailyPartitionMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec dailyPartitionMaxNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNotMatchRegexCount, dailyPartitionMaxNotMatchRegexCount));
+        this.dailyPartitionMaxNotMatchRegexCount = dailyPartitionMaxNotMatchRegexCount;
+        propagateHierarchyIdToField(dailyPartitionMaxNotMatchRegexCount, "daily_partition_max_not_match_regex_count");
     }
 
     /**

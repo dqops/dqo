@@ -58,6 +58,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_min_strings_in_set_count", o -> o.dailyCheckpointMinStringsInSetCount);
             put("daily_checkpoint_min_strings_in_set_percent", o -> o.dailyCheckpointMinStringsInSetPercent);
             put("daily_checkpoint_max_strings_invalid_email_count", o -> o.dailyCheckpointMaxInvalidEmailCount);
+            put("daily_checkpoint_min_valid_email_percent", o -> o.dailyCheckpointMinValidEmailPercent);
+            put("daily_checkpoint_max_not_match_regex_count", o -> o.dailyCheckpointMaxNotMatchRegexCount);
 
         }
     };
@@ -126,6 +128,12 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxInvalidEmailCountCheckSpec dailyCheckpointMaxInvalidEmailCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinValidEmailPercentCheckSpec dailyCheckpointMinValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxNotMatchRegexCountCheckSpec dailyCheckpointMaxNotMatchRegexCount;
 
     /**
      * Returns a maximum string length below check.
@@ -521,6 +529,42 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxInvalidEmailCount, dailyCheckpointMaxInvalidEmailCount));
         this.dailyCheckpointMaxInvalidEmailCount = dailyCheckpointMaxInvalidEmailCount;
         propagateHierarchyIdToField(dailyCheckpointMaxInvalidEmailCount, "daily_checkpoint_max_strings_invalid_email_count");
+    }
+
+    /**
+     * Returns a minimum valid email percent check.
+     * @return Minimum valid email percent check.
+     */
+    public ColumnMinValidEmailPercentCheckSpec getDailyCheckpointMinValidEmailPercent() {
+        return dailyCheckpointMinValidEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid email percent check.
+     * @param dailyCheckpointMinValidEmailPercent Minimum valid email percent check.
+     */
+    public void setDailyCheckpointMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec dailyCheckpointMinValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValidEmailPercent, dailyCheckpointMinValidEmailPercent));
+        this.dailyCheckpointMinValidEmailPercent = dailyCheckpointMinValidEmailPercent;
+        propagateHierarchyIdToField(dailyCheckpointMinValidEmailPercent, "daily_checkpoint_min_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnMaxNotMatchRegexCountCheckSpec getDailyCheckpointMaxNotMatchRegexCount() {
+        return dailyCheckpointMaxNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param dailyCheckpointMaxNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setDailyCheckpointMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec dailyCheckpointMaxNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNotMatchRegexCount, dailyCheckpointMaxNotMatchRegexCount));
+        this.dailyCheckpointMaxNotMatchRegexCount = dailyCheckpointMaxNotMatchRegexCount;
+        propagateHierarchyIdToField(dailyCheckpointMaxNotMatchRegexCount, "daily_checkpoint_max_not_match_regex_count");
     }
 
     /**

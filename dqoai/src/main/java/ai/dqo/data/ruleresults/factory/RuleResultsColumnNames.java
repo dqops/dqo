@@ -50,4 +50,19 @@ public class RuleResultsColumnNames extends SensorReadoutsColumnNames {
      * Column name for the warning upper bound, returned by the warning severity rule.
      */
     public static final String WARNING_UPPER_BOUND_COLUMN_NAME = "warning_upper_bound";
+
+    /**
+     * List of column names that should be loaded from the parquet files when the recent result overview is needed.
+     */
+    public static final String[] COLUMN_NAMES_FOR_RESULTS_OVERVIEW = new String[] {
+            COLUMN_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            DATA_STREAM_NAME_COLUMN_NAME,
+            SEVERITY_COLUMN_NAME,
+            TIME_PERIOD_COLUMN_NAME
+    };
 }
