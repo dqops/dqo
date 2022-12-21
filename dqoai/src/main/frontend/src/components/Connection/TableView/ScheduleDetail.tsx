@@ -99,7 +99,32 @@ const ScheduleDetail = ({
     );
     await dispatch(getTableSchedule(connectionName, schemaName, tableName));
   };
-
+  
+  useEffect(() => {
+    if (!schedule?.cron_expression) return;
+    
+    if (/^\*\/\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('minutes');
+      const matches = schedule?.cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+    if (/^\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('hour');
+      const matches = schedule?.cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+    
+    if (/^\d\d? \d\d? \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('day');
+      const matches = schedule?.cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+      if (!matches) return;
+      setHour(Number(matches[1]));
+      setMinutes(Number(matches[2]));
+    }
+  }, []);
+  
   return (
     <div className="p-4">
       <ActionGroup
