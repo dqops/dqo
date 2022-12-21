@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates quantity of values that matches the custom regex in a column.
+ * Column check that calculates quantity of values that does not matche the custom regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -52,7 +52,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec parameters = new ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with invalid emails in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
