@@ -15,6 +15,7 @@
  */
 package ai.dqo.checks.table.checkpoints.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -40,18 +41,24 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
         {
            put("daily_checkpoint_max_days_since_most_recent_event", o -> o.dailyCheckpointMaxDaysSinceMostRecentEvent);
            put("daily_checkpoint_max_days_since_most_recent_ingestion", o -> o.dailyCheckpointMaxDaysSinceMostRecentIngestion);
+           put("daily_checkpoint_max_delay_in_data_loading_in_days", o -> o.dailyCheckpointMaxDelayInDataLoadingInDays);
         }
     };
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent event")
+    @JsonPropertyDescription("Daily checkpoint calculating the maximum days since the most recent event timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyCheckpointMaxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Daily checkpoint calculating the maximum days since the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentIngestionCheckSpec dailyCheckpointMaxDaysSinceMostRecentIngestion;
+
+    @JsonPropertyDescription("Daily checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableMaxDelayInDataLoadingInDaysCheckSpec dailyCheckpointMaxDelayInDataLoadingInDays;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -87,6 +94,24 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDaysSinceMostRecentIngestion, dailyCheckpointMaxDaysSinceMostRecentIngestion));
         this.dailyCheckpointMaxDaysSinceMostRecentIngestion = dailyCheckpointMaxDaysSinceMostRecentIngestion;
         this.propagateHierarchyIdToField(dailyCheckpointMaxDaysSinceMostRecentIngestion, "daily_checkpoint_max_days_since_most_recent_ingestion");
+    }
+
+    /**
+     * Returns a maximum delay in data loading in days check configuration.
+     * @return Maximum delay in data loading in days check configuration.
+     */
+    public TableMaxDelayInDataLoadingInDaysCheckSpec getDailyCheckpointMaxDelayInDataLoadingInDays() {
+        return dailyCheckpointMaxDelayInDataLoadingInDays;
+    }
+
+    /**
+     * Sets a maximum delay in data loading in days check configuration.
+     * @param dailyCheckpointMaxDelayInDataLoadingInDays Maximum delay in data loading in days check configuration.
+     */
+    public void setDailyCheckpointMaxDelayInDataLoadingInDays(TableMaxDelayInDataLoadingInDaysCheckSpec dailyCheckpointMaxDelayInDataLoadingInDays) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDelayInDataLoadingInDays, dailyCheckpointMaxDelayInDataLoadingInDays));
+        this.dailyCheckpointMaxDelayInDataLoadingInDays = dailyCheckpointMaxDelayInDataLoadingInDays;
+        this.propagateHierarchyIdToField(dailyCheckpointMaxDelayInDataLoadingInDays, "daily_checkpoint_max_delay_in_data_loading_in_days");
     }
 
     /**

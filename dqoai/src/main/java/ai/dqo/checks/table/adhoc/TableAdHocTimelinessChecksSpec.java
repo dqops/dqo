@@ -16,6 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -39,14 +40,18 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         {
             put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
             put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
+            put("max_delay_in_data_loading_in_days", o -> o.maxDelayInDataLoadingInDays);
         }
     };
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent event")
+    @JsonPropertyDescription("Calculates the maximum days since the most recent event timestamp")
     private TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Calculates maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Calculates the maximum days since the most recent ingestion timestamp")
     private TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion;
+
+    @JsonPropertyDescription("Calculates the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
+    private TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -84,6 +89,24 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(maxDaysSinceMostRecentIngestion, "max_days_since_most_recent_ingestion");
     }
 
+
+    /**
+     * Returns a maximum delay in data loading in days check configuration.
+     * @return Maximum delay in data loading in days check configuration.
+     */
+    public TableMaxDelayInDataLoadingInDaysCheckSpec getMaxDelayInDataLoadingInDays() {
+        return maxDelayInDataLoadingInDays;
+    }
+
+    /**
+     * Sets a maximum delay in data loading in days check configuration.
+     * @param maxDelayInDataLoadingInDays Maximum delay in data loading in days check configuration.
+     */
+    public void setMaxDelayInDataLoadingInDays(TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays) {
+        this.setDirtyIf(!Objects.equals(this.maxDelayInDataLoadingInDays, maxDelayInDataLoadingInDays));
+        this.maxDelayInDataLoadingInDays = maxDelayInDataLoadingInDays;
+        propagateHierarchyIdToField(maxDelayInDataLoadingInDays, "max_delay_in_data_loading_in_days");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -66,6 +66,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("max_strings_invalid_email_count", o -> o.maxInvalidEmailCount);
 
             put("min_valid_email_percent", o -> o.minValidEmailPercent);
+            put("max_not_match_regex_count", o -> o.maxNotMatchRegexCount);
+
 
 
         }
@@ -139,6 +141,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnMinValidEmailPercentCheckSpec minValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxNotMatchRegexCountCheckSpec maxNotMatchRegexCount;
 
     /**
      * Returns a maximum string length below check.
@@ -552,6 +557,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minValidEmailPercent, minValidEmailPercent));
         this.minValidEmailPercent = minValidEmailPercent;
         propagateHierarchyIdToField(minValidEmailPercent, "min_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum not match regex count check.
+     * @return Maximum not match regex count check.
+     */
+    public ColumnMaxNotMatchRegexCountCheckSpec getMaxNotMatchRegexCount() {
+        return maxNotMatchRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match regex count check.
+     * @param maxNotMatchRegexCount Maximum not match regex count check.
+     */
+    public void setMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec maxNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.maxNotMatchRegexCount, maxNotMatchRegexCount));
+        this.maxNotMatchRegexCount = maxNotMatchRegexCount;
+        propagateHierarchyIdToField(maxNotMatchRegexCount, "max_not_match_regex_count");
     }
 
     /**
