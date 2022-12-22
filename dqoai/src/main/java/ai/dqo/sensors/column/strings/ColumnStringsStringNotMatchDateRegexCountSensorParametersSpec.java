@@ -24,16 +24,14 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
 /**
  * Column level sensor that calculates the number of values that does not fit to a date regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -58,7 +56,7 @@ public class ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec ex
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_max_not_match_date_regex_count";
+        return "column/strings/string_not_match_date_regex_count";
     }
 
     /**

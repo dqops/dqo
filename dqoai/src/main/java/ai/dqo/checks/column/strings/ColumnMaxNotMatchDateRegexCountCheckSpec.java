@@ -21,10 +21,8 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,7 +39,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMaxNotMatchDateRegexCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNotMatchDateRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -50,7 +48,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec parameters = new ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec();
+    private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching date regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +70,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +78,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMaxNotMatchDateRegexCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

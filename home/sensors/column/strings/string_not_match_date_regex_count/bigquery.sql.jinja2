@@ -14,7 +14,8 @@
     {%- endif -%}
 {% endmacro -%}
 
-SELECT CASE
+SELECT
+CASE
  WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
 ELSE
  SUM(
