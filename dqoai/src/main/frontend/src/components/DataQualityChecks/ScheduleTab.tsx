@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Checkbox from '../Checkbox';
 import Input from '../Input';
 import { RecurringScheduleSpec } from '../../api';
@@ -58,7 +58,33 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
     }
     setHour(val);
   };
-
+  
+  
+  useEffect(() => {
+    if (!schedule?.cron_expression) return;
+    
+    if (/^\*\/\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('minutes');
+      const matches = schedule?.cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+    if (/^\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('hour');
+      const matches = schedule?.cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+    
+    if (/^\d\d? \d\d? \* \* \*$/.test(schedule?.cron_expression)) {
+      setMode('day');
+      const matches = schedule?.cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+      if (!matches) return;
+      setHour(Number(matches[1]));
+      setMinutes(Number(matches[2]));
+    }
+  }, []);
+  
   const isDisabled = schedule?.disabled;
 
   return (

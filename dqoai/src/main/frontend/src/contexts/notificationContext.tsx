@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ErrorModal from '../components/ErrorModal';
 
 const NotificationContext = React.createContext({} as any);
 
@@ -9,8 +10,9 @@ export interface Notification {
   date: number;
 }
 
-function NotificationProvider(props: any) {
+function NotificationProvider({ children }: any) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     axios.interceptors.response.use(undefined, async (error) => {
@@ -23,6 +25,10 @@ function NotificationProvider(props: any) {
       };
 
       setNotifications([...notifications, newNotification]);
+      
+      if (response.status > 500) {
+        setIsOpen(true);
+      }
       return Promise.reject(error);
     });
   }, [notifications]);
@@ -39,8 +45,10 @@ function NotificationProvider(props: any) {
         setNotifications,
         removeNotification
       }}
-      {...props}
-    />
+    >
+      {children}
+      <ErrorModal open={isOpen} onClose={() => setIsOpen(false)} />
+    </NotificationContext.Provider>
   );
 }
 
