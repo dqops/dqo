@@ -952,13 +952,10 @@ public class ColumnsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param checkCategory  Check category.
-     * @param checkName      (Optional) Check name.
+     * @param checkName      Check name.
      * @return UI friendly model of data quality ad-hoc checks on a requested column.
      */
-    @GetMapping(value = {
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}",
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}"
-    })
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnAdHocChecksUIFilter", notes = "Return a UI friendly model of data quality ad-hoc checks on a column filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -972,7 +969,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Check category") @PathVariable String checkCategory,
-            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+            @ApiParam("Check name") @PathVariable String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1026,13 +1023,10 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @param timePartition  Time partition.
      * @param checkCategory  Check category.
-     * @param checkName      (Optional) Check name.
+     * @param checkName      Check name.
      * @return UI friendly model of data quality checkpoints on a requested column for a requested time partition, filtered by category and check name.
      */
-    @GetMapping(value = {
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}",
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}/{checkName}"
-    })
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnCheckpointsUIFilter", notes = "Return a UI friendly model of column level data quality checkpoints on a column filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1047,7 +1041,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
             @ApiParam("Check category") @PathVariable String checkCategory,
-            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+            @ApiParam("Check name") @PathVariable String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1115,14 +1109,11 @@ public class ColumnsController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timePartition  Time partition.
-     * @param checkCategory  (Optional) Check category.
+     * @param checkCategory  Check category.
      * @param checkName      Check name.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time partition, filtered by category and check name.
      */
-    @GetMapping(value = {
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}",
-            "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}/{checkName}"
-    })
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1137,7 +1128,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
             @ApiParam("Check category") @PathVariable String checkCategory,
-            @ApiParam("Check name") @PathVariable(required = false) String checkName) {
+            @ApiParam("Check name") @PathVariable String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
