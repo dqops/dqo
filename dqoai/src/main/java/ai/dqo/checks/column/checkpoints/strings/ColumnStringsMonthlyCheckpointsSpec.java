@@ -60,6 +60,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_strings_invalid_email_count", o -> o.monthlyCheckpointMaxInvalidEmailCount);
             put("monthly_checkpoint_min_valid_email_percent", o -> o.monthlyCheckpointMinValidEmailPercent);
             put("monthly_checkpoint_max_not_match_regex_count", o -> o.monthlyCheckpointMaxNotMatchRegexCount);
+            put("monthly_checkpoint_min_regex_match_percent", o -> o.monthlyCheckpointMinRegexMatchPercent);
 
         }
     };
@@ -135,6 +136,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxNotMatchRegexCountCheckSpec monthlyCheckpointMaxNotMatchRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMinRegexMatchPercentCheckSpec monthlyCheckpointMinRegexMatchPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -565,6 +569,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNotMatchRegexCount, monthlyCheckpointMaxNotMatchRegexCount));
         this.monthlyCheckpointMaxNotMatchRegexCount = monthlyCheckpointMaxNotMatchRegexCount;
         propagateHierarchyIdToField(monthlyCheckpointMaxNotMatchRegexCount, "monthly_checkpoint_max_not_match_regex_count");
+    }
+
+    /**
+     * Returns a minimum match regex percent check.
+     * @return Minimum match regex percent check.
+     */
+    public ColumnMinRegexMatchPercentCheckSpec getMonthlyCheckpointMinRegexMatchPercent() {
+        return monthlyCheckpointMinRegexMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum match regex percent check.
+     * @param monthlyCheckpointMinRegexMatchPercent Minimum match regex percent check.
+     */
+    public void setMonthlyCheckpointMinRegexMatchPercent(ColumnMinRegexMatchPercentCheckSpec monthlyCheckpointMinRegexMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinRegexMatchPercent, monthlyCheckpointMinRegexMatchPercent));
+        this.monthlyCheckpointMinRegexMatchPercent = monthlyCheckpointMinRegexMatchPercent;
+        propagateHierarchyIdToField(monthlyCheckpointMinRegexMatchPercent, "monthly_checkpoint_min_regex_match_percent");
     }
 
     /**
