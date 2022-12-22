@@ -39,7 +39,24 @@ public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec extend
     };
 
     @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
-    private String customRegex = null;
+    private String regex = null;
+
+    /**
+     * Returns the regex.
+     * @return regex.
+     */
+    public String getRegex() {
+        return regex;
+    }
+
+    /**
+     * Sets the regex.
+     * @param regex Regex.
+     */
+    public void setRegex(String regex) {
+        this.setDirtyIf(!Objects.equals(this.regex, regex));
+        this.regex = regex;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -61,12 +78,4 @@ public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec extend
         return "column/strings/string_max_not_match_regex_count";
     }
 
-    public String getCustomRegex() {
-        return customRegex;
-    }
-
-    public void setCustomRegex(String customRegex) {
-        this.setDirtyIf(!Objects.equals(this.customRegex, customRegex));
-        this.customRegex = customRegex;
-    }
 }
