@@ -19,7 +19,7 @@ import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueValuesCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniquenessUniqueValuesCountProfilerSpec extends AbstractProfilerSpec<ColumnUniquenessUniqueValuesCountSensorParametersSpec> {
+public class ColumnUniquenessUniqueValuesCountProfilerSpec extends AbstractProfilerSpec<ColumnUniquenessUniqueCountSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniqueValuesCountProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnUniquenessUniqueValuesCountProfilerSpec extends AbstractProfi
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters = new ColumnUniquenessUniqueValuesCountSensorParametersSpec();
+    private ColumnUniquenessUniqueCountSensorParametersSpec parameters = new ColumnUniquenessUniqueCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnUniquenessUniqueValuesCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessUniqueCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnUniquenessUniqueValuesCountProfilerSpec extends AbstractProfi
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessUniqueCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
