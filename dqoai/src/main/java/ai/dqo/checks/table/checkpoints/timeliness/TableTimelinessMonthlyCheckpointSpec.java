@@ -79,7 +79,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
      * Sets the maximum days since the most recent event.
      * @param monthlyCheckpointMaxDaysSinceMostRecentEvent New maximum days since the most recent event check.
      */
-    public void setMonthlyCheckpointCheckpointMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec monthlyCheckpointMaxDaysSinceMostRecentEvent) {
+    public void setMonthlyCheckpointMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec monthlyCheckpointMaxDaysSinceMostRecentEvent) {
 		this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDaysSinceMostRecentEvent, monthlyCheckpointMaxDaysSinceMostRecentEvent));
         this.monthlyCheckpointMaxDaysSinceMostRecentEvent = monthlyCheckpointMaxDaysSinceMostRecentEvent;
 		this.propagateHierarchyIdToField(monthlyCheckpointMaxDaysSinceMostRecentEvent, "monthly_checkpoint_max_days_since_most_recent_event");
@@ -97,7 +97,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
      * Sets the maximum days since the most recent ingestion.
      * @param monthlyCheckpointMaxDaysSinceMostRecentIngestion New maximum days since the most recent ingestion check.
      */
-    public void setMonthlyCheckpointCheckpointMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointMaxDaysSinceMostRecentIngestion) {
+    public void setMonthlyCheckpointMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointMaxDaysSinceMostRecentIngestion) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDaysSinceMostRecentIngestion, monthlyCheckpointMaxDaysSinceMostRecentIngestion));
         this.monthlyCheckpointMaxDaysSinceMostRecentIngestion = monthlyCheckpointMaxDaysSinceMostRecentIngestion;
         this.propagateHierarchyIdToField(monthlyCheckpointMaxDaysSinceMostRecentIngestion, "monthly_checkpoint_max_days_since_most_recent_ingestion");
