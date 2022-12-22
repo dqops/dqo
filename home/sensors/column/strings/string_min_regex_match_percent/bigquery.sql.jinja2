@@ -1,11 +1,16 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{%- macro render_regex(regex) -%}
+        r{{ make_text_constant(regex) }}
+{% endmacro %}
+
 SELECT CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE 100.0 * SUM(
             CASE
                 WHEN REGEXP_CONTAINS(
                     {{ lib.render_target_column('analyzed_table') }},
-                    r{{ make_text_constant(regex) }}
+                    {{ lib.render_regex(parameters.regex) }}
                 ) IS TRUE THEN 1
                 ELSE 0
             END
