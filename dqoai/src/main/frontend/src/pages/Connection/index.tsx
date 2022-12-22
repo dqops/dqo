@@ -23,10 +23,8 @@ import ColumnMonthlyPartitionedChecksView from '../../components/Connection/Colu
 import TableAdHockChecksUIFilterView from '../../components/Connection/TableAdHockChecksUIFilterView';
 import TableCheckpointsUIFilterView from '../../components/Connection/TableCheckpointsUIFilterView';
 import TablePartitionedChecksUIFilterView from '../../components/Connection/TablePartitionedChecksUIFilterView';
-import ColumnAdhocView from '../../components/Connection/ColumnView/ColumnAdhocView';
 import ColumnAdHockChecksUIFilterView from '../../components/Connection/ColumnAdHockChecksUIFilterView';
 import ColumnCheckpointsUIFilterView from '../../components/Connection/ColumnCheckpointsUIFilterView';
-import ColumnPartitionedChecksView from '../../components/Connection/ColumnView/ColumnPartitionedChecksView';
 import ColumnPartitionedChecksUIFilterView from '../../components/Connection/ColumnPartitionedChecksUIFilterView';
 
 const ConnectionPage = () => {
