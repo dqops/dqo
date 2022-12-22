@@ -64,6 +64,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 		this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
+        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(this.sampleTableMetadata, "id", this.checkSpec);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {

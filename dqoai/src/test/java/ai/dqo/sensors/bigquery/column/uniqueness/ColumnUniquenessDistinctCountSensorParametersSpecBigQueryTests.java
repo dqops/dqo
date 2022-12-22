@@ -83,7 +83,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value
             FROM %s AS analyzed_table""";
         
@@ -100,7 +100,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CURRENT_TIMESTAMP() AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -120,7 +120,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CURRENT_TIMESTAMP() AS time_period
             FROM %s AS analyzed_table
             WHERE col1=1
@@ -141,7 +141,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CURRENT_TIMESTAMP() AS time_period
             FROM %s AS analyzed_table
             WHERE col2=2
@@ -163,7 +163,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CURRENT_TIMESTAMP() AS time_period
             FROM %s AS analyzed_table
             WHERE col1=1 AND col2=2
@@ -184,7 +184,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), YEAR) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -204,7 +204,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -224,7 +224,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -244,7 +244,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -264,7 +264,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -284,7 +284,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -304,7 +304,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -324,7 +324,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATETIME), HOUR) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -344,7 +344,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), YEAR) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -365,7 +365,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), QUARTER) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -385,7 +385,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), MONTH) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -405,7 +405,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), WEEK) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -425,7 +425,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -446,7 +446,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -467,7 +467,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, analyzed_table.`created_at` AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -487,7 +487,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, DATETIME_TRUNC(CAST(analyzed_table.`created_at` AS DATETIME), HOUR) AS time_period
             FROM %s AS analyzed_table
             GROUP BY time_period
@@ -510,7 +510,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'FR' AS stream_level_1
             FROM %s AS analyzed_table
             GROUP BY stream_level_1
@@ -533,7 +533,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'IT' AS stream_level_1
             FROM %s AS analyzed_table
             GROUP BY stream_level_1
@@ -555,7 +555,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'DE' AS stream_level_1
             FROM %s AS analyzed_table
             GROUP BY stream_level_1
@@ -577,7 +577,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'DE''s' AS stream_level_1
             FROM %s AS analyzed_table
             GROUP BY stream_level_1
@@ -601,7 +601,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2
             FROM %s AS analyzed_table
             GROUP BY stream_level_1, stream_level_2
@@ -626,7 +626,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2, 'UK' AS stream_level_3
             FROM %s AS analyzed_table
             GROUP BY stream_level_1, stream_level_2, stream_level_3
@@ -651,7 +651,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'PL' AS stream_level_2, 'UK' AS stream_level_3
             FROM %s AS analyzed_table
             GROUP BY stream_level_2, stream_level_3
@@ -675,7 +675,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
             FROM %s AS analyzed_table
             GROUP BY stream_level_1, stream_level_2, time_period
@@ -699,7 +699,7 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecBigQueryTests exte
         String targetQuery = """
             SELECT
                 COUNT(
-                    DISTINCT analyzed_table.`id`
+                    DISTINCT(analyzed_table.`id`)
                 ) AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2
             FROM %s AS analyzed_table
             GROUP BY stream_level_1, stream_level_2
