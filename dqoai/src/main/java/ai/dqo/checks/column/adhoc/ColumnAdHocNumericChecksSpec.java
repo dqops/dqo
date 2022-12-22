@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality checks on a column level that are checking for negative values.
+ * Container of built-in preconfigured data quality checks on a column level for numeric values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
