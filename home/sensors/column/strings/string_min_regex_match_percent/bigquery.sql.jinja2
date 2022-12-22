@@ -5,7 +5,7 @@ SELECT CASE
             CASE
                 WHEN REGEXP_CONTAINS(
                     {{ lib.render_target_column('analyzed_table') }},
-                    r{{ make_text_constant(custom_regex) }}
+                    r{{ make_text_constant(regex) }}
                 ) IS TRUE THEN 1
                 ELSE 0
             END
