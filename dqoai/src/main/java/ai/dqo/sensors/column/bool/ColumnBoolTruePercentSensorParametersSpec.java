@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of rows with a true values in a column.
+ * Column level sensor that calculates the percentage of rows with a true value in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnBoolMinTruePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMinTruePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnBoolTruePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolTruePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class ColumnBoolMinTruePercentSensorParametersSpec extends AbstractColumn
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/bool/min_true_percent";
+        return "column/bool/true_percent";
     }
 }
