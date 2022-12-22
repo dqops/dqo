@@ -40,7 +40,7 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends
     };
 
     @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
-    private String customRegex = null;
+    private String regex = null;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -62,12 +62,12 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends
         return "column/strings/string_min_regex_match_percent";
     }
 
-    public String getCustomRegex() {
-        return customRegex;
+    public String getRegex() {
+        return regex;
     }
 
-    public void setCustomRegex(String customRegex) {
-        this.setDirtyIf(!Objects.equals(this.customRegex, customRegex));
-        this.customRegex = customRegex;
+    public void setRegex(String regex) {
+        this.setDirtyIf(!Objects.equals(this.regex, regex));
+        this.regex = regex;
     }
 }
