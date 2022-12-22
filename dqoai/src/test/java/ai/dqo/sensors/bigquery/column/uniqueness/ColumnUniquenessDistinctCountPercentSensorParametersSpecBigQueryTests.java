@@ -16,6 +16,7 @@
 package ai.dqo.sensors.bigquery.column.uniqueness;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.uniqueness.ColumnUniquenessDistinctCountPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -34,7 +35,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnUniquenessDistinctCountPercentSensorParametersSpec sut;
+    private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private SensorExecutionRunParameters runParameters;
     private ColumnUniquenessDistinctCountPercentCheckSpec checkSpec;
@@ -60,10 +61,13 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
         super.setUp();
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
+		this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
-		this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
+    }
+
+    private String getTableColumnName(SensorExecutionRunParameters runParameters) {
+        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
     }
 
     @Test
@@ -80,11 +84,18 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                SELECT
-                    (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value
-                FROM %s AS analyzed_table""",
-                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value
+            FROM %2$s AS analyzed_table""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
+                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
 
@@ -92,12 +103,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
     void renderSensor_whenDefaultTimeSeries_thenRendersTimeSeriesFromTableSpecAsDailyCurrentTimestamp() {
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CURRENT_TIMESTAMP() AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CURRENT_TIMESTAMP() AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -108,13 +126,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CURRENT_TIMESTAMP() AS time_period
-                        FROM %s AS analyzed_table
-                        WHERE col1=1
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CURRENT_TIMESTAMP() AS time_period
+            FROM %2$s AS analyzed_table
+            WHERE col1=1
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -125,13 +150,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CURRENT_TIMESTAMP() AS time_period
-                        FROM %s AS analyzed_table
-                        WHERE col2=2
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CURRENT_TIMESTAMP() AS time_period
+            FROM %2$s AS analyzed_table
+            WHERE col2=2
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -143,13 +175,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CURRENT_TIMESTAMP() AS time_period
-                        FROM %s AS analyzed_table
-                        WHERE col1=1 AND col2=2
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CURRENT_TIMESTAMP() AS time_period
+            FROM %2$s AS analyzed_table
+            WHERE col1=1 AND col2=2
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -160,12 +199,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), year) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), YEAR) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -176,12 +222,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), quarter) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -192,12 +245,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), week) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -208,12 +268,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), quarter) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -224,12 +291,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), month) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -240,12 +314,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), week) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -256,12 +337,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -272,16 +360,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                                SELECT
-                                    CASE
-                                        WHEN COUNT(analyzed_table.`id`) = 0 THEN 100.0
-                                        ELSE 100.0 * COUNT(DISTINCT analyzed_table.`id`) /
-                                                     COUNT(analyzed_table.`id`)
-                                    END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
-                                FROM %s AS analyzed_table
-                                GROUP BY time_period
-                                ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`id`) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`id`) /
+                                 COUNT(analyzed_table.`id`)
+                END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATETIME), HOUR) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -292,12 +383,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), year) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), YEAR) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -308,12 +406,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), quarter) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), QUARTER) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -324,12 +429,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), month) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), MONTH) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -340,12 +452,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), week) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), WEEK) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -356,12 +475,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CAST(analyzed_table.`created_at` AS date) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -373,12 +499,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, CAST(analyzed_table.`created_at` AS date) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -390,12 +523,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, analyzed_table.`created_at` AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, analyzed_table.`created_at` AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -406,12 +546,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, DATETIME_TRUNC(CAST(analyzed_table.`created_at` AS datetime), hour) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY time_period
-                        ORDER BY time_period""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, DATETIME_TRUNC(CAST(analyzed_table.`created_at` AS DATETIME), HOUR) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY time_period
+            ORDER BY time_period""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -425,12 +572,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'FR' AS stream_level_1
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1
-                        ORDER BY stream_level_1""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'FR' AS stream_level_1
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1
+            ORDER BY stream_level_1""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -444,12 +598,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'IT' AS stream_level_1
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1
-                        ORDER BY stream_level_1""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'IT' AS stream_level_1
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1
+            ORDER BY stream_level_1""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -462,12 +623,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'DE' AS stream_level_1
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1
-                        ORDER BY stream_level_1""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'DE' AS stream_level_1
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1
+            ORDER BY stream_level_1""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -480,12 +648,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'DE''s' AS stream_level_1
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1
-                        ORDER BY stream_level_1""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'DE''s' AS stream_level_1
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1
+            ORDER BY stream_level_1""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -500,12 +675,19 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
 
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1, stream_level_2
-                        ORDER BY stream_level_1, stream_level_2""",
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1, stream_level_2
+            ORDER BY stream_level_1, stream_level_2""";
+
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -520,13 +702,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
                         DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2, 'UK' AS stream_level_3
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1, stream_level_2, stream_level_3
-                        ORDER BY stream_level_1, stream_level_2, stream_level_3""",
+        
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'DE' AS stream_level_1, 'PL' AS stream_level_2, 'UK' AS stream_level_3
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1, stream_level_2, stream_level_3
+            ORDER BY stream_level_1, stream_level_2, stream_level_3""";
+        
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -541,13 +730,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
                         DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'PL' AS stream_level_2, 'UK' AS stream_level_3
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_2, stream_level_3
-                        ORDER BY stream_level_2, stream_level_3""",
+        
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'PL' AS stream_level_2, 'UK' AS stream_level_3
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_2, stream_level_3
+            ORDER BY stream_level_2, stream_level_3""";
+        
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -561,13 +757,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
                         DataStreamLevelSpecObjectMother.createTag("PL")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1, stream_level_2, time_period
-                        ORDER BY stream_level_1, stream_level_2, time_period""",
+        
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1, stream_level_2, time_period
+            ORDER BY stream_level_1, stream_level_2, time_period""";
+        
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }
@@ -581,13 +784,20 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecBigQueryTes
                         DataStreamLevelSpecObjectMother.createTag("UK")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-
-        Assertions.assertEquals(String.format("""
-                        SELECT
-                            (count(distinct analyzed_table.`id`) / count(analyzed_table.`id`)) * 100 AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2
-                        FROM %s AS analyzed_table
-                        GROUP BY stream_level_1, stream_level_2
-                        ORDER BY stream_level_1, stream_level_2""",
+        
+        String targetQuery = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT %1$s) /
+                                 COUNT(%1$s)
+                END AS actual_value, analyzed_table.`country` AS stream_level_1, 'UK' AS stream_level_2
+            FROM %2$s AS analyzed_table
+            GROUP BY stream_level_1, stream_level_2
+            ORDER BY stream_level_1, stream_level_2""";
+        
+        Assertions.assertEquals(String.format(targetQuery,
+                this.getTableColumnName(runParameters),
                 JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
                 renderedTemplate);
     }

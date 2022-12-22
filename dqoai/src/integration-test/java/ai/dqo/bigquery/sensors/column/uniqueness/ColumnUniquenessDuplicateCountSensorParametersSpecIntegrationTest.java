@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDuplicateCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec sut;
+public class ColumnUniquenessDuplicateCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnUniquenessDuplicateCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnMaxDuplicateCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -56,7 +56,7 @@ public class ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpecIntegrat
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec();
+		this.sut = new ColumnUniquenessDuplicateCountSensorParametersSpec();
 		this.checkSpec = new ColumnMaxDuplicateCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }

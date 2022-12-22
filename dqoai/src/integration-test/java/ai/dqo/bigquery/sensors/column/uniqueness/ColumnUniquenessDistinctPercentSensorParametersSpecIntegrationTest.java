@@ -28,7 +28,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +36,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnUniquenessDistinctCountPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnUniquenessDistinctCountPercentSensorParametersSpec sut;
+public class ColumnUniquenessDistinctPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnUniquenessDistinctCountPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -55,7 +55,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecIntegration
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
+		this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
 		this.checkSpec = new ColumnUniquenessDistinctCountPercentCheckSpec();
 		this.checkSpec.setParameters(this.sut);
     }

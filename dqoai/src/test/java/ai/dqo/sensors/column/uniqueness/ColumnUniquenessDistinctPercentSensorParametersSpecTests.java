@@ -24,8 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnUniquenessDistinctCountPercentSensorParametersSpecTests extends BaseTest {
-    private ColumnUniquenessDistinctCountPercentSensorParametersSpec sut;
+public class ColumnUniquenessDistinctPercentSensorParametersSpecTests extends BaseTest {
+    private ColumnUniquenessDistinctPercentSensorParametersSpec sut;
 
     /**
      * Called before each test.
@@ -37,7 +37,7 @@ public class ColumnUniquenessDistinctCountPercentSensorParametersSpecTests exten
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
+		this.sut = new ColumnUniquenessDistinctPercentSensorParametersSpec();
     }
 
     @Test
