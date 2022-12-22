@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -43,6 +44,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
            put("monthly_partition_max_days_since_most_recent_ingestion", o -> o.monthlyPartitionMaxDaysSinceMostRecentIngestion);
            put("monthly_partition_max_delay_in_data_loading_in_days", o -> o.monthlyPartitionMaxDelayInDataLoadingInDays);
+           put("monthly_partition_days_since_last_load", o -> o.monthlyPartitionDaysSinceLastLoad);
         }
     };
 
@@ -60,6 +62,11 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDelayInDataLoadingInDaysCheckSpec monthlyPartitionMaxDelayInDataLoadingInDays;
+
+    @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the current date and the maximum ingestion timestamp (the most recent data loading timestamp) (staleness)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDaysSinceLastLoadCheckSpec monthlyPartitionDaysSinceLastLoad;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -114,6 +121,25 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         this.monthlyPartitionMaxDelayInDataLoadingInDays = monthlyPartitionMaxDelayInDataLoadingInDays;
         this.propagateHierarchyIdToField(monthlyPartitionMaxDelayInDataLoadingInDays, "monthly_partition_max_delay_in_data_loading_in_days");
     }
+
+    /**
+     * Returns a number of days since the last load check configuration.
+     * @return A number of days since the last load check configuration..
+     */
+    public TableDaysSinceLastLoadCheckSpec getMonthlyPartitionDaysSinceLastLoad() {
+        return monthlyPartitionDaysSinceLastLoad;
+    }
+
+    /**
+     * Sets a number of days since the last load check configuration.
+     * @param monthlyPartitionDaysSinceLastLoad A number of days since the last load check configuration.
+     */
+    public void setMonthlyPartitionDaysSinceLastLoad(TableDaysSinceLastLoadCheckSpec monthlyPartitionDaysSinceLastLoad) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDaysSinceLastLoad, monthlyPartitionDaysSinceLastLoad));
+        this.monthlyPartitionDaysSinceLastLoad = monthlyPartitionDaysSinceLastLoad;
+        this.propagateHierarchyIdToField(monthlyPartitionDaysSinceLastLoad, "monthly_partition_min_days_between_event_and_ingestion");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

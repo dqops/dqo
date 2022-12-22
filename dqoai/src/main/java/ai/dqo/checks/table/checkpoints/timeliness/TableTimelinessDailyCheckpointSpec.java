@@ -18,6 +18,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -42,6 +43,7 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
            put("daily_checkpoint_max_days_since_most_recent_event", o -> o.dailyCheckpointMaxDaysSinceMostRecentEvent);
            put("daily_checkpoint_max_days_since_most_recent_ingestion", o -> o.dailyCheckpointMaxDaysSinceMostRecentIngestion);
            put("daily_checkpoint_max_delay_in_data_loading_in_days", o -> o.dailyCheckpointMaxDelayInDataLoadingInDays);
+           put("daily_checkpoint_days_since_last_load", o -> o.dailyCheckpointDaysSinceLastLoad);
         }
     };
 
@@ -59,6 +61,11 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDelayInDataLoadingInDaysCheckSpec dailyCheckpointMaxDelayInDataLoadingInDays;
+
+    @JsonPropertyDescription("Daily checkpoint calculating the time difference in days between the current date and the maximum ingestion timestamp (the most recent data loading timestamp) (staleness)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableDaysSinceLastLoadCheckSpec dailyCheckpointDaysSinceLastLoad;
 
     /**
      * Returns a maximum days since the most recent event check configuration.
@@ -112,6 +119,24 @@ public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDelayInDataLoadingInDays, dailyCheckpointMaxDelayInDataLoadingInDays));
         this.dailyCheckpointMaxDelayInDataLoadingInDays = dailyCheckpointMaxDelayInDataLoadingInDays;
         this.propagateHierarchyIdToField(dailyCheckpointMaxDelayInDataLoadingInDays, "daily_checkpoint_max_delay_in_data_loading_in_days");
+    }
+
+    /**
+     * Returns a number of days since the last load check configuration.
+     * @return A number of days since the last load check configuration..
+     */
+    public TableDaysSinceLastLoadCheckSpec getDailyCheckpointDaysSinceLastLoad() {
+        return dailyCheckpointDaysSinceLastLoad;
+    }
+
+    /**
+     * Sets a number of days since the last load check configuration.
+     * @param dailyCheckpointDaysSinceLastLoad A number of days since the last load check configuration.
+     */
+    public void setDailyCheckpointDaysSinceLastLoad(TableDaysSinceLastLoadCheckSpec dailyCheckpointDaysSinceLastLoad) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDaysSinceLastLoad, dailyCheckpointDaysSinceLastLoad));
+        this.dailyCheckpointDaysSinceLastLoad = dailyCheckpointDaysSinceLastLoad;
+        this.propagateHierarchyIdToField(dailyCheckpointDaysSinceLastLoad, "daily_checkpoint_days_since_last_load");
     }
 
     /**

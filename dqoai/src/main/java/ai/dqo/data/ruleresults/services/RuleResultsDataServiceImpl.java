@@ -11,6 +11,7 @@ import ai.dqo.data.ruleresults.services.models.CheckResultStatus;
 import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -86,6 +88,7 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
                 checkResultsOverviewDataModel = new CheckResultsOverviewDataModel() {{
                     setCheckCategory(checkCategory);
                     setCheckName(checkName);
+                    setCheckHash(checkHash);
                 }};
                 resultMap.put(checkHash, checkResultsOverviewDataModel);
             }
@@ -109,12 +112,13 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
         String columnName = rootChecksContainerSpec.getHierarchyId().getColumnName(); // nullable
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
-        String timeGradientName = timeScale != null ? timeScale.name() : null; // nullable
 
         Selection rowSelection = combinedTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
-        StringColumn timeGradientColumn = combinedTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-        rowSelection = rowSelection.and((timeGradientName != null) ? timeGradientColumn.isEqualTo(timeGradientName) : timeGradientColumn.isMissing());
+        if (timeScale != null) {
+            StringColumn timeGradientColumn = combinedTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeScale.name()));
+        }
 
         StringColumn columnNameColumn = combinedTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());

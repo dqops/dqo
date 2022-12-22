@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceLastLoadSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,23 +33,23 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates the maximal number of days since the most recent event timestamp.
+ * Table level check that calculates the minimal number of days between event timestamp and ingestion timestamp. .
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMaxDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMaxDaysSinceMostRecentEventCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableDaysSinceLastLoadCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceLastLoadSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableDaysSinceLastLoadCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Max days since most recent event sensor parameters")
+    @JsonPropertyDescription("Min number of days between event and ingestion sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec parameters = new TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec();
+    private TableTimelinessDaysSinceLastLoadSensorParametersSpec parameters = new TableTimelinessDaysSinceLastLoadSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a min number of days between event and ingestion check that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -69,15 +69,15 @@ public class TableMaxDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec getParameters() {
+    public TableTimelinessDaysSinceLastLoadSensorParametersSpec getParameters() {
         return parameters;
     }
 
     /**
-     * Sets a new row count sensor parameter object.
-     * @param parameters Row count parameters.
+     * Sets a new min number of days between event and ingestion sensor parameter object.
+     * @param parameters Min number of days between event and ingestion sensor parameters.
      */
-    public void setParameters(TableTimelinessMaxDaysSinceMostRecentEventSensorParametersSpec parameters) {
+    public void setParameters(TableTimelinessDaysSinceLastLoadSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

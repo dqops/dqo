@@ -66,7 +66,7 @@ const Tree = () => {
         >
           {renderIcon(node)}
           <div
-            className="flex space-x-2 py-1 flex-1 w-full"
+            className="flex space-x-2 py-1 flex-1 w-full text-sm"
             onClick={() => handleNodeClick(node)}
           >
             <SvgIcon

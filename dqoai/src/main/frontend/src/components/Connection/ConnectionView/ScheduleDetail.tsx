@@ -91,6 +91,31 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
     setHour(val);
   };
 
+  useEffect(() => {
+    if (!updatedSchedule?.cron_expression) return;
+
+    if (/^\*\/\d\d? \* \* \* \*$/.test(updatedSchedule?.cron_expression)) {
+      setMode('minutes');
+      const matches = updatedSchedule?.cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+    if (/^\d\d? \* \* \* \*$/.test(updatedSchedule?.cron_expression)) {
+      setMode('hour');
+      const matches = updatedSchedule?.cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+      if (!matches) return;
+      setMinutes(Number(matches[1]));
+    }
+  
+    if (/^\d\d? \d\d? \* \* \*$/.test(updatedSchedule?.cron_expression)) {
+      setMode('day');
+      const matches = updatedSchedule?.cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+      if (!matches) return;
+      setHour(Number(matches[1]));
+      setMinutes(Number(matches[2]));
+    }
+  }, []);
+
   return (
     <div className="p-4">
       <ConnectionActionGroup
