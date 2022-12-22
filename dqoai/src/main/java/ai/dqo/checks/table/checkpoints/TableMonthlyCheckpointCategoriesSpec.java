@@ -50,8 +50,9 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyCheckpointCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
-            put("sql", o -> o.sql);
             put("timeliness", o -> o.timeliness);
+            put("sql", o -> o.sql);
+
         }
     };
 
@@ -60,15 +61,15 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardMonthlyCheckpointSpec standard;
 
-    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyCheckpointSpec sql;
-
     @JsonPropertyDescription("Monthly checkpoints of timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessMonthlyCheckpointSpec timeliness;
+
+    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlMonthlyCheckpointSpec sql;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -89,24 +90,6 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns a container of custom sql checkpoints.
-     * @return Container of custom sql checkpoints.
-     */
-    public TableSqlMonthlyCheckpointSpec getSql() {
-        return sql;
-    }
-
-    /**
-     * Sets a reference to a container of custom sql checkpoints.
-     * @param sql Custom sql checkpoints.
-     */
-    public void setSql(TableSqlMonthlyCheckpointSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
-    }
-
-    /**
      * Returns a container of table level timeliness checkpoints.
      * @return Custom timeliness checkpoints.
      */
@@ -122,6 +105,24 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns a container of custom sql checkpoints.
+     * @return Container of custom sql checkpoints.
+     */
+    public TableSqlMonthlyCheckpointSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checkpoints.
+     * @param sql Custom sql checkpoints.
+     */
+    public void setSql(TableSqlMonthlyCheckpointSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

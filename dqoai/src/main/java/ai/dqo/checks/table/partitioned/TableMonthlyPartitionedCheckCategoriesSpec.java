@@ -50,8 +50,9 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
-            put("sql", o -> o.sql);
             put("timeliness", o -> o.timeliness);
+            put("sql", o -> o.sql);
+
         }
     };
 
@@ -60,15 +61,15 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardMonthlyPartitionedChecksSpec standard;
 
-    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every month of data separately")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyPartitionedSpec sql;
-
     @JsonPropertyDescription("Monthly partitioned timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessMonthlyPartitionedChecksSpec timeliness;
+
+    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every month of data separately")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlMonthlyPartitionedSpec sql;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -89,24 +90,6 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the container of custom SQL checks.
-     * @return Custom sql checks.
-     */
-    public TableSqlMonthlyPartitionedSpec getSql() {
-        return sql;
-    }
-
-    /**
-     * Sets a reference to a container of custom SQL checks.
-     * @param sql Container of custom SQL checks.
-     */
-    public void setSql(TableSqlMonthlyPartitionedSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
-    }
-
-    /**
      * Returns a container of table level timeliness checkpoints.
      * @return Custom timeliness checkpoints.
      */
@@ -122,6 +105,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns the container of custom SQL checks.
+     * @return Custom sql checks.
+     */
+    public TableSqlMonthlyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom SQL checks.
+     * @param sql Container of custom SQL checks.
+     */
+    public void setSql(TableSqlMonthlyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**
