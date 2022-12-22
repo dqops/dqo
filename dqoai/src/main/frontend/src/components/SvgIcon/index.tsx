@@ -50,6 +50,8 @@ import { ReactComponent as WaitingSvg } from './svg/waiting.svg';
 import { ReactComponent as PauseSvg } from './svg/pause.svg';
 import { ReactComponent as RunningSvg } from './svg/running.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
+import { ReactComponent as HouseSvg } from './svg/house.svg';
+import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -101,7 +103,9 @@ const iconsMap: any = {
   failed: FailedSvg,
   success: SuccessSvg,
   running: RunningSvg,
-  hourglass: HourglassSvg
+  hourglass: HourglassSvg,
+  house: HouseSvg,
+  'chevron-right': ChevronRightSvg
 };
 
 interface SvgIconProps {

@@ -52,6 +52,6 @@ public class ColumnUniquenessDistinctCountSensorParametersSpec extends AbstractC
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/uniqueness/distinct_count";
+        return "column/uniqueness/unique_count";
     }
 }

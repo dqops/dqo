@@ -20,7 +20,7 @@ import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -46,7 +46,7 @@ public class ColumnUniquenessDistinctCountPercentCheckSpec extends AbstractCheck
     };
 
     @JsonPropertyDescription("Distinct count percent sensor parameters")
-    private ColumnUniquenessDistinctCountPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctCountPercentSensorParametersSpec();
+    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Distinct values count percent validation rules at various alert severity levels (thresholds)")
     private ColumnUniquenessDistinctCountPercentRulesSpec rules = new ColumnUniquenessDistinctCountPercentRulesSpec();
@@ -55,7 +55,7 @@ public class ColumnUniquenessDistinctCountPercentCheckSpec extends AbstractCheck
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
-    public ColumnUniquenessDistinctCountPercentSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -63,7 +63,7 @@ public class ColumnUniquenessDistinctCountPercentCheckSpec extends AbstractCheck
      * Sets a new distinct count percent sensor parameter object.
      * @param parameters Distinct count percent parameters.
      */
-    public void setParameters(ColumnUniquenessDistinctCountPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

@@ -44,7 +44,7 @@ const ConnectionActionGroup = ({
       tab: 'schemas',
       source: true
     });
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
 
     if (onImport) {
       onImport();

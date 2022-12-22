@@ -69,7 +69,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       connection: connectionName
     });
 
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
   }, [connectionName, location.search]);
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
       ...data,
       tab
     });
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
 
     setTabMap({
       ...tabMap,

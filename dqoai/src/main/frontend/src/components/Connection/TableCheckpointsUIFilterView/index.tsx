@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableAdHockChecksUIFilter, getTableCheckpointsUIFilter,
+  getTableCheckpointsUIFilter,
 } from '../../../redux/actions/table.actions';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';

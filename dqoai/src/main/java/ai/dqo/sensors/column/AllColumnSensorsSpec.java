@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.sensors.column.completeness.ColumnCompletenessMissingDatesCountSensorParametersSpec;
 import ai.dqo.sensors.column.consistency.ColumnConsistencyNotNullPercentSensorParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountPercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import ai.dqo.sensors.column.validity.*;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -121,7 +121,7 @@ public class AllColumnSensorsSpec extends AbstractSpec {
     @JsonPropertyDescription("Uniqueness check - counts unique values percentage in a column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctCountPercentSensorParametersSpec uniquenessDistinctCountPercent;
+    private ColumnUniquenessDistinctPercentSensorParametersSpec uniquenessDistinctCountPercent;
 
     @JsonPropertyDescription("Completeness - counts missing dates in a column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -228,7 +228,7 @@ public class AllColumnSensorsSpec extends AbstractSpec {
      * Returns a uniqueness distinct count percent sensor parameters.
      * @return Uniqueness distinct count percent.
      */
-    public ColumnUniquenessDistinctCountPercentSensorParametersSpec getUniquenessDistinctCountPercent() {
+    public ColumnUniquenessDistinctPercentSensorParametersSpec getUniquenessDistinctCountPercent() {
         return uniquenessDistinctCountPercent;
     }
 
@@ -362,7 +362,7 @@ public class AllColumnSensorsSpec extends AbstractSpec {
      * Sets the validity not null count percent sensor parameters.
      * @param uniquenessDistinctCountPercent Not null sensor parameters.
      */
-    public void setUniquenessDistinctCountPercent(ColumnUniquenessDistinctCountPercentSensorParametersSpec uniquenessDistinctCountPercent) {
+    public void setUniquenessDistinctCountPercent(ColumnUniquenessDistinctPercentSensorParametersSpec uniquenessDistinctCountPercent) {
 		this.setDirtyIf(!Objects.equals(this.uniquenessDistinctCountPercent, uniquenessDistinctCountPercent));
         this.uniquenessDistinctCountPercent = uniquenessDistinctCountPercent;
 		propagateHierarchyIdToField(uniquenessDistinctCountPercent, "uniqueness_distinct_count_percent");

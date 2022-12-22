@@ -19,8 +19,8 @@ const Tree = () => {
   const location = useLocation();
 
   const handleNodeClick = (node: CustomTreeNode) => {
-    if (location.pathname !== '/') {
-      history.push('/');
+    if (location.pathname !== '/dashboard') {
+      history.push('/dashboard');
     }
     changeActiveTab(node);
   };
