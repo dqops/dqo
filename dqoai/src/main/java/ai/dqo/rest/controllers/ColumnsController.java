@@ -961,7 +961,7 @@ public class ColumnsController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
-            @ApiResponse(code = 500, message = "Internal iServer Error", response = SpringErrorPayload.class)
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnAdHocChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
