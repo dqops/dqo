@@ -10,7 +10,7 @@ SELECT CASE
             CASE
                 WHEN REGEXP_CONTAINS(
                     {{ lib.render_target_column('analyzed_table') }},
-                    {{ lib.render_regex(parameters.regex) }}
+                    {{ render_regex(parameters.regex) }}
                 ) IS TRUE THEN 1
                 ELSE 0
             END
