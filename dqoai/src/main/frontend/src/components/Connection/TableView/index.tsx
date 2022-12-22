@@ -91,7 +91,7 @@ const TableView = ({
       table: tableName
     });
 
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
   }, [connectionName, schemaName, tableName]);
 
   const onChangeTab = (tab: string) => {
@@ -102,7 +102,7 @@ const TableView = ({
       table: tableName,
       tab
     });
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
     setTabMap({
       ...tabMap,
       [pageTab]: tab

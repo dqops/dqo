@@ -59,7 +59,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
       table,
       tab: 'data-streams'
     });
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
   };
 
   return (
