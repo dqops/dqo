@@ -43,6 +43,23 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends
     private String regex = null;
 
     /**
+     * Returns the regex.
+     * @return regex.
+     */
+    public String getRegex() {
+        return regex;
+    }
+
+    /**
+     * Sets the regex.
+     * @param regex Regex.
+     */
+    public void setRegex(String regex) {
+        this.setDirtyIf(!Objects.equals(this.regex, regex));
+        this.regex = regex;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -62,12 +79,4 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends
         return "column/strings/string_min_regex_match_percent";
     }
 
-    public String getRegex() {
-        return regex;
-    }
-
-    public void setRegex(String regex) {
-        this.setDirtyIf(!Objects.equals(this.regex, regex));
-        this.regex = regex;
-    }
 }

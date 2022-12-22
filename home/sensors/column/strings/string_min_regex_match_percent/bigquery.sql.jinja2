@@ -1,7 +1,7 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {%- macro render_regex(regex) -%}
-        r{{ make_text_constant(regex) }}
+     r{{ make_text_constant(regex) }}
 {% endmacro %}
 
 SELECT CASE
