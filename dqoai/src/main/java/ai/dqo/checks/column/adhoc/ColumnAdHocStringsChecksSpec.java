@@ -68,6 +68,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("min_valid_email_percent", o -> o.minValidEmailPercent);
             put("max_not_match_regex_count", o -> o.maxNotMatchRegexCount);
             put("min_regex_match_percent", o -> o.minRegexMatchPercent);
+            put("max_not_match_date_regex_count", o -> o.maxNotMatchDateRegexCount);
 
 
 
@@ -148,6 +149,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity.")
     private ColumnMinRegexMatchPercentCheckSpec minRegexMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted quantity.")
+    private ColumnMaxNotMatchDateRegexCountCheckSpec maxNotMatchDateRegexCount;
 
     /**
      * Returns a maximum string length below check.
@@ -597,6 +601,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.minRegexMatchPercent, minRegexMatchPercent));
         this.minRegexMatchPercent = minRegexMatchPercent;
         propagateHierarchyIdToField(minRegexMatchPercent, "min_regex_match_percent");
+    }
+
+    /**
+     * Returns a maximum not match date regex count check.
+     * @return Maximum not match date regex count check.
+     */
+    public ColumnMaxNotMatchDateRegexCountCheckSpec getMaxNotMatchDateRegexCount() {
+        return maxNotMatchDateRegexCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum not match date regex count check.
+     * @param maxNotMatchDateRegexCount Maximum not match date regex count check.
+     */
+    public void setMaxNotMatchDateRegexCount(ColumnMaxNotMatchDateRegexCountCheckSpec maxNotMatchDateRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.maxNotMatchDateRegexCount, maxNotMatchDateRegexCount));
+        this.maxNotMatchDateRegexCount = maxNotMatchDateRegexCount;
+        propagateHierarchyIdToField(maxNotMatchDateRegexCount, "max_not_match_date_regex_count");
     }
 
     /**

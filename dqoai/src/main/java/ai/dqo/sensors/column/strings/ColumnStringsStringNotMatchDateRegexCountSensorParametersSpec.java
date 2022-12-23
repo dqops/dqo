@@ -40,6 +40,23 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
     private BuiltInDateFormats namedDateFormat = BuiltInDateFormats.ISO8601;
 
     /**
+     * Returns a desired format to parse the date.
+     * @return Date format.
+     */
+    public BuiltInDateFormats getNamedDateFormat() {
+        return namedDateFormat;
+    }
+
+    /**
+     * Sets a desired format to parse the date.
+     * @param namedDateFormat Date format.
+     */
+    public void setNamedDateFormat(BuiltInDateFormats namedDateFormat) {
+        this.setDirtyIf(this.namedDateFormat != namedDateFormat);
+        this.namedDateFormat = namedDateFormat;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -57,23 +74,6 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
     @Override
     public String getSensorDefinitionName() {
         return "column/strings/string_not_match_date_regex_count";
-    }
-
-    /**
-     * Returns a desired format to parse the date.
-     * @return Date format.
-     */
-    public BuiltInDateFormats getNamedDateFormat() {
-        return namedDateFormat;
-    }
-
-    /**
-     * Sets a desired format to parse the date.
-     * @param namedDateFormat Date format.
-     */
-    public void setNamedDateFormat(BuiltInDateFormats namedDateFormat) {
-        this.setDirtyIf(this.namedDateFormat != namedDateFormat);
-        this.namedDateFormat = namedDateFormat;
     }
 }
 
