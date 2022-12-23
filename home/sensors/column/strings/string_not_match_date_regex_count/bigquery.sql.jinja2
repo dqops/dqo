@@ -15,28 +15,14 @@
             '%d.%m.%Y'
     {%- elif named_date_format == 'DayDashMonthDashYear' -%}
             '%d-%m-%Y'
-    {%- elif named_date_format == 'YearSlashMonthSlashDay'-%}
-        '%Y/%m/%d'
-    {%- elif named_date_format == 'YearDotMonthDotDay'-%}
-        '%Y.%m.%d'
     {%- elif named_date_format == 'YearDashMonthDashDay'-%}
         '%Y-%m-%d'
     {%- elif named_date_format == 'MonthNameSpaceDaySpaceYear'-%}
         '%b %d %Y'
-    {%- elif named_date_format == 'DaySpaceMonthNameSlashYear'-%}
-        '%d %b/%Y'
     {%- elif named_date_format == 'DaySpaceMonthNameDotYear'-%}
         '%d %b.%Y'
-    {%- elif named_date_format == 'DaySpaceMonthNameDashYear'-%}
-        '%d %b-%Y'
     {%- elif named_date_format == 'DaySpaceMonthNameSpaceYear'-%}
         '%d %b %Y'
-    {%- elif named_date_format == 'YearSpaceMonthNameSlashDay'-%}
-        '%Y %b/%d'
-    {%- elif named_date_format == 'YearSpaceMonthNameDotDay'-%}
-        '%Y %b.%d'
-    {%- elif named_date_format == 'YearSpaceMonthNameDashDay'-%}
-        '%Y %b-%d'
     {%- elif named_date_format == 'YearSpaceMonthNameSpaceDay'-%}
         '%Y %b %d'
     {%- endif -%}
