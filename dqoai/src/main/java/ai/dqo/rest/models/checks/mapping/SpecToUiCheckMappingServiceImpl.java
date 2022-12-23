@@ -486,7 +486,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     }
 
     /**
-     * Gets a list of field infos from class info, with an optional filter for field name.
+     * Gets a list of field infos from class info, with an optional filter for field's YAML name.
      * @param classInfo     ClassInfo object.
      * @param requiredField Name of the requested field.
      * @return A list of fields in class, optionally filtered.
@@ -495,7 +495,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         List<FieldInfo> fields = new ArrayList<>();
 
         if (requiredField.isPresent()) {
-            FieldInfo fieldInfo = classInfo.getField(requiredField.get());
+            FieldInfo fieldInfo = classInfo.getFieldByYamlName(requiredField.get());
             if (fieldInfo != null) {
                 fields.add(fieldInfo);
             }

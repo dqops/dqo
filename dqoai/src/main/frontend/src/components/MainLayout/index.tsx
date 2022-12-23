@@ -16,7 +16,7 @@ const MainLayout = ({ children }: LayoutProps) => {
     <div className="flex min-h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-1">
-        <Header />
+        <Header sidebarWidth={sidebarWidth} />
         <div
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{

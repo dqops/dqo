@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueValuesCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMinUniqueCountCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessUniqueValuesCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessUniqueCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMinUniqueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -47,7 +47,7 @@ public class ColumnMinUniqueCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters = new ColumnUniquenessUniqueValuesCountSensorParametersSpec();
+    private ColumnUniquenessUniqueCountSensorParametersSpec parameters = new ColumnUniquenessUniqueCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnMinUniqueCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessUniqueValuesCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessUniqueCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnMinUniqueCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessUniqueValuesCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessUniqueCountSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

@@ -50,8 +50,9 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
-            put("sql", o -> o.sql);
             put("timeliness", o -> o.timeliness);
+            put("sql", o -> o.sql);
+
         }
     };
 
@@ -60,15 +61,15 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardDailyPartitionedChecksSpec standard;
 
-    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlDailyPartitionedSpec sql;
-
     @JsonPropertyDescription("Daily partitioned timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessDailyPartitionedChecksSpec timeliness;
+
+    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSqlDailyPartitionedSpec sql;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -89,24 +90,6 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns a container of custom sql checks.
-     * @return Custom sql checks.
-     */
-    public TableSqlDailyPartitionedSpec getSql() {
-        return sql;
-    }
-
-    /**
-     * Sets a reference to a container of custom sql checks.
-     * @param sql Container of custom sql checks.
-     */
-    public void setSql(TableSqlDailyPartitionedSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
-    }
-
-    /**
      * Returns a container of table level timeliness checkpoints.
      * @return Custom timeliness checkpoints.
      */
@@ -122,6 +105,24 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableSqlDailyPartitionedSpec getSql() {
+        return sql;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param sql Container of custom sql checks.
+     */
+    public void setSql(TableSqlDailyPartitionedSpec sql) {
+        this.setDirtyIf(!Objects.equals(this.sql, sql));
+        this.sql = sql;
+        this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**

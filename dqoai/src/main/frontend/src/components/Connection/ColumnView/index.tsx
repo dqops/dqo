@@ -77,7 +77,7 @@ const ColumnView = ({
       column: columnName
     });
 
-    history.replace(`/?${searchQuery}`);
+    history.replace(`/dashboard?${searchQuery}`);
   }, [connectionName, schemaName, tableName, columnName]);
 
   useEffect(() => {

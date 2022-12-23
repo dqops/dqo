@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDuplicateCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMaxDuplicateCountCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessDuplicateCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxDuplicateCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -48,7 +48,7 @@ public class ColumnMaxDuplicateCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec parameters = new ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec();
+    private ColumnUniquenessDuplicateCountSensorParametersSpec parameters = new ColumnUniquenessDuplicateCountSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class ColumnMaxDuplicateCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessDuplicateCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnMaxDuplicateCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessUniqueMaxDuplicateCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDuplicateCountSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

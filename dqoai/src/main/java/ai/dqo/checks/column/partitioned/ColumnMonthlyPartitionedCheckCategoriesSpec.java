@@ -45,7 +45,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level monthly partitioned checks. Contains categories of data quality checks that are executed for monthly partitionsColumnNullsMonthlyPartitionedChecksSpec.
+ * Container of data quality partitioned checks on a column level that are checking numeric values at a monthly level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

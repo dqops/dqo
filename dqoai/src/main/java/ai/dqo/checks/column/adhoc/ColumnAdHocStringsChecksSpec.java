@@ -67,6 +67,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
             put("min_valid_email_percent", o -> o.minValidEmailPercent);
             put("max_not_match_regex_count", o -> o.maxNotMatchRegexCount);
+            put("min_regex_match_percent", o -> o.minRegexMatchPercent);
 
 
 
@@ -144,6 +145,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity.")
     private ColumnMaxNotMatchRegexCountCheckSpec maxNotMatchRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity.")
+    private ColumnMinRegexMatchPercentCheckSpec minRegexMatchPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -575,6 +579,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxNotMatchRegexCount, maxNotMatchRegexCount));
         this.maxNotMatchRegexCount = maxNotMatchRegexCount;
         propagateHierarchyIdToField(maxNotMatchRegexCount, "max_not_match_regex_count");
+    }
+
+    /**
+     * Returns a minimum match regex percent check.
+     * @return Minimum match regex percent check.
+     */
+    public ColumnMinRegexMatchPercentCheckSpec getMinRegexMatchPercent() {
+        return minRegexMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum match regex percent check.
+     * @param minRegexMatchPercent Minimum match regex percent check.
+     */
+    public void setMinRegexMatchPercent(ColumnMinRegexMatchPercentCheckSpec minRegexMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.minRegexMatchPercent, minRegexMatchPercent));
+        this.minRegexMatchPercent = minRegexMatchPercent;
+        propagateHierarchyIdToField(minRegexMatchPercent, "min_regex_match_percent");
     }
 
     /**
