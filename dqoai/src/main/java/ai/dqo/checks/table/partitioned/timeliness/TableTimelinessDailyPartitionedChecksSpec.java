@@ -18,7 +18,7 @@ package ai.dqo.checks.table.partitioned.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,7 +42,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("daily_partition_max_days_since_most_recent_event", o -> o.dailyPartitionMaxDaysSinceMostRecentEvent);
-           put("daily_partition_max_days_since_most_recent_ingestion", o -> o.dailyPartitionMaxDaysSinceMostRecentIngestion);
+           put("daily_partition_max_row_data_ingestion_delay", o -> o.dailyPartitionMaxRowDataIngestionDelay);
            put("daily_partition_max_delay_in_data_loading_in_days", o -> o.dailyPartitionMaxDelayInDataLoadingInDays);
            put("daily_partition_days_since_last_load", o -> o.dailyPartitionDaysSinceLastLoad);
         }
@@ -53,10 +53,10 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec dailyPartitionMaxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Daily partition checkpoint calculating the maximum days since the most recent ingestion timestamp")
+    @JsonPropertyDescription("Daily partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec dailyPartitionMaxDaysSinceMostRecentIngestion;
+    private TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay;
 
     @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -87,21 +87,21 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a maximum days since the most recent ingestion check configuration.
-     * @return Maximum days since the most recent ingestion check configuration.
+     * Returns a maximum row data ingestion delay check configuration.
+     * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxDaysSinceMostRecentIngestionCheckSpec getDailyPartitionMaxDaysSinceMostRecentIngestion() {
-        return dailyPartitionMaxDaysSinceMostRecentIngestion;
+    public TableMaxRowDataIngestionDelayCheckSpec getDailyPartitionMaxRowDataIngestionDelay() {
+        return dailyPartitionMaxRowDataIngestionDelay;
     }
 
     /**
-     * Sets a maximum days since the most recent ingestion.
-     * @param dailyPartitionMaxDaysSinceMostRecentIngestion New maximum days since the most recent ingestion.
+     * Sets a maximum row data ingestion delay.
+     * @param dailyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
      */
-    public void setDailyPartitionMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec dailyPartitionMaxDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDaysSinceMostRecentIngestion, dailyPartitionMaxDaysSinceMostRecentIngestion));
-        this.dailyPartitionMaxDaysSinceMostRecentIngestion = dailyPartitionMaxDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(dailyPartitionMaxDaysSinceMostRecentIngestion, "daily_partition_max_days_since_most_recent_ingestion");
+    public void setDailyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxRowDataIngestionDelay, dailyPartitionMaxRowDataIngestionDelay));
+        this.dailyPartitionMaxRowDataIngestionDelay = dailyPartitionMaxRowDataIngestionDelay;
+        this.propagateHierarchyIdToField(dailyPartitionMaxRowDataIngestionDelay, "daily_partition_max_row_data_ingestion_delay");
     }
 
     /**

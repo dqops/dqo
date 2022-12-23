@@ -17,7 +17,6 @@ package ai.dqo.checks.table.checkpoints.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -41,7 +40,6 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMonthlyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("monthly_checkpoint_max_days_since_most_recent_event", o -> o.monthlyCheckpointMaxDaysSinceMostRecentEvent);
-           put("monthly_checkpoint_max_days_since_most_recent_ingestion", o -> o.monthlyCheckpointMaxDaysSinceMostRecentIngestion);
            put("monthly_checkpoint_max_delay_in_data_loading_in_days", o -> o.monthlyCheckpointMaxDelayInDataLoadingInDays);
            put("monthly_checkpoint_days_since_last_load", o -> o.monthlyCheckpointDaysSinceLastLoad);
         }
@@ -51,11 +49,6 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyCheckpointMaxDaysSinceMostRecentEvent;
-
-    @JsonPropertyDescription("Monthly checkpoint calculating maximum days since the most recent ingestion timestamp")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointMaxDaysSinceMostRecentIngestion;
 
     @JsonPropertyDescription("Monthly checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -83,24 +76,6 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
 		this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDaysSinceMostRecentEvent, monthlyCheckpointMaxDaysSinceMostRecentEvent));
         this.monthlyCheckpointMaxDaysSinceMostRecentEvent = monthlyCheckpointMaxDaysSinceMostRecentEvent;
 		this.propagateHierarchyIdToField(monthlyCheckpointMaxDaysSinceMostRecentEvent, "monthly_checkpoint_max_days_since_most_recent_event");
-    }
-
-    /**
-     * Returns the maximum days since the most recent ingestion check configuration.
-     * @return Maximum days since the most recent ingestion check configuration.
-     */
-    public TableMaxDaysSinceMostRecentIngestionCheckSpec getMonthlyCheckpointMaxDaysSinceMostRecentIngestion() {
-        return monthlyCheckpointMaxDaysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets the maximum days since the most recent ingestion.
-     * @param monthlyCheckpointMaxDaysSinceMostRecentIngestion New maximum days since the most recent ingestion check.
-     */
-    public void setMonthlyCheckpointMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointMaxDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDaysSinceMostRecentIngestion, monthlyCheckpointMaxDaysSinceMostRecentIngestion));
-        this.monthlyCheckpointMaxDaysSinceMostRecentIngestion = monthlyCheckpointMaxDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(monthlyCheckpointMaxDaysSinceMostRecentIngestion, "monthly_checkpoint_max_days_since_most_recent_ingestion");
     }
 
     /**

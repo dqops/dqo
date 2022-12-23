@@ -18,7 +18,6 @@ package ai.dqo.checks.table.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -40,7 +39,6 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocTimelinessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
-            put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
             put("max_delay_in_data_loading_in_days", o -> o.maxDelayInDataLoadingInDays);
             put("days_since_last_load", o -> o.daysSinceLastLoad);
         }
@@ -48,9 +46,6 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Calculates the maximum days since the most recent event timestamp")
     private TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent;
-
-    @JsonPropertyDescription("Calculates the maximum days since the most recent ingestion timestamp")
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion;
 
     @JsonPropertyDescription("Calculates the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     private TableMaxDelayInDataLoadingInDaysCheckSpec maxDelayInDataLoadingInDays;
@@ -74,24 +69,6 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.maxDaysSinceMostRecentEvent, maxDaysSinceMostRecentEvent));
         this.maxDaysSinceMostRecentEvent = maxDaysSinceMostRecentEvent;
         propagateHierarchyIdToField(maxDaysSinceMostRecentEvent, "max_days_since_most_recent_event");
-    }
-
-    /**
-     * Returns a maximum days since the most recent ingestion check configuration.
-     * @return Maximum days since the most recent ingestion check configuration.
-     */
-    public TableMaxDaysSinceMostRecentIngestionCheckSpec getMaxDaysSinceMostRecentIngestion() {
-        return maxDaysSinceMostRecentIngestion;
-    }
-
-    /**
-     * Sets a maximum days since the most recent ingestion check configuration.
-     * @param maxDaysSinceMostRecentIngestion Maximum days since the most recent ingestion check configuration.
-     */
-    public void setMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.maxDaysSinceMostRecentIngestion, maxDaysSinceMostRecentIngestion));
-        this.maxDaysSinceMostRecentIngestion = maxDaysSinceMostRecentIngestion;
-        propagateHierarchyIdToField(maxDaysSinceMostRecentIngestion, "max_days_since_most_recent_ingestion");
     }
 
     /**
