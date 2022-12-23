@@ -45,12 +45,6 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpec extend
     @JsonPropertyDescription("Maximal value range variable.")
     private Double maxValue;
 
-    @JsonPropertyDescription("The variable deciding whether to include the minimal value of the range. It includes it by default.")
-    private Boolean includeMinValue = true;
-
-    @JsonPropertyDescription("The variable deciding whether to include the maximal value of the range. It includes it by default.")
-    private Boolean includeMaxValue = true;
-
     /**
      * Returns the minimal value of the range.
      * @return Minimal value of the range.
@@ -83,40 +77,6 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpec extend
     public void setMaxValue(Double maxValue) {
         this.setDirtyIf(!Objects.equals(this.maxValue, maxValue));
         this.maxValue = maxValue;
-    }
-
-    /**
-     * Returns the boolean deciding whether to include the minimal value in the range.
-     * @return Boolean deciding whether to include the minimal value.
-     */
-    public Boolean isIncludeMinValue() {
-        return includeMinValue;
-    }
-
-    /**
-     * Sets the boolean deciding whether to include the minimal value in the range.
-     * @param includeMinValue Boolean deciding whether to include the minimal value.
-     */
-    public void setIncludeMinValue(Boolean includeMinValue) {
-        this.setDirtyIf(!Objects.equals(this.includeMinValue, includeMinValue));
-        this.includeMinValue = includeMinValue;
-    }
-
-    /**
-     * Returns the boolean deciding whether to include the maximal value in the range.
-     * @return Boolean deciding whether to include the maximal value.
-     */
-    public Boolean isIncludeMaxValue() {
-        return includeMaxValue;
-    }
-
-    /**
-     * Sets the boolean deciding whether to include the maximal value in the range.
-     * @param includeMaxValue Boolean deciding whether to include the maximal value.
-     */
-    public void setIncludeMaxValue(Boolean includeMaxValue) {
-        this.setDirtyIf(!Objects.equals(this.includeMaxValue, includeMaxValue));
-        this.includeMaxValue = includeMaxValue;
     }
 
     /**
