@@ -25,15 +25,67 @@ public enum BuiltInDateFormats {
     ISO8601,
 
     @JsonProperty("MM/DD/YYYY")
-    MonthDayYear,
+    MonthSlashDaySlashYear,
+
+    @JsonProperty("MM.DD.YYYY")
+    MonthDotDayDotYear,
+
+    @JsonProperty("MM-DD-YYYY")
+    MonthDashDayDashYear,
 
     @JsonProperty("DD/MM/YYYY")
-    DayMonthYear,
+    DaySlashMonthSlashYear,
+
+    @JsonProperty("DD.MM.YYYY")
+    DayDotMonthDotYear,
+
+    @JsonProperty("DD-MM-YYYY")
+    DayDashMonthDashYear,
 
     @JsonProperty("YYYY/MM/DD")
-    YearMonthDay,
+    YearSlashMonthSlashDay,
 
-    @JsonProperty("Month D, YYYY")
-    MonthNameDayYear
+    @JsonProperty("YYYY.MM.DD")
+    YearDotMonthDotDay,
+
+    @JsonProperty("YYYY-MM-DD")
+    YearDashMonthDashDay,
+
+    @JsonProperty("MonthName DD/YYYY")
+    MonthNameSpaceDaySlashYear,
+
+    @JsonProperty("MonthName DD.YYYY")
+    MonthNameSpaceDayDotYear,
+
+    @JsonProperty("MonthName DD-YYYY")
+    MonthNameSpaceDayDashYear,
+
+    @JsonProperty("MonthName DD YYYY")
+    MonthNameSpaceDaySpaceYear,
+
+    @JsonProperty("DD MonthName/YYYY")
+    DaySpaceMonthNameSlashYear,
+
+    @JsonProperty("DD MonthName.YYYY")
+    DaySpaceMonthNameDotYear,
+
+    @JsonProperty("DD MonthName-YYYY")
+    DaySpaceMonthNameDashYear,
+
+    @JsonProperty("DD MonthName YYYY")
+    DaySpaceMonthNameSpaceYear,
+
+    @JsonProperty("YYYY MonthName/DD")
+    YearSpaceMonthNameSlashDay,
+
+    @JsonProperty("YYYY MonthName.DD")
+    YearSpaceMonthNameDotDay,
+
+    @JsonProperty("YYYY MonthName-DD")
+    YearSpaceMonthNameDashDay,
+
+    @JsonProperty("YYYY MonthName DD")
+    YearSpaceMonthNameSpaceDay,
+
     // TODO add more formats
 }
