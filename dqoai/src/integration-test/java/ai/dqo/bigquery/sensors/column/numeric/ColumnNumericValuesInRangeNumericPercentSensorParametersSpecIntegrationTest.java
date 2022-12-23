@@ -82,9 +82,6 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMinValue(-2.0);
         this.sut.setMaxValue(2.0);
 
-        this.sut.setIncludeMinValue(true);
-        this.sut.setIncludeMaxValue(true);
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
 
@@ -100,8 +97,6 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         this.sut.setMinValue(0.0);
         this.sut.setMaxValue(25.0);
-
-        this.sut.setIncludeMaxValue(true);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly);
