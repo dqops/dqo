@@ -3,14 +3,48 @@
 {% macro render_date_format(named_date_format) %}
     {%- if named_date_format == 'ISO8601'-%}
         '%Y-%m-%d'
-    {%- elif named_date_format == 'MonthDayYear' -%}
+    {%- elif named_date_format == 'Month/Day/Year' -%}
         '%m/%d/%Y'
-    {%- elif named_date_format == 'DayMonthYear' -%}
+    {%- elif named_date_format == 'Month.Day.Year' -%}
+            '%m.%d.%Y'
+    {%- elif named_date_format == 'Month-Day-Year' -%}
+            '%m-%d-%Y'
+    {%- elif named_date_format == 'Day/Month/Year' -%}
         '%d/%m/%Y'
-    {%- elif named_date_format == 'YearMonthDay'-%}
+    {%- elif named_date_format == 'Day.Month.Year' -%}
+            '%d.%m.%Y'
+    {%- elif named_date_format == 'Day-Month-Year' -%}
+            '%d-%m-%Y'
+    {%- elif named_date_format == 'Year/Month/Day'-%}
         '%Y/%m/%d'
-    {%- elif named_date_format == 'MonthNameDayYear'-%}
-        '%b %d, %Y'
+    {%- elif named_date_format == 'Year.Month.Day'-%}
+        '%Y.%m.%d'
+    {%- elif named_date_format == 'Year-Month-Day'-%}
+        '%Y-%m-%d'
+    {%- elif named_date_format == 'MonthName Day/Year'-%}
+        '%b %d/%Y'
+    {%- elif named_date_format == 'MonthName Day.Year'-%}
+        '%b %d.%Y'
+    {%- elif named_date_format == 'MonthName Day-Year'-%}
+        '%b %d-%Y'
+    {%- elif named_date_format == 'MonthName Day Year'-%}
+        '%b %d %Y'
+    {%- elif named_date_format == 'Day MonthName/Year'-%}
+        '%d %b/%Y'
+    {%- elif named_date_format == 'Day MonthName.Year'-%}
+        '%d %b.%Y'
+    {%- elif named_date_format == 'Day MonthName-Year'-%}
+        '%d %b-%Y'
+    {%- elif named_date_format == 'Day MonthName Year'-%}
+        '%d %b %Y'
+    {%- elif named_date_format == 'Year MonthName/Day'-%}
+        '%Y %b/%d'
+    {%- elif named_date_format == 'Year MonthName.Day'-%}
+        '%Y %b.%d'
+    {%- elif named_date_format == 'Year MonthName-Day'-%}
+        '%Y %b-%d'
+    {%- elif named_date_format == 'Year MonthName Day'-%}
+        '%Y %b %d'
     {%- endif -%}
 {% endmacro -%}
 
@@ -19,9 +53,9 @@ CASE
  WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
 ELSE
  SUM(
-    CASE WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) IS NOT NULL
-        AND SAFE.PARSE_DATE({{render_date_format(parameters.named_date_format)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }}AS STRING)) IS NOT NULL THEN 0
-    ELSE 1
+    CASE WHEN SAFE.PARSE_DATE({{ lib.render_date_format(parameters.named_date_format) }}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING))
+    IS NULL THEN 1
+    ELSE 0
 END
 ) END AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
