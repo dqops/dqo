@@ -19,9 +19,8 @@ CASE
  WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
 ELSE
  SUM(
-    CASE WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64) IS NOT NULL
-        OR SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) IS NOT NULL
-        OR SAFE.PARSE_DATE({{render_date_format(parameters.named_date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL THEN 0
+    CASE WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) IS NOT NULL
+        AND SAFE.PARSE_DATE({{render_date_format(parameters.named_date_format)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }}AS STRING)) IS NOT NULL THEN 0
     ELSE 1
 END
 ) END AS actual_value
