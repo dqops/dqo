@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableTimelinessDataIngestionDelaySensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDataIngestionDelaySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class TableTimelinessMaxDelayInDataLoadingInDaysSensorParametersSpec exte
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/max_delay_in_data_loading_in_days";
+        return "table/timeliness/data_ingestion_delay";
     }
 }
