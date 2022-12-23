@@ -18,11 +18,15 @@ package ai.dqo.sensors.column.strings;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
+import ai.dqo.sensors.column.strings.BuiltInDateFormats;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
+
 
 /**
  * Column level sensor that calculates the number of values that does not fit to a date regex in a column.
@@ -52,7 +56,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
      * @param namedDateFormat Date format.
      */
     public void setNamedDateFormat(BuiltInDateFormats namedDateFormat) {
-        this.setDirtyIf(this.namedDateFormat != namedDateFormat);
+        this.setDirtyIf(!Objects.equals(this.namedDateFormat, namedDateFormat));
         this.namedDateFormat = namedDateFormat;
     }
 
