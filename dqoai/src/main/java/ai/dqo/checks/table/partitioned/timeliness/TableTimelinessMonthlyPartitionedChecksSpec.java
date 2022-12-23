@@ -18,7 +18,7 @@ package ai.dqo.checks.table.partitioned.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDelayInDataLoadingInDaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastLoadCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -42,7 +42,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
            put("monthly_partition_max_days_since_most_recent_event", o -> o.monthlyPartitionMaxDaysSinceMostRecentEvent);
-           put("monthly_partition_max_days_since_most_recent_ingestion", o -> o.monthlyPartitionMaxDaysSinceMostRecentIngestion);
+           put("monthly_partition_max_row_data_ingestion_delay", o -> o.monthlyPartitionMaxRowDataIngestionDelay);
            put("monthly_partition_max_delay_in_data_loading_in_days", o -> o.monthlyPartitionMaxDelayInDataLoadingInDays);
            put("monthly_partition_days_since_last_load", o -> o.monthlyPartitionDaysSinceLastLoad);
         }
@@ -53,10 +53,10 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableMaxDaysSinceMostRecentEventCheckSpec monthlyPartitionMaxDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Monthly partition checkpoint calculating the maximum days since the most recent ingestion")
+    @JsonPropertyDescription("Monthly partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyPartitionMaxDaysSinceMostRecentIngestion;
+    private TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay;
 
     @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the maximum event timestamp (the most recent transaction timestamp) and the maximum ingestion timestamp (the most recent data loading timestamp)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -87,21 +87,21 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     }
 
     /**
-     * Returns a maximum days since the most recent ingestion check configuration.
-     * @return Maximum days since the most recent ingestion check configuration.
+     * Returns a maximum row data ingestion delay check configuration.
+     * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxDaysSinceMostRecentIngestionCheckSpec getMonthlyPartitionMaxDaysSinceMostRecentIngestion() {
-        return monthlyPartitionMaxDaysSinceMostRecentIngestion;
+    public TableMaxRowDataIngestionDelayCheckSpec getMonthlyPartitionMaxRowDataIngestionDelay() {
+        return monthlyPartitionMaxRowDataIngestionDelay;
     }
 
     /**
-     * Sets a maximum days since the most recent ingestion.
-     * @param monthlyPartitionMaxDaysSinceMostRecentIngestion New maximum days since the most recent ingestion check.
+     * Sets a maximum row data ingestion delay.
+     * @param monthlyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
      */
-    public void setMonthlyPartitionMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec monthlyPartitionMaxDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDaysSinceMostRecentIngestion, monthlyPartitionMaxDaysSinceMostRecentIngestion));
-        this.monthlyPartitionMaxDaysSinceMostRecentIngestion = monthlyPartitionMaxDaysSinceMostRecentIngestion;
-        this.propagateHierarchyIdToField(monthlyPartitionMaxDaysSinceMostRecentIngestion, "monthly_partition_max_days_since_most_recent_ingestion");
+    public void setMonthlyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxRowDataIngestionDelay, monthlyPartitionMaxRowDataIngestionDelay));
+        this.monthlyPartitionMaxRowDataIngestionDelay = monthlyPartitionMaxRowDataIngestionDelay;
+        this.propagateHierarchyIdToField(monthlyPartitionMaxRowDataIngestionDelay, "monthly_partition_max_row_data_ingestion_delay");
     }
 
     /**

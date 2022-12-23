@@ -61,7 +61,7 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    passed = rule_parameters.actual_value >= rule_parameters.parameters.min_count
+    passed = rule_parameters.actual_value > rule_parameters.parameters.min_count
     expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
     upper_bound = None
