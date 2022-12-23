@@ -2,15 +2,15 @@
 
 {% macro render_date_format(named_date_format) %}
         {%- if named_date_format == 'ISO8601'-%}
-'%Y-%m-%d'
+            '%Y-%m-%d'
         {%- elif named_date_format == 'MonthDayYear' -%}
-'%m/%d/%Y'
+            '%m/%d/%Y'
         {%- elif named_date_format == 'DayMonthYear' -%}
-'%d/%m/%Y'
+            '%d/%m/%Y'
         {%- elif named_date_format == 'YearMonthDay'-%}
-'%Y/%m/%d'
+            '%Y/%m/%d'
         {%- elif named_date_format == 'MonthNameDayYear'-%}
-'%b %d, %Y'
+            '%b %d, %Y'
     {%- endif -%}
 {% endmacro %}
 
@@ -19,7 +19,7 @@ CASE
  WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
 ELSE
  SUM(
-    CASE WHEN SAFE.PARSE_DATE({{ lib.render_date_format(parameters.named_date_format) }}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING))
+    CASE WHEN SAFE.PARSE_DATE({{render_date_format(parameters.named_date_format) }}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING))
     IS NULL THEN 1
     ELSE 0
 END
