@@ -25,37 +25,15 @@ public enum BuiltInDateFormats {
     ISO8601,
 
     @JsonProperty("MM/DD/YYYY")
-    MonthSlashDaySlashYear,
-
-    @JsonProperty("MM.DD.YYYY")
-    MonthDotDayDotYear,
-
-    @JsonProperty("MM-DD-YYYY")
-    MonthDashDayDashYear,
+    MonthDayYear,
 
     @JsonProperty("DD/MM/YYYY")
-    DaySlashMonthSlashYear,
+    DayMonthYear,
 
-    @JsonProperty("DD.MM.YYYY")
-    DayDotMonthDotYear,
+    @JsonProperty("YYYY/MM/DD")
+    YearMonthDay,
 
-    @JsonProperty("DD-MM-YYYY")
-    DayDashMonthDashYear,
-
-    @JsonProperty("YYYY-MM-DD")
-    YearDashMonthDashDay,
-
-    @JsonProperty("MonthName DD YYYY")
-    MonthNameSpaceDaySpaceYear,
-
-    @JsonProperty("DD MonthName.YYYY")
-    DaySpaceMonthNameDotYear,
-
-    @JsonProperty("DD MonthName YYYY")
-    DaySpaceMonthNameSpaceYear,
-
-    @JsonProperty("YYYY MonthName DD")
-    YearSpaceMonthNameSpaceDay,
-
+    @JsonProperty("Month D, YYYY")
+    MonthNameDayYear
     // TODO add more formats
 }

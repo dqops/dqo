@@ -1,32 +1,19 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {% macro render_date_format(named_date_format) %}
-    {%- if named_date_format == 'ISO8601'-%}
-        '%Y-%m-%d'
-    {%- elif named_date_format == 'MonthSlashDaySlashYear' -%}
-        '%m/%d/%Y'
-    {%- elif named_date_format == 'MonthDotDayDotYear' -%}
-            '%m.%d.%Y'
-    {%- elif named_date_format == 'MonthDashDayDashYear' -%}
-            '%m-%d-%Y'
-    {%- elif named_date_format == 'DaySlashMonthSlashYear' -%}
-        '%d/%m/%Y'
-    {%- elif named_date_format == 'DayDotMonthDotYear' -%}
-            '%d.%m.%Y'
-    {%- elif named_date_format == 'DayDashMonthDashYear' -%}
-            '%d-%m-%Y'
-    {%- elif named_date_format == 'YearDashMonthDashDay'-%}
-        '%Y-%m-%d'
-    {%- elif named_date_format == 'MonthNameSpaceDaySpaceYear'-%}
-        '%b %d %Y'
-    {%- elif named_date_format == 'DaySpaceMonthNameDotYear'-%}
-        '%d %b.%Y'
-    {%- elif named_date_format == 'DaySpaceMonthNameSpaceYear'-%}
-        '%d %b %Y'
-    {%- elif named_date_format == 'YearSpaceMonthNameSpaceDay'-%}
-        '%Y %b %d'
+        {%- if named_date_format == 'ISO8601'-%}
+'%Y-%m-%d'
+        {%- elif named_date_format == 'MonthDayYear' -%}
+'%m/%d/%Y'
+        {%- elif named_date_format == 'DayMonthYear' -%}
+'%d/%m/%Y'
+        {%- elif named_date_format == 'YearMonthDay'-%}
+'%Y/%m/%d'
+        {%- elif named_date_format == 'MonthNameDayYear'-%}
+'%b %d, %Y'
+        {%- endif -%}
     {%- endif -%}
-{% endmacro -%}
+{% endmacro %}
 
 SELECT
 CASE
