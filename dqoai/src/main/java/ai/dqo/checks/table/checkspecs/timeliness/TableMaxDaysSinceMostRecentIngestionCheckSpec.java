@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDataIngestionDelaySensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,23 +33,23 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates the maximal number of days between event timestamp and ingestion timestamp. .
+ * Table level check that calculates the minimal number of days between event timestamp and ingestion timestamp. .
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTimelinessDataIngestionDelaySensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableDataIngestionDelayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableMaxDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableMaxDaysSinceMostRecentIngestionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Max number of days between event and ingestion sensor parameters")
+    @JsonPropertyDescription("Min number of days between event and ingestion sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessDataIngestionDelaySensorParametersSpec parameters = new TableTimelinessDataIngestionDelaySensorParametersSpec();
+    private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec parameters = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a max number of days between event and ingestion check that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a min number of days between event and ingestion check that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -69,15 +69,15 @@ public class TableDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTim
      * @return Sensor parameters.
      */
     @Override
-    public TableTimelinessDataIngestionDelaySensorParametersSpec getParameters() {
+    public TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec getParameters() {
         return parameters;
     }
 
     /**
-     * Sets a new max number of days between event and ingestion sensor parameter object.
-     * @param parameters Max number of days between event and ingestion sensor parameters.
+     * Sets a new min number of days between event and ingestion sensor parameter object.
+     * @param parameters Min number of days between event and ingestion sensor parameters.
      */
-    public void setParameters(TableTimelinessDataIngestionDelaySensorParametersSpec parameters) {
+    public void setParameters(TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

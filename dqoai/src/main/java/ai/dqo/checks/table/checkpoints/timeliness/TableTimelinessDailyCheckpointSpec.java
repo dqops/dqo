@@ -15,9 +15,9 @@
  */
 package ai.dqo.checks.table.checkpoints.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastDataIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDataIngestionDelayCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level daily checkpoints for standard data quality checks.
+ * Container of table level daily checkpoints for timeliness data quality checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -39,79 +39,79 @@ import java.util.Objects;
 public class TableTimelinessDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessDailyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_checkpoint_days_since_most_recent_event", o -> o.dailyCheckpointDaysSinceMostRecentEvent);
-           put("daily_checkpoint_data_ingestion_delay", o -> o.dailyCheckpointDataIngestionDelay);
-           put("daily_checkpoint_days_since_last_data_ingestion", o -> o.dailyCheckpointDaysSinceLastDataIngestion);
+           put("daily_checkpoint_max_days_since_most_recent_event", o -> o.dailyCheckpointMaxDaysSinceMostRecentEvent);
+           put("daily_checkpoint_max_data_ingestion_delay", o -> o.dailyCheckpointMaxDataIngestionDelay);
+           put("daily_checkpoint_max_days_since_most_recent_ingestion", o -> o.dailyCheckpointMaxDaysSinceMostRecentIngestion);
         }
     };
 
     @JsonPropertyDescription("Daily checkpoint calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceMostRecentEventCheckSpec dailyCheckpointDaysSinceMostRecentEvent;
+    private TableMaxDaysSinceMostRecentEventCheckSpec dailyCheckpointMaxDaysSinceMostRecentEvent;
 
     @JsonPropertyDescription("Daily checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDataIngestionDelayCheckSpec dailyCheckpointDataIngestionDelay;
+    private TableMaxDataIngestionDelayCheckSpec dailyCheckpointMaxDataIngestionDelay;
 
     @JsonPropertyDescription("Daily checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceLastDataIngestionCheckSpec dailyCheckpointDaysSinceLastDataIngestion;
+    private TableMaxDaysSinceMostRecentIngestionCheckSpec dailyCheckpointMaxDaysSinceMostRecentIngestion;
 
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return A number of days since the most recent event check configuration.
      */
-    public TableDaysSinceMostRecentEventCheckSpec getDailyCheckpointDaysSinceMostRecentEvent() {
-        return dailyCheckpointDaysSinceMostRecentEvent;
+    public TableMaxDaysSinceMostRecentEventCheckSpec getDailyCheckpointMaxDaysSinceMostRecentEvent() {
+        return dailyCheckpointMaxDaysSinceMostRecentEvent;
     }
 
     /**
      * Sets the number of days since the most recent event.
-     * @param dailyCheckpointDaysSinceMostRecentEvent New days since the most recent event check.
+     * @param dailyCheckpointMaxDaysSinceMostRecentEvent New days since the most recent event check.
      */
-    public void setDailyCheckpointDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec dailyCheckpointDaysSinceMostRecentEvent) {
-		this.setDirtyIf(!Objects.equals(this.dailyCheckpointDaysSinceMostRecentEvent, dailyCheckpointDaysSinceMostRecentEvent));
-        this.dailyCheckpointDaysSinceMostRecentEvent = dailyCheckpointDaysSinceMostRecentEvent;
-		this.propagateHierarchyIdToField(dailyCheckpointDaysSinceMostRecentEvent, "daily_checkpoint_days_since_most_recent_event");
+    public void setDailyCheckpointMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec dailyCheckpointMaxDaysSinceMostRecentEvent) {
+		this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDaysSinceMostRecentEvent, dailyCheckpointMaxDaysSinceMostRecentEvent));
+        this.dailyCheckpointMaxDaysSinceMostRecentEvent = dailyCheckpointMaxDaysSinceMostRecentEvent;
+		this.propagateHierarchyIdToField(dailyCheckpointMaxDaysSinceMostRecentEvent, "daily_checkpoint_max_days_since_most_recent_event");
     }
 
     /**
      * Returns a data ingestion delay check configuration.
      * @return A data ingestion delay check configuration.
      */
-    public TableDataIngestionDelayCheckSpec getDailyCheckpointDataIngestionDelay() {
-        return dailyCheckpointDataIngestionDelay;
+    public TableMaxDataIngestionDelayCheckSpec getDailyCheckpointMaxDataIngestionDelay() {
+        return dailyCheckpointMaxDataIngestionDelay;
     }
 
     /**
      * Sets a data ingestion delay check configuration.
-     * @param dailyCheckpointDataIngestionDelay A data ingestion delay check configuration.
+     * @param dailyCheckpointMaxDataIngestionDelay A data ingestion delay check configuration.
      */
-    public void setDailyCheckpointDataIngestionDelay(TableDataIngestionDelayCheckSpec dailyCheckpointDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDataIngestionDelay, dailyCheckpointDataIngestionDelay));
-        this.dailyCheckpointDataIngestionDelay = dailyCheckpointDataIngestionDelay;
-        this.propagateHierarchyIdToField(dailyCheckpointDataIngestionDelay, "daily_checkpoint_data_ingestion_delay");
+    public void setDailyCheckpointMaxDataIngestionDelay(TableMaxDataIngestionDelayCheckSpec dailyCheckpointMaxDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDataIngestionDelay, dailyCheckpointMaxDataIngestionDelay));
+        this.dailyCheckpointMaxDataIngestionDelay = dailyCheckpointMaxDataIngestionDelay;
+        this.propagateHierarchyIdToField(dailyCheckpointMaxDataIngestionDelay, "daily_checkpoint_max_data_ingestion_delay");
     }
 
     /**
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration..
      */
-    public TableDaysSinceLastDataIngestionCheckSpec getDailyCheckpointDaysSinceLastDataIngestion() {
-        return dailyCheckpointDaysSinceLastDataIngestion;
+    public TableMaxDaysSinceMostRecentIngestionCheckSpec getDailyCheckpointMaxDaysSinceMostRecentIngestion() {
+        return dailyCheckpointMaxDaysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param dailyCheckpointDaysSinceLastDataIngestion A number of days since the last data ingestion check configuration.
+     * @param dailyCheckpointMaxDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
      */
-    public void setDailyCheckpointDaysSinceLastDataIngestion(TableDaysSinceLastDataIngestionCheckSpec dailyCheckpointDaysSinceLastDataIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDaysSinceLastDataIngestion, dailyCheckpointDaysSinceLastDataIngestion));
-        this.dailyCheckpointDaysSinceLastDataIngestion = dailyCheckpointDaysSinceLastDataIngestion;
-        this.propagateHierarchyIdToField(dailyCheckpointDaysSinceLastDataIngestion, "daily_checkpoint_days_since_last_data_ingestion");
+    public void setDailyCheckpointMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec dailyCheckpointMaxDaysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDaysSinceMostRecentIngestion, dailyCheckpointMaxDaysSinceMostRecentIngestion));
+        this.dailyCheckpointMaxDaysSinceMostRecentIngestion = dailyCheckpointMaxDaysSinceMostRecentIngestion;
+        this.propagateHierarchyIdToField(dailyCheckpointMaxDaysSinceMostRecentIngestion, "daily_checkpoint_max_days_since_most_recent_ingestion");
     }
 
     /**
