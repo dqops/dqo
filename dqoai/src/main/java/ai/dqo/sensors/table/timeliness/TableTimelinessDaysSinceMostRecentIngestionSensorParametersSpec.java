@@ -52,6 +52,6 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec ext
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/days_since_last_data_ingestion";
+        return "table/timeliness/days_since_most_recent_ingestion";
     }
 }

@@ -2,9 +2,11 @@
 SELECT
     TIMESTAMP_DIFF(
         MAX(
+{#- table.timestamp_columns.ingestion_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
             CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
         ),
         MAX(
+{#- table.timestamp_columns.event_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
             CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP)
         ),
         MILLISECOND
