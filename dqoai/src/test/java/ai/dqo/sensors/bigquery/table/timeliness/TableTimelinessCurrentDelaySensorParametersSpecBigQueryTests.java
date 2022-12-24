@@ -32,10 +32,12 @@ import ai.dqo.sensors.table.timeliness.BuiltInTimeScale;
 import ai.dqo.sensors.table.timeliness.TableTimelinessCurrentDelaySensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Disabled
 public class TableTimelinessCurrentDelaySensorParametersSpecBigQueryTests extends BaseTest {
     private TableTimelinessCurrentDelaySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
