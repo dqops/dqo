@@ -50,6 +50,6 @@ public class ColumnUniquenessDistinctCountSensorParametersSpecTests extends Base
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/uniqueness/distinct_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/uniqueness/unique_count", this.sut.getSensorDefinitionName());
     }
 }
