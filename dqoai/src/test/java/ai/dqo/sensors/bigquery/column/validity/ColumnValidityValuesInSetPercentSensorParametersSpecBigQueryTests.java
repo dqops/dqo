@@ -90,7 +90,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
 //                                        ELSE
 //                                            100.0 * SUM(
 //                                                CASE
-//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) IN (NULL)) IS TRUE THEN 1
 //                                                    ELSE 0
 //                                                END
 //                                            )/COUNT(*)
@@ -117,7 +117,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
 //                                        ELSE
 //                                            100.0 * SUM(
 //                                                CASE
-//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (NULL)) IS TRUE THEN 1
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) IN (NULL)) IS TRUE THEN 1
 //                                                    ELSE 0
 //                                                END
 //                                            )/COUNT(*)
@@ -142,7 +142,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
                                         ELSE 
                                             100.0 * SUM(
                                                 CASE
-                                                    WHEN (analyzed_table.`length_string` in (NULL)) IS TRUE THEN 1
+                                                    WHEN (analyzed_table.`length_string` IN (NULL)) IS TRUE THEN 1
                                                     ELSE 0
                                                 END
                                             )/COUNT(*)
@@ -171,7 +171,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
 //                                        ELSE
 //                                            100.0 * SUM(
 //                                                CASE
-//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) in (123, 1234)) IS TRUE THEN 1
+//                                                    WHEN (CAST(analyzed_table.`length_string` AS NUMERIC) IN (123, 1234)) IS TRUE THEN 1
 //                                                    ELSE 0
 //                                                END
 //                                            )/COUNT(*)
@@ -198,7 +198,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
                                         ELSE 
                                             100.0 * SUM(
                                                 CASE
-                                                    WHEN (analyzed_table.`length_string` in ('abc', 'abcd')) IS TRUE THEN 1
+                                                    WHEN (analyzed_table.`length_string` IN ('abc', 'abcd')) IS TRUE THEN 1
                                                     ELSE 0
                                                 END
                                             )/COUNT(*)
@@ -225,7 +225,7 @@ public class ColumnValidityValuesInSetPercentSensorParametersSpecBigQueryTests e
                                         ELSE 
                                             100.0 * SUM(
                                                 CASE
-                                                    WHEN (CAST(analyzed_table.`length_string` AS DATE) in (CAST('2020-05-31' AS DATE))) IS TRUE THEN 1
+                                                    WHEN (CAST(analyzed_table.`length_string` AS DATE) IN (CAST('2020-05-31' AS DATE))) IS TRUE THEN 1
                                                     ELSE 0
                                                 END
                                             )/COUNT(*)
