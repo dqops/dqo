@@ -118,7 +118,7 @@ public class TableTimelinessAverageDelaySensorParametersSpecBigQueryTests extend
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         Assertions.assertEquals(String.format("""
                                 SELECT
-                                    AVG(ABS(TIMESTAMP_DIFF(SAFE_CAST(analyzed_table.date3 AS TIMESTAMP), SAFE_CAST(analyzed_table.date4 AS TIMESTAMP), HOUR))) AS actual_value, CAST(analyzed_table.`date4` AS date) AS time_period
+                                    AVG(ABS(TIMESTAMP_DIFF(SAFE_CAST(analyzed_table.date3 AS TIMESTAMP), SAFE_CAST(analyzed_table.date4 AS TIMESTAMP), HOUR))) AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
                                 FROM %s AS analyzed_table
                                 GROUP BY time_period
                                 ORDER BY time_period""",

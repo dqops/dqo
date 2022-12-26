@@ -196,7 +196,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), year) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), YEAR) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -218,7 +218,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), quarter) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -240,7 +240,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), week) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -262,7 +262,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), quarter) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), QUARTER) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -284,7 +284,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), month) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -306,7 +306,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS date), week) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), WEEK) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -329,7 +329,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -351,7 +351,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS datetime), hour) AS time_period
+                          END AS actual_value, DATETIME_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATETIME), HOUR) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -373,7 +373,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), year) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), YEAR) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -395,7 +395,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), quarter) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), QUARTER) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -417,7 +417,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), month) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), MONTH) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -439,7 +439,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS date), week) AS time_period
+                          END AS actual_value, DATE_TRUNC(CAST(analyzed_table.`created_at` AS DATE), WEEK) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -461,7 +461,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(analyzed_table.`created_at` AS date) AS time_period
+                          END AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -484,7 +484,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, CAST(analyzed_table.`created_at` AS date) AS time_period
+                          END AS actual_value, CAST(analyzed_table.`created_at` AS DATE) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -529,7 +529,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, DATETIME_TRUNC(CAST(analyzed_table.`created_at` AS datetime), hour) AS time_period
+                          END AS actual_value, DATETIME_TRUNC(CAST(analyzed_table.`created_at` AS DATETIME), HOUR) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY time_period
                         ORDER BY time_period""",
@@ -733,7 +733,7 @@ public class ColumnConsistencyNotNullPercentSensorParametersSpecBigQueryTests ex
                               WHEN COUNT(*)=0 THEN NULL
                               ELSE
                                 100.0 * COUNT(analyzed_table.`id`)/ COUNT(*)
-                          END AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS date) AS time_period
+                          END AS actual_value, 'US' AS stream_level_1, 'PL' AS stream_level_2, CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period
                         FROM `%s`.`%s`.`%s` AS analyzed_table
                         GROUP BY stream_level_1, stream_level_2, time_period
                         ORDER BY stream_level_1, stream_level_2, time_period""",

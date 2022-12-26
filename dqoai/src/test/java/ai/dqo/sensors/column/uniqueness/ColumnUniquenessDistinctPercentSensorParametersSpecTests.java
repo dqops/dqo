@@ -50,6 +50,6 @@ public class ColumnUniquenessDistinctPercentSensorParametersSpecTests extends Ba
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/uniqueness/distinct_count_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/uniqueness/distinct_percent", this.sut.getSensorDefinitionName());
     }
 }
