@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Predefined date formats.
  */
-public enum BuiltInDateFormats {
+public enum StringsBuiltInDateFormats {
     @JsonProperty("YYYY-MM-DD")
     ISO8601,
 

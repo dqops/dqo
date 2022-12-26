@@ -18,7 +18,6 @@ package ai.dqo.sensors.column.strings;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.column.strings.BuiltInDateFormats;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,23 +40,23 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
     };
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
-    private BuiltInDateFormats namedDateFormat = BuiltInDateFormats.ISO8601;
+    private StringsBuiltInDateFormats stringsBuiltInDateFormats = StringsBuiltInDateFormats.ISO8601;
 
     /**
      * Returns a desired format to parse the date.
      * @return Date format.
      */
-    public BuiltInDateFormats getNamedDateFormat() {
-        return namedDateFormat;
+    public StringsBuiltInDateFormats getStringsBuiltInDateFormats() {
+        return stringsBuiltInDateFormats;
     }
 
     /**
      * Sets a desired format to parse the date.
-     * @param namedDateFormat Date format.
+     * @param stringsBuiltInDateFormats Date format.
      */
-    public void setNamedDateFormat(BuiltInDateFormats namedDateFormat) {
-        this.setDirtyIf(!Objects.equals(this.namedDateFormat, namedDateFormat));
-        this.namedDateFormat = namedDateFormat;
+    public void setStringsBuiltInDateFormats(StringsBuiltInDateFormats stringsBuiltInDateFormats) {
+        this.setDirtyIf(!Objects.equals(this.stringsBuiltInDateFormats, stringsBuiltInDateFormats));
+        this.stringsBuiltInDateFormats = stringsBuiltInDateFormats;
     }
 
     /**
