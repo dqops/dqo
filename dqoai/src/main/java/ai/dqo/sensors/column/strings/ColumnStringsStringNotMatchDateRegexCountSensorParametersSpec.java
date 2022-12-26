@@ -24,9 +24,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
-
 /**
  * Column level sensor that calculates the number of values that does not fit to a date regex in a column.
  */
@@ -55,7 +52,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
      * @param dateFormats Date format.
      */
     public void setDateFormats(StringsBuiltInDateFormats dateFormats) {
-        this.setDirtyIf(!Objects.equals(this.dateFormats, dateFormats));
+        this.setDirtyIf(this.dateFormats != dateFormats);
         this.dateFormats = dateFormats;
     }
 
