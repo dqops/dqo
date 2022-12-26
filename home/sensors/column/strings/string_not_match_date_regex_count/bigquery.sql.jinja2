@@ -2,15 +2,15 @@
 
 {% macro render_date_format(date_formats) %}
     {%- if date_formats == 'ISO8601'-%}
-{{render_date_format('%Y-%m-%d'}}
+{{render_date_format('%Y-%m-%d')}}
     {%- elif date_formats == 'MonthDayYear' -%}
-{{render_date_format('%m/%d/%Y'}}
+{{render_date_format('%m/%d/%Y')}}
     {%- elif date_formats == 'DayMonthYear' -%}
-{{render_date_format('%d/%m/%Y'}}
+{{render_date_format('%d/%m/%Y')}}
     {%- elif date_formats == 'YearMonthDay'-%}
-{{render_date_format('%Y/%m/%d'}}
+{{render_date_format('%Y/%m/%d')}}
     {%- elif date_formats == 'MonthNameDayYear'-%}
-{{render_date_format('%b %d, %Y'}}
+{{render_date_format('%b %d, %Y')}}
     {%- endif -%}
 {% endmacro %}
 
