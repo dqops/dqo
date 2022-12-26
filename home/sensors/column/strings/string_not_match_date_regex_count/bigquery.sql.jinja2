@@ -1,16 +1,16 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
-{% macro render_date_format(date_formats) %}
+{% macro render_date_formats(date_formats) %}
     {%- if date_formats == 'ISO8601'-%}
-('%Y-%m-%d')
+'%Y-%m-%d'
     {%- elif date_formats == 'MonthDayYear' -%}
-('%m/%d/%Y')
+'%m/%d/%Y'
     {%- elif date_formats == 'DayMonthYear' -%}
-('%d/%m/%Y')
+'%d/%m/%Y'
     {%- elif date_formats == 'YearMonthDay'-%}
-('%Y/%m/%d')
+'%Y/%m/%d'
     {%- elif date_formats == 'MonthNameDayYear'-%}
-('%b %d, %Y')
+'%b %d, %Y'
     {%- endif -%}
 {% endmacro %}
 
@@ -19,7 +19,7 @@ CASE
  WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
 ELSE
  SUM(
-    CASE WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING))
+    CASE WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING))
     IS NULL THEN 1
     ELSE 0
 END
