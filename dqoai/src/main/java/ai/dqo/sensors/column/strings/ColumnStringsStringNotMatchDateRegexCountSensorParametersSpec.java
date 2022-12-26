@@ -40,23 +40,23 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec exten
     };
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
-    private StringsBuiltInDateFormats stringsBuiltInDateFormats = StringsBuiltInDateFormats.ISO8601;
+    private StringsBuiltInDateFormats dateFormats = StringsBuiltInDateFormats.ISO8601;
 
     /**
      * Returns a desired format to parse the date.
      * @return Date format.
      */
-    public StringsBuiltInDateFormats getStringsBuiltInDateFormats() {
-        return stringsBuiltInDateFormats;
+    public StringsBuiltInDateFormats getDateFormats() {
+        return dateFormats;
     }
 
     /**
      * Sets a desired format to parse the date.
-     * @param stringsBuiltInDateFormats Date format.
+     * @param dateFormats Date format.
      */
-    public void setStringsBuiltInDateFormats(StringsBuiltInDateFormats stringsBuiltInDateFormats) {
-        this.setDirtyIf(!Objects.equals(this.stringsBuiltInDateFormats, stringsBuiltInDateFormats));
-        this.stringsBuiltInDateFormats = stringsBuiltInDateFormats;
+    public void setDateFormats(StringsBuiltInDateFormats dateFormats) {
+        this.setDirtyIf(!Objects.equals(this.dateFormats, dateFormats));
+        this.dateFormats = dateFormats;
     }
 
     /**
