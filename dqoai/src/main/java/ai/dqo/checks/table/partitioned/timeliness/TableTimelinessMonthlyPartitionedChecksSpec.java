@@ -44,7 +44,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
            put("monthly_partition_days_since_most_recent_event", o -> o.monthlyPartitionDaysSinceMostRecentEvent);
            put("monthly_partition_data_ingestion_delay", o -> o.monthlyPartitionDataIngestionDelay);
            put("monthly_partition_days_since_most_recent_ingestion", o -> o.monthlyPartitionDaysSinceMostRecentIngestion);
-           put("monthly_partition_row_data_ingestion_delay", o -> o.monthlyPartitionMaxRowDataIngestionDelay);
+           put("monthly_partition_row_data_ingestion_delay", o -> o.monthlyPartitionRowDataIngestionDelay);
         }
     };
 
@@ -66,7 +66,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonPropertyDescription("Monthly partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay;
+    private TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionRowDataIngestionDelay;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -126,18 +126,18 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
      * Returns a maximum row data ingestion delay check configuration.
      * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxRowDataIngestionDelayCheckSpec getMonthlyPartitionMaxRowDataIngestionDelay() {
-        return monthlyPartitionMaxRowDataIngestionDelay;
+    public TableMaxRowDataIngestionDelayCheckSpec getMonthlyPartitionRowDataIngestionDelay() {
+        return monthlyPartitionRowDataIngestionDelay;
     }
 
     /**
      * Sets a maximum row data ingestion delay.
-     * @param monthlyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
+     * @param monthlyPartitionRowDataIngestionDelay New maximum row data ingestion delay.
      */
-    public void setMonthlyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxRowDataIngestionDelay, monthlyPartitionMaxRowDataIngestionDelay));
-        this.monthlyPartitionMaxRowDataIngestionDelay = monthlyPartitionMaxRowDataIngestionDelay;
-        this.propagateHierarchyIdToField(monthlyPartitionMaxRowDataIngestionDelay, "monthly_partition_max_row_data_ingestion_delay");
+    public void setMonthlyPartitionRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionRowDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionRowDataIngestionDelay, monthlyPartitionRowDataIngestionDelay));
+        this.monthlyPartitionRowDataIngestionDelay = monthlyPartitionRowDataIngestionDelay;
+        this.propagateHierarchyIdToField(monthlyPartitionRowDataIngestionDelay, "monthly_partition_row_data_ingestion_delay");
     }
 
     /**
