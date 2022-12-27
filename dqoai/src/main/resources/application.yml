@@ -7,6 +7,8 @@ spring:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
     name: dqo
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
   mvc:
     async:
       request-timeout: 60000
