@@ -17,8 +17,7 @@ package ai.dqo.sensors.bigquery.table.timeliness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +32,6 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.timeliness.TableTimelinessDataIngestionDelaySensorParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests extends BaseTest {
     private TableTimelinessDataIngestionDelaySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMaxDataIngestionDelayCheckSpec checkSpec;
+    private TableDataIngestionDelayCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -68,7 +66,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
         );
 
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableMaxDataIngestionDelayCheckSpec();
+        this.checkSpec = new TableDataIngestionDelayCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

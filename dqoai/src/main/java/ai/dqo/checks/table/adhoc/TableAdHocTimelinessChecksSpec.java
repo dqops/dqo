@@ -16,9 +16,9 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,73 +38,73 @@ import java.util.Objects;
 public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocTimelinessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("max_days_since_most_recent_event", o -> o.maxDaysSinceMostRecentEvent);
-            put("max_data_ingestion_delay", o -> o.maxDataIngestionDelay);
-            put("max_days_since_most_recent_ingestion", o -> o.maxDaysSinceMostRecentIngestion);
+            put("days_since_most_recent_event", o -> o.daysSinceMostRecentEvent);
+            put("data_ingestion_delay", o -> o.dataIngestionDelay);
+            put("days_since_most_recent_ingestion", o -> o.daysSinceMostRecentIngestion);
         }
     };
 
     @JsonPropertyDescription("Calculates the number of days since the most recent event timestamp (freshness)")
-    private TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent;
+    private TableDaysSinceMostRecentEventCheckSpec daysSinceMostRecentEvent;
 
     @JsonPropertyDescription("Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
-    private TableMaxDataIngestionDelayCheckSpec maxDataIngestionDelay;
+    private TableDataIngestionDelayCheckSpec dataIngestionDelay;
 
     @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion;
+    private TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion;
 
     /**
      * Returns the number of days since the most recent event check configuration.
      * @return A number of days since the most recent event check configuration.
      */
-    public TableMaxDaysSinceMostRecentEventCheckSpec getMaxDaysSinceMostRecentEvent() {
-        return maxDaysSinceMostRecentEvent;
+    public TableDaysSinceMostRecentEventCheckSpec getDaysSinceMostRecentEvent() {
+        return daysSinceMostRecentEvent;
     }
 
     /**
      * Sets the number of days since the most recent event check configuration.
-     * @param maxDaysSinceMostRecentEvent Maximum days since the most recent event check configuration.
+     * @param daysSinceMostRecentEvent Maximum days since the most recent event check configuration.
      */
-    public void setMaxDaysSinceMostRecentEvent(TableMaxDaysSinceMostRecentEventCheckSpec maxDaysSinceMostRecentEvent) {
-        this.setDirtyIf(!Objects.equals(this.maxDaysSinceMostRecentEvent, maxDaysSinceMostRecentEvent));
-        this.maxDaysSinceMostRecentEvent = maxDaysSinceMostRecentEvent;
-        propagateHierarchyIdToField(maxDaysSinceMostRecentEvent, "max_days_since_most_recent_event");
+    public void setDaysSinceMostRecentEvent(TableDaysSinceMostRecentEventCheckSpec daysSinceMostRecentEvent) {
+        this.setDirtyIf(!Objects.equals(this.daysSinceMostRecentEvent, daysSinceMostRecentEvent));
+        this.daysSinceMostRecentEvent = daysSinceMostRecentEvent;
+        propagateHierarchyIdToField(daysSinceMostRecentEvent, "days_since_most_recent_event");
     }
 
     /**
      * Returns a data ingestion delay check configuration.
      * @return A data ingestion delay check configuration.
      */
-    public TableMaxDataIngestionDelayCheckSpec getMaxDataIngestionDelay() {
-        return maxDataIngestionDelay;
+    public TableDataIngestionDelayCheckSpec getDataIngestionDelay() {
+        return dataIngestionDelay;
     }
 
     /**
      * Sets a data ingestion delay check configuration.
-     * @param maxDataIngestionDelay A data ingestion delay check configuration.
+     * @param dataIngestionDelay A data ingestion delay check configuration.
      */
-    public void setMaxDataIngestionDelay(TableMaxDataIngestionDelayCheckSpec maxDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.maxDataIngestionDelay, maxDataIngestionDelay));
-        this.maxDataIngestionDelay = maxDataIngestionDelay;
-        propagateHierarchyIdToField(maxDataIngestionDelay, "max_data_ingestion_delay");
+    public void setDataIngestionDelay(TableDataIngestionDelayCheckSpec dataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.dataIngestionDelay, dataIngestionDelay));
+        this.dataIngestionDelay = dataIngestionDelay;
+        propagateHierarchyIdToField(dataIngestionDelay, "data_ingestion_delay");
     }
 
     /**
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration.
      */
-    public TableMaxDaysSinceMostRecentIngestionCheckSpec getMaxDaysSinceMostRecentIngestion() {
-        return maxDaysSinceMostRecentIngestion;
+    public TableDaysSinceMostRecentIngestionCheckSpec getDaysSinceMostRecentIngestion() {
+        return daysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param maxDaysSinceMostRecentIngestion  A number of days since the last load check configuration.
+     * @param daysSinceMostRecentIngestion  A number of days since the last load check configuration.
      */
-    public void setMaxDaysSinceMostRecentIngestion(TableMaxDaysSinceMostRecentIngestionCheckSpec maxDaysSinceMostRecentIngestion) {
-        this.setDirtyIf(!Objects.equals(this.maxDaysSinceMostRecentIngestion, maxDaysSinceMostRecentIngestion));
-        this.maxDaysSinceMostRecentIngestion = maxDaysSinceMostRecentIngestion;
-        propagateHierarchyIdToField(maxDaysSinceMostRecentIngestion, "max_days_since_most_recent_ingestion");
+    public void setDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.daysSinceMostRecentIngestion, daysSinceMostRecentIngestion));
+        this.daysSinceMostRecentIngestion = daysSinceMostRecentIngestion;
+        propagateHierarchyIdToField(daysSinceMostRecentIngestion, "days_since_most_recent_ingestion");
     }
 
     /**

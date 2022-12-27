@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.table.timeliness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -41,7 +41,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQueryTests extends BaseTest {
     private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMaxDaysSinceMostRecentIngestionCheckSpec checkSpec;
+    private TableDaysSinceMostRecentIngestionCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -66,7 +66,7 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
         );
 
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableMaxDaysSinceMostRecentIngestionCheckSpec();
+        this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
