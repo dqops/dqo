@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../DataQualityChecks';
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import {
   getTableAdHocChecksUI,
   setUpdatedChecksUi,
   updateTableAdHocChecksUI
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
 
 interface IAdhocViewProps {
   connectionName: string;
@@ -26,6 +27,7 @@ const AdhocView = ({
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   useEffect(() => {
     if (
@@ -54,6 +56,12 @@ const AdhocView = ({
     dispatch(setUpdatedChecksUi(value));
   };
 
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getTableAdHocChecksOverview(connectionName, schemaName, tableName).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
+
   return (
     <div>
       <TableActionGroup
@@ -61,7 +69,12 @@ const AdhocView = ({
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
       />
-      <DataQualityChecks checksUI={checksUI} onChange={handleChange} />
+      <DataQualityChecks
+        checksUI={checksUI}
+        onChange={handleChange}
+        checkResultsOverview={checkResultsOverview}
+        getCheckOverview={getCheckOverview}
+      />
     </div>
   );
 };

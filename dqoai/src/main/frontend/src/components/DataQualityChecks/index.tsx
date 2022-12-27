@@ -1,5 +1,5 @@
 import React from 'react';
-import { UIAllChecksModel, UICheckModel } from '../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -8,6 +8,8 @@ interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
   onChange: (ui: UIAllChecksModel) => void;
   className?: string;
+  checkResultsOverview?: CheckResultsOverviewDataModel[];
+  getCheckOverview?: () => void;
 }
 
 const TableHeader = () => {
@@ -52,7 +54,7 @@ const TableHeader = () => {
   );
 };
 
-const DataQualityChecks = ({ checksUI, onChange, className }: IDataQualityChecksProps) => {
+const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview }: IDataQualityChecksProps) => {
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
     check: UICheckModel,
@@ -114,6 +116,8 @@ const DataQualityChecks = ({ checksUI, onChange, className }: IDataQualityChecks
                     onChange={(item) =>
                       handleChangeDataDataStreams(item, index, jIndex)
                     }
+                    checkResult={checkResultsOverview.find((item) => item.checkName === check.check_name && category.category === item.checkCategory)}
+                    getCheckOverview={getCheckOverview}
                   />
                 ))}
             </>
