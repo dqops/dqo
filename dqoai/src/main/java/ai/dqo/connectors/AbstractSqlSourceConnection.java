@@ -375,8 +375,8 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                     sqlBuilder.append(",\n");
                 }
 
-                Object cellValue = data.get(rowIndex, colIndex);
                 Column<?> column = data.column(colIndex);
+                Object cellValue = column.isMissing(rowIndex) ? null : data.get(rowIndex, colIndex);
                 ColumnSpec columnSpec = tableSpec.getColumns().get(column.name());
 
                 String formattedConstant = this.connectionProvider.formatConstant(cellValue, columnSpec.getTypeSnapshot());
