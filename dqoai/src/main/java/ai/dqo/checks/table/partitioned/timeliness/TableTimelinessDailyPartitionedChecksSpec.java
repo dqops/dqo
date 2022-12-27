@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastDataIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level date partitioned standard data quality checks.
+ * Container of table level date partitioned timeliness data quality checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -43,7 +43,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         {
            put("daily_partition_days_since_most_recent_event", o -> o.dailyPartitionDaysSinceMostRecentEvent);
            put("daily_partition_data_ingestion_delay", o -> o.dailyPartitionDataIngestionDelay);
-           put("daily_partition_days_since_last_data_ingestion", o -> o.dailyPartitionDaysSinceLastDataIngestion);
+           put("daily_partition_days_since_most_recent_ingestion", o -> o.dailyPartitionDaysSinceMostRecentIngestion);
            put("daily_partition_max_row_data_ingestion_delay", o -> o.dailyPartitionMaxRowDataIngestionDelay);
         }
     };
@@ -61,7 +61,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceLastDataIngestionCheckSpec dailyPartitionDaysSinceLastDataIngestion;
+    private TableDaysSinceMostRecentIngestionCheckSpec dailyPartitionDaysSinceMostRecentIngestion;
 
     @JsonPropertyDescription("Daily partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -108,18 +108,18 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration..
      */
-    public TableDaysSinceLastDataIngestionCheckSpec getDailyPartitionDaysSinceLastDataIngestion() {
-        return dailyPartitionDaysSinceLastDataIngestion;
+    public TableDaysSinceMostRecentIngestionCheckSpec getDailyPartitionDaysSinceMostRecentIngestion() {
+        return dailyPartitionDaysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param dailyPartitionDaysSinceLastDataIngestion A number of days since the last data ingestion check configuration.
+     * @param dailyPartitionDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
      */
-    public void setDailyPartitionDaysSinceLastDataIngestion(TableDaysSinceLastDataIngestionCheckSpec dailyPartitionDaysSinceLastDataIngestion) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDaysSinceLastDataIngestion, dailyPartitionDaysSinceLastDataIngestion));
-        this.dailyPartitionDaysSinceLastDataIngestion = dailyPartitionDaysSinceLastDataIngestion;
-        this.propagateHierarchyIdToField(dailyPartitionDaysSinceLastDataIngestion, "daily_partition_days_since_last_data_ingestion");
+    public void setDailyPartitionDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec dailyPartitionDaysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDaysSinceMostRecentIngestion, dailyPartitionDaysSinceMostRecentIngestion));
+        this.dailyPartitionDaysSinceMostRecentIngestion = dailyPartitionDaysSinceMostRecentIngestion;
+        this.propagateHierarchyIdToField(dailyPartitionDaysSinceMostRecentIngestion, "daily_partition_days_since_most_recent_ingestion");
     }
 
     /**

@@ -18,7 +18,7 @@ package ai.dqo.checks.table.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastDataIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured standard data quality checks on a table level.
+ * Container of timeliness data quality checks on a table level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -40,7 +40,7 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
         {
             put("days_since_most_recent_event", o -> o.daysSinceMostRecentEvent);
             put("data_ingestion_delay", o -> o.dataIngestionDelay);
-            put("days_since_last_data_ingestion", o -> o.daysSinceLastDataIngestion);
+            put("days_since_most_recent_ingestion", o -> o.daysSinceMostRecentIngestion);
         }
     };
 
@@ -51,7 +51,7 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
     private TableDataIngestionDelayCheckSpec dataIngestionDelay;
 
     @JsonPropertyDescription("Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
-    private TableDaysSinceLastDataIngestionCheckSpec daysSinceLastDataIngestion;
+    private TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -93,18 +93,18 @@ public class TableAdHocTimelinessChecksSpec extends AbstractCheckCategorySpec {
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration.
      */
-    public TableDaysSinceLastDataIngestionCheckSpec getDaysSinceLastDataIngestion() {
-        return daysSinceLastDataIngestion;
+    public TableDaysSinceMostRecentIngestionCheckSpec getDaysSinceMostRecentIngestion() {
+        return daysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param daysSinceLastDataIngestion  A number of days since the last load check configuration.
+     * @param daysSinceMostRecentIngestion  A number of days since the last load check configuration.
      */
-    public void setDaysSinceLastDataIngestion(TableDaysSinceLastDataIngestionCheckSpec daysSinceLastDataIngestion) {
-        this.setDirtyIf(!Objects.equals(this.daysSinceLastDataIngestion, daysSinceLastDataIngestion));
-        this.daysSinceLastDataIngestion = daysSinceLastDataIngestion;
-        propagateHierarchyIdToField(daysSinceLastDataIngestion, "days_since_last_data_ingestion");
+    public void setDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec daysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.daysSinceMostRecentIngestion, daysSinceMostRecentIngestion));
+        this.daysSinceMostRecentIngestion = daysSinceMostRecentIngestion;
+        propagateHierarchyIdToField(daysSinceMostRecentIngestion, "days_since_most_recent_ingestion");
     }
 
     /**

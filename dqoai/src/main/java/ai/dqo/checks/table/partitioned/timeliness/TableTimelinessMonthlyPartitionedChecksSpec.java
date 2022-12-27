@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastDataIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monthly partitioned standard data quality checks.
+ * Container of table level monthly partitioned timeliness data quality checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -43,7 +43,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         {
            put("monthly_partition_days_since_most_recent_event", o -> o.monthlyPartitionDaysSinceMostRecentEvent);
            put("monthly_partition_data_ingestion_delay", o -> o.monthlyPartitionDataIngestionDelay);
-           put("monthly_partition_days_since_last_data_ingestion", o -> o.monthlyPartitionDaysSinceLastDataIngestion);
+           put("monthly_partition_days_since_most_recent_ingestion", o -> o.monthlyPartitionDaysSinceMostRecentIngestion);
            put("monthly_partition_max_row_data_ingestion_delay", o -> o.monthlyPartitionMaxRowDataIngestionDelay);
         }
     };
@@ -61,7 +61,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceLastDataIngestionCheckSpec monthlyPartitionDaysSinceLastDataIngestion;
+    private TableDaysSinceMostRecentIngestionCheckSpec monthlyPartitionDaysSinceMostRecentIngestion;
 
     @JsonPropertyDescription("Monthly partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -108,18 +108,18 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration..
      */
-    public TableDaysSinceLastDataIngestionCheckSpec getMonthlyPartitionDaysSinceLastDataIngestion() {
-        return monthlyPartitionDaysSinceLastDataIngestion;
+    public TableDaysSinceMostRecentIngestionCheckSpec getMonthlyPartitionDaysSinceMostRecentIngestion() {
+        return monthlyPartitionDaysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param monthlyPartitionDaysSinceLastDataIngestion A number of days since the last data ingestion check configuration.
+     * @param monthlyPartitionDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
      */
-    public void setMonthlyPartitionDaysSinceLastDataIngestion(TableDaysSinceLastDataIngestionCheckSpec monthlyPartitionDaysSinceLastDataIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDaysSinceLastDataIngestion, monthlyPartitionDaysSinceLastDataIngestion));
-        this.monthlyPartitionDaysSinceLastDataIngestion = monthlyPartitionDaysSinceLastDataIngestion;
-        this.propagateHierarchyIdToField(monthlyPartitionDaysSinceLastDataIngestion, "monthly_partition_days_since_last_data_ingestion");
+    public void setMonthlyPartitionDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec monthlyPartitionDaysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDaysSinceMostRecentIngestion, monthlyPartitionDaysSinceMostRecentIngestion));
+        this.monthlyPartitionDaysSinceMostRecentIngestion = monthlyPartitionDaysSinceMostRecentIngestion;
+        this.propagateHierarchyIdToField(monthlyPartitionDaysSinceMostRecentIngestion, "monthly_partition_days_since_most_recent_ingestion");
     }
 
     /**

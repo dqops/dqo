@@ -17,7 +17,7 @@ package ai.dqo.checks.table.checkpoints.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceLastDataIngestionCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monthly checkpoints for standard data quality checks
+ * Container of table level monthly checkpoints for timeliness data quality checks
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -41,7 +41,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
         {
            put("monthly_checkpoint_days_since_most_recent_event", o -> o.monthlyCheckpointDaysSinceMostRecentEvent);
            put("monthly_checkpoint_data_ingestion_delay", o -> o.monthlyCheckpointDataIngestionDelay);
-           put("monthly_checkpoint_days_since_last_data_ingestion", o -> o.monthlyCheckpointDaysSinceLastDataIngestion);
+           put("monthly_checkpoint_days_since_most_recent_ingestion", o -> o.monthlyCheckpointDaysSinceMostRecentIngestion);
         }
     };
 
@@ -58,7 +58,7 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
     @JsonPropertyDescription("Monthly checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDaysSinceLastDataIngestionCheckSpec monthlyCheckpointDaysSinceLastDataIngestion;
+    private TableDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointDaysSinceMostRecentIngestion;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -100,18 +100,18 @@ public class TableTimelinessMonthlyCheckpointSpec extends AbstractCheckCategoryS
      * Returns a number of days since the last data ingestion check configuration.
      * @return A number of days since the last data ingestion check configuration..
      */
-    public TableDaysSinceLastDataIngestionCheckSpec getMonthlyCheckpointDaysSinceLastDataIngestion() {
-        return monthlyCheckpointDaysSinceLastDataIngestion;
+    public TableDaysSinceMostRecentIngestionCheckSpec getMonthlyCheckpointDaysSinceMostRecentIngestion() {
+        return monthlyCheckpointDaysSinceMostRecentIngestion;
     }
 
     /**
      * Sets a number of days since the last data ingestion check configuration.
-     * @param monthlyCheckpointDaysSinceLastDataIngestion A number of days since the last data ingestion check configuration.
+     * @param monthlyCheckpointDaysSinceMostRecentIngestion A number of days since the last data ingestion check configuration.
      */
-    public void setMonthlyCheckpointDaysSinceLastDataIngestion(TableDaysSinceLastDataIngestionCheckSpec monthlyCheckpointDaysSinceLastDataIngestion) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDaysSinceLastDataIngestion, monthlyCheckpointDaysSinceLastDataIngestion));
-        this.monthlyCheckpointDaysSinceLastDataIngestion = monthlyCheckpointDaysSinceLastDataIngestion;
-        this.propagateHierarchyIdToField(monthlyCheckpointDaysSinceLastDataIngestion, "monthly_checkpoint_days_since_last_data_ingestion");
+    public void setMonthlyCheckpointDaysSinceMostRecentIngestion(TableDaysSinceMostRecentIngestionCheckSpec monthlyCheckpointDaysSinceMostRecentIngestion) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDaysSinceMostRecentIngestion, monthlyCheckpointDaysSinceMostRecentIngestion));
+        this.monthlyCheckpointDaysSinceMostRecentIngestion = monthlyCheckpointDaysSinceMostRecentIngestion;
+        this.propagateHierarchyIdToField(monthlyCheckpointDaysSinceMostRecentIngestion, "monthly_checkpoint_days_since_most_recent_ingestion");
     }
 
         /**
