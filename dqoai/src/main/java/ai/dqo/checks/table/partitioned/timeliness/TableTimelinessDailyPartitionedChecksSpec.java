@@ -44,7 +44,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
            put("daily_partition_days_since_most_recent_event", o -> o.dailyPartitionDaysSinceMostRecentEvent);
            put("daily_partition_data_ingestion_delay", o -> o.dailyPartitionDataIngestionDelay);
            put("daily_partition_days_since_most_recent_ingestion", o -> o.dailyPartitionDaysSinceMostRecentIngestion);
-           put("daily_partition_row_data_ingestion_delay", o -> o.dailyPartitionRowDataIngestionDelay);
+           put("daily_partition_max_row_data_ingestion_delay", o -> o.dailyPartitionMaxRowDataIngestionDelay);
         }
     };
 
@@ -66,7 +66,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Daily partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxRowDataIngestionDelayCheckSpec dailyPartitionRowDataIngestionDelay;
+    private TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -126,18 +126,18 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a maximum row data ingestion delay check configuration.
      * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxRowDataIngestionDelayCheckSpec getDailyPartitionRowDataIngestionDelay() {
-        return dailyPartitionRowDataIngestionDelay;
+    public TableMaxRowDataIngestionDelayCheckSpec getDailyPartitionMaxRowDataIngestionDelay() {
+        return dailyPartitionMaxRowDataIngestionDelay;
     }
 
     /**
      * Sets a maximum row data ingestion delay.
-     * @param dailyPartitionRowDataIngestionDelay New maximum row data ingestion delay.
+     * @param dailyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
      */
-    public void setDailyPartitionRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec dailyPartitionRowDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowDataIngestionDelay, dailyPartitionRowDataIngestionDelay));
-        this.dailyPartitionRowDataIngestionDelay = dailyPartitionRowDataIngestionDelay;
-        this.propagateHierarchyIdToField(dailyPartitionRowDataIngestionDelay, "daily_partition_row_data_ingestion_delay");
+    public void setDailyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxRowDataIngestionDelay, dailyPartitionMaxRowDataIngestionDelay));
+        this.dailyPartitionMaxRowDataIngestionDelay = dailyPartitionMaxRowDataIngestionDelay;
+        this.propagateHierarchyIdToField(dailyPartitionMaxRowDataIngestionDelay, "daily_partition_max_row_data_ingestion_delay");
     }
 
     /**
