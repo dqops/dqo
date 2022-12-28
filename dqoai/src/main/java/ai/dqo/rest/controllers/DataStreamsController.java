@@ -34,9 +34,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * REST api controller to manage the data streams on a table.
@@ -83,12 +82,16 @@ public class DataStreamsController {
         }
 
         List<DataStreamBasicModel> result = new LinkedList<>();
-        for (String dataStreamName : dataStreamMapping.keySet()) {
+        List<String> dataStreamNamesList = new ArrayList<>(dataStreamMapping.keySet());
+        for (int i = 0; i < dataStreamNamesList.size() ; i++) {
+            String dataStreamName = dataStreamNamesList.get(i);
+            boolean isDefaultDataStream = (i == 0);
             result.add(new DataStreamBasicModel(){{
                 setConnectionName(connectionName);
                 setSchemaName(schemaName);
                 setTableName(tableName);
                 setDataStreamName(dataStreamName);
+                setDefaultDataStream(isDefaultDataStream);
             }});
         }
 
@@ -143,13 +146,14 @@ public class DataStreamsController {
      * @param dataStreamModel Data stream trimmed model.
      * @return Empty response.
      */
-    @PostMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
     @ApiOperation(value = "updateDataStream", notes = "Updates a data stream according to the provided model")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data stream successfully updated"),
             @ApiResponse(code = 404, message = "Connection, table or data stream not found"),
             @ApiResponse(code = 406, message = "Incorrect request"),
+            @ApiResponse(code = 409, message = "Data stream name with the same name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateDataStream(
@@ -177,6 +181,10 @@ public class DataStreamsController {
             newName = dataStreamName;
         }
 
+        if (newName != null && !Objects.equals(newName, dataStreamName) && dataStreamMapping.containsKey(newName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data stream configuration with this name already exists
+        }
+
         DataStreamMappingSpec newSpec = dataStreamModel.getSpec();
         dataStreamMapping.put(newName, newSpec);
         if (!newName.equals(dataStreamName)) {
@@ -188,6 +196,51 @@ public class DataStreamsController {
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
+    /**
+     * Creates (adds) a new named data stream configuration.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @return Empty response.
+     */
+    @PostMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams")
+    @ApiOperation(value = "createDataStream", notes = "Creates a new data stream configuration")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New data stream configuration successfully created"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Data stream name with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> createDataStream(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Data stream trimmed model") @RequestBody DataStreamTrimmedModel dataStreamModel) {
+        if (Strings.isNullOrEmpty(connectionName)     ||
+                Strings.isNullOrEmpty(schemaName)     ||
+                Strings.isNullOrEmpty(tableName)      ||
+                dataStreamModel == null               ||
+                Strings.isNullOrEmpty(dataStreamModel.getDataStreamName())) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        if (tableSpec.getDataStreams().containsKey(dataStreamModel.getDataStreamName())) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT); // 409 - a data stream configuration with this name already exists
+        }
+
+        tableSpec.getDataStreams().put(dataStreamModel.getDataStreamName(), dataStreamModel.getSpec());
+
+        userHomeContext.flush();
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED); // 201
+    }
 
     /**
      * Sets a specific data stream as a default for the table.
@@ -237,7 +290,6 @@ public class DataStreamsController {
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
-
 
     /**
      * Deletes a specific data stream.

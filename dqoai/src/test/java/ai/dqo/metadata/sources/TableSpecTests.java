@@ -24,6 +24,12 @@ import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.utils.serialization.JsonSerializerObjectMother;
+import ai.dqo.utils.serialization.YamlSerializer;
+import ai.dqo.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -195,5 +201,20 @@ public class TableSpecTests extends BaseTest {
         checkpoints.setMonthly(daily);
         this.sut.setCheckpoints(checkpoints);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void serialize_whenHasAnyDataStreams_thenDataStreamsSerialized() {
+        YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
+        DataStreamMappingSpec dataStreamMapping = new DataStreamMappingSpec();
+        dataStreamMapping.setLevel1(DataStreamLevelSpecObjectMother.createTag("tag1"));
+        this.sut.getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        String yaml = yamlSerializer.serialize(this.sut);
+
+        TableSpec deserialized = yamlSerializer.deserialize(yaml, TableSpec.class);
+        Assertions.assertNotNull(deserialized.getDataStreams());
+        Assertions.assertEquals(1, deserialized.getDataStreams().size());
+        Assertions.assertEquals("tag1", deserialized.getDataStreams().get("default").getLevel1().getTag());
     }
 }

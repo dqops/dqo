@@ -41,4 +41,7 @@ public class DataStreamBasicModel {
 
     @JsonPropertyDescription("Data stream name.")
     private String dataStreamName;
+
+    @JsonPropertyDescription("True when this is the default data stream for the table.")
+    private boolean defaultDataStream;
 }
