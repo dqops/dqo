@@ -25,7 +25,7 @@ import {
   JobsApiFactory,
   SourceSchemasControllerApiFactory,
   SourceTablesControllerApiFactory,
-  DataStreamsApiFactory
+  DataStreamsApiFactory, CheckResultsOverviewApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -63,6 +63,12 @@ export const SourceTableApi = SourceTablesControllerApiFactory(
 );
 
 export const DataStreamsApi = DataStreamsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const CheckResultOverviewApi = CheckResultsOverviewApiFactory(
   new Configuration(),
   '',
   axios

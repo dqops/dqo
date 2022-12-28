@@ -12,8 +12,9 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
 
 interface ICheckpointsViewProps {
   connectionName: string;
@@ -40,6 +41,8 @@ const CheckpointsView = ({
   const [activeTab, setActiveTab] = useState('daily');
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
+  const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const {
     tableBasic,
@@ -130,7 +133,19 @@ const CheckpointsView = ({
       )
     );
   }, [isUpdatedMonthlyCheckpoints]);
-
+  
+  const getDailyCheckOverview = () => {
+    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+      setDailyCheckResultsOverview(res.data);
+    });
+  };
+  
+  const getMonthlyCheckOverview = () => {
+    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+      setMonthlyCheckResultsOverview(res.data);
+    });
+  };
+  
   return (
     <div className="py-2">
       <TableActionGroup
@@ -147,6 +162,8 @@ const CheckpointsView = ({
             checksUI={dailyCheckpoints}
             onChange={onDailyCheckpointsChange}
             className="max-h-checks"
+            checkResultsOverview={dailyCheckResultsOverview}
+            getCheckOverview={getDailyCheckOverview}
           />
         )}
         {activeTab === 'monthly' && (
@@ -154,6 +171,8 @@ const CheckpointsView = ({
             checksUI={monthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
             className="max-h-checks"
+            checkResultsOverview={monthlyCheckResultsOverview}
+            getCheckOverview={getMonthlyCheckOverview}
           />
         )}
       </div>
