@@ -26,6 +26,10 @@ import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
+import ai.dqo.metadata.dashboards.DashboardListSpec;
+import ai.dqo.metadata.dashboards.DashboardSpec;
+import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
+import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -565,4 +569,36 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(NotificationSettingsSpec notificationSettingsSpec, P parameter);
+
+    /**
+     * Accepts a dashboard configuration object.
+     * @param dashboardSpec Dashboard configuration.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DashboardSpec dashboardSpec, P parameter);
+
+    /**
+     * Accepts a list of dashboard configuration objects.
+     * @param dashboardListSpec Dashboard configuration objects.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DashboardListSpec dashboardListSpec, P parameter);
+
+    /**
+     * Accepts a folder with a list of dashboards.
+     * @param dashboardsFolderSpec Dashboard folder.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DashboardsFolderSpec dashboardsFolderSpec, P parameter);
+
+    /**
+     * Accepts a list of dashboard folders.
+     * @param dashboardsFolderSpecs List of dashboard folders.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DashboardsFolderListSpec dashboardsFolderSpecs, P parameter);
 }
