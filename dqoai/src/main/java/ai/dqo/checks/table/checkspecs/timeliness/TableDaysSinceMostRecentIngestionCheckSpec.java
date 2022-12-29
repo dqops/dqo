@@ -19,8 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxDaysRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxDaysRule10ParametersSpec;
 import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec, MaxDaysRule0ParametersSpec, MaxDaysRule10ParametersSpec, MaxDaysRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableDaysSinceMostRecentIngestionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +52,17 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
     @JsonPropertyDescription("Default alerting threshold for a min number of days between event and ingestion check that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxDaysRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxDaysRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxDaysRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -89,7 +89,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxDaysRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +97,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxDaysRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +109,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxDaysRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +117,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxDaysRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +129,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxDaysRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +137,7 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxDaysRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
