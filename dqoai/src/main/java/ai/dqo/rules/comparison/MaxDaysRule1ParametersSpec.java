@@ -41,7 +41,7 @@ public class MaxDaysRule1ParametersSpec extends AbstractRuleParametersSpec {
     // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxDays = 0.0;
+    private Double maxDays = 1.0;
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
