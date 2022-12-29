@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxDaysRule10ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxDaysRule10ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxDaysRule2ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxDaysRule2ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -41,7 +41,7 @@ public class MaxDaysRule10ParametersSpec extends AbstractRuleParametersSpec {
     // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxDays = 10.0;
+    private Double maxDays = 2.0;
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
@@ -77,6 +77,6 @@ public class MaxDaysRule10ParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/max_value";
+        return "comparison/max_days";
     }
 }
