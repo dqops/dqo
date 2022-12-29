@@ -18,17 +18,16 @@ package ai.dqo.data.ruleresults.services;
 
 import ai.dqo.data.ruleresults.services.models.RuleResultsFragmentFilter;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
-import ai.dqo.data.storage.LoadedMonthlyPartition;
-import ai.dqo.data.storage.ParquetPartitionId;
-import ai.dqo.data.storage.ParquetPartitionStorageService;
+import ai.dqo.data.storage.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.selection.Selection;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,18 +47,21 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
     }
 
     /**
-     * Deletes the results for the given parameters.
-     *
-     * @param filter Filter for the results that are of interest.
+     * Deletes the results from a table, applying specific filters to get the fragment.
+     * @param filter Filter for the result fragment that is of interest.
      */
     @Override
     public void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter) {
         this.validateRuleResultsFragmentFilter(filter);
 
         Map<String, String> conditions = filter.getColumnConditions();
-        Stream<String> defaultColumns = Arrays.stream(new String[]{ID_COLUMN_NAME, TIME_SERIES_COLUMN_NAME});
-        String[] colNames = Stream.concat(defaultColumns, conditions.keySet().stream())
-                                  .toArray(String[]::new);
+        List<String> columnNames = new ArrayList<>(conditions.keySet());
+        columnNames.add(ID_COLUMN_NAME);
+        if (!filter.isIgnoreDateDay()) {
+            columnNames.add(TIME_SERIES_COLUMN_NAME);
+        }
+
+        FileStorageSettings fileStorageSettings = RuleResultsSnapshot.createRuleResultsStorageSettings();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> presentData =
                 parquetPartitionStorageService.loadPartitionsForMonthsRange(
@@ -68,11 +70,11 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
                                 filter.getTableSearchFilters().getSchemaTableName()),
                         filter.getDateStart(),
                         filter.getDateEnd(),
-                        RuleResultsSnapshot.createRuleResultsStorageSettings(),
-                        colNames
+                        fileStorageSettings,
+                        columnNames.toArray(new String[0])
                 );
 
-        for (LoadedMonthlyPartition loadedMonthlyPartition: presentData.values()) {
+        for (LoadedMonthlyPartition loadedMonthlyPartition : presentData.values()) {
             Table monthlyPartitionTable = loadedMonthlyPartition.getData();
             Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
 
@@ -92,7 +94,13 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
                                 .isEqualTo(colValue));
             }
 
+            List<String> idsToDelete = monthlyPartitionTable.stringColumn(ID_COLUMN_NAME).where(toDelete).asList();
 
+            if (!idsToDelete.isEmpty()) {
+                TableDataChanges changes = new TableDataChanges(null);
+                changes.getDeletedIds().addAll(idsToDelete);
+                this.parquetPartitionStorageService.savePartition(loadedMonthlyPartition, changes, fileStorageSettings);
+            }
         }
     }
 

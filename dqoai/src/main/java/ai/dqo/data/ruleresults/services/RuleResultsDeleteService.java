@@ -22,10 +22,10 @@ import ai.dqo.data.ruleresults.services.models.RuleResultsFragmentFilter;
  * Service that deletes outdated results of a check.
  */
 public interface RuleResultsDeleteService {
+
     /**
-     * Deletes the results for the given parameters.
-     *
-     * @param filter Filter for the results that are of interest.
+     * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the result fragment that is of interest.
      */
     void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter);
 }

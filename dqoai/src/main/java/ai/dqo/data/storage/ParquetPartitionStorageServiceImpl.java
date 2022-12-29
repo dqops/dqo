@@ -16,18 +16,20 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.localfiles.LocalFileStorageService;
+import ai.dqo.core.filesystem.virtual.FolderName;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.storage.parquet.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,8 +43,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -52,21 +56,25 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
+    private LocalUserHomeFileStorageService localUserHomeFileStorageService;
 
     /**
      * Dependency injection constructor.
      * @param localDqoUserHomePathProvider DQO User home finder.
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
+     * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
             LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
             UserHomeLockManager userHomeLockManager,
-            HadoopConfigurationProvider hadoopConfigurationProvider) {
+            HadoopConfigurationProvider hadoopConfigurationProvider,
+            LocalUserHomeFileStorageService localUserHomeFileStorageService) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
+        this.localUserHomeFileStorageService = localUserHomeFileStorageService;
     }
 
     /**
@@ -190,6 +198,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+
             String hivePartitionFolderName = makeHivePartitionPath(loadedPartition.getPartitionId());
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
             Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
@@ -246,6 +255,26 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
                 } else if (newOrChangedDataPartitionMonth == null) {
                     // no matching deletes and no new/updated changes in this monthly partition, skipping save
+                    return;
+                }
+            }
+
+            if (dataToSave == null || dataToSave.isEmpty()) {
+                // ensure the partition data is deleted
+                if (targetParquetFile.exists()) {
+                    // TODO: Change the splitting for god's sake.
+                    FolderName[] partitionPathFolders = Arrays.stream(partitionPath.toString().split("\\\\"))
+                            .map(FolderName::fromFileSystemName)
+                            .collect(Collectors.toList())
+                            .toArray(FolderName[]::new);
+                    boolean success = this.localUserHomeFileStorageService.tryDeleteFolder(
+                            new HomeFolderPath(partitionPathFolders));
+                    if (success) {
+                        return;
+                    }
+                    // If unsuccessful, then proceed with the regular deleting method.
+                }
+                else {
                     return;
                 }
             }
