@@ -27,40 +27,38 @@ const HomePage = () => {
           </div>
         </div>
         <div className="p-12 mt-16 flex-1">
-          <h1 className="text-3xl italic mb-4">Welcome to your DQO.ai account</h1>
+          <h1 className="text-3xl italic mb-4">Welcome to your DQO account</h1>
           <div className="mb-3">
-            In the menu on the left you can find some propositions of checks results data visualizations.
+            In the menu on the left, you can find some examples of visualization dashboards showing the results of check execution.
           </div>
           <div className="mb-3">
-            If you are a new user there is the instruction on how to <b>install and run</b> the DQO.ai application:
+            If you are a new user, follow the instruction below on how to install and run the DQO application:
           </div>
           <ol className="list-decimal pl-4">
             <li>
               <div className="flex space-x-1 items-center">
-                <span>Make sure you have pip installed, use the</span>
+                <span>{"DQO requires Python version >= 3.6 and can be installed using pip. You can check your version of pip with"}</span>
                 <img src="/images/home/1.png" className="mb-2" alt="" />
-                <span>command</span>
               </div>
               <div>
-                {`If you don't have it use on Windows and MacOS system:`}
+                {"You can install pip version with this command for Windows or MacOS:"}
               </div>
               <img src="/images/home/2.png" className="mb-2" alt="" />
               <div>
-                or
+                or the following command for Linux
               </div>
               <img src="/images/home/3.png" className="mb-2" alt="" />
-              <div>on Linux</div>
             </li>
             <li>
               <div>Install the DQO app</div>
               <img src="/images/home/4.png" className="mb-2" alt="" />
             </li>
             <li>
-              <div>Now you can run the application</div>
+              <div>Start the application</div>
               <img src="/images/home/5.png" className="mb-2" alt="" />
             </li>
             <li>
-              <div>Log into cloud dqo ai</div>
+              <div>Log into dqo cloud</div>
               <img src="/images/home/6.png" className="mb-2" alt="" />
             </li>
           </ol>
@@ -68,30 +66,30 @@ const HomePage = () => {
           <div className="mt-12 grid grid-cols-2 gap-8">
             <div>
               <div className="text-xl mb-5">
-                Please contact us for more information
+                Contact us for more information
               </div>
-              <Button label="Contact Us" color="success" variant="contained" className="bg-green-600" />
+               <a href="https://dqo.ai/contact-us"><Button label="Contact Us" color="success" variant="contained" className="bg-green-600" /></a>
             </div>
       
             <div>
               <div className="text-xl mb-3">
-                Or check out the progress of our work on
+                Check our progress on GitHub
               </div>
-              <img src="images/home/8.png" alt="" className="w-40" />
+              <a href="https://github.com/dqoai/dqo"><img src="images/home/8.png" alt="" className="w-40" /></a>
             </div>
       
             <div>
               <div className="text-xl mb-5">
-                Download and read the guide
+                Download our best practices for effective data quality improvement
               </div>
-              <img src="images/home/7.png" alt="" className="w-40" />
+              <a href="https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"><img src="images/home/7.png" alt="" className="w-40" /></a>
             </div>
       
             <div>
               <div className="text-xl mb-3">
-                Back to main page
+                Back to home page
               </div>
-              <Logo className="w-30" />
+              <a href="https://dqo.ai/"><Logo className="w-30" /></a>
             </div>
           </div>
         </div>
