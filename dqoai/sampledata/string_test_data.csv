@@ -1,31 +1,31 @@
-id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surrounded_by_whitespace_ok:INTEGER,null_placeholder:STRING,null_placeholder_ok:INTEGER,boolean_placeholder:STRING,boolean_placeholder_ok:INTEGER,empty_percent:STRING,empty_percent_ok:INTEGER,range_numeric:DOUBLE,range_integers:INTEGER
-1,##user1@mail.com,0,  name,0,married,1,none,0,North Ridgeville,1,8.9,21520
-2,@@user2@mail.com,0, sur name ,0,married,1,true ,1,Point Pleasant Beach,1,56.43,21531
-3,%%user3@mail.com,0,advetising,1,married,1,false ,1,West Chicago,1,98.07,215417
-4,^^user4@mail.com,0,,1,none,0,f,1,South Rockledge Street,1,,21522
-5,!@user5@mail.com,0,Philade lphia,1,married,1,f,1,,0,34,21536
-6,^&user6@mail.com,0,Alabama  ,0,married,1,y,1,Pumpkin Hill Drive,1,76.91,21550
-7,^&*user7@mail.com,0,Delaware,1,empty,0,y,1,,0,1.54,
-8,$%$user8@mail.com,0,North Dakota,1,married,1,n/a,0,Brookside Street,1,,2153888
-9,$$$user9@mail.com,0,Ohio,1,,1,y,1,West New York,1,56,21561
-10,#$user10@mail.com,0,Alaska,1,undefined,0,yes,1,Margarets Avenue,1,78,86045
-11,%%user3@mail.com,0,Arizona,1,married,1,no,1,Benton Harbor,1,,2345
-12,^^user4@mail.com,0,,1,blank,0,no,1,Poplar Court,1,89.6,86435
-13,!@user5@mail.com,0,,1,married,1,no,1,Liberty Court,1,,86024
-14,^&user6@mail.com,0,Colorado,1,-,0,yes,1,,0,76,30601306
-15,^&*user7@mail.com,0,Connecticu,1,missing,1,y,1,,0,34,3060830
-16,$%$user8@mail.com,0,Delaware,1,married,1,y,1,Branch Lane,1,21,30683
-17,$$$user9@mail.com,0,District of Columbia,1,null,0,t,1,West Airport Court,1,54.99,
-18,*&user8@mail.com,0,Florida,1,nan,0,t,1,Cypress Road,1,87.234,61914
-19,user9@mail.com,1,Geor gia,1,married,1,f,1,Division Drive,1,87,61925
-20,user10@mail.com,1,Hawaii  ,0,married,1,f,1,,0,,
-21,user1@mail.com,1,Idaho,1,married,1,true ,1,,0,98.76,66552
-22,user2@mail.com,1,Illinois,1,N/A,0,false ,1,Lincoln Street,1,34.6,66419
-23,user3@mail.com,1,Indiana,1,na,0,none,0,Green Hill,1,56.21,22801
-24,user4@mail.com,1,Iowa,1,n/d,0,okay,0,,0,76.09,22803
-25,user5@mail.com,1,Kansas,1,married,1,1,1,West Windsor Road,1,89.23,765890
-26,user6@mail.com,1,Kentucky,1,,1,0,1,Mulberry Ave.,1,123.65,86045
-27,user7@mail.com,1,Louisiana,1,,1,1,1,,0,77,2345
-28,user8@mail.com,1,Tennessee,1,married,1,f,1,Summerhouse St.,1,432.98,86435
-29,user9@mail.com,1,Texas,1,married,1,t,1,,0,34.12,86024
-30,user10@mail.com,1,Ut ah,1,married,1,t,1,Hill Field Ave.,1,678.43,30601
+id:INTEGER,email:STRING,email_ok:INTEGER,surrounded_by_whitespace:STRING,surrounded_by_whitespace_ok:INTEGER,null_placeholder:STRING,null_placeholder_ok:INTEGER,boolean_placeholder:STRING,boolean_placeholder_ok:INTEGER,empty_percent:STRING,empty_percent_ok:INTEGER,range_numeric:DOUBLE,range_integers:INTEGER,date:LOCAL_DATE
+1,##user1@mail.com,0,  name,0,married,1,none,0,North Ridgeville,1,8.9,21520,2022-02-01
+2,@@user2@mail.com,0, sur name ,0,married,1,true ,1,Point Pleasant Beach,1,56.43,21531,2022-02-02
+3,%%user3@mail.com,0,advetising,1,married,1,false ,1,West Chicago,1,98.07,215417,2022-02-03
+4,^^user4@mail.com,0,,1,none,0,f,1,South Rockledge Street,1,,21522,2022-02-04
+5,!@user5@mail.com,0,Philade lphia,1,married,1,f,1,,0,34,21536,2022-02-05
+6,^&user6@mail.com,0,Alabama  ,0,married,1,y,1,Pumpkin Hill Drive,1,76.91,21550,2022-02-06
+7,^&*user7@mail.com,0,Delaware,1,empty,0,y,1,,0,1.54,,2022-02-07
+8,$%$user8@mail.com,0,North Dakota,1,married,1,n/a,0,Brookside Street,1,,2153888,2022-02-08
+9,$$$user9@mail.com,0,Ohio,1,,1,y,1,West New York,1,56,21561,2022-02-09
+10,#$user10@mail.com,0,Alaska,1,undefined,0,yes,1,Margarets Avenue,1,78,86045,2022-02-10
+11,%%user3@mail.com,0,Arizona,1,married,1,no,1,Benton Harbor,1,,2345,2022-02-11
+12,^^user4@mail.com,0,,1,blank,0,no,1,Poplar Court,1,89.6,86435,2022-02-12
+13,!@user5@mail.com,0,,1,married,1,no,1,Liberty Court,1,,86024,2022-02-13
+14,^&user6@mail.com,0,Colorado,1,-,0,yes,1,,0,76,30601306,2022-02-14
+15,^&*user7@mail.com,0,Connecticu,1,missing,1,y,1,,0,34,3060830,2022-02-15
+16,$%$user8@mail.com,0,Delaware,1,married,1,y,1,Branch Lane,1,21,30683,2022-02-16
+17,$$$user9@mail.com,0,District of Columbia,1,null,0,t,1,West Airport Court,1,54.99,,2022-02-17
+18,*&user8@mail.com,0,Florida,1,nan,0,t,1,Cypress Road,1,87.234,61914,2022-02-18
+19,user9@mail.com,1,Geor gia,1,married,1,f,1,Division Drive,1,87,61925,2022-02-19
+20,user10@mail.com,1,Hawaii  ,0,married,1,f,1,,0,,,2022-02-20
+21,user1@mail.com,1,Idaho,1,married,1,true ,1,,0,98.76,66552,2022-02-21
+22,user2@mail.com,1,Illinois,1,N/A,0,false ,1,Lincoln Street,1,34.6,66419,2022-02-22
+23,user3@mail.com,1,Indiana,1,na,0,none,0,Green Hill,1,56.21,22801,2022-02-23
+24,user4@mail.com,1,Iowa,1,n/d,0,okay,0,,0,76.09,22803,2022-02-24
+25,user5@mail.com,1,Kansas,1,married,1,1,1,West Windsor Road,1,89.23,765890,2022-02-25
+26,user6@mail.com,1,Kentucky,1,,1,0,1,Mulberry Ave.,1,123.65,86045,2022-02-01
+27,user7@mail.com,1,Louisiana,1,,1,1,1,,0,77,2345,2022-02-01
+28,user8@mail.com,1,Tennessee,1,married,1,f,1,Summerhouse St.,1,432.98,86435,2022-02-01
+29,user9@mail.com,1,Texas,1,married,1,t,1,,0,34.12,86024,2022-02-01
+30,user10@mail.com,1,Ut ah,1,married,1,t,1,Hill Field Ave.,1,678.43,30601,2022-02-01
