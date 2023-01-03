@@ -4,8 +4,8 @@ SELECT
         CURRENT_TIMESTAMP(),
         MAX(
             CASE
-                WHEN CAST({{ render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                    THEN CAST({{ render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                WHEN CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
+                    THEN CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ELSE NULL
             END
         ),
