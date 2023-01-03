@@ -16,6 +16,7 @@
 package ai.dqo.bigquery.sensors.table.timeliness;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocTimelinessChecksSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
@@ -27,6 +28,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
@@ -41,6 +43,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
@@ -71,30 +77,105 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecInte
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsValues() {
+    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
-        runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimestampColumnTimeSeries("date2",TimeSeriesGradient.MONTH));
+
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
+        LocalDateTime ld = LocalDateTime.now();
+        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ld);
+        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
+        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
+
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.0, resultTable.column(0).get(0));
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        LocalDateTime ld = LocalDateTime.now();
+        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ld);
+        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
+        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
 
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsValues2() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
-                sampleTableMetadata, this.checkSpec);
-        runParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimestampColumnTimeSeries("date2", TimeSeriesGradient.DAY));
+    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
+
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
+        LocalDateTime ld = LocalDateTime.now();
+        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ld);
+        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
+        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
+
         Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        LocalDateTime ld = LocalDateTime.now();
+        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").get(0),ld);
+        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
+        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
+
+        System.out.println(min);
+        System.out.println(max);
+        Table resultTable = sensorResult.getResultTable();
+        System.out.println((double)resultTable.column(0).get(0));
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.5, resultTable.column(0).get(1));
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+    }
 
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        LocalDateTime ld = LocalDateTime.now();
+        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ld);
+        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
+        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
+
+        System.out.println(min);
+        System.out.println(max);
+
+        Table resultTable = sensorResult.getResultTable();
+        System.out.println((double)resultTable.column(0).get(0));
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
     }
 }
