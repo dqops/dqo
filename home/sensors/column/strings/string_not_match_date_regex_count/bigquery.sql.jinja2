@@ -2,17 +2,17 @@
 
 {% macro render_date_formats(date_formats) %}
     {%- if date_formats == 'ISO8601'-%}
-'%Y-%m-%d'
+        '%Y-%m-%d'
     {%- elif date_formats == 'MonthDayYear' -%}
-'%m/%d/%Y'
+        '%m/%d/%Y'
     {%- elif date_formats == 'DayMonthYear' -%}
-'%d/%m/%Y'
+        '%d/%m/%Y'
     {%- elif date_formats == 'YearMonthDay'-%}
-'%Y/%m/%d'
+        '%Y/%m/%d'
     {%- elif date_formats == 'MonthNameDayYear'-%}
-'%b %d, %Y'
+        '%b %d, %Y'
     {%- endif -%}
-{% endmacro %}
+{% endmacro -%}
 
 SELECT
 CASE
