@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.standard;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -45,13 +45,13 @@ public class TableStandardMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Minimum row count check for each monthly partition or each month of data")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinRowCountCheckSpec monthlyPartitionMinRowCount;
+    private TableRowCountCheckSpec monthlyPartitionMinRowCount;
 
     /**
      * Returns the minimum row count check configuration.
      * @return Minimum row count check specification.
      */
-    public TableMinRowCountCheckSpec getMonthlyPartitionMinRowCount() {
+    public TableRowCountCheckSpec getMonthlyPartitionMinRowCount() {
         return monthlyPartitionMinRowCount;
     }
 
@@ -59,7 +59,7 @@ public class TableStandardMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Sets the minimum row count.
      * @param monthlyPartitionMinRowCount New row count check.
      */
-    public void setMonthlyPartitionMinRowCount(TableMinRowCountCheckSpec monthlyPartitionMinRowCount) {
+    public void setMonthlyPartitionMinRowCount(TableRowCountCheckSpec monthlyPartitionMinRowCount) {
 		this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinRowCount, monthlyPartitionMinRowCount));
         this.monthlyPartitionMinRowCount = monthlyPartitionMinRowCount;
 		this.propagateHierarchyIdToField(monthlyPartitionMinRowCount, "monthly_partition_min_row_count");

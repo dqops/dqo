@@ -33,13 +33,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the min row count rule.
+ * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec, MinCountRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMinRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec, MinCountRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRule0ParametersSpec error;

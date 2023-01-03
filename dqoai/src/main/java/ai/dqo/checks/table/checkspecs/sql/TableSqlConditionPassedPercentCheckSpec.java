@@ -39,9 +39,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMinSqlConditionPassedPercentCheckSpec
+public class TableSqlConditionPassedPercentCheckSpec
         extends AbstractCheckSpec<TableSqlConditionPassedPercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMinSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.table.standard;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableStandardRowCountSensorParametersSpecBigQueryTests extends BaseTest {
     private TableStandardRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMinRowCountCheckSpec checkSpec;
+    private TableRowCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableMinRowCountCheckSpec();
+        this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

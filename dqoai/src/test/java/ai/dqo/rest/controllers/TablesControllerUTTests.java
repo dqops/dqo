@@ -22,7 +22,7 @@ import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
@@ -158,13 +158,13 @@ public class TablesControllerUTTests extends BaseTest {
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
         TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
-        standardDailyCheckpointSpec.setDailyCheckpointMinRowCount(minRowCountSpec);
+        standardDailyCheckpointSpec.setDailyCheckpointRowCount(minRowCountSpec);
         TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
         dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
         TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
@@ -188,13 +188,13 @@ public class TablesControllerUTTests extends BaseTest {
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
         TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
-        standardDailyPartitionedCheckSpec.setDailyPartitionMinRowCount(minRowCountSpec);
+        standardDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
         dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
@@ -312,13 +312,13 @@ public class TablesControllerUTTests extends BaseTest {
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
         TableAdHocStandardChecksSpec standardChecksSpec = new TableAdHocStandardChecksSpec();
-        standardChecksSpec.setMinRowCount(minRowCountSpec);
+        standardChecksSpec.setRowCount(minRowCountSpec);
         TableAdHocCheckCategoriesSpec sampleAdHocCheck = new TableAdHocCheckCategoriesSpec();
         sampleAdHocCheck.setStandard(standardChecksSpec);
 
@@ -340,13 +340,13 @@ public class TablesControllerUTTests extends BaseTest {
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
         TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
-        standardDailyCheckpointSpec.setDailyCheckpointMinRowCount(minRowCountSpec);
+        standardDailyCheckpointSpec.setDailyCheckpointRowCount(minRowCountSpec);
         TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
         dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
         TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
@@ -372,13 +372,13 @@ public class TablesControllerUTTests extends BaseTest {
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleParametersSpec minRule3 = new MinCountRuleParametersSpec(30L);
-        TableMinRowCountCheckSpec minRowCountSpec = new TableMinRowCountCheckSpec();
+        TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
         minRowCountSpec.setWarning(minRule1);
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
         TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
-        standardDailyPartitionedCheckSpec.setDailyPartitionMinRowCount(minRowCountSpec);
+        standardDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
         dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();

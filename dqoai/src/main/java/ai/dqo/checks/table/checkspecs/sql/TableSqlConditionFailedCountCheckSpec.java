@@ -19,8 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxValueRuleParametersSpec;
-import ai.dqo.sensors.table.sql.TableSqlAggregatedExpressionSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,44 +33,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+ * Table level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
-        MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionMaxValueCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableSqlConditionFailedCountCheckSpec
+        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a table")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlAggregatedExpressionSensorParametersSpec parameters = new TableSqlAggregatedExpressionSensorParametersSpec();
+    private TableSqlConditionFailedCountSensorParametersSpec parameters = new TableSqlConditionFailedCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec error;
+    private MaxCountRule0ParametersSpec error;
 
-    @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec warning;
+    private MaxCountRule10ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec fatal;
+    private MaxCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public TableSqlAggregatedExpressionSensorParametersSpec getParameters() {
+    public TableSqlConditionFailedCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,10 +78,10 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableSqlAggregatedExpressionSensorParametersSpec parameters) {
-		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(TableSqlConditionFailedCountSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-		this.propagateHierarchyIdToField(parameters, "parameters");
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -89,7 +90,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxValueRuleParametersSpec getError() {
+    public MaxCountRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +98,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxValueRuleParametersSpec error) {
+    public void setError(MaxCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +110,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getWarning() {
+    public MaxCountRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +118,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxValueRuleParametersSpec warning) {
+    public void setWarning(MaxCountRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +130,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getFatal() {
+    public MaxCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +138,7 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxValueRuleParametersSpec fatal) {
+    public void setFatal(MaxCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -160,6 +161,6 @@ public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheck
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.VALIDITY;
     }
 }

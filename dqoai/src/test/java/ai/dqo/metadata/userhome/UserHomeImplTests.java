@@ -17,7 +17,7 @@ package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;
@@ -62,8 +62,8 @@ public class UserHomeImplTests extends BaseTest {
         TableSpec tableSpec = tableWrapper.getSpec();
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         ConnectionWrapper result = this.sut.findConnectionFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -77,8 +77,8 @@ public class UserHomeImplTests extends BaseTest {
         TableSpec tableSpec = tableWrapper.getSpec();
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         TableWrapper result = this.sut.findTableFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -92,8 +92,8 @@ public class UserHomeImplTests extends BaseTest {
         TableSpec tableSpec = tableWrapper.getSpec();
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         ColumnSpec result = this.sut.findColumnFor(check.getHierarchyId());
         Assertions.assertNull(result);

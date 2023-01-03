@@ -16,10 +16,10 @@
 package ai.dqo.checks.table.partitioned.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMinSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMaxValueCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,193 +39,193 @@ import java.util.Objects;
 public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlDailyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_min_sql_condition_passed_percent_on_table_1", o -> o.dailyPartitionMinSqlConditionPassedPercentOnTable_1);
-            put("daily_partition_min_sql_condition_passed_percent_on_table_2", o -> o.dailyPartitionMinSqlConditionPassedPercentOnTable_2);
-            put("daily_partition_min_sql_condition_passed_percent_on_table_3", o -> o.dailyPartitionMinSqlConditionPassedPercentOnTable_3);
+            put("daily_partition_sql_condition_passed_percent_on_table_1", o -> o.dailyPartitionSqlConditionPassedPercentOnTable_1);
+            put("daily_partition_sql_condition_passed_percent_on_table_2", o -> o.dailyPartitionSqlConditionPassedPercentOnTable_2);
+            put("daily_partition_sql_condition_passed_percent_on_table_3", o -> o.dailyPartitionSqlConditionPassedPercentOnTable_3);
 
-            put("daily_partition_max_sql_condition_failed_count_on_table_1", o -> o.dailyPartitionMaxSqlConditionFailedCountOnTable_1);
-            put("daily_partition_max_sql_condition_failed_count_on_table_2", o -> o.dailyPartitionMaxSqlConditionFailedCountOnTable_2);
-            put("daily_partition_max_sql_condition_failed_count_on_table_3", o -> o.dailyPartitionMaxSqlConditionFailedCountOnTable_3);
+            put("daily_partition_sql_condition_failed_count_on_table_1", o -> o.dailyPartitionSqlConditionFailedCountOnTable_1);
+            put("daily_partition_sql_condition_failed_count_on_table_2", o -> o.dailyPartitionSqlConditionFailedCountOnTable_2);
+            put("daily_partition_sql_condition_failed_count_on_table_3", o -> o.dailyPartitionSqlConditionFailedCountOnTable_3);
 
-            put("daily_partition_min_sql_aggregated_expression_value_on_table", o -> o.dailyPartitionMinSqlAggregatedExpressionValueOnTable);
-            put("daily_partition_max_sql_aggregated_expression_value_on_table", o -> o.dailyPartitionMaxSqlAggregatedExpressionValueOnTable);
+            put("daily_partition_sql_aggregated_expression_value_on_table_min", o -> o.dailyPartitionSqlAggregatedExpressionValueOnTableMin);
+            put("daily_partition_sql_aggregated_expression_value_on_table_max", o -> o.dailyPartitionSqlAggregatedExpressionValueOnTableMax);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_1;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_2;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_3;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_3;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_1;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_2;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_3;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_3;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionMinValueCheckSpec dailyPartitionMinSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionMaxValueCheckSpec dailyPartitionMaxSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMaxCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
-        return dailyPartitionMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
+        return dailyPartitionSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyPartitionMinSqlConditionPassedPercentOnTable_1() {
-        return dailyPartitionMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getDailyPartitionSqlConditionPassedPercentOnTable_1() {
+        return dailyPartitionSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMinSqlConditionPassedPercentOnTable_1 Check specification.
+     * @param dailyPartitionSqlConditionPassedPercentOnTable_1 Check specification.
      */
-    public void setDailyPartitionMinSqlConditionPassedPercentOnTable_1(TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinSqlConditionPassedPercentOnTable_1, dailyPartitionMinSqlConditionPassedPercentOnTable_1));
-        this.dailyPartitionMinSqlConditionPassedPercentOnTable_1 = dailyPartitionMinSqlConditionPassedPercentOnTable_1;
-        propagateHierarchyIdToField(dailyPartitionMinSqlConditionPassedPercentOnTable_1, "daily_partition_min_sql_condition_passed_percent_on_table_1");
+    public void setDailyPartitionSqlConditionPassedPercentOnTable_1(TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionPassedPercentOnTable_1, dailyPartitionSqlConditionPassedPercentOnTable_1));
+        this.dailyPartitionSqlConditionPassedPercentOnTable_1 = dailyPartitionSqlConditionPassedPercentOnTable_1;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionPassedPercentOnTable_1, "daily_partition_sql_condition_passed_percent_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyPartitionMinSqlConditionPassedPercentOnTable_2() {
-        return dailyPartitionMinSqlConditionPassedPercentOnTable_2;
+    public TableSqlConditionPassedPercentCheckSpec getDailyPartitionSqlConditionPassedPercentOnTable_2() {
+        return dailyPartitionSqlConditionPassedPercentOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMinSqlConditionPassedPercentOnTable_2 Check specification.
+     * @param dailyPartitionSqlConditionPassedPercentOnTable_2 Check specification.
      */
-    public void setDailyPartitionMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinSqlConditionPassedPercentOnTable_2, dailyPartitionMinSqlConditionPassedPercentOnTable_2));
-        this.dailyPartitionMinSqlConditionPassedPercentOnTable_2 = dailyPartitionMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(dailyPartitionMinSqlConditionPassedPercentOnTable_2, "daily_partition_min_sql_condition_passed_percent_on_table_2");
+    public void setDailyPartitionSqlConditionPassedPercentOnTable_2(TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionPassedPercentOnTable_2, dailyPartitionSqlConditionPassedPercentOnTable_2));
+        this.dailyPartitionSqlConditionPassedPercentOnTable_2 = dailyPartitionSqlConditionPassedPercentOnTable_2;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionPassedPercentOnTable_2, "daily_partition_sql_condition_passed_percent_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyPartitionMinSqlConditionPassedPercentOnTable_3() {
-        return dailyPartitionMinSqlConditionPassedPercentOnTable_3;
+    public TableSqlConditionPassedPercentCheckSpec getDailyPartitionSqlConditionPassedPercentOnTable_3() {
+        return dailyPartitionSqlConditionPassedPercentOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMinSqlConditionPassedPercentOnTable_3 Check specification.
+     * @param dailyPartitionSqlConditionPassedPercentOnTable_3 Check specification.
      */
-    public void setDailyPartitionMinSqlConditionPassedPercentOnTable_3(TableMinSqlConditionPassedPercentCheckSpec dailyPartitionMinSqlConditionPassedPercentOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinSqlConditionPassedPercentOnTable_3, dailyPartitionMinSqlConditionPassedPercentOnTable_3));
-        this.dailyPartitionMinSqlConditionPassedPercentOnTable_3 = dailyPartitionMinSqlConditionPassedPercentOnTable_3;
-        propagateHierarchyIdToField(dailyPartitionMinSqlConditionPassedPercentOnTable_3, "daily_partition_min_sql_condition_passed_percent_on_table_3");
+    public void setDailyPartitionSqlConditionPassedPercentOnTable_3(TableSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionPassedPercentOnTable_3, dailyPartitionSqlConditionPassedPercentOnTable_3));
+        this.dailyPartitionSqlConditionPassedPercentOnTable_3 = dailyPartitionSqlConditionPassedPercentOnTable_3;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionPassedPercentOnTable_3, "daily_partition_sql_condition_passed_percent_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyPartitionMaxSqlConditionFailedCountOnTable_1() {
-        return dailyPartitionMaxSqlConditionFailedCountOnTable_1;
+    public TableSqlConditionFailedCountCheckSpec getDailyPartitionSqlConditionFailedCountOnTable_1() {
+        return dailyPartitionSqlConditionFailedCountOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMaxSqlConditionFailedCountOnTable_1 Check specification.
+     * @param dailyPartitionSqlConditionFailedCountOnTable_1 Check specification.
      */
-    public void setDailyPartitionMaxSqlConditionFailedCountOnTable_1(TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxSqlConditionFailedCountOnTable_1, dailyPartitionMaxSqlConditionFailedCountOnTable_1));
-        this.dailyPartitionMaxSqlConditionFailedCountOnTable_1 = dailyPartitionMaxSqlConditionFailedCountOnTable_1;
-        propagateHierarchyIdToField(dailyPartitionMaxSqlConditionFailedCountOnTable_1, "daily_partition_max_sql_condition_failed_count_on_table_1");
+    public void setDailyPartitionSqlConditionFailedCountOnTable_1(TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionFailedCountOnTable_1, dailyPartitionSqlConditionFailedCountOnTable_1));
+        this.dailyPartitionSqlConditionFailedCountOnTable_1 = dailyPartitionSqlConditionFailedCountOnTable_1;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionFailedCountOnTable_1, "daily_partition_sql_condition_failed_count_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyPartitionMaxSqlConditionFailedCountOnTable_2() {
-        return dailyPartitionMaxSqlConditionFailedCountOnTable_2;
+    public TableSqlConditionFailedCountCheckSpec getDailyPartitionSqlConditionFailedCountOnTable_2() {
+        return dailyPartitionSqlConditionFailedCountOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMaxSqlConditionFailedCountOnTable_2 Check specification.
+     * @param dailyPartitionSqlConditionFailedCountOnTable_2 Check specification.
      */
-    public void setDailyPartitionMaxSqlConditionFailedCountOnTable_2(TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxSqlConditionFailedCountOnTable_2, dailyPartitionMaxSqlConditionFailedCountOnTable_2));
-        this.dailyPartitionMaxSqlConditionFailedCountOnTable_2 = dailyPartitionMaxSqlConditionFailedCountOnTable_2;
-        propagateHierarchyIdToField(dailyPartitionMaxSqlConditionFailedCountOnTable_2, "daily_partition_max_sql_condition_failed_count_on_table_2");
+    public void setDailyPartitionSqlConditionFailedCountOnTable_2(TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionFailedCountOnTable_2, dailyPartitionSqlConditionFailedCountOnTable_2));
+        this.dailyPartitionSqlConditionFailedCountOnTable_2 = dailyPartitionSqlConditionFailedCountOnTable_2;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionFailedCountOnTable_2, "daily_partition_sql_condition_failed_count_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyPartitionMaxSqlConditionFailedCountOnTable_3() {
-        return dailyPartitionMaxSqlConditionFailedCountOnTable_3;
+    public TableSqlConditionFailedCountCheckSpec getDailyPartitionSqlConditionFailedCountOnTable_3() {
+        return dailyPartitionSqlConditionFailedCountOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMaxSqlConditionFailedCountOnTable_3 Check specification.
+     * @param dailyPartitionSqlConditionFailedCountOnTable_3 Check specification.
      */
-    public void setDailyPartitionMaxSqlConditionFailedCountOnTable_3(TableMaxSqlConditionFailedCountCheckSpec dailyPartitionMaxSqlConditionFailedCountOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxSqlConditionFailedCountOnTable_3, dailyPartitionMaxSqlConditionFailedCountOnTable_3));
-        this.dailyPartitionMaxSqlConditionFailedCountOnTable_3 = dailyPartitionMaxSqlConditionFailedCountOnTable_3;
-        propagateHierarchyIdToField(dailyPartitionMaxSqlConditionFailedCountOnTable_3, "daily_partition_max_sql_condition_failed_count_on_table_3");
+    public void setDailyPartitionSqlConditionFailedCountOnTable_3(TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlConditionFailedCountOnTable_3, dailyPartitionSqlConditionFailedCountOnTable_3));
+        this.dailyPartitionSqlConditionFailedCountOnTable_3 = dailyPartitionSqlConditionFailedCountOnTable_3;
+        propagateHierarchyIdToField(dailyPartitionSqlConditionFailedCountOnTable_3, "daily_partition_sql_condition_failed_count_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMinValueCheckSpec getDailyPartitionMinSqlAggregatedExpressionValueOnTable() {
-        return dailyPartitionMinSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMinCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnTableMin() {
+        return dailyPartitionSqlAggregatedExpressionValueOnTableMin;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMinSqlAggregatedExpressionValueOnTable Check specification.
+     * @param dailyPartitionSqlAggregatedExpressionValueOnTableMin Check specification.
      */
-    public void setDailyPartitionMinSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMinValueCheckSpec dailyPartitionMinSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinSqlAggregatedExpressionValueOnTable, dailyPartitionMinSqlAggregatedExpressionValueOnTable));
-        this.dailyPartitionMinSqlAggregatedExpressionValueOnTable = dailyPartitionMinSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(dailyPartitionMinSqlAggregatedExpressionValueOnTable, "daily_partition_min_sql_aggregated_expression_value_on_table");
+    public void setDailyPartitionSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMin) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnTableMin, dailyPartitionSqlAggregatedExpressionValueOnTableMin));
+        this.dailyPartitionSqlAggregatedExpressionValueOnTableMin = dailyPartitionSqlAggregatedExpressionValueOnTableMin;
+        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnTableMin, "daily_partition_sql_aggregated_expression_value_on_table_min");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMaxValueCheckSpec getDailyPartitionMaxSqlAggregatedExpressionValueOnTable() {
-        return dailyPartitionMaxSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMaxCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnTableMax() {
+        return dailyPartitionSqlAggregatedExpressionValueOnTableMax;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionMaxSqlAggregatedExpressionValueOnTable Check specification.
+     * @param dailyPartitionSqlAggregatedExpressionValueOnTableMax Check specification.
      */
-    public void setDailyPartitionMaxSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMaxValueCheckSpec dailyPartitionMaxSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxSqlAggregatedExpressionValueOnTable, dailyPartitionMaxSqlAggregatedExpressionValueOnTable));
-        this.dailyPartitionMaxSqlAggregatedExpressionValueOnTable = dailyPartitionMaxSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(dailyPartitionMaxSqlAggregatedExpressionValueOnTable, "daily_partition_max_sql_aggregated_expression_value_on_table");
+    public void setDailyPartitionSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnTableMax, dailyPartitionSqlAggregatedExpressionValueOnTableMax));
+        this.dailyPartitionSqlAggregatedExpressionValueOnTableMax = dailyPartitionSqlAggregatedExpressionValueOnTableMax;
+        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnTableMax, "daily_partition_sql_aggregated_expression_value_on_table_max");
     }
 
     /**
