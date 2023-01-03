@@ -16,10 +16,10 @@
 package ai.dqo.checks.table.checkpoints.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMinSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMaxValueCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,193 +39,193 @@ import java.util.Objects;
 public class TableSqlDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlDailyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_min_sql_condition_passed_percent_on_table_1", o -> o.dailyCheckpointMinSqlConditionPassedPercentOnTable_1);
-            put("daily_checkpoint_min_sql_condition_passed_percent_on_table_2", o -> o.dailyCheckpointMinSqlConditionPassedPercentOnTable_2);
-            put("daily_checkpoint_min_sql_condition_passed_percent_on_table_3", o -> o.dailyCheckpointMinSqlConditionPassedPercentOnTable_3);
+            put("daily_checkpoint_sql_condition_passed_percent_on_table_1", o -> o.dailyCheckpointSqlConditionPassedPercentOnTable_1);
+            put("daily_checkpoint_sql_condition_passed_percent_on_table_2", o -> o.dailyCheckpointSqlConditionPassedPercentOnTable_2);
+            put("daily_checkpoint_sql_condition_passed_percent_on_table_3", o -> o.dailyCheckpointSqlConditionPassedPercentOnTable_3);
 
-            put("daily_checkpoint_max_sql_condition_failed_count_on_table_1", o -> o.dailyCheckpointMaxSqlConditionFailedCountOnTable_1);
-            put("daily_checkpoint_max_sql_condition_failed_count_on_table_2", o -> o.dailyCheckpointMaxSqlConditionFailedCountOnTable_2);
-            put("daily_checkpoint_max_sql_condition_failed_count_on_table_3", o -> o.dailyCheckpointMaxSqlConditionFailedCountOnTable_3);
+            put("daily_checkpoint_sql_condition_failed_count_on_table_1", o -> o.dailyCheckpointSqlConditionFailedCountOnTable_1);
+            put("daily_checkpoint_sql_condition_failed_count_on_table_2", o -> o.dailyCheckpointSqlConditionFailedCountOnTable_2);
+            put("daily_checkpoint_sql_condition_failed_count_on_table_3", o -> o.dailyCheckpointSqlConditionFailedCountOnTable_3);
 
-            put("daily_checkpoint_min_sql_aggregated_expression_value_on_table", o -> o.dailyCheckpointMinSqlAggregatedExpressionValueOnTable);
-            put("daily_checkpoint_max_sql_aggregated_expression_value_on_table", o -> o.dailyCheckpointMaxSqlAggregatedExpressionValueOnTable);
+            put("daily_checkpoint_sql_aggregated_expression_value_on_table_min", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnTableMin);
+            put("daily_checkpoint_sql_aggregated_expression_value_on_table_max", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnTableMax);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_2;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_3;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_3;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_1;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_2;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_3;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_3;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionMinValueCheckSpec dailyCheckpointMinSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionMaxValueCheckSpec dailyCheckpointMaxSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
-        return dailyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
+        return dailyCheckpointSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyCheckpointMinSqlConditionPassedPercentOnTable_1() {
-        return dailyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getDailyCheckpointSqlConditionPassedPercentOnTable_1() {
+        return dailyCheckpointSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMinSqlConditionPassedPercentOnTable_1 Check specification.
+     * @param dailyCheckpointSqlConditionPassedPercentOnTable_1 Check specification.
      */
-    public void setDailyCheckpointMinSqlConditionPassedPercentOnTable_1(TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinSqlConditionPassedPercentOnTable_1, dailyCheckpointMinSqlConditionPassedPercentOnTable_1));
-        this.dailyCheckpointMinSqlConditionPassedPercentOnTable_1 = dailyCheckpointMinSqlConditionPassedPercentOnTable_1;
-        propagateHierarchyIdToField(dailyCheckpointMinSqlConditionPassedPercentOnTable_1, "daily_checkpoint_min_sql_condition_passed_percent_on_table_1");
+    public void setDailyCheckpointSqlConditionPassedPercentOnTable_1(TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionPassedPercentOnTable_1, dailyCheckpointSqlConditionPassedPercentOnTable_1));
+        this.dailyCheckpointSqlConditionPassedPercentOnTable_1 = dailyCheckpointSqlConditionPassedPercentOnTable_1;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionPassedPercentOnTable_1, "daily_checkpoint_sql_condition_passed_percent_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyCheckpointMinSqlConditionPassedPercentOnTable_2() {
-        return dailyCheckpointMinSqlConditionPassedPercentOnTable_2;
+    public TableSqlConditionPassedPercentCheckSpec getDailyCheckpointSqlConditionPassedPercentOnTable_2() {
+        return dailyCheckpointSqlConditionPassedPercentOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMinSqlConditionPassedPercentOnTable_2 Check specification.
+     * @param dailyCheckpointSqlConditionPassedPercentOnTable_2 Check specification.
      */
-    public void setDailyCheckpointMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinSqlConditionPassedPercentOnTable_2, dailyCheckpointMinSqlConditionPassedPercentOnTable_2));
-        this.dailyCheckpointMinSqlConditionPassedPercentOnTable_2 = dailyCheckpointMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(dailyCheckpointMinSqlConditionPassedPercentOnTable_2, "daily_checkpoint_min_sql_condition_passed_percent_on_table_2");
+    public void setDailyCheckpointSqlConditionPassedPercentOnTable_2(TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionPassedPercentOnTable_2, dailyCheckpointSqlConditionPassedPercentOnTable_2));
+        this.dailyCheckpointSqlConditionPassedPercentOnTable_2 = dailyCheckpointSqlConditionPassedPercentOnTable_2;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionPassedPercentOnTable_2, "daily_checkpoint_sql_condition_passed_percent_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getDailyCheckpointMinSqlConditionPassedPercentOnTable_3() {
-        return dailyCheckpointMinSqlConditionPassedPercentOnTable_3;
+    public TableSqlConditionPassedPercentCheckSpec getDailyCheckpointSqlConditionPassedPercentOnTable_3() {
+        return dailyCheckpointSqlConditionPassedPercentOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMinSqlConditionPassedPercentOnTable_3 Check specification.
+     * @param dailyCheckpointSqlConditionPassedPercentOnTable_3 Check specification.
      */
-    public void setDailyCheckpointMinSqlConditionPassedPercentOnTable_3(TableMinSqlConditionPassedPercentCheckSpec dailyCheckpointMinSqlConditionPassedPercentOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinSqlConditionPassedPercentOnTable_3, dailyCheckpointMinSqlConditionPassedPercentOnTable_3));
-        this.dailyCheckpointMinSqlConditionPassedPercentOnTable_3 = dailyCheckpointMinSqlConditionPassedPercentOnTable_3;
-        propagateHierarchyIdToField(dailyCheckpointMinSqlConditionPassedPercentOnTable_3, "daily_checkpoint_min_sql_condition_passed_percent_on_table_3");
+    public void setDailyCheckpointSqlConditionPassedPercentOnTable_3(TableSqlConditionPassedPercentCheckSpec dailyCheckpointSqlConditionPassedPercentOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionPassedPercentOnTable_3, dailyCheckpointSqlConditionPassedPercentOnTable_3));
+        this.dailyCheckpointSqlConditionPassedPercentOnTable_3 = dailyCheckpointSqlConditionPassedPercentOnTable_3;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionPassedPercentOnTable_3, "daily_checkpoint_sql_condition_passed_percent_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyCheckpointMaxSqlConditionFailedCountOnTable_1() {
-        return dailyCheckpointMaxSqlConditionFailedCountOnTable_1;
+    public TableSqlConditionFailedCountCheckSpec getDailyCheckpointSqlConditionFailedCountOnTable_1() {
+        return dailyCheckpointSqlConditionFailedCountOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMaxSqlConditionFailedCountOnTable_1 Check specification.
+     * @param dailyCheckpointSqlConditionFailedCountOnTable_1 Check specification.
      */
-    public void setDailyCheckpointMaxSqlConditionFailedCountOnTable_1(TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxSqlConditionFailedCountOnTable_1, dailyCheckpointMaxSqlConditionFailedCountOnTable_1));
-        this.dailyCheckpointMaxSqlConditionFailedCountOnTable_1 = dailyCheckpointMaxSqlConditionFailedCountOnTable_1;
-        propagateHierarchyIdToField(dailyCheckpointMaxSqlConditionFailedCountOnTable_1, "daily_checkpoint_max_sql_condition_failed_count_on_table_1");
+    public void setDailyCheckpointSqlConditionFailedCountOnTable_1(TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionFailedCountOnTable_1, dailyCheckpointSqlConditionFailedCountOnTable_1));
+        this.dailyCheckpointSqlConditionFailedCountOnTable_1 = dailyCheckpointSqlConditionFailedCountOnTable_1;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionFailedCountOnTable_1, "daily_checkpoint_sql_condition_failed_count_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyCheckpointMaxSqlConditionFailedCountOnTable_2() {
-        return dailyCheckpointMaxSqlConditionFailedCountOnTable_2;
+    public TableSqlConditionFailedCountCheckSpec getDailyCheckpointSqlConditionFailedCountOnTable_2() {
+        return dailyCheckpointSqlConditionFailedCountOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMaxSqlConditionFailedCountOnTable_2 Check specification.
+     * @param dailyCheckpointSqlConditionFailedCountOnTable_2 Check specification.
      */
-    public void setDailyCheckpointMaxSqlConditionFailedCountOnTable_2(TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxSqlConditionFailedCountOnTable_2, dailyCheckpointMaxSqlConditionFailedCountOnTable_2));
-        this.dailyCheckpointMaxSqlConditionFailedCountOnTable_2 = dailyCheckpointMaxSqlConditionFailedCountOnTable_2;
-        propagateHierarchyIdToField(dailyCheckpointMaxSqlConditionFailedCountOnTable_2, "daily_checkpoint_max_sql_condition_failed_count_on_table_2");
+    public void setDailyCheckpointSqlConditionFailedCountOnTable_2(TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionFailedCountOnTable_2, dailyCheckpointSqlConditionFailedCountOnTable_2));
+        this.dailyCheckpointSqlConditionFailedCountOnTable_2 = dailyCheckpointSqlConditionFailedCountOnTable_2;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionFailedCountOnTable_2, "daily_checkpoint_sql_condition_failed_count_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getDailyCheckpointMaxSqlConditionFailedCountOnTable_3() {
-        return dailyCheckpointMaxSqlConditionFailedCountOnTable_3;
+    public TableSqlConditionFailedCountCheckSpec getDailyCheckpointSqlConditionFailedCountOnTable_3() {
+        return dailyCheckpointSqlConditionFailedCountOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMaxSqlConditionFailedCountOnTable_3 Check specification.
+     * @param dailyCheckpointSqlConditionFailedCountOnTable_3 Check specification.
      */
-    public void setDailyCheckpointMaxSqlConditionFailedCountOnTable_3(TableMaxSqlConditionFailedCountCheckSpec dailyCheckpointMaxSqlConditionFailedCountOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxSqlConditionFailedCountOnTable_3, dailyCheckpointMaxSqlConditionFailedCountOnTable_3));
-        this.dailyCheckpointMaxSqlConditionFailedCountOnTable_3 = dailyCheckpointMaxSqlConditionFailedCountOnTable_3;
-        propagateHierarchyIdToField(dailyCheckpointMaxSqlConditionFailedCountOnTable_3, "daily_checkpoint_max_sql_condition_failed_count_on_table_3");
+    public void setDailyCheckpointSqlConditionFailedCountOnTable_3(TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlConditionFailedCountOnTable_3, dailyCheckpointSqlConditionFailedCountOnTable_3));
+        this.dailyCheckpointSqlConditionFailedCountOnTable_3 = dailyCheckpointSqlConditionFailedCountOnTable_3;
+        propagateHierarchyIdToField(dailyCheckpointSqlConditionFailedCountOnTable_3, "daily_checkpoint_sql_condition_failed_count_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMinValueCheckSpec getDailyCheckpointMinSqlAggregatedExpressionValueOnTable() {
-        return dailyCheckpointMinSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMinCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnTableMin() {
+        return dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMinSqlAggregatedExpressionValueOnTable Check specification.
+     * @param dailyCheckpointSqlAggregatedExpressionValueOnTableMin Check specification.
      */
-    public void setDailyCheckpointMinSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMinValueCheckSpec dailyCheckpointMinSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinSqlAggregatedExpressionValueOnTable, dailyCheckpointMinSqlAggregatedExpressionValueOnTable));
-        this.dailyCheckpointMinSqlAggregatedExpressionValueOnTable = dailyCheckpointMinSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(dailyCheckpointMinSqlAggregatedExpressionValueOnTable, "daily_checkpoint_min_sql_aggregated_expression_value_on_table");
+    public void setDailyCheckpointSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMin) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnTableMin, dailyCheckpointSqlAggregatedExpressionValueOnTableMin));
+        this.dailyCheckpointSqlAggregatedExpressionValueOnTableMin = dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
+        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnTableMin, "daily_checkpoint_sql_aggregated_expression_value_on_table_min");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMaxValueCheckSpec getDailyCheckpointMaxSqlAggregatedExpressionValueOnTable() {
-        return dailyCheckpointMaxSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMaxCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnTableMax() {
+        return dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointMaxSqlAggregatedExpressionValueOnTable Check specification.
+     * @param dailyCheckpointSqlAggregatedExpressionValueOnTableMax Check specification.
      */
-    public void setDailyCheckpointMaxSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMaxValueCheckSpec dailyCheckpointMaxSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxSqlAggregatedExpressionValueOnTable, dailyCheckpointMaxSqlAggregatedExpressionValueOnTable));
-        this.dailyCheckpointMaxSqlAggregatedExpressionValueOnTable = dailyCheckpointMaxSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(dailyCheckpointMaxSqlAggregatedExpressionValueOnTable, "daily_checkpoint_max_sql_aggregated_expression_value_on_table");
+    public void setDailyCheckpointSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMax) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnTableMax, dailyCheckpointSqlAggregatedExpressionValueOnTableMax));
+        this.dailyCheckpointSqlAggregatedExpressionValueOnTableMax = dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
+        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnTableMax, "daily_checkpoint_sql_aggregated_expression_value_on_table_max");
     }
 
     /**

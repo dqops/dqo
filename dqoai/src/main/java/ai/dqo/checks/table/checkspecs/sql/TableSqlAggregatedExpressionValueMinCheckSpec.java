@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSqlAggregatedExpressionMinValueCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
+public class TableSqlAggregatedExpressionValueMinCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
         MinValueRuleParametersSpec, MinValueRuleParametersSpec, MinValueRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionMinValueCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionValueMinCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

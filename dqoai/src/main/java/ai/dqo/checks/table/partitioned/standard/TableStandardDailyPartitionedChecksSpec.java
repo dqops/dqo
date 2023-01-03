@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.standard;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -38,31 +38,31 @@ import java.util.Objects;
 public class TableStandardDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableStandardDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_partition_min_row_count", o -> o.dailyPartitionMinRowCount);
+           put("daily_partition_row_count", o -> o.dailyPartitionRowCount);
         }
     };
 
-    @JsonPropertyDescription("Minimum row count check for each daily partition")
+    @JsonPropertyDescription("Verifies that the set row count is met on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinRowCountCheckSpec dailyPartitionMinRowCount;
+    private TableRowCountCheckSpec dailyPartitionRowCount;
 
     /**
-     * Returns the minimum row count check configuration.
-     * @return Minimum row count check specification.
+     * Returns the row count check configuration.
+     * @return Row count check specification.
      */
-    public TableMinRowCountCheckSpec getDailyPartitionMinRowCount() {
-        return dailyPartitionMinRowCount;
+    public TableRowCountCheckSpec getDailyPartitionRowCount() {
+        return dailyPartitionRowCount;
     }
 
     /**
-     * Sets the minimum row count.
-     * @param dailyPartitionMinRowCount New row count check.
+     * Sets the row count.
+     * @param dailyPartitionRowCount New row count check.
      */
-    public void setDailyPartitionMinRowCount(TableMinRowCountCheckSpec dailyPartitionMinRowCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyPartitionMinRowCount, dailyPartitionMinRowCount));
-        this.dailyPartitionMinRowCount = dailyPartitionMinRowCount;
-		this.propagateHierarchyIdToField(dailyPartitionMinRowCount, "daily_partition_min_row_count");
+    public void setDailyPartitionRowCount(TableRowCountCheckSpec dailyPartitionRowCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCount, dailyPartitionRowCount));
+        this.dailyPartitionRowCount = dailyPartitionRowCount;
+		this.propagateHierarchyIdToField(dailyPartitionRowCount, "daily_partition_row_count");
     }
 
     /**

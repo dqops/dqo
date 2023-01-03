@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.checkpoints.standard;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -38,31 +38,31 @@ import java.util.Objects;
 public class TableStandardMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableStandardMonthlyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("monthly_checkpoint_min_row_count", o -> o.monthlyCheckpointMinRowCount);
+           put("monthly_checkpoint_row_count", o -> o.monthlyCheckpointRowCount);
         }
     };
 
-    @JsonPropertyDescription("Monthly checkpoint of the minimum number of rows on a table")
+    @JsonPropertyDescription("Verifies that the set row count is met on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinRowCountCheckSpec monthlyCheckpointMinRowCount;
+    private TableRowCountCheckSpec monthlyCheckpointRowCount;
 
     /**
-     * Returns the minimum row count check configuration.
-     * @return Minimum row count check specification.
+     * Returns the row count check configuration.
+     * @return Row count check specification.
      */
-    public TableMinRowCountCheckSpec getMonthlyCheckpointMinRowCount() {
-        return monthlyCheckpointMinRowCount;
+    public TableRowCountCheckSpec getMonthlyCheckpointRowCount() {
+        return monthlyCheckpointRowCount;
     }
 
     /**
-     * Sets the minimum row count.
-     * @param monthlyCheckpointMinRowCount New row count check.
+     * Sets the row count.
+     * @param monthlyCheckpointRowCount New row count check.
      */
-    public void setMonthlyCheckpointMinRowCount(TableMinRowCountCheckSpec monthlyCheckpointMinRowCount) {
-		this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinRowCount, monthlyCheckpointMinRowCount));
-        this.monthlyCheckpointMinRowCount = monthlyCheckpointMinRowCount;
-		this.propagateHierarchyIdToField(monthlyCheckpointMinRowCount, "monthly_checkpoint_min_row_count");
+    public void setMonthlyCheckpointRowCount(TableRowCountCheckSpec monthlyCheckpointRowCount) {
+		this.setDirtyIf(!Objects.equals(this.monthlyCheckpointRowCount, monthlyCheckpointRowCount));
+        this.monthlyCheckpointRowCount = monthlyCheckpointRowCount;
+		this.propagateHierarchyIdToField(monthlyCheckpointRowCount, "monthly_checkpoint_row_count");
     }
 
     /**

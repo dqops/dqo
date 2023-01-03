@@ -18,7 +18,7 @@ package ai.dqo.metadata.search;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -222,10 +222,10 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         checkSearchFilters.setCheckName("*");
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
         table.setSpec(tableSpec);
-        ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
+        ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
         Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
@@ -237,10 +237,10 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
         table.setSpec(tableSpec);
-        ArrayList<TableMinRowCountCheckSpec> expectedList = new ArrayList<>();
+        ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
 
         Collection<AbstractCheckSpec<?,?,?,?>> checkSpecCollection = this.sut.findChecks(userHomeContext.getUserHome(), checkSearchFilters);
@@ -253,8 +253,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         checkSearchFilters.setCheckName("test");
         TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
         tableSpec.getChecks().setStandard(standard);
-        TableMinRowCountCheckSpec check = new TableMinRowCountCheckSpec();
-        standard.setMinRowCount(check);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 		table.setSpec(tableSpec);
 
         ArrayList<AbstractCheckSpec<?,?,?,?>> expectedList = new ArrayList<>();
