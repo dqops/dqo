@@ -4,9 +4,8 @@ SELECT
         CURRENT_TIMESTAMP(),
         MAX(
             CASE
-{#- table.timestamp_columns.ingestion_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
-                WHEN CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                    THEN CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+                WHEN CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
+                    THEN CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
                 ELSE NULL
             END
         ),
