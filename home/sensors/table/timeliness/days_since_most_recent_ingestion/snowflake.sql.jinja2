@@ -1,19 +1,16 @@
-{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 SELECT
     TIMESTAMP_DIFF(
         CURRENT_TIMESTAMP(),
         MAX(
-            CASE WHEN
-                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)  <= CURRENT_TIMESTAMP()
-            THEN
-                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
-            ELSE
-                NULL
+            CASE
+                WHEN CAST({{ render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
+                    THEN CAST({{ render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+                ELSE NULL
             END
         ),
         MILLISECOND
-    )
-    / 24.0 / 3600.0 / 1000.0 AS actual_value
+    ) / 24.0 / 3600.0 / 1000.0 AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table

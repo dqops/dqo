@@ -2,12 +2,10 @@
 SELECT
     TIMESTAMP_DIFF(
         MAX(
-{#- table.timestamp_columns.ingestion_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
-            CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+            CAST({{ render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
         ),
         MAX(
-{#- table.timestamp_columns.event_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
-            CAST({{ table.timestamp_columns.event_timestamp_column }} AS TIMESTAMP)
+            CAST({{ render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
         ),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0 AS actual_value
