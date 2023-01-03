@@ -275,6 +275,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     // If unsuccessful, then proceed with the regular deleting method.
                 }
                 else {
+                    // there is no file, therefore no data to delete
                     return;
                 }
             }
