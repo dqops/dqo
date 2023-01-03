@@ -42,13 +42,13 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
         }
     };
 
-    @JsonPropertyDescription("Comment date and time.")
+    @JsonPropertyDescription("Comment date and time")
     private Date date;
 
-    @JsonPropertyDescription("Commented by.")
+    @JsonPropertyDescription("Commented by")
     private String commentBy;
 
-    @JsonPropertyDescription("Comment text.")
+    @JsonPropertyDescription("Comment text")
     private String comment;
 
     /**

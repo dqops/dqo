@@ -109,7 +109,6 @@ public class TableTimelinessAverageDelaySensorParametersSpecBigQueryTests extend
 
     @Test
     void renderSensor_whenSetTimeSeries_thenRendersCorrectSql() {
-
         this.sut.setColumn1("date3");
         this.sut.setColumn2("date4");
         this.sut.setTimeScale(BuiltInTimeScale.HOUR);

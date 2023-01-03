@@ -19,6 +19,7 @@ import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.Map;
 /**
  * Dictionary of spec objects indexed by a key.
  */
+@JsonIgnoreProperties(value = { "" })
 public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & HierarchyNode>
         extends LinkedHashMap<String, V> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore

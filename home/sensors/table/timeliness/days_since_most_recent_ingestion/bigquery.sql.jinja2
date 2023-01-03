@@ -3,17 +3,15 @@ SELECT
     TIMESTAMP_DIFF(
         CURRENT_TIMESTAMP(),
         MAX(
-            CASE WHEN
-                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)  <= CURRENT_TIMESTAMP()
-            THEN
-                CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
-            ELSE
-                NULL
+            CASE
+{#- table.timestamp_columns.ingestion_timestamp_column and subsequent CAST could be made into a template function (with typechecks) #}
+                WHEN CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP) <= CURRENT_TIMESTAMP()
+                    THEN CAST({{ table.timestamp_columns.ingestion_timestamp_column }} AS TIMESTAMP)
+                ELSE NULL
             END
         ),
         MILLISECOND
-    )
-    / 24.0 / 3600.0 / 1000.0 AS actual_value
+    ) / 24.0 / 3600.0 / 1000.0 AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table

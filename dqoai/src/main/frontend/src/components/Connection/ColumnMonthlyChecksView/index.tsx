@@ -3,13 +3,14 @@ import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import Button from '../../Button';
 import {
   getColumnMonthlyCheckpoints,
   updateColumnMonthlyCheckpoints
 } from '../../../redux/actions/column.actions';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
 
 interface IColumnMonthlyChecksViewProps {
   connectionName: string;
@@ -30,6 +31,13 @@ const ColumnMonthlyChecksView = ({
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
 
   useEffect(() => {
     setUpdatedChecksUI(monthlyCheckpoints);
@@ -95,6 +103,8 @@ const ColumnMonthlyChecksView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

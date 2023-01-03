@@ -3,7 +3,7 @@ import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import Button from '../../Button';
 import {
@@ -11,6 +11,7 @@ import {
   updateColumnCheckUI
 } from '../../../redux/actions/column.actions';
 import { isEqual } from 'lodash';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
 
 interface IColumnChecksViewProps {
   connectionName: string;
@@ -30,7 +31,14 @@ const ColumnChecksView = ({
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const dispatch = useActionDispatch();
-
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
+  
   useEffect(() => {
     setUpdatedChecksUI(checksUI);
   }, [checksUI]);
@@ -63,7 +71,7 @@ const ColumnChecksView = ({
     () => !isEqual(updatedChecksUI, checksUI),
     [checksUI, updatedChecksUI]
   );
-
+  
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -85,6 +93,8 @@ const ColumnChecksView = ({
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
           className="max-h-checks-1"
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

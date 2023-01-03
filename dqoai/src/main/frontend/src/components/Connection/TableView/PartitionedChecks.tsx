@@ -12,8 +12,9 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
+import { CheckResultOverviewApi } from '../../../services/apiClient';
 
 interface ITablePartitionedChecksViewProps {
   connectionName: string;
@@ -39,6 +40,8 @@ const TablePartitionedChecksView = ({
 }: ITablePartitionedChecksViewProps) => {
   const [activeTab, setActiveTab] = useState('daily');
   const [tabs, setTabs] = useState(initTabs);
+  const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const dispatch = useActionDispatch();
 
@@ -133,7 +136,19 @@ const TablePartitionedChecksView = ({
       )
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
-
+  
+  const getDailyCheckOverview = () => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+      setDailyCheckResultsOverview(res.data);
+    });
+  };
+  
+  const getMonthlyCheckOverview = () => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+      setMonthlyCheckResultsOverview(res.data);
+    });
+  };
+  
   return (
     <div className="py-2">
       <TableActionGroup
@@ -152,6 +167,8 @@ const TablePartitionedChecksView = ({
             checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
             className="max-h-checks"
+            checkResultsOverview={dailyCheckResultsOverview}
+            getCheckOverview={getDailyCheckOverview}
           />
         )}
         {activeTab === 'monthly' && (
@@ -159,6 +176,8 @@ const TablePartitionedChecksView = ({
             checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
             className="max-h-checks"
+            checkResultsOverview={monthlyCheckResultsOverview}
+            getCheckOverview={getMonthlyCheckOverview}
           />
         )}
       </div>

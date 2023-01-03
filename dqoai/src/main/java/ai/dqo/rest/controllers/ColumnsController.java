@@ -597,20 +597,20 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time partition.
+     * Retrieves a UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
-     * @return UI friendly model of data quality checkpoints on a requested column for a requested time partition.
+     * @param timeScale  Time scale.
+     * @return UI friendly model of data quality checkpoints on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/ui")
     @ApiOperation(value = "getColumnCheckpointsUI", notes = "Return a UI friendly model of column level data quality checkpoints on a column", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality checkpoints on a column returned", response = UIAllChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnCheckpointsUI(
@@ -618,7 +618,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -645,7 +645,7 @@ public class ColumnsController {
                 ColumnCheckpointsSpec::new);
 
         AbstractRootChecksContainerSpec tempCheckpointsPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 tempCheckpointsPartition = Objects.requireNonNullElseGet(
                         checkpoints.getDaily(),
@@ -678,20 +678,20 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time partition.
+     * Retrieves a UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
-     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time partition.
+     * @param timeScale  Time scale.
+     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
     @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = UIAllChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnPartitionedChecksUI(
@@ -699,7 +699,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -726,7 +726,7 @@ public class ColumnsController {
                 ColumnPartitionedChecksRootSpec::new);
 
         AbstractRootChecksContainerSpec tempPartitionedChecksPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
                         partitionedChecks.getDaily(),
@@ -811,20 +811,20 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a simplistic UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time partition.
+     * Retrieves a simplistic UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
-     * @return Simplistic UI friendly data quality checkpoints list on a requested column for a requested time partition.
+     * @param timeScale  Time scale.
+     * @return Simplistic UI friendly data quality checkpoints list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/ui/basic")
     @ApiOperation(value = "getColumnCheckpointsUIBasic", notes = "Return a simplistic UI friendly model of column level data quality checkpoints on a column", response = UIAllChecksBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality checkpoints on a column returned", response = UIAllChecksBasicModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksBasicModel>> getColumnCheckpointsUIBasic(
@@ -832,7 +832,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -859,7 +859,7 @@ public class ColumnsController {
                 ColumnCheckpointsSpec::new);
 
         AbstractRootChecksContainerSpec checkpointsPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 checkpointsPartition = Objects.requireNonNullElseGet(
                         checkpoints.getDaily(),
@@ -878,20 +878,20 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a simplistic UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time partition.
+     * Retrieves a simplistic UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
-     * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time partition.
+     * @param timeScale  Time scale.
+     * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/basic")
     @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = UIAllChecksBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality partitioned checks on a column returned", response = UIAllChecksBasicModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksBasicModel>> getColumnPartitionedChecksUIBasic(
@@ -899,7 +899,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -926,7 +926,7 @@ public class ColumnsController {
                 ColumnPartitionedChecksRootSpec::new);
 
         AbstractRootChecksContainerSpec partitionedChecksPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 partitionedChecksPartition = Objects.requireNonNullElseGet(
                         partitionedChecks.getDaily(),
@@ -1016,22 +1016,22 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time partition, filtered by category and check name.
+     * Retrieves a UI friendly model of column level data quality checkpoints on a column given a connection, table name, column name, and time scale, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
+     * @param timeScale  Time scale.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly model of data quality checkpoints on a requested column for a requested time partition, filtered by category and check name.
+     * @return UI friendly model of data quality checkpoints on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnCheckpointsUIFilter", notes = "Return a UI friendly model of column level data quality checkpoints on a column filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality checkpoints on a column returned", response = UIAllChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnCheckpointsUIFilter(
@@ -1039,7 +1039,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -1068,7 +1068,7 @@ public class ColumnsController {
                 ColumnCheckpointsSpec::new);
 
         AbstractRootChecksContainerSpec tempCheckpointsPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 tempCheckpointsPartition = Objects.requireNonNullElseGet(
                         checkpoints.getDaily(),
@@ -1103,22 +1103,22 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time partition, filtered by category and check name.
+     * Retrieves a UI friendly model of column level data quality partitioned checks on a column given a connection, table name, column name, and time scale, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @param timePartition  Time partition.
+     * @param timeScale  Time scale.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time partition, filtered by category and check name.
+     * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = UIAllChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<UIAllChecksModel>> getColumnPartitionedChecksUIFilter(
@@ -1126,7 +1126,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Check category") @PathVariable String checkCategory,
             @ApiParam("Check name") @PathVariable String checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -1155,7 +1155,7 @@ public class ColumnsController {
                 ColumnPartitionedChecksRootSpec::new);
 
         AbstractRootChecksContainerSpec tempPartitionedChecksPartition = null;
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
                         partitionedChecks.getDaily(),
@@ -1838,22 +1838,22 @@ public class ColumnsController {
     }
 
     /**
-     * Updates the configuration of column level data quality checkpoints configured on a column, for a given time partition, from a UI friendly model.
+     * Updates the configuration of column level data quality checkpoints configured on a column, for a given time scale, from a UI friendly model.
      * @param connectionName            Connection name.
      * @param schemaName                Schema name.
      * @param tableName                 Table name.
      * @param columnName                Column name.
-     * @param timePartition             Time partition.
-     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality checkpoints on a column, for a given time partition. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
+     * @param timeScale             Time scale.
+     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality checkpoints on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timePartition}/ui")
-    @ApiOperation(value = "updateColumnCheckpointsUI", notes = "Updates configuration of column level data quality checkpoints on a column, for a given time partition, from a UI friendly model.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/ui")
+    @ApiOperation(value = "updateColumnCheckpointsUI", notes = "Updates configuration of column level data quality checkpoints on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality checkpoints successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Table or column not found, or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1862,7 +1862,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("UI model with the changes to be applied to the data quality checkpoints configuration")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
@@ -1882,7 +1882,7 @@ public class ColumnsController {
         ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(columnSpec.getCheckpoints(), ColumnCheckpointsSpec::new);
         AbstractRootChecksContainerSpec checksToUpdate = null;
 
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 checksToUpdate = Objects.requireNonNullElseGet(checkpoints.getDaily(), ColumnDailyCheckpointCategoriesSpec::new);
                 break;
@@ -1896,7 +1896,7 @@ public class ColumnsController {
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
             
-            switch (timePartition) {
+            switch (timeScale) {
                 case daily:
                     if (!checksToUpdate.isDefault()) {
                         checkpoints.setDaily((ColumnDailyCheckpointCategoriesSpec) checksToUpdate);
@@ -1919,22 +1919,22 @@ public class ColumnsController {
     }
 
     /**
-     * Updates the configuration of column level data quality partitioned checks configured on a column, for a given time partition, from a UI friendly model.
+     * Updates the configuration of column level data quality partitioned checks configured on a column, for a given time scale, from a UI friendly model.
      * @param connectionName            Connection name.
      * @param schemaName                Schema name.
      * @param tableName                 Table name.
      * @param columnName                Column name.
-     * @param timePartition             Time partition.
-     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality partitioned checks on a column, for a given time partition. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
+     * @param timeScale             Time scale.
+     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality partitioned checks on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timePartition}/ui")
-    @ApiOperation(value = "updateColumnPartitionedChecksUI", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time partition, from a UI friendly model.")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
+    @ApiOperation(value = "updateColumnPartitionedChecksUI", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality partitioned checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table or column not found, or invalid time partition"),
+            @ApiResponse(code = 404, message = "Table or column not found, or invalid time scale"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1943,7 +1943,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time partition (eg. daily)") @PathVariable CheckTimeScale timePartition,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("UI model with the changes to be applied to the data quality partitioned checks configuration")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
@@ -1963,7 +1963,7 @@ public class ColumnsController {
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         AbstractRootChecksContainerSpec checksToUpdate = null;
 
-        switch (timePartition) {
+        switch (timeScale) {
             case daily:
                 checksToUpdate = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
                 break;
@@ -1977,7 +1977,7 @@ public class ColumnsController {
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
 
-            switch (timePartition) {
+            switch (timeScale) {
                 case daily:
                     if (!checksToUpdate.isDefault()) {
                         partitionedChecks.setDaily((ColumnDailyPartitionedCheckCategoriesSpec) checksToUpdate);

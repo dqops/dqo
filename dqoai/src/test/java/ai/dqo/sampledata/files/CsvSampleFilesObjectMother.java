@@ -17,7 +17,9 @@ package ai.dqo.sampledata.files;
 
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvReadOptions;
 
@@ -65,6 +67,7 @@ public class CsvSampleFilesObjectMother {
                     .separator(',')
                     .dateFormat(DateTimeFormatter.ISO_DATE)
                     .dateTimeFormat(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    .missingValueIndicator("")
                     .build();
             Table loadedTable = Table.read().csv(csvReadOptions);
             String tableName = fileName.substring(0, fileName.indexOf(".csv"));
@@ -77,6 +80,16 @@ public class CsvSampleFilesObjectMother {
                 String columnName = nameTypeParts[0];
                 String typeName = nameTypeParts[1];
                 ColumnType columnType = ColumnType.valueOf(typeName);
+
+                if (loadedColumn instanceof StringColumn) {
+                    StringColumn loadedStringColumn = (StringColumn) loadedColumn;
+                    loadedColumn = loadedStringColumn.set(loadedStringColumn.isEqualTo(""), (String)null);
+                }
+
+                if (loadedColumn instanceof TextColumn) {
+                    TextColumn loadedTextColumn = (TextColumn) loadedColumn;
+                    loadedColumn = loadedTextColumn.set(loadedTextColumn.isEqualTo(""), (String)null);
+                }
 
                 if (loadedColumn.type().equals(columnType)) {
                     Column<?> copiedColumn = loadedColumn.copy();
