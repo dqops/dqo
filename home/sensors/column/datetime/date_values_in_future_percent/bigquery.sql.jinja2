@@ -14,7 +14,7 @@
         THEN 1
         ELSE 0
     {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
-    CASE WHEN ({{ lib.render_target_column('analyzed_table.{{ col }}'}). }}) > CURRENT_TIMESTAMP()
+    CASE WHEN ({{ lib.render_target_column('analyzed_table.{{ col }}'). }}) > CURRENT_TIMESTAMP()
         THEN 1
         ELSE 0
     {%- else -%}
