@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.uniqueness;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnUniquenessUniqueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinUniqueCountCheckSpec checkSpec;
+    private ColumnUniqueCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -57,7 +57,7 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest exte
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnUniquenessUniqueCountSensorParametersSpec();
-		this.checkSpec = new ColumnMinUniqueCountCheckSpec();
+		this.checkSpec = new ColumnUniqueCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -36,52 +36,52 @@ import java.util.Objects;
 public class ColumnBoolMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_min_true_percent", o -> o.monthlyPartitionMinTruePercent);
-            put("monthly_partition_min_false_percent", o -> o.monthlyPartitionMinFalsePercent);
+            put("monthly_partition_true_percent", o -> o.monthlyPartitionTruePercent);
+            put("monthly_partition_false_percent", o -> o.monthlyPartitionFalsePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinTruePercentCheckSpec monthlyPartitionMinTruePercent;
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnTruePercentCheckSpec monthlyPartitionTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinFalsePercentCheckSpec monthlyPartitionMinFalsePercent;
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnFalsePercentCheckSpec monthlyPartitionFalsePercent;
 
     /**
-     * Returns a minimum true check.
-     * @return Minimum true check.
+     * Returns a true check.
+     * @return True check.
      */
-    public ColumnMinTruePercentCheckSpec getMonthlyPartitionMinTruePercent() {
-        return monthlyPartitionMinTruePercent;
+    public ColumnTruePercentCheckSpec getMonthlyPartitionTruePercent() {
+        return monthlyPartitionTruePercent;
     }
 
     /**
-     * Sets a new definition of a minimum true check.
-     * @param monthlyPartitionMinTruePercent Minimum true check.
+     * Sets a new definition of a true check.
+     * @param monthlyPartitionTruePercent True check.
      */
-    public void setMonthlyPartitionMinTruePercent(ColumnMinTruePercentCheckSpec monthlyPartitionMinTruePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinTruePercent, monthlyPartitionMinTruePercent));
-        this.monthlyPartitionMinTruePercent = monthlyPartitionMinTruePercent;
-        propagateHierarchyIdToField(monthlyPartitionMinTruePercent, "monthly_partition_min_true_percent");
+    public void setMonthlyPartitionTruePercent(ColumnTruePercentCheckSpec monthlyPartitionTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTruePercent, monthlyPartitionTruePercent));
+        this.monthlyPartitionTruePercent = monthlyPartitionTruePercent;
+        propagateHierarchyIdToField(monthlyPartitionTruePercent, "monthly_partition_true_percent");
     }
 
     /**
-     * Returns a minimum false check.
-     * @return Minimum false check.
+     * Returns a false check.
+     * @return False check.
      */
-    public ColumnMinFalsePercentCheckSpec getMonthlyPartitionMinFalsePercent() {
-        return monthlyPartitionMinFalsePercent;
+    public ColumnFalsePercentCheckSpec getMonthlyPartitionFalsePercent() {
+        return monthlyPartitionFalsePercent;
     }
 
     /**
-     * Sets a new definition of a minimum false check.
-     * @param monthlyPartitionMinFalsePercent Minimum false check.
+     * Sets a new definition of a false check.
+     * @param monthlyPartitionFalsePercent False check.
      */
-    public void setMonthlyPartitionMinFalsePercent(ColumnMinFalsePercentCheckSpec monthlyPartitionMinFalsePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinFalsePercent, monthlyPartitionMinFalsePercent));
-        this.monthlyPartitionMinFalsePercent = monthlyPartitionMinFalsePercent;
-        propagateHierarchyIdToField(monthlyPartitionMinFalsePercent, "monthly_partition_min_false_percent");
+    public void setMonthlyPartitionFalsePercent(ColumnFalsePercentCheckSpec monthlyPartitionFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionFalsePercent, monthlyPartitionFalsePercent));
+        this.monthlyPartitionFalsePercent = monthlyPartitionFalsePercent;
+        propagateHierarchyIdToField(monthlyPartitionFalsePercent, "monthly_partition_false_percent");
     }
 
     /**

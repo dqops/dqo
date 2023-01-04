@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.checkpoints.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,73 +38,73 @@ import java.util.Objects;
 public class ColumnUniquenessMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_min_unique_count", o -> o.monthlyCheckpointMinUniqueCount);
-            put("monthly_checkpoint_max_duplicate_count", o -> o.monthlyCheckpointMaxDuplicateCount);
-            put("monthly_checkpoint_max_duplicate_percent", o -> o.monthlyCheckpointMaxDuplicatePercent);
+            put("monthly_checkpoint_unique_count", o -> o.monthlyCheckpointUniqueCount);
+            put("monthly_checkpoint_duplicate_count", o -> o.monthlyCheckpointDuplicateCount);
+            put("monthly_checkpoint_duplicate_percent", o -> o.monthlyCheckpointDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinUniqueCountCheckSpec monthlyCheckpointMinUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnUniqueCountCheckSpec monthlyCheckpointUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicateCountCheckSpec monthlyCheckpointMaxDuplicateCount;
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicateCountCheckSpec monthlyCheckpointDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicatePercentCheckSpec monthlyCheckpointMaxDuplicatePercent;
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicatePercentCheckSpec monthlyCheckpointDuplicatePercent;
 
     /**
-     * Returns a minimum unique values count check.
-     * @return Minimum unique values count check.
+     * Returns a unique values count check specification.
+     * @return Unique values count check specification.
      */
-    public ColumnMinUniqueCountCheckSpec getMonthlyCheckpointMinUniqueCount() {
-        return monthlyCheckpointMinUniqueCount;
+    public ColumnUniqueCountCheckSpec getMonthlyCheckpointUniqueCount() {
+        return monthlyCheckpointUniqueCount;
     }
 
     /**
-     * Sets a new definition of a minimum unique values count check.
-     * @param monthlyCheckpointMinUniqueCount Minimum unique values count check.
+     * Sets a new specification of a unique values count check.
+     * @param monthlyCheckpointUniqueCount Unique values count check specification.
      */
-    public void setMonthlyCheckpointMinUniqueCount(ColumnMinUniqueCountCheckSpec monthlyCheckpointMinUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinUniqueCount, monthlyCheckpointMinUniqueCount));
-        this.monthlyCheckpointMinUniqueCount = monthlyCheckpointMinUniqueCount;
-        propagateHierarchyIdToField(monthlyCheckpointMinUniqueCount, "monthly_checkpoint_min_unique_count");
+    public void setMonthlyCheckpointUniqueCount(ColumnUniqueCountCheckSpec monthlyCheckpointUniqueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointUniqueCount, monthlyCheckpointUniqueCount));
+        this.monthlyCheckpointUniqueCount = monthlyCheckpointUniqueCount;
+        propagateHierarchyIdToField(monthlyCheckpointUniqueCount, "monthly_checkpoint_unique_count");
     }
 
     /**
-     * Returns a maximum duplicate values count check.
-     * @return Maximum duplicate values count check.
+     * Returns a duplicate values count check specification.
+     * @return Duplicate values count check specification.
      */
-    public ColumnMaxDuplicateCountCheckSpec getMonthlyCheckpointMaxDuplicateCount() {
-        return monthlyCheckpointMaxDuplicateCount;
+    public ColumnDuplicateCountCheckSpec getMonthlyCheckpointDuplicateCount() {
+        return monthlyCheckpointDuplicateCount;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values count check.
-     * @param monthlyCheckpointMaxDuplicateCount Maximum duplicate values count check.
+     * Sets a new specification of a duplicate values count check.
+     * @param monthlyCheckpointDuplicateCount Duplicate values count check specification.
      */
-    public void setMonthlyCheckpointMaxDuplicateCount(ColumnMaxDuplicateCountCheckSpec monthlyCheckpointMaxDuplicateCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDuplicateCount, monthlyCheckpointMaxDuplicateCount));
-        this.monthlyCheckpointMaxDuplicateCount = monthlyCheckpointMaxDuplicateCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxDuplicateCount, "monthly_checkpoint_max_duplicate_count");
+    public void setMonthlyCheckpointDuplicateCount(ColumnDuplicateCountCheckSpec monthlyCheckpointDuplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDuplicateCount, monthlyCheckpointDuplicateCount));
+        this.monthlyCheckpointDuplicateCount = monthlyCheckpointDuplicateCount;
+        propagateHierarchyIdToField(monthlyCheckpointDuplicateCount, "monthly_checkpoint_duplicate_count");
     }
 
     /**
-     * Returns a maximum duplicate values percent check.
-     * @return Maximum duplicate values percent check.
+     * Returns a duplicate values percent check specification.
+     * @return Duplicate values percent check specification.
      */
-    public ColumnMaxDuplicatePercentCheckSpec getMonthlyCheckpointMaxDuplicatePercent() {
-        return monthlyCheckpointMaxDuplicatePercent;
+    public ColumnDuplicatePercentCheckSpec getMonthlyCheckpointDuplicatePercent() {
+        return monthlyCheckpointDuplicatePercent;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values percent check.
-     * @param monthlyCheckpointMaxDuplicatePercent Maximum duplicate values percent check.
+     * Sets a new specification of a duplicate values percent check.
+     * @param monthlyCheckpointDuplicatePercent Duplicate values percent check specification.
      */
-    public void setMonthlyCheckpointMaxDuplicatePercent(ColumnMaxDuplicatePercentCheckSpec monthlyCheckpointMaxDuplicatePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDuplicatePercent, monthlyCheckpointMaxDuplicatePercent));
-        this.monthlyCheckpointMaxDuplicatePercent = monthlyCheckpointMaxDuplicatePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxDuplicatePercent, "monthly_checkpoint_max_duplicate_percent");
+    public void setMonthlyCheckpointDuplicatePercent(ColumnDuplicatePercentCheckSpec monthlyCheckpointDuplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDuplicatePercent, monthlyCheckpointDuplicatePercent));
+        this.monthlyCheckpointDuplicatePercent = monthlyCheckpointDuplicatePercent;
+        propagateHierarchyIdToField(monthlyCheckpointDuplicatePercent, "monthly_checkpoint_duplicate_percent");
     }
 
     /**

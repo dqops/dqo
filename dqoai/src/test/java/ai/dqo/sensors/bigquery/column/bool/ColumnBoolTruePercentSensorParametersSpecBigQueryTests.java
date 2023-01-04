@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.bool;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.bool.ColumnMinTruePercentCheckSpec;
+import ai.dqo.checks.column.bool.ColumnTruePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnBoolTruePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinTruePercentCheckSpec checkSpec;
+    private ColumnTruePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinTruePercentCheckSpec();
+        this.checkSpec = new ColumnTruePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

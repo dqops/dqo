@@ -16,8 +16,8 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,51 +37,51 @@ import java.util.Objects;
 public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNullsChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("max_nulls_count", o -> o.maxNullsCount);
-            put("max_nulls_percent", o -> o.maxNullsPercent);
+            put("nulls_count", o -> o.nullsCount);
+            put("nulls_percent", o -> o.nullsPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count.")
-    private ColumnMaxNullsCountCheckSpec maxNullsCount;
+    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count.")
+    private ColumnNullsCountCheckSpec nullsCount;
 
-    @JsonPropertyDescription("Verifies that the percent of nulls in a column does not exceed the maximum accepted percentage.")
-    private ColumnMaxNullsPercentCheckSpec maxNullsPercent;
+    @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the set percentage.")
+    private ColumnNullsPercentCheckSpec nullsPercent;
 
     /**
-     * Returns a maximum nulls count check.
-     * @return Maximum nulls count check.
+     * Returns a nulls count check specification.
+     * @return Nulls count check specification.
      */
-    public ColumnMaxNullsCountCheckSpec getMaxNullsCount() {
-        return maxNullsCount;
+    public ColumnNullsCountCheckSpec getNullsCount() {
+        return nullsCount;
     }
 
     /**
-     * Sets a new definition of a maximum nulls count check.
-     * @param maxNullsCount Maximum nulls count check.
+     * Sets a new nulls count check  specification.
+     * @param nullsCount Nulls count check specification.
      */
-    public void setMaxNullsCount(ColumnMaxNullsCountCheckSpec maxNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.maxNullsCount, maxNullsCount));
-        this.maxNullsCount = maxNullsCount;
-        propagateHierarchyIdToField(maxNullsCount, "max_nulls_count");
+    public void setNullsCount(ColumnNullsCountCheckSpec nullsCount) {
+        this.setDirtyIf(!Objects.equals(this.nullsCount, nullsCount));
+        this.nullsCount = nullsCount;
+        propagateHierarchyIdToField(nullsCount, "nulls_count");
     }
 
     /**
-     * Returns a maximum nulls percent check.
-     * @return Maximum nulls percent check.
+     * Returns a nulls percent check specification.
+     * @return Nulls percent check specification.
      */
-    public ColumnMaxNullsPercentCheckSpec getMaxNullsPercent() {
-        return maxNullsPercent;
+    public ColumnNullsPercentCheckSpec getNullsPercent() {
+        return nullsPercent;
     }
 
     /**
-     * Sets a new definition of a maximum nulls percent check.
-     * @param maxNullsPercent Maximum nulls percent check.
+     * Sets a new percent check specification.
+     * @param nullsPercent Nulls percent check specification.
      */
-    public void setMaxNullsPercent(ColumnMaxNullsPercentCheckSpec maxNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.maxNullsPercent, maxNullsPercent));
-        this.maxNullsPercent = maxNullsPercent;
-        propagateHierarchyIdToField(maxNullsPercent, "max_nulls_percent");
+    public void setNullsPercent(ColumnNullsPercentCheckSpec nullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.nullsPercent, nullsPercent));
+        this.nullsPercent = nullsPercent;
+        propagateHierarchyIdToField(nullsPercent, "nulls_percent");
     }
 
     /**

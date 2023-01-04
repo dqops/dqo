@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec exte
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/datetime_max_date_values_in_future_percent";
+        return "column/datetime/date_values_in_future_percent";
     }
 }

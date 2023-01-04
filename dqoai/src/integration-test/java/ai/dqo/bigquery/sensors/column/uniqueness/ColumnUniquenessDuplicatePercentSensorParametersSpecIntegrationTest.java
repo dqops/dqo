@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.uniqueness;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnUniquenessDuplicatePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnUniquenessDuplicatePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxDuplicatePercentCheckSpec checkSpec;
+    private ColumnDuplicatePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -57,7 +57,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecIntegrationTest
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnUniquenessDuplicatePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMaxDuplicatePercentCheckSpec();
+		this.checkSpec = new ColumnDuplicatePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.datetime;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.datetime.ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec;
+import ai.dqo.sensors.column.datetime.ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec sut;
+public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxDateValuesInFuturePercentCheckSpec checkSpec;
+    private ColumnDateValuesInFuturePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -56,8 +56,8 @@ public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpecInteg
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMaxDateValuesInFuturePercentCheckSpec();
+		this.sut = new ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec();
+		this.checkSpec = new ColumnDateValuesInFuturePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

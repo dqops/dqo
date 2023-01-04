@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.bool.ColumnBoolFalsePercentSensorParametersSpec;
+import ai.dqo.sensors.column.bool.ColumnBoolTruePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are at least percentage of rows with a false value in a monitored column.
+ * Column level check that ensures that there are at least percentage of rows with a true value in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinFalsePercentCheckSpec
-        extends AbstractCheckSpec<ColumnBoolFalsePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinFalsePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnTruePercentCheckSpec
+        extends AbstractCheckSpec<ColumnBoolTruePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnTruePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,9 +49,9 @@ public class ColumnMinFalsePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBoolFalsePercentSensorParametersSpec parameters = new ColumnBoolFalsePercentSensorParametersSpec();
+    private ColumnBoolTruePercentSensorParametersSpec parameters = new ColumnBoolTruePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of false value in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of true value in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -71,7 +71,7 @@ public class ColumnMinFalsePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnBoolFalsePercentSensorParametersSpec getParameters() {
+    public ColumnBoolTruePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnMinFalsePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnBoolFalsePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnBoolTruePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

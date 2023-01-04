@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocDatetimeChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("max_datetime_values_in_future_percent", o -> o.maxDatetimeValuesInFuturePercent);
+            put("date_values_in_future_percent", o -> o.dateValuesInFuturePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage.")
-    private ColumnMaxDateValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent;
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage.")
+    private ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent;
 
     /**
-     * Returns a maximum datetime values in future percent check.
-     * @return Maximum datetime values in future percent check.
+     * Returns a date values in future percent check specification.
+     * @return Date values in future percent check specification.
      */
-    public ColumnMaxDateValuesInFuturePercentCheckSpec getMaxDatetimeValuesInFuturePercent() {
-        return maxDatetimeValuesInFuturePercent;
+    public ColumnDateValuesInFuturePercentCheckSpec getDateValuesInFuturePercent() {
+        return dateValuesInFuturePercent;
     }
 
     /**
-     * Sets a new definition of a maximum datetime values in future percent check.
-     * @param maxDatetimeValuesInFuturePercent Maximum datetime values in future percent check.
+     * Sets a new date values in future percent check specification.
+     * @param dateValuesInFuturePercent Date values in future percent check specification.
      */
-    public void setMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec maxDatetimeValuesInFuturePercent) {
-        this.setDirtyIf(!Objects.equals(this.maxDatetimeValuesInFuturePercent, maxDatetimeValuesInFuturePercent));
-        this.maxDatetimeValuesInFuturePercent = maxDatetimeValuesInFuturePercent;
-        propagateHierarchyIdToField(maxDatetimeValuesInFuturePercent, "max_datetime_values_in_future_percent");
+    public void setDateValuesInFuturePercent(ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.dateValuesInFuturePercent, dateValuesInFuturePercent));
+        this.dateValuesInFuturePercent = dateValuesInFuturePercent;
+        propagateHierarchyIdToField(dateValuesInFuturePercent, "date_values_in_future_percent");
     }
 
     /**

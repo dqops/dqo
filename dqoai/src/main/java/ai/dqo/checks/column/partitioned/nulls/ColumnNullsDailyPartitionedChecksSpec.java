@@ -16,8 +16,8 @@
 package ai.dqo.checks.column.partitioned.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,51 +37,51 @@ import java.util.Objects;
 public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_max_nulls_count", o -> o.dailyPartitionMaxNullsCount);
-            put("daily_partition_max_nulls_percent", o -> o.dailyPartitionMaxNullsPercent);
+            put("daily_partition_nulls_count", o -> o.dailyPartitionNullsCount);
+            put("daily_partition_nulls_percent", o -> o.dailyPartitionNullsPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxNullsCountCheckSpec dailyPartitionMaxNullsCount;
+    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNullsCountCheckSpec dailyPartitionNullsCount;
 
-    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxNullsPercentCheckSpec dailyPartitionMaxNullsPercent;
+    @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNullsPercentCheckSpec dailyPartitionNullsPercent;
 
     /**
-     * Returns a maximum nulls count check.
-     * @return Maximum nulls count check.
+     * Returns a nulls count check.
+     * @return Nulls count check.
      */
-    public ColumnMaxNullsCountCheckSpec getDailyPartitionMaxNullsCount() {
-        return dailyPartitionMaxNullsCount;
+    public ColumnNullsCountCheckSpec getDailyPartitionNullsCount() {
+        return dailyPartitionNullsCount;
     }
 
     /**
-     * Sets a new definition of a maximum nulls count check.
-     * @param dailyPartitionMaxNullsCount Maximum nulls count check.
+     * Sets a new definition of a nulls count check.
+     * @param dailyPartitionNullsCount Nulls count check.
      */
-    public void setDailyPartitionMaxNullsCount(ColumnMaxNullsCountCheckSpec dailyPartitionMaxNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNullsCount, dailyPartitionMaxNullsCount));
-        this.dailyPartitionMaxNullsCount = dailyPartitionMaxNullsCount;
-        propagateHierarchyIdToField(dailyPartitionMaxNullsCount, "daily_partition_max_nulls_count");
+    public void setDailyPartitionNullsCount(ColumnNullsCountCheckSpec dailyPartitionNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsCount, dailyPartitionNullsCount));
+        this.dailyPartitionNullsCount = dailyPartitionNullsCount;
+        propagateHierarchyIdToField(dailyPartitionNullsCount, "daily_partition_nulls_count");
     }
 
     /**
-     * Returns a maximum nulls percent check.
-     * @return Maximum nulls percent check.
+     * Returns a nulls percent check.
+     * @return Nulls percent check.
      */
-    public ColumnMaxNullsPercentCheckSpec getDailyPartitionMaxNullsPercent() {
-        return dailyPartitionMaxNullsPercent;
+    public ColumnNullsPercentCheckSpec getDailyPartitionNullsPercent() {
+        return dailyPartitionNullsPercent;
     }
 
     /**
-     * Sets a new definition of a maximum nulls percent check.
-     * @param dailyPartitionMaxNullsPercent Maximum nulls percent check.
+     * Sets a new definition of a nulls percent check.
+     * @param dailyPartitionNullsPercent Nulls percent check.
      */
-    public void setDailyPartitionMaxNullsPercent(ColumnMaxNullsPercentCheckSpec dailyPartitionMaxNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNullsPercent, dailyPartitionMaxNullsPercent));
-        this.dailyPartitionMaxNullsPercent = dailyPartitionMaxNullsPercent;
-        propagateHierarchyIdToField(dailyPartitionMaxNullsPercent, "daily_partition_max_nulls_percent");
+    public void setDailyPartitionNullsPercent(ColumnNullsPercentCheckSpec dailyPartitionNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercent, dailyPartitionNullsPercent));
+        this.dailyPartitionNullsPercent = dailyPartitionNullsPercent;
+        propagateHierarchyIdToField(dailyPartitionNullsPercent, "daily_partition_nulls_percent");
     }
     /**
      * Returns the child map on the spec class with all fields.

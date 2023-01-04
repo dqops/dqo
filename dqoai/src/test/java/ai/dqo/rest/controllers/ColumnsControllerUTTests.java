@@ -22,7 +22,7 @@ import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
@@ -254,13 +254,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
-        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
+        ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
         nullsChecksSpec.setWarning(maxCountRule1);
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
         ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
-        nullChecks.setMaxNullsCount(nullsChecksSpec);
+        nullChecks.setNullsCount(nullsChecksSpec);
         ColumnAdHocCheckCategoriesSpec sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
         sampleAdHocCheck.setNulls(nullChecks);
         
@@ -288,13 +288,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
 
-        ColumnMaxNullsCountCheckSpec nullsChecksSpec = new ColumnMaxNullsCountCheckSpec();
+        ColumnNullsCountCheckSpec nullsChecksSpec = new ColumnNullsCountCheckSpec();
         nullsChecksSpec.setWarning(maxCountRule1);
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
         ColumnNullsDailyCheckpointsSpec nullDailyCheckpoints = new ColumnNullsDailyCheckpointsSpec();
-        nullDailyCheckpoints.setDailyCheckpointMaxNullsCount(nullsChecksSpec);
+        nullDailyCheckpoints.setDailyCheckpointNullsCount(nullsChecksSpec);
         ColumnDailyCheckpointCategoriesSpec dailyCheckpoint = new ColumnDailyCheckpointCategoriesSpec();
         dailyCheckpoint.setNulls(nullDailyCheckpoints);
         ColumnCheckpointsSpec sampleCheckpoint = new ColumnCheckpointsSpec();

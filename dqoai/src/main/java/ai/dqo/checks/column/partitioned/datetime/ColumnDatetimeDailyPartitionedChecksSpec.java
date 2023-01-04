@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.partitioned.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_max_datetime_values_in_future_percent", o -> o.dailyPartitionMaxDatetimeValuesInFuturePercent);
+            put("daily_partition_date_values_in_future_percent", o -> o.dailyPartitionDateValuesInFuturePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDateValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent;
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDateValuesInFuturePercentCheckSpec dailyPartitionDateValuesInFuturePercent;
 
     /**
-     * Returns a maximum datetime values in future percentage check.
-     * @return Maximum datetime values in future percentage check.
+     * Returns a date values in future percentage check.
+     * @return Maximum date values in future percentage check.
      */
-    public ColumnMaxDateValuesInFuturePercentCheckSpec getDailyPartitionMaxDatetimeValuesInFuturePercent() {
-        return dailyPartitionMaxDatetimeValuesInFuturePercent;
+    public ColumnDateValuesInFuturePercentCheckSpec getDailyPartitionDateValuesInFuturePercent() {
+        return dailyPartitionDateValuesInFuturePercent;
     }
 
     /**
-     * Sets a new definition of a maximum datetime values in future percentage check.
-     * @param dailyPartitionMaxDatetimeValuesInFuturePercent Maximum datetime values in future percentage check.
+     * Sets a new definition of a date values in future percentage check.
+     * @param dailyPartitionDateValuesInFuturePercent Date values in future percentage check.
      */
-    public void setDailyPartitionMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec dailyPartitionMaxDatetimeValuesInFuturePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxDatetimeValuesInFuturePercent, dailyPartitionMaxDatetimeValuesInFuturePercent));
-        this.dailyPartitionMaxDatetimeValuesInFuturePercent = dailyPartitionMaxDatetimeValuesInFuturePercent;
-        propagateHierarchyIdToField(dailyPartitionMaxDatetimeValuesInFuturePercent, "daily_partition_max_datetime_values_in_future_percent");
+    public void setDailyPartitionDateValuesInFuturePercent(ColumnDateValuesInFuturePercentCheckSpec dailyPartitionDateValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDateValuesInFuturePercent, dailyPartitionDateValuesInFuturePercent));
+        this.dailyPartitionDateValuesInFuturePercent = dailyPartitionDateValuesInFuturePercent;
+        propagateHierarchyIdToField(dailyPartitionDateValuesInFuturePercent, "daily_partition_date_values_in_future_percent");
     }
 
     /**

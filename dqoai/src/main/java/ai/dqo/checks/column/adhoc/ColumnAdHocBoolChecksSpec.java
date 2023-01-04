@@ -36,53 +36,53 @@ import java.util.Objects;
 public class ColumnAdHocBoolChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocBoolChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("min_true_percent", o -> o.minTruePercent);
-            put("min_false_percent", o -> o.minFalsePercent);
+            put("true_percent", o -> o.truePercent);
+            put("false_percent", o -> o.falsePercent);
 
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage.")
-    private ColumnMinTruePercentCheckSpec minTruePercent;
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage.")
+    private ColumnTruePercentCheckSpec truePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage.")
-    private ColumnMinFalsePercentCheckSpec minFalsePercent;
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage.")
+    private ColumnFalsePercentCheckSpec falsePercent;
 
     /**
-     * Returns a minimum true percent check.
-     * @return Minimum true percent check.
+     * Returns a true percent check specification.
+     * @return True percent check specification.
      */
-    public ColumnMinTruePercentCheckSpec getMinTruePercent() {
-        return minTruePercent;
+    public ColumnTruePercentCheckSpec getTruePercent() {
+        return truePercent;
     }
 
     /**
-     * Sets a new definition of a minimum true percent check.
-     * @param minTruePercent Minimum true percent check.
+     * Sets true percent check specification.
+     * @param truePercent True percent check specification.
      */
-    public void setMinTruePercent(ColumnMinTruePercentCheckSpec minTruePercent) {
-        this.setDirtyIf(!Objects.equals(this.minTruePercent, minTruePercent));
-        this.minTruePercent = minTruePercent;
-        propagateHierarchyIdToField(minTruePercent, "min_true_percent");
+    public void setTruePercent(ColumnTruePercentCheckSpec truePercent) {
+        this.setDirtyIf(!Objects.equals(this.truePercent, truePercent));
+        this.truePercent = truePercent;
+        propagateHierarchyIdToField(truePercent, "true_percent");
     }
 
     /**
-     * Returns a minimum false percent check.
-     * @return Minimum false percent check.
+     * Returns a false percent check specification.
+     * @return False percent check specification.
      */
-    public ColumnMinFalsePercentCheckSpec getMinFalsePercent() {
-        return minFalsePercent;
+    public ColumnFalsePercentCheckSpec getFalsePercent() {
+        return falsePercent;
     }
 
     /**
-     * Sets a new definition of a minimum false percent check.
-     * @param minFalsePercent Minimum false percent check.
+     * Sets a new false percent check specification.
+     * @param falsePercent False percent check specification.
      */
-    public void setMinFalsePercent(ColumnMinFalsePercentCheckSpec minFalsePercent) {
-        this.setDirtyIf(!Objects.equals(this.minFalsePercent, minFalsePercent));
-        this.minFalsePercent = minFalsePercent;
-        propagateHierarchyIdToField(minFalsePercent, "min_false_percent");
+    public void setFalsePercent(ColumnFalsePercentCheckSpec falsePercent) {
+        this.setDirtyIf(!Objects.equals(this.falsePercent, falsePercent));
+        this.falsePercent = falsePercent;
+        propagateHierarchyIdToField(falsePercent, "false_percent");
     }
 
     /**

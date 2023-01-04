@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.pii;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -41,7 +41,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
     private ColumnPiiContainsUsaZipcodePercentSensorParametersSpec sut;
     private final String sensorRegex = "r\"[0-9]{5}(?:-[0-9]{4})?\"";
     private UserHomeContext userHomeContext;
-    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec checkSpec;
+    private ColumnPiiContainsUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxPiiContainsUsaZipcodePercentCheckSpec();
+        this.checkSpec = new ColumnPiiContainsUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

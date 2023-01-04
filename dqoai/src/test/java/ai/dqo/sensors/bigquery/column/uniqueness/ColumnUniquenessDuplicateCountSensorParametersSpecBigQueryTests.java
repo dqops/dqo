@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.uniqueness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnUniquenessDuplicateCountSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnUniquenessDuplicateCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxDuplicateCountCheckSpec checkSpec;
+    private ColumnDuplicateCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnUniquenessDuplicateCountSensorParametersSpecBigQueryTests ext
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxDuplicateCountCheckSpec();
+        this.checkSpec = new ColumnDuplicateCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
