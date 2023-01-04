@@ -16,8 +16,8 @@
 package ai.dqo.checks.column.partitioned.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,51 +37,51 @@ import java.util.Objects;
 public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_max_nulls_count", o -> o.monthlyPartitionMaxNullsCount);
-            put("monthly_partition_max_nulls_percent", o -> o.monthlyPartitionMaxNullsPercent);
+            put("monthly_partition_nulls_count", o -> o.monthlyPartitionNullsCount);
+            put("monthly_partition_nulls_percent", o -> o.monthlyPartitionNullsPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monhtly partition.")
-    private ColumnMaxNullsCountCheckSpec monthlyPartitionMaxNullsCount;
+    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    private ColumnNullsCountCheckSpec monthlyPartitionNullsCount;
 
-    @JsonPropertyDescription("Verifies that the number of nulls in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monhtly partition.")
-    private ColumnMaxNullsPercentCheckSpec monthlyPartitionMaxNullsPercent;
+    @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monhtly partition.")
+    private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
     /**
-     * Returns a maximum nulls count check.
-     * @return Maximum nulls count check.
+     * Returns a nulls count check.
+     * @return Nulls count check.
      */
-    public ColumnMaxNullsCountCheckSpec getMonthlyPartitionMaxNullsCount() {
-        return monthlyPartitionMaxNullsCount;
+    public ColumnNullsCountCheckSpec getMonthlyPartitionNullsCount() {
+        return monthlyPartitionNullsCount;
     }
 
     /**
-     * Sets a new definition of a maximum nulls count check.
-     * @param monthlyPartitionMaxNullsCount Maximum nulls count check.
+     * Sets a new definition of a nulls count check.
+     * @param monthlyPartitionNullsCount Nulls count check.
      */
-    public void setMonthlyPartitionMaxNullsCount(ColumnMaxNullsCountCheckSpec monthlyPartitionMaxNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNullsCount, monthlyPartitionMaxNullsCount));
-        this.monthlyPartitionMaxNullsCount = monthlyPartitionMaxNullsCount;
-        propagateHierarchyIdToField(monthlyPartitionMaxNullsCount, "monthly_partition_max_nulls_count");
+    public void setMonthlyPartitionNullsCount(ColumnNullsCountCheckSpec monthlyPartitionNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNullsCount, monthlyPartitionNullsCount));
+        this.monthlyPartitionNullsCount = monthlyPartitionNullsCount;
+        propagateHierarchyIdToField(monthlyPartitionNullsCount, "monthly_partition_nulls_count");
     }
 
     /**
-     * Returns a maximum nulls percent check.
-     * @return Maximum nulls percent check.
+     * Returns a nulls percent check.
+     * @return Nulls percent check.
      */
-    public ColumnMaxNullsPercentCheckSpec getMonthlyPartitionMaxNullsPercent() {
-        return monthlyPartitionMaxNullsPercent;
+    public ColumnNullsPercentCheckSpec getMonthlyPartitionNullsPercent() {
+        return monthlyPartitionNullsPercent;
     }
 
     /**
-     * Sets a new definition of a maximum nulls percent check.
-     * @param monthlyPartitionMaxNullsPercent Maximum nulls percent check.
+     * Sets a new definition of a nulls percent check.
+     * @param monthlyPartitionNullsPercent Nulls percent check.
      */
-    public void setMonthlyPartitionMaxNullsPercent(ColumnMaxNullsPercentCheckSpec monthlyPartitionMaxNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxNullsPercent, monthlyPartitionMaxNullsPercent));
-        this.monthlyPartitionMaxNullsPercent = monthlyPartitionMaxNullsPercent;
-        propagateHierarchyIdToField(monthlyPartitionMaxNullsPercent, "monthly_partition_max_nulls_percent");
+    public void setMonthlyPartitionNullsPercent(ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNullsPercent, monthlyPartitionNullsPercent));
+        this.monthlyPartitionNullsPercent = monthlyPartitionNullsPercent;
+        propagateHierarchyIdToField(monthlyPartitionNullsPercent, "monthly_partition_nulls_percent");
     }
 
     /**

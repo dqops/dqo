@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.pii;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnPiiContainsUsaPhonePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -41,7 +41,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
     private ColumnPiiContainsUsaPhonePercentSensorParametersSpec sut;
     private final String sensorRegex = "r\"((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))\"";
     private UserHomeContext userHomeContext;
-    private ColumnMaxPiiContainsUsaPhonePercentCheckSpec checkSpec;
+    private ColumnPiiContainsUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests e
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxPiiContainsUsaPhonePercentCheckSpec();
+        this.checkSpec = new ColumnPiiContainsUsaPhonePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

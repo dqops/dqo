@@ -18,7 +18,7 @@ package ai.dqo.bigquery.sensors.table.standard;
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class TableStandardRowCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableStandardRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMinRowCountCheckSpec checkSpec;
+    private TableRowCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,11 +58,11 @@ public class TableStandardRowCountSensorParametersSpecIntegrationTest extends Ba
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableStandardRowCountSensorParametersSpec();
-        this.checkSpec = new TableMinRowCountCheckSpec();
+        this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
         TableAdHocStandardChecksSpec category = new TableAdHocStandardChecksSpec();
         this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
-        category.setMinRowCount(this.checkSpec);
+        category.setRowCount(this.checkSpec);
     }
 
     @Test

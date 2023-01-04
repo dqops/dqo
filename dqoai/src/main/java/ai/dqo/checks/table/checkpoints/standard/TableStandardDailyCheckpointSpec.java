@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.checkpoints.standard;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -38,31 +38,31 @@ import java.util.Objects;
 public class TableStandardDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableStandardDailyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_checkpoint_min_row_count", o -> o.dailyCheckpointMinRowCount);
+           put("daily_checkpoint_row_count", o -> o.dailyCheckpointRowCount);
         }
     };
 
-    @JsonPropertyDescription("Daily checkpoint of the minimum number of rows on a table")
+    @JsonPropertyDescription("Verifies that the set row count is met on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMinRowCountCheckSpec dailyCheckpointMinRowCount;
+    private TableRowCountCheckSpec dailyCheckpointRowCount;
 
     /**
-     * Returns the minimum row count check configuration.
-     * @return Minimum row count check specification.
+     * Returns the row count check configuration.
+     * @return Row count check specification.
      */
-    public TableMinRowCountCheckSpec getDailyCheckpointMinRowCount() {
-        return dailyCheckpointMinRowCount;
+    public TableRowCountCheckSpec getDailyCheckpointRowCount() {
+        return dailyCheckpointRowCount;
     }
 
     /**
-     * Sets the minimum row count.
-     * @param dailyCheckpointMinRowCount New row count check.
+     * Sets the row count check.
+     * @param dailyCheckpointRowCount New row count check.
      */
-    public void setDailyCheckpointMinRowCount(TableMinRowCountCheckSpec dailyCheckpointMinRowCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinRowCount, dailyCheckpointMinRowCount));
-        this.dailyCheckpointMinRowCount = dailyCheckpointMinRowCount;
-		this.propagateHierarchyIdToField(dailyCheckpointMinRowCount, "daily_checkpoint_min_row_count");
+    public void setDailyCheckpointRowCount(TableRowCountCheckSpec dailyCheckpointRowCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyCheckpointRowCount, dailyCheckpointRowCount));
+        this.dailyCheckpointRowCount = dailyCheckpointRowCount;
+		this.propagateHierarchyIdToField(dailyCheckpointRowCount, "daily_checkpoint_row_count");
     }
 
     /**

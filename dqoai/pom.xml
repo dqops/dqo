@@ -96,8 +96,6 @@
 								<apiSource>
 									<springmvc>true</springmvc>
 									<locations>ai.dqo.rest.controllers</locations>
-									<schemes>http</schemes>
-									<host>localhost:8888</host>
 									<basePath>/</basePath>
 									<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
 									<swaggerFileName>dqo-ui-swagger</swaggerFileName>

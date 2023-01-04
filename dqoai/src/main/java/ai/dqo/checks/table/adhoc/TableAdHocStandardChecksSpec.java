@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAdHocStandardChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocStandardChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("min_row_count", o -> o.minRowCount);
+            put("row_count", o -> o.rowCount);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the minimum row count is met on a table level.")
-    private TableMinRowCountCheckSpec minRowCount;
+    @JsonPropertyDescription("Verifies that the set row count is met on a table level.")
+    private TableRowCountCheckSpec rowCount;
 
     /**
-     * Returns a minimum row count check.
-     * @return Min row count check.
+     * Returns a row count check.
+     * @return Row count check.
      */
-    public TableMinRowCountCheckSpec getMinRowCount() {
-        return minRowCount;
+    public TableRowCountCheckSpec getRowCount() {
+        return rowCount;
     }
 
     /**
-     * Sets a new definition of a min row count check.
-     * @param minRowCount Min row count check.
+     * Sets a new definition of a row count check.
+     * @param rowCount Row count check.
      */
-    public void setMinRowCount(TableMinRowCountCheckSpec minRowCount) {
-        this.setDirtyIf(!Objects.equals(this.minRowCount, minRowCount));
-        this.minRowCount = minRowCount;
-        propagateHierarchyIdToField(minRowCount, "min_row_count");
+    public void setRowCount(TableRowCountCheckSpec rowCount) {
+        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
+        this.rowCount = rowCount;
+        propagateHierarchyIdToField(rowCount, "row_count");
     }
 
     /**

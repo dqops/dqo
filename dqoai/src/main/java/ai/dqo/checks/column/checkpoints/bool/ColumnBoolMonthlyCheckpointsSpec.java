@@ -36,52 +36,52 @@ import java.util.Objects;
 public class ColumnBoolMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_min_true_percent", o -> o.monthlyCheckpointMinTruePercent);
-            put("monthly_checkpoint_min_false_percent", o -> o.monthlyCheckpointMinFalsePercent);
+            put("monthly_checkpoint_true_percent", o -> o.monthlyCheckpointTruePercent);
+            put("monthly_checkpoint_false_percent", o -> o.monthlyCheckpointFalsePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinTruePercentCheckSpec monthlyCheckpointMinTruePercent;
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnTruePercentCheckSpec monthlyCheckpointTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinFalsePercentCheckSpec monthlyCheckpointMinFalsePercent;
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnFalsePercentCheckSpec monthlyCheckpointFalsePercent;
 
     /**
-     * Returns a minimum true percent check.
-     * @return Minimum true percent check.
+     * Returns a true percent check specification.
+     * @return True percent check specification.
      */
-    public ColumnMinTruePercentCheckSpec getMonthlyCheckpointMinTruePercent() {
-        return monthlyCheckpointMinTruePercent;
+    public ColumnTruePercentCheckSpec getMonthlyCheckpointTruePercent() {
+        return monthlyCheckpointTruePercent;
     }
 
     /**
-     * Sets a new definition of a minimum true percent check.
-     * @param monthlyCheckpointMinTruePercent Minimum true percent check.
+     * Sets a new definition of a true percent check.
+     * @param monthlyCheckpointTruePercent True percent check specification.
      */
-    public void setMonthlyCheckpointMinTruePercent(ColumnMinTruePercentCheckSpec monthlyCheckpointMinTruePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinTruePercent, monthlyCheckpointMinTruePercent));
-        this.monthlyCheckpointMinTruePercent = monthlyCheckpointMinTruePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinTruePercent, "monthly_checkpoint_min_true_percent");
+    public void setMonthlyCheckpointTruePercent(ColumnTruePercentCheckSpec monthlyCheckpointTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointTruePercent, monthlyCheckpointTruePercent));
+        this.monthlyCheckpointTruePercent = monthlyCheckpointTruePercent;
+        propagateHierarchyIdToField(monthlyCheckpointTruePercent, "monthly_checkpoint_true_percent");
     }
 
     /**
-     * Returns a minimum false percent check.
-     * @return Minimum false percent check.
+     * Returns a false percent check specification.
+     * @return False percent check specification.
      */
-    public ColumnMinFalsePercentCheckSpec getMonthlyCheckpointMinFalsePercent() {
-        return monthlyCheckpointMinFalsePercent;
+    public ColumnFalsePercentCheckSpec getMonthlyCheckpointFalsePercent() {
+        return monthlyCheckpointFalsePercent;
     }
 
     /**
-     * Sets a new definition of a minimum false percent check.
-     * @param monthlyCheckpointMinFalsePercent Minimum false percent check.
+     * Sets a new definition of a false percent check.
+     * @param monthlyCheckpointFalsePercent False percent check specification.
      */
-    public void setMonthlyCheckpointMinFalsePercent(ColumnMinFalsePercentCheckSpec monthlyCheckpointMinFalsePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinFalsePercent, monthlyCheckpointMinFalsePercent));
-        this.monthlyCheckpointMinFalsePercent = monthlyCheckpointMinFalsePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinFalsePercent, "monthly_checkpoint_min_false_percent");
+    public void setMonthlyCheckpointFalsePercent(ColumnFalsePercentCheckSpec monthlyCheckpointFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointFalsePercent, monthlyCheckpointFalsePercent));
+        this.monthlyCheckpointFalsePercent = monthlyCheckpointFalsePercent;
+        propagateHierarchyIdToField(monthlyCheckpointFalsePercent, "monthly_checkpoint_false_percent");
     }
 
     /**

@@ -36,52 +36,52 @@ import java.util.Objects;
 public class ColumnBoolDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_min_true_percent", o -> o.dailyPartitionMinTruePercent);
-            put("daily_partition_min_false_percent", o -> o.dailyPartitionMinFalsePercent);
+            put("daily_partition_true_percent", o -> o.dailyPartitionTruePercent);
+            put("daily_partition_false_percent", o -> o.dailyPartitionFalsePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinTruePercentCheckSpec dailyPartitionMinTruePercent;
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage.")
+    private ColumnTruePercentCheckSpec dailyPartitionTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinFalsePercentCheckSpec dailyPartitionMinFalsePercent;
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage.")
+    private ColumnFalsePercentCheckSpec dailyPartitionFalsePercent;
 
     /**
-     * Returns a minimum true check.
-     * @return Minimum true check.
+     * Returns a true check.
+     * @return True check.
      */
-    public ColumnMinTruePercentCheckSpec getDailyPartitionMinTruePercent() {
-        return dailyPartitionMinTruePercent;
+    public ColumnTruePercentCheckSpec getDailyPartitionTruePercent() {
+        return dailyPartitionTruePercent;
     }
 
     /**
-     * Sets a new definition of a minimum true check.
-     * @param dailyPartitionMinTruePercent Minimum true check.
+     * Sets a new definition of a true check.
+     * @param dailyPartitionTruePercent True check.
      */
-    public void setDailyPartitionMinTruePercent(ColumnMinTruePercentCheckSpec dailyPartitionMinTruePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinTruePercent, dailyPartitionMinTruePercent));
-        this.dailyPartitionMinTruePercent = dailyPartitionMinTruePercent;
-        propagateHierarchyIdToField(dailyPartitionMinTruePercent, "daily_partition_min_true_percent");
+    public void setDailyPartitionTruePercent(ColumnTruePercentCheckSpec dailyPartitionTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTruePercent, dailyPartitionTruePercent));
+        this.dailyPartitionTruePercent = dailyPartitionTruePercent;
+        propagateHierarchyIdToField(dailyPartitionTruePercent, "daily_partition_true_percent");
     }
 
     /**
-     * Returns a minimum false check.
-     * @return Minimum false check.
+     * Returns a false check.
+     * @return False check.
      */
-    public ColumnMinFalsePercentCheckSpec getDailyPartitionMinFalsePercent() {
-        return dailyPartitionMinFalsePercent;
+    public ColumnFalsePercentCheckSpec getDailyPartitionFalsePercent() {
+        return dailyPartitionFalsePercent;
     }
 
     /**
-     * Sets a new definition of a minimum false check.
-     * @param dailyPartitionMinFalsePercent Minimum false check.
+     * Sets a new definition of a false check.
+     * @param dailyPartitionFalsePercent False check.
      */
-    public void setDailyPartitionMinFalsePercent(ColumnMinFalsePercentCheckSpec dailyPartitionMinFalsePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinFalsePercent, dailyPartitionMinFalsePercent));
-        this.dailyPartitionMinFalsePercent = dailyPartitionMinFalsePercent;
-        propagateHierarchyIdToField(dailyPartitionMinFalsePercent, "daily_partition_min_false_percent");
+    public void setDailyPartitionFalsePercent(ColumnFalsePercentCheckSpec dailyPartitionFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionFalsePercent, dailyPartitionFalsePercent));
+        this.dailyPartitionFalsePercent = dailyPartitionFalsePercent;
+        propagateHierarchyIdToField(dailyPartitionFalsePercent, "daily_partition_false_percent");
     }
 
     /**

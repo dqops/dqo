@@ -22,6 +22,14 @@
     {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
 {%- endmacro %}
 
+{%- macro render_column(name, table_alias_prefix = '') -%}
+    {%- if table_alias_prefix != '' -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(name) }}
+    {%- else -%}
+        {{ quote_identifier(name) }}
+    {%- endif -%}
+{%- endmacro %}
+
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
         DATE_TRUNC('YEAR', CAST({{value}} AS date))

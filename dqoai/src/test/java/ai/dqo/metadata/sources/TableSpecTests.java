@@ -23,11 +23,9 @@ import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
-import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.utils.serialization.JsonSerializerObjectMother;
 import ai.dqo.utils.serialization.YamlSerializer;
 import ai.dqo.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
@@ -146,7 +144,7 @@ public class TableSpecTests extends BaseTest {
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
         TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
         adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setChecks(adhocChecks);
         Assertions.assertEquals(this.sut.getChecks(), adhocChecks);
         Assertions.assertTrue(this.sut.isDirty());
@@ -156,7 +154,7 @@ public class TableSpecTests extends BaseTest {
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
         TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
         adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setChecks(adhocChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -174,7 +172,7 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneAdhocCheckConfigured_thenReturnsTrue() {
         TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
         adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setMinRowCount(new TableMinRowCountCheckSpec());
+        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
         this.sut.setChecks(adhocChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
@@ -184,7 +182,7 @@ public class TableSpecTests extends BaseTest {
         TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
         TableDailyCheckpointCategoriesSpec daily = new TableDailyCheckpointCategoriesSpec();
         TableStandardDailyCheckpointSpec standard = new TableStandardDailyCheckpointSpec();
-        standard.setDailyCheckpointMinRowCount(new TableMinRowCountCheckSpec());
+        standard.setDailyCheckpointRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         checkpoints.setDaily(daily);
         this.sut.setCheckpoints(checkpoints);
@@ -196,7 +194,7 @@ public class TableSpecTests extends BaseTest {
         TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
         TableMonthlyCheckpointCategoriesSpec daily = new TableMonthlyCheckpointCategoriesSpec();
         TableStandardMonthlyCheckpointSpec standard = new TableStandardMonthlyCheckpointSpec();
-        standard.setMonthlyCheckpointMinRowCount(new TableMinRowCountCheckSpec());
+        standard.setMonthlyCheckpointRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         checkpoints.setMonthly(daily);
         this.sut.setCheckpoints(checkpoints);

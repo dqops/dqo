@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.partitioned.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,73 +38,73 @@ import java.util.Objects;
 public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_min_unique_count", o -> o.monthlyPartitionMinUniqueCount);
-            put("monthly_partition_max_duplicate_count", o -> o.monthlyPartitionMaxDuplicateCount);
-            put("monthly_partition_max_duplicate_percent", o -> o.monthlyPartitionMaxDuplicatePercent);
+            put("monthly_partition_unique_count", o -> o.monthlyPartitionUniqueCount);
+            put("monthly_partition_duplicate_count", o -> o.monthlyPartitionDuplicateCount);
+            put("monthly_partition_duplicate_percent", o -> o.monthlyPartitionDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinUniqueCountCheckSpec monthlyPartitionMinUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnUniqueCountCheckSpec monthlyPartitionUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicateCountCheckSpec monthlyPartitionMaxDuplicateCount;
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicatePercentCheckSpec monthlyPartitionMaxDuplicatePercent;
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
 
     /**
-     * Returns a minimum unique values count check.
-     * @return Minimum unique values count check.
+     * Returns a unique values count check specification.
+     * @return Unique values count check specification.
      */
-    public ColumnMinUniqueCountCheckSpec getMonthlyPartitionMinUniqueCount() {
-        return monthlyPartitionMinUniqueCount;
+    public ColumnUniqueCountCheckSpec getMonthlyPartitionUniqueCount() {
+        return monthlyPartitionUniqueCount;
     }
 
     /**
-     * Sets a new definition of a minimum unique values count check.
-     * @param monthlyPartitionMinUniqueCount Minimum unique values count check.
+     * Sets a new specification of a unique values count check.
+     * @param monthlyPartitionUniqueCount Unique values count check specification.
      */
-    public void setMonthlyPartitionMinUniqueCount(ColumnMinUniqueCountCheckSpec monthlyPartitionMinUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinUniqueCount, monthlyPartitionMinUniqueCount));
-        this.monthlyPartitionMinUniqueCount = monthlyPartitionMinUniqueCount;
-        propagateHierarchyIdToField(monthlyPartitionMinUniqueCount, "monthly_partition_min_unique_count");
+    public void setMonthlyPartitionUniqueCount(ColumnUniqueCountCheckSpec monthlyPartitionUniqueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionUniqueCount, monthlyPartitionUniqueCount));
+        this.monthlyPartitionUniqueCount = monthlyPartitionUniqueCount;
+        propagateHierarchyIdToField(monthlyPartitionUniqueCount, "monthly_partition_unique_count");
     }
 
     /**
-     * Returns a maximum duplicate values count check.
-     * @return Maximum duplicate values count check.
+     * Returns a duplicate values count check specification.
+     * @return Duplicate values count check specification.
      */
-    public ColumnMaxDuplicateCountCheckSpec getMonthlyPartitionMaxDuplicateCount() {
-        return monthlyPartitionMaxDuplicateCount;
+    public ColumnDuplicateCountCheckSpec getMonthlyPartitionDuplicateCount() {
+        return monthlyPartitionDuplicateCount;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values count check.
-     * @param monthlyPartitionMaxDuplicateCount Maximum duplicate values count check.
+     * Sets a new specification of a duplicate values count check.
+     * @param monthlyPartitionDuplicateCount Duplicate values count check specification.
      */
-    public void setMonthlyPartitionMaxDuplicateCount(ColumnMaxDuplicateCountCheckSpec monthlyPartitionMaxDuplicateCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDuplicateCount, monthlyPartitionMaxDuplicateCount));
-        this.monthlyPartitionMaxDuplicateCount = monthlyPartitionMaxDuplicateCount;
-        propagateHierarchyIdToField(monthlyPartitionMaxDuplicateCount, "monthly_partition_max_duplicate_count");
+    public void setMonthlyPartitionDuplicateCount(ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicateCount, monthlyPartitionDuplicateCount));
+        this.monthlyPartitionDuplicateCount = monthlyPartitionDuplicateCount;
+        propagateHierarchyIdToField(monthlyPartitionDuplicateCount, "monthly_partition_duplicate_count");
     }
 
     /**
-     * Returns a maximum duplicate values percent check.
-     * @return Maximum duplicate values percent check.
+     * Returns a duplicate values percent check specification.
+     * @return Duplicate values percent check specification.
      */
-    public ColumnMaxDuplicatePercentCheckSpec getMonthlyPartitionMaxDuplicatePercent() {
-        return monthlyPartitionMaxDuplicatePercent;
+    public ColumnDuplicatePercentCheckSpec getMonthlyPartitionDuplicatePercent() {
+        return monthlyPartitionDuplicatePercent;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values percent check.
-     * @param monthlyPartitionMaxDuplicatePercent Maximum duplicate values percent check.
+     * Sets a new specification of a duplicate values percent check.
+     * @param monthlyPartitionDuplicatePercent Duplicate values percent check specification.
      */
-    public void setMonthlyPartitionMaxDuplicatePercent(ColumnMaxDuplicatePercentCheckSpec monthlyPartitionMaxDuplicatePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxDuplicatePercent, monthlyPartitionMaxDuplicatePercent));
-        this.monthlyPartitionMaxDuplicatePercent = monthlyPartitionMaxDuplicatePercent;
-        propagateHierarchyIdToField(monthlyPartitionMaxDuplicatePercent, "monthly_partition_max_duplicate_percent");
+    public void setMonthlyPartitionDuplicatePercent(ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicatePercent, monthlyPartitionDuplicatePercent));
+        this.monthlyPartitionDuplicatePercent = monthlyPartitionDuplicatePercent;
+        propagateHierarchyIdToField(monthlyPartitionDuplicatePercent, "monthly_partition_duplicate_percent");
     }
 
     /**

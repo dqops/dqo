@@ -17,8 +17,7 @@ package ai.dqo.sensors.bigquery.column.uniqueness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -31,7 +30,6 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDuplicateCountSensorParametersSpec;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnUniquenessUniqueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinUniqueCountCheckSpec checkSpec;
+    private ColumnUniqueCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -60,7 +58,7 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecBigQueryTests extend
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinUniqueCountCheckSpec();
+        this.checkSpec = new ColumnUniqueCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
