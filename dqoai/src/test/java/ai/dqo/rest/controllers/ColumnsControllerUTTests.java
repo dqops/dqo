@@ -23,7 +23,7 @@ import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
@@ -325,13 +325,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         MaxCountRule0ParametersSpec maxCountRule3 = new MaxCountRule0ParametersSpec();
         maxCountRule3.setMaxCount(30L);
         
-        ColumnMaxNegativeCountCheckSpec negativeChecksSpec = new ColumnMaxNegativeCountCheckSpec();
+        ColumnNegativeCountCheckSpec negativeChecksSpec = new ColumnNegativeCountCheckSpec();
         negativeChecksSpec.setWarning(maxCountRule1);
         negativeChecksSpec.setError(maxCountRule2);
         negativeChecksSpec.setFatal(maxCountRule3);
         
         ColumnNumericMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNumericMonthlyPartitionedChecksSpec();
-        negativeMonthlyPartitionedChecks.setMonthlyPartitionMaxNegativeCount(negativeChecksSpec);
+        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeCount(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
         monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();

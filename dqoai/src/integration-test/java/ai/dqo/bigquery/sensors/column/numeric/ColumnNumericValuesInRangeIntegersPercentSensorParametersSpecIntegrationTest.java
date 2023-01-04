@@ -17,8 +17,7 @@ package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinValuesInRangeIntegersPercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnValuesInRangeIntegersPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -30,7 +29,6 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetPercentSensorParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,14 +36,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootTest
 public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinValuesInRangeIntegersPercentCheckSpec checkSpec;
+    private ColumnValuesInRangeIntegersPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -62,7 +57,7 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinValuesInRangeIntegersPercentCheckSpec();
+		this.checkSpec = new ColumnValuesInRangeIntegersPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

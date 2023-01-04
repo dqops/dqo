@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.numeric;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnNegativePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnNumericNegativePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNegativePercentCheckSpec checkSpec;
+    private ColumnNegativePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxNegativePercentCheckSpec();
+        this.checkSpec = new ColumnNegativePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

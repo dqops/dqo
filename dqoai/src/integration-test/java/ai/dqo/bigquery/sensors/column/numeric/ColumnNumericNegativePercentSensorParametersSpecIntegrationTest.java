@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativePercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnNegativePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnNumericNegativePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnNumericNegativePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNegativePercentCheckSpec checkSpec;
+    private ColumnNegativePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecIntegrationTest ext
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericNegativePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMaxNegativePercentCheckSpec();
+		this.checkSpec = new ColumnNegativePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

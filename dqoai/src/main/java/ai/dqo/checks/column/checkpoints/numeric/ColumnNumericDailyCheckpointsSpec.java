@@ -36,139 +36,139 @@ import java.util.Objects;
 public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_max_negative_count", o -> o.dailyCheckpointMaxNegativeCount);
-            put("daily_checkpoint_max_negative_percent", o -> o.dailyCheckpointMaxNegativePercent);
-            put("daily_checkpoint_min_numbers_in_set_count", o -> o.dailyCheckpointMinNumbersInSetCount);
-            put("daily_checkpoint_min_numbers_in_set_percent", o -> o.dailyCheckpointMinNumbersInSetPercent);
-            put("daily_checkpoint_min_values_in_range_numeric_percent", o -> o.dailyCheckpointMinValuesInRangeNumericPercent);
-            put("daily_checkpoint_min_values_in_range_integers_percent", o -> o.dailyCheckpointMinValuesInRangeIntegersPercent);
+            put("daily_checkpoint_negative_count", o -> o.dailyCheckpointNegativeCount);
+            put("daily_checkpoint_negative_percent", o -> o.dailyCheckpointNegativePercent);
+            put("daily_checkpoint_numbers_in_set_count", o -> o.dailyCheckpointNumbersInSetCount);
+            put("daily_checkpoint_numbers_in_set_percent", o -> o.dailyCheckpointNumbersInSetPercent);
+            put("daily_checkpoint_values_in_range_numeric_percent", o -> o.dailyCheckpointValuesInRangeNumericPercent);
+            put("daily_checkpoint_values_in_range_integers_percent", o -> o.dailyCheckpointValuesInRangeIntegersPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxNegativeCountCheckSpec dailyCheckpointMaxNegativeCount;
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnNegativeCountCheckSpec dailyCheckpointNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxNegativePercentCheckSpec dailyCheckpointMaxNegativePercent;
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnNegativePercentCheckSpec dailyCheckpointNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
-    private ColumnMinNumbersInSetCountCheckSpec dailyCheckpointMinNumbersInSetCount;
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the set count.")
+    private ColumnNumbersInSetCountCheckSpec dailyCheckpointNumbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinNumbersInSetPercentCheckSpec dailyCheckpointMinNumbersInSetPercent;
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the set percentage.")
+    private ColumnNumbersInSetPercentCheckSpec dailyCheckpointNumbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeNumericPercentCheckSpec dailyCheckpointMinValuesInRangeNumericPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    private ColumnValuesInRangeNumericPercentCheckSpec dailyCheckpointValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeIntegersPercentCheckSpec dailyCheckpointMinValuesInRangeIntegersPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    private ColumnValuesInRangeIntegersPercentCheckSpec dailyCheckpointValuesInRangeIntegersPercent;
 
     /**
-     * Returns a maximum negative values count check.
-     * @return Maximum negative values count check.
+     * Returns a negative values count check specification.
+     * @return Negative values count check specification.
      */
-    public ColumnMaxNegativeCountCheckSpec getDailyCheckpointMaxNegativeCount() {
-        return dailyCheckpointMaxNegativeCount;
+    public ColumnNegativeCountCheckSpec getDailyCheckpointNegativeCount() {
+        return dailyCheckpointNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum negative values count check.
-     * @param dailyCheckpointMaxNegativeCount Maximum negative values count check.
+     * Sets a new specification of a negative values count check.
+     * @param dailyCheckpointNegativeCount Negative values count check specification.
      */
-    public void setDailyCheckpointMaxNegativeCount(ColumnMaxNegativeCountCheckSpec dailyCheckpointMaxNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNegativeCount, dailyCheckpointMaxNegativeCount));
-        this.dailyCheckpointMaxNegativeCount = dailyCheckpointMaxNegativeCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxNegativeCount, "daily_checkpoint_max_negative_count");
+    public void setDailyCheckpointNegativeCount(ColumnNegativeCountCheckSpec dailyCheckpointNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNegativeCount, dailyCheckpointNegativeCount));
+        this.dailyCheckpointNegativeCount = dailyCheckpointNegativeCount;
+        propagateHierarchyIdToField(dailyCheckpointNegativeCount, "daily_checkpoint_negative_count");
     }
 
     /**
-     * Returns a maximum negative values percentage check.
-     * @return Maximum negative values percentage check.
+     * Returns a negative values percentage check specification.
+     * @return Negative values percentage check specification.
      */
-    public ColumnMaxNegativePercentCheckSpec getDailyCheckpointMaxNegativePercent() {
-        return dailyCheckpointMaxNegativePercent;
+    public ColumnNegativePercentCheckSpec getDailyCheckpointNegativePercent() {
+        return dailyCheckpointNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative values percentage check.
-     * @param dailyCheckpointMaxNegativePercent Maximum negative values percentage check.
+     * Sets a new specification of a negative values percentage check.
+     * @param dailyCheckpointNegativePercent Negative values percentage check specification.
      */
-    public void setDailyCheckpointMaxNegativePercent(ColumnMaxNegativePercentCheckSpec dailyCheckpointMaxNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNegativePercent, dailyCheckpointMaxNegativePercent));
-        this.dailyCheckpointMaxNegativePercent = dailyCheckpointMaxNegativePercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxNegativePercent, "daily_checkpoint_max_negative_percent");
+    public void setDailyCheckpointNegativePercent(ColumnNegativePercentCheckSpec dailyCheckpointNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNegativePercent, dailyCheckpointNegativePercent));
+        this.dailyCheckpointNegativePercent = dailyCheckpointNegativePercent;
+        propagateHierarchyIdToField(dailyCheckpointNegativePercent, "daily_checkpoint_negative_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set count check.
-     * @return Minimum Numbers in set count check.
+     * Returns a numbers in set count check specification.
+     * @return Numbers in set count check specification.
      */
-    public ColumnMinNumbersInSetCountCheckSpec getDailyCheckpointMinNumbersInSetCount() {
-        return dailyCheckpointMinNumbersInSetCount;
+    public ColumnNumbersInSetCountCheckSpec getDailyCheckpointNumbersInSetCount() {
+        return dailyCheckpointNumbersInSetCount;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set count check.
-     * @param dailyCheckpointMinNumbersInSetCount Minimum Numbers in set count check.
+     * Sets a new specification of a numbers in set count check.
+     * @param dailyCheckpointNumbersInSetCount Numbers in set count check.
      */
-    public void setDailyCheckpointMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec dailyCheckpointMinNumbersInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinNumbersInSetCount, dailyCheckpointMinNumbersInSetCount));
-        this.dailyCheckpointMinNumbersInSetCount = dailyCheckpointMinNumbersInSetCount;
-        propagateHierarchyIdToField(dailyCheckpointMinNumbersInSetCount, "daily_checkpoint_min_numbers_in_set_count");
+    public void setDailyCheckpointNumbersInSetCount(ColumnNumbersInSetCountCheckSpec dailyCheckpointNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNumbersInSetCount, dailyCheckpointNumbersInSetCount));
+        this.dailyCheckpointNumbersInSetCount = dailyCheckpointNumbersInSetCount;
+        propagateHierarchyIdToField(dailyCheckpointNumbersInSetCount, "daily_checkpoint_numbers_in_set_count");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinNumbersInSetPercentCheckSpec getDailyCheckpointMinNumbersInSetPercent() {
-        return dailyCheckpointMinNumbersInSetPercent;
+    public ColumnNumbersInSetPercentCheckSpec getDailyCheckpointNumbersInSetPercent() {
+        return dailyCheckpointNumbersInSetPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyCheckpointMinNumbersInSetPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyCheckpointNumbersInSetPercent Numbers in set percent check specification.
      */
-    public void setDailyCheckpointMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec dailyCheckpointMinNumbersInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinNumbersInSetPercent, dailyCheckpointMinNumbersInSetPercent));
-        this.dailyCheckpointMinNumbersInSetPercent = dailyCheckpointMinNumbersInSetPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinNumbersInSetPercent, "daily_checkpoint_min_numbers_in_set_percent");
+    public void setDailyCheckpointNumbersInSetPercent(ColumnNumbersInSetPercentCheckSpec dailyCheckpointNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNumbersInSetPercent, dailyCheckpointNumbersInSetPercent));
+        this.dailyCheckpointNumbersInSetPercent = dailyCheckpointNumbersInSetPercent;
+        propagateHierarchyIdToField(dailyCheckpointNumbersInSetPercent, "daily_checkpoint_numbers_in_set_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeNumericPercentCheckSpec getDailyCheckpointMinValuesInRangeNumericPercent() {
-        return dailyCheckpointMinValuesInRangeNumericPercent;
+    public ColumnValuesInRangeNumericPercentCheckSpec getDailyCheckpointValuesInRangeNumericPercent() {
+        return dailyCheckpointValuesInRangeNumericPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyCheckpointMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyCheckpointValuesInRangeNumericPercent Numbers in set percent check.
      */
-    public void setDailyCheckpointMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec dailyCheckpointMinValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValuesInRangeNumericPercent, dailyCheckpointMinValuesInRangeNumericPercent));
-        this.dailyCheckpointMinValuesInRangeNumericPercent = dailyCheckpointMinValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinValuesInRangeNumericPercent, "daily_checkpoint_min_values_in_range_numeric_percent");
+    public void setDailyCheckpointValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec dailyCheckpointValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValuesInRangeNumericPercent, dailyCheckpointValuesInRangeNumericPercent));
+        this.dailyCheckpointValuesInRangeNumericPercent = dailyCheckpointValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(dailyCheckpointValuesInRangeNumericPercent, "daily_checkpoint_values_in_range_numeric_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeIntegersPercentCheckSpec getDailyCheckpointMinValuesInRangeIntegersPercent() {
-        return dailyCheckpointMinValuesInRangeIntegersPercent;
+    public ColumnValuesInRangeIntegersPercentCheckSpec getDailyCheckpointValuesInRangeIntegersPercent() {
+        return dailyCheckpointValuesInRangeIntegersPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyCheckpointMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyCheckpointValuesInRangeIntegersPercent Numbers in set percent check specification.
      */
-    public void setDailyCheckpointMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec dailyCheckpointMinValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValuesInRangeIntegersPercent, dailyCheckpointMinValuesInRangeIntegersPercent));
-        this.dailyCheckpointMinValuesInRangeIntegersPercent = dailyCheckpointMinValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinValuesInRangeIntegersPercent, "daily_checkpoint_min_values_in_range_integers_percent");
+    public void setDailyCheckpointValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec dailyCheckpointValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValuesInRangeIntegersPercent, dailyCheckpointValuesInRangeIntegersPercent));
+        this.dailyCheckpointValuesInRangeIntegersPercent = dailyCheckpointValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(dailyCheckpointValuesInRangeIntegersPercent, "daily_checkpoint_values_in_range_integers_percent");
     }
     
     /**
