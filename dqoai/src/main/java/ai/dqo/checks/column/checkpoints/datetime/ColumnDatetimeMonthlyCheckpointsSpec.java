@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.checkpoints.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnDatetimeMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_max_datetime_values_in_future_percent", o -> o.monthlyCheckpointMaxDatetimeValuesInFuturePercent);
+            put("monthly_checkpoint_date_values_in_future_percent", o -> o.monthlyCheckpointDateValuesInFuturePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of datetime values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxDateValuesInFuturePercentCheckSpec monthlyCheckpointMaxDatetimeValuesInFuturePercent;
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnDateValuesInFuturePercentCheckSpec monthlyCheckpointDateValuesInFuturePercent;
 
     /**
-     * Returns a maximum datetime values in future percent check.
-     * @return Maximum datetime values in future percent check.
+     * Returns a date values in future percent check specification.
+     * @return Date values in future percent check specification.
      */
-    public ColumnMaxDateValuesInFuturePercentCheckSpec getMonthlyCheckpointMaxDatetimeValuesInFuturePercent() {
-        return monthlyCheckpointMaxDatetimeValuesInFuturePercent;
+    public ColumnDateValuesInFuturePercentCheckSpec getMonthlyCheckpointDateValuesInFuturePercent() {
+        return monthlyCheckpointDateValuesInFuturePercent;
     }
 
     /**
-     * Sets a new definition of a maximum datetime values in future percent check.
-     * @param monthlyCheckpointMaxDatetimeValuesInFuturePercent Maximum datetime values in future percent check.
+     * Sets a new definition of a date values in future percent check.
+     * @param monthlyCheckpointDateValuesInFuturePercent Date values in future percent check specification.
      */
-    public void setMonthlyCheckpointMaxDatetimeValuesInFuturePercent(ColumnMaxDateValuesInFuturePercentCheckSpec monthlyCheckpointMaxDatetimeValuesInFuturePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxDatetimeValuesInFuturePercent, monthlyCheckpointMaxDatetimeValuesInFuturePercent));
-        this.monthlyCheckpointMaxDatetimeValuesInFuturePercent = monthlyCheckpointMaxDatetimeValuesInFuturePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxDatetimeValuesInFuturePercent, "monthly_checkpoint_max_datetime_values_in_future_percent");
+    public void setMonthlyCheckpointDateValuesInFuturePercent(ColumnDateValuesInFuturePercentCheckSpec monthlyCheckpointDateValuesInFuturePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointDateValuesInFuturePercent, monthlyCheckpointDateValuesInFuturePercent));
+        this.monthlyCheckpointDateValuesInFuturePercent = monthlyCheckpointDateValuesInFuturePercent;
+        propagateHierarchyIdToField(monthlyCheckpointDateValuesInFuturePercent, "monthly_checkpoint_date_values_in_future_percent");
     }
 
     /**

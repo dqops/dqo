@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.nulls;
+package ai.dqo.checks.column.pii;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullPercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiContainsUsaZipcodePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,24 +34,25 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+ * Column check that calculates the percentage of rows that contains USA zip code values in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNullsPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNullsPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnPiiContainsUsaZipcodePercentCheckSpec
+        extends AbstractCheckSpec<ColumnPiiContainsUsaZipcodePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiContainsUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Numerical value in range percent sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullPercentSensorParametersSpec parameters = new ColumnNullsNullPercentSensorParametersSpec();
+    private ColumnPiiContainsUsaZipcodePercentSensorParametersSpec parameters = new ColumnPiiContainsUsaZipcodePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for the minimum percentage of rows that contains a USA zip code number in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxPercentRule2ParametersSpec error;
@@ -71,7 +72,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNullPercentSensorParametersSpec getParameters() {
+    public ColumnPiiContainsUsaZipcodePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +80,7 @@ public class ColumnMaxNullsPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNullPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPiiContainsUsaZipcodePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

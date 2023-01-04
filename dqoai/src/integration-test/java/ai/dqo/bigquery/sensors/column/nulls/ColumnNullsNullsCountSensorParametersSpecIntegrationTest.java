@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.nulls;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnNullsNullCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnNullsNullCountSensorParametersSpec sut;
+public class ColumnNullsNullsCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnNullsNullsCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNullsCountCheckSpec checkSpec;
+    private ColumnNullsCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -56,8 +56,8 @@ public class ColumnNullsNullCountSensorParametersSpecIntegrationTest extends Bas
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNullsNullCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxNullsCountCheckSpec();
+		this.sut = new ColumnNullsNullsCountSensorParametersSpec();
+		this.checkSpec = new ColumnNullsCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

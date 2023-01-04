@@ -19,7 +19,7 @@ import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullPercentSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNullPercentProfilerSpec extends AbstractProfilerSpec<ColumnNullsNullPercentSensorParametersSpec> {
+public class ColumnNullsNullPercentProfilerSpec extends AbstractProfilerSpec<ColumnNullsNullsPercentSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullPercentProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnNullsNullPercentProfilerSpec extends AbstractProfilerSpec<Col
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullPercentSensorParametersSpec parameters = new ColumnNullsNullPercentSensorParametersSpec();
+    private ColumnNullsNullsPercentSensorParametersSpec parameters = new ColumnNullsNullsPercentSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNullPercentSensorParametersSpec getParameters() {
+    public ColumnNullsNullsPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsNullPercentProfilerSpec extends AbstractProfilerSpec<Col
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNullPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNullsPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.datetime;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.datetime.ColumnMaxDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,17 +30,17 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.datetime.ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec;
+import ai.dqo.sensors.column.datetime.ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec sut;
+public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxDateValuesInFuturePercentCheckSpec checkSpec;
+    private ColumnDateValuesInFuturePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -53,12 +53,12 @@ public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpecBigQu
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpec();
+		this.sut = new ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec();
         this.sut.setFilter("{table}.id <> 4");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxDateValuesInFuturePercentCheckSpec();
+        this.checkSpec = new ColumnDateValuesInFuturePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -93,7 +93,7 @@ public class ColumnDatetimeMaxDateValuesInFuturePercentSensorParametersSpecBigQu
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/datetime/datetime_max_date_values_in_future_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/datetime/date_values_in_future_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

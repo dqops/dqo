@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.nulls;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,17 +30,17 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnNullsNullCountSensorParametersSpec sut;
+public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnNullsNullsPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNullsCountCheckSpec checkSpec;
+    private ColumnNullsPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -53,12 +53,12 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sut = new ColumnNullsNullCountSensorParametersSpec();
+		this.sut = new ColumnNullsNullsPercentSensorParametersSpec();
         this.sut.setFilter("{table}.`id` <> 4");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxNullsCountCheckSpec();
+        this.checkSpec = new ColumnNullsPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -93,7 +93,7 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/nulls/null_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/nulls/null_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -104,12 +104,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -135,12 +138,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, CAST(analyzed_table.`date1` AS DATE) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, CAST(analyzed_table.`date1` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -162,12 +168,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -189,12 +198,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, CAST(analyzed_table.`date1` AS DATE) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, CAST(analyzed_table.`date1` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -221,12 +233,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -251,12 +266,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -281,12 +299,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1, CAST(analyzed_table.`date1` AS DATE) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1, CAST(analyzed_table.`date1` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -318,12 +339,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, CAST(analyzed_table.`date1` AS DATE) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, CAST(analyzed_table.`date1` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, time_period
@@ -349,12 +373,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, time_period
@@ -380,12 +407,15 @@ public class ColumnNullsNullCountSensorParametersSpecBigQueryTests extends BaseT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
-                    CASE
-                        WHEN %s IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, CAST(analyzed_table.`date1` AS DATE) AS time_period
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %s IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value, analyzed_table.`date2` AS stream_level_1, analyzed_table.`date4` AS stream_level_2, CAST(analyzed_table.`date1` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, stream_level_2, time_period

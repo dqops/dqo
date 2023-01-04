@@ -36,52 +36,52 @@ import java.util.Objects;
 public class ColumnBoolDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBoolDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_min_true_percent", o -> o.dailyCheckpointMinTruePercent);
-            put("daily_checkpoint_min_false_percent", o -> o.dailyCheckpointMinFalsePercent);
+            put("daily_checkpoint_true_percent", o -> o.dailyCheckpointTruePercent);
+            put("daily_checkpoint_false_percent", o -> o.dailyCheckpointFalsePercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinTruePercentCheckSpec dailyCheckpointMinTruePercent;
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnTruePercentCheckSpec dailyCheckpointTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinFalsePercentCheckSpec dailyCheckpointMinFalsePercent;
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnFalsePercentCheckSpec dailyCheckpointFalsePercent;
 
     /**
-     * Returns a minimum true percent check.
-     * @return Minimum true percent check.
+     * Returns a true percent check specification.
+     * @return True percent check specification.
      */
-    public ColumnMinTruePercentCheckSpec getDailyCheckpointMinTruePercent() {
-        return dailyCheckpointMinTruePercent;
+    public ColumnTruePercentCheckSpec getDailyCheckpointTruePercent() {
+        return dailyCheckpointTruePercent;
     }
 
     /**
-     * Sets a new definition of a minimum true percent check.
-     * @param dailyCheckpointMinTruePercent Minimum true percent check.
+     * Sets a new definition of a true percent check.
+     * @param dailyCheckpointTruePercent True percent check specification.
      */
-    public void setDailyCheckpointMinTruePercent(ColumnMinTruePercentCheckSpec dailyCheckpointMinTruePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinTruePercent, dailyCheckpointMinTruePercent));
-        this.dailyCheckpointMinTruePercent = dailyCheckpointMinTruePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinTruePercent, "daily_checkpoint_min_true_percent");
+    public void setDailyCheckpointTruePercent(ColumnTruePercentCheckSpec dailyCheckpointTruePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointTruePercent, dailyCheckpointTruePercent));
+        this.dailyCheckpointTruePercent = dailyCheckpointTruePercent;
+        propagateHierarchyIdToField(dailyCheckpointTruePercent, "daily_checkpoint_true_percent");
     }
 
     /**
-     * Returns a minimum false percent check.
-     * @return Minimum false percent check.
+     * Returns a false percent check specification.
+     * @return False percent check specification.
      */
-    public ColumnMinFalsePercentCheckSpec getDailyCheckpointMinFalsePercent() {
-        return dailyCheckpointMinFalsePercent;
+    public ColumnFalsePercentCheckSpec getDailyCheckpointFalsePercent() {
+        return dailyCheckpointFalsePercent;
     }
 
     /**
-     * Sets a new definition of a minimum false percent check.
-     * @param dailyCheckpointMinFalsePercent Minimum false percent check.
+     * Sets a new definition of a false percent check.
+     * @param dailyCheckpointFalsePercent False percent check specification.
      */
-    public void setDailyCheckpointMinFalsePercent(ColumnMinFalsePercentCheckSpec dailyCheckpointMinFalsePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinFalsePercent, dailyCheckpointMinFalsePercent));
-        this.dailyCheckpointMinFalsePercent = dailyCheckpointMinFalsePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinFalsePercent, "daily_checkpoint_min_false_percent");
+    public void setDailyCheckpointFalsePercent(ColumnFalsePercentCheckSpec dailyCheckpointFalsePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointFalsePercent, dailyCheckpointFalsePercent));
+        this.dailyCheckpointFalsePercent = dailyCheckpointFalsePercent;
+        propagateHierarchyIdToField(dailyCheckpointFalsePercent, "daily_checkpoint_false_percent");
     }
 
     /**

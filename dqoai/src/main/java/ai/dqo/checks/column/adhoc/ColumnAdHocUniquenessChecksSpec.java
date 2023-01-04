@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,73 +38,73 @@ import java.util.Objects;
 public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("min_unique_count", o -> o.minUniqueCount);
-            put("max_duplicate_count", o -> o.maxDuplicateCount);
-            put("max_duplicate_percent", o -> o.maxDuplicatePercent);
+            put("unique_count", o -> o.uniqueCount);
+            put("duplicate_count", o -> o.duplicateCount);
+            put("duplicate_percent", o -> o.duplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count.")
-    private ColumnMinUniqueCountCheckSpec minUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count.")
+    private ColumnUniqueCountCheckSpec uniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
-    private ColumnMaxDuplicateCountCheckSpec maxDuplicateCount;
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count.")
+    private ColumnDuplicateCountCheckSpec duplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent.")
-    private ColumnMaxDuplicatePercentCheckSpec maxDuplicatePercent;
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent.")
+    private ColumnDuplicatePercentCheckSpec duplicatePercent;
 
     /**
-     * Returns a minimum unique count check.
-     * @return Minimum unique count check.
+     * Returns a unique count check specification.
+     * @return Unique count check specification.
      */
-    public ColumnMinUniqueCountCheckSpec getMinUniqueCount() {
-        return minUniqueCount;
+    public ColumnUniqueCountCheckSpec getUniqueCount() {
+        return uniqueCount;
     }
 
     /**
-     * Sets a new definition of a minimum unique count check.
-     * @param minUniqueCount Minimum unique count check.
+     * Sets a new specification of a unique count check.
+     * @param uniqueCount Unique count check specification.
      */
-    public void setMinUniqueCount(ColumnMinUniqueCountCheckSpec minUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.minUniqueCount, minUniqueCount));
-        this.minUniqueCount = minUniqueCount;
-        propagateHierarchyIdToField(minUniqueCount, "min_unique_count");
+    public void setUniqueCount(ColumnUniqueCountCheckSpec uniqueCount) {
+        this.setDirtyIf(!Objects.equals(this.uniqueCount, uniqueCount));
+        this.uniqueCount = uniqueCount;
+        propagateHierarchyIdToField(uniqueCount, "unique_count");
     }
 
     /**
-     * Returns a maximum duplicate count check.
-     * @return Maximum duplicate count check.
+     * Returns a duplicate count check specification.
+     * @return Duplicate count check specification.
      */
-    public ColumnMaxDuplicateCountCheckSpec getMaxDuplicateCount() {
-        return maxDuplicateCount;
+    public ColumnDuplicateCountCheckSpec getDuplicateCount() {
+        return duplicateCount;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate count check.
-     * @param maxDuplicateCount Maximum duplicate count check.
+     * Sets a new specification of a duplicate count check.
+     * @param duplicateCount Duplicate count check specification.
      */
-    public void setMaxDuplicateCount(ColumnMaxDuplicateCountCheckSpec maxDuplicateCount) {
-        this.setDirtyIf(!Objects.equals(this.maxDuplicateCount, maxDuplicateCount));
-        this.maxDuplicateCount = maxDuplicateCount;
-        propagateHierarchyIdToField(maxDuplicateCount, "max_duplicate_count");
+    public void setDuplicateCount(ColumnDuplicateCountCheckSpec duplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.duplicateCount, duplicateCount));
+        this.duplicateCount = duplicateCount;
+        propagateHierarchyIdToField(duplicateCount, "duplicate_count");
     }
 
     /**
-     * Returns a maximum duplicate percent check.
-     * @return Maximum duplicate percent check.
+     * Returns a duplicate percent check specification.
+     * @return Duplicate percent check specification.
      */
-    public ColumnMaxDuplicatePercentCheckSpec getMaxDuplicatePercent() {
-        return maxDuplicatePercent;
+    public ColumnDuplicatePercentCheckSpec getDuplicatePercent() {
+        return duplicatePercent;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate percent check.
-     * @param maxDuplicatePercent Maximum duplicate percent check.
+     * Sets a new specification of a duplicate percent check.
+     * @param duplicatePercent Duplicate percent check specification.
      */
-    public void setMaxDuplicatePercent(ColumnMaxDuplicatePercentCheckSpec maxDuplicatePercent) {
-        this.setDirtyIf(!Objects.equals(this.maxDuplicatePercent, maxDuplicatePercent));
-        this.maxDuplicatePercent = maxDuplicatePercent;
-        propagateHierarchyIdToField(maxDuplicatePercent, "max_duplicate_percent");
+    public void setDuplicatePercent(ColumnDuplicatePercentCheckSpec duplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.duplicatePercent, duplicatePercent));
+        this.duplicatePercent = duplicatePercent;
+        propagateHierarchyIdToField(duplicatePercent, "duplicate_percent");
     }
 
     /**

@@ -19,7 +19,7 @@ import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNullCountProfilerSpec extends AbstractProfilerSpec<ColumnNullsNullCountSensorParametersSpec> {
+public class ColumnNullsNullCountProfilerSpec extends AbstractProfilerSpec<ColumnNullsNullsCountSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullCountProfilerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractProfilerSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnNullsNullCountProfilerSpec extends AbstractProfilerSpec<Colum
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullCountSensorParametersSpec parameters = new ColumnNullsNullCountSensorParametersSpec();
+    private ColumnNullsNullsCountSensorParametersSpec parameters = new ColumnNullsNullsCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNullCountSensorParametersSpec getParameters() {
+    public ColumnNullsNullsCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsNullCountProfilerSpec extends AbstractProfilerSpec<Colum
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNullCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNullsCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

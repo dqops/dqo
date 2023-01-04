@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.uniqueness;
+package ai.dqo.checks.column.checkspecs.nulls;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessDuplicatePercentSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+ * Column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxDuplicatePercentCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDuplicatePercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxDuplicatePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnNullsPercentCheckSpec
+        extends AbstractCheckSpec<ColumnNullsNullsPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,9 +49,9 @@ public class ColumnMaxDuplicatePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDuplicatePercentSensorParametersSpec parameters = new ColumnUniquenessDuplicatePercentSensorParametersSpec();
+    private ColumnNullsNullsPercentSensorParametersSpec parameters = new ColumnNullsNullsPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxPercentRule2ParametersSpec error;
@@ -71,7 +71,7 @@ public class ColumnMaxDuplicatePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessDuplicatePercentSensorParametersSpec getParameters() {
+    public ColumnNullsNullsPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,10 +79,10 @@ public class ColumnMaxDuplicatePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessDuplicatePercentSensorParametersSpec parameters) {
-		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(ColumnNullsNullsPercentSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-		this.propagateHierarchyIdToField(parameters, "parameters");
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**

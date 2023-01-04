@@ -24,13 +24,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the number of rows with a null column value.
+ * Column-level sensor that calculates the number of rows with null values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNullCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnNullsNullsCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullsCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };

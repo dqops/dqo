@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.checkpoints.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMaxDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnMinUniqueCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,73 +38,73 @@ import java.util.Objects;
 public class ColumnUniquenessDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_min_unique_count", o -> o.dailyCheckpointMinUniqueCount);
-            put("daily_checkpoint_max_duplicate_count", o -> o.dailyCheckpointMaxDuplicateCount);
-            put("daily_checkpoint_max_duplicate_percent", o -> o.dailyCheckpointMaxDuplicatePercent);
+            put("daily_checkpoint_unique_count", o -> o.dailyCheckpointUniqueCount);
+            put("daily_checkpoint_duplicate_count", o -> o.dailyCheckpointDuplicateCount);
+            put("daily_checkpoint_duplicate_percent", o -> o.dailyCheckpointDuplicatePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinUniqueCountCheckSpec dailyCheckpointMinUniqueCount;
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnUniqueCountCheckSpec dailyCheckpointUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicateCountCheckSpec dailyCheckpointMaxDuplicateCount;
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicateCountCheckSpec dailyCheckpointDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxDuplicatePercentCheckSpec dailyCheckpointMaxDuplicatePercent;
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnDuplicatePercentCheckSpec dailyCheckpointDuplicatePercent;
 
     /**
-     * Returns a minimum unique values count check.
-     * @return Minimum unique values count check.
+     * Returns a unique values count check specification.
+     * @return Unique values count check specification.
      */
-    public ColumnMinUniqueCountCheckSpec getDailyCheckpointMinUniqueCount() {
-        return dailyCheckpointMinUniqueCount;
+    public ColumnUniqueCountCheckSpec getDailyCheckpointUniqueCount() {
+        return dailyCheckpointUniqueCount;
     }
 
     /**
-     * Sets a new definition of a minimum unique values count check.
-     * @param dailyCheckpointMinUniqueCount Minimum unique values count check.
+     * Sets a new specification of a unique values count check.
+     * @param dailyCheckpointUniqueCount Unique values count check specification.
      */
-    public void setDailyCheckpointMinUniqueCount(ColumnMinUniqueCountCheckSpec dailyCheckpointMinUniqueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinUniqueCount, dailyCheckpointMinUniqueCount));
-        this.dailyCheckpointMinUniqueCount = dailyCheckpointMinUniqueCount;
-        propagateHierarchyIdToField(dailyCheckpointMinUniqueCount, "daily_checkpoint_min_unique_count");
+    public void setDailyCheckpointUniqueCount(ColumnUniqueCountCheckSpec dailyCheckpointUniqueCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointUniqueCount, dailyCheckpointUniqueCount));
+        this.dailyCheckpointUniqueCount = dailyCheckpointUniqueCount;
+        propagateHierarchyIdToField(dailyCheckpointUniqueCount, "daily_checkpoint_unique_count");
     }
 
     /**
-     * Returns a maximum duplicate values count check.
-     * @return Maximum duplicate values count check.
+     * Returns a  duplicate values count check specification.
+     * @return Duplicate values count check specification.
      */
-    public ColumnMaxDuplicateCountCheckSpec getDailyCheckpointMaxDuplicateCount() {
-        return dailyCheckpointMaxDuplicateCount;
+    public ColumnDuplicateCountCheckSpec getDailyCheckpointDuplicateCount() {
+        return dailyCheckpointDuplicateCount;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values count check.
-     * @param dailyCheckpointMaxDuplicateCount Maximum duplicate values count check.
+     * Sets a new specification of a duplicate values count check.
+     * @param dailyCheckpointDuplicateCount Duplicate values count check specification.
      */
-    public void setDailyCheckpointMaxDuplicateCount(ColumnMaxDuplicateCountCheckSpec dailyCheckpointMaxDuplicateCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDuplicateCount, dailyCheckpointMaxDuplicateCount));
-        this.dailyCheckpointMaxDuplicateCount = dailyCheckpointMaxDuplicateCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxDuplicateCount, "daily_checkpoint_max_duplicate_count");
+    public void setDailyCheckpointDuplicateCount(ColumnDuplicateCountCheckSpec dailyCheckpointDuplicateCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDuplicateCount, dailyCheckpointDuplicateCount));
+        this.dailyCheckpointDuplicateCount = dailyCheckpointDuplicateCount;
+        propagateHierarchyIdToField(dailyCheckpointDuplicateCount, "daily_checkpoint_duplicate_count");
     }
 
     /**
-     * Returns a maximum duplicate values percent check.
-     * @return Maximum duplicate values percent check.
+     * Returns a duplicate values percent check specification.
+     * @return Duplicate values percent check specification.
      */
-    public ColumnMaxDuplicatePercentCheckSpec getDailyCheckpointMaxDuplicatePercent() {
-        return dailyCheckpointMaxDuplicatePercent;
+    public ColumnDuplicatePercentCheckSpec getDailyCheckpointDuplicatePercent() {
+        return dailyCheckpointDuplicatePercent;
     }
 
     /**
-     * Sets a new definition of a maximum duplicate values percent check.
-     * @param dailyCheckpointMaxDuplicatePercent Maximum duplicate values percent check.
+     * Sets a new specification of a duplicate values percent check.
+     * @param dailyCheckpointDuplicatePercent Duplicate values percent check specification.
      */
-    public void setDailyCheckpointMaxDuplicatePercent(ColumnMaxDuplicatePercentCheckSpec dailyCheckpointMaxDuplicatePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxDuplicatePercent, dailyCheckpointMaxDuplicatePercent));
-        this.dailyCheckpointMaxDuplicatePercent = dailyCheckpointMaxDuplicatePercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxDuplicatePercent, "daily_checkpoint_max_duplicate_percent");
+    public void setDailyCheckpointDuplicatePercent(ColumnDuplicatePercentCheckSpec dailyCheckpointDuplicatePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDuplicatePercent, dailyCheckpointDuplicatePercent));
+        this.dailyCheckpointDuplicatePercent = dailyCheckpointDuplicatePercent;
+        propagateHierarchyIdToField(dailyCheckpointDuplicatePercent, "daily_checkpoint_duplicate_percent");
     }
 
     /**
