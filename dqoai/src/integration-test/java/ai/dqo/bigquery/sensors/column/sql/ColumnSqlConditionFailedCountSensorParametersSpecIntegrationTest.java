@@ -17,7 +17,6 @@ package ai.dqo.bigquery.sensors.column.sql;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnMaxSqlConditionFailedCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -30,7 +29,6 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
 import ai.dqo.sensors.column.sql.ColumnSqlConditionFailedCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 public class ColumnSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.table.sql;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableMinSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableSqlConditionPassedPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMinSqlConditionPassedPercentCheckSpec checkSpec;
+    private TableSqlConditionPassedPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class TableSqlConditionPassedPercentSensorParametersSpecIntegrationTest e
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlConditionPassedPercentSensorParametersSpec();
-        this.checkSpec = new TableMinSqlConditionPassedPercentCheckSpec();
+        this.checkSpec = new TableSqlConditionPassedPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

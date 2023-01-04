@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.table.sql;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableMaxSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMaxSqlConditionFailedCountCheckSpec checkSpec;
+    private TableSqlConditionFailedCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
-        this.checkSpec = new TableMaxSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new TableSqlConditionFailedCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
