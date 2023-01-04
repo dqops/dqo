@@ -10,6 +10,7 @@ interface IDataQualityChecksProps {
   className?: string;
   checkResultsOverview?: CheckResultsOverviewDataModel[];
   getCheckOverview?: () => void;
+  onUpdate: () => void;
 }
 
 const TableHeader = () => {
@@ -54,7 +55,7 @@ const TableHeader = () => {
   );
 };
 
-const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview }: IDataQualityChecksProps) => {
+const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate }: IDataQualityChecksProps) => {
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
     check: UICheckModel,
@@ -118,6 +119,7 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
                     }
                     checkResult={checkResultsOverview.find((item) => item.checkName === check.check_name && category.category === item.checkCategory)}
                     getCheckOverview={getCheckOverview}
+                    onUpdate={onUpdate}
                   />
                 ))}
             </>

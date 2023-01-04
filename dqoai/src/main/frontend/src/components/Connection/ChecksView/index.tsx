@@ -78,6 +78,7 @@ const ChecksView = ({
       </div>
       <div>
         <DataQualityChecks
+          onUpdate={onUpdate}
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
           className="max-h-checks-1"

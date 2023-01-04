@@ -23,6 +23,7 @@ interface ICheckListItemProps {
   category?: string;
   checkResult?: CheckResultsOverviewDataModel;
   getCheckOverview?: () => void;
+  onUpdate: () => void;
 }
 
 export interface ITab {
@@ -32,7 +33,7 @@ export interface ITab {
   field?: UIFieldModel;
 }
 
-const CheckListItem = ({ check, onChange, checkResult, getCheckOverview }: ICheckListItemProps) => {
+const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdate }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
@@ -112,6 +113,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview }: IChec
   };
 
   const onRunCheck = () => {
+    onUpdate();
     JobApiClient.runChecks(check?.run_checks_job_template);
   };
 
