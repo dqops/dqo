@@ -59,7 +59,7 @@ const TimestampsView = ({
 
   useEffect(() => {
     dispatch(getTableBasic(connectionName, schemaName, tableName));
-  }, []);
+  }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     await dispatch(
