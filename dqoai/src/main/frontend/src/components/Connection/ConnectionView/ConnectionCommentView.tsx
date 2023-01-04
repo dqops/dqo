@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import CommentsView from '../CommentsView';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useSelector } from 'react-redux';
@@ -23,6 +23,7 @@ const ConnectionCommentView = ({
     (state: IRootState) => state.connection
   );
   const dispatch = useActionDispatch();
+  const [text, setText] = useState('');
 
   useEffect(() => {
     if (!updatedComments) {
@@ -32,7 +33,11 @@ const ConnectionCommentView = ({
 
   const onUpdate = async () => {
     await dispatch(
-      updateConnectionComments(connectionName, updatedComments || [])
+      updateConnectionComments(connectionName, [...(updatedComments || []), ...text ? [{
+        comment: text,
+        comment_by: 'user',
+        date: new Date().toISOString()
+      }] : []])
     );
     await dispatch(getConnectionComments(connectionName));
     dispatch(setIsUpdatedComments(false));
@@ -51,6 +56,8 @@ const ConnectionCommentView = ({
         isUpdating={isUpdating}
       />
       <CommentsView
+        text={text}
+        setText={setText}
         isUpdated={isUpdatedComments}
         setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
         comments={updatedComments || []}
