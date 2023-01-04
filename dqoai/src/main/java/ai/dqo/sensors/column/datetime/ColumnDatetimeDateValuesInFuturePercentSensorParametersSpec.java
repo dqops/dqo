@@ -42,7 +42,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
 
     @JsonPropertyDescription("Select the column on which the check will be run.")
     @ControlType(ParameterDataType.column_name_type)
-    private String column;
+    private String columnName;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -68,16 +68,16 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
      * Returns the column's name.
      * @return Column's name.
      */
-    public String getColumn() {
-        return column;
+    public String getColumnName() {
+        return columnName;
     }
 
     /**
      * Sets the column's name.
-     * @param column
+     * @param columnName
      */
-    public void setColumn(String column) {
-        this.setDirtyIf(!Objects.equals(this.column, column));
-        this.column = column;
+    public void setColumnName(String columnName) {
+        this.setDirtyIf(!Objects.equals(this.columnName, columnName));
+        this.columnName = columnName;
     }
 }
