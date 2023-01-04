@@ -18,22 +18,17 @@ package ai.dqo.bigquery.sensors.table.timeliness;
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
-import ai.dqo.checks.table.timeliness.TableTimelinessAverageDelayCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpecObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.BuiltInTimeScale;
-import ai.dqo.sensors.table.timeliness.TableTimelinessAverageDelaySensorParametersSpec;
 import ai.dqo.sensors.table.timeliness.TableTimelinessDataIngestionDelaySensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +36,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 @SpringBootTest
 public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
@@ -110,11 +103,6 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        LocalDateTime ld = LocalDateTime.now();
-        Duration timediff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ld);
-        double min = timediff.getSeconds()/24.0/ 3600.0 - 1;
-        double max = timediff.getSeconds()/24.0/ 3600.0 + 1;
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
