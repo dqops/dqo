@@ -40,9 +40,9 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
         }
     };
 
-    @JsonPropertyDescription("Timestamp column to measure timeliness. Other data types will be cast as Timestamp if possible.")
+    @JsonPropertyDescription("Select the column on which the check will be run.")
     @ControlType(ParameterDataType.column_name_type)
-    private String columnName;
+    private String column;
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -68,16 +68,16 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
      * Returns the column's name.
      * @return Column's name.
      */
-    public String getColumnName() {
-        return columnName;
+    public String getColumn() {
+        return column;
     }
 
     /**
      * Sets the column's name.
-     * @param columnName
+     * @param column
      */
-    public void setColumnName(String columnName) {
-        this.setDirtyIf(!Objects.equals(this.columnName, columnName));
-        this.columnName = columnName;
+    public void setColumn(String column) {
+        this.setDirtyIf(!Objects.equals(this.column, column));
+        this.column = column;
     }
 }
