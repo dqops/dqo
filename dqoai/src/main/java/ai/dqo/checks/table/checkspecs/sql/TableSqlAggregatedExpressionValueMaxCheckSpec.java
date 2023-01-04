@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
+public class TableSqlAggregatedExpressionValueMaxCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
         MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionMaxValueCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionValueMaxCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

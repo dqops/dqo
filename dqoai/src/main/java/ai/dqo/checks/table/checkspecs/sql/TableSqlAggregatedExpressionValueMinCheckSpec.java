@@ -19,10 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinPercentRule100ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.table.sql.TableSqlConditionPassedPercentSensorParametersSpec;
+import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
+import ai.dqo.sensors.table.sql.TableSqlAggregatedExpressionSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,44 +32,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+ * Table level check that calculates a given SQL aggregate expression and compares it with a minimum accepted value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMinSqlConditionPassedPercentCheckSpec
-        extends AbstractCheckSpec<TableSqlConditionPassedPercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMinSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableSqlAggregatedExpressionValueMinCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
+        MinValueRuleParametersSpec, MinValueRuleParametersSpec, MinValueRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregatedExpressionValueMinCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a table")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlConditionPassedPercentSensorParametersSpec parameters = new TableSqlConditionPassedPercentSensorParametersSpec();
+    private TableSqlAggregatedExpressionSensorParametersSpec parameters = new TableSqlAggregatedExpressionSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is below the minimum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private MinValueRuleParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). The warning is considered as a passed data quality check.")
+    @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is below the minimum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MinValueRuleParametersSpec warning;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
+    @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is below the minimum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private MinValueRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public TableSqlConditionPassedPercentSensorParametersSpec getParameters() {
+    public TableSqlAggregatedExpressionSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,10 +77,10 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableSqlConditionPassedPercentSensorParametersSpec parameters) {
-        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(TableSqlAggregatedExpressionSensorParametersSpec parameters) {
+		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-        this.propagateHierarchyIdToField(parameters, "parameters");
+		this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -91,7 +89,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public MinValueRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -99,7 +97,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(MinValueRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -111,7 +109,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MinValueRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -119,7 +117,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MinValueRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -131,7 +129,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public MinValueRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +137,7 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(MinValueRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -162,6 +160,6 @@ public class TableMinSqlConditionPassedPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.VALIDITY;
+        return DefaultDataQualityDimensions.REASONABLENESS;
     }
 }

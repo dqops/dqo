@@ -18,7 +18,7 @@ package ai.dqo.data.readouts.normalization;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableMinRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
@@ -54,7 +54,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     private Table table;
     private UserHomeImpl userHome;
     private TableSpec tableSpec;
-    private TableMinRowCountCheckSpec checkSpec;
+    private TableRowCountCheckSpec checkSpec;
     private SensorExecutionRunParameters sensorExecutionRunParameters;
     private SensorExecutionResult sensorExecutionResult;
 
@@ -76,9 +76,9 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		this.utcZone = connectionWrapper.getSpec().getJavaTimeZoneId();
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
-		checkSpec = new TableMinRowCountCheckSpec();
+		checkSpec = new TableRowCountCheckSpec();
         tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
-		tableSpec.getChecks().getStandard().setMinRowCount(checkSpec);
+		tableSpec.getChecks().getStandard().setRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,

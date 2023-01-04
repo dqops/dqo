@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.table.sql;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableMinSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableSqlConditionPassedPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private TableSqlConditionPassedPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableMinSqlConditionPassedPercentCheckSpec checkSpec;
+    private TableSqlConditionPassedPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class TableSqlConditionPassedPercentSensorParametersSpecBigQueryTests ext
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableMinSqlConditionPassedPercentCheckSpec();
+        this.checkSpec = new TableSqlConditionPassedPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

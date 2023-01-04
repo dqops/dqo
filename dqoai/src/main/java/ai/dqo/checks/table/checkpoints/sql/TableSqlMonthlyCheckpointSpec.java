@@ -16,10 +16,10 @@
 package ai.dqo.checks.table.checkpoints.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableMinSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMaxValueCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,193 +39,193 @@ import java.util.Objects;
 public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlMonthlyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_min_sql_condition_passed_percent_on_table_1", o -> o.monthlyCheckpointMinSqlConditionPassedPercentOnTable_1);
-            put("monthly_checkpoint_min_sql_condition_passed_percent_on_table_2", o -> o.monthlyCheckpointMinSqlConditionPassedPercentOnTable_2);
-            put("monthly_checkpoint_min_sql_condition_passed_percent_on_table_3", o -> o.monthlyCheckpointMinSqlConditionPassedPercentOnTable_3);
+            put("monthly_checkpoint_sql_condition_passed_percent_on_table_1", o -> o.monthlyCheckpointSqlConditionPassedPercentOnTable_1);
+            put("monthly_checkpoint_sql_condition_passed_percent_on_table_2", o -> o.monthlyCheckpointSqlConditionPassedPercentOnTable_2);
+            put("monthly_checkpoint_sql_condition_passed_percent_on_table_3", o -> o.monthlyCheckpointSqlConditionPassedPercentOnTable_3);
 
-            put("monthly_checkpoint_max_sql_condition_failed_count_on_table_1", o -> o.monthlyCheckpointMaxSqlConditionFailedCountOnTable_1);
-            put("monthly_checkpoint_max_sql_condition_failed_count_on_table_2", o -> o.monthlyCheckpointMaxSqlConditionFailedCountOnTable_2);
-            put("monthly_checkpoint_max_sql_condition_failed_count_on_table_3", o -> o.monthlyCheckpointMaxSqlConditionFailedCountOnTable_3);
+            put("monthly_checkpoint_sql_condition_failed_count_on_table_1", o -> o.monthlyCheckpointSqlConditionFailedCountOnTable_1);
+            put("monthly_checkpoint_sql_condition_failed_count_on_table_2", o -> o.monthlyCheckpointSqlConditionFailedCountOnTable_2);
+            put("monthly_checkpoint_sql_condition_failed_count_on_table_3", o -> o.monthlyCheckpointSqlConditionFailedCountOnTable_3);
 
-            put("monthly_checkpoint_min_sql_aggregated_expression_value_on_table", o -> o.monthlyCheckpointMinSqlAggregatedExpressionValueOnTable);
-            put("monthly_checkpoint_max_sql_aggregated_expression_value_on_table", o -> o.monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable);
+            put("monthly_checkpoint_sql_aggregated_expression_value_on_table_min", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin);
+            put("monthly_checkpoint_max_sql_aggregated_expression_value_on_table", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax);
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_2;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_3;
+    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
+    private TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_3;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_1;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_1;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_2;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_2;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_3;
+    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
+    private TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_3;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionMinValueCheckSpec monthlyCheckpointMinSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionMaxValueCheckSpec monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable;
+    private TableSqlAggregatedExpressionValueMaxCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
-        return monthlyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnTable_1() {
+        return monthlyCheckpointSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMonthlyCheckpointMinSqlConditionPassedPercentOnTable_1() {
-        return monthlyCheckpointMinSqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getMonthlyCheckpointSqlConditionPassedPercentOnTable_1() {
+        return monthlyCheckpointSqlConditionPassedPercentOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMinSqlConditionPassedPercentOnTable_1 Check specification.
+     * @param monthlyCheckpointSqlConditionPassedPercentOnTable_1 Check specification.
      */
-    public void setMonthlyCheckpointMinSqlConditionPassedPercentOnTable_1(TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_1, monthlyCheckpointMinSqlConditionPassedPercentOnTable_1));
-        this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_1 = monthlyCheckpointMinSqlConditionPassedPercentOnTable_1;
-        propagateHierarchyIdToField(monthlyCheckpointMinSqlConditionPassedPercentOnTable_1, "monthly_checkpoint_min_sql_condition_passed_percent_on_table_1");
+    public void setMonthlyCheckpointSqlConditionPassedPercentOnTable_1(TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionPassedPercentOnTable_1, monthlyCheckpointSqlConditionPassedPercentOnTable_1));
+        this.monthlyCheckpointSqlConditionPassedPercentOnTable_1 = monthlyCheckpointSqlConditionPassedPercentOnTable_1;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionPassedPercentOnTable_1, "monthly_checkpoint_sql_condition_passed_percent_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMonthlyCheckpointMinSqlConditionPassedPercentOnTable_2() {
-        return monthlyCheckpointMinSqlConditionPassedPercentOnTable_2;
+    public TableSqlConditionPassedPercentCheckSpec getMonthlyCheckpointSqlConditionPassedPercentOnTable_2() {
+        return monthlyCheckpointSqlConditionPassedPercentOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMinSqlConditionPassedPercentOnTable_2 Check specification.
+     * @param monthlyCheckpointSqlConditionPassedPercentOnTable_2 Check specification.
      */
-    public void setMonthlyCheckpointMinSqlConditionPassedPercentOnTable_2(TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_2, monthlyCheckpointMinSqlConditionPassedPercentOnTable_2));
-        this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_2 = monthlyCheckpointMinSqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(monthlyCheckpointMinSqlConditionPassedPercentOnTable_2, "monthly_checkpoint_min_sql_condition_passed_percent_on_table_2");
+    public void setMonthlyCheckpointSqlConditionPassedPercentOnTable_2(TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionPassedPercentOnTable_2, monthlyCheckpointSqlConditionPassedPercentOnTable_2));
+        this.monthlyCheckpointSqlConditionPassedPercentOnTable_2 = monthlyCheckpointSqlConditionPassedPercentOnTable_2;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionPassedPercentOnTable_2, "monthly_checkpoint_sql_condition_passed_percent_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMinSqlConditionPassedPercentCheckSpec getMonthlyCheckpointMinSqlConditionPassedPercentOnTable_3() {
-        return monthlyCheckpointMinSqlConditionPassedPercentOnTable_3;
+    public TableSqlConditionPassedPercentCheckSpec getMonthlyCheckpointSqlConditionPassedPercentOnTable_3() {
+        return monthlyCheckpointSqlConditionPassedPercentOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMinSqlConditionPassedPercentOnTable_3 Check specification.
+     * @param monthlyCheckpointSqlConditionPassedPercentOnTable_3 Check specification.
      */
-    public void setMonthlyCheckpointMinSqlConditionPassedPercentOnTable_3(TableMinSqlConditionPassedPercentCheckSpec monthlyCheckpointMinSqlConditionPassedPercentOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_3, monthlyCheckpointMinSqlConditionPassedPercentOnTable_3));
-        this.monthlyCheckpointMinSqlConditionPassedPercentOnTable_3 = monthlyCheckpointMinSqlConditionPassedPercentOnTable_3;
-        propagateHierarchyIdToField(monthlyCheckpointMinSqlConditionPassedPercentOnTable_3, "monthly_checkpoint_min_sql_condition_passed_percent_on_table_3");
+    public void setMonthlyCheckpointSqlConditionPassedPercentOnTable_3(TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionPassedPercentOnTable_3, monthlyCheckpointSqlConditionPassedPercentOnTable_3));
+        this.monthlyCheckpointSqlConditionPassedPercentOnTable_3 = monthlyCheckpointSqlConditionPassedPercentOnTable_3;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionPassedPercentOnTable_3, "monthly_checkpoint_sql_condition_passed_percent_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getMonthlyCheckpointMaxSqlConditionFailedCountOnTable_1() {
-        return monthlyCheckpointMaxSqlConditionFailedCountOnTable_1;
+    public TableSqlConditionFailedCountCheckSpec getMonthlyCheckpointSqlConditionFailedCountOnTable_1() {
+        return monthlyCheckpointSqlConditionFailedCountOnTable_1;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMaxSqlConditionFailedCountOnTable_1 Check specification.
+     * @param monthlyCheckpointSqlConditionFailedCountOnTable_1 Check specification.
      */
-    public void setMonthlyCheckpointMaxSqlConditionFailedCountOnTable_1(TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_1, monthlyCheckpointMaxSqlConditionFailedCountOnTable_1));
-        this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_1 = monthlyCheckpointMaxSqlConditionFailedCountOnTable_1;
-        propagateHierarchyIdToField(monthlyCheckpointMaxSqlConditionFailedCountOnTable_1, "monthly_checkpoint_max_sql_condition_failed_count_on_table_1");
+    public void setMonthlyCheckpointSqlConditionFailedCountOnTable_1(TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_1) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionFailedCountOnTable_1, monthlyCheckpointSqlConditionFailedCountOnTable_1));
+        this.monthlyCheckpointSqlConditionFailedCountOnTable_1 = monthlyCheckpointSqlConditionFailedCountOnTable_1;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionFailedCountOnTable_1, "monthly_checkpoint_sql_condition_failed_count_on_table_1");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getMonthlyCheckpointMaxSqlConditionFailedCountOnTable_2() {
-        return monthlyCheckpointMaxSqlConditionFailedCountOnTable_2;
+    public TableSqlConditionFailedCountCheckSpec getMonthlyCheckpointSqlConditionFailedCountOnTable_2() {
+        return monthlyCheckpointSqlConditionFailedCountOnTable_2;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMaxSqlConditionFailedCountOnTable_2 Check specification.
+     * @param monthlyCheckpointSqlConditionFailedCountOnTable_2 Check specification.
      */
-    public void setMonthlyCheckpointMaxSqlConditionFailedCountOnTable_2(TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_2, monthlyCheckpointMaxSqlConditionFailedCountOnTable_2));
-        this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_2 = monthlyCheckpointMaxSqlConditionFailedCountOnTable_2;
-        propagateHierarchyIdToField(monthlyCheckpointMaxSqlConditionFailedCountOnTable_2, "monthly_checkpoint_max_sql_condition_failed_count_on_table_2");
+    public void setMonthlyCheckpointSqlConditionFailedCountOnTable_2(TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_2) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionFailedCountOnTable_2, monthlyCheckpointSqlConditionFailedCountOnTable_2));
+        this.monthlyCheckpointSqlConditionFailedCountOnTable_2 = monthlyCheckpointSqlConditionFailedCountOnTable_2;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionFailedCountOnTable_2, "monthly_checkpoint_sql_condition_failed_count_on_table_2");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableMaxSqlConditionFailedCountCheckSpec getMonthlyCheckpointMaxSqlConditionFailedCountOnTable_3() {
-        return monthlyCheckpointMaxSqlConditionFailedCountOnTable_3;
+    public TableSqlConditionFailedCountCheckSpec getMonthlyCheckpointSqlConditionFailedCountOnTable_3() {
+        return monthlyCheckpointSqlConditionFailedCountOnTable_3;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMaxSqlConditionFailedCountOnTable_3 Check specification.
+     * @param monthlyCheckpointSqlConditionFailedCountOnTable_3 Check specification.
      */
-    public void setMonthlyCheckpointMaxSqlConditionFailedCountOnTable_3(TableMaxSqlConditionFailedCountCheckSpec monthlyCheckpointMaxSqlConditionFailedCountOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_3, monthlyCheckpointMaxSqlConditionFailedCountOnTable_3));
-        this.monthlyCheckpointMaxSqlConditionFailedCountOnTable_3 = monthlyCheckpointMaxSqlConditionFailedCountOnTable_3;
-        propagateHierarchyIdToField(monthlyCheckpointMaxSqlConditionFailedCountOnTable_3, "monthly_checkpoint_max_sql_condition_failed_count_on_table_3");
+    public void setMonthlyCheckpointSqlConditionFailedCountOnTable_3(TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable_3) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionFailedCountOnTable_3, monthlyCheckpointSqlConditionFailedCountOnTable_3));
+        this.monthlyCheckpointSqlConditionFailedCountOnTable_3 = monthlyCheckpointSqlConditionFailedCountOnTable_3;
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionFailedCountOnTable_3, "monthly_checkpoint_sql_condition_failed_count_on_table_3");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMinValueCheckSpec getMonthlyCheckpointMinSqlAggregatedExpressionValueOnTable() {
-        return monthlyCheckpointMinSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMinCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnTableMin() {
+        return monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMinSqlAggregatedExpressionValueOnTable Check specification.
+     * @param monthlyCheckpointSqlAggregatedExpressionValueOnTableMin Check specification.
      */
-    public void setMonthlyCheckpointMinSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMinValueCheckSpec monthlyCheckpointMinSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinSqlAggregatedExpressionValueOnTable, monthlyCheckpointMinSqlAggregatedExpressionValueOnTable));
-        this.monthlyCheckpointMinSqlAggregatedExpressionValueOnTable = monthlyCheckpointMinSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(monthlyCheckpointMinSqlAggregatedExpressionValueOnTable, "monthly_checkpoint_min_sql_aggregated_expression_value_on_table");
+    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMin) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin, monthlyCheckpointSqlAggregatedExpressionValueOnTableMin));
+        this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin = monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
+        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnTableMin, "monthly_checkpoint_sql_aggregated_expression_value_on_table_min");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionMaxValueCheckSpec getMonthlyCheckpointMaxSqlAggregatedExpressionValueOnTable() {
-        return monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable;
+    public TableSqlAggregatedExpressionValueMaxCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnTableMax() {
+        return monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable Check specification.
+     * @param monthlyCheckpointSqlAggregatedExpressionValueOnTableMax Check specification.
      */
-    public void setMonthlyCheckpointMaxSqlAggregatedExpressionValueOnTable(TableSqlAggregatedExpressionMaxValueCheckSpec monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable, monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable));
-        this.monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable = monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable;
-        propagateHierarchyIdToField(monthlyCheckpointMaxSqlAggregatedExpressionValueOnTable, "monthly_checkpoint_max_sql_aggregated_expression_value_on_table");
+    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMax) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax, monthlyCheckpointSqlAggregatedExpressionValueOnTableMax));
+        this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax = monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
+        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnTableMax, "monthly_checkpoint_sql_aggregated_expression_value_on_table_max");
     }
 
     /**

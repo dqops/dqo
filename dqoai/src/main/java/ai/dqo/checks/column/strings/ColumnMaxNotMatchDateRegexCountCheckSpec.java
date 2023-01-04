@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.checkspecs.sql;
+package ai.dqo.checks.column.strings;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,34 +33,34 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that there are no more than a maximum number of rows fail a custom SQL condition (expression).
+ * Column check that calculates quantity of values that does not match the date regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMaxSqlConditionFailedCountCheckSpec
-        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMaxSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMaxNotMatchDateRegexCountCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNotMatchDateRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row")
+    @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlConditionFailedCountSensorParametersSpec parameters = new TableSqlConditionFailedCountSensorParametersSpec();
+    private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching date regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule10ParametersSpec warning;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec fatal;
@@ -70,7 +70,7 @@ public class TableMaxSqlConditionFailedCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public TableSqlConditionFailedCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class TableMaxSqlConditionFailedCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableSqlConditionFailedCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -161,6 +161,6 @@ public class TableMaxSqlConditionFailedCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.VALIDITY;
+        return DefaultDataQualityDimensions.COMPLETENESS;
     }
 }

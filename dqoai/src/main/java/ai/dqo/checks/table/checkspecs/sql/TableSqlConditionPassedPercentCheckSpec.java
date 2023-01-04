@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.checkspecs.standard;
+package ai.dqo.checks.table.checkspecs.sql;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule100ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
+import ai.dqo.sensors.table.sql.TableSqlConditionPassedPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,43 +34,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the min row count rule.
+ * Table level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec, MinCountRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMinRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableSqlConditionPassedPercentCheckSpec
+        extends AbstractCheckSpec<TableSqlConditionPassedPercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Row count sensor parameters")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
+    private TableSqlConditionPassedPercentSensorParametersSpec parameters = new TableSqlConditionPassedPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
+    private MinPercentRule99ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec warning;
+    private MinPercentRule100ParametersSpec warning;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec fatal;
+    private MinPercentRule95ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public TableStandardRowCountSensorParametersSpec getParameters() {
+    public TableSqlConditionPassedPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,10 +79,10 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
-		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(TableSqlConditionPassedPercentSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-		this.propagateHierarchyIdToField(parameters, "parameters");
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -89,7 +91,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRule0ParametersSpec getError() {
+    public MinPercentRule99ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +99,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRule0ParametersSpec error) {
+    public void setError(MinPercentRule99ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +111,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getWarning() {
+    public MinPercentRule100ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +119,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleParametersSpec warning) {
+    public void setWarning(MinPercentRule100ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +131,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getFatal() {
+    public MinPercentRule95ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +139,7 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleParametersSpec fatal) {
+    public void setFatal(MinPercentRule95ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -160,6 +162,6 @@ public class TableMinRowCountCheckSpec extends AbstractCheckSpec<TableStandardRo
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.VALIDITY;
     }
 }

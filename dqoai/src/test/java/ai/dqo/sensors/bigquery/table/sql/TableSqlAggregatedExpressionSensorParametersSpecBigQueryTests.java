@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.table.sql;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableSqlAggregatedExpressionSensorParametersSpecBigQueryTests extends BaseTest {
     private TableSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlAggregatedExpressionMinValueCheckSpec checkSpec;
+    private TableSqlAggregatedExpressionValueMinCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecBigQueryTests exten
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new TableSqlAggregatedExpressionMinValueCheckSpec();
+        this.checkSpec = new TableSqlAggregatedExpressionValueMinCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
