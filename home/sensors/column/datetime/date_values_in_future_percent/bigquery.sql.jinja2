@@ -2,21 +2,21 @@
 
 {% macro render_value_in_future(column_name) -%}
     {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
-    'CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
+    CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
         THEN 1
-        ELSE 0'
+        ELSE 0
     {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
     CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_DATE()
         THEN 1
         ELSE 0
     {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
-    'CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_DATETIME()
+    CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_DATETIME()
         THEN 1
-        ELSE 0'
+        ELSE 0
     {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
-    'CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
+    CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
         THEN 1
-        ELSE 0'
+        ELSE 0
     {%- else -%}
     <INVALID DATA TYPE: {{table.columns[column_name].type_snapshot.column_type}}/>
     {%- endif -%}
