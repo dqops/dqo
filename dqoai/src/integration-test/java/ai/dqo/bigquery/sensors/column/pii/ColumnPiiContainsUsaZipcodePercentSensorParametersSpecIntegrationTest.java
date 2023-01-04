@@ -17,8 +17,7 @@ package ai.dqo.bigquery.sensors.column.pii;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
-import ai.dqo.checks.column.pii.ColumnMaxPiiContainsUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -30,7 +29,6 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
 import ai.dqo.sensors.column.pii.ColumnPiiContainsUsaZipcodePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnPiiContainsUsaZipcodePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxPiiContainsUsaZipcodePercentCheckSpec checkSpec;
+    private ColumnPiiContainsUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +57,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecIntegrationTe
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnPiiContainsUsaZipcodePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMaxPiiContainsUsaZipcodePercentCheckSpec();
+		this.checkSpec = new ColumnPiiContainsUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

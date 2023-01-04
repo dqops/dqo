@@ -17,8 +17,7 @@ package ai.dqo.bigquery.sensors.column.bool;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.bool.ColumnMinFalsePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnMaxNullsCountCheckSpec;
+import ai.dqo.checks.column.bool.ColumnFalsePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -31,7 +30,6 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.bool.ColumnBoolFalsePercentSensorParametersSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnBoolFalsePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinFalsePercentCheckSpec checkSpec;
+    private ColumnFalsePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +57,7 @@ public class ColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends B
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnBoolFalsePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinFalsePercentCheckSpec();
+		this.checkSpec = new ColumnFalsePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
