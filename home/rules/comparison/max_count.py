@@ -61,6 +61,8 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
     passed = rule_parameters.actual_value <= rule_parameters.parameters.max_count
     expected_value = rule_parameters.parameters.max_count
     lower_bound = rule_parameters.parameters.max_count
