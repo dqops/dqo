@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.sql;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMaxValueCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMaxCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlAggregatedExpressionMaxValueCheckSpec checkSpec;
+    private ColumnSqlAggregatedExpressionValueMaxCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -57,7 +57,7 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTest ex
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnSqlAggregatedExpressionSensorParametersSpec();
-		this.checkSpec = new ColumnSqlAggregatedExpressionMaxValueCheckSpec();
+		this.checkSpec = new ColumnSqlAggregatedExpressionValueMaxCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
