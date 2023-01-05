@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.partitioned.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMinSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMaxValueCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMaxCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,185 +39,97 @@ import java.util.Objects;
 public class ColumnSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlMonthlyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_min_sql_condition_passed_percent_on_column_1", o -> o.monthlyPartitionMinSqlConditionPassedPercentOnColumn_1);
-            put("monthly_partition_min_sql_condition_passed_percent_on_column_2", o -> o.monthlyPartitionMinSqlConditionPassedPercentOnColumn_2);
-            put("monthly_partition_min_sql_condition_passed_percent_on_column_3", o -> o.monthlyPartitionMinSqlConditionPassedPercentOnColumn_3);
+            put("monthly_partition_sql_condition_passed_percent_on_column", o -> o.monthlyPartitionSqlConditionPassedPercentOnColumn);
 
-            put("monthly_partition_max_sql_condition_failed_count_on_column_1", o -> o.monthlyPartitionMaxSqlConditionFailedCountOnColumn_1);
-            put("monthly_partition_max_sql_condition_failed_count_on_column_2", o -> o.monthlyPartitionMaxSqlConditionFailedCountOnColumn_2);
-            put("monthly_partition_max_sql_condition_failed_count_on_column_3", o -> o.monthlyPartitionMaxSqlConditionFailedCountOnColumn_3);
+            put("monthly_partition_sql_condition_failed_count_on_column", o -> o.monthlyPartitionSqlConditionFailedCountOnColumn);
 
-            put("monthly_partition_min_sql_aggregated_expression_value_on_column", o -> o.monthlyPartitionMinSqlAggregatedExpressionValueOnColumn);
-            put("monthly_partition_max_sql_aggregated_expression_value_on_column", o -> o.monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn);
+            put("monthly_partition_sql_aggregated_expression_value_on_column_min", o -> o.monthlyPartitionSqlAggregatedExpressionValueOnColumnMin);
+            put("monthly_partition_sql_aggregated_expression_value_on_column_max", o -> o.monthlyPartitionSqlAggregatedExpressionValueOnColumnMax);
         }
     };
 
     @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_1;
-
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_2;
-
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_3;
+    private ColumnSqlConditionPassedPercentCheckSpec monthlyPartitionSqlConditionPassedPercentOnColumn;
 
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_1;
-
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_2;
-
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_3;
+    private ColumnSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private ColumnSqlAggregatedExpressionMinValueCheckSpec monthlyPartitionMinSqlAggregatedExpressionValueOnColumn;
+    private ColumnSqlAggregatedExpressionValueMinCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnColumnMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregatedExpressionMaxValueCheckSpec monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn;
+    private ColumnSqlAggregatedExpressionValueMaxCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnColumnMax;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMonthlyPartitionMinSqlConditionPassedPercentOnColumn_1() {
-        return monthlyPartitionMinSqlConditionPassedPercentOnColumn_1;
+    public ColumnSqlConditionPassedPercentCheckSpec getMonthlyPartitionSqlConditionPassedPercentOnColumn() {
+        return monthlyPartitionSqlConditionPassedPercentOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionMinSqlConditionPassedPercentOnColumn_1 Check specification.
+     * @param monthlyPartitionSqlConditionPassedPercentOnColumn Check specification.
      */
-    public void setMonthlyPartitionMinSqlConditionPassedPercentOnColumn_1(ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_1) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_1, monthlyPartitionMinSqlConditionPassedPercentOnColumn_1));
-        this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_1 = monthlyPartitionMinSqlConditionPassedPercentOnColumn_1;
-        propagateHierarchyIdToField(monthlyPartitionMinSqlConditionPassedPercentOnColumn_1, "monthly_partition_min_sql_condition_passed_percent_on_column_1");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMonthlyPartitionMinSqlConditionPassedPercentOnColumn_2() {
-        return monthlyPartitionMinSqlConditionPassedPercentOnColumn_2;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionMinSqlConditionPassedPercentOnColumn_2 Check specification.
-     */
-    public void setMonthlyPartitionMinSqlConditionPassedPercentOnColumn_2(ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_2) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_2, monthlyPartitionMinSqlConditionPassedPercentOnColumn_2));
-        this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_2 = monthlyPartitionMinSqlConditionPassedPercentOnColumn_2;
-        propagateHierarchyIdToField(monthlyPartitionMinSqlConditionPassedPercentOnColumn_1, "monthly_partition_min_sql_condition_passed_percent_on_column_2");
+    public void setMonthlyPartitionSqlConditionPassedPercentOnColumn(ColumnSqlConditionPassedPercentCheckSpec monthlyPartitionSqlConditionPassedPercentOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlConditionPassedPercentOnColumn, monthlyPartitionSqlConditionPassedPercentOnColumn));
+        this.monthlyPartitionSqlConditionPassedPercentOnColumn = monthlyPartitionSqlConditionPassedPercentOnColumn;
+        propagateHierarchyIdToField(monthlyPartitionSqlConditionPassedPercentOnColumn, "monthly_partition_sql_condition_passed_percent_on_column");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMonthlyPartitionMinSqlConditionPassedPercentOnColumn_3() {
-        return monthlyPartitionMinSqlConditionPassedPercentOnColumn_3;
+    public ColumnSqlConditionFailedCountCheckSpec getMonthlyPartitionSqlConditionFailedCountOnColumn() {
+        return monthlyPartitionSqlConditionFailedCountOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionMinSqlConditionPassedPercentOnColumn_3 Check specification.
+     * @param monthlyPartitionSqlConditionFailedCountOnColumn Check specification.
      */
-    public void setMonthlyPartitionMinSqlConditionPassedPercentOnColumn_3(ColumnMinSqlConditionPassedPercentCheckSpec monthlyPartitionMinSqlConditionPassedPercentOnColumn_3) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_3, monthlyPartitionMinSqlConditionPassedPercentOnColumn_3));
-        this.monthlyPartitionMinSqlConditionPassedPercentOnColumn_3 = monthlyPartitionMinSqlConditionPassedPercentOnColumn_3;
-        propagateHierarchyIdToField(monthlyPartitionMinSqlConditionPassedPercentOnColumn_3, "monthly_partition_min_sql_condition_passed_percent_on_column_3");
+    public void setMonthlyPartitionSqlConditionFailedCountOnColumn(ColumnSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlConditionFailedCountOnColumn, monthlyPartitionSqlConditionFailedCountOnColumn));
+        this.monthlyPartitionSqlConditionFailedCountOnColumn = monthlyPartitionSqlConditionFailedCountOnColumn;
+        propagateHierarchyIdToField(monthlyPartitionSqlConditionFailedCountOnColumn, "monthly_partition_sql_condition_failed_count_on_column");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMonthlyPartitionMaxSqlConditionFailedCountOnColumn_1() {
-        return monthlyPartitionMaxSqlConditionFailedCountOnColumn_1;
+    public ColumnSqlAggregatedExpressionValueMinCheckSpec getMonthlyPartitionSqlAggregatedExpressionValueOnColumnMin() {
+        return monthlyPartitionSqlAggregatedExpressionValueOnColumnMin;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionMaxSqlConditionFailedCountOnColumn_1 Check specification.
+     * @param monthlyPartitionSqlAggregatedExpressionValueOnColumnMin Check specification.
      */
-    public void setMonthlyPartitionMaxSqlConditionFailedCountOnColumn_1(ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_1) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_1, monthlyPartitionMaxSqlConditionFailedCountOnColumn_1));
-        this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_1 = monthlyPartitionMaxSqlConditionFailedCountOnColumn_1;
-        propagateHierarchyIdToField(monthlyPartitionMaxSqlConditionFailedCountOnColumn_1, "monthly_partition_max_sql_condition_failed_count_on_column_1");
+    public void setMonthlyPartitionSqlAggregatedExpressionValueOnColumnMin(ColumnSqlAggregatedExpressionValueMinCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnColumnMin) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregatedExpressionValueOnColumnMin, monthlyPartitionSqlAggregatedExpressionValueOnColumnMin));
+        this.monthlyPartitionSqlAggregatedExpressionValueOnColumnMin = monthlyPartitionSqlAggregatedExpressionValueOnColumnMin;
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregatedExpressionValueOnColumnMin, "monthly_partition_sql_aggregated_expression_value_on_column_min");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMonthlyPartitionMaxSqlConditionFailedCountOnColumn_2() {
-        return monthlyPartitionMaxSqlConditionFailedCountOnColumn_2;
+    public ColumnSqlAggregatedExpressionValueMaxCheckSpec getMonthlyPartitionSqlAggregatedExpressionValueOnColumnMax() {
+        return monthlyPartitionSqlAggregatedExpressionValueOnColumnMax;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionMaxSqlConditionFailedCountOnColumn_2 Check specification.
+     * @param monthlyPartitionSqlAggregatedExpressionValueOnColumnMax Check specification.
      */
-    public void setMonthlyPartitionMaxSqlConditionFailedCountOnColumn_2(ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_2) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_2, monthlyPartitionMaxSqlConditionFailedCountOnColumn_2));
-        this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_2 = monthlyPartitionMaxSqlConditionFailedCountOnColumn_2;
-        propagateHierarchyIdToField(monthlyPartitionMaxSqlConditionFailedCountOnColumn_2, "monthly_partition_max_sql_condition_failed_count_on_column_2");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMonthlyPartitionMaxSqlConditionFailedCountOnColumn_3() {
-        return monthlyPartitionMaxSqlConditionFailedCountOnColumn_3;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionMaxSqlConditionFailedCountOnColumn_3 Check specification.
-     */
-    public void setMonthlyPartitionMaxSqlConditionFailedCountOnColumn_3(ColumnMaxSqlConditionFailedCountCheckSpec monthlyPartitionMaxSqlConditionFailedCountOnColumn_3) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_3, monthlyPartitionMaxSqlConditionFailedCountOnColumn_3));
-        this.monthlyPartitionMaxSqlConditionFailedCountOnColumn_3 = monthlyPartitionMaxSqlConditionFailedCountOnColumn_3;
-        propagateHierarchyIdToField(monthlyPartitionMaxSqlConditionFailedCountOnColumn_3, "monthly_partition_max_sql_condition_failed_count_on_column_3");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregatedExpressionMinValueCheckSpec getMonthlyPartitionMinSqlAggregatedExpressionValueOnColumn() {
-        return monthlyPartitionMinSqlAggregatedExpressionValueOnColumn;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionMinSqlAggregatedExpressionValueOnColumn Check specification.
-     */
-    public void setMonthlyPartitionMinSqlAggregatedExpressionValueOnColumn(ColumnSqlAggregatedExpressionMinValueCheckSpec monthlyPartitionMinSqlAggregatedExpressionValueOnColumn) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinSqlAggregatedExpressionValueOnColumn, monthlyPartitionMinSqlAggregatedExpressionValueOnColumn));
-        this.monthlyPartitionMinSqlAggregatedExpressionValueOnColumn = monthlyPartitionMinSqlAggregatedExpressionValueOnColumn;
-        propagateHierarchyIdToField(monthlyPartitionMinSqlAggregatedExpressionValueOnColumn, "monthly_partition_min_sql_aggregated_expression_value_on_column");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregatedExpressionMaxValueCheckSpec getMonthlyPartitionMaxSqlAggregatedExpressionValueOnColumn() {
-        return monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn Check specification.
-     */
-    public void setMonthlyPartitionMaxSqlAggregatedExpressionValueOnColumn(ColumnSqlAggregatedExpressionMaxValueCheckSpec monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn, monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn));
-        this.monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn = monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn;
-        propagateHierarchyIdToField(monthlyPartitionMaxSqlAggregatedExpressionValueOnColumn, "monthly_partition_max_sql_aggregated_expression_value_on_column");
+    public void setMonthlyPartitionSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregatedExpressionValueMaxCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnColumnMax) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregatedExpressionValueOnColumnMax, monthlyPartitionSqlAggregatedExpressionValueOnColumnMax));
+        this.monthlyPartitionSqlAggregatedExpressionValueOnColumnMax = monthlyPartitionSqlAggregatedExpressionValueOnColumnMax;
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregatedExpressionValueOnColumnMax, "monthly_partition_sql_aggregated_expression_value_on_column_max");
     }
 
     /**

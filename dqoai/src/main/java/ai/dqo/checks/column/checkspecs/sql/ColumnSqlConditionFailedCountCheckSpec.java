@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.numeric;
+package ai.dqo.checks.column.checkspecs.sql;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxPercentRule95ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule98ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericNegativePercentSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.sensors.column.sql.ColumnSqlConditionFailedCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,54 +33,52 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of negative values in a monitored column.
+ * Column level check that ensures that there are no more than a set number of rows fail a custom SQL condition (expression) evaluated for a given column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNegativePercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNegativePercentSensorParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNegativePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnSqlConditionFailedCountCheckSpec
+        extends AbstractCheckSpec<ColumnSqlConditionFailedCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row, using a {column} placeholder to reference the current column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericNegativePercentSensorParametersSpec parameters = new ColumnNumericNegativePercentSensorParametersSpec();
+    private ColumnSqlConditionFailedCountSensorParametersSpec parameters = new ColumnSqlConditionFailedCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with negative value in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule98ParametersSpec error;
+    private MaxCountRule0ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule99ParametersSpec warning;
+    private MaxCountRule10ParametersSpec warning;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule95ParametersSpec fatal;
+    private MaxCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
-     *
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericNegativePercentSensorParametersSpec getParameters() {
+    public ColumnSqlConditionFailedCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
     /**
      * Sets a new row count sensor parameter object.
-     *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericNegativePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnSqlConditionFailedCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -90,19 +87,18 @@ public class ColumnMaxNegativePercentCheckSpec
     /**
      * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      *
-     * @return Default "error" alerting thresholds.
+     * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule98ParametersSpec getError() {
+    public MaxCountRule0ParametersSpec getError() {
         return this.error;
     }
 
     /**
      * Sets a new error level alerting threshold.
-     *
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule98ParametersSpec error) {
+    public void setError(MaxCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -114,16 +110,15 @@ public class ColumnMaxNegativePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule99ParametersSpec getWarning() {
+    public MaxCountRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
     /**
      * Sets a new warning level alerting threshold.
-     *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule99ParametersSpec warning) {
+    public void setWarning(MaxCountRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -135,16 +130,15 @@ public class ColumnMaxNegativePercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxPercentRule95ParametersSpec getFatal() {
+    public MaxCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
     /**
      * Sets a new fatal level alerting threshold.
-     *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxPercentRule95ParametersSpec fatal) {
+    public void setFatal(MaxCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -167,6 +161,6 @@ public class ColumnMaxNegativePercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.COMPLETENESS;
+        return DefaultDataQualityDimensions.VALIDITY;
     }
 }

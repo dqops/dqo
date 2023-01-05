@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.sql;
+package ai.dqo.checks.column.numeric;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxValueRuleParametersSpec;
-import ai.dqo.sensors.column.sql.ColumnSqlAggregatedExpressionSensorParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule2ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule5ParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,44 +34,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+ * Column level check that ensures that there are no more than a set number of values from range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractCheckSpec<ColumnSqlAggregatedExpressionSensorParametersSpec,
-        MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlAggregatedExpressionMaxValueCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnValuesInRangeIntegersPercentCheckSpec
+        extends AbstractCheckSpec<ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule1ParametersSpec, MinPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnValuesInRangeIntegersPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a column")
+    @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlAggregatedExpressionSensorParametersSpec parameters = new ColumnSqlAggregatedExpressionSensorParametersSpec();
+    private ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec parameters = new ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Default alerting threshold for a set number of values from range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec error;
+    private MinPercentRule2ParametersSpec error;
 
-    @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec warning;
+    private MinPercentRule1ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec fatal;
+    private MinPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnSqlAggregatedExpressionSensorParametersSpec getParameters() {
+    public ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,10 +79,10 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnSqlAggregatedExpressionSensorParametersSpec parameters) {
-		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-		this.propagateHierarchyIdToField(parameters, "parameters");
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -89,7 +91,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxValueRuleParametersSpec getError() {
+    public MinPercentRule2ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +99,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxValueRuleParametersSpec error) {
+    public void setError(MinPercentRule2ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +111,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getWarning() {
+    public MinPercentRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +119,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxValueRuleParametersSpec warning) {
+    public void setWarning(MinPercentRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +131,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getFatal() {
+    public MinPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +139,7 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxValueRuleParametersSpec fatal) {
+    public void setFatal(MinPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -160,6 +162,6 @@ public class ColumnSqlAggregatedExpressionMaxValueCheckSpec extends AbstractChec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.COMPLETENESS;
     }
 }

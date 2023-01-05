@@ -19,8 +19,6 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeNumericPercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,140 +36,140 @@ import java.util.Objects;
 public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_max_negative_count", o -> o.dailyPartitionMaxNegativeCount);
-            put("daily_partition_max_negative_percent", o -> o.dailyPartitionMaxNegativePercent);
-            put("daily_partition_min_numbers_in_set_count", o -> o.dailyPartitionMinNumbersInSetCount);
-            put("daily_partition_min_numbers_in_set_percent", o -> o.dailyPartitionMinNumbersInSetPercent);
-            put("daily_partition_min_values_in_range_numeric_percent", o -> o.dailyPartitionMinValuesInRangeNumericPercent);
-            put("daily_partition_min_values_in_range_integers_percent", o -> o.dailyPartitionMinValuesInRangeIntegersPercent);
+            put("daily_partition_negative_count", o -> o.dailyPartitionNegativeCount);
+            put("daily_partition_negative_percent", o -> o.dailyPartitionNegativePercent);
+            put("daily_partition_numbers_in_set_count", o -> o.dailyPartitionNumbersInSetCount);
+            put("daily_partition_numbers_in_set_percent", o -> o.dailyPartitionNumbersInSetPercent);
+            put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
+            put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount;
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNegativeCountCheckSpec dailyPartitionNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnMaxNegativePercentCheckSpec dailyPartitionMaxNegativePercent;
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNegativePercentCheckSpec dailyPartitionNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
-    private ColumnMinNumbersInSetCountCheckSpec dailyPartitionMinNumbersInSetCount;
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the set count.")
+    private ColumnNumbersInSetCountCheckSpec dailyPartitionNumbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinNumbersInSetPercentCheckSpec dailyPartitionMinNumbersInSetPercent;
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the set percentage.")
+    private ColumnNumbersInSetPercentCheckSpec dailyPartitionNumbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeNumericPercentCheckSpec dailyPartitionMinValuesInRangeNumericPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the mset percentage.")
+    private ColumnValuesInRangeNumericPercentCheckSpec dailyPartitionValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeIntegersPercentCheckSpec dailyPartitionMinValuesInRangeIntegersPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
     /**
-     * Returns a maximum negative values count check.
-     * @return Maximum negative values count check.
+     * Returns a negative values count check specification.
+     * @return Negative values count check specification.
      */
-    public ColumnMaxNegativeCountCheckSpec getDailyPartitionMaxNegativeCount() {
-        return dailyPartitionMaxNegativeCount;
+    public ColumnNegativeCountCheckSpec getDailyPartitionNegativeCount() {
+        return dailyPartitionNegativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum negative values count check.
-     * @param dailyPartitionMaxNegativeCount Maximum negative values count check.
+     * Sets a new specification of a maximum negative values count check.
+     * @param dailyPartitionNegativeCount Negative values count check specification.
      */
-    public void setDailyPartitionMaxNegativeCount(ColumnMaxNegativeCountCheckSpec dailyPartitionMaxNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativeCount, dailyPartitionMaxNegativeCount));
-        this.dailyPartitionMaxNegativeCount = dailyPartitionMaxNegativeCount;
-        propagateHierarchyIdToField(dailyPartitionMaxNegativeCount, "daily_partition_max_negative_count");
+    public void setDailyPartitionNegativeCount(ColumnNegativeCountCheckSpec dailyPartitionNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNegativeCount, dailyPartitionNegativeCount));
+        this.dailyPartitionNegativeCount = dailyPartitionNegativeCount;
+        propagateHierarchyIdToField(dailyPartitionNegativeCount, "daily_partition_negative_count");
     }
 
     /**
-     * Returns a maximum negative values percentage check.
-     * @return Maximum negative values percentage check.
+     * Returns a negative values percentage check specification.
+     * @return Negative values percentage check specification.
      */
-    public ColumnMaxNegativePercentCheckSpec getDailyPartitionMaxNegativePercent() {
-        return dailyPartitionMaxNegativePercent;
+    public ColumnNegativePercentCheckSpec getDailyPartitionNegativePercent() {
+        return dailyPartitionNegativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative values percentage check.
-     * @param dailyPartitionMaxNegativePercent Maximum negative values percentage check.
+     * Sets a new specification of a negative values percentage check.
+     * @param dailyPartitionNegativePercent Negative values percentage check specification.
      */
-    public void setDailyPartitionMaxNegativePercent(ColumnMaxNegativePercentCheckSpec dailyPartitionMaxNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxNegativePercent, dailyPartitionMaxNegativePercent));
-        this.dailyPartitionMaxNegativePercent = dailyPartitionMaxNegativePercent;
-        propagateHierarchyIdToField(dailyPartitionMaxNegativePercent, "daily_partition_max_negative_percent");
+    public void setDailyPartitionNegativePercent(ColumnNegativePercentCheckSpec dailyPartitionNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNegativePercent, dailyPartitionNegativePercent));
+        this.dailyPartitionNegativePercent = dailyPartitionNegativePercent;
+        propagateHierarchyIdToField(dailyPartitionNegativePercent, "daily_partition_negative_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set count check.
-     * @return Minimum Numbers in set count check.
+     * Returns a numbers in set count check specification.
+     * @return Numbers in set count check specification.
      */
-    public ColumnMinNumbersInSetCountCheckSpec getDailyPartitionMinNumbersInSetCount() {
-        return dailyPartitionMinNumbersInSetCount;
+    public ColumnNumbersInSetCountCheckSpec getDailyPartitionNumbersInSetCount() {
+        return dailyPartitionNumbersInSetCount;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set count check.
-     * @param dailyPartitionMinNumbersInSetCount Minimum Numbers in set count check.
+     * Sets a new specification of a numbers in set count check.
+     * @param dailyPartitionNumbersInSetCount Numbers in set count check specification.
      */
-    public void setDailyPartitionMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec dailyPartitionMinNumbersInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinNumbersInSetCount, dailyPartitionMinNumbersInSetCount));
-        this.dailyPartitionMinNumbersInSetCount = dailyPartitionMinNumbersInSetCount;
-        propagateHierarchyIdToField(dailyPartitionMinNumbersInSetCount, "daily_partition_min_numbers_in_set_count");
+    public void setDailyPartitionNumbersInSetCount(ColumnNumbersInSetCountCheckSpec dailyPartitionNumbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumbersInSetCount, dailyPartitionNumbersInSetCount));
+        this.dailyPartitionNumbersInSetCount = dailyPartitionNumbersInSetCount;
+        propagateHierarchyIdToField(dailyPartitionNumbersInSetCount, "daily_partition_numbers_in_set_count");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinNumbersInSetPercentCheckSpec getDailyPartitionMinNumbersInSetPercent() {
-        return dailyPartitionMinNumbersInSetPercent;
+    public ColumnNumbersInSetPercentCheckSpec getDailyPartitionNumbersInSetPercent() {
+        return dailyPartitionNumbersInSetPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyPartitionMinNumbersInSetPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyPartitionNumbersInSetPercent Numbers in set percent check specification.
      */
-    public void setDailyPartitionMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec dailyPartitionMinNumbersInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinNumbersInSetPercent, dailyPartitionMinNumbersInSetPercent));
-        this.dailyPartitionMinNumbersInSetPercent = dailyPartitionMinNumbersInSetPercent;
-        propagateHierarchyIdToField(dailyPartitionMinNumbersInSetPercent, "daily_partition_min_numbers_in_set_percent");
+    public void setDailyPartitionNumbersInSetPercent(ColumnNumbersInSetPercentCheckSpec dailyPartitionNumbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumbersInSetPercent, dailyPartitionNumbersInSetPercent));
+        this.dailyPartitionNumbersInSetPercent = dailyPartitionNumbersInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionNumbersInSetPercent, "daily_partition_numbers_in_set_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeNumericPercentCheckSpec getDailyPartitionMinValuesInRangeNumericPercent() {
-        return dailyPartitionMinValuesInRangeNumericPercent;
+    public ColumnValuesInRangeNumericPercentCheckSpec getDailyPartitionValuesInRangeNumericPercent() {
+        return dailyPartitionValuesInRangeNumericPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyPartitionMinValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     * Sets a new definition of a numbers in set percent check specification.
+     * @param dailyPartitionValuesInRangeNumericPercent Numbers in set percent check specification.
      */
-    public void setDailyPartitionMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec dailyPartitionMinValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValuesInRangeNumericPercent, dailyPartitionMinValuesInRangeNumericPercent));
-        this.dailyPartitionMinValuesInRangeNumericPercent = dailyPartitionMinValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(dailyPartitionMinValuesInRangeNumericPercent, "daily_partition_min_values_in_range_numeric_percent");
+    public void setDailyPartitionValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec dailyPartitionValuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValuesInRangeNumericPercent, dailyPartitionValuesInRangeNumericPercent));
+        this.dailyPartitionValuesInRangeNumericPercent = dailyPartitionValuesInRangeNumericPercent;
+        propagateHierarchyIdToField(dailyPartitionValuesInRangeNumericPercent, "daily_partition_values_in_range_numeric_percent");
     }
 
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeIntegersPercentCheckSpec getDailyPartitionMinValuesInRangeIntegersPercent() {
-        return dailyPartitionMinValuesInRangeIntegersPercent;
+    public ColumnValuesInRangeIntegersPercentCheckSpec getDailyPartitionValuesInRangeIntegersPercent() {
+        return dailyPartitionValuesInRangeIntegersPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param dailyPartitionMinValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyPartitionValuesInRangeIntegersPercent Numbers in set percent check specification.
      */
-    public void setDailyPartitionMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec dailyPartitionMinValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinValuesInRangeIntegersPercent, dailyPartitionMinValuesInRangeIntegersPercent));
-        this.dailyPartitionMinValuesInRangeIntegersPercent = dailyPartitionMinValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(dailyPartitionMinValuesInRangeIntegersPercent, "daily_partition_min_values_in_range_integers_percent");
+    public void setDailyPartitionValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValuesInRangeIntegersPercent, dailyPartitionValuesInRangeIntegersPercent));
+        this.dailyPartitionValuesInRangeIntegersPercent = dailyPartitionValuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(dailyPartitionValuesInRangeIntegersPercent, "daily_partition_values_in_range_integers_percent");
     }
 
     /**

@@ -36,139 +36,139 @@ import java.util.Objects;
 public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocNumericChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("max_negative_count", o -> o.maxNegativeCount);
-            put("max_negative_percent", o -> o.maxNegativePercent);
-            put("min_numbers_in_set_count", o -> o.minNumbersInSetCount);
-            put("min_numbers_in_set_percent", o -> o.minNumbersInSetPercent);
-            put("min_values_in_range_numeric_percent", o -> o.minValuesInRangeNumericPercent);
-            put("min_values_in_range_integers_percent", o -> o.minValuesInRangeIntegersPercent);
+            put("negative_count", o -> o.negativeCount);
+            put("negative_percent", o -> o.negativePercent);
+            put("numbers_in_set_count", o -> o.numbersInSetCount);
+            put("numbers_in_set_percent", o -> o.numbersInSetPercent);
+            put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
+            put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
-    private ColumnMaxNegativeCountCheckSpec maxNegativeCount;
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count.")
+    private ColumnNegativeCountCheckSpec negativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
-    private ColumnMaxNegativePercentCheckSpec maxNegativePercent;
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage.")
+    private ColumnNegativePercentCheckSpec negativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count.")
-    private ColumnMinNumbersInSetCountCheckSpec minNumbersInSetCount;
+    @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the set count.")
+    private ColumnNumbersInSetCountCheckSpec numbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinNumbersInSetPercentCheckSpec minNumbersInSetPercent;
+    @JsonPropertyDescription("Verifies that the percentage of numbers from set in a column does not exceed the set percentage.")
+    private ColumnNumbersInSetPercentCheckSpec numbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeNumericPercentCheckSpec minValuesInRangeNumericPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    private ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinValuesInRangeIntegersPercentCheckSpec minValuesInRangeIntegersPercent;
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
 
     /**
-     * Returns a maximum negative count check.
-     * @return Maximum negative count check.
+     * Returns a negative count check specification.
+     * @return Negative count check specification.
      */
-    public ColumnMaxNegativeCountCheckSpec getMaxNegativeCount() {
-        return maxNegativeCount;
+    public ColumnNegativeCountCheckSpec getNegativeCount() {
+        return negativeCount;
     }
 
     /**
-     * Sets a new definition of a maximum negative count check.
-     * @param maxNegativeCount Maximum negative count check.
+     * Sets a new specification of a negative count check.
+     * @param negativeCount Negative count check specification.
      */
-    public void setMaxNegativeCount(ColumnMaxNegativeCountCheckSpec maxNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.maxNegativeCount, maxNegativeCount));
-        this.maxNegativeCount = maxNegativeCount;
-        propagateHierarchyIdToField(maxNegativeCount, "max_negative_count");
+    public void setNegativeCount(ColumnNegativeCountCheckSpec negativeCount) {
+        this.setDirtyIf(!Objects.equals(this.negativeCount, negativeCount));
+        this.negativeCount = negativeCount;
+        propagateHierarchyIdToField(negativeCount, "negative_count");
     }
 
     /**
-     * Returns a maximum negative percentage check.
-     * @return Maximum negative percentage check.
+     * Returns a negative percentage check specification.
+     * @return Negative percentage check specification.
      */
-    public ColumnMaxNegativePercentCheckSpec getMaxNegativePercent() {
-        return maxNegativePercent;
+    public ColumnNegativePercentCheckSpec getNegativePercent() {
+        return negativePercent;
     }
 
     /**
-     * Sets a new definition of a maximum negative percentage check.
-     * @param maxNegativePercent Maximum negative percentage check.
+     * Sets a new specification of a negative percentage check.
+     * @param negativePercent Negative percentage check specification.
      */
-    public void setMaxNegativePercent(ColumnMaxNegativePercentCheckSpec maxNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.maxNegativePercent, maxNegativePercent));
-        this.maxNegativePercent = maxNegativePercent;
-        propagateHierarchyIdToField(maxNegativePercent, "max_negative_percent");
+    public void setNegativePercent(ColumnNegativePercentCheckSpec negativePercent) {
+        this.setDirtyIf(!Objects.equals(this.negativePercent, negativePercent));
+        this.negativePercent = negativePercent;
+        propagateHierarchyIdToField(negativePercent, "negative_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set count check.
-     * @return Minimum Numbers in set count check.
+     * Returns a numbers in set count check specification.
+     * @return Numbers in set count check specification.
      */
-    public ColumnMinNumbersInSetCountCheckSpec getMinNumbersInSetCount() {
-        return minNumbersInSetCount;
+    public ColumnNumbersInSetCountCheckSpec getNumbersInSetCount() {
+        return numbersInSetCount;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set count check.
-     * @param minNumbersInSetCount Minimum Numbers in set count check.
+     * Sets a new specification of a numbers in set count check specification.
+     * @param numbersInSetCount Numbers in set count check specification.
      */
-    public void setMinNumbersInSetCount(ColumnMinNumbersInSetCountCheckSpec minNumbersInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.minNumbersInSetCount, minNumbersInSetCount));
-        this.minNumbersInSetCount = minNumbersInSetCount;
-        propagateHierarchyIdToField(minNumbersInSetCount, "min_numbers_in_set_count");
+    public void setNumbersInSetCount(ColumnNumbersInSetCountCheckSpec numbersInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.numbersInSetCount, numbersInSetCount));
+        this.numbersInSetCount = numbersInSetCount;
+        propagateHierarchyIdToField(numbersInSetCount, "numbers_in_set_count");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinNumbersInSetPercentCheckSpec getMinNumbersInSetPercent() {
-        return minNumbersInSetPercent;
+    public ColumnNumbersInSetPercentCheckSpec getNumbersInSetPercent() {
+        return numbersInSetPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param minNumbersInSetPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check specification.
+     * @param numbersInSetPercent Numbers in set percent check specification.
      */
-    public void setMinNumbersInSetPercent(ColumnMinNumbersInSetPercentCheckSpec minNumbersInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.minNumbersInSetPercent, minNumbersInSetPercent));
-        this.minNumbersInSetPercent = minNumbersInSetPercent;
-        propagateHierarchyIdToField(minNumbersInSetPercent, "min_numbers_in_set_percent");
+    public void setNumbersInSetPercent(ColumnNumbersInSetPercentCheckSpec numbersInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.numbersInSetPercent, numbersInSetPercent));
+        this.numbersInSetPercent = numbersInSetPercent;
+        propagateHierarchyIdToField(numbersInSetPercent, "numbers_in_set_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeNumericPercentCheckSpec getMinValuesInRangeNumericPercent() {
-        return minValuesInRangeNumericPercent;
+    public ColumnValuesInRangeNumericPercentCheckSpec getValuesInRangeNumericPercent() {
+        return valuesInRangeNumericPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param minValuesInRangeNumericPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param valuesInRangeNumericPercent Numbers in set percent check specification.
      */
-    public void setMinValuesInRangeNumericPercent(ColumnMinValuesInRangeNumericPercentCheckSpec minValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.minValuesInRangeNumericPercent, minValuesInRangeNumericPercent));
-        this.minValuesInRangeNumericPercent = minValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(minValuesInRangeNumericPercent, "min_values_in_range_numeric_percent");
+    public void setValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent) {
+        this.setDirtyIf(!Objects.equals(this.valuesInRangeNumericPercent, valuesInRangeNumericPercent));
+        this.valuesInRangeNumericPercent = valuesInRangeNumericPercent;
+        propagateHierarchyIdToField(valuesInRangeNumericPercent, "values_in_range_numeric_percent");
     }
 
     /**
-     * Returns a minimum Numbers in set percent check.
-     * @return Minimum Numbers in set percent check.
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
      */
-    public ColumnMinValuesInRangeIntegersPercentCheckSpec getMinValuesInRangeIntegersPercent() {
-        return minValuesInRangeIntegersPercent;
+    public ColumnValuesInRangeIntegersPercentCheckSpec getValuesInRangeIntegersPercent() {
+        return valuesInRangeIntegersPercent;
     }
 
     /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param minValuesInRangeIntegersPercent Minimum Numbers in set percent check.
+     * Sets a new specification of a numbers in set percent check.
+     * @param valuesInRangeIntegersPercent Numbers in set percent check specification.
      */
-    public void setMinValuesInRangeIntegersPercent(ColumnMinValuesInRangeIntegersPercentCheckSpec minValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.minValuesInRangeIntegersPercent, minValuesInRangeIntegersPercent));
-        this.minValuesInRangeIntegersPercent = minValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(minValuesInRangeIntegersPercent, "min_values_in_range_integers_percent");
+    public void setValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent) {
+        this.setDirtyIf(!Objects.equals(this.valuesInRangeIntegersPercent, valuesInRangeIntegersPercent));
+        this.valuesInRangeIntegersPercent = valuesInRangeIntegersPercent;
+        propagateHierarchyIdToField(valuesInRangeIntegersPercent, "values_in_range_integers_percent");
     }
     
     /**

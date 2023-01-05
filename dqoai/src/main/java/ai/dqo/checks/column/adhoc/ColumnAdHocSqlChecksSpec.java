@@ -16,10 +16,10 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMinSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMaxValueCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionMinValueCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMaxCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,185 +39,97 @@ import java.util.Objects;
 public class ColumnAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocSqlChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("min_sql_condition_passed_percent_on_column_1", o -> o.minSqlConditionPassedPercentOnColumn_1);
-            put("min_sql_condition_passed_percent_on_column_2", o -> o.minSqlConditionPassedPercentOnColumn_2);
-            put("min_sql_condition_passed_percent_on_column_3", o -> o.minSqlConditionPassedPercentOnColumn_3);
+            put("sql_condition_passed_percent_on_column", o -> o.sqlConditionPassedPercentOnColumn);
 
-            put("max_sql_condition_failed_count_on_column_1", o -> o.maxSqlConditionFailedCountOnColumn_1);
-            put("max_sql_condition_failed_count_on_column_2", o -> o.maxSqlConditionFailedCountOnColumn_2);
-            put("max_sql_condition_failed_count_on_column_3", o -> o.maxSqlConditionFailedCountOnColumn_3);
+            put("sql_condition_failed_count_on_column", o -> o.sqlConditionFailedCountOnColumn);
 
-            put("min_sql_aggregated_expression_value_on_column", o -> o.minSqlAggregatedExpressionValueOnColumn);
-            put("max_sql_aggregated_expression_value_on_column", o -> o.maxSqlAggregatedExpressionValueOnColumn);
+            put("sql_aggregated_expression_value_on_column_min", o -> o.sqlAggregatedExpressionValueOnColumnMin);
+            put("sql_aggregated_expression_value_on_column_max", o -> o.sqlAggregatedExpressionValueOnColumnMax);
         }
     };
 
     @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_1;
-
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_2;
-
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
-    private ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_3;
+    private ColumnSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnColumn;
 
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_1;
-
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_2;
-
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
-    private ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_3;
+    private ColumnSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private ColumnSqlAggregatedExpressionMinValueCheckSpec minSqlAggregatedExpressionValueOnColumn;
+    private ColumnSqlAggregatedExpressionValueMinCheckSpec sqlAggregatedExpressionValueOnColumnMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregatedExpressionMaxValueCheckSpec maxSqlAggregatedExpressionValueOnColumn;
+    private ColumnSqlAggregatedExpressionValueMaxCheckSpec sqlAggregatedExpressionValueOnColumnMax;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnColumn_1() {
-        return minSqlConditionPassedPercentOnColumn_1;
+    public ColumnSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnColumn() {
+        return sqlConditionPassedPercentOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param minSqlConditionPassedPercentOnColumn_1 Check specification.
+     * @param sqlConditionPassedPercentOnColumn Check specification.
      */
-    public void setMinSqlConditionPassedPercentOnColumn_1(ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_1) {
-        this.setDirtyIf(!Objects.equals(this.minSqlConditionPassedPercentOnColumn_1, minSqlConditionPassedPercentOnColumn_1));
-        this.minSqlConditionPassedPercentOnColumn_1 = minSqlConditionPassedPercentOnColumn_1;
-        propagateHierarchyIdToField(minSqlConditionPassedPercentOnColumn_1, "min_sql_condition_passed_percent_on_column_1");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnColumn_2() {
-        return minSqlConditionPassedPercentOnColumn_2;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param minSqlConditionPassedPercentOnColumn_2 Check specification.
-     */
-    public void setMinSqlConditionPassedPercentOnColumn_2(ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_2) {
-        this.setDirtyIf(!Objects.equals(this.minSqlConditionPassedPercentOnColumn_2, minSqlConditionPassedPercentOnColumn_2));
-        this.minSqlConditionPassedPercentOnColumn_2 = minSqlConditionPassedPercentOnColumn_2;
-        propagateHierarchyIdToField(minSqlConditionPassedPercentOnColumn_1, "min_sql_condition_passed_percent_on_column_2");
+    public void setSqlConditionPassedPercentOnColumn(ColumnSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnColumn, sqlConditionPassedPercentOnColumn));
+        this.sqlConditionPassedPercentOnColumn = sqlConditionPassedPercentOnColumn;
+        propagateHierarchyIdToField(sqlConditionPassedPercentOnColumn, "sql_condition_passed_percent_on_column");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMinSqlConditionPassedPercentCheckSpec getMinSqlConditionPassedPercentOnColumn_3() {
-        return minSqlConditionPassedPercentOnColumn_3;
+    public ColumnSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnColumn() {
+        return sqlConditionFailedCountOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param minSqlConditionPassedPercentOnColumn_3 Check specification.
+     * @param sqlConditionFailedCountOnColumn Check specification.
      */
-    public void setMinSqlConditionPassedPercentOnColumn_3(ColumnMinSqlConditionPassedPercentCheckSpec minSqlConditionPassedPercentOnColumn_3) {
-        this.setDirtyIf(!Objects.equals(this.minSqlConditionPassedPercentOnColumn_3, minSqlConditionPassedPercentOnColumn_3));
-        this.minSqlConditionPassedPercentOnColumn_3 = minSqlConditionPassedPercentOnColumn_3;
-        propagateHierarchyIdToField(minSqlConditionPassedPercentOnColumn_3, "min_sql_condition_passed_percent_on_column_3");
+    public void setSqlConditionFailedCountOnColumn(ColumnSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnColumn, sqlConditionFailedCountOnColumn));
+        this.sqlConditionFailedCountOnColumn = sqlConditionFailedCountOnColumn;
+        propagateHierarchyIdToField(sqlConditionFailedCountOnColumn, "sql_condition_failed_count_on_column");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMaxSqlConditionFailedCountOnColumn_1() {
-        return maxSqlConditionFailedCountOnColumn_1;
+    public ColumnSqlAggregatedExpressionValueMinCheckSpec getSqlAggregatedExpressionValueOnColumnMin() {
+        return sqlAggregatedExpressionValueOnColumnMin;
     }
 
     /**
      * Sets a new check specification.
-     * @param maxSqlConditionFailedCountOnColumn_1 Check specification.
+     * @param sqlAggregatedExpressionValueOnColumnMin Check specification.
      */
-    public void setMaxSqlConditionFailedCountOnColumn_1(ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_1) {
-        this.setDirtyIf(!Objects.equals(this.maxSqlConditionFailedCountOnColumn_1, maxSqlConditionFailedCountOnColumn_1));
-        this.maxSqlConditionFailedCountOnColumn_1 = maxSqlConditionFailedCountOnColumn_1;
-        propagateHierarchyIdToField(maxSqlConditionFailedCountOnColumn_1, "max_sql_condition_failed_count_on_column_1");
+    public void setSqlAggregatedExpressionValueOnColumnMin(ColumnSqlAggregatedExpressionValueMinCheckSpec sqlAggregatedExpressionValueOnColumnMin) {
+        this.setDirtyIf(!Objects.equals(this.sqlAggregatedExpressionValueOnColumnMin, sqlAggregatedExpressionValueOnColumnMin));
+        this.sqlAggregatedExpressionValueOnColumnMin = sqlAggregatedExpressionValueOnColumnMin;
+        propagateHierarchyIdToField(sqlAggregatedExpressionValueOnColumnMin, "sql_aggregated_expression_value_on_column_min");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMaxSqlConditionFailedCountOnColumn_2() {
-        return maxSqlConditionFailedCountOnColumn_2;
+    public ColumnSqlAggregatedExpressionValueMaxCheckSpec getSqlAggregatedExpressionValueOnColumnMax() {
+        return sqlAggregatedExpressionValueOnColumnMax;
     }
 
     /**
      * Sets a new check specification.
-     * @param maxSqlConditionFailedCountOnColumn_2 Check specification.
+     * @param sqlAggregatedExpressionValueOnColumnMax Check specification.
      */
-    public void setMaxSqlConditionFailedCountOnColumn_2(ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_2) {
-        this.setDirtyIf(!Objects.equals(this.maxSqlConditionFailedCountOnColumn_2, maxSqlConditionFailedCountOnColumn_2));
-        this.maxSqlConditionFailedCountOnColumn_2 = maxSqlConditionFailedCountOnColumn_2;
-        propagateHierarchyIdToField(maxSqlConditionFailedCountOnColumn_2, "max_sql_condition_failed_count_on_column_2");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnMaxSqlConditionFailedCountCheckSpec getMaxSqlConditionFailedCountOnColumn_3() {
-        return maxSqlConditionFailedCountOnColumn_3;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param maxSqlConditionFailedCountOnColumn_3 Check specification.
-     */
-    public void setMaxSqlConditionFailedCountOnColumn_3(ColumnMaxSqlConditionFailedCountCheckSpec maxSqlConditionFailedCountOnColumn_3) {
-        this.setDirtyIf(!Objects.equals(this.maxSqlConditionFailedCountOnColumn_3, maxSqlConditionFailedCountOnColumn_3));
-        this.maxSqlConditionFailedCountOnColumn_3 = maxSqlConditionFailedCountOnColumn_3;
-        propagateHierarchyIdToField(maxSqlConditionFailedCountOnColumn_3, "max_sql_condition_failed_count_on_column_3");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregatedExpressionMinValueCheckSpec getMinSqlAggregatedExpressionValueOnColumn() {
-        return minSqlAggregatedExpressionValueOnColumn;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param minSqlAggregatedExpressionValueOnColumn Check specification.
-     */
-    public void setMinSqlAggregatedExpressionValueOnColumn(ColumnSqlAggregatedExpressionMinValueCheckSpec minSqlAggregatedExpressionValueOnColumn) {
-        this.setDirtyIf(!Objects.equals(this.minSqlAggregatedExpressionValueOnColumn, minSqlAggregatedExpressionValueOnColumn));
-        this.minSqlAggregatedExpressionValueOnColumn = minSqlAggregatedExpressionValueOnColumn;
-        propagateHierarchyIdToField(minSqlAggregatedExpressionValueOnColumn, "min_sql_aggregated_expression_value_on_column");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregatedExpressionMaxValueCheckSpec getMaxSqlAggregatedExpressionValueOnColumn() {
-        return maxSqlAggregatedExpressionValueOnColumn;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param maxSqlAggregatedExpressionValueOnColumn Check specification.
-     */
-    public void setMaxSqlAggregatedExpressionValueOnColumn(ColumnSqlAggregatedExpressionMaxValueCheckSpec maxSqlAggregatedExpressionValueOnColumn) {
-        this.setDirtyIf(!Objects.equals(this.maxSqlAggregatedExpressionValueOnColumn, maxSqlAggregatedExpressionValueOnColumn));
-        this.maxSqlAggregatedExpressionValueOnColumn = maxSqlAggregatedExpressionValueOnColumn;
-        propagateHierarchyIdToField(maxSqlAggregatedExpressionValueOnColumn, "max_sql_aggregated_expression_value_on_column");
+    public void setSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregatedExpressionValueMaxCheckSpec sqlAggregatedExpressionValueOnColumnMax) {
+        this.setDirtyIf(!Objects.equals(this.sqlAggregatedExpressionValueOnColumnMax, sqlAggregatedExpressionValueOnColumnMax));
+        this.sqlAggregatedExpressionValueOnColumnMax = sqlAggregatedExpressionValueOnColumnMax;
+        propagateHierarchyIdToField(sqlAggregatedExpressionValueOnColumnMax, "sql_aggregated_expression_value_on_column_max");
     }
 
     /**
