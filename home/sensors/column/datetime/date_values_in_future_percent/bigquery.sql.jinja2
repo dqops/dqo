@@ -1,24 +1,24 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {% macro render_value_in_future() -%}
-    {%- if {{lib.render_target_column('analyzed_table').type_snapshot.column_type}} | upper == 'TIMESTAMP' -%}
+    {%- if table.columns[col].type_snapshot.column_type}} | upper == 'TIMESTAMP' -%}
     CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
         THEN 1
         ELSE 0
-    {%- elif {{lib.render_target_column('analyzed_table').type_snapshot.column_type}} | upper == 'DATE' -%}
+    {%- elif table.columns[col].type_snapshot.column_type}} | upper == 'DATE' -%}
     CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_DATE()
         THEN 1
         ELSE 0
-    {%- elif {{lib.render_target_column('analyzed_table').type_snapshot.column_type}} | upper == 'DATETIME' -%}
+    {%- elif table.columns[col].type_snapshot.column_type}} | upper == 'DATETIME' -%}
     CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_DATETIME()
         THEN 1
         ELSE 0
-    {%- elif {{lib.render_target_column('analyzed_table').type_snapshot.column_type}} | upper == 'STRING' -%}
+    {%- elif table.columns[col].type_snapshot.column_type}} | upper == 'STRING' -%}
     CASE WHEN ({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP()
         THEN 1
         ELSE 0
     {%- else -%}
-    <INVALID DATA TYPE: {{lib.render_target_column('analyzed_table').type_snapshot.column_type}}/>
+    <INVALID DATA TYPE: table.columns[col].type_snapshot.column_type}}/>
     {%- endif -%}
 {%- endmacro %}
 
