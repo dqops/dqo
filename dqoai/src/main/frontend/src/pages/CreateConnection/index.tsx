@@ -9,7 +9,7 @@ import {
   ConnectionBasicModelProviderTypeEnum
 } from '../../api';
 
-const Dashboard = () => {
+const CreateConnection = () => {
   const [step, setStep] = useState(0);
   const [database, setDatabase] = useState<ConnectionBasicModel>({});
 
@@ -61,4 +61,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default CreateConnection;

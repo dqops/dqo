@@ -14,9 +14,8 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
-export * from './dashboard.types';
+export enum DASHBOARD_ACTION {
+  GET_DASHBOARDS = 'DASHBOARD_ACTION/GET_DASHBOARDS',
+  GET_DASHBOARDS_SUCCESS = 'DASHBOARD_ACTION/GET_DASHBOARDS_SUCCESS',
+  GET_DASHBOARDS_ERROR = 'DASHBOARD_ACTION/GET_DASHBOARDS_ERROR',
+}
