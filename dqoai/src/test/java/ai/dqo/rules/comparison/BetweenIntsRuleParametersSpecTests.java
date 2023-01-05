@@ -38,7 +38,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualBegin_thenReturnsPassed() {
 		this.sut.setBegin(1L);
         this.sut.setEnd(5L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
@@ -48,7 +48,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsEqualEnd_thenReturnsPassed() {
         this.sut.setBegin(1L);
         this.sut.setEnd(5L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
@@ -58,7 +58,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBetweenBeginAndEnd_thenReturnsPassed() {
         this.sut.setBegin(1L);
         this.sut.setEnd(5L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
@@ -68,7 +68,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsAboveEnd_thenReturnsFailed() {
         this.sut.setBegin(1L);
         this.sut.setEnd(5L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
@@ -78,7 +78,7 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBelowBegin_thenReturnsFailed() {
         this.sut.setBegin(1L);
         this.sut.setEnd(5L);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(5, ruleExecutionResult.getUpperBound());
@@ -120,5 +120,14 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
         this.sut.setEnd(1L);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 }

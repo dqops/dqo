@@ -16,8 +16,11 @@
 package ai.dqo.rules.comparison;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.rules.HistoricDataPoint;
+import ai.dqo.execution.rules.HistoricDataPointObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,5 +123,14 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
         this.sut.setEnd(1.0);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 }

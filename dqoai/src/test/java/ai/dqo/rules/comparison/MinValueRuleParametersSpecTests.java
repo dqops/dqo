@@ -82,4 +82,13 @@ public class MinValueRuleParametersSpecTests extends BaseTest {
 		this.sut.setMinValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
 }
