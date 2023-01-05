@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import CommentsView from '../CommentsView';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ const TableCommentView = ({
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
+  const [text, setText] = useState('');
 
   useEffect(() => {
     if (
@@ -41,8 +42,13 @@ const TableCommentView = ({
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableComments(connectionName, schemaName, tableName, comments)
+      updateTableComments(connectionName, schemaName, tableName, [...comments, ...text ? [{
+        comment: text,
+        comment_by: 'user',
+        date: new Date().toISOString()
+      }] : []])
     );
+    setText('');
     await dispatch(getTableComments(connectionName, schemaName, tableName));
   };
 
@@ -58,6 +64,8 @@ const TableCommentView = ({
         isUpdating={isUpdating}
       />
       <CommentsView
+        text={text}
+        setText={setText}
         isUpdated={isUpdatedComments}
         setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
         comments={comments}
