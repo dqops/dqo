@@ -11,7 +11,7 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path="/create" component={CreateConnection} />
-      <Route exact path="/dashboard" component={ConnectionPage} />
+      <Route exact path="/checks" component={ConnectionPage} />
       <Route exact path="/home" component={HomePage} />
       <Route exact path="/dashboards" component={Dashboards} />
       <Redirect from="/" to="/home" />

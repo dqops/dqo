@@ -56,7 +56,7 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
       tab: 'schemas',
       source: true
     });
-    history.replace(`/dashboard?${searchQuery}`);
+    history.replace(`/checks?${searchQuery}`);
   };
 
   return (

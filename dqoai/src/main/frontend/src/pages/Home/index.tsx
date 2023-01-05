@@ -21,7 +21,7 @@ const HomePage = () => {
           </div>
           <div
             className="w-full py-3 bg-gray-250 flex items-center justify-center cursor-pointer"
-            onClick={() => history.push('/dashboard')}
+            onClick={() => history.push('/checks')}
           >
             <img src="/images/home/dashboard.png" className="w-6" alt="" />
           </div>
