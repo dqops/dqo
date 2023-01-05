@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,15 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates percent of valid USA Zip code values in a column.
+ * Column level check that ensures that there are no more than a maximum percentage of rows with a valid currency code strings in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringValidUsaZipcodePercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringValidCurrencyCodePercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValidCurrencyCodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,9 +49,9 @@ public class ColumnMinStringValidUsaZipcodePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
+    private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec parameters = new ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with a valid currency code strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -72,7 +71,7 @@ public class ColumnMinStringValidUsaZipcodePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +79,7 @@ public class ColumnMinStringValidUsaZipcodePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

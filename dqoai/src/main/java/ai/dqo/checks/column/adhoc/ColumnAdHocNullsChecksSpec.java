@@ -42,10 +42,10 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count.")
     private ColumnNullsCountCheckSpec nullsCount;
 
-    @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
     private ColumnNullsPercentCheckSpec nullsPercent;
 
     /**

@@ -41,7 +41,7 @@ public class ColumnDatetimeDailyCheckpointsSpec extends AbstractCheckCategorySpe
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnDateValuesInFuturePercentCheckSpec dailyCheckpointDateValuesInFuturePercent;
 
     /**

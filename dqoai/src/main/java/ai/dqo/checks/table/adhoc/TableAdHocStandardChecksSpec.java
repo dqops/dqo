@@ -40,7 +40,7 @@ public class TableAdHocStandardChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the set row count is met on a table level.")
+    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
     private TableRowCountCheckSpec rowCount;
 
     /**

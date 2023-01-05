@@ -19,9 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec;
+import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMeanLengthSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates quantity of values that does not match the date regex in a column.
+ * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNotMatchDateRegexCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNotMatchDateRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringMeanLengthCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringMeanLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,29 +47,29 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
+    private ColumnStringsStringMeanLengthSensorParametersSpec parameters = new ColumnStringsStringMeanLengthSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching date regex in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private BetweenFloatsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private BetweenFloatsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringMeanLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,10 +77,10 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters) {
-        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(ColumnStringsStringMeanLengthSensorParametersSpec parameters) {
+		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-        this.propagateHierarchyIdToField(parameters, "parameters");
+		this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -90,7 +89,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public BetweenFloatsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -98,7 +97,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(BetweenFloatsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -110,7 +109,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public BetweenFloatsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -118,7 +117,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(BetweenFloatsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -130,7 +129,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public BetweenFloatsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +137,7 @@ public class ColumnMaxNotMatchDateRegexCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(BetweenFloatsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

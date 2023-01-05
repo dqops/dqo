@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringsInSetCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringInSetCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -44,8 +44,8 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
     private ColumnStringsStringInSetCountSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringsInSetCountCheckSpec checkSpec;
-    private ColumnMinStringsInSetCountCheckSpec altCheckSpec;
+    private ColumnStringInSetCountCheckSpec checkSpec;
+    private ColumnStringInSetCountCheckSpec altCheckSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -70,9 +70,9 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinStringsInSetCountCheckSpec();
+        this.checkSpec = new ColumnStringInSetCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.altCheckSpec = new ColumnMinStringsInSetCountCheckSpec();
+        this.altCheckSpec = new ColumnStringInSetCountCheckSpec();
         this.altCheckSpec.setParameters(altSut);
     }
 

@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringMaxLengthCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringMaxLengthSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringMaxLengthSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringLengthBelowCheckSpec checkSpec;
+    private ColumnStringMaxLengthCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringMaxLengthSensorParametersSpecBigQueryTests exten
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxStringLengthBelowCheckSpec();
+        this.checkSpec = new ColumnStringMaxLengthCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

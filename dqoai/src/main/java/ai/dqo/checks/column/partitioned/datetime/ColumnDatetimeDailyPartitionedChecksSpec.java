@@ -41,7 +41,7 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnDateValuesInFuturePercentCheckSpec dailyPartitionDateValuesInFuturePercent;
 
     /**

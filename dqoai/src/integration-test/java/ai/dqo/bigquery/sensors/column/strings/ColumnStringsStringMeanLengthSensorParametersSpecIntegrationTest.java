@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMeanStringLengthBetweenCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringMeanLengthCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringMeanLengthSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringMeanLengthSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMeanStringLengthBetweenCheckSpec checkSpec;
+    private ColumnStringMeanLengthCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringMeanLengthSensorParametersSpecIntegrationTest ex
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringMeanLengthSensorParametersSpec();
-		this.checkSpec = new ColumnMeanStringLengthBetweenCheckSpec();
+		this.checkSpec = new ColumnStringMeanLengthCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

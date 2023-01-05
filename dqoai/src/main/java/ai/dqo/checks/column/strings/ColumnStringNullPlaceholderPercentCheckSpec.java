@@ -19,8 +19,10 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinValueRuleParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinLengthSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNullPlaceholderPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+ * Column level check that ensures that there are no more than a maximum number of rows with a null placeholder strings in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringLengthAboveCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMinLengthSensorParametersSpec, MinValueRuleParametersSpec,MinValueRuleParametersSpec,MinValueRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringLengthAboveCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringNullPlaceholderPercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringNullPlaceholderPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringNullPlaceholderPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,29 +49,29 @@ public class ColumnMinStringLengthAboveCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinLengthSensorParametersSpec parameters = new ColumnStringsStringMinLengthSensorParametersSpec();
+    private ColumnStringsStringNullPlaceholderPercentSensorParametersSpec parameters = new ColumnStringsStringNullPlaceholderPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum length of string in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of rows with a null placeholder strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec error;
+    private MaxPercentRule2ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec warning;
+    private MaxPercentRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinLengthSensorParametersSpec getParameters() {
+    public ColumnStringsStringNullPlaceholderPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,10 +79,10 @@ public class ColumnMinStringLengthAboveCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinLengthSensorParametersSpec parameters) {
-		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+    public void setParameters(ColumnStringsStringNullPlaceholderPercentSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
-		this.propagateHierarchyIdToField(parameters, "parameters");
+        this.propagateHierarchyIdToField(parameters, "parameters");
     }
 
     /**
@@ -89,7 +91,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinValueRuleParametersSpec getError() {
+    public MaxPercentRule2ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +99,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinValueRuleParametersSpec error) {
+    public void setError(MaxPercentRule2ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +111,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinValueRuleParametersSpec getWarning() {
+    public MaxPercentRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +119,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinValueRuleParametersSpec warning) {
+    public void setWarning(MaxPercentRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +131,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinValueRuleParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +139,7 @@ public class ColumnMinStringLengthAboveCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinValueRuleParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

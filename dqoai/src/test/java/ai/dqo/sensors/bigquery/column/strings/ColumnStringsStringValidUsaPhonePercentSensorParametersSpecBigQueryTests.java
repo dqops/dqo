@@ -17,8 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -32,7 +31,6 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaPhonePercentSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +41,7 @@ public class ColumnStringsStringValidUsaPhonePercentSensorParametersSpecBigQuery
     private ColumnStringsStringValidUsaPhonePercentSensorParametersSpec sut;
     private final String sensorRegex = "r\"^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$\"";
     private UserHomeContext userHomeContext;
-    private ColumnMinStringValidUsaPhonePercentCheckSpec checkSpec;
+    private ColumnStringValidUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -61,7 +59,7 @@ public class ColumnStringsStringValidUsaPhonePercentSensorParametersSpecBigQuery
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinStringValidUsaPhonePercentCheckSpec();
+        this.checkSpec = new ColumnStringValidUsaPhonePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

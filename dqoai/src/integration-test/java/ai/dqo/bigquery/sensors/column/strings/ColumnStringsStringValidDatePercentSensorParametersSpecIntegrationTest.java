@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringValidDatesPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidDatesPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringValidDatePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringValidDatePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringValidDatesPercentCheckSpec checkSpec;
+    private ColumnStringValidDatesPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringValidDatePercentSensorParametersSpecIntegrationT
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringValidDatePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinStringValidDatesPercentCheckSpec();
+		this.checkSpec = new ColumnStringValidDatesPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -43,10 +43,10 @@ public class ColumnAdHocBoolChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.")
     private ColumnTruePercentCheckSpec truePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.")
     private ColumnFalsePercentCheckSpec falsePercent;
 
     /**

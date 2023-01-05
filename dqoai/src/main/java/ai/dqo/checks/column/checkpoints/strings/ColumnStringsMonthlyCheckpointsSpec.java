@@ -36,579 +36,585 @@ import java.util.Objects;
 public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_max_string_length_below", o -> o.monthlyCheckpointMaxStringLengthBelow);
-            put("monthly_checkpoint_min_string_length_above", o -> o.monthlyCheckpointMinStringLengthAbove);
-            put("monthly_checkpoint_mean_string_length_between", o -> o.monthlyCheckpointMeanStringLengthBetween);
-            put("monthly_checkpoint_max_string_empty_percent", o -> o.monthlyCheckpointMaxStringEmptyPercent);
-            put("monthly_checkpoint_max_string_empty_count", o -> o.monthlyCheckpointMaxStringEmptyCount);
-            put("monthly_checkpoint_max_string_whitespace_count", o -> o.monthlyCheckpointMaxStringWhitespaceCount);
-            put("monthly_checkpoint_max_string_whitespace_percent", o -> o.monthlyCheckpointMaxStringWhitespacePercent);
-            put("monthly_checkpoint_min_string_valid_dates_percent", o -> o.monthlyCheckpointMinStringValidDatesPercent);
-            put("monthly_checkpoint_max_string_null_placeholder_count", o -> o.monthlyCheckpointMaxStringNullPlaceholderCount);
-            put("monthly_checkpoint_max_string_null_placeholder_percent", o -> o.monthlyCheckpointMaxStringNullPlaceholderPercent);
-            put("monthly_checkpoint_min_string_boolean_placeholder_percent", o -> o.monthlyCheckpointMinStringBooleanPlaceholderPercent);
-            put("monthly_checkpoint_max_string_surrounded_by_whitespace_count", o -> o.monthlyCheckpointMaxStringSurroundedByWhitespaceCount);
-            put("monthly_checkpoint_min_string_parsable_to_integer_percent", o -> o.monthlyCheckpointMinStringParsableToIntegerPercent);
-            put("monthly_checkpoint_max_string_surrounded_by_whitespace_percent", o -> o.monthlyCheckpointMaxStringSurroundedByWhitespacePercent);
-            put("monthly_checkpoint_min_string_parsable_to_float_percent", o -> o.monthlyCheckpointMinStringParsableToFloatPercent);
-            put("monthly_checkpoint_min_string_valid_usa_zipcode_percent", o -> o.monthlyCheckpointMinStringValidUsaZipcodePercent);
-            put("monthly_checkpoint_min_string_valid_usa_phone_percent", o -> o.monthlyCheckpointMinStringValidUsaPhonePercent);
-            put("monthly_checkpoint_min_string_valid_country_code_percent", o -> o.monthlyCheckpointMinStringValidCountryCodePercent);
-            put("monthly_checkpoint_min_string_valid_currency_code_percent", o -> o.monthlyCheckpointMinStringValidCurrencyCodePercent);
-            put("monthly_checkpoint_min_strings_in_set_count", o -> o.monthlyCheckpointMinStringsInSetCount);
-            put("monthly_checkpoint_min_strings_in_set_percent", o -> o.monthlyCheckpointMinStringsInSetPercent);
-            put("monthly_checkpoint_max_strings_invalid_email_count", o -> o.monthlyCheckpointMaxInvalidEmailCount);
-            put("monthly_checkpoint_min_valid_email_percent", o -> o.monthlyCheckpointMinValidEmailPercent);
-            put("monthly_checkpoint_max_not_match_regex_count", o -> o.monthlyCheckpointMaxNotMatchRegexCount);
-            put("monthly_checkpoint_min_regex_match_percent", o -> o.monthlyCheckpointMinRegexMatchPercent);
-            put("monthly_checkpoint_max_not_match_date_regex_count", o -> o.monthlyCheckpointMaxNotMatchDateRegexCount);
+            put("monthly_checkpoint_string_max_length", o -> o.monthlyCheckpointStringMaxLength);
+            put("monthly_checkpoint_string_min_length", o -> o.monthlyCheckpointStringMinLength);
+            put("monthly_checkpoint_string_mean_length", o -> o.monthlyCheckpointStringMeanLength);
+
+            put("monthly_checkpoint_string_empty_count", o -> o.monthlyCheckpointStringEmptyCount);
+            put("monthly_checkpoint_string_empty_percent", o -> o.monthlyCheckpointStringEmptyPercent);
+            put("monthly_checkpoint_string_whitespace_count", o -> o.monthlyCheckpointStringWhitespaceCount);
+            put("monthly_checkpoint_string_whitespace_percent", o -> o.monthlyCheckpointStringWhitespacePercent);
+            put("monthly_checkpoint_string_surrounded_by_whitespace_count", o -> o.monthlyCheckpointStringSurroundedByWhitespaceCount);
+            put("monthly_checkpoint_string_surrounded_by_whitespace_percent", o -> o.monthlyCheckpointStringSurroundedByWhitespacePercent);
+
+            put("monthly_checkpoint_string_null_placeholder_count", o -> o.monthlyCheckpointStringNullPlaceholderCount);
+            put("monthly_checkpoint_string_null_placeholder_percent", o -> o.monthlyCheckpointStringNullPlaceholderPercent);
+            put("monthly_checkpoint_string_boolean_placeholder_percent", o -> o.monthlyCheckpointStringBooleanPlaceholderPercent);
+            put("monthly_checkpoint_string_parsable_to_integer_percent", o -> o.monthlyCheckpointStringParsableToIntegerPercent);
+            put("monthly_checkpoint_string_parsable_to_float_percent", o -> o.monthlyCheckpointStringParsableToFloatPercent);
+
+            put("monthly_checkpoint_string_in_set_count", o -> o.monthlyCheckpointStringInSetCount);
+            put("monthly_checkpoint_string_in_set_percent", o -> o.monthlyCheckpointStringInSetPercent);
+
+            put("monthly_checkpoint_string_valid_dates_percent", o -> o.monthlyCheckpointStringValidDatesPercent);
+            put("monthly_checkpoint_string_valid_usa_zipcode_percent", o -> o.monthlyCheckpointStringValidUsaZipcodePercent);
+            put("monthly_checkpoint_string_valid_usa_phone_percent", o -> o.monthlyCheckpointStringValidUsaPhonePercent);
+            put("monthly_checkpoint_string_valid_country_code_percent", o -> o.monthlyCheckpointStringValidCountryCodePercent);
+            put("monthly_checkpoint_string_valid_currency_code_percent", o -> o.monthlyCheckpointStringValidCurrencyCodePercent);
+            put("monthly_checkpoint_string_invalid_email_count", o -> o.monthlyCheckpointStringInvalidEmailCount);
+            put("monthly_checkpoint_string_valid_email_percent", o -> o.monthlyCheckpointStringValidEmailPercent);
+
+            put("monthly_checkpoint_string_not_match_regex_count", o -> o.monthlyCheckpointStringNotMatchRegexCount);
+            put("monthly_checkpoint_string_match_regex_percent", o -> o.monthlyCheckpointStringMatchRegexPercent);
+            put("monthly_checkpoint_string_not_match_date_regex_count", o -> o.monthlyCheckpointStringNotMatchDateRegexCount);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringLengthBelowCheckSpec monthlyCheckpointMaxStringLengthBelow;
+    private ColumnStringMaxLengthCheckSpec monthlyCheckpointStringMaxLength;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringLengthAboveCheckSpec monthlyCheckpointMinStringLengthAbove;
+    private ColumnStringMinLengthCheckSpec monthlyCheckpointStringMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMeanStringLengthBetweenCheckSpec monthlyCheckpointMeanStringLengthBetween;
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringMeanLengthCheckSpec monthlyCheckpointStringMeanLength;
+
+    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount;
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringEmptyPercentCheckSpec monthlyCheckpointMaxStringEmptyPercent;
+    private ColumnStringEmptyPercentCheckSpec monthlyCheckpointStringEmptyPercent;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringValidDatesPercentCheckSpec monthlyCheckpointMinStringValidDatesPercent;
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringValidDatesPercentCheckSpec monthlyCheckpointStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount;
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringWhitespaceCountCheckSpec monthlyCheckpointStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringWhitespaceCountCheckSpec monthlyCheckpointMaxStringWhitespaceCount;
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringWhitespacePercentCheckSpec monthlyCheckpointStringWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringWhitespacePercentCheckSpec monthlyCheckpointMaxStringWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringNullPlaceholderPercentCheckSpec monthlyCheckpointMaxStringNullPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyCheckpointMinStringBooleanPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringParsableToIntegerPercentCheckSpec monthlyCheckpointMinStringParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyCheckpointMaxStringSurroundedByWhitespaceCount;
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringSurroundedByWhitespaceCountCheckSpec monthlyCheckpointStringSurroundedByWhitespaceCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec monthlyCheckpointMaxStringSurroundedByWhitespacePercent;
+    private ColumnStringSurroundedByWhitespacePercentCheckSpec monthlyCheckpointStringSurroundedByWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringNullPlaceholderCountCheckSpec monthlyCheckpointStringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringNullPlaceholderPercentCheckSpec monthlyCheckpointStringNullPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringBooleanPlaceholderPercentCheckSpec monthlyCheckpointStringBooleanPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringParsableToIntegerPercentCheckSpec monthlyCheckpointStringParsableToIntegerPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringParsableToFloatPercentCheckSpec monthlyCheckpointMinStringParsableToFloatPercent;
+    private ColumnStringParsableToFloatPercentCheckSpec monthlyCheckpointStringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringInSetCountCheckSpec monthlyCheckpointStringInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringInSetPercentCheckSpec monthlyCheckpointStringInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringValidUsaZipcodePercentCheckSpec monthlyCheckpointMinStringValidUsaZipcodePercent;
+    private ColumnStringValidUsaZipcodePercentCheckSpec monthlyCheckpointStringValidUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinStringValidUsaPhonePercentCheckSpec monthlyCheckpointMinStringValidUsaPhonePercent;
+    private ColumnStringValidUsaPhonePercentCheckSpec monthlyCheckpointStringValidUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinValidCountryCodePercentCheckSpec monthlyCheckpointMinStringValidCountryCodePercent;
+    private ColumnStringValidCountryCodePercentCheckSpec monthlyCheckpointStringValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinValidCurrencyCodePercentCheckSpec monthlyCheckpointMinStringValidCurrencyCodePercent;
+    private ColumnStringValidCurrencyCodePercentCheckSpec monthlyCheckpointStringValidCurrencyCodePercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
-    private ColumnMinStringsInSetCountCheckSpec monthlyCheckpointMinStringsInSetCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinStringsInSetPercentCheckSpec monthlyCheckpointMinStringsInSetPercent;
-
-    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxInvalidEmailCountCheckSpec monthlyCheckpointMaxInvalidEmailCount;
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringInvalidEmailCountCheckSpec monthlyCheckpointStringInvalidEmailCount;
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinValidEmailPercentCheckSpec monthlyCheckpointMinValidEmailPercent;
+    private ColumnStringValidEmailPercentCheckSpec monthlyCheckpointStringValidEmailPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxNotMatchRegexCountCheckSpec monthlyCheckpointMaxNotMatchRegexCount;
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringNotMatchRegexCountCheckSpec monthlyCheckpointStringNotMatchRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMinRegexMatchPercentCheckSpec monthlyCheckpointMinRegexMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringRegexMatchPercentCheckSpec monthlyCheckpointStringMatchRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnMaxNotMatchDateRegexCountCheckSpec monthlyCheckpointMaxNotMatchDateRegexCount;
+    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringNotMatchDateRegexCountCheckSpec monthlyCheckpointStringNotMatchDateRegexCount;
 
     /**
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnMaxStringLengthBelowCheckSpec getMonthlyCheckpointMaxStringLengthBelow() {
-        return monthlyCheckpointMaxStringLengthBelow;
+    public ColumnStringMaxLengthCheckSpec getMonthlyCheckpointStringMaxLength() {
+        return monthlyCheckpointStringMaxLength;
     }
 
     /**
      * Sets a new definition of a maximum string length below check.
-     * @param monthlyCheckpointMaxStringLengthBelow Maximum string length below check.
+     * @param monthlyCheckpointStringMaxLength Maximum string length below check.
      */
-    public void setMonthlyCheckpointMaxStringLengthBelow(ColumnMaxStringLengthBelowCheckSpec monthlyCheckpointMaxStringLengthBelow) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringLengthBelow, monthlyCheckpointMaxStringLengthBelow));
-        this.monthlyCheckpointMaxStringLengthBelow = monthlyCheckpointMaxStringLengthBelow;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringLengthBelow, "monthly_checkpoint_max_string_length_below");
+    public void setMonthlyCheckpointStringMaxLength(ColumnStringMaxLengthCheckSpec monthlyCheckpointStringMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMaxLength, monthlyCheckpointStringMaxLength));
+        this.monthlyCheckpointStringMaxLength = monthlyCheckpointStringMaxLength;
+        propagateHierarchyIdToField(monthlyCheckpointStringMaxLength, "monthly_checkpoint_string_max_length");
     }
 
     /**
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
-    public ColumnMinStringLengthAboveCheckSpec getMonthlyCheckpointMinStringLengthAbove() {
-        return monthlyCheckpointMinStringLengthAbove;
+    public ColumnStringMinLengthCheckSpec getMonthlyCheckpointStringMinLength() {
+        return monthlyCheckpointStringMinLength;
     }
 
     /**
      * Sets a new definition of a minimum string length above check.
-     * @param monthlyCheckpointMinStringLengthAbove Minimum string length below check.
+     * @param monthlyCheckpointStringMinLength Minimum string length below check.
      */
-    public void setMonthlyCheckpointMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec monthlyCheckpointMinStringLengthAbove) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringLengthAbove, monthlyCheckpointMinStringLengthAbove));
-        this.monthlyCheckpointMinStringLengthAbove = monthlyCheckpointMinStringLengthAbove;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringLengthAbove, "monthly_checkpoint_max_string_length_below");
-    }
-
-    /**
-     * Returns a maximum string empty percent check.
-     * @return Maximum string empty percent check.
-     */
-    public ColumnMaxStringEmptyPercentCheckSpec getMonthlyCheckpointMaxStringEmptyPercent() {
-        return monthlyCheckpointMaxStringEmptyPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string empty percent check.
-     * @param monthlyCheckpointMaxStringEmptyPercent Maximum string empty percent check.
-     */
-    public void setMonthlyCheckpointMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec monthlyCheckpointMaxStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringEmptyPercent, monthlyCheckpointMaxStringEmptyPercent));
-        this.monthlyCheckpointMaxStringEmptyPercent = monthlyCheckpointMaxStringEmptyPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringEmptyPercent, "monthly_checkpoint_max_string_empty_percent");
+    public void setMonthlyCheckpointStringMinLength(ColumnStringMinLengthCheckSpec monthlyCheckpointStringMinLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMinLength, monthlyCheckpointStringMinLength));
+        this.monthlyCheckpointStringMinLength = monthlyCheckpointStringMinLength;
+        propagateHierarchyIdToField(monthlyCheckpointStringMinLength, "monthly_checkpoint_string_min_length");
     }
 
     /**
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnMeanStringLengthBetweenCheckSpec getMonthlyCheckpointMeanStringLengthBetween() {
-        return monthlyCheckpointMeanStringLengthBetween;
+    public ColumnStringMeanLengthCheckSpec getMonthlyCheckpointStringMeanLength() {
+        return monthlyCheckpointStringMeanLength;
     }
 
     /**
      * Sets a new definition of a mean string length between check.
-     * @param monthlyCheckpointMeanStringLengthBetween Mean string length between check.
+     * @param monthlyCheckpointStringMeanLength Mean string length between check.
      */
-    public void setMonthlyCheckpointMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec monthlyCheckpointMeanStringLengthBetween) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMeanStringLengthBetween, monthlyCheckpointMeanStringLengthBetween));
-        this.monthlyCheckpointMeanStringLengthBetween = monthlyCheckpointMeanStringLengthBetween;
-        propagateHierarchyIdToField(monthlyCheckpointMeanStringLengthBetween, "monthly_checkpoint_mean_string_length_between");
+    public void setMonthlyCheckpointStringMeanLength(ColumnStringMeanLengthCheckSpec monthlyCheckpointStringMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMeanLength, monthlyCheckpointStringMeanLength));
+        this.monthlyCheckpointStringMeanLength = monthlyCheckpointStringMeanLength;
+        propagateHierarchyIdToField(monthlyCheckpointStringMeanLength, "monthly_checkpoint_string_mean_length");
     }
 
     /**
      * Returns max string empty count check.
      * @return Max string empty count check.
      */
-    public ColumnMaxStringEmptyCountCheckSpec getMonthlyCheckpointMaxStringEmptyCount() {
-        return monthlyCheckpointMaxStringEmptyCount;
+    public ColumnStringEmptyCountCheckSpec getMonthlyCheckpointStringEmptyCount() {
+        return monthlyCheckpointStringEmptyCount;
     }
 
     /**
      * Sets a new definition of a max string empty count check.
-     * @param monthlyCheckpointMaxStringEmptyCount Max string empty count check.
+     * @param monthlyCheckpointStringEmptyCount Max string empty count check.
      */
-    public void setMonthlyCheckpointMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec monthlyCheckpointMaxStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringEmptyCount, monthlyCheckpointMaxStringEmptyCount));
-        this.monthlyCheckpointMaxStringEmptyCount = monthlyCheckpointMaxStringEmptyCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringEmptyCount, "monthly_checkpoint_max_string_empty_count");
+    public void setMonthlyCheckpointStringEmptyCount(ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringEmptyCount, monthlyCheckpointStringEmptyCount));
+        this.monthlyCheckpointStringEmptyCount = monthlyCheckpointStringEmptyCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringEmptyCount, "monthly_checkpoint_string_empty_count");
+    }
+
+    /**
+     * Returns a maximum string empty percent check.
+     * @return Maximum string empty percent check.
+     */
+    public ColumnStringEmptyPercentCheckSpec getMonthlyCheckpointStringEmptyPercent() {
+        return monthlyCheckpointStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string empty percent check.
+     * @param monthlyCheckpointStringEmptyPercent Maximum string empty percent check.
+     */
+    public void setMonthlyCheckpointStringEmptyPercent(ColumnStringEmptyPercentCheckSpec monthlyCheckpointStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringEmptyPercent, monthlyCheckpointStringEmptyPercent));
+        this.monthlyCheckpointStringEmptyPercent = monthlyCheckpointStringEmptyPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringEmptyPercent, "monthly_checkpoint_string_empty_percent");
     }
 
     /**
      * Returns a maximum string whitespace count check.
      * @return Maximum string whitespace count check.
      */
-    public ColumnMaxStringWhitespaceCountCheckSpec getMonthlyCheckpointMaxStringWhitespaceCount() {
-        return monthlyCheckpointMaxStringWhitespaceCount;
+    public ColumnStringWhitespaceCountCheckSpec getMonthlyCheckpointStringWhitespaceCount() {
+        return monthlyCheckpointStringWhitespaceCount;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace count check.
-     * @param monthlyCheckpointMaxStringWhitespaceCount Maximum string whitespace count check.
+     * @param monthlyCheckpointStringWhitespaceCount Maximum string whitespace count check.
      */
-    public void setMonthlyCheckpointMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec monthlyCheckpointMaxStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringWhitespaceCount, monthlyCheckpointMaxStringWhitespaceCount));
-        this.monthlyCheckpointMaxStringWhitespaceCount = monthlyCheckpointMaxStringWhitespaceCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringWhitespaceCount, "monthly_checkpoint_max_string_whitespace_count");
+    public void setMonthlyCheckpointStringWhitespaceCount(ColumnStringWhitespaceCountCheckSpec monthlyCheckpointStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringWhitespaceCount, monthlyCheckpointStringWhitespaceCount));
+        this.monthlyCheckpointStringWhitespaceCount = monthlyCheckpointStringWhitespaceCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringWhitespaceCount, "monthly_checkpoint_string_whitespace_count");
     }
 
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnMinStringValidDatesPercentCheckSpec getMonthlyCheckpointMinStringValidDatesPercent() {
-        return monthlyCheckpointMinStringValidDatesPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid dates percent check.
-     * @param monthlyCheckpointMinStringValidDatesPercent Minimum string valid dates percent check.
-     */
-    public void setMonthlyCheckpointMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec monthlyCheckpointMinStringValidDatesPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidDatesPercent, monthlyCheckpointMinStringValidDatesPercent));
-        this.monthlyCheckpointMinStringValidDatesPercent = monthlyCheckpointMinStringValidDatesPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringValidDatesPercent, "monthly_checkpoint_min_string_valid_dates_percent");
-    }
     /**
      * Returns a maximum string whitespace percent check.
      * @return Maximum string whitespace percent check.
      */
-    public ColumnMaxStringWhitespacePercentCheckSpec getMonthlyCheckpointMaxStringWhitespacePercent() {
-        return monthlyCheckpointMaxStringWhitespacePercent;
+    public ColumnStringWhitespacePercentCheckSpec getMonthlyCheckpointStringWhitespacePercent() {
+        return monthlyCheckpointStringWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace percent check.
-     * @param monthlyCheckpointMaxStringWhitespacePercent Maximum string whitespace percent check.
+     * @param monthlyCheckpointStringWhitespacePercent Maximum string whitespace percent check.
      */
-    public void setMonthlyCheckpointMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec monthlyCheckpointMaxStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringWhitespacePercent, monthlyCheckpointMaxStringWhitespacePercent));
-        this.monthlyCheckpointMaxStringWhitespacePercent = monthlyCheckpointMaxStringWhitespacePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringWhitespacePercent, "monthly_checkpoint_max_string_whitespace_percent");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnMaxStringNullPlaceholderCountCheckSpec getMonthlyCheckpointMaxStringNullPlaceholderCount() {
-        return monthlyCheckpointMaxStringNullPlaceholderCount;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder count check.
-     * @param monthlyCheckpointMaxStringNullPlaceholderCount Maximum string null placeholder count check.
-     */
-    public void setMonthlyCheckpointMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec monthlyCheckpointMaxStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringNullPlaceholderCount, monthlyCheckpointMaxStringNullPlaceholderCount));
-        this.monthlyCheckpointMaxStringNullPlaceholderCount = monthlyCheckpointMaxStringNullPlaceholderCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringNullPlaceholderCount, "monthly_checkpoint_max_string_null_placeholder_count");
-    }
-
-    /**
-     * Returns a maximum string null placeholder percent check.
-     * @return Maximum string null placeholder percent check.
-     */
-    public ColumnMaxStringNullPlaceholderPercentCheckSpec getMonthlyCheckpointMaxStringNullPlaceholderPercent() {
-        return monthlyCheckpointMaxStringNullPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder percent check.
-     * @param monthlyCheckpointMaxStringNullPlaceholderPercent Maximum string null placeholder percent check.
-     */
-    public void setMonthlyCheckpointMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec monthlyCheckpointMaxStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringNullPlaceholderPercent, monthlyCheckpointMaxStringNullPlaceholderPercent));
-        this.monthlyCheckpointMaxStringNullPlaceholderPercent = monthlyCheckpointMaxStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringNullPlaceholderPercent, "monthly_checkpoint_max_string_null_placeholder_percent");
-    }
-
-    /**
-     * Returns a minimum string boolean placeholder percent check.
-     * @return Minimum string boolean placeholder percent check.
-     */
-    public ColumnMinStringBooleanPlaceholderPercentCheckSpec getMonthlyCheckpointMinStringBooleanPlaceholderPercent() {
-        return monthlyCheckpointMinStringBooleanPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string boolean placeholder percent check.
-     * @param monthlyCheckpointMinStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
-     */
-    public void setMonthlyCheckpointMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec monthlyCheckpointMinStringBooleanPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringBooleanPlaceholderPercent, monthlyCheckpointMinStringBooleanPlaceholderPercent));
-        this.monthlyCheckpointMinStringBooleanPlaceholderPercent = monthlyCheckpointMinStringBooleanPlaceholderPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringBooleanPlaceholderPercent, "monthly_checkpoint_min_string_boolean_placeholder_percent");
-    }
-
-    /**
-     * Returns a minimum string parsable to integer percent check.
-     * @return Minimum string parsable to integer percent check.
-     */
-    public ColumnMinStringParsableToIntegerPercentCheckSpec getMonthlyCheckpointMinStringParsableToIntegerPercent() {
-        return monthlyCheckpointMinStringParsableToIntegerPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string parsable to integer percent check.
-     * @param monthlyCheckpointMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
-     */
-    public void setMonthlyCheckpointMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec monthlyCheckpointMinStringParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringParsableToIntegerPercent, monthlyCheckpointMinStringParsableToIntegerPercent));
-        this.monthlyCheckpointMinStringParsableToIntegerPercent = monthlyCheckpointMinStringParsableToIntegerPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringParsableToIntegerPercent, "monthly_checkpoint_min_string_parsable_to_integer_percent");
+    public void setMonthlyCheckpointStringWhitespacePercent(ColumnStringWhitespacePercentCheckSpec monthlyCheckpointStringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringWhitespacePercent, monthlyCheckpointStringWhitespacePercent));
+        this.monthlyCheckpointStringWhitespacePercent = monthlyCheckpointStringWhitespacePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringWhitespacePercent, "monthly_checkpoint_string_whitespace_percent");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace count check.
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getMonthlyCheckpointMaxStringSurroundedByWhitespaceCount() {
-        return monthlyCheckpointMaxStringSurroundedByWhitespaceCount;
+    public ColumnStringSurroundedByWhitespaceCountCheckSpec getMonthlyCheckpointStringSurroundedByWhitespaceCount() {
+        return monthlyCheckpointStringSurroundedByWhitespaceCount;
     }
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace count check.
-     * @param monthlyCheckpointMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
+     * @param monthlyCheckpointStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
      */
-    public void setMonthlyCheckpointMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec monthlyCheckpointMaxStringSurroundedByWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringSurroundedByWhitespaceCount, monthlyCheckpointMaxStringSurroundedByWhitespaceCount));
-        this.monthlyCheckpointMaxStringSurroundedByWhitespaceCount = monthlyCheckpointMaxStringSurroundedByWhitespaceCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringSurroundedByWhitespaceCount, "monthly_checkpoint_max_string_surrounded_by_whitespace_count");
+    public void setMonthlyCheckpointStringSurroundedByWhitespaceCount(ColumnStringSurroundedByWhitespaceCountCheckSpec monthlyCheckpointStringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringSurroundedByWhitespaceCount, monthlyCheckpointStringSurroundedByWhitespaceCount));
+        this.monthlyCheckpointStringSurroundedByWhitespaceCount = monthlyCheckpointStringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringSurroundedByWhitespaceCount, "monthly_checkpoint_string_surrounded_by_whitespace_count");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace percent check.
      * @return Maximum string surrounded by whitespace percent check.
      */
-    public ColumnMaxStringSurroundedByWhitespacePercentCheckSpec getMonthlyCheckpointMaxStringSurroundedByWhitespacePercent() {
-        return monthlyCheckpointMaxStringSurroundedByWhitespacePercent;
+    public ColumnStringSurroundedByWhitespacePercentCheckSpec getMonthlyCheckpointStringSurroundedByWhitespacePercent() {
+        return monthlyCheckpointStringSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace percent check.
-     * @param monthlyCheckpointMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     * @param monthlyCheckpointStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
      */
-    public void setMonthlyCheckpointMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespacePercentCheckSpec monthlyCheckpointMaxStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxStringSurroundedByWhitespacePercent, monthlyCheckpointMaxStringSurroundedByWhitespacePercent));
-        this.monthlyCheckpointMaxStringSurroundedByWhitespacePercent = monthlyCheckpointMaxStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMaxStringSurroundedByWhitespacePercent, "monthly_checkpoint_max_string_surrounded_by_whitespace_percent");
+    public void setMonthlyCheckpointStringSurroundedByWhitespacePercent(ColumnStringSurroundedByWhitespacePercentCheckSpec monthlyCheckpointStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringSurroundedByWhitespacePercent, monthlyCheckpointStringSurroundedByWhitespacePercent));
+        this.monthlyCheckpointStringSurroundedByWhitespacePercent = monthlyCheckpointStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringSurroundedByWhitespacePercent, "monthly_checkpoint_string_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnStringNullPlaceholderCountCheckSpec getMonthlyCheckpointStringNullPlaceholderCount() {
+        return monthlyCheckpointStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param monthlyCheckpointStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setMonthlyCheckpointStringNullPlaceholderCount(ColumnStringNullPlaceholderCountCheckSpec monthlyCheckpointStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringNullPlaceholderCount, monthlyCheckpointStringNullPlaceholderCount));
+        this.monthlyCheckpointStringNullPlaceholderCount = monthlyCheckpointStringNullPlaceholderCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringNullPlaceholderCount, "monthly_checkpoint_string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnStringNullPlaceholderPercentCheckSpec getMonthlyCheckpointStringNullPlaceholderPercent() {
+        return monthlyCheckpointStringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder percent check.
+     * @param monthlyCheckpointStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     */
+    public void setMonthlyCheckpointStringNullPlaceholderPercent(ColumnStringNullPlaceholderPercentCheckSpec monthlyCheckpointStringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringNullPlaceholderPercent, monthlyCheckpointStringNullPlaceholderPercent));
+        this.monthlyCheckpointStringNullPlaceholderPercent = monthlyCheckpointStringNullPlaceholderPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringNullPlaceholderPercent, "monthly_checkpoint_string_null_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnStringBooleanPlaceholderPercentCheckSpec getMonthlyCheckpointStringBooleanPlaceholderPercent() {
+        return monthlyCheckpointStringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string boolean placeholder percent check.
+     * @param monthlyCheckpointStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     */
+    public void setMonthlyCheckpointStringBooleanPlaceholderPercent(ColumnStringBooleanPlaceholderPercentCheckSpec monthlyCheckpointStringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringBooleanPlaceholderPercent, monthlyCheckpointStringBooleanPlaceholderPercent));
+        this.monthlyCheckpointStringBooleanPlaceholderPercent = monthlyCheckpointStringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringBooleanPlaceholderPercent, "monthly_checkpoint_string_boolean_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent check.
+     */
+    public ColumnStringParsableToIntegerPercentCheckSpec getMonthlyCheckpointStringParsableToIntegerPercent() {
+        return monthlyCheckpointStringParsableToIntegerPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string parsable to integer percent check.
+     * @param monthlyCheckpointStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     */
+    public void setMonthlyCheckpointStringParsableToIntegerPercent(ColumnStringParsableToIntegerPercentCheckSpec monthlyCheckpointStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringParsableToIntegerPercent, monthlyCheckpointStringParsableToIntegerPercent));
+        this.monthlyCheckpointStringParsableToIntegerPercent = monthlyCheckpointStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringParsableToIntegerPercent, "monthly_checkpoint_string_parsable_to_integer_percent");
     }
 
     /**
      * Returns a minimum string parsable to float percent check.
      * @return Minimum string parsable to float percent check.
      */
-    public ColumnMinStringParsableToFloatPercentCheckSpec getMonthlyCheckpointMinStringParsableToFloatPercent() {
-        return monthlyCheckpointMinStringParsableToFloatPercent;
+    public ColumnStringParsableToFloatPercentCheckSpec getMonthlyCheckpointStringParsableToFloatPercent() {
+        return monthlyCheckpointStringParsableToFloatPercent;
     }
 
     /**
      * Sets a new definition of a minimum string parsable to float percent check.
-     * @param monthlyCheckpointMinStringParsableToFloatPercent Minimum string parsable to float percent check.
+     * @param monthlyCheckpointStringParsableToFloatPercent Minimum string parsable to float percent check.
      */
-    public void setMonthlyCheckpointMinStringParsableToFloatPercent(ColumnMinStringParsableToFloatPercentCheckSpec monthlyCheckpointMinStringParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringParsableToFloatPercent, monthlyCheckpointMinStringParsableToFloatPercent));
-        this.monthlyCheckpointMinStringParsableToFloatPercent = monthlyCheckpointMinStringParsableToFloatPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringParsableToFloatPercent, "monthly_checkpoint_min_string_parsable_to_float_percent");
-    }
-
-    /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnMinStringValidUsaZipcodePercentCheckSpec getMonthlyCheckpointMinStringValidUsaZipcodePercent() {
-        return monthlyCheckpointMinStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param monthlyCheckpointMinStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setMonthlyCheckpointMinStringValidUsaZipcodePercent(ColumnMinStringValidUsaZipcodePercentCheckSpec monthlyCheckpointMinStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidUsaZipcodePercent, monthlyCheckpointMinStringValidUsaZipcodePercent));
-        this.monthlyCheckpointMinStringValidUsaZipcodePercent = monthlyCheckpointMinStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringValidUsaZipcodePercent, "monthly_checkpoint_min_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnMinStringValidUsaPhonePercentCheckSpec getMonthlyCheckpointMinStringValidUsaPhonePercent() {
-        return monthlyCheckpointMinStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param monthlyCheckpointMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setMonthlyCheckpointMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec monthlyCheckpointMinStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidUsaPhonePercent, monthlyCheckpointMinStringValidUsaPhonePercent));
-        this.monthlyCheckpointMinStringValidUsaPhonePercent = monthlyCheckpointMinStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringValidUsaPhonePercent, "monthly_checkpoint_min_string_valid_usa_phone_percent");
-    }
-
-    /**
-     * Returns a minimum string valid country code percent check.
-     * @return Minimum string valid country code percent check.
-     */
-    public ColumnMinValidCountryCodePercentCheckSpec getMonthlyCheckpointMinStringValidCountryCodePercent() {
-        return monthlyCheckpointMinStringValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid country code percent check.
-     * @param monthlyCheckpointMinStringValidCountryCodePercent Minimum string valid country code percent check.
-     */
-    public void setMonthlyCheckpointMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec monthlyCheckpointMinStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidCountryCodePercent, monthlyCheckpointMinStringValidCountryCodePercent));
-        this.monthlyCheckpointMinStringValidCountryCodePercent = monthlyCheckpointMinStringValidCountryCodePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringValidCountryCodePercent, "monthly_checkpoint_min_string_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum string valid currency code percent check.
-     * @return Minimum string valid currency code percent check.
-     */
-    public ColumnMinValidCurrencyCodePercentCheckSpec getMonthlyCheckpointMinStringValidCurrencyCodePercent() {
-        return monthlyCheckpointMinStringValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid currency code percent check.
-     * @param monthlyCheckpointMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
-     */
-    public void setMonthlyCheckpointMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec monthlyCheckpointMinStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringValidCurrencyCodePercent, monthlyCheckpointMinStringValidCurrencyCodePercent));
-        this.monthlyCheckpointMinStringValidCurrencyCodePercent = monthlyCheckpointMinStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringValidCurrencyCodePercent, "monthly_checkpoint_min_string_valid_currency_code_percent");
+    public void setMonthlyCheckpointStringParsableToFloatPercent(ColumnStringParsableToFloatPercentCheckSpec monthlyCheckpointStringParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringParsableToFloatPercent, monthlyCheckpointStringParsableToFloatPercent));
+        this.monthlyCheckpointStringParsableToFloatPercent = monthlyCheckpointStringParsableToFloatPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringParsableToFloatPercent, "monthly_checkpoint_string_parsable_to_float_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnMinStringsInSetCountCheckSpec getMonthlyCheckpointMinStringsInSetCount() {
-        return monthlyCheckpointMinStringsInSetCount;
+    public ColumnStringInSetCountCheckSpec getMonthlyCheckpointStringInSetCount() {
+        return monthlyCheckpointStringInSetCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyCheckpointMinStringsInSetCount Minimum strings in set count check.
+     * @param monthlyCheckpointStringInSetCount Minimum strings in set count check.
      */
-    public void setMonthlyCheckpointMinStringsInSetCount(ColumnMinStringsInSetCountCheckSpec monthlyCheckpointMinStringsInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringsInSetCount, monthlyCheckpointMinStringsInSetCount));
-        this.monthlyCheckpointMinStringsInSetCount = monthlyCheckpointMinStringsInSetCount;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringsInSetCount, "monthly_checkpoint_min_strings_in_set_count");
+    public void setMonthlyCheckpointStringInSetCount(ColumnStringInSetCountCheckSpec monthlyCheckpointStringInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInSetCount, monthlyCheckpointStringInSetCount));
+        this.monthlyCheckpointStringInSetCount = monthlyCheckpointStringInSetCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringInSetCount, "monthly_checkpoint_string_in_set_count");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnMinStringsInSetPercentCheckSpec getMonthlyCheckpointMinStringsInSetPercent() {
-        return monthlyCheckpointMinStringsInSetPercent;
+    public ColumnStringInSetPercentCheckSpec getMonthlyCheckpointStringInSetPercent() {
+        return monthlyCheckpointStringInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyCheckpointMinStringsInSetPercent Minimum strings in set percent check.
+     * @param monthlyCheckpointStringInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyCheckpointMinStringsInSetPercent(ColumnMinStringsInSetPercentCheckSpec monthlyCheckpointMinStringsInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinStringsInSetPercent, monthlyCheckpointMinStringsInSetPercent));
-        this.monthlyCheckpointMinStringsInSetPercent = monthlyCheckpointMinStringsInSetPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinStringsInSetPercent, "monthly_checkpoint_min_strings_in_set_percent");
+    public void setMonthlyCheckpointStringInSetPercent(ColumnStringInSetPercentCheckSpec monthlyCheckpointStringInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInSetPercent, monthlyCheckpointStringInSetPercent));
+        this.monthlyCheckpointStringInSetPercent = monthlyCheckpointStringInSetPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringInSetPercent, "monthly_checkpoint_string_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnStringValidDatesPercentCheckSpec getMonthlyCheckpointStringValidDatesPercent() {
+        return monthlyCheckpointStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param monthlyCheckpointStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setMonthlyCheckpointStringValidDatesPercent(ColumnStringValidDatesPercentCheckSpec monthlyCheckpointStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidDatesPercent, monthlyCheckpointStringValidDatesPercent));
+        this.monthlyCheckpointStringValidDatesPercent = monthlyCheckpointStringValidDatesPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidDatesPercent, "monthly_checkpoint_string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a minimum string valid usa zip code percent check.
+     * @return Minimum string valid usa zip code percent check.
+     */
+    public ColumnStringValidUsaZipcodePercentCheckSpec getMonthlyCheckpointStringValidUsaZipcodePercent() {
+        return monthlyCheckpointStringValidUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid usa zip code percent check.
+     * @param monthlyCheckpointStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
+     */
+    public void setMonthlyCheckpointStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec monthlyCheckpointStringValidUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidUsaZipcodePercent, monthlyCheckpointStringValidUsaZipcodePercent));
+        this.monthlyCheckpointStringValidUsaZipcodePercent = monthlyCheckpointStringValidUsaZipcodePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidUsaZipcodePercent, "monthly_checkpoint_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnStringValidUsaPhonePercentCheckSpec getMonthlyCheckpointStringValidUsaPhonePercent() {
+        return monthlyCheckpointStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param monthlyCheckpointStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setMonthlyCheckpointStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec monthlyCheckpointStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidUsaPhonePercent, monthlyCheckpointStringValidUsaPhonePercent));
+        this.monthlyCheckpointStringValidUsaPhonePercent = monthlyCheckpointStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidUsaPhonePercent, "monthly_checkpoint_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent check.
+     */
+    public ColumnStringValidCountryCodePercentCheckSpec getMonthlyCheckpointStringValidCountryCodePercent() {
+        return monthlyCheckpointStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param monthlyCheckpointStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setMonthlyCheckpointStringValidCountryCodePercent(ColumnStringValidCountryCodePercentCheckSpec monthlyCheckpointStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidCountryCodePercent, monthlyCheckpointStringValidCountryCodePercent));
+        this.monthlyCheckpointStringValidCountryCodePercent = monthlyCheckpointStringValidCountryCodePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidCountryCodePercent, "monthly_checkpoint_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent check.
+     */
+    public ColumnStringValidCurrencyCodePercentCheckSpec getMonthlyCheckpointStringValidCurrencyCodePercent() {
+        return monthlyCheckpointStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param monthlyCheckpointStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setMonthlyCheckpointStringValidCurrencyCodePercent(ColumnStringValidCurrencyCodePercentCheckSpec monthlyCheckpointStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidCurrencyCodePercent, monthlyCheckpointStringValidCurrencyCodePercent));
+        this.monthlyCheckpointStringValidCurrencyCodePercent = monthlyCheckpointStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidCurrencyCodePercent, "monthly_checkpoint_string_valid_currency_code_percent");
     }
 
     /**
      * Returns a maximum invalid email count check.
      * @return Maximum invalid email count check.
      */
-    public ColumnMaxInvalidEmailCountCheckSpec getMonthlyCheckpointMaxInvalidEmailCount() {
-        return monthlyCheckpointMaxInvalidEmailCount;
+    public ColumnStringInvalidEmailCountCheckSpec getMonthlyCheckpointStringInvalidEmailCount() {
+        return monthlyCheckpointStringInvalidEmailCount;
     }
 
     /**
      * Sets a new definition of a maximum invalid email count check.
-     * @param monthlyCheckpointMaxInvalidEmailCount Maximum invalid email count check.
+     * @param monthlyCheckpointStringInvalidEmailCount Maximum invalid email count check.
      */
-    public void setMonthlyCheckpointMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec monthlyCheckpointMaxInvalidEmailCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxInvalidEmailCount, monthlyCheckpointMaxInvalidEmailCount));
-        this.monthlyCheckpointMaxInvalidEmailCount = monthlyCheckpointMaxInvalidEmailCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxInvalidEmailCount, "monthly_checkpoint_max_strings_invalid_email_count");
+    public void setMonthlyCheckpointStringInvalidEmailCount(ColumnStringInvalidEmailCountCheckSpec monthlyCheckpointStringInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInvalidEmailCount, monthlyCheckpointStringInvalidEmailCount));
+        this.monthlyCheckpointStringInvalidEmailCount = monthlyCheckpointStringInvalidEmailCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringInvalidEmailCount, "monthly_checkpoint_string_invalid_email_count");
     }
 
     /**
      * Returns a minimum valid email percent check.
      * @return Minimum valid email percent check.
      */
-    public ColumnMinValidEmailPercentCheckSpec getMonthlyCheckpointMinValidEmailPercent() {
-        return monthlyCheckpointMinValidEmailPercent;
+    public ColumnStringValidEmailPercentCheckSpec getMonthlyCheckpointStringValidEmailPercent() {
+        return monthlyCheckpointStringValidEmailPercent;
     }
 
     /**
      * Sets a new definition of a minimum valid email percent check.
-     * @param monthlyCheckpointMinValidEmailPercent Minimum valid email percent check.
+     * @param monthlyCheckpointStringValidEmailPercent Minimum valid email percent check.
      */
-    public void setMonthlyCheckpointMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec monthlyCheckpointMinValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinValidEmailPercent, monthlyCheckpointMinValidEmailPercent));
-        this.monthlyCheckpointMinValidEmailPercent = monthlyCheckpointMinValidEmailPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinValidEmailPercent, "monthly_checkpoint_min_valid_email_percent");
+    public void setMonthlyCheckpointStringValidEmailPercent(ColumnStringValidEmailPercentCheckSpec monthlyCheckpointStringValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidEmailPercent, monthlyCheckpointStringValidEmailPercent));
+        this.monthlyCheckpointStringValidEmailPercent = monthlyCheckpointStringValidEmailPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringValidEmailPercent, "monthly_checkpoint_string_valid_email_percent");
     }
 
     /**
      * Returns a maximum not match regex count check.
      * @return Maximum not match regex count check.
      */
-    public ColumnMaxNotMatchRegexCountCheckSpec getMonthlyCheckpointMaxNotMatchRegexCount() {
-        return monthlyCheckpointMaxNotMatchRegexCount;
+    public ColumnStringNotMatchRegexCountCheckSpec getMonthlyCheckpointStringNotMatchRegexCount() {
+        return monthlyCheckpointStringNotMatchRegexCount;
     }
 
     /**
      * Sets a new definition of a maximum not match regex count check.
-     * @param monthlyCheckpointMaxNotMatchRegexCount Maximum not match regex count check.
+     * @param monthlyCheckpointStringNotMatchRegexCount Maximum not match regex count check.
      */
-    public void setMonthlyCheckpointMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec monthlyCheckpointMaxNotMatchRegexCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNotMatchRegexCount, monthlyCheckpointMaxNotMatchRegexCount));
-        this.monthlyCheckpointMaxNotMatchRegexCount = monthlyCheckpointMaxNotMatchRegexCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxNotMatchRegexCount, "monthly_checkpoint_max_not_match_regex_count");
+    public void setMonthlyCheckpointStringNotMatchRegexCount(ColumnStringNotMatchRegexCountCheckSpec monthlyCheckpointStringNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringNotMatchRegexCount, monthlyCheckpointStringNotMatchRegexCount));
+        this.monthlyCheckpointStringNotMatchRegexCount = monthlyCheckpointStringNotMatchRegexCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringNotMatchRegexCount, "monthly_checkpoint_string_not_match_regex_count");
     }
 
     /**
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnMinRegexMatchPercentCheckSpec getMonthlyCheckpointMinRegexMatchPercent() {
-        return monthlyCheckpointMinRegexMatchPercent;
+    public ColumnStringRegexMatchPercentCheckSpec getMonthlyCheckpointStringMatchRegexPercent() {
+        return monthlyCheckpointStringMatchRegexPercent;
     }
 
     /**
      * Sets a new definition of a minimum match regex percent check.
-     * @param monthlyCheckpointMinRegexMatchPercent Minimum match regex percent check.
+     * @param monthlyCheckpointStringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setMonthlyCheckpointMinRegexMatchPercent(ColumnMinRegexMatchPercentCheckSpec monthlyCheckpointMinRegexMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinRegexMatchPercent, monthlyCheckpointMinRegexMatchPercent));
-        this.monthlyCheckpointMinRegexMatchPercent = monthlyCheckpointMinRegexMatchPercent;
-        propagateHierarchyIdToField(monthlyCheckpointMinRegexMatchPercent, "monthly_checkpoint_min_regex_match_percent");
+    public void setMonthlyCheckpointStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec monthlyCheckpointStringMatchRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMatchRegexPercent, monthlyCheckpointStringMatchRegexPercent));
+        this.monthlyCheckpointStringMatchRegexPercent = monthlyCheckpointStringMatchRegexPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringMatchRegexPercent, "monthly_checkpoint_string_match_regex_percent");
     }
 
     /**
      * Returns a maximum not match date regex count check.
      * @return Maximum not match date regex count check.
      */
-    public ColumnMaxNotMatchDateRegexCountCheckSpec getMonthlyCheckpointMaxNotMatchDateRegexCount() {
-        return monthlyCheckpointMaxNotMatchDateRegexCount;
+    public ColumnStringNotMatchDateRegexCountCheckSpec getMonthlyCheckpointStringNotMatchDateRegexCount() {
+        return monthlyCheckpointStringNotMatchDateRegexCount;
     }
 
     /**
      * Sets a new definition of a maximum not match date regex count check.
-     * @param monthlyCheckpointMaxNotMatchDateRegexCount Maximum not match date regex count check.
+     * @param monthlyCheckpointStringNotMatchDateRegexCount Maximum not match date regex count check.
      */
-    public void setMonthlyCheckpointMaxNotMatchDateRegexCount(ColumnMaxNotMatchDateRegexCountCheckSpec monthlyCheckpointMaxNotMatchDateRegexCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMaxNotMatchDateRegexCount, monthlyCheckpointMaxNotMatchDateRegexCount));
-        this.monthlyCheckpointMaxNotMatchDateRegexCount = monthlyCheckpointMaxNotMatchDateRegexCount;
-        propagateHierarchyIdToField(monthlyCheckpointMaxNotMatchDateRegexCount, "monthly_checkpoint_max_not_match_date_regex_count");
+    public void setMonthlyCheckpointStringNotMatchDateRegexCount(ColumnStringNotMatchDateRegexCountCheckSpec monthlyCheckpointStringNotMatchDateRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringNotMatchDateRegexCount, monthlyCheckpointStringNotMatchDateRegexCount));
+        this.monthlyCheckpointStringNotMatchDateRegexCount = monthlyCheckpointStringNotMatchDateRegexCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringNotMatchDateRegexCount, "monthly_checkpoint_string_not_match_date_regex_count");
     }
 
     /**

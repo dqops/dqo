@@ -42,10 +42,10 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNullsCountCheckSpec dailyCheckpointNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec dailyCheckpointNullsPercent;
 
     /**

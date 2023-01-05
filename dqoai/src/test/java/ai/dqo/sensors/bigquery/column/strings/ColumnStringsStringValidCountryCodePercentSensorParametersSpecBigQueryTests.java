@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidCountryCodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -41,7 +41,7 @@ public class ColumnStringsStringValidCountryCodePercentSensorParametersSpecBigQu
     private ColumnStringsStringValidCountryCodePercentSensorParametersSpec sut;
     private final String valuesString = "'AF',\t'AL',\t'DZ',\t'AS',\t'AD',\t'AO',\t'AI',\t'AQ',\t'AG',\t'AR',\t'AM',\t'AW',\t'AU',\t'AT',\t'AZ',\t'BS',\t'BH',\t'BD',\t'BB',\t'BY',\t'BE',\t'BZ',\t'BJ',\t'BM',\t'BT',\t'BO',\t'BA',\t'BW',\t'BR',\t'IO',\t'VG',\t'BN',\t'BG',\t'BF',\t'BI',\t'KH',\t'CM',\t'CA',\t'CV',\t'KY',\t'CF',\t'TD',\t'CL',\t'CN',\t'CX',\t'CC',\t'CO',\t'KM',\t'CK',\t'CR',\t'HR',\t'CU',\t'CW',\t'CY',\t'CZ',\t'CD',\t'DK',\t'DJ',\t'DM',\t'DO',\t'TL',\t'EC',\t'EG',\t'SV',\t'GQ',\t'ER',\t'EE',\t'ET',\t'FK',\t'FO',\t'FJ',\t'FI',\t'FR',\t'PF',\t'GA',\t'GM',\t'GE',\t'DE',\t'GH',\t'GI',\t'GR',\t'GL',\t'GD',\t'GU',\t'GT',\t'GG',\t'GN',\t'GW',\t'GY',\t'HT',\t'HN',\t'HK',\t'HU',\t'IS',\t'IN',\t'ID',\t'IR',\t'IQ',\t'IE',\t'IM',\t'IL',\t'IT',\t'CI',\t'JM',\t'JP',\t'JE',\t'JO',\t'KZ',\t'KE',\t'KI',\t'XK',\t'KW',\t'KG',\t'LA',\t'LV',\t'LB',\t'LS',\t'LR',\t'LY',\t'LI',\t'LT',\t'LU',\t'MO',\t'MK',\t'MG',\t'MW',\t'MY',\t'MV',\t'ML',\t'MT',\t'MH',\t'MR',\t'MU',\t'YT',\t'MX',\t'FM',\t'MD',\t'MC',\t'MN',\t'ME',\t'MS',\t'MA',\t'MZ',\t'MM',\t'NA',\t'NR',\t'NP',\t'NL',\t'AN',\t'NC',\t'NZ',\t'NI',\t'NE',\t'NG',\t'NU',\t'KP',\t'MP',\t'NO',\t'OM',\t'PK',\t'PW',\t'PS',\t'PA',\t'PG',\t'PY',\t'PE',\t'PH', 'PN', 'PL',\t'PT',\t'PR',\t'QA',\t'CG',\t'RE',\t'RO',\t'RU',\t'RW',\t'BL',\t'SH',\t'KN',\t'LC',\t'MF',\t'PM',\t'VC',\t'WS',\t'SM',\t'ST',\t'SA',\t'SN',\t'RS',\t'SC',\t'SL',\t'SG',\t'SX',\t'SK',\t'SI',\t'SB',\t'SO',\t'ZA',\t'KR',\t'SS',\t'ES',\t'LK',\t'SD',\t'SR',\t'SJ',\t'SZ',\t'SE',\t'CH',\t'SY',\t'TW',\t'TJ',\t'TZ',\t'TH',\t'TG',\t'TK',\t'TO',\t'TT',\t'TN',\t'TR',\t'TM',\t'TC',\t'TV',\t'VI',\t'UG',\t'UA',\t'AE',\t'GB',\t'US',\t'UY',\t'UZ',\t'VU',\t'VA',\t'VE',\t'VN',\t'WF',\t'EH',\t'YE',\t'ZM',\t'ZW'";
     private UserHomeContext userHomeContext;
-    private ColumnMinValidCountryCodePercentCheckSpec checkSpec;
+    private ColumnStringValidCountryCodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringValidCountryCodePercentSensorParametersSpecBigQu
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinValidCountryCodePercentCheckSpec();
+        this.checkSpec = new ColumnStringValidCountryCodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

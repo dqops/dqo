@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringNullPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringNullPlaceholderPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringNullPlaceholderPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringNullPlaceholderPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringNullPlaceholderPercentCheckSpec checkSpec;
+    private ColumnStringNullPlaceholderPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringNullPlaceholderPercentSensorParametersSpecBigQue
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxStringNullPlaceholderPercentCheckSpec();
+        this.checkSpec = new ColumnStringNullPlaceholderPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -42,7 +42,7 @@ public class TableStandardMonthlyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Minimum row count check for each monthly partition or each month of data")
+    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec monthlyPartitionMinRowCount;

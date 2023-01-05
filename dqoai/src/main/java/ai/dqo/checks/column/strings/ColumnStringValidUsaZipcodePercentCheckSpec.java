@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinValidEmailPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,15 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a minimum percentage of rows with a valid email in a monitored column.
+ * Column check that calculates percent of valid USA Zip code values in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinValidEmailPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMinValidEmailPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinValidEmailPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringValidUsaZipcodePercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,9 +50,9 @@ public class ColumnMinValidEmailPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinValidEmailPercentSensorParametersSpec parameters = new ColumnStringsStringMinValidEmailPercentSensorParametersSpec();
+    private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a valid email in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -71,7 +72,7 @@ public class ColumnMinValidEmailPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinValidEmailPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +80,7 @@ public class ColumnMinValidEmailPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinValidEmailPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

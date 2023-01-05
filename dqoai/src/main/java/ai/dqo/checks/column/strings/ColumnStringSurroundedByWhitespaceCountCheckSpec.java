@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringWhitespaceCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +33,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of whitespace strings in a monitored column.
+ * Column level check that ensures that there are no more than a maximum number of surrounded by whitespace strings in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxStringWhitespaceCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringWhitespaceCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringWhitespaceCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringSurroundedByWhitespaceCountCheckSpec extends AbstractCheckSpec<ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringSurroundedByWhitespaceCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,9 +47,9 @@ public class ColumnMaxStringWhitespaceCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringWhitespaceCountSensorParametersSpec parameters = new ColumnStringsStringWhitespaceCountSensorParametersSpec();
+    private ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec parameters = new ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with whitespace strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with surrounded by whitespace strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -70,7 +69,7 @@ public class ColumnMaxStringWhitespaceCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringWhitespaceCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +77,7 @@ public class ColumnMaxStringWhitespaceCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringWhitespaceCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringSurroundedByWhitespaceCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
