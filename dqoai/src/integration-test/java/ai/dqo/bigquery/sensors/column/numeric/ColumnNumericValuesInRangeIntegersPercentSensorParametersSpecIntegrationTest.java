@@ -53,7 +53,7 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day_13_non_negative_floats, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec();
@@ -67,7 +67,7 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "id", this.checkSpec);
+                sampleTableMetadata, "negative", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -83,14 +83,14 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         this.sut.setMaxValue(2L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(84.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(24.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,14 +99,14 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         this.sut.setMaxValue(25L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(28.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -131,7 +131,7 @@ public class ColumnNumericValuesInRangeIntegersPercentSensorParametersSpecIntegr
         this.sut.setMaxValue(30L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

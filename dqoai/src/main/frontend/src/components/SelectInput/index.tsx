@@ -66,6 +66,7 @@ const SelectInput = ({
     setIsChanged(true);
   };
 
+  console.log('value', value);
   return (
     <div className={clsx('', className)}>
       {label && (
@@ -105,7 +106,7 @@ const SelectInput = ({
         >
           <input
             className="h-full pl-4 focus:outline-none w-full"
-            value={value}
+            value={value || ''}
             onChange={handleChange}
             placeholder={placeholder}
           />

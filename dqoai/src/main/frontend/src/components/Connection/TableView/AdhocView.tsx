@@ -70,6 +70,7 @@ const AdhocView = ({
         isUpdating={isUpdating}
       />
       <DataQualityChecks
+        onUpdate={onUpdate}
         checksUI={checksUI}
         onChange={handleChange}
         checkResultsOverview={checkResultsOverview}

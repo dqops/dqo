@@ -175,6 +175,7 @@ const ColumnPartitionedChecksView = ({
       <div>
         {activeTab === 'daily' && (
           <DataQualityChecks
+            onUpdate={onUpdate}
             checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
             className="max-h-checks"
@@ -182,6 +183,7 @@ const ColumnPartitionedChecksView = ({
         )}
         {activeTab === 'monthly' && (
           <DataQualityChecks
+            onUpdate={onUpdate}
             checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
             className="max-h-checks"

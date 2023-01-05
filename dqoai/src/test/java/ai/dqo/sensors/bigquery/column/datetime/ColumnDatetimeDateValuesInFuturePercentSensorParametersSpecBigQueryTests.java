@@ -62,16 +62,16 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date4", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersAdHoc(String columnName) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, columnName, this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "date4", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersCheckpoint(String columnName, CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, columnName, this.checkSpec, timeScale);
     }
 
-    private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "date4", this.checkSpec, timeScale, timeSeriesColumn);
+    private SensorExecutionRunParameters getRunParametersPartitioned(String columnName, CheckTimeScale timeScale, String timeSeriesColumn) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, columnName, this.checkSpec, timeScale, timeSeriesColumn);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
@@ -98,7 +98,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -108,7 +108,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -126,10 +126,39 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         ), renderedTemplate);
     }
 
+    @Test
+    void renderSensor_whenAdHocNoTimeSeriesNoDataStreamTypeString_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date3");
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%s AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
 
     @Test
     void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.DAY);
@@ -143,7 +172,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                         WHEN COUNT(*) = 0 THEN 100.0
                         ELSE 100.0 * SUM(
                             CASE
-                                WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                                WHEN %s > CURRENT_DATETIME()
                                     THEN 1
                                 ELSE 0
                             END
@@ -165,7 +194,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -174,7 +203,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -196,7 +225,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -205,7 +234,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -228,7 +257,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -241,7 +270,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -263,7 +292,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
@@ -275,7 +304,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -297,7 +326,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
@@ -309,7 +338,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -332,7 +361,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenAdHocOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.DAY);
@@ -350,7 +379,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -372,7 +401,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
@@ -385,7 +414,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
@@ -407,7 +436,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned("date4", CheckTimeScale.daily, "date1");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
@@ -420,7 +449,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS DATE) > CURRENT_DATE()
+                            WHEN %s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END

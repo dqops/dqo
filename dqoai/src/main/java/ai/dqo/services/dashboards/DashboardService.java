@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.dashboards;
+package ai.dqo.services.dashboards;
+
+import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
 
 /**
  * Service that returns the list of built-in data quality dashboards, divided into folders.

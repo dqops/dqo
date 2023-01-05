@@ -18,6 +18,8 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
+import java.util.Objects;
+
 /**
  * List of dashboards.
  */
@@ -73,5 +75,20 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
         this.add(dashboardSpec);
 
         return this;
+    }
+
+    /**
+     * Finds a dashboard by name.
+     * @param dashboardName Dashboard specification when the dashboard was found or null when the dashboard is missing.
+     * @return Dashboard specification or null.
+     */
+    public DashboardSpec getDashboardByName(String dashboardName) {
+        for (DashboardSpec dashboard : this) {
+            if (Objects.equals(dashboardName, dashboard.getDashboardName())) {
+                return dashboard;
+            }
+        }
+
+        return null;
     }
 }
