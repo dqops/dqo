@@ -15,13 +15,18 @@
  */
 package ai.dqo.sensors.column.datetime;
 
+import ai.dqo.metadata.fields.ControlType;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
@@ -54,4 +59,5 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec extends
     public String getSensorDefinitionName() {
         return "column/datetime/date_values_in_future_percent";
     }
+
 }

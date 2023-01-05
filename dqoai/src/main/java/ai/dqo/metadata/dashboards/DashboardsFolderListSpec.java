@@ -18,6 +18,8 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
+import java.util.Objects;
+
 /**
  * List of dashboard folders.
  */
@@ -53,5 +55,20 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         }
 
         return cloned;
+    }
+
+    /**
+     * Finds a folder by name.
+     * @param folderName Folder specification when the folder was found or null when the folder is missing.
+     * @return Folder specification or null.
+     */
+    public DashboardsFolderSpec getFolderByName(String folderName) {
+        for (DashboardsFolderSpec folder : this) {
+            if (Objects.equals(folderName, folder.getFolderName())) {
+                return folder;
+            }
+        }
+
+        return null;
     }
 }

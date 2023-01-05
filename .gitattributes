@@ -1,5 +1,8 @@
 mvnw text eol=cr
 mvnw.sh text eol=cr
-dqo.sh text eol=cr
+dqo text eol=cr
+rebuild.sh text eol=cr
+make_docs text eol=cr
 find-dqo-home.sh text eol=cr
 set-dqo-envs.sh text eol=cr
+find-dqo-classpath.sh text eol=cr
