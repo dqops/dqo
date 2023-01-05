@@ -12,6 +12,8 @@ interface ICommentsViewProps {
   className?: string;
   isUpdated?: boolean;
   setIsUpdated?: (value: boolean) => void;
+  text: string;
+  setText: (value: string) => void;
 }
 
 const CommentsView = ({
@@ -19,9 +21,10 @@ const CommentsView = ({
   onChange,
   className,
   isUpdated,
-  setIsUpdated
+  setIsUpdated,
+  text,
+  setText
 }: ICommentsViewProps) => {
-  const [text, setText] = useState('');
 
   const onAdd = () => {
     onChange([

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetPercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnNumbersInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -43,7 +43,7 @@ import java.util.List;
 public class ColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnNumericNumbersInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinNumbersInSetPercentCheckSpec checkSpec;
+    private ColumnNumbersInSetPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -60,7 +60,7 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericNumbersInSetPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinNumbersInSetPercentCheckSpec();
+		this.checkSpec = new ColumnNumbersInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -77,7 +77,7 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test

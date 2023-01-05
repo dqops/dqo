@@ -17,8 +17,7 @@ package ai.dqo.sensors.bigquery.column.sql;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMaxSqlConditionFailedCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnMinSqlConditionPassedPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -32,7 +31,6 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.sql.ColumnSqlConditionFailedCountSensorParametersSpec;
-import ai.dqo.sensors.column.sql.ColumnSqlConditionPassedPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxSqlConditionFailedCountCheckSpec checkSpec;
+    private ColumnSqlConditionFailedCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -61,7 +59,7 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxSqlConditionFailedCountCheckSpec();
+        this.checkSpec = new ColumnSqlConditionFailedCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

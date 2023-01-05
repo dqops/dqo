@@ -19,8 +19,10 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule98ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule99ParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNegativePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
+ * Column level check that ensures that there are no more than a set percentage of negative values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinNumbersInSetCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNumbersInSetCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinNumbersInSetCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnNegativePercentCheckSpec
+        extends AbstractCheckSpec<ColumnNumericNegativePercentSensorParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,37 +49,39 @@ public class ColumnMinNumbersInSetCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericNumbersInSetCountSensorParametersSpec parameters = new ColumnNumericNumbersInSetCountSensorParametersSpec();
+    private ColumnNumericNegativePercentSensorParametersSpec parameters = new ColumnNumericNegativePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
+    private MaxPercentRule98ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec warning;
+    private MaxPercentRule99ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec fatal;
+    private MaxPercentRule95ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
+     *
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericNumbersInSetCountSensorParametersSpec getParameters() {
+    public ColumnNumericNegativePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
     /**
      * Sets a new row count sensor parameter object.
+     *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericNumbersInSetCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericNegativePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -86,18 +90,19 @@ public class ColumnMinNumbersInSetCountCheckSpec
     /**
      * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      *
-     * @return Default "ERROR" alerting thresholds.
+     * @return Default "error" alerting thresholds.
      */
     @Override
-    public MinCountRule0ParametersSpec getError() {
+    public MaxPercentRule98ParametersSpec getError() {
         return this.error;
     }
 
     /**
      * Sets a new error level alerting threshold.
+     *
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRule0ParametersSpec error) {
+    public void setError(MaxPercentRule98ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,15 +114,16 @@ public class ColumnMinNumbersInSetCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRule0ParametersSpec getWarning() {
+    public MaxPercentRule99ParametersSpec getWarning() {
         return this.warning;
     }
 
     /**
      * Sets a new warning level alerting threshold.
+     *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRule0ParametersSpec warning) {
+    public void setWarning(MaxPercentRule99ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,15 +135,16 @@ public class ColumnMinNumbersInSetCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRule0ParametersSpec getFatal() {
+    public MaxPercentRule95ParametersSpec getFatal() {
         return this.fatal;
     }
 
     /**
      * Sets a new fatal level alerting threshold.
+     *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule95ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

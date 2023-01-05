@@ -17,8 +17,7 @@ package ai.dqo.sensors.bigquery.column.numeric;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMaxNegativeCountCheckSpec;
-import ai.dqo.checks.column.numeric.ColumnMinNumbersInSetCountCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnNumbersInSetCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -31,7 +30,6 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNegativeCountSensorParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,8 +45,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     private ColumnNumericNumbersInSetCountSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
-    private ColumnMinNumbersInSetCountCheckSpec checkSpec;
-    private ColumnMinNumbersInSetCountCheckSpec altCheckSpec;
+    private ColumnNumbersInSetCountCheckSpec checkSpec;
+    private ColumnNumbersInSetCountCheckSpec altCheckSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -71,9 +69,9 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMinNumbersInSetCountCheckSpec();
+        this.checkSpec = new ColumnNumbersInSetCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.altCheckSpec = new ColumnMinNumbersInSetCountCheckSpec();
+        this.altCheckSpec = new ColumnNumbersInSetCountCheckSpec();
         this.altCheckSpec.setParameters(altSut);
     }
 

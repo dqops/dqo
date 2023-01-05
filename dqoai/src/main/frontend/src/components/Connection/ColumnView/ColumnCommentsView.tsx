@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import CommentsView from '../CommentsView';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ const ColumnCommentsView = ({
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
+  const [text, setText] = useState('');
 
   useEffect(() => {
     if (
@@ -51,7 +52,11 @@ const ColumnCommentsView = ({
         schemaName,
         tableName,
         columnName,
-        comments
+        [...comments, ...text ? [{
+          comment: text,
+          comment_by: 'user',
+          date: new Date().toISOString()
+        }] : []]
       )
     );
     await dispatch(
@@ -71,6 +76,8 @@ const ColumnCommentsView = ({
         isUpdating={isUpdating}
       />
       <CommentsView
+        text={text}
+        setText={setText}
         isUpdated={isUpdatedComments}
         setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
         comments={comments}

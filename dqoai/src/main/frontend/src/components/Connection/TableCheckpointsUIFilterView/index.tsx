@@ -52,6 +52,7 @@ const TableCheckpointsUIFilterView = ({
       </div>
       <div>
         <DataQualityChecks
+          onUpdate={() => {}}
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}

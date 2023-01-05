@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.numeric.ColumnMinValuesInRangeNumericPercentCheckSpec;
+import ai.dqo.checks.column.numeric.ColumnValuesInRangeNumericPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnNumericValuesInRangeNumericPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinValuesInRangeNumericPercentCheckSpec checkSpec;
+    private ColumnValuesInRangeNumericPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -53,11 +53,11 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day_13_non_negative_floats, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericValuesInRangeNumericPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinValuesInRangeNumericPercentCheckSpec();
+		this.checkSpec = new ColumnValuesInRangeNumericPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -67,7 +67,7 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMaxValue(30.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "id", this.checkSpec);
+                sampleTableMetadata, "negative", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -83,14 +83,14 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMaxValue(2.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(84.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(24.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,14 +99,14 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMaxValue(25.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(28.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMaxValue(30.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -131,7 +131,7 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecIntegra
         this.sut.setMaxValue(30.0);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "id", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
