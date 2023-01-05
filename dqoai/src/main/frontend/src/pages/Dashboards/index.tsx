@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getAllDashboards } from "../../redux/actions/dashboard.actions";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
 import DashboardLayout from "../../components/DashboardLayout";
 import PageTabs from "../../components/PageTabs";
 import { useDashboard } from "../../contexts/dashboardContext";
@@ -12,7 +10,6 @@ import { AuthenticatedDashboardModel } from "../../api";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
-  const { dashboardFolders }  = useSelector((state: IRootState) => state.dashboard);
   const { tabs, activeTab, setActiveTab, closeTab, onAddTab, openedDashboards } = useDashboard();
 
   useEffect(() => {

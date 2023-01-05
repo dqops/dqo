@@ -3,7 +3,7 @@ import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import SvgIcon from '../SvgIcon';
 import clsx from 'clsx';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   sidebarWidth: number;
@@ -12,6 +12,8 @@ interface HeaderProps {
 
 const Header = ({ sidebarWidth, isHome }: HeaderProps) => {
   const history = useHistory();
+  const location = useLocation();
+
   return (
     <div
       className={clsx(
@@ -26,6 +28,20 @@ const Header = ({ sidebarWidth, isHome }: HeaderProps) => {
         )}
         <div onClick={() => history.push('/')}>
           <Logo className="w-30 cursor-pointer" />
+        </div>
+        <div className="flex items-center">
+          <div
+            className={clsx("px-4 cursor-pointer", location.pathname === '/checks' ? 'font-bold' : '' )}
+            onClick={() => history.push('/checks')}
+          >
+            Data Quality Checks
+          </div>
+          <div
+            className={clsx("px-4 cursor-pointer", location.pathname === '/dashboards' ? 'font-bold' : '' )}
+            onClick={() => history.push('/dashboards')}
+          >
+            Data Quality Dashboards
+          </div>
         </div>
       </div>
       <NotificationMenu />

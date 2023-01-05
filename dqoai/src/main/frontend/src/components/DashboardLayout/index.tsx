@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import TopView from "../Dashboards/TopView";
 import LeftView from "../Dashboards/LeftView";
+import Header from "../Header";
 
 interface LayoutProps {
   children?: any;
@@ -12,7 +13,7 @@ interface LayoutProps {
 const DashboardLayout = ({ children }: LayoutProps) => {
   return (
     <div className="flex min-h-screen overflow-hidden">
-      <TopView />
+      <Header sidebarWidth={280} />
       <LeftView />
       <div className="flex flex-1">
         <div
