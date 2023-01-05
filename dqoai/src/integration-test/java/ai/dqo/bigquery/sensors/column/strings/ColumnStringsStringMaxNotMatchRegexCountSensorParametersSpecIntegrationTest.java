@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxNotMatchRegexCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringNotMatchRegexCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchRegexCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec sut;
+    private ColumnStringsStringNotMatchRegexCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNotMatchRegexCountCheckSpec checkSpec;
+    private ColumnStringNotMatchRegexCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -57,8 +57,8 @@ public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpecIntegra
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxNotMatchRegexCountCheckSpec();
+		this.sut = new ColumnStringsStringNotMatchRegexCountSensorParametersSpec();
+		this.checkSpec = new ColumnStringNotMatchRegexCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

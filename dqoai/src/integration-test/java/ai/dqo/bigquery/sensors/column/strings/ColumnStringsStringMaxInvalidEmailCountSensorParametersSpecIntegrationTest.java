@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxInvalidEmailCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringInvalidEmailCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxInvalidEmailCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringInvalidEmailCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class ColumnStringsStringMaxInvalidEmailCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMaxInvalidEmailCountSensorParametersSpec sut;
+    private ColumnStringsStringInvalidEmailCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxInvalidEmailCountCheckSpec checkSpec;
+    private ColumnStringInvalidEmailCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -57,8 +57,8 @@ public class ColumnStringsStringMaxInvalidEmailCountSensorParametersSpecIntegrat
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMaxInvalidEmailCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxInvalidEmailCountCheckSpec();
+		this.sut = new ColumnStringsStringInvalidEmailCountSensorParametersSpec();
+		this.checkSpec = new ColumnStringInvalidEmailCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidUsaPhonePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringValidUsaPhonePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringValidUsaPhonePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringValidUsaPhonePercentCheckSpec checkSpec;
+    private ColumnStringValidUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringValidUsaPhonePercentSensorParametersSpecIntegrat
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringValidUsaPhonePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinStringValidUsaPhonePercentCheckSpec();
+		this.checkSpec = new ColumnStringValidUsaPhonePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

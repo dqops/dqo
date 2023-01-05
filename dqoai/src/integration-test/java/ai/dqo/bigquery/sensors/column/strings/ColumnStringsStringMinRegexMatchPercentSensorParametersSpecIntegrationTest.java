@@ -17,8 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinRegexMatchPercentCheckSpec;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringRegexMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -30,8 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinRegexMatchPercentSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringRegexMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringMinRegexMatchPercentSensorParametersSpec sut;
+    private ColumnStringsStringRegexMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinRegexMatchPercentCheckSpec checkSpec;
+    private ColumnStringRegexMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,8 +57,8 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpecIntegrat
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringMinRegexMatchPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinRegexMatchPercentCheckSpec();
+		this.sut = new ColumnStringsStringRegexMatchPercentSensorParametersSpec();
+		this.checkSpec = new ColumnStringRegexMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

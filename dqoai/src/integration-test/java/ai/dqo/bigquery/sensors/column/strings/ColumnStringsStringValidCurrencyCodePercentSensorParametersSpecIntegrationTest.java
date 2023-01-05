@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinValidCurrencyCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidCurrencyCodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinValidCurrencyCodePercentCheckSpec checkSpec;
+    private ColumnStringValidCurrencyCodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecInte
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinValidCurrencyCodePercentCheckSpec();
+		this.checkSpec = new ColumnStringValidCurrencyCodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

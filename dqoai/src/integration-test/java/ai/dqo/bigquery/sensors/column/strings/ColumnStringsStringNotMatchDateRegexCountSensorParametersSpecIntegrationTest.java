@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxNotMatchDateRegexCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringNotMatchDateRegexCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxNotMatchDateRegexCountCheckSpec checkSpec;
+    private ColumnStringNotMatchDateRegexCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecIntegr
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxNotMatchDateRegexCountCheckSpec();
+		this.checkSpec = new ColumnStringNotMatchDateRegexCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

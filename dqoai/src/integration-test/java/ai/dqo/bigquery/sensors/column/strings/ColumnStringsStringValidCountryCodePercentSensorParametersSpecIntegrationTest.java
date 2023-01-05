@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinValidCountryCodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidCountryCodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringValidCountryCodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringValidCountryCodePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinValidCountryCodePercentCheckSpec checkSpec;
+    private ColumnStringValidCountryCodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringValidCountryCodePercentSensorParametersSpecInteg
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringValidCountryCodePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinValidCountryCodePercentCheckSpec();
+		this.checkSpec = new ColumnStringValidCountryCodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
