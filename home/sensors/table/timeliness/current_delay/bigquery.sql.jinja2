@@ -1,6 +1,29 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{% macro render_current_timestamp_diff(col, time_scale) -%}
+    {%- if table.columns[col].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+    TIMESTAMP_DIFF(CURRENT_TIMESTAMP(),
+                   MAX(analyzed_table.{{ col }}),
+                   {{ time_scale }})
+    {%- elif table.columns[col].type_snapshot.column_type | upper == 'DATE' -%}
+    DATE_DIFF(CURRENT_DATE(),
+                   MAX(analyzed_table.{{ col }}),
+                   {{ time_scale }})
+    {%- elif table.columns[col].type_snapshot.column_type | upper == 'DATETIME' -%}
+    DATETIME_DIFF(CURRENT_DATETIME(),
+                   MAX(analyzed_table.{{ col }}),
+                   {{ time_scale }})
+    {%- elif table.columns[col].type_snapshot.column_type | upper == 'STRING' -%}
+    TIMESTAMP_DIFF(CURRENT_TIMESTAMP(),
+                   SAFE_CAST(MAX(analyzed_table.{{ col }}) AS TIMESTAMP),
+                   {{ time_scale }})
+    {%- else -%}
+    <INVALID DATA TYPE: {{table.columns[col].type_snapshot.column_type}}/>
+    {%- endif -%}
+{%- endmacro %}
+
 SELECT
-    {{ lib.render_current_timestamp_diff(parameters.column, parameters.time_scale) }} AS actual_value
+    {{ render_current_timestamp_diff(parameters.column, parameters.time_scale) }} AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table

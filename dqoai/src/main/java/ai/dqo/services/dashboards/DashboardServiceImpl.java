@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.dashboards;
+package ai.dqo.services.dashboards;
 
+import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
+import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import org.springframework.stereotype.Service;
 
 /**
