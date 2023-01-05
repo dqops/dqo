@@ -25,8 +25,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeleteStoredDataQueueJobParameters {
     private String connectionName;
-    private String schemaName;
-    private String tableName;
+    private String schemaTableName;
     private LocalDate dateStart;
     private LocalDate dateEnd;
 
@@ -50,20 +49,17 @@ public class DeleteStoredDataQueueJobParameters {
 
     /**
      * Creates parameters for a delete stored data job.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @param dateStart      Beginning of the period marked for deletion (only year and month considered by default).
-     * @param dateEnd        End of the period marked for deletion (only year and month considered by default).
+     * @param connectionName  Connection name.
+     * @param schemaTableName Schema.table name.
+     * @param dateStart       Beginning of the period marked for deletion (only year and month considered by default).
+     * @param dateEnd         End of the period marked for deletion (only year and month considered by default).
      */
     public DeleteStoredDataQueueJobParameters(String connectionName,
-                                              String schemaName,
-                                              String tableName,
+                                              String schemaTableName,
                                               LocalDate dateStart,
                                               LocalDate dateEnd) {
         this.connectionName = connectionName;
-        this.schemaName = schemaName;
-        this.tableName = tableName;
+        this.schemaTableName = schemaTableName;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
     }
@@ -84,36 +80,12 @@ public class DeleteStoredDataQueueJobParameters {
         this.connectionName = connectionName;
     }
 
-    /**
-     * Returns the schema name.
-     * @return Schema name.
-     */
-    public String getSchemaName() {
-        return schemaName;
+    public String getSchemaTableName() {
+        return schemaTableName;
     }
 
-    /**
-     * Sets the schema name.
-     * @param schemaName Schema name.
-     */
-    public void setSchemaName(String schemaName) {
-        this.schemaName = schemaName;
-    }
-
-    /**
-     * Returns the table name.
-     * @return Table name.
-     */
-    public String getTableName() {
-        return tableName;
-    }
-
-    /**
-     * Sets the table name.
-     * @param tableName Table name.
-     */
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setSchemaTableName(String schemaTableName) {
+        this.schemaTableName = schemaTableName;
     }
 
     public LocalDate getDateStart() {

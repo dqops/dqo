@@ -73,14 +73,18 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
         return new RuleResultsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
                 setConnectionName(deletionParameters.getConnectionName());
-                setSchemaTableName(
-                        new PhysicalTableName(deletionParameters.getSchemaName(),
-                                deletionParameters.getTableName()).toTableSearchFilter());
+                setSchemaTableName(deletionParameters.getSchemaTableName());
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
             setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
-            // TODO: Add other parameters.
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType());
+            setColumnName(deletionParameters.getColumnName());
+            setDataStreamName(deletionParameters.getDataStreamName());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTimeGradient(deletionParameters.getTimeGradient());
         }};
     }
 

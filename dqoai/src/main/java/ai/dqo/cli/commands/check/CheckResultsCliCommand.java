@@ -22,10 +22,10 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "check" 1st level CLI command - a grouping command for performing actions on checks like executing checks, listing checks, etc.
+ * "check results" 2nd level CLI command - a grouping command for performing actions on check results like displaying results of a certain check, deleting results for a time period, etc.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "check", description = "Commands related to checks and rules", subcommands = {CheckRunCliCommand.class, CheckResultsCliCommand.class})
-public class CheckCliCommand extends BaseCommand {
+@CommandLine.Command(name = "results", description = "Delete results for a specified check", subcommands = CheckResultsDeleteCliCommand.class)
+public class CheckResultsCliCommand extends BaseCommand {
 }

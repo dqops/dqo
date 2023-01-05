@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
@@ -110,5 +111,15 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public ImportTablesQueueJob createImportTablesJob() {
         return this.beanFactory.getBean(ImportTablesQueueJob.class);
+    }
+
+    /**
+     * Creates a job that data from user's ".data" directory.
+     *
+     * @return Delete stored data job.
+     */
+    @Override
+    public DeleteStoredDataQueueJob createDeleteStoredDataJob() {
+        return this.beanFactory.getBean(DeleteStoredDataQueueJob.class);
     }
 }
