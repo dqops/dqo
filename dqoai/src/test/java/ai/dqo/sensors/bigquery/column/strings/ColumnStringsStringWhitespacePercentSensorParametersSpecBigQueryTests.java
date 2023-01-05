@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespacePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringWhitespacePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -40,7 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnStringsStringWhitespacePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnStringsStringWhitespacePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringWhitespacePercentCheckSpec checkSpec;
+    private ColumnStringWhitespacePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -58,7 +58,7 @@ public class ColumnStringsStringWhitespacePercentSensorParametersSpecBigQueryTes
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnMaxStringWhitespacePercentCheckSpec();
+        this.checkSpec = new ColumnStringWhitespacePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringEmptyCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringEmptyCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringEmptyCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringEmptyCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringEmptyCountCheckSpec checkSpec;
+    private ColumnStringEmptyCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringEmptyCountSensorParametersSpecIntegrationTest ex
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringEmptyCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxStringEmptyCountCheckSpec();
+		this.checkSpec = new ColumnStringEmptyCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

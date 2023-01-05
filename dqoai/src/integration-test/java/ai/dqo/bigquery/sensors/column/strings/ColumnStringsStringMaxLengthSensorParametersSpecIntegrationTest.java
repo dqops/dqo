@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringLengthBelowCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringMaxLengthCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringMaxLengthSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringMaxLengthSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringLengthBelowCheckSpec checkSpec;
+    private ColumnStringMaxLengthCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringMaxLengthSensorParametersSpecIntegrationTest ext
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringMaxLengthSensorParametersSpec();
-		this.checkSpec = new ColumnMaxStringLengthBelowCheckSpec();
+		this.checkSpec = new ColumnStringMaxLengthCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

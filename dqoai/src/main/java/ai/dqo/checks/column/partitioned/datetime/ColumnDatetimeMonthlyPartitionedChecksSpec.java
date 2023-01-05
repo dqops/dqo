@@ -41,7 +41,7 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDateValuesInFuturePercentCheckSpec monthlyPartitionDateValuesInFuturePercent;
 
     /**

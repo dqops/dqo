@@ -19,10 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringParsableToFloatPercentSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchRegexCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,13 +33,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are at least percentage of rows with parsable to float strings in a monitored column.
+ * Column check that calculates quantity of values that does not matche the custom regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringParsableToFloatPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringParsableToFloatPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringNotMatchRegexCountCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringNotMatchRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringNotMatchRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,29 +48,29 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringParsableToFloatPercentSensorParametersSpec parameters = new ColumnStringsStringParsableToFloatPercentSensorParametersSpec();
+    private ColumnStringsStringNotMatchRegexCountSensorParametersSpec parameters = new ColumnStringsStringNotMatchRegexCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to float strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule98ParametersSpec error;
+    private MaxCountRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec warning;
+    private MaxCountRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule95ParametersSpec fatal;
+    private MaxCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringParsableToFloatPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringNotMatchRegexCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringParsableToFloatPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringNotMatchRegexCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -90,7 +90,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule98ParametersSpec getError() {
+    public MaxCountRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -98,7 +98,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule98ParametersSpec error) {
+    public void setError(MaxCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -110,7 +110,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule99ParametersSpec getWarning() {
+    public MaxCountRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -118,7 +118,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule99ParametersSpec warning) {
+    public void setWarning(MaxCountRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -130,7 +130,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule95ParametersSpec getFatal() {
+    public MaxCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +138,7 @@ public class ColumnMinStringParsableToFloatPercentCheckSpec extends AbstractChec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule95ParametersSpec fatal) {
+    public void setFatal(MaxCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

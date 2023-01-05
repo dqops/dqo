@@ -40,7 +40,7 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.")
     private ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent;
 
     /**

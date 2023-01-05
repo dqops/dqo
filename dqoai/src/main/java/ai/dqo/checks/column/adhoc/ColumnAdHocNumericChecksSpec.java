@@ -45,22 +45,22 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
     private ColumnNegativeCountCheckSpec negativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNegativePercentCheckSpec negativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.")
     private ColumnNumbersInSetCountCheckSpec numbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of numbers from set in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage.")
     private ColumnNumbersInSetPercentCheckSpec numbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
 
     /**

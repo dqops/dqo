@@ -44,13 +44,13 @@ public class ColumnUniquenessDailyCheckpointsSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnUniqueCountCheckSpec dailyCheckpointUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec dailyCheckpointDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnDuplicatePercentCheckSpec dailyCheckpointDuplicatePercent;
 
     /**

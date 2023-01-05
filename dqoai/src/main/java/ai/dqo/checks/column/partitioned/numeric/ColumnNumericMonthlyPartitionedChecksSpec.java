@@ -45,22 +45,22 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNegativeCountCheckSpec monthlyPartitionNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNegativePercentCheckSpec monthlyPartitionNegativePercent;
     
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNumbersInSetCountCheckSpec monthlyPartitionNumbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNumbersInSetPercentCheckSpec monthlyPartitionNumbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeNumericPercentCheckSpec monthlyPartitionValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
 
     /**

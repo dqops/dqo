@@ -45,22 +45,22 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNegativeCountCheckSpec dailyPartitionNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNegativePercentCheckSpec dailyPartitionNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNumbersInSetCountCheckSpec dailyPartitionNumbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNumbersInSetPercentCheckSpec dailyPartitionNumbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the mset percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeNumericPercentCheckSpec dailyPartitionValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
     /**

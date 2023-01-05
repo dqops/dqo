@@ -19,8 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMeanLengthSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxValueRuleParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMeanStringLengthBetweenCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMeanStringLengthBetweenCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringMaxLengthCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMaxLengthSensorParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringMaxLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,29 +47,29 @@ public class ColumnMeanStringLengthBetweenCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMeanLengthSensorParametersSpec parameters = new ColumnStringsStringMeanLengthSensorParametersSpec();
+    private ColumnStringsStringMaxLengthSensorParametersSpec parameters = new ColumnStringsStringMaxLengthSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BetweenFloatsRuleParametersSpec error;
+    private MaxValueRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BetweenFloatsRuleParametersSpec warning;
+    private MaxValueRuleParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BetweenFloatsRuleParametersSpec fatal;
+    private MaxValueRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMeanLengthSensorParametersSpec getParameters() {
+    public ColumnStringsStringMaxLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMeanLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringMaxLengthSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
@@ -89,7 +89,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public BetweenFloatsRuleParametersSpec getError() {
+    public MaxValueRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +97,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(BetweenFloatsRuleParametersSpec error) {
+    public void setError(MaxValueRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +109,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public BetweenFloatsRuleParametersSpec getWarning() {
+    public MaxValueRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +117,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(BetweenFloatsRuleParametersSpec warning) {
+    public void setWarning(MaxValueRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +129,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public BetweenFloatsRuleParametersSpec getFatal() {
+    public MaxValueRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +137,7 @@ public class ColumnMeanStringLengthBetweenCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(BetweenFloatsRuleParametersSpec fatal) {
+    public void setFatal(MaxValueRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

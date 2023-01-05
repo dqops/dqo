@@ -44,13 +44,13 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count.")
     private ColumnUniqueCountCheckSpec uniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
     private ColumnDuplicateCountCheckSpec duplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent.")
+    @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.")
     private ColumnDuplicatePercentCheckSpec duplicatePercent;
 
     /**

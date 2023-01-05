@@ -45,22 +45,22 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNegativeCountCheckSpec dailyCheckpointNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec dailyCheckpointNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the set count.")
+    @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNumbersInSetCountCheckSpec dailyCheckpointNumbersInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNumbersInSetPercentCheckSpec dailyCheckpointNumbersInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeNumericPercentCheckSpec dailyCheckpointValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyCheckpointValuesInRangeIntegersPercent;
 
     /**

@@ -44,13 +44,13 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnUniqueCountCheckSpec monthlyPartitionUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the set percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
 
     /**

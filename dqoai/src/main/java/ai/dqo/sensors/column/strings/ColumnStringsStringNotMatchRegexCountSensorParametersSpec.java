@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringNotMatchRegexCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringNotMatchRegexCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -75,7 +75,7 @@ public class ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec extend
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_max_not_match_regex_count";
+        return "column/strings/string_not_match_regex_count";
     }
 
 }

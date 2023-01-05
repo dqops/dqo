@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMaxStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringWhitespaceCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringWhitespaceCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringWhitespaceCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMaxStringWhitespaceCountCheckSpec checkSpec;
+    private ColumnStringWhitespaceCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecIntegrationTe
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringWhitespaceCountSensorParametersSpec();
-		this.checkSpec = new ColumnMaxStringWhitespaceCountCheckSpec();
+		this.checkSpec = new ColumnStringWhitespaceCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

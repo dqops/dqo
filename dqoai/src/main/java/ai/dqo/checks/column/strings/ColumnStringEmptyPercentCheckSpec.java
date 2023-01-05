@@ -19,12 +19,11 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringEmptyPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates quantity of values that does not matche the custom regex in a column.
+ * Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxNotMatchRegexCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxNotMatchRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringEmptyPercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringEmptyPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringEmptyPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,29 +49,29 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec parameters = new ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec();
+    private ColumnStringsStringEmptyPercentSensorParametersSpec parameters = new ColumnStringsStringEmptyPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching regex in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxPercentRule2ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxPercentRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringEmptyPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +79,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMaxNotMatchRegexCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringEmptyPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -92,7 +91,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxPercentRule2ParametersSpec getError() {
         return this.error;
     }
 
@@ -100,7 +99,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxPercentRule2ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -112,7 +111,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxPercentRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -120,7 +119,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxPercentRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -132,7 +131,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -140,7 +139,7 @@ public class ColumnMaxNotMatchRegexCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

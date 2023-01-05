@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringParsableToIntegerPercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringParsableToIntegerPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringParsableToIntegerPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringParsableToIntegerPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringParsableToIntegerPercentCheckSpec checkSpec;
+    private ColumnStringParsableToIntegerPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringParsableToIntegerPercentSensorParametersSpecInte
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringParsableToIntegerPercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinStringParsableToIntegerPercentCheckSpec();
+		this.checkSpec = new ColumnStringParsableToIntegerPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

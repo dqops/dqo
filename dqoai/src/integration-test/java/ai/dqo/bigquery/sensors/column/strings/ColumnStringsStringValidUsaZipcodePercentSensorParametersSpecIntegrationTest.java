@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnMinStringValidUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.strings.ColumnStringValidUsaZipcodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class ColumnStringsStringValidUsaZipcodePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnMinStringValidUsaZipcodePercentCheckSpec checkSpec;
+    private ColumnStringValidUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -59,7 +59,7 @@ public class ColumnStringsStringValidUsaZipcodePercentSensorParametersSpecIntegr
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
-		this.checkSpec = new ColumnMinStringValidUsaZipcodePercentCheckSpec();
+		this.checkSpec = new ColumnStringValidUsaZipcodePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

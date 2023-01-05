@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringEmptyCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +33,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
+ * Column check that calculates quantity of values that does not match the date regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMaxStringEmptyCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringEmptyCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxStringEmptyCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringNotMatchDateRegexCountCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringNotMatchDateRegexCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,9 +48,9 @@ public class ColumnMaxStringEmptyCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringEmptyCountSensorParametersSpec parameters = new ColumnStringsStringEmptyCountSensorParametersSpec();
+    private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with not matching date regex in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -70,7 +70,7 @@ public class ColumnMaxStringEmptyCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringEmptyCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnMaxStringEmptyCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringEmptyCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

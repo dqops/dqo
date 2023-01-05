@@ -39,10 +39,10 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinStringValidUsaPhonePercentCheckSpec
+public class ColumnStringValidUsaPhonePercentCheckSpec
         extends AbstractCheckSpec<ColumnStringsStringValidUsaPhonePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
 
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinStringValidUsaPhonePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValidUsaPhonePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

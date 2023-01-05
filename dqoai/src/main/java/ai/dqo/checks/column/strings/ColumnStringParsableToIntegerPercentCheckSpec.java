@@ -22,10 +22,8 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMinRegexMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringParsableToIntegerPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,14 +34,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates percentage of values that matches the custom regex in a column.
+ * Column level check that ensures that there are at least percentage of rows with parsable to integer strings in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnMinRegexMatchPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMinRegexMatchPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinRegexMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringParsableToIntegerPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringParsableToIntegerPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringParsableToIntegerPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -51,9 +48,9 @@ public class ColumnMinRegexMatchPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinRegexMatchPercentSensorParametersSpec parameters = new ColumnStringsStringMinRegexMatchPercentSensorParametersSpec();
+    private ColumnStringsStringParsableToIntegerPercentSensorParametersSpec parameters = new ColumnStringsStringParsableToIntegerPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with matching regex in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -73,7 +70,7 @@ public class ColumnMinRegexMatchPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinRegexMatchPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringParsableToIntegerPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +78,7 @@ public class ColumnMinRegexMatchPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinRegexMatchPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringParsableToIntegerPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

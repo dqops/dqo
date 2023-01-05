@@ -43,10 +43,10 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec containsUsaPhonePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the set percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec containsUsaZipcodePercent;
 
 

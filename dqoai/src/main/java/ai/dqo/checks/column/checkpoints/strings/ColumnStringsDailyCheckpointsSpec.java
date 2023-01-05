@@ -36,579 +36,584 @@ import java.util.Objects;
 public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_max_string_length_below", o -> o.dailyCheckpointMaxStringLengthBelow);
-            put("daily_checkpoint_min_string_length_above", o -> o.dailyCheckpointMinStringLengthAbove);
-            put("daily_checkpoint_mean_string_length_between", o -> o.dailyCheckpointMeanStringLengthBetween);
-            put("daily_checkpoint_max_string_empty_percent", o -> o.dailyCheckpointMaxStringEmptyPercent);
-            put("daily_checkpoint_max_string_empty_count", o -> o.dailyCheckpointMaxStringEmptyCount);
-            put("daily_checkpoint_max_string_whitespace_count", o -> o.dailyCheckpointMaxStringWhitespaceCount);
-            put("daily_checkpoint_max_string_whitespace_percent", o -> o.dailyCheckpointMaxStringWhitespacePercent);
-            put("daily_checkpoint_min_string_valid_dates_percent", o -> o.dailyCheckpointMinStringValidDatesPercent);
-            put("daily_checkpoint_max_string_null_placeholder_count", o -> o.dailyCheckpointMaxStringNullPlaceholderCount);
-            put("daily_checkpoint_max_string_null_placeholder_percent", o -> o.dailyCheckpointMaxStringNullPlaceholderPercent);
-            put("daily_checkpoint_min_string_boolean_placeholder_percent", o -> o.dailyCheckpointMinStringBooleanPlaceholderPercent);
-            put("daily_checkpoint_min_string_parsable_to_integer_percent", o -> o.dailyCheckpointMinStringParsableToIntegerPercent);
-            put("daily_checkpoint_max_string_surrounded_by_whitespace_count", o -> o.dailyCheckpointMaxStringSurroundedByWhitespaceCount);
-            put("daily_checkpoint_max_string_surrounded_by_whitespace_percent", o -> o.dailyCheckpointMaxStringSurroundedByWhitespacePercent);
-            put("daily_checkpoint_min_string_parsable_to_float_percent", o -> o.dailyCheckpointMinStringParsableToFloatPercent);
-            put("daily_checkpoint_min_string_valid_usa_zipcode_percent", o -> o.dailyCheckpointMinStringValidUsaZipcodePercent);
-            put("daily_checkpoint_min_string_valid_usa_phone_percent", o -> o.dailyCheckpointMinStringValidUsaPhonePercent);
-            put("daily_checkpoint_min_string_valid_country_code_percent", o -> o.dailyCheckpointMinStringValidCountryCodePercent);
-            put("daily_checkpoint_min_string_valid_currency_code_percent", o -> o.dailyCheckpointMinStringValidCurrencyCodePercent);
-            put("daily_checkpoint_min_strings_in_set_count", o -> o.dailyCheckpointMinStringsInSetCount);
-            put("daily_checkpoint_min_strings_in_set_percent", o -> o.dailyCheckpointMinStringsInSetPercent);
-            put("daily_checkpoint_max_strings_invalid_email_count", o -> o.dailyCheckpointMaxInvalidEmailCount);
-            put("daily_checkpoint_min_valid_email_percent", o -> o.dailyCheckpointMinValidEmailPercent);
-            put("daily_checkpoint_max_not_match_regex_count", o -> o.dailyCheckpointMaxNotMatchRegexCount);
-            put("daily_checkpoint_min_regex_match_percent", o -> o.dailyCheckpointMinRegexMatchPercent);
-            put("daily_checkpoint_max_not_match_date_regex_count", o -> o.dailyCheckpointMaxNotMatchDateRegexCount);
+            put("daily_checkpoint_string_max_length", o -> o.dailyCheckpointStringMaxLength);
+            put("daily_checkpoint_string_min_length", o -> o.dailyCheckpointStringMinLength);
+            put("daily_checkpoint_string_mean_length", o -> o.dailyCheckpointStringMeanLength);
+
+            put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);
+            put("daily_checkpoint_string_empty_percent", o -> o.dailyCheckpointStringEmptyPercent);
+            put("daily_checkpoint_string_whitespace_count", o -> o.dailyCheckpointStringWhitespaceCount);
+            put("daily_checkpoint_string_whitespace_percent", o -> o.dailyCheckpointStringWhitespacePercent);
+            put("daily_checkpoint_string_surrounded_by_whitespace_count", o -> o.dailyCheckpointStringSurroundedByWhitespaceCount);
+            put("daily_checkpoint_string_surrounded_by_whitespace_percent", o -> o.dailyCheckpointStringSurroundedByWhitespacePercent);
+
+            put("daily_checkpoint_string_null_placeholder_count", o -> o.dailyCheckpointStringNullPlaceholderCount);
+            put("daily_checkpoint_string_null_placeholder_percent", o -> o.dailyCheckpointStringNullPlaceholderPercent);
+            put("daily_checkpoint_string_boolean_placeholder_percent", o -> o.dailyCheckpointStringBooleanPlaceholderPercent);
+            put("daily_checkpoint_string_parsable_to_integer_percent", o -> o.dailyCheckpointStringParsableToIntegerPercent);
+            put("daily_checkpoint_string_parsable_to_float_percent", o -> o.dailyCheckpointStringParsableToFloatPercent);
+
+            put("daily_checkpoint_string_in_set_count", o -> o.dailyCheckpointStringInSetCount);
+            put("daily_checkpoint_string_in_set_percent", o -> o.dailyCheckpointStringInSetPercent);
+
+            put("daily_checkpoint_string_valid_dates_percent", o -> o.dailyCheckpointStringValidDatesPercent);
+            put("daily_checkpoint_string_valid_usa_zipcode_percent", o -> o.dailyCheckpointStringValidUsaZipcodePercent);
+            put("daily_checkpoint_string_valid_usa_phone_percent", o -> o.dailyCheckpointStringValidUsaPhonePercent);
+            put("daily_checkpoint_string_valid_country_code_percent", o -> o.dailyCheckpointStringValidCountryCodePercent);
+            put("daily_checkpoint_string_valid_currency_code_percent", o -> o.dailyCheckpointStringValidCurrencyCodePercent);
+            put("daily_checkpoint_string_invalid_email_count", o -> o.dailyCheckpointStringInvalidEmailCount);
+            put("daily_checkpoint_string_valid_email_percent", o -> o.dailyCheckpointStringValidEmailPercent);
+
+            put("daily_checkpoint_string_not_match_regex_count", o -> o.dailyCheckpointStringNotMatchRegexCount);
+            put("daily_checkpoint_string_match_regex_percent", o -> o.dailyCheckpointStringMatchRegexPercent);
+            put("daily_checkpoint_string_not_match_date_regex_count", o -> o.dailyCheckpointStringNotMatchDateRegexCount);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringLengthBelowCheckSpec dailyCheckpointMaxStringLengthBelow;
+    private ColumnStringMaxLengthCheckSpec dailyCheckpointStringMaxLength;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringLengthAboveCheckSpec dailyCheckpointMinStringLengthAbove;
+    private ColumnStringMinLengthCheckSpec dailyCheckpointStringMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween;
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringMeanLengthCheckSpec dailyCheckpointStringMeanLength;
+
+    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount;
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringEmptyPercentCheckSpec dailyCheckpointMaxStringEmptyPercent;
+    private ColumnStringEmptyPercentCheckSpec dailyCheckpointStringEmptyPercent;
 
-    @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringEmptyCountCheckSpec dailyCheckpointMaxStringEmptyCount;
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringWhitespaceCountCheckSpec dailyCheckpointStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringValidDatesPercentCheckSpec dailyCheckpointMinStringValidDatesPercent;
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringWhitespacePercentCheckSpec dailyCheckpointStringWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringWhitespaceCountCheckSpec dailyCheckpointMaxStringWhitespaceCount;
-
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringWhitespacePercentCheckSpec dailyCheckpointMaxStringWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringNullPlaceholderCountCheckSpec dailyCheckpointMaxStringNullPlaceholderCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringNullPlaceholderPercentCheckSpec dailyCheckpointMaxStringNullPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyCheckpointMinStringBooleanPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointMaxStringSurroundedByWhitespaceCount;
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointStringSurroundedByWhitespaceCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyCheckpointMaxStringSurroundedByWhitespacePercent;
+    private ColumnStringSurroundedByWhitespacePercentCheckSpec dailyCheckpointStringSurroundedByWhitespacePercent;
+
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringNullPlaceholderCountCheckSpec dailyCheckpointStringNullPlaceholderCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringNullPlaceholderPercentCheckSpec dailyCheckpointStringNullPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringBooleanPlaceholderPercentCheckSpec dailyCheckpointStringBooleanPlaceholderPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringParsableToIntegerPercentCheckSpec dailyCheckpointStringParsableToIntegerPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringParsableToFloatPercentCheckSpec dailyCheckpointMinStringParsableToFloatPercent;
+    private ColumnStringParsableToFloatPercentCheckSpec dailyCheckpointStringParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringInSetCountCheckSpec dailyCheckpointStringInSetCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringInSetPercentCheckSpec dailyCheckpointStringInSetPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringValidDatesPercentCheckSpec dailyCheckpointStringValidDatesPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringValidUsaZipcodePercentCheckSpec dailyCheckpointMinStringValidUsaZipcodePercent;
+    private ColumnStringValidUsaZipcodePercentCheckSpec dailyCheckpointStringValidUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinStringValidUsaPhonePercentCheckSpec dailyCheckpointMinStringValidUsaPhonePercent;
+    private ColumnStringValidUsaPhonePercentCheckSpec dailyCheckpointStringValidUsaPhonePercent;
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinValidCountryCodePercentCheckSpec dailyCheckpointMinStringValidCountryCodePercent;
+    private ColumnStringValidCountryCodePercentCheckSpec dailyCheckpointStringValidCountryCodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinValidCurrencyCodePercentCheckSpec dailyCheckpointMinStringValidCurrencyCodePercent;
+    private ColumnStringValidCurrencyCodePercentCheckSpec dailyCheckpointStringValidCurrencyCodePercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count.")
-    private ColumnMinStringsInSetCountCheckSpec dailyCheckpointMinStringsInSetCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnMinStringsInSetPercentCheckSpec dailyCheckpointMinStringsInSetPercent;
-
-    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxInvalidEmailCountCheckSpec dailyCheckpointMaxInvalidEmailCount;
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringInvalidEmailCountCheckSpec dailyCheckpointStringInvalidEmailCount;
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinValidEmailPercentCheckSpec dailyCheckpointMinValidEmailPercent;
+    private ColumnStringValidEmailPercentCheckSpec dailyCheckpointStringValidEmailPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxNotMatchRegexCountCheckSpec dailyCheckpointMaxNotMatchRegexCount;
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringNotMatchRegexCountCheckSpec dailyCheckpointStringNotMatchRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMinRegexMatchPercentCheckSpec dailyCheckpointMinRegexMatchPercent;
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringRegexMatchPercentCheckSpec dailyCheckpointStringMatchRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted quantity. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnMaxNotMatchDateRegexCountCheckSpec dailyCheckpointMaxNotMatchDateRegexCount;
+    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringNotMatchDateRegexCountCheckSpec dailyCheckpointStringNotMatchDateRegexCount;
 
     /**
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnMaxStringLengthBelowCheckSpec getDailyCheckpointMaxStringLengthBelow() {
-        return dailyCheckpointMaxStringLengthBelow;
+    public ColumnStringMaxLengthCheckSpec getDailyCheckpointStringMaxLength() {
+        return dailyCheckpointStringMaxLength;
     }
 
     /**
      * Sets a new definition of a maximum string length below check.
-     * @param dailyCheckpointMaxStringLengthBelow Maximum string length below check.
+     * @param dailyCheckpointStringMaxLength Maximum string length below check.
      */
-    public void setDailyCheckpointMaxStringLengthBelow(ColumnMaxStringLengthBelowCheckSpec dailyCheckpointMaxStringLengthBelow) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringLengthBelow, dailyCheckpointMaxStringLengthBelow));
-        this.dailyCheckpointMaxStringLengthBelow = dailyCheckpointMaxStringLengthBelow;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringLengthBelow, "daily_checkpoint_max_string_length_below");
+    public void setDailyCheckpointStringMaxLength(ColumnStringMaxLengthCheckSpec dailyCheckpointStringMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMaxLength, dailyCheckpointStringMaxLength));
+        this.dailyCheckpointStringMaxLength = dailyCheckpointStringMaxLength;
+        propagateHierarchyIdToField(dailyCheckpointStringMaxLength, "daily_checkpoint_string_max_length");
     }
 
     /**
      * Returns a minimum string length above check.
      * @return Minimum string length below check.
      */
-    public ColumnMinStringLengthAboveCheckSpec getDailyCheckpointMinStringLengthAbove() {
-        return dailyCheckpointMinStringLengthAbove;
+    public ColumnStringMinLengthCheckSpec getDailyCheckpointStringMinLength() {
+        return dailyCheckpointStringMinLength;
     }
 
     /**
      * Sets a new definition of a minimum string length above check.
-     * @param dailyCheckpointMinStringLengthAbove Minimum string length above check.
+     * @param dailyCheckpointStringMinLength Minimum string length above check.
      */
-    public void setDailyCheckpointMinStringLengthAbove(ColumnMinStringLengthAboveCheckSpec dailyCheckpointMinStringLengthAbove) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringLengthAbove, dailyCheckpointMinStringLengthAbove));
-        this.dailyCheckpointMinStringLengthAbove = dailyCheckpointMinStringLengthAbove;
-        propagateHierarchyIdToField(dailyCheckpointMinStringLengthAbove, "daily_checkpoint_min_string_length_above");
+    public void setDailyCheckpointStringMinLength(ColumnStringMinLengthCheckSpec dailyCheckpointStringMinLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMinLength, dailyCheckpointStringMinLength));
+        this.dailyCheckpointStringMinLength = dailyCheckpointStringMinLength;
+        propagateHierarchyIdToField(dailyCheckpointStringMinLength, "daily_checkpoint_string_min_length");
     }
 
     /**
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnMeanStringLengthBetweenCheckSpec getDailyCheckpointMeanStringLengthBetween() {
-        return dailyCheckpointMeanStringLengthBetween;
+    public ColumnStringMeanLengthCheckSpec getDailyCheckpointStringMeanLength() {
+        return dailyCheckpointStringMeanLength;
     }
 
     /**
      * Sets a new definition of a mean string length between check.
-     * @param dailyCheckpointMeanStringLengthBetween Mean string length between check.
+     * @param dailyCheckpointStringMeanLength Mean string length between check.
      */
-    public void setDailyCheckpointMeanStringLengthBetween(ColumnMeanStringLengthBetweenCheckSpec dailyCheckpointMeanStringLengthBetween) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanStringLengthBetween, dailyCheckpointMeanStringLengthBetween));
-        this.dailyCheckpointMeanStringLengthBetween = dailyCheckpointMeanStringLengthBetween;
-        propagateHierarchyIdToField(dailyCheckpointMeanStringLengthBetween, "daily_checkpoint_mean_string_length_between");
-    }
-
-    /**
-     * Returns a maximum string empty percent check.
-     * @return Maximum string empty percent check.
-     */
-    public ColumnMaxStringEmptyPercentCheckSpec getDailyCheckpointMaxStringEmptyPercent() {
-        return dailyCheckpointMaxStringEmptyPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string empty percent check.
-     * @param dailyCheckpointMaxStringEmptyPercent Maximum string empty percent check.
-     */
-    public void setDailyCheckpointMaxStringEmptyPercent(ColumnMaxStringEmptyPercentCheckSpec dailyCheckpointMaxStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringEmptyPercent, dailyCheckpointMaxStringEmptyPercent));
-        this.dailyCheckpointMaxStringEmptyPercent = dailyCheckpointMaxStringEmptyPercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringEmptyPercent, "daily_checkpoint_max_string_empty_percent");
+    public void setDailyCheckpointStringMeanLength(ColumnStringMeanLengthCheckSpec dailyCheckpointStringMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMeanLength, dailyCheckpointStringMeanLength));
+        this.dailyCheckpointStringMeanLength = dailyCheckpointStringMeanLength;
+        propagateHierarchyIdToField(dailyCheckpointStringMeanLength, "daily_checkpoint_string_mean_length");
     }
 
     /**
      * Returns a max string empty count check.
      * @return Max string empty count check.
      */
-    public ColumnMaxStringEmptyCountCheckSpec getDailyCheckpointMaxStringEmptyCount() {
-        return dailyCheckpointMaxStringEmptyCount;
+    public ColumnStringEmptyCountCheckSpec getDailyCheckpointStringEmptyCount() {
+        return dailyCheckpointStringEmptyCount;
     }
 
     /**
      * Sets a new definition of a max string empty count check.
-     * @param dailyCheckpointMaxStringEmptyCount Max string empty count check.
+     * @param dailyCheckpointStringEmptyCount Max string empty count check.
      */
-    public void setDailyCheckpointMaxStringEmptyCount(ColumnMaxStringEmptyCountCheckSpec dailyCheckpointMaxStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringEmptyCount, dailyCheckpointMaxStringEmptyCount));
-        this.dailyCheckpointMaxStringEmptyCount = dailyCheckpointMaxStringEmptyCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringEmptyCount, "daily_checkpoint_max_string_empty_count");
+    public void setDailyCheckpointStringEmptyCount(ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringEmptyCount, dailyCheckpointStringEmptyCount));
+        this.dailyCheckpointStringEmptyCount = dailyCheckpointStringEmptyCount;
+        propagateHierarchyIdToField(dailyCheckpointStringEmptyCount, "daily_checkpoint_string_empty_count");
+    }
+
+    /**
+     * Returns a maximum string empty percent check.
+     * @return Maximum string empty percent check.
+     */
+    public ColumnStringEmptyPercentCheckSpec getDailyCheckpointStringEmptyPercent() {
+        return dailyCheckpointStringEmptyPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string empty percent check.
+     * @param dailyCheckpointStringEmptyPercent Maximum string empty percent check.
+     */
+    public void setDailyCheckpointStringEmptyPercent(ColumnStringEmptyPercentCheckSpec dailyCheckpointStringEmptyPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringEmptyPercent, dailyCheckpointStringEmptyPercent));
+        this.dailyCheckpointStringEmptyPercent = dailyCheckpointStringEmptyPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringEmptyPercent, "daily_checkpoint_string_empty_percent");
     }
 
     /**
      * Returns a maximum string whitespace count check.
      * @return Maximum string whitespace count check.
      */
-    public ColumnMaxStringWhitespaceCountCheckSpec getDailyCheckpointMaxStringWhitespaceCount() {
-        return dailyCheckpointMaxStringWhitespaceCount;
+    public ColumnStringWhitespaceCountCheckSpec getDailyCheckpointStringWhitespaceCount() {
+        return dailyCheckpointStringWhitespaceCount;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace count check.
-     * @param dailyCheckpointMaxStringWhitespaceCount Maximum string whitespace count check.
+     * @param dailyCheckpointStringWhitespaceCount Maximum string whitespace count check.
      */
-    public void setDailyCheckpointMaxStringWhitespaceCount(ColumnMaxStringWhitespaceCountCheckSpec dailyCheckpointMaxStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringWhitespaceCount, dailyCheckpointMaxStringWhitespaceCount));
-        this.dailyCheckpointMaxStringWhitespaceCount = dailyCheckpointMaxStringWhitespaceCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringWhitespaceCount, "daily_checkpoint_max_string_whitespace_count");
+    public void setDailyCheckpointStringWhitespaceCount(ColumnStringWhitespaceCountCheckSpec dailyCheckpointStringWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringWhitespaceCount, dailyCheckpointStringWhitespaceCount));
+        this.dailyCheckpointStringWhitespaceCount = dailyCheckpointStringWhitespaceCount;
+        propagateHierarchyIdToField(dailyCheckpointStringWhitespaceCount, "daily_checkpoint_string_whitespace_count");
     }
 
     /**
      * Returns a maximum string whitespace percent check.
      * @return Maximum string whitespace percent check.
      */
-    public ColumnMaxStringWhitespacePercentCheckSpec getDailyCheckpointMaxStringWhitespacePercent() {
-        return dailyCheckpointMaxStringWhitespacePercent;
+    public ColumnStringWhitespacePercentCheckSpec getDailyCheckpointStringWhitespacePercent() {
+        return dailyCheckpointStringWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace percent check.
-     * @param dailyCheckpointMaxStringWhitespacePercent Maximum string whitespace percent check.
+     * @param dailyCheckpointStringWhitespacePercent Maximum string whitespace percent check.
      */
-    public void setDailyCheckpointMaxStringWhitespacePercent(ColumnMaxStringWhitespacePercentCheckSpec dailyCheckpointMaxStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringWhitespacePercent, dailyCheckpointMaxStringWhitespacePercent));
-        this.dailyCheckpointMaxStringWhitespacePercent = dailyCheckpointMaxStringWhitespacePercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringWhitespacePercent, "daily_checkpoint_max_string_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnMinStringValidDatesPercentCheckSpec getDailyCheckpointMinStringValidDatesPercent() {
-        return dailyCheckpointMinStringValidDatesPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid dates percent check.
-     * @param dailyCheckpointMinStringValidDatesPercent Minimum string valid dates percent check.
-     */
-    public void setDailyCheckpointMinStringValidDatesPercent(ColumnMinStringValidDatesPercentCheckSpec dailyCheckpointMinStringValidDatesPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidDatesPercent, dailyCheckpointMinStringValidDatesPercent));
-        this.dailyCheckpointMinStringValidDatesPercent = dailyCheckpointMinStringValidDatesPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringValidDatesPercent, "daily_checkpoint_min_string_valid_dates_percent");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnMaxStringNullPlaceholderCountCheckSpec getDailyCheckpointMaxStringNullPlaceholderCount() {
-        return dailyCheckpointMaxStringNullPlaceholderCount;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder count check.
-     * @param dailyCheckpointMaxStringNullPlaceholderCount Maximum string null placeholder count check.
-     */
-    public void setDailyCheckpointMaxStringNullPlaceholderCount(ColumnMaxStringNullPlaceholderCountCheckSpec dailyCheckpointMaxStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringNullPlaceholderCount, dailyCheckpointMaxStringNullPlaceholderCount));
-        this.dailyCheckpointMaxStringNullPlaceholderCount = dailyCheckpointMaxStringNullPlaceholderCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringNullPlaceholderCount, "daily_checkpoint_max_string_null_placeholder_count");
-    }
-
-    /**
-     * Returns a maximum string null placeholder percent check.
-     * @return Maximum string null placeholder percent check.
-     */
-    public ColumnMaxStringNullPlaceholderPercentCheckSpec getDailyCheckpointMaxStringNullPlaceholderPercent() {
-        return dailyCheckpointMaxStringNullPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder percent check.
-     * @param dailyCheckpointMaxStringNullPlaceholderPercent Maximum string null placeholder percent check.
-     */
-    public void setDailyCheckpointMaxStringNullPlaceholderPercent(ColumnMaxStringNullPlaceholderPercentCheckSpec dailyCheckpointMaxStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringNullPlaceholderPercent, dailyCheckpointMaxStringNullPlaceholderPercent));
-        this.dailyCheckpointMaxStringNullPlaceholderPercent = dailyCheckpointMaxStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringNullPlaceholderPercent, "daily_checkpoint_max_string_null_placeholder_percent");
-    }
-
-    /**
-     * Returns a minimum string boolean placeholder percent check.
-     * @return Minimum string boolean placeholder percent check.
-     */
-    public ColumnMinStringBooleanPlaceholderPercentCheckSpec getDailyCheckpointMinStringBooleanPlaceholderPercent() {
-        return dailyCheckpointMinStringBooleanPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string boolean placeholder percent check.
-     * @param dailyCheckpointMinStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
-     */
-    public void setDailyCheckpointMinStringBooleanPlaceholderPercent(ColumnMinStringBooleanPlaceholderPercentCheckSpec dailyCheckpointMinStringBooleanPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringBooleanPlaceholderPercent, dailyCheckpointMinStringBooleanPlaceholderPercent));
-        this.dailyCheckpointMinStringBooleanPlaceholderPercent = dailyCheckpointMinStringBooleanPlaceholderPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringBooleanPlaceholderPercent, "daily_checkpoint_min_string_boolean_placeholder_percent");
-    }
-
-    /**
-    * Returns a minimum string parsable to integer percent check.
-    * @return Minimum string parsable to integer percent check.
-    */
-    public ColumnMinStringParsableToIntegerPercentCheckSpec getDailyCheckpointMinStringParsableToIntegerPercent() {
-        return dailyCheckpointMinStringParsableToIntegerPercent;
-    }
-
-    /**
-    * Sets a new definition of a minimum string parsable to integer percent check.
-    * @param dailyCheckpointMinStringParsableToIntegerPercent Minimum string parsable to integer percent check.
-    */
-    public void setDailyCheckpointMinStringParsableToIntegerPercent(ColumnMinStringParsableToIntegerPercentCheckSpec dailyCheckpointMinStringParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringParsableToIntegerPercent, dailyCheckpointMinStringParsableToIntegerPercent));
-        this.dailyCheckpointMinStringParsableToIntegerPercent = dailyCheckpointMinStringParsableToIntegerPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringParsableToIntegerPercent, "daily_checkpoint_min_string_parsable_to_integer_percent");
+    public void setDailyCheckpointStringWhitespacePercent(ColumnStringWhitespacePercentCheckSpec dailyCheckpointStringWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringWhitespacePercent, dailyCheckpointStringWhitespacePercent));
+        this.dailyCheckpointStringWhitespacePercent = dailyCheckpointStringWhitespacePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringWhitespacePercent, "daily_checkpoint_string_whitespace_percent");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace count check.
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnMaxStringSurroundedByWhitespaceCountCheckSpec getDailyCheckpointMaxStringSurroundedByWhitespaceCount() {
-        return dailyCheckpointMaxStringSurroundedByWhitespaceCount;
+    public ColumnStringSurroundedByWhitespaceCountCheckSpec getDailyCheckpointStringSurroundedByWhitespaceCount() {
+        return dailyCheckpointStringSurroundedByWhitespaceCount;
     }
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace count check.
-     * @param dailyCheckpointMaxStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
+     * @param dailyCheckpointStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
      */
-    public void setDailyCheckpointMaxStringSurroundedByWhitespaceCount(ColumnMaxStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointMaxStringSurroundedByWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringSurroundedByWhitespaceCount, dailyCheckpointMaxStringSurroundedByWhitespaceCount));
-        this.dailyCheckpointMaxStringSurroundedByWhitespaceCount = dailyCheckpointMaxStringSurroundedByWhitespaceCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringSurroundedByWhitespaceCount, "daily_checkpoint_max_string_surrounded_by_whitespace_count");
+    public void setDailyCheckpointStringSurroundedByWhitespaceCount(ColumnStringSurroundedByWhitespaceCountCheckSpec dailyCheckpointStringSurroundedByWhitespaceCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringSurroundedByWhitespaceCount, dailyCheckpointStringSurroundedByWhitespaceCount));
+        this.dailyCheckpointStringSurroundedByWhitespaceCount = dailyCheckpointStringSurroundedByWhitespaceCount;
+        propagateHierarchyIdToField(dailyCheckpointStringSurroundedByWhitespaceCount, "daily_checkpoint_string_surrounded_by_whitespace_count");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace percent check.
      * @return Maximum string surrounded by whitespace percent check.
      */
-    public ColumnMaxStringSurroundedByWhitespacePercentCheckSpec getDailyCheckpointMaxStringSurroundedByWhitespacePercent() {
-        return dailyCheckpointMaxStringSurroundedByWhitespacePercent;
+    public ColumnStringSurroundedByWhitespacePercentCheckSpec getDailyCheckpointStringSurroundedByWhitespacePercent() {
+        return dailyCheckpointStringSurroundedByWhitespacePercent;
     }
 
     /**
      * Sets a new definition of a maximum string surrounded by whitespace percent check.
-     * @param dailyCheckpointMaxStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     * @param dailyCheckpointStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
      */
-    public void setDailyCheckpointMaxStringSurroundedByWhitespacePercent(ColumnMaxStringSurroundedByWhitespacePercentCheckSpec dailyCheckpointMaxStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxStringSurroundedByWhitespacePercent, dailyCheckpointMaxStringSurroundedByWhitespacePercent));
-        this.dailyCheckpointMaxStringSurroundedByWhitespacePercent = dailyCheckpointMaxStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(dailyCheckpointMaxStringSurroundedByWhitespacePercent, "daily_checkpoint_max_string_surrounded_by_whitespace_percent");
+    public void setDailyCheckpointStringSurroundedByWhitespacePercent(ColumnStringSurroundedByWhitespacePercentCheckSpec dailyCheckpointStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringSurroundedByWhitespacePercent, dailyCheckpointStringSurroundedByWhitespacePercent));
+        this.dailyCheckpointStringSurroundedByWhitespacePercent = dailyCheckpointStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringSurroundedByWhitespacePercent, "daily_checkpoint_string_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnStringNullPlaceholderCountCheckSpec getDailyCheckpointStringNullPlaceholderCount() {
+        return dailyCheckpointStringNullPlaceholderCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder count check.
+     * @param dailyCheckpointStringNullPlaceholderCount Maximum string null placeholder count check.
+     */
+    public void setDailyCheckpointStringNullPlaceholderCount(ColumnStringNullPlaceholderCountCheckSpec dailyCheckpointStringNullPlaceholderCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringNullPlaceholderCount, dailyCheckpointStringNullPlaceholderCount));
+        this.dailyCheckpointStringNullPlaceholderCount = dailyCheckpointStringNullPlaceholderCount;
+        propagateHierarchyIdToField(dailyCheckpointStringNullPlaceholderCount, "daily_checkpoint_string_null_placeholder_count");
+    }
+
+    /**
+     * Returns a maximum string null placeholder percent check.
+     * @return Maximum string null placeholder percent check.
+     */
+    public ColumnStringNullPlaceholderPercentCheckSpec getDailyCheckpointStringNullPlaceholderPercent() {
+        return dailyCheckpointStringNullPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum string null placeholder percent check.
+     * @param dailyCheckpointStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     */
+    public void setDailyCheckpointStringNullPlaceholderPercent(ColumnStringNullPlaceholderPercentCheckSpec dailyCheckpointStringNullPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringNullPlaceholderPercent, dailyCheckpointStringNullPlaceholderPercent));
+        this.dailyCheckpointStringNullPlaceholderPercent = dailyCheckpointStringNullPlaceholderPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringNullPlaceholderPercent, "daily_checkpoint_string_null_placeholder_percent");
+    }
+
+    /**
+     * Returns a minimum string boolean placeholder percent check.
+     * @return Minimum string boolean placeholder percent check.
+     */
+    public ColumnStringBooleanPlaceholderPercentCheckSpec getDailyCheckpointStringBooleanPlaceholderPercent() {
+        return dailyCheckpointStringBooleanPlaceholderPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string boolean placeholder percent check.
+     * @param dailyCheckpointStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     */
+    public void setDailyCheckpointStringBooleanPlaceholderPercent(ColumnStringBooleanPlaceholderPercentCheckSpec dailyCheckpointStringBooleanPlaceholderPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringBooleanPlaceholderPercent, dailyCheckpointStringBooleanPlaceholderPercent));
+        this.dailyCheckpointStringBooleanPlaceholderPercent = dailyCheckpointStringBooleanPlaceholderPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringBooleanPlaceholderPercent, "daily_checkpoint_string_boolean_placeholder_percent");
+    }
+
+    /**
+    * Returns a minimum string parsable to integer percent check.
+    * @return Minimum string parsable to integer percent check.
+    */
+    public ColumnStringParsableToIntegerPercentCheckSpec getDailyCheckpointStringParsableToIntegerPercent() {
+        return dailyCheckpointStringParsableToIntegerPercent;
+    }
+
+    /**
+    * Sets a new definition of a minimum string parsable to integer percent check.
+    * @param dailyCheckpointStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+    */
+    public void setDailyCheckpointStringParsableToIntegerPercent(ColumnStringParsableToIntegerPercentCheckSpec dailyCheckpointStringParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringParsableToIntegerPercent, dailyCheckpointStringParsableToIntegerPercent));
+        this.dailyCheckpointStringParsableToIntegerPercent = dailyCheckpointStringParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringParsableToIntegerPercent, "daily_checkpoint_string_parsable_to_integer_percent");
     }
 
     /**
      * Returns a minimum string parsable to float percent check.
      * @return Minimum string parsable to float percent check.
      */
-    public ColumnMinStringParsableToFloatPercentCheckSpec getDailyCheckpointMinStringParsableToFloatPercent() {
-        return dailyCheckpointMinStringParsableToFloatPercent;
+    public ColumnStringParsableToFloatPercentCheckSpec getDailyCheckpointStringParsableToFloatPercent() {
+        return dailyCheckpointStringParsableToFloatPercent;
     }
 
     /**
      * Sets a new definition of a minimum string parsable to float percent check.
-     * @param dailyCheckpointMinStringParsableToFloatPercent Minimum string parsable to float percent check.
+     * @param dailyCheckpointStringParsableToFloatPercent Minimum string parsable to float percent check.
      */
-    public void setDailyCheckpointMinStringParsableToFloatPercent(ColumnMinStringParsableToFloatPercentCheckSpec dailyCheckpointMinStringParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringParsableToFloatPercent, dailyCheckpointMinStringParsableToFloatPercent));
-        this.dailyCheckpointMinStringParsableToFloatPercent = dailyCheckpointMinStringParsableToFloatPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringParsableToFloatPercent, "daily_checkpoint_min_string_parsable_to_float_percent");
-    }
-
-    /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnMinStringValidUsaZipcodePercentCheckSpec getDailyCheckpointMinStringValidUsaZipcodePercent() {
-        return dailyCheckpointMinStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param dailyCheckpointMinStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setDailyCheckpointMinStringValidUsaZipcodePercent(ColumnMinStringValidUsaZipcodePercentCheckSpec dailyCheckpointMinStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidUsaZipcodePercent, dailyCheckpointMinStringValidUsaZipcodePercent));
-        this.dailyCheckpointMinStringValidUsaZipcodePercent = dailyCheckpointMinStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringValidUsaZipcodePercent, "daily_checkpoint_min_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnMinStringValidUsaPhonePercentCheckSpec getDailyCheckpointMinStringValidUsaPhonePercent() {
-        return dailyCheckpointMinStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param dailyCheckpointMinStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setDailyCheckpointMinStringValidUsaPhonePercent(ColumnMinStringValidUsaPhonePercentCheckSpec dailyCheckpointMinStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidUsaPhonePercent, dailyCheckpointMinStringValidUsaPhonePercent));
-        this.dailyCheckpointMinStringValidUsaPhonePercent = dailyCheckpointMinStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringValidUsaPhonePercent, "daily_checkpoint_min_string_valid_usa_phone_percent");
-    }
-
-    /**
-     * Returns a minimum string valid country code percent check.
-     * @return Minimum string valid country code percent check.
-     */
-    public ColumnMinValidCountryCodePercentCheckSpec getDailyCheckpointMinStringValidCountryCodePercent() {
-        return dailyCheckpointMinStringValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid country code percent check.
-     * @param dailyCheckpointMinStringValidCountryCodePercent Minimum string valid country code percent check.
-     */
-    public void setDailyCheckpointMinStringValidCountryCodePercent(ColumnMinValidCountryCodePercentCheckSpec dailyCheckpointMinStringValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidCountryCodePercent, dailyCheckpointMinStringValidCountryCodePercent));
-        this.dailyCheckpointMinStringValidCountryCodePercent = dailyCheckpointMinStringValidCountryCodePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringValidCountryCodePercent, "daily_checkpoint_min_string_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum string valid currency code percent check.
-     * @return Minimum string valid currency code percent check.
-     */
-    public ColumnMinValidCurrencyCodePercentCheckSpec getDailyCheckpointMinStringValidCurrencyCodePercent() {
-        return dailyCheckpointMinStringValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid currency code percent check.
-     * @param dailyCheckpointMinStringValidCurrencyCodePercent Minimum string valid currency code percent check.
-     */
-    public void setDailyCheckpointMinStringValidCurrencyCodePercent(ColumnMinValidCurrencyCodePercentCheckSpec dailyCheckpointMinStringValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringValidCurrencyCodePercent, dailyCheckpointMinStringValidCurrencyCodePercent));
-        this.dailyCheckpointMinStringValidCurrencyCodePercent = dailyCheckpointMinStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringValidCurrencyCodePercent, "daily_checkpoint_min_string_valid_currency_code_percent");
+    public void setDailyCheckpointStringParsableToFloatPercent(ColumnStringParsableToFloatPercentCheckSpec dailyCheckpointStringParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringParsableToFloatPercent, dailyCheckpointStringParsableToFloatPercent));
+        this.dailyCheckpointStringParsableToFloatPercent = dailyCheckpointStringParsableToFloatPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringParsableToFloatPercent, "daily_checkpoint_string_parsable_to_float_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnMinStringsInSetCountCheckSpec getDailyCheckpointMinStringsInSetCount() {
-        return dailyCheckpointMinStringsInSetCount;
+    public ColumnStringInSetCountCheckSpec getDailyCheckpointStringInSetCount() {
+        return dailyCheckpointStringInSetCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyCheckpointMinStringsInSetCount Minimum strings in set count check.
+     * @param dailyCheckpointStringInSetCount Minimum strings in set count check.
      */
-    public void setDailyCheckpointMinStringsInSetCount(ColumnMinStringsInSetCountCheckSpec dailyCheckpointMinStringsInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringsInSetCount, dailyCheckpointMinStringsInSetCount));
-        this.dailyCheckpointMinStringsInSetCount = dailyCheckpointMinStringsInSetCount;
-        propagateHierarchyIdToField(dailyCheckpointMinStringsInSetCount, "daily_checkpoint_min_strings_in_set_count");
+    public void setDailyCheckpointStringInSetCount(ColumnStringInSetCountCheckSpec dailyCheckpointStringInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInSetCount, dailyCheckpointStringInSetCount));
+        this.dailyCheckpointStringInSetCount = dailyCheckpointStringInSetCount;
+        propagateHierarchyIdToField(dailyCheckpointStringInSetCount, "daily_checkpoint_string_in_set_count");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnMinStringsInSetPercentCheckSpec getDailyCheckpointMinStringsInSetPercent() {
-        return dailyCheckpointMinStringsInSetPercent;
+    public ColumnStringInSetPercentCheckSpec getDailyCheckpointStringInSetPercent() {
+        return dailyCheckpointStringInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param dailyCheckpointMinStringsInSetPercent Minimum strings in set percent check.
+     * @param dailyCheckpointStringInSetPercent Minimum strings in set percent check.
      */
-    public void setDailyCheckpointMinStringsInSetPercent(ColumnMinStringsInSetPercentCheckSpec dailyCheckpointMinStringsInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinStringsInSetPercent, dailyCheckpointMinStringsInSetPercent));
-        this.dailyCheckpointMinStringsInSetPercent = dailyCheckpointMinStringsInSetPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinStringsInSetPercent, "daily_checkpoint_min_strings_in_set_percent");
+    public void setDailyCheckpointStringInSetPercent(ColumnStringInSetPercentCheckSpec dailyCheckpointStringInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInSetPercent, dailyCheckpointStringInSetPercent));
+        this.dailyCheckpointStringInSetPercent = dailyCheckpointStringInSetPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringInSetPercent, "daily_checkpoint_string_in_set_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnStringValidDatesPercentCheckSpec getDailyCheckpointStringValidDatesPercent() {
+        return dailyCheckpointStringValidDatesPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid dates percent check.
+     * @param dailyCheckpointStringValidDatesPercent Minimum string valid dates percent check.
+     */
+    public void setDailyCheckpointStringValidDatesPercent(ColumnStringValidDatesPercentCheckSpec dailyCheckpointStringValidDatesPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidDatesPercent, dailyCheckpointStringValidDatesPercent));
+        this.dailyCheckpointStringValidDatesPercent = dailyCheckpointStringValidDatesPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidDatesPercent, "daily_checkpoint_string_valid_dates_percent");
+    }
+
+    /**
+     * Returns a minimum string valid usa zip code percent check.
+     * @return Minimum string valid usa zip code percent check.
+     */
+    public ColumnStringValidUsaZipcodePercentCheckSpec getDailyCheckpointStringValidUsaZipcodePercent() {
+        return dailyCheckpointStringValidUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid usa zip code percent check.
+     * @param dailyCheckpointStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
+     */
+    public void setDailyCheckpointStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec dailyCheckpointStringValidUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidUsaZipcodePercent, dailyCheckpointStringValidUsaZipcodePercent));
+        this.dailyCheckpointStringValidUsaZipcodePercent = dailyCheckpointStringValidUsaZipcodePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidUsaZipcodePercent, "daily_checkpoint_string_valid_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnStringValidUsaPhonePercentCheckSpec getDailyCheckpointStringValidUsaPhonePercent() {
+        return dailyCheckpointStringValidUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid USA phone percent check.
+     * @param dailyCheckpointStringValidUsaPhonePercent Minimum string valid USA phone percent check.
+     */
+    public void setDailyCheckpointStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec dailyCheckpointStringValidUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidUsaPhonePercent, dailyCheckpointStringValidUsaPhonePercent));
+        this.dailyCheckpointStringValidUsaPhonePercent = dailyCheckpointStringValidUsaPhonePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidUsaPhonePercent, "daily_checkpoint_string_valid_usa_phone_percent");
+    }
+
+    /**
+     * Returns a minimum string valid country code percent check.
+     * @return Minimum string valid country code percent check.
+     */
+    public ColumnStringValidCountryCodePercentCheckSpec getDailyCheckpointStringValidCountryCodePercent() {
+        return dailyCheckpointStringValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid country code percent check.
+     * @param dailyCheckpointStringValidCountryCodePercent Minimum string valid country code percent check.
+     */
+    public void setDailyCheckpointStringValidCountryCodePercent(ColumnStringValidCountryCodePercentCheckSpec dailyCheckpointStringValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidCountryCodePercent, dailyCheckpointStringValidCountryCodePercent));
+        this.dailyCheckpointStringValidCountryCodePercent = dailyCheckpointStringValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidCountryCodePercent, "daily_checkpoint_string_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum string valid currency code percent check.
+     * @return Minimum string valid currency code percent check.
+     */
+    public ColumnStringValidCurrencyCodePercentCheckSpec getDailyCheckpointStringValidCurrencyCodePercent() {
+        return dailyCheckpointStringValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum string valid currency code percent check.
+     * @param dailyCheckpointStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     */
+    public void setDailyCheckpointStringValidCurrencyCodePercent(ColumnStringValidCurrencyCodePercentCheckSpec dailyCheckpointStringValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidCurrencyCodePercent, dailyCheckpointStringValidCurrencyCodePercent));
+        this.dailyCheckpointStringValidCurrencyCodePercent = dailyCheckpointStringValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidCurrencyCodePercent, "daily_checkpoint_string_valid_currency_code_percent");
     }
 
     /**
      * Returns a maximum invalid email count check.
      * @return Maximum invalid email count check.
      */
-    public ColumnMaxInvalidEmailCountCheckSpec getDailyCheckpointMaxInvalidEmailCount() {
-        return dailyCheckpointMaxInvalidEmailCount;
+    public ColumnStringInvalidEmailCountCheckSpec getDailyCheckpointStringInvalidEmailCount() {
+        return dailyCheckpointStringInvalidEmailCount;
     }
 
     /**
      * Sets a new definition of a maximum invalid email count check.
-     * @param dailyCheckpointMaxInvalidEmailCount Maximum invalid email count check.
+     * @param dailyCheckpointStringInvalidEmailCount Maximum invalid email count check.
      */
-    public void setDailyCheckpointMaxInvalidEmailCount(ColumnMaxInvalidEmailCountCheckSpec dailyCheckpointMaxInvalidEmailCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxInvalidEmailCount, dailyCheckpointMaxInvalidEmailCount));
-        this.dailyCheckpointMaxInvalidEmailCount = dailyCheckpointMaxInvalidEmailCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxInvalidEmailCount, "daily_checkpoint_max_strings_invalid_email_count");
+    public void setDailyCheckpointStringInvalidEmailCount(ColumnStringInvalidEmailCountCheckSpec dailyCheckpointStringInvalidEmailCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInvalidEmailCount, dailyCheckpointStringInvalidEmailCount));
+        this.dailyCheckpointStringInvalidEmailCount = dailyCheckpointStringInvalidEmailCount;
+        propagateHierarchyIdToField(dailyCheckpointStringInvalidEmailCount, "daily_checkpoint_string_invalid_email_count");
     }
 
     /**
      * Returns a minimum valid email percent check.
      * @return Minimum valid email percent check.
      */
-    public ColumnMinValidEmailPercentCheckSpec getDailyCheckpointMinValidEmailPercent() {
-        return dailyCheckpointMinValidEmailPercent;
+    public ColumnStringValidEmailPercentCheckSpec getDailyCheckpointStringValidEmailPercent() {
+        return dailyCheckpointStringValidEmailPercent;
     }
 
     /**
      * Sets a new definition of a minimum valid email percent check.
-     * @param dailyCheckpointMinValidEmailPercent Minimum valid email percent check.
+     * @param dailyCheckpointStringValidEmailPercent Minimum valid email percent check.
      */
-    public void setDailyCheckpointMinValidEmailPercent(ColumnMinValidEmailPercentCheckSpec dailyCheckpointMinValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinValidEmailPercent, dailyCheckpointMinValidEmailPercent));
-        this.dailyCheckpointMinValidEmailPercent = dailyCheckpointMinValidEmailPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinValidEmailPercent, "daily_checkpoint_min_valid_email_percent");
+    public void setDailyCheckpointStringValidEmailPercent(ColumnStringValidEmailPercentCheckSpec dailyCheckpointStringValidEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidEmailPercent, dailyCheckpointStringValidEmailPercent));
+        this.dailyCheckpointStringValidEmailPercent = dailyCheckpointStringValidEmailPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringValidEmailPercent, "daily_checkpoint_string_valid_email_percent");
     }
 
     /**
      * Returns a maximum not match regex count check.
      * @return Maximum not match regex count check.
      */
-    public ColumnMaxNotMatchRegexCountCheckSpec getDailyCheckpointMaxNotMatchRegexCount() {
-        return dailyCheckpointMaxNotMatchRegexCount;
+    public ColumnStringNotMatchRegexCountCheckSpec getDailyCheckpointStringNotMatchRegexCount() {
+        return dailyCheckpointStringNotMatchRegexCount;
     }
 
     /**
      * Sets a new definition of a maximum not match regex count check.
-     * @param dailyCheckpointMaxNotMatchRegexCount Maximum not match regex count check.
+     * @param dailyCheckpointStringNotMatchRegexCount Maximum not match regex count check.
      */
-    public void setDailyCheckpointMaxNotMatchRegexCount(ColumnMaxNotMatchRegexCountCheckSpec dailyCheckpointMaxNotMatchRegexCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNotMatchRegexCount, dailyCheckpointMaxNotMatchRegexCount));
-        this.dailyCheckpointMaxNotMatchRegexCount = dailyCheckpointMaxNotMatchRegexCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxNotMatchRegexCount, "daily_checkpoint_max_not_match_regex_count");
+    public void setDailyCheckpointStringNotMatchRegexCount(ColumnStringNotMatchRegexCountCheckSpec dailyCheckpointStringNotMatchRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringNotMatchRegexCount, dailyCheckpointStringNotMatchRegexCount));
+        this.dailyCheckpointStringNotMatchRegexCount = dailyCheckpointStringNotMatchRegexCount;
+        propagateHierarchyIdToField(dailyCheckpointStringNotMatchRegexCount, "daily_checkpoint_string_not_match_regex_count");
     }
 
     /**
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnMinRegexMatchPercentCheckSpec getDailyCheckpointMinRegexMatchPercent() {
-        return dailyCheckpointMinRegexMatchPercent;
+    public ColumnStringRegexMatchPercentCheckSpec getDailyCheckpointStringMatchRegexPercent() {
+        return dailyCheckpointStringMatchRegexPercent;
     }
 
     /**
      * Sets a new definition of a minimum match regex percent check.
-     * @param dailyCheckpointMinRegexMatchPercent Minimum match regex percent check.
+     * @param dailyCheckpointStringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setDailyCheckpointMinRegexMatchPercent(ColumnMinRegexMatchPercentCheckSpec dailyCheckpointMinRegexMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinRegexMatchPercent, dailyCheckpointMinRegexMatchPercent));
-        this.dailyCheckpointMinRegexMatchPercent = dailyCheckpointMinRegexMatchPercent;
-        propagateHierarchyIdToField(dailyCheckpointMinRegexMatchPercent, "daily_checkpoint_min_regex_match_percent");
+    public void setDailyCheckpointStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec dailyCheckpointStringMatchRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMatchRegexPercent, dailyCheckpointStringMatchRegexPercent));
+        this.dailyCheckpointStringMatchRegexPercent = dailyCheckpointStringMatchRegexPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringMatchRegexPercent, "daily_checkpoint_string_match_regex_percent");
     }
 
     /**
      * Returns a maximum not match date regex count check.
      * @return Maximum not match date regex count check.
      */
-    public ColumnMaxNotMatchDateRegexCountCheckSpec getDailyCheckpointMaxNotMatchDateRegexCount() {
-        return dailyCheckpointMaxNotMatchDateRegexCount;
+    public ColumnStringNotMatchDateRegexCountCheckSpec getDailyCheckpointStringNotMatchDateRegexCount() {
+        return dailyCheckpointStringNotMatchDateRegexCount;
     }
 
     /**
      * Sets a new definition of a maximum not match date regex count check.
-     * @param dailyCheckpointMaxNotMatchDateRegexCount Maximum not match date regex count check.
+     * @param dailyCheckpointStringNotMatchDateRegexCount Maximum not match date regex count check.
      */
-    public void setDailyCheckpointMaxNotMatchDateRegexCount(ColumnMaxNotMatchDateRegexCountCheckSpec dailyCheckpointMaxNotMatchDateRegexCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxNotMatchDateRegexCount, dailyCheckpointMaxNotMatchDateRegexCount));
-        this.dailyCheckpointMaxNotMatchDateRegexCount = dailyCheckpointMaxNotMatchDateRegexCount;
-        propagateHierarchyIdToField(dailyCheckpointMaxNotMatchDateRegexCount, "daily_checkpoint_max_not_match_date_regex_count");
+    public void setDailyCheckpointStringNotMatchDateRegexCount(ColumnStringNotMatchDateRegexCountCheckSpec dailyCheckpointStringNotMatchDateRegexCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringNotMatchDateRegexCount, dailyCheckpointStringNotMatchDateRegexCount));
+        this.dailyCheckpointStringNotMatchDateRegexCount = dailyCheckpointStringNotMatchDateRegexCount;
+        propagateHierarchyIdToField(dailyCheckpointStringNotMatchDateRegexCount, "daily_checkpoint_string_not_match_date_regex_count");
     }
 
     /**

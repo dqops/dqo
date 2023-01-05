@@ -43,10 +43,10 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec dailyCheckpointContainsUsaPhonePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the set percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec dailyCheckpointContainsUsaZipcodePercent;
 
     /**

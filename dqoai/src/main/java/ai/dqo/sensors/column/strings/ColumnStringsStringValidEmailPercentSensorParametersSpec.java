@@ -13,51 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ai.dqo.sensors.column.strings;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
 /**
- * Column level sensor that calculates the percent of values that fit to a regex in a column.
+ * Column level sensor that calculates the percentage of rows with a valid email value in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMinRegexMatchPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringValidEmailPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringValidEmailPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
-
-    @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
-    private String regex = null;
-
-    /**
-     * Returns the regex.
-     * @return regex.
-     */
-    public String getRegex() {
-        return regex;
-    }
-
-    /**
-     * Sets the regex.
-     * @param regex Regex.
-     */
-    public void setRegex(String regex) {
-        this.setDirtyIf(!Objects.equals(this.regex, regex));
-        this.regex = regex;
-    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -76,7 +52,6 @@ public class ColumnStringsStringMinRegexMatchPercentSensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_min_regex_match_percent";
+        return "column/strings/string_valid_email_percent";
     }
-
 }
