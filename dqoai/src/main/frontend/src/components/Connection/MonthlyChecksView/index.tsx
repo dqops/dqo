@@ -81,6 +81,7 @@ const MonthlyChecksView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
+          onUpdate={onUpdate}
         />
       </div>
     </div>

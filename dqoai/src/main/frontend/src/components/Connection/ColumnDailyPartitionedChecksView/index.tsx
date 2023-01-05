@@ -100,6 +100,7 @@ const ColumnDailyPartitionedChecksView = ({
       </div>
       <div>
         <DataQualityChecks
+          onUpdate={onUpdate}
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
