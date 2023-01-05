@@ -12,8 +12,9 @@ import {
 } from '../../../redux/actions/column.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import ColumnActionGroup from './ColumnActionGroup';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface IColumnPartitionedChecksViewProps {
   connectionName: string;
@@ -52,6 +53,14 @@ const ColumnPartitionedChecksView = ({
     isUpdatedMonthlyPartitionedChecks,
     isUpdating
   } = useSelector((state: IRootState) => state.column);
+
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, activeTab as any).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
 
   useEffect(() => {
     if (
@@ -179,6 +188,8 @@ const ColumnPartitionedChecksView = ({
             checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
             className="max-h-checks"
+            checkResultsOverview={checkResultsOverview}
+            getCheckOverview={getCheckOverview}
           />
         )}
         {activeTab === 'monthly' && (
@@ -187,6 +198,8 @@ const ColumnPartitionedChecksView = ({
             checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
             className="max-h-checks"
+            checkResultsOverview={checkResultsOverview}
+            getCheckOverview={getCheckOverview}
           />
         )}
       </div>

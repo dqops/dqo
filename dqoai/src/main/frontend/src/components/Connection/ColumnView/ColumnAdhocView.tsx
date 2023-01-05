@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getColumnChecksUi,
   setUpdatedChecksUi,
   updateColumnCheckUI
 } from '../../../redux/actions/column.actions';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface IAdhocViewProps {
   connectionName: string;
@@ -28,6 +29,13 @@ const AdhocView = ({
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
 
   useEffect(() => {
     if (
@@ -76,6 +84,8 @@ const AdhocView = ({
         onUpdate={onUpdate}
         checksUI={checksUI}
         onChange={handleChange}
+        checkResultsOverview={checkResultsOverview}
+        getCheckOverview={getCheckOverview}
       />
     </div>
   );

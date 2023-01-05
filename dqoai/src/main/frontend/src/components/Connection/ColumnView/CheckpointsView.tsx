@@ -12,8 +12,9 @@ import {
 } from '../../../redux/actions/column.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import ColumnActionGroup from './ColumnActionGroup';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface ICheckpointsViewProps {
   connectionName: string;
@@ -51,6 +52,14 @@ const CheckpointsView = ({
     isUpdatedMonthlyCheckpoints,
     isUpdating
   } = useSelector((state: IRootState) => state.column);
+
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, activeTab as any).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
 
   useEffect(() => {
     if (
@@ -176,6 +185,8 @@ const CheckpointsView = ({
             checksUI={dailyCheckpoints}
             onChange={onDailyCheckpointsChange}
             className="max-h-checks"
+            checkResultsOverview={checkResultsOverview}
+            getCheckOverview={getCheckOverview}
           />
         )}
         {activeTab === 'monthly' && (
@@ -184,6 +195,8 @@ const CheckpointsView = ({
             checksUI={monthlyCheckpoints}
             onChange={onMonthlyCheckpointsChange}
             className="max-h-checks"
+            checkResultsOverview={checkResultsOverview}
+            getCheckOverview={getCheckOverview}
           />
         )}
       </div>
