@@ -8,17 +8,16 @@ import PageTabs from "../../components/PageTabs";
 import { useDashboard } from "../../contexts/dashboardContext";
 import clsx from 'clsx';
 import { ITab } from "../../shared/interfaces";
+import { AuthenticatedDashboardModel } from "../../api";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
   const { dashboardFolders }  = useSelector((state: IRootState) => state.dashboard);
-  const { tabs, activeTab, setActiveTab, closeTab, onAddTab } = useDashboard();
+  const { tabs, activeTab, setActiveTab, closeTab, onAddTab, openedDashboards } = useDashboard();
 
   useEffect(() => {
     dispatch(getAllDashboards());
   }, []);
-
-  const currentDashboard = dashboardFolders[0]?.dashboards ? dashboardFolders[0]?.dashboards[0] : undefined;
 
   return (
     <DashboardLayout>
@@ -38,8 +37,8 @@ const Dashboards = () => {
           )}
           {
             tabs.map((tab: ITab) => {
-              const folder = dashboardFolders.find((folder) => !!folder.dashboards?.find((item) => item.dashboard_name === tab.value));
-              const dashboard = folder?.dashboards?.find((item) => item.dashboard_name === tab.value);
+              const dashboard = openedDashboards?.find((item: AuthenticatedDashboardModel) => item.dashboard?.dashboard_name === tab.value);
+
               return (
                 <div
                   key={tab.value}
@@ -49,9 +48,9 @@ const Dashboards = () => {
                     <div>
                       <iframe
                         key={tab.value}
-                        src={dashboard?.url}
-                        width={dashboard?.width || 0}
-                        height={dashboard?.height || 0}
+                        src={dashboard?.authenticated_dashboard_url}
+                        width={dashboard?.dashboard?.width || 0}
+                        height={dashboard?.dashboard?.height || 0}
                       />
                     </div>
                   ) : (

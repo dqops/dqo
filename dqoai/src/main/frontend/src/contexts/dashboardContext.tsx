@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import { ITab } from '../shared/interfaces';
-import { DashboardSpec } from "../api";
+import { AuthenticatedDashboardModel, DashboardSpec } from "../api";
+import { DashboardsApi } from "../services/apiClient";
 
 const DashboardContext = React.createContext({} as any);
 
 function DashboardProvider(props: any) {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
+  const [openedDashboards, setOpenedDashboards] = useState<AuthenticatedDashboardModel[]>([]);
 
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
@@ -33,7 +35,7 @@ function DashboardProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (dashboard: DashboardSpec, isNew = false) => {
+  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, isNew = false) => {
     const existTab = tabs.find((item) => item.value === dashboard.dashboard_name);
     if (existTab) {
       setActiveTab(dashboard.dashboard_name);
@@ -52,6 +54,10 @@ function DashboardProvider(props: any) {
         setTabs([newTab]);
       }
       setActiveTab(dashboard.dashboard_name);
+
+      const res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '');
+      const authenticatedDashboard: AuthenticatedDashboardModel = res.data;
+      setOpenedDashboards([...openedDashboards, authenticatedDashboard]);
     }
   };
 
@@ -63,6 +69,7 @@ function DashboardProvider(props: any) {
     <DashboardContext.Provider
       value={{
         tabs,
+        openedDashboards,
         activeTab,
         setActiveTab,
         closeTab,

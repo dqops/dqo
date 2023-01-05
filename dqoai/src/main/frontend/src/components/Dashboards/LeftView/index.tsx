@@ -21,7 +21,7 @@ const LeftView = () => {
               <div
                 key={jIndex}
                 className="cursor-pointer flex space-x-1 items-center"
-                onClick={() => changeActiveTab(dashboard)}
+                onClick={() => changeActiveTab(dashboard, folder.folder_name)}
               >
                 <SvgIcon name="grid" className="w-4 h-4" />
                 <div className="text-sm leading-1.5">{dashboard.dashboard_name}</div>
