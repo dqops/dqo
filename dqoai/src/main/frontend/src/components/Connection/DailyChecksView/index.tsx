@@ -3,13 +3,14 @@ import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableDailyCheckpoints,
   updateTableDailyCheckpoints
 } from '../../../redux/actions/table.actions';
 import Button from '../../Button';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface IDailyChecksViewProps {
   connectionName: string;
@@ -28,6 +29,13 @@ const DailyChecksView = ({
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
 
   useEffect(() => {
     setUpdatedChecksUI(dailyCheckpoints);
@@ -81,6 +89,8 @@ const DailyChecksView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={onChangeUI}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

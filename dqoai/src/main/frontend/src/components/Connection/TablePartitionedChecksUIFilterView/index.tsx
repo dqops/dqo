@@ -7,7 +7,8 @@ import {
 } from '../../../redux/actions/table.actions';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface TablePartitionedChecksUIFilterViewProps {
   connectionName: string;
@@ -31,7 +32,14 @@ const TablePartitionedChecksUIFilterView = ({
   );
   const dispatch = useActionDispatch();
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
+
   useEffect(() => {
     setUpdatedChecksUI(partitionedChecksUIFilter);
   }, [partitionedChecksUIFilter]);
@@ -41,7 +49,7 @@ const TablePartitionedChecksUIFilterView = ({
       getTablePartitionedChecksUIFilter(connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
-  
+
   return (
     <div className="">
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -56,6 +64,8 @@ const TablePartitionedChecksUIFilterView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

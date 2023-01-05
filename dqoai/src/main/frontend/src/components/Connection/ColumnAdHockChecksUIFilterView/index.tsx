@@ -4,8 +4,9 @@ import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import { getColumnAdHockChecksUIFilter } from '../../../redux/actions/column.actions';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface ColumnAdHockChecksUIFilterViewProps {
   connectionName: string;
@@ -29,7 +30,14 @@ const ColumnAdHockChecksUIFilterView = ({
   );
   const dispatch = useActionDispatch();
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
+
   useEffect(() => {
     setUpdatedChecksUI(checksUIFilter);
   }, [checksUIFilter]);
@@ -54,6 +62,8 @@ const ColumnAdHockChecksUIFilterView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

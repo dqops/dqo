@@ -7,7 +7,8 @@ import {
 } from '../../../redux/actions/table.actions';
 import SvgIcon from '../../SvgIcon';
 import DataQualityChecks from '../../DataQualityChecks';
-import { UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
+import { CheckResultOverviewApi } from "../../../services/apiClient";
 
 interface TableCheckpointsUIFilterViewProps {
   connectionName: string;
@@ -31,7 +32,14 @@ const TableCheckpointsUIFilterView = ({
   );
   const dispatch = useActionDispatch();
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
-  
+  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+
+  const getCheckOverview = () => {
+    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+      setCheckResultsOverview(res.data);
+    });
+  };
+
   useEffect(() => {
     setUpdatedChecksUI(checkpointsUIFilter);
   }, [checkpointsUIFilter]);
@@ -56,6 +64,8 @@ const TableCheckpointsUIFilterView = ({
           className="max-h-checks-1"
           checksUI={updatedChecksUI}
           onChange={setUpdatedChecksUI}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
         />
       </div>
     </div>

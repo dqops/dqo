@@ -22,7 +22,7 @@ interface ICheckListItemProps {
   onChange: (check: UICheckModel) => void;
   category?: string;
   checkResult?: CheckResultsOverviewDataModel;
-  getCheckOverview?: () => void;
+  getCheckOverview: () => void;
   onUpdate: () => void;
 }
 
@@ -138,9 +138,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
 
   useEffect(() => {
     if (job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job?.status === DqoJobHistoryEntryModelStatusEnum.failed) {
-      if (getCheckOverview) {
-        getCheckOverview();
-      }
+      getCheckOverview();
     }
   }, [job?.status]);
 

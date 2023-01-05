@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CheckResultsOverviewDataModel, UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
 import { useTree } from '../../contexts/treeContext';
@@ -8,8 +8,8 @@ interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
   onChange: (ui: UIAllChecksModel) => void;
   className?: string;
-  checkResultsOverview?: CheckResultsOverviewDataModel[];
-  getCheckOverview?: () => void;
+  checkResultsOverview: CheckResultsOverviewDataModel[];
+  getCheckOverview: () => void;
   onUpdate: () => void;
 }
 
@@ -80,6 +80,10 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
 
     onChange(newChecksUI);
   };
+
+  useEffect(() => {
+    getCheckOverview();
+  }, []);
 
   if (!checksUI?.categories) {
     return <div className="p-4">No Checks</div>;
