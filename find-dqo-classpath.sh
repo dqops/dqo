@@ -16,7 +16,6 @@
 #
 
 if [ -e $(dirname $0)/dqoai/pom.xml ]; then
-
     "$JAVA_HOME/bin/javac" --version > /dev/null 2> /dev/null
 
     returnedValue=$?

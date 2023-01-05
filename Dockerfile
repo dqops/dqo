@@ -20,6 +20,6 @@ COPY --from=dqo-fetcher /dqo/home /dqo/home
 WORKDIR /dqo/userhome
 ENV DQO_HOME=/dqo/home
 ENV DQO_USER_HOME=/dqo/userhome
+ENV DQO_USER_INITIALIZE_USER_HOME=true
 
-RUN chsh -s /bin/bash
-CMD ["/bin/bash", "/dqo/home/bin/dqo"]
+ENTRYPOINT ["/bin/sh", "/dqo/home/bin/dqo"]

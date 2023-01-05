@@ -102,6 +102,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "This parameter is effective only in CLI mode.", defaultValue = "8888")
     private Integer serverPort;
 
+    @CommandLine.Option(names = {"--dqo.user.initialize-user-home"},
+            description = "Initializes an empty DQO user home (identified by the DQO_USER_HOME environment variable) without asking the user for confirmation.", defaultValue = "false")
+    private Boolean dqoUserInitializeUserHome;
+
     @CommandLine.Option(names = {"--logging.level.root"},
             description = "Default logging level at the root level of the logging hierarchy. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "WARN")

@@ -18,6 +18,7 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
@@ -45,6 +46,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
 
     /**
      * Default constructor called by the IoC container.
@@ -52,16 +54,19 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param terminalReader Terminal reader - used to prompt the user before the default user home is created.
      * @param terminalWriter Terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
+     * @param dqoUserConfigurationProperties DQO user home configuration parameters.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
                                     TerminalReader terminalReader,
                                     TerminalWriter terminalWriter,
-                                    DqoLoggingConfigurationProperties loggingConfigurationProperties) {
+                                    DqoLoggingConfigurationProperties loggingConfigurationProperties,
+                                    DqoUserConfigurationProperties dqoUserConfigurationProperties) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
     }
 
     /**
@@ -197,7 +202,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return;
         }
 
-        if (isHeadless) {
+        if (isHeadless || this.dqoUserConfigurationProperties.isInitializeUserHome()) {
             this.initializeDefaultDqoUserHome();
             activateFileLoggingInUserHome();
         }

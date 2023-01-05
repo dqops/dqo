@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-# Only attempt to find DQO_HOME if it is not set.
+# Only attempt to find DQO_HOME if it is not set
 if [ -z $DQO_HOME ]; then
   export DQO_HOME=$(dirname $0)/..
 fi

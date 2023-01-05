@@ -18,6 +18,7 @@ package ai.dqo.cli;
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.scheduler.JobSchedulerService;

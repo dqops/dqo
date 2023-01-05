@@ -58,6 +58,7 @@ dqo:
   user:
     home: .
     has-local-home: true
+    initialize-user-home: false
   logging:
     enable-user-home-logging: true
     max-history: 7

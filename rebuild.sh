@@ -16,6 +16,8 @@
 #
 
 pushd $(dirname $0)
+
 ./mvnw.sh clean -f pom.xml
 ./mvnw.sh package -DskipTests -Pbuild-with-jdk-11 -Prun-npm
+
 popd
