@@ -35,6 +35,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
+import static org.xbill.DNS.IPSECKEYRecord.Gateway.None;
+
 @SpringBootTest
 public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends BaseTest {
     private BetweenPercentMovingAverage7DaysRule5ParametersSpec sut;
@@ -160,5 +162,18 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 }

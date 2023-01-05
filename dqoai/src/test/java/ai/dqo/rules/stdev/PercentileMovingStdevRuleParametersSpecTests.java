@@ -80,4 +80,18 @@ public class PercentileMovingStdevRuleParametersSpecTests extends BaseTest {
         Assertions.assertEquals(11.465273611102807, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(22.720980651910963, ruleExecutionResult.getUpperBound());
     }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
 }

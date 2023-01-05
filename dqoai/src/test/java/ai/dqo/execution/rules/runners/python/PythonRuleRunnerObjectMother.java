@@ -50,7 +50,7 @@ public class PythonRuleRunnerObjectMother {
      * @param ruleParameters Rule parameters, also used to find the rule definition.
      * @return Rule evaluation result.
      */
-    public static RuleExecutionResult executeBuiltInRule(double actualValue, AbstractRuleParametersSpec ruleParameters) {
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue, AbstractRuleParametersSpec ruleParameters) {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
         LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.DAY);
@@ -71,7 +71,7 @@ public class PythonRuleRunnerObjectMother {
      * @param timeWindowSettingsSpec Time window settings.
      * @return Rule evaluation result.
      */
-    public static RuleExecutionResult executeBuiltInRule(double actualValue,
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue,
 														 AbstractRuleParametersSpec ruleParameters,
 														 LocalDateTime readoutTimestamp,
 														 HistoricDataPoint[] previousReadouts,

@@ -63,11 +63,13 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered_mean = float(scipy.mean(filtered))
 
     threshold_upper = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
-
     threshold_lower = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
 
     passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)

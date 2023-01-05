@@ -16,6 +16,8 @@
 package ai.dqo.rules.comparison;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.rules.RuleExecutionResult;
+import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,5 +51,14 @@ public class MaxCountRuleParametersSpecTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
         this.sut.setMaxCount(1L);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 }
