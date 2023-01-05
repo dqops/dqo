@@ -15,22 +15,21 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.metadata.dashboards.DashboardService;
+import ai.dqo.core.dqocloud.dashboards.LookerStudioUrlService;
+import ai.dqo.metadata.dashboards.DashboardSpec;
+import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
+import ai.dqo.rest.models.metadata.ConnectionModel;
+import ai.dqo.services.dashboards.DashboardService;
 import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
 import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * Controller that provides access to data quality dashboards.
@@ -41,14 +40,18 @@ import reactor.core.publisher.Flux;
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
 public class DashboardsController {
     private DashboardService dashboardService;
+    private final LookerStudioUrlService lookerStudioUrlService;
 
     /**
      * Default dependency injection constructor.
      * @param dashboardService Dashboard service that returns a list of built-in dashboards.
+     * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
      */
     @Autowired
-    public DashboardsController(DashboardService dashboardService) {
+    public DashboardsController(DashboardService dashboardService,
+                                LookerStudioUrlService lookerStudioUrlService) {
         this.dashboardService = dashboardService;
+        this.lookerStudioUrlService = lookerStudioUrlService;
     }
 
     /**
@@ -66,5 +69,130 @@ public class DashboardsController {
         DashboardsFolderListSpec dashboardList = this.dashboardService.getDashboards();
 
         return new ResponseEntity<>(Flux.fromStream(dashboardList.stream()), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a model of a single dashboard in one level folder, generating also an authenticated url.
+     * @param folder Folder name.
+     * @param dashboardName Dashboard name.
+     * @return Dashboard model with the authenticated url.
+     */
+    @GetMapping("/{folder}/{dashboardName}")
+    @ApiOperation(value = "getDashboardLevel1", notes = "Returns a single dashboard in one folder with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 404, message = "Dashboard not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel1(
+            @ApiParam("Root folder name") @PathVariable String folder,
+            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+
+        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder);
+        if (folder1Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardSpec dashboard = folder1Spec.getDashboards().getDashboardByName(dashboardName);
+        if (dashboard == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
+        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a model of a single dashboard in two level folder, generating also an authenticated url.
+     * @param folder1 Folder name.
+     * @param folder2 Folder name.
+     * @param dashboardName Dashboard name.
+     * @return Dashboard model with the authenticated url.
+     */
+    @GetMapping("/{folder1}/{folder2}/{dashboardName}")
+    @ApiOperation(value = "getDashboardLevel2", notes = "Returns a single dashboard in two folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 404, message = "Dashboard not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel2(
+            @ApiParam("Root folder name") @PathVariable String folder1,
+            @ApiParam("Second level folder name") @PathVariable String folder2,
+            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+
+        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
+        if (folder1Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
+        if (folder2Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardSpec dashboard = folder2Spec.getDashboards().getDashboardByName(dashboardName);
+        if (dashboard == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
+        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a model of a single dashboard in three level folder, generating also an authenticated url.
+     * @param folder1 Folder name.
+     * @param folder2 Folder name.
+     * @param folder3 Folder name.
+     * @param dashboardName Dashboard name.
+     * @return Dashboard model with the authenticated url.
+     */
+    @GetMapping("/{folder1}/{folder2}/{folder3}/{dashboardName}")
+    @ApiOperation(value = "getDashboardLevel3", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 404, message = "Dashboard not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel3(
+            @ApiParam("Root folder name") @PathVariable String folder1,
+            @ApiParam("Second level folder name") @PathVariable String folder2,
+            @ApiParam("Third level folder name") @PathVariable String folder3,
+            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+
+        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
+        if (folder1Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
+        if (folder2Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
+        if (folder3Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardSpec dashboard = folder3Spec.getDashboards().getDashboardByName(dashboardName);
+        if (dashboard == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
+        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
     }
 }
