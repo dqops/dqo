@@ -228,7 +228,14 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TablePartitionedChecksRootSpec partitionedChecks = tableSpec.getPartitionedChecks();
+        final TablePartitionedChecksRootSpec partitionedChecks =
+                Objects.requireNonNullElseGet(
+                        tableSpec.getPartitionedChecks(),
+                        () -> {
+                            TablePartitionedChecksRootSpec container = new TablePartitionedChecksRootSpec();
+                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "partitioned_checks"));
+                            return container;
+                        });
 
         AbstractRootChecksContainerSpec tempCheckpointPartition = null;
         switch (timeScale) {
@@ -237,7 +244,7 @@ public class CheckResultsOverviewController {
                         partitionedChecks.getDaily(),
                         () -> {
                             TableDailyPartitionedCheckCategoriesSpec container = new TableDailyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), timeScale.name()));
+                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
                             return container;
                         });
                 break;
@@ -247,7 +254,7 @@ public class CheckResultsOverviewController {
                         partitionedChecks.getMonthly(),
                         () -> {
                             TableMonthlyPartitionedCheckCategoriesSpec container = new TableMonthlyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), timeScale.name()));
+                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
                             return container;
                         });
                 break;
