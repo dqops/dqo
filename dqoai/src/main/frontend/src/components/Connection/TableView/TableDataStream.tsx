@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react';
-import ActionGroup from './TableActionGroup';
-import DataStreamsMappingView from '../DataStreamsMappingView';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import {
-  getTableDefaultDataStreamMapping,
-  setUpdatedTableDataStreamsMapping,
-  updateTableDefaultDataStreamMapping
-} from '../../../redux/actions/table.actions';
-import { DataStreamMappingSpec } from '../../../api';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
+import React, { useEffect, useState } from 'react';
+import { DataStreamBasicModel } from '../../../api';
+import DataStreamListView from "./DataStreamListView";
+import DataStreamEditView from "./DataStreamEditView";
+import { DataStreamsApi } from "../../../services/apiClient";
 
 interface ITableDataStreamProps {
   connectionName: string;
@@ -22,59 +15,52 @@ const TableDataStream = ({
   schemaName,
   tableName
 }: ITableDataStreamProps) => {
-  const dispatch = useActionDispatch();
-  const {
-    isUpdating,
-    dataStreamsMapping,
-    isUpdatedDataStreamsMapping,
-    tableBasic
-  } = useSelector((state: IRootState) => state.table);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
+  const [selectedDataStream, setSelectedDataStream] = useState<DataStreamBasicModel>();
 
   useEffect(() => {
-    if (
-      !dataStreamsMapping ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(
-        getTableDefaultDataStreamMapping(connectionName, schemaName, tableName)
-      );
-    }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+    getDataStreams();
+  }, [connectionName, schemaName, tableName]);
 
-  const onUpdate = async () => {
-    if (!dataStreamsMapping) {
-      return;
-    }
-    await dispatch(
-      updateTableDefaultDataStreamMapping(
-        connectionName,
-        schemaName,
-        tableName,
-        dataStreamsMapping
-      )
-    );
-    await dispatch(
-      getTableDefaultDataStreamMapping(connectionName, schemaName, tableName)
-    );
+  const getDataStreams = () => {
+    DataStreamsApi.getDataStreams(connectionName, schemaName, tableName).then((res) => {
+      setDataStreams(res.data);
+    });
   };
 
-  const handleChange = (value: DataStreamMappingSpec) => {
-    dispatch(setUpdatedTableDataStreamsMapping(value));
+  const onEdit = (stream: DataStreamBasicModel) => {
+    setSelectedDataStream(stream);
+    setIsEditing(true);
+  };
+
+  const onCreate = () => {
+    setSelectedDataStream(undefined);
+    setIsEditing(true);
   };
 
   return (
     <div>
-      <ActionGroup
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedDataStreamsMapping}
-        isUpdating={isUpdating}
-      />
-      <DataStreamsMappingView
-        dataStreamsMapping={dataStreamsMapping}
-        onChange={handleChange}
-      />
+      {
+        isEditing ? (
+          <DataStreamEditView
+            onBack={() => setIsEditing(false)}
+            selectedDataStream={selectedDataStream}
+            connection={connectionName}
+            schema={schemaName}
+            table={tableName}
+            getDataStreams={getDataStreams}
+          />
+        ) : (
+          <DataStreamListView
+            dataStreams={dataStreams}
+            getDataStreams={getDataStreams}
+            onCreate={onCreate}
+            onEdit={onEdit}
+          />
+        )
+      }
     </div>
   );
 };

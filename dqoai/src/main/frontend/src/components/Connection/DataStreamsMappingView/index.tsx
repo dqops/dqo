@@ -9,7 +9,7 @@ interface IDataStreamsMappingViewProps {
 
 const DataStreamsMappingView = ({
   dataStreamsMapping,
-  onChange
+  onChange,
 }: IDataStreamsMappingViewProps) => {
   const getDataStreamLevel = (index: number) => {
     if (index === 0) return dataStreamsMapping?.level_1;
