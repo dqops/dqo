@@ -8,7 +8,7 @@ interface ILogoProps {
 }
 
 const Logo = (props: ILogoProps) => {
-  return <img src="/logo.png" {...props} />;
+  return <img src="/logo.svg" {...props} />;
 };
 
 export default Logo;
