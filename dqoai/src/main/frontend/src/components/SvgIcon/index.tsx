@@ -52,7 +52,9 @@ import { ReactComponent as RunningSvg } from './svg/running.svg';
 import { ReactComponent as HourglassSvg } from './svg/hourglass.svg';
 import { ReactComponent as HouseSvg } from './svg/house.svg';
 import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
+import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as FolderSvg } from './svg/folder.svg';
+import { ReactComponent as StarSvg } from './svg/star.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -107,7 +109,9 @@ const iconsMap: any = {
   hourglass: HourglassSvg,
   house: HouseSvg,
   'chevron-right': ChevronRightSvg,
-  folder: FolderSvg
+  'chevron-left': ChevronLeftSvg,
+  folder: FolderSvg,
+  star: StarSvg
 };
 
 interface SvgIconProps {
