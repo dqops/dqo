@@ -41,15 +41,14 @@ const Dashboards = () => {
                   key={tab.value}
                   className={clsx('bg-white absolute top-0 left-0 w-full h-full flex items-center justify-center overflow-auto', activeTab === tab.value ? 'z-50' : 'z-0')}
                 >
-                  {dashboard ? (
-                    <div>
-                      <iframe
-                        key={tab.value}
-                        src={dashboard?.authenticated_dashboard_url}
-                        width={dashboard?.dashboard?.width || 0}
-                        height={dashboard?.dashboard?.height || 0}
-                      />
-                    </div>
+                  {!dashboard ? (
+                    <iframe
+                      className="absolute top-0 left-0"
+                      key={tab.value}
+                      src={dashboard?.authenticated_dashboard_url}
+                      width={dashboard?.dashboard?.width || 0}
+                      height={dashboard?.dashboard?.height || 0}
+                    />
                   ) : (
                     <div>
                       Choose a data quality dashboard from the tree
