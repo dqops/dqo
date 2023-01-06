@@ -2,30 +2,12 @@ import React from 'react';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Logo from '../../components/Logo';
-import SvgIcon from '../../components/SvgIcon';
-import { useHistory } from 'react-router-dom';
 
 const HomePage = () => {
-  const history = useHistory();
-  
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Header sidebarWidth={0} isHome />
       <div className="flex w-full">
-        <div className="w-10 bg-gray-600 h-full mt-16 flex flex-col items-center">
-          <div
-            className="w-full py-3 bg-gray-250 flex items-center justify-center mt-1.5 mb-1.5 cursor-pointer"
-            onClick={() => history.push('/home')}
-          >
-            <SvgIcon name="house" className="w-6 text-white" />
-          </div>
-          <div
-            className="w-full py-3 bg-gray-250 flex items-center justify-center cursor-pointer"
-            onClick={() => history.push('/checks')}
-          >
-            <img src="/images/home/dashboard.png" className="w-6" alt="" />
-          </div>
-        </div>
         <div className="p-12 mt-16 flex-1">
           <h1 className="text-3xl italic mb-4">Welcome to your DQO account</h1>
           <div className="mb-3">
