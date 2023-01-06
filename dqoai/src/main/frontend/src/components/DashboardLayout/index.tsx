@@ -2,26 +2,25 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import Header from '../Header';
-import Sidebar from '../Sidebar';
-import { useTree } from '../../contexts/treeContext';
+import TopView from "../Dashboards/TopView";
+import LeftView from "../Dashboards/LeftView";
+import Header from "../Header";
 
 interface LayoutProps {
   children?: any;
 }
 
-const MainLayout = ({ children }: LayoutProps) => {
-  const { sidebarWidth } = useTree();
+const DashboardLayout = ({ children }: LayoutProps) => {
   return (
     <div className="flex min-h-screen overflow-hidden">
-      <Sidebar />
+      <Header sidebarWidth={280} />
+      <LeftView />
       <div className="flex flex-1">
-        <Header sidebarWidth={sidebarWidth} />
         <div
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
-            marginLeft: sidebarWidth,
-            maxWidth: `calc(100vw - ${sidebarWidth}px)`
+            marginLeft: 280,
+            maxWidth: `calc(100vw - 280px)`
           }}
         >
           {children}
@@ -31,8 +30,8 @@ const MainLayout = ({ children }: LayoutProps) => {
   );
 };
 
-MainLayout.propTypes = {
+DashboardLayout.propTypes = {
   children: PropTypes.any.isRequired
 };
 
-export default MainLayout;
+export default DashboardLayout;

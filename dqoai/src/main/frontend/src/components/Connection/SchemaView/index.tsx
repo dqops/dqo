@@ -35,7 +35,7 @@ const SchemaView = ({ connectionName, schemaName }: ISchemaViewProps) => {
       schema: schemaName
     });
 
-    history.replace(`/dashboard?${searchQuery}`);
+    history.replace(`/checks?${searchQuery}`);
   }, [schemaName, connectionName]);
 
   return (

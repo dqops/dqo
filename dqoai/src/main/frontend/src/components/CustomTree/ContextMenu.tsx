@@ -54,7 +54,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
       tab: 'schemas',
       source: true
     });
-    history.replace(`/dashboard?${searchQuery}`);
+    history.replace(`/checks?${searchQuery}`);
     setOpen(false);
   };
   const importTables = () => {
