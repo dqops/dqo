@@ -42,7 +42,7 @@ const Tree = () => {
 
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK) {
-      return <div />;
+      return <div className="w-6" />;
     }
     return (
       <SvgIcon
