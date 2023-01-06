@@ -41,7 +41,7 @@ const Dashboards = () => {
                   key={tab.value}
                   className={clsx('bg-white absolute top-0 left-0 w-full h-full flex items-center justify-center overflow-auto', activeTab === tab.value ? 'z-50' : 'z-0')}
                 >
-                  {!dashboard ? (
+                  {dashboard ? (
                     <iframe
                       className="absolute top-0 left-0"
                       key={tab.value}
