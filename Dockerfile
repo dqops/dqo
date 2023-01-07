@@ -8,6 +8,7 @@ RUN unzip /dqo/temp/dqo-distribution-$(cat /dqo/temp/VERSION)-bin.zip -d /dqo/ho
 
 
 FROM python:3.10.8-slim-bullseye AS dqo-main
+EXPOSE 8888
 WORKDIR /dqo
 
 # install java
