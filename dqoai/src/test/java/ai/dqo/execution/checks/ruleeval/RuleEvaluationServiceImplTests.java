@@ -126,7 +126,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -151,7 +151,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -176,7 +176,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
@@ -201,7 +201,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
@@ -226,7 +226,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
@@ -251,7 +251,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(11.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
@@ -280,7 +280,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getErrorUpperBoundColumn().get(0));
@@ -307,7 +307,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getErrorUpperBoundColumn().get(0));
@@ -334,7 +334,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getErrorUpperBoundColumn().get(0));
@@ -361,7 +361,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getErrorUpperBoundColumn().get(0));
@@ -383,7 +383,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(14.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -395,7 +395,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(14.0, evaluationResult.getWarningLowerBoundColumn().get(1));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(1));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(1));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(1));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(1));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(1));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(1));
         Assertions.assertNull(evaluationResult.getFatalLowerBoundColumn().get(1));
@@ -420,7 +420,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(2324401329629152617L, evaluationResult.getRuleResultsTable().column("data_stream_hash").get(0));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(0));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(0));
@@ -433,7 +433,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(1));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(1));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(1));
-        Assertions.assertEquals(8830480320851780991L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(1));
+        Assertions.assertEquals(6373675363437324823L, resultTable.column(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME).get(1));
         Assertions.assertEquals(1454728803102928799L, evaluationResult.getRuleResultsTable().column("data_stream_hash").get(1));
         Assertions.assertNull(evaluationResult.getWarningUpperBoundColumn().get(1));
         Assertions.assertNull(evaluationResult.getFatalUpperBoundColumn().get(1));
