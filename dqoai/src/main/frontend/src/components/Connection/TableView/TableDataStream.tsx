@@ -3,18 +3,10 @@ import { DataStreamBasicModel } from '../../../api';
 import DataStreamListView from "./DataStreamListView";
 import DataStreamEditView from "./DataStreamEditView";
 import { DataStreamsApi } from "../../../services/apiClient";
+import { useParams } from "react-router-dom";
 
-interface ITableDataStreamProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const TableDataStream = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITableDataStreamProps) => {
+const TableDataStream = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isEditing, setIsEditing] = useState(false);
 
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);

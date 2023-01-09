@@ -11,23 +11,19 @@ import { DataStreamMappingSpec } from '../../../api';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import { useParams } from "react-router-dom";
 
-interface IConnectionDataStreamProps {
-  connectionName: string;
-}
-
-const ConnectionDataStream = ({
-  connectionName
-}: IConnectionDataStreamProps) => {
+const ConnectionDataStream = () => {
+  const { connection }: { connection: string } = useParams();
   const dispatch = useActionDispatch();
   const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
     useSelector((state: IRootState) => state.connection);
 
   useEffect(() => {
     if (!updatedDataStreamsMapping) {
-      dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
+      dispatch(getConnectionDefaultDataStreamsMapping(connection));
     }
-  }, [connectionName]);
+  }, [connection]);
 
   const onUpdate = async () => {
     if (!updatedDataStreamsMapping) {
@@ -35,11 +31,11 @@ const ConnectionDataStream = ({
     }
     await dispatch(
       updateConnectionDefaultDataStreamsMapping(
-        connectionName,
+        connection,
         updatedDataStreamsMapping
       )
     );
-    await dispatch(getConnectionDefaultDataStreamsMapping(connectionName));
+    await dispatch(getConnectionDefaultDataStreamsMapping(connection));
     dispatch(setIsUpdatedDataStreamsMapping(false));
   };
 

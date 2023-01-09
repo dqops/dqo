@@ -1,30 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { IRootState } from '../../redux/reducers';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableAdHockChecksUIFilter,
-} from '../../../redux/actions/table.actions';
-import SvgIcon from '../../SvgIcon';
-import DataQualityChecks from '../../DataQualityChecks';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
-import { CheckResultOverviewApi } from "../../../services/apiClient";
+} from '../../redux/actions/table.actions';
+import SvgIcon from '../../components/SvgIcon';
+import DataQualityChecks from '../../components/DataQualityChecks';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultOverviewApi } from "../../services/apiClient";
+import { useParams } from "react-router-dom";
+import ConnectionLayout from "../../components/ConnectionLayout";
 
-interface TableAdHockChecksUIFilterViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-  category: string;
-  checkName: string;
-}
-
-const TableAdHockChecksUIFilterView = ({
-  connectionName,
-  schemaName,
-  tableName,
-  category,
-  checkName
-}: TableAdHockChecksUIFilterViewProps) => {
+const TableAdHockChecksUIFilterView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
   const { checksUIFilter } = useSelector(
     (state: IRootState) => state.table
   );
@@ -49,7 +38,7 @@ const TableAdHockChecksUIFilterView = ({
   }, [connectionName, schemaName, tableName, category, checkName]);
   
   return (
-    <div className="">
+    <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
@@ -66,7 +55,7 @@ const TableAdHockChecksUIFilterView = ({
           getCheckOverview={getCheckOverview}
         />
       </div>
-    </div>
+    </ConnectionLayout>
   );
 };
 

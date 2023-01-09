@@ -9,18 +9,10 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ActionGroup from './TableActionGroup';
 import LabelsView from '../LabelsView';
+import { useParams } from "react-router-dom";
 
-interface ITableLabelsViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const TableLabelsView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITableLabelsViewProps) => {
+const TableLabelsView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );
