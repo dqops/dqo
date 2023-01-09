@@ -11,7 +11,10 @@ const HomePage = () => {
         <div className="p-12 mt-16 flex-1">
           <h1 className="text-3xl italic mb-4">Welcome to your DQO account</h1>
           <div className="mb-3">
-            In the menu on the left, you can find some examples of visualization dashboards showing the results of check execution.
+            The navigation menu at the top of the page provides access the Data Quality Checks and Data Quality Dashboards sections.
+          </div>
+          <div className="mb-3">
+            In the Data Quality Dashboard section you can find examples of visualization dashboards showing the results of check execution.
           </div>
           <div className="mb-3">
             If you are a new user, follow the instruction below on how to install and run the DQO application:
