@@ -67,6 +67,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
             put("string_not_match_date_regex_count", o -> o.stringNotMatchDateRegexCount);
+            put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
 
 
 
@@ -151,6 +152,10 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchDateRegexCountCheckSpec stringNotMatchDateRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent;
+
 
     /**
      * Returns a maximum string length below check.
@@ -618,6 +623,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringNotMatchDateRegexCount, stringNotMatchDateRegexCount));
         this.stringNotMatchDateRegexCount = stringNotMatchDateRegexCount;
         propagateHierarchyIdToField(stringNotMatchDateRegexCount, "string_not_match_date_regex_count");
+    }
+
+    /**
+     * Returns a maximum match date regex percent check.
+     * @return Maximum match date regex percent check.
+     */
+    public ColumnStringMatchDateRegexPercentCheckSpec getStringMatchDateRegexPercent() {
+        return stringMatchDateRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match date regex percent check.
+     * @param stringMatchDateRegexPercent Maximum match date regex percent check.
+     */
+    public void setStringMatchDateRegexPercent(ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringMatchDateRegexPercent, stringMatchDateRegexPercent));
+        this.stringMatchDateRegexPercent = stringMatchDateRegexPercent;
+        propagateHierarchyIdToField(stringMatchDateRegexPercent, "string_match_date_regex_percent");
     }
 
     /**
