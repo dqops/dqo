@@ -10,18 +10,10 @@ import {
   setUpdatedTableBasic,
   updateTableBasic
 } from '../../../redux/actions/table.actions';
+import { useParams } from "react-router-dom";
 
-interface ITableDetailsProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const TableDetails = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITableDetailsProps) => {
+const TableDetails = () => {
+  const { connection, schema, table }: { connection: string, schema: string, table: string } = useParams();
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     (state: IRootState) => state.table
   );
@@ -30,13 +22,13 @@ const TableDetails = ({
   useEffect(() => {
     if (
       !tableBasic ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
+      tableBasic?.connection_name !== connection ||
+      tableBasic?.target?.schema_name !== schema ||
+      tableBasic?.target?.table_name !== table
     ) {
-      dispatch(getTableBasic(connectionName, schemaName, tableName));
+      dispatch(getTableBasic(connection, schema, table));
     }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+  }, [connection, schema, table, tableBasic]);
 
   const handleChange = (obj: any) => {
     dispatch(
@@ -52,9 +44,9 @@ const TableDetails = ({
       return;
     }
     await dispatch(
-      updateTableBasic(connectionName, schemaName, tableName, tableBasic)
+      updateTableBasic(connection, schema, table, tableBasic)
     );
-    await dispatch(getTableBasic(connectionName, schemaName, tableName));
+    await dispatch(getTableBasic(connection, schema, table));
   };
 
   return (

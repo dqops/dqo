@@ -228,83 +228,47 @@ const TableView = ({
       </div>
       <div>
         {activeTab === 'table' && (
-          <TableDetails
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <TableDetails />
         )}
       </div>
       <div>
         {activeTab === 'schedule' && (
-          <ScheduleDetail
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <ScheduleDetail />
         )}
       </div>
       <div>
         {activeTab === 'data-quality-checks' && (
-          <AdhocView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <AdhocView />
         )}
       </div>
       <div>
         {activeTab === 'checkpoints' && (
-          <CheckpointsView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <CheckpointsView />
         )}
       </div>
       <div>
         {activeTab === 'partitioned-checks' && (
-          <PartitionedChecks
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <PartitionedChecks />
         )}
       </div>
       <div>
         {activeTab === 'comments' && (
-          <TableCommentView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <TableCommentView />
         )}
       </div>
       <div>
         {activeTab === 'labels' && (
-          <TableLabelsView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <TableLabelsView />
         )}
       </div>
       <div>
         {activeTab === 'data-streams' && (
-          <TableDataStream
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <TableDataStream />
         )}
       </div>
       <div>
         {activeTab === 'timestamps' && (
-          <TimestampsView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-          />
+          <TimestampsView />
         )}
       </div>
     </div>

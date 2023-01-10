@@ -12,19 +12,19 @@ import {
 } from '../../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 
-interface IColumnMonthlyPartitionedChecksViewProps {
+interface IColumnTableMonthlyPartitionedChecksViewProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
   columnName: string;
 }
 
-const ColumnMonthlyPartitionedChecksView = ({
+const ColumnTableMonthlyPartitionedChecksView = ({
   connectionName,
   schemaName,
   tableName,
   columnName
-}: IColumnMonthlyPartitionedChecksViewProps) => {
+}: IColumnTableMonthlyPartitionedChecksViewProps) => {
   const { monthlyPartitionedChecks, isUpdating } = useSelector(
     (state: IRootState) => state.column
   );
@@ -112,4 +112,4 @@ const ColumnMonthlyPartitionedChecksView = ({
   );
 };
 
-export default ColumnMonthlyPartitionedChecksView;
+export default ColumnTableMonthlyPartitionedChecksView;

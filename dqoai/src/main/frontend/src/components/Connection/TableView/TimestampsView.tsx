@@ -13,12 +13,7 @@ import {
   updateTableBasic
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-
-interface TimestampsViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
+import { useParams } from "react-router-dom";
 
 const partitionedChecksOptions = [
   {
@@ -33,11 +28,8 @@ const partitionedChecksOptions = [
   }
 ];
 
-const TimestampsView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: TimestampsViewProps) => {
+const TimestampsView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [isUpdated, setIsUpdated] = useState(false);
   const [columnsSpec, setColumnsSpec] = useState<TimestampColumnsSpec>();
   const { tableBasic, isUpdating } = useSelector(

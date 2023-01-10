@@ -13,12 +13,10 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import { useParams } from "react-router-dom";
 
-interface IScheduleDetailProps {
-  connectionName: string;
-}
-
-const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
+const ScheduleDetail = () => {
+  const { connection }: { connection: string } = useParams();
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
@@ -41,16 +39,16 @@ const ScheduleDetail: React.FC<IScheduleDetailProps> = ({ connectionName }) => {
 
   useEffect(() => {
     if (!updatedSchedule) {
-      dispatch(getConnectionSchedule(connectionName));
+      dispatch(getConnectionSchedule(connection));
     }
-  }, [connectionName]);
+  }, [connection]);
 
   const onUpdate = async () => {
     if (!updatedSchedule) {
       return;
     }
-    await dispatch(updateConnectionSchedule(connectionName, updatedSchedule));
-    await dispatch(getConnectionSchedule(connectionName));
+    await dispatch(updateConnectionSchedule(connection, updatedSchedule));
+    await dispatch(getConnectionSchedule(connection));
     dispatch(setIsUpdatedSchedule(false));
   };
 

@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import SvgIcon from '../../SvgIcon';
-import DataQualityChecks from '../../DataQualityChecks';
+import SvgIcon from '../../components/SvgIcon';
+import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { IRootState } from '../../redux/reducers';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableMonthlyPartitionedChecks,
-  updateTableMonthlyPartitionedChecks
-} from '../../../redux/actions/table.actions';
-import Button from '../../Button';
-import { CheckResultOverviewApi } from "../../../services/apiClient";
+  getTableDailyCheckpoints,
+  updateTableDailyCheckpoints
+} from '../../redux/actions/table.actions';
+import Button from '../../components/Button';
+import { CheckResultOverviewApi } from "../../services/apiClient";
+import { useParams } from "react-router-dom";
+import ConnectionLayout from "../../components/ConnectionLayout";
 
-interface IMonthlyPartitionedChecksViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const MonthlyPartitionedChecksView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: IMonthlyPartitionedChecksViewProps) => {
-  const { monthlyPartitionedChecks, isUpdating } = useSelector(
+const TableDailyChecksView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
+  const { dailyCheckpoints, isUpdating } = useSelector(
     (state: IRootState) => state.table
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -32,25 +25,24 @@ const MonthlyPartitionedChecksView = ({
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(monthlyPartitionedChecks);
-  }, [monthlyPartitionedChecks]);
+    setUpdatedChecksUI(dailyCheckpoints);
+  }, [dailyCheckpoints]);
 
   useEffect(() => {
-    dispatch(
-      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
-    );
+    dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
+
     await dispatch(
-      updateTableMonthlyPartitionedChecks(
+      updateTableDailyCheckpoints(
         connectionName,
         schemaName,
         tableName,
@@ -58,7 +50,7 @@ const MonthlyPartitionedChecksView = ({
       )
     );
     await dispatch(
-      getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+      getTableDailyCheckpoints(connectionName, schemaName, tableName)
     );
     setIsUpdated(false);
   };
@@ -69,11 +61,11 @@ const MonthlyPartitionedChecksView = ({
   };
 
   return (
-    <div className="">
+    <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`Monthly Partitioned checks for ${connectionName}.${schemaName}.${tableName}`}</div>
+          <div className="text-xl font-semibold">{`Daily Checkpoints for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}
@@ -94,8 +86,8 @@ const MonthlyPartitionedChecksView = ({
           getCheckOverview={getCheckOverview}
         />
       </div>
-    </div>
+    </ConnectionLayout>
   );
 };
 
-export default MonthlyPartitionedChecksView;
+export default TableDailyChecksView;

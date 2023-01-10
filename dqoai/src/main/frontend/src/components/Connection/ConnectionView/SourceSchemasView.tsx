@@ -12,12 +12,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
 import SourceTablesView from './SourceTablesView';
+import { useParams } from "react-router-dom";
 
-interface ISourceSchemasViewProps {
-  connectionName: string;
-}
-
-const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
+const SourceSchemasView = () => {
+  const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
 
@@ -26,14 +24,14 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
 
   useEffect(() => {
     setLoading(true);
-    SourceSchemasApi.getRemoteSchemas(connectionName)
+    SourceSchemasApi.getRemoteSchemas(connection)
       .then((res) => {
         setSchemas(res.data);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [connectionName]);
+  }, [connection]);
 
   const onImportTables = (schema: SchemaRemoteModel) => {
     setSelectedSchema(schema);
@@ -57,7 +55,7 @@ const SourceSchemasView = ({ connectionName }: ISourceSchemasViewProps) => {
   if (selectedSchema) {
     return (
       <SourceTablesView
-        connectionName={connectionName}
+        connectionName={connection}
         schemaName={selectedSchema.schemaName ?? ''}
         onBack={() => setSelectedSchema(undefined)}
       />
