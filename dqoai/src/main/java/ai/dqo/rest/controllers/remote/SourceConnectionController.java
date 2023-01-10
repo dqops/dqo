@@ -44,7 +44,7 @@ public class SourceConnectionController {
     }
 
     /**
-     * Returns a boolean value of connection status and message exception.
+     * Returns a boolean value of connection status and exception message.
      * @param connectionBasicModel Connection connectionBasicModel. Required import.
      * @return Enum value of connection status and exception message.
      */
