@@ -15,12 +15,7 @@
  */
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionSpec;
-import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.controllers.remote.services.SourceConnectionsService;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
@@ -39,24 +34,22 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceSchemasController", description = "Connection status remote management")
+@Api(value = "SourceConnectionController", description = "Connection status remote management")
 public class SourceConnectionController {
-    private final UserHomeContextFactory userHomeContextFactory;
     private SourceConnectionsService sourceConnectionsService;
 
     @Autowired
-    public SourceConnectionController(UserHomeContextFactory userHomeContextFactory, SourceConnectionsService sourceConnectionsService){
-        this.userHomeContextFactory = userHomeContextFactory;
+    public SourceConnectionController(SourceConnectionsService sourceConnectionsService){
         this.sourceConnectionsService = sourceConnectionsService;
     }
 
     /**
      * Returns a boolean value of connection status and message exception.
      * @param connectionBasicModel Connection connectionBasicModel. Required import.
-     * @return Enum value of connection status and message exception.
+     * @return Enum value of connection status and exception message.
      */
     @PostMapping("/checkconnection")
-    @ApiOperation(value = "checkconnection", notes = "Checks if the given connection exists", response = ConnectionRemoteModel.class)
+    @ApiOperation(value = "checkconnection", notes = "Checks if the given remote connection exists", response = ConnectionRemoteModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",  response = ConnectionRemoteModel.class),
@@ -64,28 +57,21 @@ public class SourceConnectionController {
             @ApiResponse(code = 409, message = "Rejected, The connection name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ConnectionRemoteModel>> connection(
+    public ResponseEntity<Mono<ConnectionRemoteModel>> checkconnection(
             @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
 
         ConnectionRemoteModel connectionRemoteModel;
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionBasicModel.getConnectionName(), true);
-
-        if (connectionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
-
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionBasicModel.copyToConnectionSpecification(connectionSpec);
 
-        connectionRemoteModel = sourceConnectionsService.showSchemas(connectionSpec);
+        connectionRemoteModel = sourceConnectionsService.checkConnection(connectionBasicModel.getConnectionName(), connectionSpec);
 
-        if (connectionRemoteModel.getConnectionStatus() == ConnectionStatusRemote.FAIL) {
+        if (connectionRemoteModel.getConnectionStatus() == ConnectionStatusRemote.FAILURE) {
             return new ResponseEntity<>(Mono.just(connectionRemoteModel), HttpStatus.NOT_FOUND);
+        }
+        if (connectionRemoteModel.getConnectionStatus() == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
         return new ResponseEntity<>(Mono.just(connectionRemoteModel), HttpStatus.OK);

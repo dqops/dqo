@@ -26,8 +26,8 @@ public enum ConnectionStatusRemote {
     @JsonProperty("SUCCESS")
     SUCCESS,
     /**
-     * An enumeration for Failed connection status.
+     * An enumeration for FAILURE connection status.
      */
-    @JsonProperty("FAIL")
-    FAIL
+    @JsonProperty("FAILURE")
+    FAILURE,
 }

@@ -19,15 +19,16 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.rest.models.remote.ConnectionRemoteModel;
 
 /**
- * Connection status on remote database management service.
+ * Management service for remote connection.
  */
 public interface SourceConnectionsService {
 
     /**
-     * Returns a ConnectionRemoteModel for connection.
+     * Returns the status of the remote connection.
      * @param connectionSpec Connection spec model.
-     * @return ConnectionRemoteModel acquired remotely.
+     * @param connectionName Connection name
+     * @return Connection status acquired remotely.
      */
 
-    ConnectionRemoteModel showSchemas(ConnectionSpec connectionSpec);
+    ConnectionRemoteModel checkConnection(String connectionName, ConnectionSpec connectionSpec);
 }

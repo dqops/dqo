@@ -17,49 +17,69 @@ package ai.dqo.rest.controllers.remote.services;
 
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.remote.ConnectionRemoteModel;
 import ai.dqo.rest.models.remote.ConnectionStatusRemote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * Connection status on remote database management service.
+ * Management service for remote connection.
  */
 @Component
 public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
+    private final UserHomeContextFactory userHomeContextFactory;
+
 
 
     @Autowired
-    public SourceConnectionsServiceImpl(UserHomeContextFactory userHomeContextFactory, ConnectionProviderRegistry connectionProviderRegistry,
-                                        SecretValueProvider secretValueProvider) {
+    public SourceConnectionsServiceImpl(ConnectionProviderRegistry connectionProviderRegistry,
+                                        SecretValueProvider secretValueProvider, UserHomeContextFactory userHomeContextFactory1) {
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
+        this.userHomeContextFactory = userHomeContextFactory1;
     }
 
+
     /**
-     * Returns a list of schemas for local connection.
-     * @param connectionSpec     Connection name.
-     * @return Schema list acquired remotely. Null in case of object not found.
+     * Returns the status of the remote connection.
+     * @param connectionSpec Connection spec model.
+     * @param connectionName Connection name
+     * @return Status of the remote connection.
      */
     @Override
-    public ConnectionRemoteModel showSchemas(ConnectionSpec connectionSpec) {
+    public ConnectionRemoteModel checkConnection(String connectionName, ConnectionSpec connectionSpec) {
         ConnectionRemoteModel connectionRemoteModel = new ConnectionRemoteModel();
 
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+
+        if (connectionWrapper != null) {
+            return connectionRemoteModel;
+        }
+
+        connectionRemoteModel.setMessage(connectionSpec.getConnectionName());
         ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
 
-        try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true)) {
+        try {
+            SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true);
             sourceConnection.listSchemas();
             connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.SUCCESS);
 
         } catch (Exception e) {
-            connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAIL);
+            connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
             connectionRemoteModel.setMessage(e.getMessage());
         }
         return connectionRemoteModel;

@@ -25,7 +25,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "SourceSchemasController", description = "Connection status remote management")
+@ApiModel(value = "ConnectionRemoteModel", description = "Connection status remote management")
 public class ConnectionRemoteModel {
 
     @JsonPropertyDescription("Connection status.")
