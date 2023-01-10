@@ -34,15 +34,15 @@ public class DashboardServiceImpl implements DashboardService {
                 new DashboardsFolderSpec("")
                         .withFolder("Governance", f -> {
                             f.withDqoCloudDashboard("KPIs",
-                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1600, 1600);
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1600);
                         })
                         .withFolder("Operational", f -> {
                             f.withDqoCloudDashboard("Tables with most alerts",
-                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1600, 1800);
+                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800);
                         })
                         .withFolder("Details", f -> {
                             f.withDqoCloudDashboard("Alerts per table",
-                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1600, 1800);
+                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 1800);
                         });
     }
 
