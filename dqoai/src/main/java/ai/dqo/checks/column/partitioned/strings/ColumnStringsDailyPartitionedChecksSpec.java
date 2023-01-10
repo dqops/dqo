@@ -68,7 +68,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_match_regex_percent", o -> o.dailyPartitionStringMatchRegexPercent);
             put("daily_partition_string_not_match_date_regex_count", o -> o.dailyPartitionStringNotMatchDateRegexCount);
             put("daily_partition_string_match_date_regex_percent", o -> o.dailyPartitionStringMatchDateRegexPercent);
-
+            put("daily_partition_string_match_name_regex_percent", o -> o.dailyPartitionStringMatchNameRegexPercent);
         }
     };
 
@@ -153,6 +153,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchDateRegexPercentCheckSpec dailyPartitionStringMatchDateRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringMatchNameRegexPercentCheckSpec dailyPartitionStringMatchNameRegexPercent;
 
     /**
      * Returns a maximum string length below  check.
@@ -639,6 +642,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMatchDateRegexPercent, dailyPartitionStringMatchDateRegexPercent));
         this.dailyPartitionStringMatchDateRegexPercent = dailyPartitionStringMatchDateRegexPercent;
         propagateHierarchyIdToField(dailyPartitionStringMatchDateRegexPercent, "daily_partition_string_match_date_regex_percent");
+    }
+
+    /**
+     * Returns a maximum match name regex percent check.
+     * @return Maximum match name regex percent check.
+     */
+    public ColumnStringMatchNameRegexPercentCheckSpec getDailyPartitionStringMatchNameRegexPercent() {
+        return dailyPartitionStringMatchNameRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match name regex percent check.
+     * @param dailyPartitionStringMatchNameRegexPercent Maximum match name regex percent check.
+     */
+    public void setDailyPartitionStringMatchNameRegexPercent(ColumnStringMatchNameRegexPercentCheckSpec dailyPartitionStringMatchNameRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMatchNameRegexPercent, dailyPartitionStringMatchNameRegexPercent));
+        this.dailyPartitionStringMatchNameRegexPercent = dailyPartitionStringMatchNameRegexPercent;
+        propagateHierarchyIdToField(dailyPartitionStringMatchNameRegexPercent, "daily_partition_string_match_name_regex_percent");
     }
 
     /**
