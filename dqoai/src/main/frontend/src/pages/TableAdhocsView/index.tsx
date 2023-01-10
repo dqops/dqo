@@ -1,29 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import SvgIcon from '../../SvgIcon';
-import DataQualityChecks from '../../DataQualityChecks';
+import SvgIcon from '../../components/SvgIcon';
+import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { IRootState } from '../../redux/reducers';
+import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableAdHocChecksUI,
   updateTableAdHocChecksUI
-} from '../../../redux/actions/table.actions';
-import Button from '../../Button';
+} from '../../redux/actions/table.actions';
+import Button from '../../components/Button';
 import { isEqual } from 'lodash';
-import { CheckResultOverviewApi } from "../../../services/apiClient";
+import { CheckResultOverviewApi } from "../../services/apiClient";
+import ConnectionLayout from "../../components/ConnectionLayout";
+import { useParams } from "react-router-dom";
 
-interface IChecksViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
+const TableAdhocsView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
 
-const ChecksView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: IChecksViewProps) => {
   const { checksUI, isUpdating } = useSelector(
     (state: IRootState) => state.table
   );
@@ -69,7 +63,7 @@ const ChecksView = ({
   }
 
   return (
-    <div className="">
+    <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
           <SvgIcon name="database" className="w-5 h-5" />
@@ -94,8 +88,8 @@ const ChecksView = ({
           getCheckOverview={getCheckOverview}
         />
       </div>
-    </div>
+    </ConnectionLayout>
   );
 };
 
-export default ChecksView;
+export default TableAdhocsView;

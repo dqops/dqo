@@ -13,14 +13,13 @@ import {
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import { useLocation, useParams } from "react-router-dom";
 
-interface IConnectionDetailProps {
-  connectionName: string;
-}
+const ConnectionDetail = () => {
+  const { connection }: { connection: string } = useParams();
+  const location = useLocation();
+  console.log('location', location);
 
-const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
-  connectionName
-}) => {
   const { updatedConnectionBasic, isUpdatedConnectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
@@ -30,9 +29,9 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
 
   useEffect(() => {
     if (!updatedConnectionBasic) {
-      dispatch(getConnectionBasic(connectionName));
+      dispatch(getConnectionBasic(connection));
     }
-  }, [connectionName]);
+  }, [connection]);
 
   const onChange = (obj: any) => {
     dispatch(
@@ -49,12 +48,13 @@ const ConnectionDetail: React.FC<IConnectionDetailProps> = ({
       return;
     }
     await dispatch(
-      updateConnectionBasic(connectionName, updatedConnectionBasic)
+      updateConnectionBasic(connection, updatedConnectionBasic)
     );
-    await dispatch(getConnectionBasic(connectionName));
+    await dispatch(getConnectionBasic(connection));
     dispatch(setIsUpdatedConnectionBasic(false));
   };
 
+  console.log('connection', connection);
   return (
     <div className="p-4">
       <ConnectionActionGroup

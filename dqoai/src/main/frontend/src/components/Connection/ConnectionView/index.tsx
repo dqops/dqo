@@ -89,28 +89,28 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
   }, [location.search]);
 
   const renderTabContent = () => {
-    if (activeTab === 'connection') {
-      return <ConnectionDetail connectionName={connectionName} />;
-    }
-    if (activeTab === 'schedule') {
-      return <ScheduleDetail connectionName={connectionName} />;
-    }
-    if (activeTab === 'comments') {
-      return <ConnectionCommentView connectionName={connectionName} />;
-    }
-    if (activeTab === 'labels') {
-      return <ConnectionLabelsView connectionName={connectionName} />;
-    }
-    if (activeTab === 'schemas') {
-      if (showMetaData) {
-        return <SourceSchemasView connectionName={connectionName} />;
-      } else {
-        return <SchemasView connectionName={connectionName} />;
-      }
-    }
-    if (activeTab === 'data-streams') {
-      return <ConnectionDataStream connectionName={connectionName} />;
-    }
+    // if (activeTab === 'connection') {
+    //   return <ConnectionDetail connectionName={connectionName} />;
+    // }
+    // if (activeTab === 'schedule') {
+    //   return <ScheduleDetail connectionName={connectionName} />;
+    // }
+    // if (activeTab === 'comments') {
+    //   return <ConnectionCommentView connectionName={connectionName} />;
+    // }
+    // if (activeTab === 'labels') {
+    //   return <ConnectionLabelsView connectionName={connectionName} />;
+    // }
+    // if (activeTab === 'schemas') {
+    //   if (showMetaData) {
+    //     return <SourceSchemasView connectionName={connectionName} />;
+    //   } else {
+    //     return <SchemasView connectionName={connectionName} />;
+    //   }
+    // }
+    // if (activeTab === 'data-streams') {
+    //   return <ConnectionDataStream connectionName={connectionName} />;
+    // }
     return null;
   };
 
@@ -119,7 +119,6 @@ const ConnectionView = ({ connectionName }: IConnectionViewProps) => {
     const params = qs.parse(location.search);
     const { source, ...data } = params;
 
-    console.log('source', source);
     const searchQuery = qs.stringify({
       ...data,
       tab

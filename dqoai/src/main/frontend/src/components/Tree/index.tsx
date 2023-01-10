@@ -7,19 +7,62 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import clsx from 'clsx';
 import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from '../CustomTree/ContextMenu';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { ROUTES } from "../../shared/routes";
+import { findTreeNode } from "../../utils/tree";
 
 const Tree = () => {
-  const { changeActiveTab, treeData, toggleOpenNode, activeTab } = useTree();
+  const { changeActiveTab, treeData, toggleOpenNode, activeTab, tabMap } = useTree();
   const [isOpen, setIsOpen] = useState(false);
   const { removeNode } = useTree();
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
   const history = useHistory();
-  const location = useLocation();
 
   const handleNodeClick = (node: CustomTreeNode) => {
-    if (location.pathname !== '/checks') {
+    if (node.level === TREE_LEVEL.DATABASE) {
+      history.push(ROUTES.CONNECTION_DETAIL(node.label, tabMap[node.label] || 'detail'));
+    } else if (node.level === TREE_LEVEL.SCHEMA) {
+      const connectionNode = findTreeNode(treeData, node.parentId ?? '');
+
+      history.push(ROUTES.SCHEMA_LEVEL_PAGE(connectionNode?.label ?? '', node.label, 'tables'));
+    } else if (node.level === TREE_LEVEL.TABLE) {
+      const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.TABLE_LEVEL_PAGE(connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, 'detail'));
+    } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_AD_HOCS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
+    } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_CHECKPOINTS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
+    } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_CHECKPOINTS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly'));
+    } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_PARTITIONED(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
+    } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_PARTITIONED(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly'));
+    } else if (node.level === TREE_LEVEL.CHECK) {
+      const parentNode = findTreeNode(treeData, node.parentId ?? '');
+      const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.TABLE_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
+    } else {
       history.push('/checks');
     }
     changeActiveTab(node);
