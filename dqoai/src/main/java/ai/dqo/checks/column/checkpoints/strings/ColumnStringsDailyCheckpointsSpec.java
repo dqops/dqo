@@ -67,6 +67,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_not_match_regex_count", o -> o.dailyCheckpointStringNotMatchRegexCount);
             put("daily_checkpoint_string_match_regex_percent", o -> o.dailyCheckpointStringMatchRegexPercent);
             put("daily_checkpoint_string_not_match_date_regex_count", o -> o.dailyCheckpointStringNotMatchDateRegexCount);
+            put("daily_checkpoint_string_match_date_regex_percent", o -> o.dailyCheckpointStringMatchDateRegexPercent);
 
         }
     };
@@ -147,6 +148,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchDateRegexCountCheckSpec dailyCheckpointStringNotMatchDateRegexCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringMatchDateRegexPercentCheckSpec dailyCheckpointStringMatchDateRegexPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -614,6 +618,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringNotMatchDateRegexCount, dailyCheckpointStringNotMatchDateRegexCount));
         this.dailyCheckpointStringNotMatchDateRegexCount = dailyCheckpointStringNotMatchDateRegexCount;
         propagateHierarchyIdToField(dailyCheckpointStringNotMatchDateRegexCount, "daily_checkpoint_string_not_match_date_regex_count");
+    }
+
+    /**
+     * Returns a maximum match date regex percent check.
+     * @return Maximum match date regex percent check.
+     */
+    public ColumnStringMatchDateRegexPercentCheckSpec getDailyCheckpointStringMatchDateRegexPercent() {
+        return dailyCheckpointStringMatchDateRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match date regex percent check.
+     * @param dailyCheckpointStringMatchDateRegexPercent Maximum match date regex percent check.
+     */
+    public void setDailyCheckpointStringMatchDateRegexPercent(ColumnStringMatchDateRegexPercentCheckSpec dailyCheckpointStringMatchDateRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMatchDateRegexPercent, dailyCheckpointStringMatchDateRegexPercent));
+        this.dailyCheckpointStringMatchDateRegexPercent = dailyCheckpointStringMatchDateRegexPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringMatchDateRegexPercent, "daily_checkpoint_string_match_date_regex_percent");
     }
 
     /**
