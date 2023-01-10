@@ -18,6 +18,8 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const match = useRouteMatch();
 
   useEffect(() => {
+    if (activeTab) return;
+
     (async () => {
       if (connection) {
         const connectionNode = findTreeNode(treeData, connection);
