@@ -68,6 +68,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_match_regex_percent", o -> o.monthlyCheckpointStringMatchRegexPercent);
             put("monthly_checkpoint_string_not_match_date_regex_count", o -> o.monthlyCheckpointStringNotMatchDateRegexCount);
             put("monthly_checkpoint_string_match_date_regex_percent", o -> o.monthlyCheckpointStringMatchDateRegexPercent);
+            put("monthly_checkpoint_string_match_name_regex_percent", o -> o.monthlyCheckpointStringMatchNameRegexPercent);
 
         }
     };
@@ -152,6 +153,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMatchDateRegexPercentCheckSpec monthlyCheckpointStringMatchDateRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringMatchNameRegexPercentCheckSpec monthlyCheckpointStringMatchNameRegexPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -637,6 +641,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMatchDateRegexPercent, monthlyCheckpointStringMatchDateRegexPercent));
         this.monthlyCheckpointStringMatchDateRegexPercent = monthlyCheckpointStringMatchDateRegexPercent;
         propagateHierarchyIdToField(monthlyCheckpointStringMatchDateRegexPercent, "monthly_checkpoint_string_match_date_regex_percent");
+    }
+
+    /**
+     * Returns a maximum match name regex percent check.
+     * @return Maximum match name regex percent check.
+     */
+    public ColumnStringMatchNameRegexPercentCheckSpec getMonthlyCheckpointStringMatchNameRegexPercent() {
+        return monthlyCheckpointStringMatchNameRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match name regex percent check.
+     * @param monthlyCheckpointStringMatchNameRegexPercent Maximum match name regex percent check.
+     */
+    public void setMonthlyCheckpointStringMatchNameRegexPercent(ColumnStringMatchNameRegexPercentCheckSpec monthlyCheckpointStringMatchNameRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMatchNameRegexPercent, monthlyCheckpointStringMatchNameRegexPercent));
+        this.monthlyCheckpointStringMatchNameRegexPercent = monthlyCheckpointStringMatchNameRegexPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringMatchNameRegexPercent, "monthly_checkpoint_string_match_name_regex_percent");
     }
 
     /**
