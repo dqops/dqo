@@ -85,11 +85,11 @@ const Tree = () => {
 
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK) {
-      return <div className="w-6" />;
+      return <div className="w-6 shrink-0" />;
     }
     return (
       <SvgIcon
-        className="w-4 min-w-4 text-black cursor-pointer"
+        className="w-4 min-w-4 text-black cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
           toggleOpenNode(node.id);
