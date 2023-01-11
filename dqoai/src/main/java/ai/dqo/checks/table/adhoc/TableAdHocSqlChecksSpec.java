@@ -39,13 +39,9 @@ import java.util.Objects;
 public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocSqlChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("sql_condition_passed_percent_on_table_1", o -> o.sqlConditionPassedPercentOnTable_1);
-            put("sql_condition_passed_percent_on_table_2", o -> o.sqlConditionPassedPercentOnTable_2);
-            put("sql_condition_passed_percent_on_table_3", o -> o.sqlConditionPassedPercentOnTable_3);
+            put("sql_condition_passed_percent_on_table", o -> o.sqlConditionPassedPercentOnTable);
 
-            put("sql_condition_failed_count_on_table_1", o -> o.sqlConditionFailedCountOnTable_1);
-            put("sql_condition_failed_count_on_table_2", o -> o.sqlConditionFailedCountOnTable_2);
-            put("sql_condition_failed_count_on_table_3", o -> o.sqlConditionFailedCountOnTable_3);
+            put("sql_condition_failed_count_on_table", o -> o.sqlConditionFailedCountOnTable);
 
             put("sql_aggregated_expression_value_on_table_min", o -> o.sqlAggregatedExpressionValueOnTableMin);
             put("sql_aggregated_expression_value_on_table_max", o -> o.sqlAggregatedExpressionValueOnTableMax);
@@ -53,22 +49,10 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     };
 
     @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
-    private TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_1;
-
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
-    private TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_2;
-
-    @JsonPropertyDescription("Verifies that a set percentage of rows passed a custom SQL condition (expression).")
-    private TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_3;
+    private TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable;
 
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
-    private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_1;
-
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
-    private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_2;
-
-    @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
-    private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_3;
+    private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
     private TableSqlAggregatedExpressionValueMinCheckSpec sqlAggregatedExpressionValueOnTableMin;
@@ -80,108 +64,36 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnTable_1() {
-        return sqlConditionPassedPercentOnTable_1;
+    public TableSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnTable() {
+        return sqlConditionPassedPercentOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param sqlConditionPassedPercentOnTable_1 Check specification.
+     * @param sqlConditionPassedPercentOnTable Check specification.
      */
-    public void setSqlConditionPassedPercentOnTable_1(TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnTable_1, sqlConditionPassedPercentOnTable_1));
-        this.sqlConditionPassedPercentOnTable_1 = sqlConditionPassedPercentOnTable_1;
-        propagateHierarchyIdToField(sqlConditionPassedPercentOnTable_1, "sql_condition_passed_percent_on_table_1");
+    public void setSqlConditionPassedPercentOnTable(TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable) {
+        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnTable, sqlConditionPassedPercentOnTable));
+        this.sqlConditionPassedPercentOnTable = sqlConditionPassedPercentOnTable;
+        propagateHierarchyIdToField(sqlConditionPassedPercentOnTable, "sql_condition_passed_percent_on_table");
     }
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnTable_2() {
-        return sqlConditionPassedPercentOnTable_2;
+    public TableSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnTable() {
+        return sqlConditionFailedCountOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param sqlConditionPassedPercentOnTable_2 Check specification.
+     * @param sqlConditionFailedCountOnTable Check specification.
      */
-    public void setSqlConditionPassedPercentOnTable_2(TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnTable_2, sqlConditionPassedPercentOnTable_2));
-        this.sqlConditionPassedPercentOnTable_2 = sqlConditionPassedPercentOnTable_2;
-        propagateHierarchyIdToField(sqlConditionPassedPercentOnTable_2, "sql_condition_passed_percent_on_table_2");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionPassedPercentCheckSpec getSqlConditionPassedPercentOnTable_3() {
-        return sqlConditionPassedPercentOnTable_3;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlConditionPassedPercentOnTable_3 Check specification.
-     */
-    public void setSqlConditionPassedPercentOnTable_3(TableSqlConditionPassedPercentCheckSpec sqlConditionPassedPercentOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionPassedPercentOnTable_3, sqlConditionPassedPercentOnTable_3));
-        this.sqlConditionPassedPercentOnTable_3 = sqlConditionPassedPercentOnTable_3;
-        propagateHierarchyIdToField(sqlConditionPassedPercentOnTable_3, "sql_condition_passed_percent_on_table_3");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnTable_1() {
-        return sqlConditionFailedCountOnTable_1;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlConditionFailedCountOnTable_1 Check specification.
-     */
-    public void setSqlConditionFailedCountOnTable_1(TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_1) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnTable_1, sqlConditionFailedCountOnTable_1));
-        this.sqlConditionFailedCountOnTable_1 = sqlConditionFailedCountOnTable_1;
-        propagateHierarchyIdToField(sqlConditionFailedCountOnTable_1, "sql_condition_failed_count_on_table_1");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnTable_2() {
-        return sqlConditionFailedCountOnTable_2;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlConditionFailedCountOnTable_2 Check specification.
-     */
-    public void setSqlConditionFailedCountOnTable_2(TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_2) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnTable_2, sqlConditionFailedCountOnTable_2));
-        this.sqlConditionFailedCountOnTable_2 = sqlConditionFailedCountOnTable_2;
-        propagateHierarchyIdToField(sqlConditionFailedCountOnTable_2, "sql_condition_failed_count_on_table_2");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlConditionFailedCountCheckSpec getSqlConditionFailedCountOnTable_3() {
-        return sqlConditionFailedCountOnTable_3;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlConditionFailedCountOnTable_3 Check specification.
-     */
-    public void setSqlConditionFailedCountOnTable_3(TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable_3) {
-        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnTable_3, sqlConditionFailedCountOnTable_3));
-        this.sqlConditionFailedCountOnTable_3 = sqlConditionFailedCountOnTable_3;
-        propagateHierarchyIdToField(sqlConditionFailedCountOnTable_3, "sql_condition_failed_count_on_table_3");
+    public void setSqlConditionFailedCountOnTable(TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable) {
+        this.setDirtyIf(!Objects.equals(this.sqlConditionFailedCountOnTable, sqlConditionFailedCountOnTable));
+        this.sqlConditionFailedCountOnTable = sqlConditionFailedCountOnTable;
+        propagateHierarchyIdToField(sqlConditionFailedCountOnTable, "sql_condition_failed_count_on_table");
     }
 
     /**
