@@ -66,7 +66,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
         if (connectionWrapper != null) {
             connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
-            connectionRemoteModel.setMessage("Remote Connection name: "+connectionName+" already exists!");
+            connectionRemoteModel.setMessage("A connection with the name you specified: "+connectionName+ " already exists!");
             return connectionRemoteModel;
         }
 
