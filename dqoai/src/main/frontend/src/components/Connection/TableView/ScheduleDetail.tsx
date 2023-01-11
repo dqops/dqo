@@ -12,18 +12,10 @@ import {
   setUpdatedSchedule,
   updateTableSchedule
 } from '../../../redux/actions/table.actions';
+import { useParams } from "react-router-dom";
 
-interface IScheduleDetailProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const ScheduleDetail = ({
-  connectionName,
-  schemaName,
-  tableName
-}: IScheduleDetailProps) => {
+const ScheduleDetail = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);

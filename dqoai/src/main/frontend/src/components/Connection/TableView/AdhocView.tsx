@@ -11,18 +11,10 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
+import { useParams } from "react-router-dom";
 
-interface IAdhocViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const AdhocView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: IAdhocViewProps) => {
+const AdhocView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );

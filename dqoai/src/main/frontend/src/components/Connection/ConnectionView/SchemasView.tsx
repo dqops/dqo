@@ -9,13 +9,10 @@ import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import qs from 'query-string';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-interface ISchemasViewProps {
-  connectionName: string;
-}
-
-const SchemasView = ({ connectionName }: ISchemasViewProps) => {
+const SchemasView = () => {
+  const { connection }: { connection: string } = useParams();
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
   const history = useHistory();
@@ -24,10 +21,10 @@ const SchemasView = ({ connectionName }: ISchemasViewProps) => {
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(connectionName).then((res) => {
+    SchemaApiClient.getSchemas(connection).then((res) => {
       setSchemas(res.data);
     });
-  }, [connectionName]);
+  }, [connection]);
 
   const onImportTables = (schema: SchemaModel) => {
     JobApiClient.importTables(schema.import_table_job_parameters);

@@ -11,18 +11,10 @@ import {
   updateTableComments
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { useParams } from "react-router-dom";
 
-interface ITableCommentViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
-
-const TableCommentView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITableCommentViewProps) => {
+const TableCommentView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const { tableBasic, comments, isUpdating, isUpdatedComments } = useSelector(
     (state: IRootState) => state.table
   );

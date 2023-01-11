@@ -21,9 +21,6 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.sensors.table.consistency.TableConsistencyRowCountSensorParametersSpec;
 import ai.dqo.sensors.table.relevance.TableRelevanceMovingWeekAverageSensorParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessAverageDelaySensorParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessCurrentDelaySensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -46,31 +43,14 @@ public class AllTableSensorsSpec extends AbstractSpec {
         {
 			put("consistency_row_count", o -> o.consistencyRowCount);
             put("relevance_moving_week_average", o -> o.relevanceMovingWeekAverage);
-            put("timeliness_column_datetime_difference_percent", o -> o.timelinessColumnDatetimeDifferencePercent);
-            put("timeliness_average_delay", o -> o.timelinessAverageDelay);
-            put("timeliness_current_delay", o -> o.timelinessCurrentDelay);
+
         }
     };
-
-    @JsonPropertyDescription("Column datetime difference sensor that calculates the percent of datetime differences of two datetime columns which are above defined threshold.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec timelinessColumnDatetimeDifferencePercent;
-
-    @JsonPropertyDescription("Average delay sensor that calculates the percent of datetime differences of two datetime columns which are above defined threshold.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessAverageDelaySensorParametersSpec timelinessAverageDelay;
 
     @JsonPropertyDescription("Row count sensors for checking the consistency of row counts.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableConsistencyRowCountSensorParametersSpec consistencyRowCount;
-
-    @JsonPropertyDescription("Current delay sensor that calculates the timestamp difference between current timestamp and the latest record in provided clumn.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessCurrentDelaySensorParametersSpec timelinessCurrentDelay;
 
     // TODO update description
     @JsonPropertyDescription("Moving week average sensor...")
@@ -94,50 +74,6 @@ public class AllTableSensorsSpec extends AbstractSpec {
      */
     public TableRelevanceMovingWeekAverageSensorParametersSpec getRelevanceMovingWeekAverage() {
         return relevanceMovingWeekAverage;
-    }
-
-    /**
-     * Returns a column datetime difference percent.
-     * @return  Column datetime difference percent.
-     */
-    public TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec getTimelinessColumnDatetimeDifferencePercent() {
-        return timelinessColumnDatetimeDifferencePercent;
-    }
-
-    /**
-     * Returns a current delay sensor.
-     * @return Current delay sensor.
-     */
-    public TableTimelinessCurrentDelaySensorParametersSpec getTimelinessCurrentDelay() {
-        return timelinessCurrentDelay;
-    }
-
-    /**
-     * Sets a datetime difference percent sensor that should be used.
-     * @param timelinessColumnDatetimeDifferencePercent
-     */
-    public void setTimelinessColumnDatetimeDifferencePercent(TableTimelinessColumnDatetimeDifferencePercentSensorParametersSpec timelinessColumnDatetimeDifferencePercent) {
-        this.setDirtyIf(!Objects.equals(this.timelinessColumnDatetimeDifferencePercent, timelinessColumnDatetimeDifferencePercent));
-        this.timelinessColumnDatetimeDifferencePercent = timelinessColumnDatetimeDifferencePercent;
-        propagateHierarchyIdToField(timelinessColumnDatetimeDifferencePercent, "timeliness_column_datetime_difference_percent");
-    }
-
-    /**
-     * Returns a average delay.
-     * @return  Average delay.
-     */
-    public TableTimelinessAverageDelaySensorParametersSpec getTimelinessAverageDelay() {
-        return timelinessAverageDelay;
-    }
-
-    /**
-     * Sets average delay sensor that should be used.
-     * @param timelinessAverageDelay
-     */
-    public void setTimelinessAverageDelay(TableTimelinessAverageDelaySensorParametersSpec timelinessAverageDelay) {
-        this.setDirtyIf(!Objects.equals(this.timelinessAverageDelay, timelinessAverageDelay));
-        this.timelinessAverageDelay = timelinessAverageDelay;
-        propagateHierarchyIdToField(timelinessAverageDelay, "timeliness_average_delay");
     }
 
     /**

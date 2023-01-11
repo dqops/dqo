@@ -11,14 +11,10 @@ import {
   updateConnectionComments
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { useParams } from "react-router-dom";
 
-interface IConnectionCommentViewProps {
-  connectionName: string;
-}
-
-const ConnectionCommentView = ({
-  connectionName
-}: IConnectionCommentViewProps) => {
+const ConnectionCommentView = () => {
+  const { connection }: { connection: string } = useParams();
   const { isUpdating, updatedComments, isUpdatedComments } = useSelector(
     (state: IRootState) => state.connection
   );
@@ -27,19 +23,19 @@ const ConnectionCommentView = ({
 
   useEffect(() => {
     if (!updatedComments) {
-      dispatch(getConnectionComments(connectionName));
+      dispatch(getConnectionComments(connection));
     }
   }, []);
 
   const onUpdate = async () => {
     await dispatch(
-      updateConnectionComments(connectionName, [...(updatedComments || []), ...text ? [{
+      updateConnectionComments(connection, [...(updatedComments || []), ...text ? [{
         comment: text,
         comment_by: 'user',
         date: new Date().toISOString()
       }] : []])
     );
-    await dispatch(getConnectionComments(connectionName));
+    await dispatch(getConnectionComments(connection));
     dispatch(setIsUpdatedComments(false));
   };
 

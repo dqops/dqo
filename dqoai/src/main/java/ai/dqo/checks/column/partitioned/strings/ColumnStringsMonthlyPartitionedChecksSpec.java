@@ -67,6 +67,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_not_match_regex_count", o -> o.monthlyPartitionStringNotMatchRegexCount);
             put("monthly_partition_string_match_regex_percent", o -> o.monthlyPartitionStringMatchRegexPercent);
             put("monthly_partition_string_not_match_date_regex_count", o -> o.monthlyPartitionStringNotMatchDateRegexCount);
+            put("monthly_partition_string_match_date_regex_percent", o -> o.monthlyPartitionStringMatchDateRegexPercent);
 
         }
     };
@@ -149,6 +150,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchDateRegexCountCheckSpec monthlyPartitionStringNotMatchDateRegexCount;
 
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringMatchDateRegexPercentCheckSpec monthlyPartitionStringMatchDateRegexPercent;
 
     /**
      * Returns a maximum string length below check.
@@ -620,6 +623,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringNotMatchDateRegexCount, monthlyPartitionStringNotMatchDateRegexCount));
         this.monthlyPartitionStringNotMatchDateRegexCount = monthlyPartitionStringNotMatchDateRegexCount;
         propagateHierarchyIdToField(monthlyPartitionStringNotMatchDateRegexCount, "monthly_partition_string_not_match_date_regex_count");
+    }
+
+    /**
+     * Returns a maximum match date regex percent check.
+     * @return Maximum match date regex percent check.
+     */
+    public ColumnStringMatchDateRegexPercentCheckSpec getMonthlyPartitionStringMatchDateRegexPercent() {
+        return monthlyPartitionStringMatchDateRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match date regex percent check.
+     * @param monthlyPartitionStringMatchDateRegexPercent Maximum match date regex percent check.
+     */
+    public void setMonthlyPartitionStringMatchDateRegexPercent(ColumnStringMatchDateRegexPercentCheckSpec monthlyPartitionStringMatchDateRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMatchDateRegexPercent, monthlyPartitionStringMatchDateRegexPercent));
+        this.monthlyPartitionStringMatchDateRegexPercent = monthlyPartitionStringMatchDateRegexPercent;
+        propagateHierarchyIdToField(monthlyPartitionStringMatchDateRegexPercent, "monthly_partition_string_match_date_regex_percent");
     }
 
     /**

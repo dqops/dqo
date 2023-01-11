@@ -15,12 +15,7 @@ import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
-
-interface ITablePartitionedChecksViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-}
+import { useParams } from "react-router-dom";
 
 const initTabs = [
   {
@@ -33,11 +28,8 @@ const initTabs = [
   }
 ];
 
-const TablePartitionedChecksView = ({
-  connectionName,
-  schemaName,
-  tableName
-}: ITablePartitionedChecksViewProps) => {
+const TablePartitionedChecksView = () => {
+  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const [activeTab, setActiveTab] = useState('daily');
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);

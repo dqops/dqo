@@ -10,14 +10,10 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import LabelsView from '../LabelsView';
 import ConnectionActionGroup from './ConnectionActionGroup';
+import { useParams } from "react-router-dom";
 
-interface IConnectionLabelsViewProps {
-  connectionName: string;
-}
-
-const ConnectionLabelsView = ({
-  connectionName
-}: IConnectionLabelsViewProps) => {
+const ConnectionLabelsView = () => {
+  const { connection }: { connection: string } = useParams();
   const { isUpdating, updatedLabels, isUpdatedLabels } = useSelector(
     (state: IRootState) => state.connection
   );
@@ -25,13 +21,13 @@ const ConnectionLabelsView = ({
 
   useEffect(() => {
     if (!updatedLabels) {
-      dispatch(getConnectionLabels(connectionName));
+      dispatch(getConnectionLabels(connection));
     }
-  }, [connectionName]);
+  }, [connection]);
 
   const onUpdate = async () => {
-    await dispatch(updateConnectionLabels(connectionName, updatedLabels || []));
-    await dispatch(getConnectionLabels(connectionName));
+    await dispatch(updateConnectionLabels(connection, updatedLabels || []));
+    await dispatch(getConnectionLabels(connection));
   };
 
   const handleChange = (value: string[]) => {
