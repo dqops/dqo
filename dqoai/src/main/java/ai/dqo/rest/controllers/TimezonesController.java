@@ -36,10 +36,10 @@ import java.util.*;
 public class TimezonesController {
 
     @GetMapping
-    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available zone ids")
+    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available zone ids", response = String.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 200, message = "OK", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<List<String>>> test() {
