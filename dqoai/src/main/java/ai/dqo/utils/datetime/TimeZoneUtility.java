@@ -18,6 +18,8 @@ package ai.dqo.utils.datetime;
 import com.google.common.base.Strings;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -57,5 +59,14 @@ public final class TimeZoneUtility {
         catch (Exception ex) {
             return TimeZone.getTimeZone("UTC");
         }
+    }
+
+    /**
+     * Gets the list of available zone IDs.
+     * @return List of available zone IDs.
+     */
+    public static List<String> getAvailableZoneIds() {
+        List<String> availableZoneIds = new ArrayList<>(ZoneId.getAvailableZoneIds());
+        return availableZoneIds;
     }
 }
