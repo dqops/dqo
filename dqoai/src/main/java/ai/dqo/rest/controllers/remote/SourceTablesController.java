@@ -35,7 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/remote/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceTablesController", description = "Tables remote management")
+@Api(value = "SourceTables", description = "Tables remote management")
 public class SourceTablesController {
     private SourceTablesService sourceTablesService;
 

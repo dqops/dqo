@@ -36,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/remote/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceSchemasController", description = "Schema remote management")
+@Api(value = "SourceSchemas", description = "Schema remote management")
 public class SourceSchemasController {
     private SourceSchemasService sourceSchemasService;
 
