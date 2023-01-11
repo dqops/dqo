@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxDaysRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxDaysRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxDaysRule7ParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessPartitionReloadLagSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,18 +39,18 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMaxRowDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec, MaxDaysRule2ParametersSpec, MaxDaysRule1ParametersSpec, MaxDaysRule7ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMaxRowDataIngestionDelayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TablePartitionReloadLagCheckSpec extends AbstractCheckSpec<TableTimelinessPartitionReloadLagSensorParametersSpec, MaxDaysRule2ParametersSpec, MaxDaysRule1ParametersSpec, MaxDaysRule7ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TablePartitionReloadLagCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Max days since most recent ingestion sensor parameters")
+    @JsonPropertyDescription("Partition reload lag sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec parameters = new TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec();
+    private TableTimelinessPartitionReloadLagSensorParametersSpec parameters = new TableTimelinessPartitionReloadLagSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for max days since most recent ingestion that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for partition reload lag that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDaysRule2ParametersSpec error;
@@ -70,15 +70,15 @@ public class TableMaxRowDataIngestionDelayCheckSpec extends AbstractCheckSpec<Ta
      * @return Sensor parameters.
      */
     @Override
-    public TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec getParameters() {
+    public TableTimelinessPartitionReloadLagSensorParametersSpec getParameters() {
         return parameters;
     }
 
     /**
-     * Sets a new row count sensor parameter object.
-     * @param parameters Row count parameters.
+     * Sets a new partition reload lag parameter object.
+     * @param parameters Partition reload lag parameters.
      */
-    public void setParameters(TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec parameters) {
+    public void setParameters(TableTimelinessPartitionReloadLagSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

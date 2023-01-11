@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableTimelinessPartitionReloadLagSensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessPartitionReloadLagSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/max_row_data_ingestion_delay";
+        return "table/timeliness/partition_reload_lag";
     }
 }
