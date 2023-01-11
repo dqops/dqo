@@ -43,6 +43,7 @@ public class TimeZoneUtilityTests extends BaseTest {
         List<String> zoneIds = new ArrayList<>(ZoneId.getAvailableZoneIds());
         List<ZoneId> expectedResult = new ArrayList<>();
         List<ZoneId> obtainedResult = new ArrayList<>();
+
         for (String id : zoneIds) {
             try {
                 ZoneId zoneId = ZoneId.of(id);
@@ -53,6 +54,7 @@ public class TimeZoneUtilityTests extends BaseTest {
             }
             obtainedResult.add(TimeZoneUtility.parseZoneId(id));
         }
+
         Assertions.assertEquals(expectedResult, obtainedResult);
     }
 
@@ -62,6 +64,7 @@ public class TimeZoneUtilityTests extends BaseTest {
         List<TimeZone> expectedResult = new ArrayList<>();
         List<TimeZone> obtainedResult = new ArrayList<>();
         List<ZoneId> zoneInstances = new ArrayList<>();
+
         for (String id : zoneIds) {
             zoneInstances.add(TimeZoneUtility.parseZoneId(id));
             obtainedResult.add(TimeZoneUtility.parseTimeOneOrDefault(id));
@@ -73,6 +76,7 @@ public class TimeZoneUtilityTests extends BaseTest {
                 expectedResult.add(TimeZone.getTimeZone("UTC"));
             }
         }
+
         Assertions.assertEquals(expectedResult, obtainedResult);
     }
 
