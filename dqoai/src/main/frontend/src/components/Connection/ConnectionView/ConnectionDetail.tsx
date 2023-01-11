@@ -13,12 +13,11 @@ import {
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import TimezoneSelect from "../../TimezoneSelect";
 
 const ConnectionDetail = () => {
   const { connection }: { connection: string } = useParams();
-  const location = useLocation();
-  console.log('location', location);
 
   const { updatedConnectionBasic, isUpdatedConnectionBasic } = useSelector(
     (state: IRootState) => state.connection
@@ -54,7 +53,6 @@ const ConnectionDetail = () => {
     dispatch(setIsUpdatedConnectionBasic(false));
   };
 
-  console.log('connection', connection);
   return (
     <div className="p-4">
       <ConnectionActionGroup
@@ -77,9 +75,9 @@ const ConnectionDetail = () => {
               <div>Time zone:</div>
             </td>
             <td className="px-4 py-2">
-              <Input
+              <TimezoneSelect
                 value={updatedConnectionBasic?.time_zone}
-                onChange={(e) => onChange({ time_zone: e.target.value })}
+                onChange={(value) => onChange({ time_zone: value })}
               />
             </td>
           </tr>
@@ -91,7 +89,7 @@ const ConnectionDetail = () => {
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
             bigquery={updatedConnectionBasic?.bigquery}
-            onChange={onChange}
+            onChange={(bigquery) => onChange({ bigquery })}
           />
         )}
         {updatedConnectionBasic?.provider_type ===

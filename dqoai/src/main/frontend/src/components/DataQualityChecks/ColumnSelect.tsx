@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import qs from 'query-string';
+import { useParams } from 'react-router-dom';
 import { ColumnApiClient, ConnectionApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import { ColumnBasicModel, CommonColumnModel } from '../../api';
@@ -33,8 +32,7 @@ const ColumnSelect = ({
   error
 }: IColumnSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
-
-  const location = useLocation();
+  const { connection, schema, table }: { connection: string, schema: string, table: string } = useParams();
 
   const setColumns = (
     res: AxiosResponse<CommonColumnModel[] | ColumnBasicModel[]>
@@ -48,8 +46,6 @@ const ColumnSelect = ({
   };
 
   useEffect(() => {
-    const params: any = qs.parse(location.search);
-    const { connection, schema, table } = params;
     if (connection && scope === 'connection') {
       ConnectionApiClient.getConnectionCommonColumns(connection).then(
         setColumns
@@ -57,7 +53,7 @@ const ColumnSelect = ({
     } else if (table) {
       ColumnApiClient.getColumns(connection, schema, table).then(setColumns);
     }
-  }, [location.search]);
+  }, [connection, schema, table]);
 
   return (
     <div>

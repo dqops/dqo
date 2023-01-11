@@ -25,7 +25,7 @@ import {
   JobsApiFactory,
   SourceSchemasControllerApiFactory,
   SourceTablesControllerApiFactory,
-  DataStreamsApiFactory, CheckResultsOverviewApiFactory, DashboardsApiFactory
+  DataStreamsApiFactory, CheckResultsOverviewApiFactory, DashboardsApiFactory, TimezonesApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -75,6 +75,12 @@ export const CheckResultOverviewApi = CheckResultsOverviewApiFactory(
 );
 
 export const DashboardsApi = DashboardsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const TimezonesApi = TimezonesApiFactory(
   new Configuration(),
   '',
   axios
