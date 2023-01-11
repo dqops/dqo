@@ -1,12 +1,40 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{% macro render_ingestion_event_diff() -%}
+    {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' and
+     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+         TIMESTAMP_DIFF(
+             {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+             {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+             MILLISECOND)
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+         DATE_DIFF(
+             {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+             {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+             MILLISECOND)
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' and
+    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+        DATETIME_DIFF(
+            {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }},
+            {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }},
+            MILLISECOND)
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
+    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        DATETIME_DIFF(
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
+            MILLISECOND)
+    {%- else -%}
+    <INVALID DATA TYPE: table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type OR
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type/>
+    {%- endif -%}
+{%- endmacro -%}
+
 SELECT
-    MAX(
-        TIMESTAMP_DIFF(
-            CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-            CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-            MILLISECOND
-        )
-    ) / 24.0 / 3600.0 / 1000.0 AS actual_value
+    {{ render_ingestion_event_diff() }}
+    / 24.0 / 3600.0 / 1000.0
+    AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
