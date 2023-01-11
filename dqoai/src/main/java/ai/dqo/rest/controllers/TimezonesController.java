@@ -23,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * REST api controller to return a list of available time zones.
@@ -35,14 +35,14 @@ import java.util.*;
 
 public class TimezonesController {
 
-    @GetMapping
-    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available zone ids", response = String.class)
+    @GetMapping(produces = "application/json")
+    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available zone ids", response = String[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 200, message = "OK", response = String[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<List<String>>> test() {
+    public ResponseEntity<Mono<List<String>>> getAvailableZoneIds() {
         return new ResponseEntity<>(Mono.just(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
     }
 }
