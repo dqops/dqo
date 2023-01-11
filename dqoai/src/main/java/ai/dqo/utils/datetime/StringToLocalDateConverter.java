@@ -16,7 +16,10 @@
 
 package ai.dqo.utils.datetime;
 
+import org.springframework.format.datetime.joda.LocalDateTimeParser;
+
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -42,8 +45,8 @@ public class StringToLocalDateConverter {
      */
     public static LocalDate convertFromYearMonth(String value) {
         try {
-            LocalDate result = LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyy.MM"));
-            return result.withDayOfMonth(1);
+            YearMonth parsedValue = YearMonth.parse(value, DateTimeFormatter.ofPattern("yyyy.MM"));
+            return parsedValue.atDay(1);
         } catch (DateTimeParseException e) {
             return null;
         }

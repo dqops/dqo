@@ -16,8 +16,10 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.localfiles.LocalFileStorageService;
 import ai.dqo.core.filesystem.virtual.FolderName;
+import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
@@ -40,12 +42,11 @@ import tech.tablesaw.selection.Selection;
 import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -262,13 +263,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             if (dataToSave == null || dataToSave.isEmpty()) {
                 // ensure the partition data is deleted
                 if (targetParquetFile.exists()) {
-                    // TODO: Change the splitting for god's sake.
-                    FolderName[] partitionPathFolders = Arrays.stream(partitionPath.toString().split("\\\\"))
-                            .map(FolderName::fromFileSystemName)
-                            .collect(Collectors.toList())
-                            .toArray(FolderName[]::new);
-                    boolean success = this.localUserHomeFileStorageService.tryDeleteFolder(
-                            new HomeFolderPath(partitionPathFolders));
+                    boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
                     if (success) {
                         return;
                     }
@@ -291,6 +286,73 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);
+        }
+    }
+
+    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
+        if (!(tableType == DqoRoot.DATA_ERRORS
+                || tableType == DqoRoot.DATA_PROFILING_RESULTS
+                || tableType == DqoRoot.DATA_RULE_RESULTS
+                || tableType == DqoRoot.DATA_SENSOR_READOUTS)) {
+            return false;
+        }
+
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
+            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);
+
+            // TODO: Hoist the magic constant.
+            if (Files.isDirectory(homeRelativePath) || homeRelativePath.getNameCount() != 6) {
+                return false;
+            }
+
+            LinkedList<FolderName> homeRelativeFoldersList = new LinkedList<>();
+            for (Path fileSystemName : homeRelativePath.getParent()) {
+                homeRelativeFoldersList.add(
+                        FolderName.fromFileSystemName(fileSystemName.toString())
+                );
+            }
+
+            if (!this.localUserHomeFileStorageService.deleteFile(
+                    new HomeFilePath(
+                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                            homeRelativePath.getFileName().toString()
+                    )
+            )) {
+                // Deleting .parquet file failed.
+                return false;
+            }
+
+            if (!this.localUserHomeFileStorageService.deleteFile(
+                    new HomeFilePath(
+                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                            ".%s.crc".formatted(homeRelativePath.getFileName().toString())
+                    )
+            )) {
+                // Deleting .crc file failed.
+                return false;
+            }
+
+            while (homeRelativeFoldersList.size() > 2) {
+                // Delete all remaining folders, if empty, to the extent allowed by the lock.
+                HomeFolderPath homeFolderPath = new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));
+
+                int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath).size();
+                int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath).size();
+                if (filesInFolderCount + foldersInFolderCount != 0) {
+                    // Folder is not empty
+                    break;
+                }
+
+                if (!this.localUserHomeFileStorageService.tryDeleteFolder(homeFolderPath)) {
+                    // Deleting the folder failed
+                    // TODO: Add a warn log message.
+                    break;
+                }
+
+                homeRelativeFoldersList.removeLast();
+            }
+
+            return true;
         }
     }
 }

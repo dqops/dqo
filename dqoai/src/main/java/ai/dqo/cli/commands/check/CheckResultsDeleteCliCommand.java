@@ -110,11 +110,11 @@ public class CheckResultsDeleteCliCommand extends BaseCommand implements IComman
     private String table;
 
     @CommandLine.Option(names = "--begin", description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverter.class, paramLabel = "yyyy.MM or yyyy.MM.dd")
+            required = true, converter = StringToLocalDateCliConverter.class)
     private LocalDate begin;
 
     @CommandLine.Option(names = "--end", description = "End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverter.class, paramLabel = "yyyy.MM or yyyy.MM.dd")
+            required = true, converter = StringToLocalDateCliConverter.class)
     private LocalDate end;
 
     @CommandLine.Option(names = {"-day", "--daily-detailed"},
@@ -388,7 +388,7 @@ public class CheckResultsDeleteCliCommand extends BaseCommand implements IComman
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deletionParameters);
         PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
-        pushJobResult.wait(3000);
+//        pushJobResult.wait(3000);
         return 0;
     }
 }
