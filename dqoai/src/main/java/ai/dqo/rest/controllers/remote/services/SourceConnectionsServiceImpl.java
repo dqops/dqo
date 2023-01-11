@@ -42,10 +42,10 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
     @Autowired
     public SourceConnectionsServiceImpl(ConnectionProviderRegistry connectionProviderRegistry,
-                                        SecretValueProvider secretValueProvider, UserHomeContextFactory userHomeContextFactory1) {
+                                        SecretValueProvider secretValueProvider, UserHomeContextFactory userHomeContextFactory) {
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
-        this.userHomeContextFactory = userHomeContextFactory1;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
 
@@ -65,6 +65,8 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
         ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
 
         if (connectionWrapper != null) {
+            connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
+            connectionRemoteModel.setMessage("Remote Connection name: "+connectionName+" already exists!");
             return connectionRemoteModel;
         }
 

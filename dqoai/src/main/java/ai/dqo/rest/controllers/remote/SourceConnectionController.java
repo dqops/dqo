@@ -20,7 +20,6 @@ import ai.dqo.rest.controllers.remote.services.SourceConnectionsService;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.ConnectionRemoteModel;
-import ai.dqo.rest.models.remote.ConnectionStatusRemote;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,8 +52,6 @@ public class SourceConnectionController {
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",  response = ConnectionRemoteModel.class),
-            @ApiResponse(code = 404, message = "Connection not found"),
-            @ApiResponse(code = 409, message = "Rejected, The connection name already exists"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<ConnectionRemoteModel>> checkconnection(
@@ -66,13 +63,6 @@ public class SourceConnectionController {
         connectionBasicModel.copyToConnectionSpecification(connectionSpec);
 
         connectionRemoteModel = sourceConnectionsService.checkConnection(connectionBasicModel.getConnectionName(), connectionSpec);
-
-        if (connectionRemoteModel.getConnectionStatus() == ConnectionStatusRemote.FAILURE) {
-            return new ResponseEntity<>(Mono.just(connectionRemoteModel), HttpStatus.NOT_FOUND);
-        }
-        if (connectionRemoteModel.getConnectionStatus() == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
 
         return new ResponseEntity<>(Mono.just(connectionRemoteModel), HttpStatus.OK);
     }
