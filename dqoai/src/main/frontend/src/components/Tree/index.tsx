@@ -58,10 +58,97 @@ const Tree = () => {
       history.push(ROUTES.TABLE_PARTITIONED(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly'));
     } else if (node.level === TREE_LEVEL.CHECK) {
       const parentNode = findTreeNode(treeData, node.parentId ?? '');
-      const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+
+      if (!parentNode) {
+        return;
+      }
+
+      if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(parentNode.level)) {
+        const tableNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+        if (parentNode?.level === TREE_LEVEL.TABLE_CHECKS) {
+          history.push(ROUTES.TABLE_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
+          history.push(ROUTES.TABLE_CHECKPOINTS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
+          history.push(ROUTES.TABLE_CHECKPOINTS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
+          history.push(ROUTES.TABLE_PARTITIONED_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
+          history.push(ROUTES.TABLE_PARTITIONED_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+        }
+      } else {
+        const columnNode = findTreeNode(treeData, parentNode?.parentId ?? '');
+        const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+        const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+        const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+        const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+        if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
+          console.log('-----target', ROUTES.COLUMN_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
+          history.push(ROUTES.COLUMN_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
+          history.push(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
+          history.push(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
+          history.push(ROUTES.COLUMN_PARTITIONED_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
+        } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
+          history.push(ROUTES.COLUMN_PARTITIONED_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+        }
+      }
+    } else if (node.level === TREE_LEVEL.COLUMNS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-      history.push(ROUTES.TABLE_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
+      history.push(ROUTES.TABLE_COLUMNS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
+    } else if (node.level === TREE_LEVEL.COLUMN) {
+      const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+      history.push(ROUTES.COLUMN_LEVEL_PAGE(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, 'detail'));
+    } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
+      const columnNode = findTreeNode(treeData, node.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.COLUMN_AD_HOCS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? ''));
+    } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
+      const columnNode = findTreeNode(treeData, node.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.COLUMN_CHECKPOINTS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
+    } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
+      const columnNode = findTreeNode(treeData, node.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.COLUMN_CHECKPOINTS(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly'));
+    } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
+      const columnNode = findTreeNode(treeData, node.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.COLUMN_PARTITIONED(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
+    } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
+      const columnNode = findTreeNode(treeData, node.parentId ?? '');
+      const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
+      const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      history.push(ROUTES.COLUMN_PARTITIONED(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly'));
     } else {
       history.push('/checks');
     }
@@ -85,11 +172,11 @@ const Tree = () => {
 
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK) {
-      return <div className="w-6" />;
+      return <div className="w-6 shrink-0" />;
     }
     return (
       <SvgIcon
-        className="w-4 min-w-4 text-black cursor-pointer"
+        className="w-4 min-w-4 text-black cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
           toggleOpenNode(node.id);

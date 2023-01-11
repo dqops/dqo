@@ -108,6 +108,8 @@ function TreeProvider(props: any) {
     }));
 
     resetTreeData(node, items);
+
+    return items;
   };
 
   const refreshSchemaNode = async (node: CustomTreeNode) => {
@@ -489,7 +491,7 @@ function TreeProvider(props: any) {
 
   const refreshNode = async (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.DATABASE) {
-      await refreshDatabaseNode(node);
+      return await refreshDatabaseNode(node);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       await refreshSchemaNode(node);
     } else if (node.level === TREE_LEVEL.TABLE) {
