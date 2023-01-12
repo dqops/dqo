@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.dqo.cli.commands.converters;
+package ai.dqo.cli.converters;
 
 import ai.dqo.utils.datetime.StringToLocalDateConverter;
 import picocli.CommandLine.ITypeConverter;

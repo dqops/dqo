@@ -68,13 +68,17 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
                 );
 
         for (LoadedMonthlyPartition loadedMonthlyPartition : presentData.values()) {
+            if (loadedMonthlyPartition.getData() == null) {
+                continue;
+            }
+
             Table monthlyPartitionTable = loadedMonthlyPartition.getData();
             Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
 
             // Filter by accurate date.
             if (!filter.isIgnoreDateDay()) {
                 toDelete = toDelete.and(
-                        monthlyPartitionTable.dateColumn(TIME_SERIES_COLUMN_NAME)
+                        monthlyPartitionTable.dateTimeColumn(TIME_SERIES_COLUMN_NAME).date()
                                 .isBetweenIncluding(filter.getDateStart(), filter.getDateEnd()));
             }
 

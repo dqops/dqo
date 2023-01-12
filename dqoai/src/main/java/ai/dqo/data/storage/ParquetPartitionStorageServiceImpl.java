@@ -332,7 +332,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 return false;
             }
 
-            while (homeRelativeFoldersList.size() > 2) {
+            while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.
                 HomeFolderPath homeFolderPath = new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));
 
