@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CheckResultsOverviewDataModel,
+  CheckResultsOverviewDataModel, CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
   UICheckModel,
   UIFieldModel
@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
+import moment from "moment";
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -142,6 +143,16 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     }
   }, [job?.status]);
 
+  const getStatusLabel = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+    if (status === 'success') {
+      return 'Valid';
+    }
+    if (status === CheckResultsOverviewDataModelStatusesEnum.execution_error) {
+      return 'Execution Error'
+    }
+    return status;
+  };
+
   return (
     <>
       <tr
@@ -232,8 +243,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     key={index}
                     content={
                       <div className="text-gray-900">
-                        <div className="capitalize">{status}</div>
-                        <div>{checkResult?.timePeriods ? checkResult.timePeriods[index] : ''}</div>
+                        <div className="capitalize">{getStatusLabel(status)}</div>
+                        <div>{checkResult?.timePeriods ? moment(checkResult.timePeriods[index]).format('YYYY-MM-DD HH:mm:ss') : ''}</div>
                         <div>{checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
                       </div>
                     }
