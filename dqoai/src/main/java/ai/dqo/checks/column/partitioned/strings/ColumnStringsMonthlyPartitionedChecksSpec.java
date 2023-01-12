@@ -63,7 +63,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_valid_currency_code_percent", o -> o.monthlyPartitionStringValidCurrencyCodePercent);
             put("monthly_partition_string_invalid_email_count", o -> o.monthlyPartitionStringInvalidEmailCount);
             put("monthly_partition_valid_email_percent", o -> o.monthlyPartitionValidEmailPercent);
-            
+            put("monthly_partition_string_invalid_uuid_count", o -> o.monthlyPartitionStringInvalidUuidCount);
+
             put("monthly_partition_string_not_match_regex_count", o -> o.monthlyPartitionStringNotMatchRegexCount);
             put("monthly_partition_string_match_regex_percent", o -> o.monthlyPartitionStringMatchRegexPercent);
             put("monthly_partition_string_not_match_date_regex_count", o -> o.monthlyPartitionStringNotMatchDateRegexCount);
@@ -141,6 +142,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidEmailPercentCheckSpec monthlyPartitionValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringInvalidUuidCountCheckSpec monthlyPartitionStringInvalidUuidCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyPartitionStringNotMatchRegexCount;
@@ -573,6 +577,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidEmailPercent, monthlyPartitionValidEmailPercent));
         this.monthlyPartitionValidEmailPercent = monthlyPartitionValidEmailPercent;
         propagateHierarchyIdToField(monthlyPartitionValidEmailPercent, "monthly_partition_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getMonthlyPartitionStringInvalidUuidCount() {
+        return monthlyPartitionStringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid UUID count check.
+     * @param monthlyPartitionStringInvalidUuidCount Maximum invalid UUID count check.
+     */
+    public void setMonthlyPartitionStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec monthlyPartitionStringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInvalidUuidCount, monthlyPartitionStringInvalidUuidCount));
+        this.monthlyPartitionStringInvalidUuidCount = monthlyPartitionStringInvalidUuidCount;
+        propagateHierarchyIdToField(monthlyPartitionStringInvalidUuidCount, "monthly_partition_string_invalid_uuid_count");
     }
 
     /**

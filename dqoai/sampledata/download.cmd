@@ -54,3 +54,5 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1Jy0jlXlAt1t3bSpVkrd3pgbv62nJVU3ueXf5jjIk3Ps
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1Jy0jlXlAt1t3bSpVkrd3pgbv62nJVU3ueXf5jjIk3Ps/export?exportFormat=csv" > full_name_test.csv
 
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1uFv2hUPzNlfPoGZt1dSNfxxeJ45Decy2SekW9RvwSeI
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1uFv2hUPzNlfPoGZt1dSNfxxeJ45Decy2SekW9RvwSeI/export?exportFormat=csv" > uuid_test.csv
