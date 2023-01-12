@@ -701,7 +701,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new definition of a maximum match name regex percent check.
      * @param stringTopPopularValuesSet Maximum match name regex percent check.
      */
-    public void setStringMatchNameRegexPercent(ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet) {
+    public void setStringTopPopularValuesSet(ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet) {
         this.setDirtyIf(!Objects.equals(this.stringTopPopularValuesSet, stringTopPopularValuesSet));
         this.stringTopPopularValuesSet = stringTopPopularValuesSet;
         propagateHierarchyIdToField(stringTopPopularValuesSet, "string_top_popular_values_set");

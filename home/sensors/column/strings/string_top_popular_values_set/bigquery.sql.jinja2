@@ -26,7 +26,7 @@
       SELECT
         SUM(
           CASE
-            WHEN top_col_values.top_values IN (extract_in_list(parameters['values'])) THEN 1
+            WHEN top_col_values.top_values IN ({{extract_in_list(parameters['values'])}}) THEN 1
             ELSE 0
           END
         ) AS value
@@ -39,14 +39,13 @@
            ORDER BY ct DESC LIMIT {{parameters.limit}}
          ) top_col_values
     ) top_value
-    {%- endif -%}
 {% endmacro -%}
 
 SELECT
     {{ actual_value() }} AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
-FROM {{ top_value() }}
+FROM {{ top_value() -}}
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
