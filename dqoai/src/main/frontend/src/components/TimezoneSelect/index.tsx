@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TimezonesApi } from "../../services/apiClient";
 import SelectInput from "../SelectInput";
+import { Option } from "../DataQualityChecks/ColumnSelect";
 
 interface ITimezoneSelectProps {
   value?: string;
@@ -8,11 +9,11 @@ interface ITimezoneSelectProps {
 }
 
 const TimezoneSelect = ({ value, onChange }: ITimezoneSelectProps) => {
-  const [options, setOptions] = useState([]);
+  const [options, setOptions] = useState<Option[]>([]);
 
   useEffect(() => {
-    TimezonesApi.test().then((res) => {
-      setOptions((res.data as any).map((item: string) => ({
+    TimezonesApi.getAvailableZoneIds().then((res) => {
+      setOptions(res.data.map((item: string) => ({
         label: item,
         value: item,
       })));
