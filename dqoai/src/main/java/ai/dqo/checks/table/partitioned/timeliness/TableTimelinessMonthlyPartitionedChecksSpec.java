@@ -18,7 +18,7 @@ package ai.dqo.checks.table.partitioned.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
            put("monthly_partition_days_since_most_recent_event", o -> o.monthlyPartitionDaysSinceMostRecentEvent);
            put("monthly_partition_data_ingestion_delay", o -> o.monthlyPartitionDataIngestionDelay);
            put("monthly_partition_days_since_most_recent_ingestion", o -> o.monthlyPartitionDaysSinceMostRecentIngestion);
-           put("monthly_partition_max_row_data_ingestion_delay", o -> o.monthlyPartitionMaxRowDataIngestionDelay);
+           put("monthly_partition_reload_lag", o -> o.monthlyPartitionReloadLag);
         }
     };
 
@@ -66,7 +66,7 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
     @JsonPropertyDescription("Monthly partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay;
+    private TablePartitionReloadLagCheckSpec monthlyPartitionReloadLag;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -126,18 +126,18 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
      * Returns a maximum row data ingestion delay check configuration.
      * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxRowDataIngestionDelayCheckSpec getMonthlyPartitionMaxRowDataIngestionDelay() {
-        return monthlyPartitionMaxRowDataIngestionDelay;
+    public TablePartitionReloadLagCheckSpec getMonthlyPartitionReloadLag() {
+        return monthlyPartitionReloadLag;
     }
 
     /**
      * Sets a maximum row data ingestion delay.
-     * @param monthlyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
+     * @param monthlyPartitionReloadLag New maximum row data ingestion delay.
      */
-    public void setMonthlyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec monthlyPartitionMaxRowDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxRowDataIngestionDelay, monthlyPartitionMaxRowDataIngestionDelay));
-        this.monthlyPartitionMaxRowDataIngestionDelay = monthlyPartitionMaxRowDataIngestionDelay;
-        this.propagateHierarchyIdToField(monthlyPartitionMaxRowDataIngestionDelay, "monthly_partition_max_row_data_ingestion_delay");
+    public void setMonthlyPartitionReloadLag(TablePartitionReloadLagCheckSpec monthlyPartitionReloadLag) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionReloadLag, monthlyPartitionReloadLag));
+        this.monthlyPartitionReloadLag = monthlyPartitionReloadLag;
+        this.propagateHierarchyIdToField(monthlyPartitionReloadLag, "monthly_partition_reload_lag");
     }
 
     /**

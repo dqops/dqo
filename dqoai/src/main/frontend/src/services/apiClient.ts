@@ -23,9 +23,12 @@ import {
   TablesApiFactory,
   ColumnsApiFactory,
   JobsApiFactory,
-  SourceSchemasControllerApiFactory,
-  SourceTablesControllerApiFactory,
-  DataStreamsApiFactory, CheckResultsOverviewApiFactory, DashboardsApiFactory, TimezonesApiFactory
+  SourceSchemasApiFactory,
+  SourceTablesApiFactory,
+  DataStreamsApiFactory,
+  CheckResultsOverviewApiFactory,
+  DashboardsApiFactory,
+  TimezonesApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -50,13 +53,13 @@ export const ColumnApiClient = ColumnsApiFactory(
 
 export const JobApiClient = JobsApiFactory(new Configuration(), '', axios);
 
-export const SourceSchemasApi = SourceSchemasControllerApiFactory(
+export const SourceSchemasApi = SourceSchemasApiFactory(
   new Configuration(),
   '',
   axios
 );
 
-export const SourceTableApi = SourceTablesControllerApiFactory(
+export const SourceTableApi = SourceTablesApiFactory(
   new Configuration(),
   '',
   axios

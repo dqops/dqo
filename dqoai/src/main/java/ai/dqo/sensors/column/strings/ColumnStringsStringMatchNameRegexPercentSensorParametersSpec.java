@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.table.timeliness;
+package ai.dqo.sensors.column.strings;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
+import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
+ * Column level sensor that calculates the percentage of values that does fit a given name regex in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringMatchNameRegexPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMatchNameRegexPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +53,7 @@ public class TableTimelinessMaxRowDataIngestionDelaySensorParametersSpec extends
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/timeliness/max_row_data_ingestion_delay";
+        return "column/strings/string_match_name_regex_percent";
     }
 }
+
