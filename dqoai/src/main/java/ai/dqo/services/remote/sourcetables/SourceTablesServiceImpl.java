@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.controllers.remote.services;
+package ai.dqo.services.remote.sourcetables;
 
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;

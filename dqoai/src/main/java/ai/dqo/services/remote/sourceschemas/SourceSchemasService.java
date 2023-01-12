@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.controllers.remote.services;
+package ai.dqo.services.remote.sourceschemas;
 
-import ai.dqo.rest.models.remote.TableRemoteBasicModel;
+import ai.dqo.rest.models.remote.SchemaRemoteModel;
 
 import java.util.List;
 
 /**
- * Management service for tables on the source database.
+ * Schema on remote database management service.
  */
-public interface SourceTablesService {
+public interface SourceSchemasService {
 
     /**
-     * Returns a list of tables on a schema on the source database.
-     * @param connectionName     Connection name. Required import.
-     * @param schemaName         Schema name.
+     * Returns a list of schemas for local connection.
+     * @param connectionName     Connection name.
      * @return Schema list acquired remotely.
      */
-    List<TableRemoteBasicModel> showTablesOnRemoteSchema(String connectionName, String schemaName);
+    List<SchemaRemoteModel> showSchemas(String connectionName);
 }
