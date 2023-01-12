@@ -8,6 +8,7 @@ import {
   BigQueryParametersSpec,
   BigQueryParametersSpecAuthenticationModeEnum
 } from '../../../../api';
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeSelect";
 
 const options = [
   {
@@ -44,19 +45,19 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
 
   return (
     <SectionWrapper title="BigQuery connection parameters" className="mb-4">
-      <Input
-        label="Source GCP project ID"
+      <FieldTypeInput
         className="mb-4"
+        label="Source GCP project ID"
         name="source_project_id"
         value={bigquery?.source_project_id}
-        onChange={(e) => handleChange({ source_project_id: e.target.value })}
+        onChange={(value) => handleChange({ source_project_id: value })}
       />
-      <Input
-        label="Billing GCP project ID"
+      <FieldTypeInput
         className="mb-4"
+        label="Billing GCP project ID"
         name="billing_project_id"
         value={bigquery?.billing_project_id}
-        onChange={(e) => handleChange({ billing_project_id: e.target.value })}
+        onChange={(value) => handleChange({ billing_project_id: value })}
       />
       <Select
         label="Authentication mode to the Google Cloud"
@@ -67,29 +68,29 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
-        <Input
+        <FieldTypeInput
           label="JSON key content"
           className="mb-4"
           name="json_key_content"
           value={bigquery?.json_key_content}
-          onChange={(e) => handleChange({ json_key_content: e.target.value })}
+          onChange={(value) => handleChange({ json_key_content: value })}
         />
       )}
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_path && (
-        <Input
+        <FieldTypeInput
           label="A path to the JSON key file"
           className="mb-4"
           name="json_key_path"
           value={bigquery?.json_key_path}
-          onChange={(e) => handleChange({ json_key_path: e.target.value })}
+          onChange={(value) => handleChange({ json_key_path: value })}
         />
       )}
-      <Input
+      <FieldTypeInput
         label="Quota GCP project ID"
         name="quota_project_id"
         value={bigquery?.quota_project_id}
-        onChange={(e) => handleChange({ quota_project_id: e.target.value })}
+        onChange={(value) => handleChange({ quota_project_id: value })}
       />
     </SectionWrapper>
   );
