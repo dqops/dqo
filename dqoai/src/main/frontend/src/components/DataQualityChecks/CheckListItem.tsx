@@ -120,9 +120,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
 
   const isDisabled = !check?.configured || check?.disabled;
 
-  const getColor = (status: string) => {
+  const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
-      case 'success':
+      case 'valid':
         return 'bg-green-500';
       case 'warning':
         return 'bg-yellow-500';
@@ -144,7 +144,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   }, [job?.status]);
 
   const getStatusLabel = (status: CheckResultsOverviewDataModelStatusesEnum) => {
-    if (status === 'success') {
+    if (status === 'valid') {
       return 'Valid';
     }
     if (status === CheckResultsOverviewDataModelStatusesEnum.execution_error) {

@@ -65,7 +65,8 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
 
         Table filteredTable = filterTableToRootChecksContainer(rootChecksContainerSpec, combinedTable);
         Table sortedTable = filteredTable.sortDescendingOn(
-                SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // first on the most recent readings
+                SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME, // most recent execution first
+                SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, // then the most recent reading (for partitioned checks) when many partitions were captured
                 RuleResultsColumnNames.SEVERITY_COLUMN_NAME); // second on the highest severity first on that time period
 
         int rowCount = sortedTable.rowCount();

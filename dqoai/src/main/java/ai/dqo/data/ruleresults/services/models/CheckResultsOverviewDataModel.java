@@ -27,7 +27,7 @@ public class CheckResultsOverviewDataModel {
     @JsonPropertyDescription("Check name.")
     private String checkName;
 
-    @JsonPropertyDescription("List of time periods for the results, sorted from the oldest to the newest.")
+    @JsonPropertyDescription("List of time periods for the results, sorted from the newest to the oldest.")
     private List<LocalDateTime> timePeriods = new ArrayList<>();
 
     @JsonPropertyDescription("List of check severity levels or an error status, indexes with the severity levels match the time periods.")
