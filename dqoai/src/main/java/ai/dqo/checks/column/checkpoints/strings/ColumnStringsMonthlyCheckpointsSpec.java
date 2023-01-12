@@ -63,6 +63,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_valid_currency_code_percent", o -> o.monthlyCheckpointStringValidCurrencyCodePercent);
             put("monthly_checkpoint_string_invalid_email_count", o -> o.monthlyCheckpointStringInvalidEmailCount);
             put("monthly_checkpoint_string_valid_email_percent", o -> o.monthlyCheckpointStringValidEmailPercent);
+            put("monthly_checkpoint_string_invalid_uuid_count", o -> o.monthlyCheckpointStringInvalidUuidCount);
 
             put("monthly_checkpoint_string_not_match_regex_count", o -> o.monthlyCheckpointStringNotMatchRegexCount);
             put("monthly_checkpoint_string_match_regex_percent", o -> o.monthlyCheckpointStringMatchRegexPercent);
@@ -141,6 +142,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringValidEmailPercentCheckSpec monthlyCheckpointStringValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringInvalidUuidCountCheckSpec monthlyCheckpointStringInvalidUuidCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyCheckpointStringNotMatchRegexCount;
@@ -569,6 +573,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidEmailPercent, monthlyCheckpointStringValidEmailPercent));
         this.monthlyCheckpointStringValidEmailPercent = monthlyCheckpointStringValidEmailPercent;
         propagateHierarchyIdToField(monthlyCheckpointStringValidEmailPercent, "monthly_checkpoint_string_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getMonthlyCheckpointStringInvalidUuidCount() {
+        return monthlyCheckpointStringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid UUID count check.
+     * @param monthlyCheckpointStringInvalidUuidCount Maximum invalid UUID count check.
+     */
+    public void setMonthlyCheckpointStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec monthlyCheckpointStringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInvalidUuidCount, monthlyCheckpointStringInvalidUuidCount));
+        this.monthlyCheckpointStringInvalidUuidCount = monthlyCheckpointStringInvalidUuidCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringInvalidUuidCount, "monthly_checkpoint_string_invalid_uuid_count");
     }
 
     /**

@@ -63,6 +63,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_valid_currency_code_percent", o -> o.stringValidCurrencyCodePercent);
             put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
             put("string_valid_email_percent", o -> o.stringValidEmailPercent);
+            put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
@@ -143,6 +144,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnStringValidEmailPercentCheckSpec stringValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -575,6 +579,25 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.stringValidEmailPercent = stringValidEmailPercent;
         propagateHierarchyIdToField(stringValidEmailPercent, "string_valid_email_percent");
     }
+
+    /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getStringInvalidUuidCount() {
+        return stringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid UUID count check.
+     * @param stringInvalidUuidCount Invalid UUID count check.
+     */
+    public void setStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidUuidCount, stringInvalidUuidCount));
+        this.stringInvalidUuidCount = stringInvalidUuidCount;
+        propagateHierarchyIdToField(stringInvalidUuidCount, "string_invalid_uuid_count");
+    }
+
 
     /**
      * Returns a maximum not match regex count check.

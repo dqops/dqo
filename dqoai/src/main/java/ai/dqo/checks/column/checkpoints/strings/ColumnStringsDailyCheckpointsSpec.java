@@ -63,6 +63,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_valid_currency_code_percent", o -> o.dailyCheckpointStringValidCurrencyCodePercent);
             put("daily_checkpoint_string_invalid_email_count", o -> o.dailyCheckpointStringInvalidEmailCount);
             put("daily_checkpoint_string_valid_email_percent", o -> o.dailyCheckpointStringValidEmailPercent);
+            put("daily_checkpoint_string_invalid_uuid_count", o -> o.dailyCheckpointStringInvalidUuidCount);
 
             put("daily_checkpoint_string_not_match_regex_count", o -> o.dailyCheckpointStringNotMatchRegexCount);
             put("daily_checkpoint_string_match_regex_percent", o -> o.dailyCheckpointStringMatchRegexPercent);
@@ -140,6 +141,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringValidEmailPercentCheckSpec dailyCheckpointStringValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringInvalidUuidCountCheckSpec dailyCheckpointStringInvalidUuidCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyCheckpointStringNotMatchRegexCount;
@@ -568,6 +572,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidEmailPercent, dailyCheckpointStringValidEmailPercent));
         this.dailyCheckpointStringValidEmailPercent = dailyCheckpointStringValidEmailPercent;
         propagateHierarchyIdToField(dailyCheckpointStringValidEmailPercent, "daily_checkpoint_string_valid_email_percent");
+    }
+
+    /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getDailyCheckpointStringInvalidUuidCount() {
+        return dailyCheckpointStringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid UUID count check.
+     * @param dailyCheckpointStringInvalidUuidCount Maximum invalid UUID count check.
+     */
+    public void setDailyCheckpointStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec dailyCheckpointStringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInvalidUuidCount, dailyCheckpointStringInvalidUuidCount));
+        this.dailyCheckpointStringInvalidUuidCount = dailyCheckpointStringInvalidUuidCount;
+        propagateHierarchyIdToField(dailyCheckpointStringInvalidUuidCount, "daily_checkpoint_string_invalid_uuid_count");
     }
 
     /**
