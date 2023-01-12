@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { CheckResultsOverviewDataModel, UIAllChecksModel, UICheckModel } from '../../api';
 import CheckListItem from './CheckListItem';
 import { useTree } from '../../contexts/treeContext';
@@ -15,7 +15,7 @@ interface IDataQualityChecksProps {
 
 const TableHeader = () => {
   return (
-    <>
+    <thead>
       <tr>
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
@@ -51,7 +51,7 @@ const TableHeader = () => {
           Warning threshold
         </td>
       </tr>
-    </>
+    </thead>
   );
 };
 
@@ -98,8 +98,8 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
         <TableHeader />
         <tbody>
           {checksUI?.categories.map((category, index) => (
-            <>
-              <tr key={index}>
+            <Fragment key={index}>
+              <tr>
                 <td
                   className="py-2 px-4 bg-gray-50 border-b border-t"
                   colSpan={2}
@@ -126,7 +126,7 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
                     onUpdate={onUpdate}
                   />
                 ))}
-            </>
+            </Fragment>
           ))}
         </tbody>
       </table>
