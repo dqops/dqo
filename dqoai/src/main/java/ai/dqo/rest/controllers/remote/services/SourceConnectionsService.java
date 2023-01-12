@@ -26,7 +26,7 @@ public interface SourceConnectionsService {
     /**
      * Returns the status of the remote connection.
      * @param connectionSpec Connection spec model.
-     * @param connectionName Connection name
+     * @param connectionName Connection name.
      * @return Connection status acquired remotely.
      */
 

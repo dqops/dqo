@@ -52,7 +52,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
     /**
      * Returns the status of the remote connection.
      * @param connectionSpec Connection spec model.
-     * @param connectionName Connection name
+     * @param connectionName Connection name.
      * @return Status of the remote connection.
      */
     @Override
