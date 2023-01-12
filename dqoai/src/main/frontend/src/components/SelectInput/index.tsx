@@ -23,6 +23,7 @@ interface SelectInputProps {
   tooltipText?: string;
   disabled?: boolean;
   error?: boolean;
+  limit?: number;
 }
 
 const SelectInput = ({
@@ -35,7 +36,8 @@ const SelectInput = ({
   triggerClassName,
   tooltipText,
   disabled,
-  error
+  error,
+  limit
 }: SelectInputProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu, closeMenu } = usePopup(ref);
@@ -66,7 +68,8 @@ const SelectInput = ({
     setIsChanged(true);
   };
 
-  console.log('value', value);
+  const dataOptions = limit ? filteredOptions.slice(0, limit) : filteredOptions;
+
   return (
     <div className={clsx('', className)}>
       {label && (
@@ -126,7 +129,7 @@ const SelectInput = ({
               : 'opacity-0 max-h-0 overflow-hidden py-0'
           )}
         >
-          {filteredOptions.map((option, index) => (
+          {dataOptions.map((option, index) => (
             <div
               data-testid="select-option"
               key={index}

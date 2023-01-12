@@ -86,7 +86,6 @@ const Tree = () => {
         const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
         if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
-          console.log('-----target', ROUTES.COLUMN_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
           history.push(ROUTES.COLUMN_AD_HOCS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
           history.push(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
