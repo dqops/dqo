@@ -43,18 +43,19 @@ public class SourceConnectionController {
     }
 
     /**
-     * Returns a boolean value of connection status and exception message.
+     * Returns an enum value of connection status
+     * and if the connection status value is FAILURE then it returns error message.
      * @param connectionBasicModel Connection connectionBasicModel. Required import.
-     * @return Enum value of connection status and exception message.
+     * @return Enum value of connection status and error message.
      */
     @PostMapping("/checkconnection")
-    @ApiOperation(value = "checkconnection", notes = "Checks if the given remote connection exists", response = ConnectionRemoteModel.class)
+    @ApiOperation(value = "checkConnection", notes = "Checks if the given remote connection exists", response = ConnectionRemoteModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK",  response = ConnectionRemoteModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ConnectionRemoteModel>> checkconnection(
+    public ResponseEntity<Mono<ConnectionRemoteModel>> checkConnection(
             @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel) {
 
         ConnectionRemoteModel connectionRemoteModel;

@@ -66,11 +66,10 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
         if (connectionWrapper != null) {
             connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
-            connectionRemoteModel.setMessage("A connection with the name you specified: "+connectionName+ " already exists!");
+            connectionRemoteModel.setErrorMessage("A connection with the name you specified: "+connectionName+ " already exists!");
             return connectionRemoteModel;
         }
 
-        connectionRemoteModel.setMessage(connectionSpec.getConnectionName());
         ConnectionSpec expandedConnectionSpec = connectionSpec.expandAndTrim(this.secretValueProvider);
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
@@ -82,7 +81,7 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
         } catch (Exception e) {
             connectionRemoteModel.setConnectionStatus(ConnectionStatusRemote.FAILURE);
-            connectionRemoteModel.setMessage(e.getMessage());
+            connectionRemoteModel.setErrorMessage(e.getMessage());
         }
         return connectionRemoteModel;
     }

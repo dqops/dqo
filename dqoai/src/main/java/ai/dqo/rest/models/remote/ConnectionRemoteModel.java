@@ -28,9 +28,9 @@ import lombok.Data;
 @ApiModel(value = "ConnectionRemoteModel", description = "Connection status remote management")
 public class ConnectionRemoteModel {
 
-    @JsonPropertyDescription("Connection status.")
+    @JsonPropertyDescription("Connection status")
     private ConnectionStatusRemote connectionStatus;
 
-    @JsonPropertyDescription("Exception message")
-    private String message;
+    @JsonPropertyDescription("Error message")
+    private String errorMessage;
 }
