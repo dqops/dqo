@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.ruleresults.services;
+package ai.dqo.data.readouts.services;
 
-import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
+import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 
 /**
- * Service that deletes outdated results of a check.
+ * Service that deletes outdated sensor readouts.
  */
-public interface RuleResultsDeleteService {
+public interface SensorReadoutsDeleteService {
 
     /**
-     * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
-     * @param filter Filter for the result fragment that is of interest.
+     * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the readouts fragment that is of interest.
      */
-    void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter);
+    void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter);
 }

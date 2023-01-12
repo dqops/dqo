@@ -15,28 +15,21 @@
  */
 package ai.dqo.core.jobqueue.jobs.data;
 
-import ai.dqo.connectors.*;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
-import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.data.errors.models.ErrorsFragmentFilter;
+import ai.dqo.data.errors.services.ErrorsDeleteService;
+import ai.dqo.data.profilingresults.models.ProfilingResultsFragmentFilter;
+import ai.dqo.data.profilingresults.services.ProfilingResultsDeleteService;
+import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
+import ai.dqo.data.readouts.services.SensorReadoutsDeleteService;
 import ai.dqo.data.ruleresults.services.RuleResultsDeleteService;
-import ai.dqo.data.ruleresults.services.models.RuleResultsFragmentFilter;
+import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
 import ai.dqo.metadata.search.TableSearchFilters;
-import ai.dqo.metadata.sources.*;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Queue job that deletes data stored in user's ".data" directory.
@@ -44,12 +37,21 @@ import java.util.stream.Collectors;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJobResult> {
+    private ErrorsDeleteService errorsDeleteService;
+    private ProfilingResultsDeleteService profilingResultsDeleteService;
     private RuleResultsDeleteService ruleResultsDeleteService;
+    private SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
-    public DeleteStoredDataQueueJob(RuleResultsDeleteService ruleResultsDeleteService) {
+    public DeleteStoredDataQueueJob(ErrorsDeleteService errorsDeleteService,
+                                    ProfilingResultsDeleteService profilingResultsDeleteService,
+                                    RuleResultsDeleteService ruleResultsDeleteService,
+                                    SensorReadoutsDeleteService sensorReadoutsDeleteService) {
+        this.errorsDeleteService = errorsDeleteService;
+        this.profilingResultsDeleteService = profilingResultsDeleteService;
         this.ruleResultsDeleteService = ruleResultsDeleteService;
+        this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
     }
 
     /**
@@ -69,6 +71,45 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
     }
 
 
+    protected ErrorsFragmentFilter getErrorsFragmentFilter() {
+        return new ErrorsFragmentFilter() {{
+            setTableSearchFilters(new TableSearchFilters() {{
+                setConnectionName(deletionParameters.getConnectionName());
+                setSchemaTableName(deletionParameters.getSchemaTableName());
+            }});
+            setDateStart(deletionParameters.getDateStart());
+            setDateEnd(deletionParameters.getDateEnd());
+            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType());
+            setColumnName(deletionParameters.getColumnName());
+            setSensorName(deletionParameters.getSensorName());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTimeGradient(deletionParameters.getTimeGradient());
+        }};
+    }
+
+    protected ProfilingResultsFragmentFilter getProfilingResultsFragmentFilter() {
+        return new ProfilingResultsFragmentFilter() {{
+            setTableSearchFilters(new TableSearchFilters() {{
+                setConnectionName(deletionParameters.getConnectionName());
+                setSchemaTableName(deletionParameters.getSchemaTableName());
+            }});
+            setDateStart(deletionParameters.getDateStart());
+            setDateEnd(deletionParameters.getDateEnd());
+            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
+            setProfilerCategory(deletionParameters.getProfilerCategory());
+            setProfilerName(deletionParameters.getProfilerName());
+            setProfilerType(deletionParameters.getProfilerType());
+            setColumnName(deletionParameters.getColumnName());
+            setDataStreamName(deletionParameters.getDataStreamName());
+            setSensorName(deletionParameters.getSensorName());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTimeGradient(deletionParameters.getTimeGradient());
+        }};
+    }
+
     protected RuleResultsFragmentFilter getRuleResultsFragmentFilter() {
         return new RuleResultsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
@@ -83,6 +124,27 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckType(deletionParameters.getCheckType());
             setColumnName(deletionParameters.getColumnName());
             setDataStreamName(deletionParameters.getDataStreamName());
+            setSensorName(deletionParameters.getSensorName());
+            setQualityDimension(deletionParameters.getQualityDimension());
+            setTimeGradient(deletionParameters.getTimeGradient());
+        }};
+    }
+
+    protected SensorReadoutsFragmentFilter getSensorReadoutsFragmentFilter() {
+        return new SensorReadoutsFragmentFilter() {{
+            setTableSearchFilters(new TableSearchFilters() {{
+                setConnectionName(deletionParameters.getConnectionName());
+                setSchemaTableName(deletionParameters.getSchemaTableName());
+            }});
+            setDateStart(deletionParameters.getDateStart());
+            setDateEnd(deletionParameters.getDateEnd());
+            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
+            setCheckCategory(deletionParameters.getCheckCategory());
+            setCheckName(deletionParameters.getCheckName());
+            setCheckType(deletionParameters.getCheckType());
+            setColumnName(deletionParameters.getColumnName());
+            setDataStreamName(deletionParameters.getDataStreamName());
+            setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
         }};
@@ -96,11 +158,22 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      */
     @Override
     public DeleteStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        DeleteStoredDataQueueJobResult result = new DeleteStoredDataQueueJobResult();
+
+        if (this.deletionParameters.isDeleteErrors()) {
+            this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
+        }
+        if (this.deletionParameters.isDeleteProfilingResults()) {
+            this.profilingResultsDeleteService.deleteSelectedProfilingResultsFragment(this.getProfilingResultsFragmentFilter());
+        }
         if (this.deletionParameters.isDeleteRuleResults()) {
             this.ruleResultsDeleteService.deleteSelectedRuleResultsFragment(this.getRuleResultsFragmentFilter());
         }
+        if (this.deletionParameters.isDeleteSensorReadouts()) {
+            this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
+        }
 
-        return new DeleteStoredDataQueueJobResult();
+        return result;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.ruleresults.services;
+package ai.dqo.data.profilingresults.services;
 
-import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
+import ai.dqo.data.profilingresults.models.ProfilingResultsFragmentFilter;
 
 /**
- * Service that deletes outdated results of a check.
+ * Service that deletes outdated profiling results.
  */
-public interface RuleResultsDeleteService {
+public interface ProfilingResultsDeleteService {
 
     /**
-     * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
-     * @param filter Filter for the result fragment that is of interest.
+     * Deletes the profiling results from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the profiling results fragment that is of interest.
      */
-    void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter);
+    void deleteSelectedProfilingResultsFragment(ProfilingResultsFragmentFilter filter);
 }

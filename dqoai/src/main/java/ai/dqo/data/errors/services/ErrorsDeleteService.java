@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.ruleresults.services;
+package ai.dqo.data.errors.services;
 
-import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
+import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 
 /**
- * Service that deletes outdated results of a check.
+ * Service that deletes outdated errors of a check run.
  */
-public interface RuleResultsDeleteService {
+public interface ErrorsDeleteService {
 
     /**
-     * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
-     * @param filter Filter for the result fragment that is of interest.
+     * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the errors fragment that is of interest.
      */
-    void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter);
+    void deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
 }

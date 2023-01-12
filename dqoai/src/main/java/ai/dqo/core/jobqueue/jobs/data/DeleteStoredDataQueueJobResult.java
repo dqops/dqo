@@ -15,16 +15,10 @@
  */
 package ai.dqo.core.jobqueue.jobs.data;
 
-import tech.tablesaw.api.Table;
+import lombok.Data;
 
 /**
  * Result object from the {@link DeleteStoredDataQueueJob}.
  */
-public class DeleteStoredDataQueueJobResult {
-
-    /**
-     * Creates a job result object.
-     */
-    public DeleteStoredDataQueueJobResult() {
-    }
-}
+@Data
+public class DeleteStoredDataQueueJobResult {}

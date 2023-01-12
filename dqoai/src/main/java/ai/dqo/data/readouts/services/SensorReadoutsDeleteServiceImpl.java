@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.ruleresults.services;
+package ai.dqo.data.readouts.services;
 
 import ai.dqo.data.normalization.CommonColumnNames;
-import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.storage.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,22 +31,22 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
+public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
     private final String TIME_SERIES_COLUMN_NAME = "time_period";
 
     private ParquetPartitionStorageService parquetPartitionStorageService;
 
     @Autowired
-    public RuleResultsDeleteServiceImpl(ParquetPartitionStorageService parquetPartitionStorageService) {
+    public SensorReadoutsDeleteServiceImpl(ParquetPartitionStorageService parquetPartitionStorageService) {
         this.parquetPartitionStorageService = parquetPartitionStorageService;
     }
 
     /**
-     * Deletes the results from a table, applying specific filters to get the fragment.
-     * @param filter Filter for the result fragment that is of interest.
+     * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the readouts fragment that is of interest.
      */
     @Override
-    public void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter) {
+    public void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
         Map<String, String> conditions = filter.getColumnConditions();
         List<String> columnNames = new ArrayList<>(conditions.keySet());
         columnNames.add(CommonColumnNames.ID_COLUMN_NAME);
@@ -54,7 +54,7 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
             columnNames.add(TIME_SERIES_COLUMN_NAME);
         }
 
-        FileStorageSettings fileStorageSettings = RuleResultsSnapshot.createRuleResultsStorageSettings();
+        FileStorageSettings fileStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> presentData =
                 parquetPartitionStorageService.loadPartitionsForMonthsRange(

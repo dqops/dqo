@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue.jobs.data;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
 
 import java.time.LocalDate;
 
@@ -23,26 +24,31 @@ import java.time.LocalDate;
  * Parameters for the {@link DeleteStoredDataQueueJob} job that deletes data stored in user's ".data" directory.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
 public class DeleteStoredDataQueueJobParameters {
     private String connectionName;
     private String schemaTableName;
     private LocalDate dateStart;
     private LocalDate dateEnd;
+    private boolean ignoreDateDay = true;
 
-
+    private boolean deleteErrors = false;
+    private boolean deleteProfilingResults = false;
     private boolean deleteRuleResults = false;
     private boolean deleteSensorReadouts = false;
-    private boolean deleteProfilingResults = false;
-    private boolean deleteErrors = false;
 
-    private boolean ignoreDateDay = true;
     private String checkCategory;
     private String checkName;
     private String checkType;
+    private String sensorName;
     private String columnName;
     private String dataStreamName;
     private String qualityDimension;
     private String timeGradient;
+
+    private String profilerCategory;
+    private String profilerName;
+    private String profilerType;
 
     public DeleteStoredDataQueueJobParameters() {
     }
@@ -62,141 +68,5 @@ public class DeleteStoredDataQueueJobParameters {
         this.schemaTableName = schemaTableName;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
-    }
-
-    /**
-     * Returns the connection name.
-     * @return Connection name.
-     */
-    public String getConnectionName() {
-        return connectionName;
-    }
-
-    /**
-     * Sets the connection name.
-     * @param connectionName Connection name.
-     */
-    public void setConnectionName(String connectionName) {
-        this.connectionName = connectionName;
-    }
-
-    public String getSchemaTableName() {
-        return schemaTableName;
-    }
-
-    public void setSchemaTableName(String schemaTableName) {
-        this.schemaTableName = schemaTableName;
-    }
-
-    public LocalDate getDateStart() {
-        return dateStart;
-    }
-
-    public void setDateStart(LocalDate dateStart) {
-        this.dateStart = dateStart;
-    }
-
-    public LocalDate getDateEnd() {
-        return dateEnd;
-    }
-
-    public boolean isDeleteRuleResults() {
-        return deleteRuleResults;
-    }
-
-    public void setDeleteRuleResults(boolean deleteRuleResults) {
-        this.deleteRuleResults = deleteRuleResults;
-    }
-
-    public boolean isDeleteSensorReadouts() {
-        return deleteSensorReadouts;
-    }
-
-    public void setDeleteSensorReadouts(boolean deleteSensorReadouts) {
-        this.deleteSensorReadouts = deleteSensorReadouts;
-    }
-
-    public boolean isDeleteProfilingResults() {
-        return deleteProfilingResults;
-    }
-
-    public void setDeleteProfilingResults(boolean deleteProfilingResults) {
-        this.deleteProfilingResults = deleteProfilingResults;
-    }
-
-    public boolean isDeleteErrors() {
-        return deleteErrors;
-    }
-
-    public void setDeleteErrors(boolean deleteErrors) {
-        this.deleteErrors = deleteErrors;
-    }
-
-    public void setDateEnd(LocalDate dateEnd) {
-        this.dateEnd = dateEnd;
-    }
-
-    public boolean isIgnoreDateDay() {
-        return ignoreDateDay;
-    }
-
-    public void setIgnoreDateDay(boolean ignoreDateDay) {
-        this.ignoreDateDay = ignoreDateDay;
-    }
-
-    public String getCheckCategory() {
-        return checkCategory;
-    }
-
-    public void setCheckCategory(String checkCategory) {
-        this.checkCategory = checkCategory;
-    }
-
-    public String getCheckName() {
-        return checkName;
-    }
-
-    public void setCheckName(String checkName) {
-        this.checkName = checkName;
-    }
-
-    public String getCheckType() {
-        return checkType;
-    }
-
-    public void setCheckType(String checkType) {
-        this.checkType = checkType;
-    }
-
-    public String getColumnName() {
-        return columnName;
-    }
-
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-
-    public String getDataStreamName() {
-        return dataStreamName;
-    }
-
-    public void setDataStreamName(String dataStreamName) {
-        this.dataStreamName = dataStreamName;
-    }
-
-    public String getQualityDimension() {
-        return qualityDimension;
-    }
-
-    public void setQualityDimension(String qualityDimension) {
-        this.qualityDimension = qualityDimension;
-    }
-
-    public String getTimeGradient() {
-        return timeGradient;
-    }
-
-    public void setTimeGradient(String timeGradient) {
-        this.timeGradient = timeGradient;
     }
 }
