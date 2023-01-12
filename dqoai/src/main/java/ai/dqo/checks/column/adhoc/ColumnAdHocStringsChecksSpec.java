@@ -70,7 +70,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
             put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
-
+            put("string_top_popular_values_set", o -> o.stringTopPopularValuesSet);
         }
     };
 
@@ -159,6 +159,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage.")
     private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    private ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet;
 
     /**
      * Returns a maximum string length below check.
@@ -662,6 +664,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringMatchNameRegexPercent, stringMatchNameRegexPercent));
         this.stringMatchNameRegexPercent = stringMatchNameRegexPercent;
         propagateHierarchyIdToField(stringMatchNameRegexPercent, "string_match_name_regex_percent");
+    }
+
+    /**
+     * Returns a maximum match name regex percent check.
+     * @return Maximum match name regex percent check.
+     */
+    public ColumnStringTopPopularValuesSetCheckSpec getStringTopPopularValuesSet() {
+        return stringTopPopularValuesSet;
+    }
+
+    /**
+     * Sets a new definition of a maximum match name regex percent check.
+     * @param stringTopPopularValuesSet Maximum match name regex percent check.
+     */
+    public void setStringMatchNameRegexPercent(ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet) {
+        this.setDirtyIf(!Objects.equals(this.stringTopPopularValuesSet, stringTopPopularValuesSet));
+        this.stringTopPopularValuesSet = stringTopPopularValuesSet;
+        propagateHierarchyIdToField(stringTopPopularValuesSet, "string_top_popular_values_set");
     }
 
     /**

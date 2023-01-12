@@ -1,0 +1,52 @@
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+
+{%- macro extract_in_list(values_list) -%}
+    {%- for i in values_list -%}
+        {%- if not loop.last -%}
+            {{lib.make_text_constant(i)}}{{", "}}
+        {%- else -%}
+            {{lib.make_text_constant(i)}}
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro -%}
+
+{%- macro actual_value() -%}
+    {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+    NULL
+    {%- else -%}
+    CASE
+        WHEN top_value.value = {{parameters.limit}} THEN 1
+        ELSE 0
+    END
+    {%- endif -%}
+{% endmacro -%}
+
+{%- macro top_value() -%}
+    (
+      SELECT
+        SUM(
+          CASE
+            WHEN top_col_values.top_values IN (extract_in_list(parameters['values'])) THEN 1
+            ELSE 0
+          END
+        ) AS value
+    FROM (
+           SELECT
+            DISTINCT({{ lib.render_target_column('analyzed_table') }}) AS top_values,
+            COUNT(*) AS ct
+           FROM {{ lib.render_target_table() }} AS analyzed_table
+           GROUP BY top_values
+           ORDER BY ct DESC LIMIT {{parameters.limit}}
+         ) top_col_values
+    ) top_value
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    {{ actual_value() }} AS actual_value
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ top_value() }}
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
