@@ -64,7 +64,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_invalid_email_count", o -> o.dailyPartitionStringInvalidEmailCount);
             put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
             put("daily_partition_string_invalid_uuid_count", o -> o.dailyPartitionStringInvalidUuidCount);
-          
+            put("daily_partition_valid_uuid_percent", o -> o.dailyPartitionValidUuidPercent);
+
+
             put("daily_partition_string_not_match_regex_count", o -> o.dailyPartitionStringNotMatchRegexCount);
             put("daily_partition_string_match_regex_percent", o -> o.dailyPartitionStringMatchRegexPercent);
             put("daily_partition_string_not_match_date_regex_count", o -> o.dailyPartitionStringNotMatchDateRegexCount);
@@ -144,6 +146,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidUuidCountCheckSpec dailyPartitionStringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringValidUuidPercentCheckSpec dailyPartitionValidUuidPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
@@ -591,6 +596,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInvalidUuidCount, dailyPartitionStringInvalidUuidCount));
         this.dailyPartitionStringInvalidUuidCount = dailyPartitionStringInvalidUuidCount;
         propagateHierarchyIdToField(dailyPartitionStringInvalidUuidCount, "daily_partition_string_invalid_uuid_count");
+    }
+
+    /**
+     * Returns a minimum valid UUID percent check.
+     * @return Minimum valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getDailyPartitionValidUuidPercent() {
+        return dailyPartitionValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid UUID percent check.
+     * @param dailyPartitionValidUuidPercent Minimum valid UUID percent check.
+     */
+    public void setDailyPartitionValidUuidPercent(ColumnStringValidUuidPercentCheckSpec dailyPartitionValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidUuidPercent, dailyPartitionValidUuidPercent));
+        this.dailyPartitionValidUuidPercent = dailyPartitionValidUuidPercent;
+        propagateHierarchyIdToField(dailyPartitionValidUuidPercent, "daily_partition_valid_uuid_percent");
     }
 
     /**
