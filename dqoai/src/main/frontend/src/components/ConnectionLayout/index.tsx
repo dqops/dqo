@@ -11,7 +11,7 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab } =
+  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab } =
     useTree();
 
   const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
@@ -67,25 +67,64 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                   } else if (!columnNode?.open) {
                     await refreshNode(columnNode);
                   } else {
-                    if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS || match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS_FILTER) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.checks`);
-                      changeActiveTab(node);
+
+                      if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS) {
+                        changeActiveTab(node);
+                      } else if (!node?.open) {
+                        await refreshNode(node);
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS_FILTER) {
+                        const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.checks.${category}_${checkName}`);
+                        changeActiveTab(node);
+                      }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyCheck`);
-                      changeActiveTab(node);
+
+                      if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY) {
+                        changeActiveTab(node);
+                      } else if (!node?.open) {
+                        await refreshNode(node);
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER) {
+                        const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyCheck.${category}_${checkName}`);
+                        changeActiveTab(node);
+                      }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyCheck`);
-                      changeActiveTab(node);
+
+                      if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY) {
+                        changeActiveTab(node);
+                      } else if (!node?.open) {
+                        await refreshNode(node);
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER) {
+                        const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyCheck.${category}_${checkName}`);
+                        changeActiveTab(node);
+                      }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyPartitionedChecks`);
-                      changeActiveTab(node);
+
+                      if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY) {
+                        changeActiveTab(node);
+                      } else if (!node?.open) {
+                        await refreshNode(node);
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER) {
+                        const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyPartitionedChecks.${category}_${checkName}`);
+                        changeActiveTab(node);
+                      }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyPartitionedChecks`);
-                      changeActiveTab(node);
+                      if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY) {
+                        changeActiveTab(node);
+                      } else if (!node?.open) {
+                        await refreshNode(node);
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER) {
+                        const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyPartitionedChecks.${category}_${checkName}`);
+                        changeActiveTab(node);
+                      }
                     }
                   }
                 }
@@ -155,13 +194,19 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
     })();
   }, [treeData]);
 
+  const handleChange = (value: string) => {
+    const node = findTreeNode(treeData, value);
+    switchTab(node);
+    setActiveTab(value);
+  }
+
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
         <PageTabs
           tabs={tabs}
           activeTab={activeTab}
-          onChange={setActiveTab}
+          onChange={handleChange}
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
         />
