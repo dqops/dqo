@@ -64,6 +64,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_invalid_email_count", o -> o.monthlyPartitionStringInvalidEmailCount);
             put("monthly_partition_valid_email_percent", o -> o.monthlyPartitionValidEmailPercent);
             put("monthly_partition_string_invalid_uuid_count", o -> o.monthlyPartitionStringInvalidUuidCount);
+            put("monthly_partition_valid_uuid_percent", o -> o.monthlyPartitionValidUuidPercent);
+
 
             put("monthly_partition_string_not_match_regex_count", o -> o.monthlyPartitionStringNotMatchRegexCount);
             put("monthly_partition_string_match_regex_percent", o -> o.monthlyPartitionStringMatchRegexPercent);
@@ -145,6 +147,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInvalidUuidCountCheckSpec monthlyPartitionStringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringValidUuidPercentCheckSpec monthlyPartitionValidUuidPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyPartitionStringNotMatchRegexCount;
@@ -595,6 +600,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInvalidUuidCount, monthlyPartitionStringInvalidUuidCount));
         this.monthlyPartitionStringInvalidUuidCount = monthlyPartitionStringInvalidUuidCount;
         propagateHierarchyIdToField(monthlyPartitionStringInvalidUuidCount, "monthly_partition_string_invalid_uuid_count");
+    }
+
+    /**
+     * Returns a minimum valid UUID percent check.
+     * @return Minimum valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getMonthlyPartitionValidUuidPercent() {
+        return monthlyPartitionValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid UUID percent check.
+     * @param monthlyPartitionValidUuidPercent Minimum valid UUID percent check.
+     */
+    public void setMonthlyPartitionValidUuidPercent(ColumnStringValidUuidPercentCheckSpec monthlyPartitionValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidUuidPercent, monthlyPartitionValidUuidPercent));
+        this.monthlyPartitionValidUuidPercent = monthlyPartitionValidUuidPercent;
+        propagateHierarchyIdToField(monthlyPartitionValidUuidPercent, "monthly_partition_valid_uuid_percent");
     }
 
     /**
