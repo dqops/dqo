@@ -22,7 +22,7 @@ There are two methods to synchronize metadata: CLI mode and server mode.
 
 Open the CLI and start the DQO.
 
-In order to define a frequency in [cron format](Cron_formatting.md) of a synchronization of a connection use following command:
+In order to define a frequency in [cron format](cron_formatting.md) of a synchronization of a connection use following command:
 
 ```
 --dqo.scheduler.scan-metadata-cron-schedule=<frequency>
@@ -42,7 +42,7 @@ To enable type `true`, to disable type `false`.
 
 Open the CLI, do not start DQO.
 
-In order to define a frequency in [cron format](Cron_formatting.md) of a synchronization of a connection use following command:
+In order to define a frequency in [cron format](cron_formatting.md) of a synchronization of a connection use following command:
 
 ```
 set DQO_SCHEDULER_SCANMETADATACRONSCHEDULE=<frequency>
@@ -78,9 +78,9 @@ In order to schedule a check on a certain check, open a YAML file of the table.
 
 Type `schedule_override` below the definition of the check. In this example check is named `distinct_count_percent`.
 
-Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
+Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -131,9 +131,9 @@ In order to schedule a check on a certain column, open a YAML file of the table.
 
 Type `schedule_override` between the checked column and the definition of the check. In this example the checked column is named `unique key`.
 
-Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
+Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -183,9 +183,9 @@ In order to schedule a check on a certain table, open a YAML file of a table.
 
 Type `schedule_override` between `checks: {}` and `columns:`. 
 
-Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
+Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -212,9 +212,9 @@ In order to schedule a check on a whole connection, open a YAML file of a connec
 
 Type `schedule` at the end, right after `time_zone`. 
 
-Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](Cron_formatting.md). Please use quotation marks when defining a frequency.
+Define how often a check should be run by typing `cron_expression:` and frequency in [cron format](cron_formatting.md). Please use quotation marks when defining a frequency.
 
-The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](Enabling_and_disabling_schedules.md).
+The `disabled:` option allows to switch on or off a scheduler. In order to enable a scheduler type `false`. To disable type `true`. More on enabling and disabling a schedule [here](enabling_and_disabling_schedules.md).
 
 ```
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ConnectionYaml-schema.json

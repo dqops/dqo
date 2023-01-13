@@ -21,30 +21,19 @@ nav:
   - Working with DQO:
     - Adding connections: 'working_with_dqo/add_connection.md'
   - Commands:
-      - check: 'commands/check/check.md' #cont.from next
+      - check: 'commands/check/check.md'
       - column: 'commands/column/column.md'
       - table: 'commands/table/table.md'
-#          - add: 'commands/table/add/table_add.md'
-#          - edit: 'commands/table/edit/table_edit.md'
-#          - import: 'commands/table/import/table_import.md'
-#          - list: 'commands/table/list/table_list.md'
-#          - remove: 'commands/table/remove/table_remove.md'
-#          - update: 'commands/table/update/table_update.md'
       - connection: 'commands/connection/connection.md'
-#      - connection:
-#          - connection: 'commands/connection/connection.md'
-#          - add: 'commands/connection/add/connection_add.md'
-#          - list: 'commands/connection/list/connection_list.md'
-#          - remove: 'commands/connection/remove/connection_remove.md'
-#          - update: 'commands/connection/update/connection_update.md'
+        #TODO: tbd:
       - cloud: 'commands/cloud/cloud.md'
   - Scheduler:
-    - Introduction to the scheduler: 'Scheduler/Introduction_to_the_scheduler.md'
-    - Cron formatting: 'Scheduler/Cron_formatting.md'
-    - Enabling and disabling schedules: 'Scheduler/Enabling_and_disabling_schedules.md'
-    - Cloud logging: 'Scheduler/Cloud_logging.md'
-    - Console logging modes: 'Scheduler/Console_logging_modes.md'
-    - Timezone configuration: 'Scheduler/Timezone_configuration.md'
+    - Introduction to the scheduler: 'scheduler/introduction_to_the_scheduler.md'
+    - Cron formatting: 'scheduler/cron_formatting.md'
+    - Enabling and disabling schedules: 'scheduler/enabling_and_disabling_schedules.md'
+    - Cloud logging: 'scheduler/cloud_logging.md'
+    - Console logging modes: 'scheduler/console_logging_modes.md'
+    - Timezone configuration: 'scheduler/timezone_configuration.md'
   - Check reference:
     - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
     - Timeliness:
