@@ -140,7 +140,7 @@ function TreeProvider(props: any) {
     const items = [
       {
         id: `${node.id}.columns`,
-        label: `Columns for ${connectionNode?.label}.${schemaNode?.label}.${node.label}`,
+        label: `Columns`,
         level: TREE_LEVEL.COLUMNS,
         parentId: node.id,
         items: [],
@@ -206,7 +206,7 @@ function TreeProvider(props: any) {
     const items = [
       {
         id: `${node.id}.checks`,
-        label: `Data quality checks for ${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label}`,
+        label: `Ad-hoc checks`,
         level: TREE_LEVEL.COLUMN_CHECKS,
         parentId: node.id,
         items: [],
