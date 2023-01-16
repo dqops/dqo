@@ -105,8 +105,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setColumnName(deletionParameters.getColumnName());
             setDataStreamName(deletionParameters.getDataStreamName());
             setSensorName(deletionParameters.getSensorName());
-            setQualityDimension(deletionParameters.getQualityDimension());
-            setTimeGradient(deletionParameters.getTimeGradient());
         }};
     }
 

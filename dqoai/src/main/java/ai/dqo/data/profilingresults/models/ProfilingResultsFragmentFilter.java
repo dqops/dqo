@@ -42,10 +42,6 @@ public class ProfilingResultsFragmentFilter extends ParquetDataFragmentFilter {
     private String dataStreamName;
     private String sensorName;
 
-    private String qualityDimension;
-
-    private String timeGradient;
-
     /**
      * Tell which additional columns should be read from the parquet, and what their value should be.
      * @return Mapping column name to expected value.
@@ -71,12 +67,6 @@ public class ProfilingResultsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Strings.isNullOrEmpty(sensorName)) {
             result.put(ProfilingResultsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
         }
-        if (!Strings.isNullOrEmpty(qualityDimension)) {
-            result.put("quality_dimension", qualityDimension);
-        }
-        if (!Strings.isNullOrEmpty(timeGradient)) {
-            result.put("time_gradient", timeGradient);
-        }
 
         return result;
     }
@@ -96,10 +86,7 @@ public class ProfilingResultsFragmentFilter extends ParquetDataFragmentFilter {
         if (!Objects.equals(columnName, that.columnName)) return false;
         if (!Objects.equals(dataStreamName, that.dataStreamName))
             return false;
-        if (!Objects.equals(sensorName, that.sensorName)) return false;
-        if (!Objects.equals(qualityDimension, that.qualityDimension))
-            return false;
-        return Objects.equals(timeGradient, that.timeGradient);
+        return Objects.equals(sensorName, that.sensorName);
     }
 
     @Override
@@ -111,8 +98,6 @@ public class ProfilingResultsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
         result = 31 * result + (dataStreamName != null ? dataStreamName.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
-        result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);
-        result = 31 * result + (timeGradient != null ? timeGradient.hashCode() : 0);
         return result;
     }
 }

@@ -33,7 +33,7 @@ import java.util.Map;
 
 @Service
 public class ProfilingResultsDeleteServiceImpl implements ProfilingResultsDeleteService {
-    private final String TIME_SERIES_COLUMN_NAME = "time_period";
+    private final String TIME_SERIES_COLUMN_NAME = ProfilingResultsColumnNames.PROFILED_AT_COLUMN_NAME;
 
     private ParquetPartitionStorageService parquetPartitionStorageService;
 
@@ -55,7 +55,7 @@ public class ProfilingResultsDeleteServiceImpl implements ProfilingResultsDelete
             columnNames.add(TIME_SERIES_COLUMN_NAME);
         }
 
-        FileStorageSettings fileStorageSettings = ProfilingResultsSnapshot.createRuleResultsStorageSettings();
+        FileStorageSettings fileStorageSettings = ProfilingResultsSnapshot.createProfilingResultsStorageSettings();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> presentData =
                 parquetPartitionStorageService.loadPartitionsForMonthsRange(
