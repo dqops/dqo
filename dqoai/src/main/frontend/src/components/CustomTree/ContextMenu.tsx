@@ -11,6 +11,7 @@ import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
 import qs from 'query-string';
 import { useHistory } from 'react-router-dom';
+import { ROUTES } from "../../shared/routes";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -49,12 +50,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   };
 
   const importMetaData = () => {
-    const searchQuery = qs.stringify({
-      connection: node.label,
-      tab: 'schemas',
-      source: true
-    });
-    history.replace(`/checks?${searchQuery}`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(node.label || '', 'schemas')}?import_schema=true`)
     setOpen(false);
   };
   const importTables = () => {
