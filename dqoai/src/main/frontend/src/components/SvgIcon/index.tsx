@@ -55,6 +55,8 @@ import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as FolderSvg } from './svg/folder.svg';
 import { ReactComponent as StarSvg } from './svg/star.svg';
+import { ReactComponent as ColumnCheckSvg } from './svg/column-check.svg';
+import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -111,7 +113,9 @@ const iconsMap: any = {
   'chevron-right': ChevronRightSvg,
   'chevron-left': ChevronLeftSvg,
   folder: FolderSvg,
-  star: StarSvg
+  star: StarSvg,
+  'column-check': ColumnCheckSvg,
+  'table-check': TableCheckSvg
 };
 
 interface SvgIconProps {

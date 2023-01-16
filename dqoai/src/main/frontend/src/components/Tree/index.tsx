@@ -26,6 +26,24 @@ const Tree = () => {
     if (level === TREE_LEVEL.DATABASE) return 'database';
     if (level === TREE_LEVEL.SCHEMA) return 'schema';
     if (level === TREE_LEVEL.TABLE) return 'table';
+    if (level === TREE_LEVEL.CHECK) return 'search';
+    if (level === TREE_LEVEL.COLUMNS ||  level === TREE_LEVEL.COLUMN) return 'column';
+    if (level === TREE_LEVEL.COLUMN_CHECKS
+      || level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS
+      || level === TREE_LEVEL.COLUMN_DAILY_CHECKS
+      || level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS
+      || level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS
+    ) {
+      return 'column-check';
+    }
+    if (level === TREE_LEVEL.TABLE_CHECKS
+      || level === TREE_LEVEL.TABLE_DAILY_CHECKS
+      || level === TREE_LEVEL.TABLE_MONTHLY_CHECKS
+      || level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS
+      || level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS
+    ) {
+      return 'table-check';
+    }
 
     return 'column';
   };
