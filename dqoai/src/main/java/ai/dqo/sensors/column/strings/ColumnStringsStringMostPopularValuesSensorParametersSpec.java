@@ -33,50 +33,50 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringTopPopularValuesSetSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringTopPopularValuesSetSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMostPopularValuesSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
-    private List<String> values;
+    private List<String> expectedValues;
 
     @JsonPropertyDescription("Provided limit of top popular values.")
-    private Long limit;
+    private Long topValues;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getValues() {
-        return values;
+    public List<String> getExpectedValues() {
+        return expectedValues;
     }
 
     /**
      * Sets a List given from user.
-     * @param values values given from user.
+     * @param expectedValues values given from user.
      */
-    public void setValues(List<String> values) {
-        this.setDirtyIf(!Objects.equals(this.values, values));
-        this.values = values;
+    public void setExpectedValues(List<String> expectedValues) {
+        this.setDirtyIf(!Objects.equals(this.expectedValues, expectedValues));
+        this.expectedValues = expectedValues;
     }
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public Long getLimit() {
-        return limit;
+    public Long getTopValues() {
+        return topValues;
     }
 
     /**
      * Sets a List given from user.
-     * @param limit values given from user.
+     * @param topValues values given from user.
      */
-    public void setLimit(Long limit) {
-        this.setDirtyIf(!Objects.equals(this.limit, limit));
-        this.limit = limit;
+    public void setTopValues(Long topValues) {
+        this.setDirtyIf(!Objects.equals(this.topValues, topValues));
+        this.topValues = topValues;
     }
 
     /**
@@ -96,6 +96,6 @@ public class ColumnStringsStringTopPopularValuesSetSensorParametersSpec extends 
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_top_popular_values_set";
+        return "column/strings/string_most_popular_values";
     }
 }

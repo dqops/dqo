@@ -47,6 +47,6 @@ SELECT
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ top_value() -}}
 {{- lib.render_where_clause() -}}
-{{- lib.render_group_by() -}}
+{{- lib.render_group_by() -}},
 {{- lib.render_order_by() -}}
 

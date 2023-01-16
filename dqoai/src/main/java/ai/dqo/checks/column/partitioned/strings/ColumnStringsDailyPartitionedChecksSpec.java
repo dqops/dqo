@@ -70,6 +70,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_not_match_date_regex_count", o -> o.dailyPartitionStringNotMatchDateRegexCount);
             put("daily_partition_string_match_date_regex_percent", o -> o.dailyPartitionStringMatchDateRegexPercent);
             put("daily_partition_string_match_name_regex_percent", o -> o.dailyPartitionStringMatchNameRegexPercent);
+
+            put("daily_partition_string_most_popular_values", o -> o.dailyPartitionStringMostPopularValues);
         }
     };
 
@@ -159,6 +161,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyPartitionStringMatchNameRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    private ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues;
 
     /**
      * Returns a maximum string length below  check.
@@ -681,6 +686,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMatchNameRegexPercent, dailyPartitionStringMatchNameRegexPercent));
         this.dailyPartitionStringMatchNameRegexPercent = dailyPartitionStringMatchNameRegexPercent;
         propagateHierarchyIdToField(dailyPartitionStringMatchNameRegexPercent, "daily_partition_string_match_name_regex_percent");
+    }
+
+    /**
+     * Returns a count of expected values in most popular values set count check.
+     * @return Most popular values count check.
+     */
+    public ColumnStringMostPopularValuesCheckSpec getDailyPartitionStringMostPopularValues() {
+        return dailyPartitionStringMostPopularValues;
+    }
+
+    /**
+     * Sets a new definition of a most popular values count check.
+     * @param dailyPartitionStringMostPopularValues Most popular values count check.
+     */
+    public void setDailyPartitionStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMostPopularValues, dailyPartitionStringMostPopularValues));
+        this.dailyPartitionStringMostPopularValues = dailyPartitionStringMostPopularValues;
+        propagateHierarchyIdToField(dailyPartitionStringMostPopularValues, "daily_partition_string_most_popular_values");
     }
 
     /**

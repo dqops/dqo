@@ -71,7 +71,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
             put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
-            put("string_top_popular_values_set", o -> o.stringTopPopularValuesSet);
+            put("string_most_popular_values", o -> o.stringMostPopularValues);
         }
     };
 
@@ -164,7 +164,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
-    private ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet;
+    private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
 
     /**
      * Returns a maximum string length below check.
@@ -690,21 +690,21 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a maximum match name regex percent check.
-     * @return Maximum match name regex percent check.
+     * Returns a count of expected values in most popular values set count check.
+     * @return Most popular values count check.
      */
-    public ColumnStringTopPopularValuesSetCheckSpec getStringTopPopularValuesSet() {
-        return stringTopPopularValuesSet;
+    public ColumnStringMostPopularValuesCheckSpec getStringMostPopularValues() {
+        return stringMostPopularValues;
     }
 
     /**
-     * Sets a new definition of a maximum match name regex percent check.
-     * @param stringTopPopularValuesSet Maximum match name regex percent check.
+     * Sets a new definition of a most popular values count check.
+     * @param stringMostPopularValues Most popular values count check.
      */
-    public void setStringTopPopularValuesSet(ColumnStringTopPopularValuesSetCheckSpec stringTopPopularValuesSet) {
-        this.setDirtyIf(!Objects.equals(this.stringTopPopularValuesSet, stringTopPopularValuesSet));
-        this.stringTopPopularValuesSet = stringTopPopularValuesSet;
-        propagateHierarchyIdToField(stringTopPopularValuesSet, "string_top_popular_values_set");
+    public void setStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec stringMostPopularValues) {
+        this.setDirtyIf(!Objects.equals(this.stringMostPopularValues, stringMostPopularValues));
+        this.stringMostPopularValues = stringMostPopularValues;
+        propagateHierarchyIdToField(stringMostPopularValues, "string_most_popular_values");
     }
 
     /**

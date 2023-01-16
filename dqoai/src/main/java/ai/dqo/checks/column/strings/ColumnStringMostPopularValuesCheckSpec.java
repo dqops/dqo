@@ -20,8 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringTopPopularValuesSetSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMostPopularValuesSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringTopPopularValuesSetCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringTopPopularValuesSetSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringTopPopularValuesSetCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringMostPopularValuesCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringMostPopularValuesSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringMostPopularValuesCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,7 +47,7 @@ public class ColumnStringTopPopularValuesSetCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringTopPopularValuesSetSensorParametersSpec parameters = new ColumnStringsStringTopPopularValuesSetSensorParametersSpec();
+    private ColumnStringsStringMostPopularValuesSensorParametersSpec parameters = new ColumnStringsStringMostPopularValuesSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +69,7 @@ public class ColumnStringTopPopularValuesSetCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringTopPopularValuesSetSensorParametersSpec getParameters() {
+    public ColumnStringsStringMostPopularValuesSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +77,7 @@ public class ColumnStringTopPopularValuesSetCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringTopPopularValuesSetSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringMostPopularValuesSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
