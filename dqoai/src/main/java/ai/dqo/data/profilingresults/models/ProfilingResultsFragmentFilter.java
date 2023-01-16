@@ -18,6 +18,7 @@ package ai.dqo.data.profilingresults.models;
 
 import ai.dqo.data.models.ParquetDataFragmentFilter;
 import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.profilingresults.factory.ProfilingResultsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
@@ -53,22 +54,22 @@ public class ProfilingResultsFragmentFilter extends ParquetDataFragmentFilter {
     public Map<String, String> getColumnConditions() {
         Map<String, String> result = new HashMap<>();
         if (!Strings.isNullOrEmpty(profilerCategory)) {
-            result.put("profiler_category", profilerCategory);
+            result.put(ProfilingResultsColumnNames.PROFILER_CATEGORY_COLUMN_NAME, profilerCategory);
         }
         if (!Strings.isNullOrEmpty(profilerName)) {
-            result.put("profiler_name", profilerName);
+            result.put(ProfilingResultsColumnNames.PROFILER_NAME_COLUMN_NAME, profilerName);
         }
         if (!Strings.isNullOrEmpty(profilerType)) {
-            result.put("profiler_type", profilerType);
+            result.put(ProfilingResultsColumnNames.PROFILER_TYPE_COLUMN_NAME, profilerType);
         }
         if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(CommonColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
+            result.put(ProfilingResultsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
-            result.put(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
+            result.put(ProfilingResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
-            result.put(CommonColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
+            result.put(ProfilingResultsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
         }
         if (!Strings.isNullOrEmpty(qualityDimension)) {
             result.put("quality_dimension", qualityDimension);

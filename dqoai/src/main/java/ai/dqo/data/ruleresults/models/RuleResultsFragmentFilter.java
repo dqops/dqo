@@ -18,6 +18,7 @@ package ai.dqo.data.ruleresults.models;
 
 import ai.dqo.data.models.ParquetDataFragmentFilter;
 import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
@@ -45,28 +46,28 @@ public class RuleResultsFragmentFilter extends ParquetDataFragmentFilter {
     public Map<String, String> getColumnConditions() {
         Map<String, String> result = new HashMap<>();
         if (!Strings.isNullOrEmpty(checkCategory)) {
-            result.put("check_category", checkCategory);
+            result.put(RuleResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME, checkCategory);
         }
         if (!Strings.isNullOrEmpty(checkName)) {
-            result.put("check_name", checkName);
+            result.put(RuleResultsColumnNames.CHECK_NAME_COLUMN_NAME, checkName);
         }
         if (!Strings.isNullOrEmpty(checkType)) {
-            result.put("check_type", checkType);
+            result.put(RuleResultsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
         }
         if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(CommonColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
+            result.put(RuleResultsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
-            result.put(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
+            result.put(RuleResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
-            result.put(CommonColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
+            result.put(RuleResultsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
         }
         if (!Strings.isNullOrEmpty(qualityDimension)) {
-            result.put("quality_dimension", qualityDimension);
+            result.put(RuleResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);
         }
         if (!Strings.isNullOrEmpty(timeGradient)) {
-            result.put("time_gradient", timeGradient);
+            result.put(RuleResultsColumnNames.TIME_GRADIENT_COLUMN_NAME, timeGradient);
         }
 
         return result;

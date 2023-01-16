@@ -17,6 +17,7 @@
 package ai.dqo.data.profilingresults.services;
 
 import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.profilingresults.factory.ProfilingResultsColumnNames;
 import ai.dqo.data.profilingresults.models.ProfilingResultsFragmentFilter;
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshot;
 import ai.dqo.data.storage.*;

@@ -17,6 +17,7 @@
 package ai.dqo.data.readouts.services;
 
 import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.storage.*;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Service
 public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
-    private final String TIME_SERIES_COLUMN_NAME = "time_period";
+    private final String TIME_SERIES_COLUMN_NAME = SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME;
 
     private ParquetPartitionStorageService parquetPartitionStorageService;
 

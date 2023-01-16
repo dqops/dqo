@@ -16,6 +16,7 @@
 
 package ai.dqo.data.errors.models;
 
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.models.ParquetDataFragmentFilter;
 import ai.dqo.data.normalization.CommonColumnNames;
 import lombok.Data;
@@ -51,25 +52,25 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
     public Map<String, String> getColumnConditions() {
         Map<String, String> result = new HashMap<>();
         if (!Strings.isNullOrEmpty(checkCategory)) {
-            result.put("check_category", checkCategory);
+            result.put(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME, checkCategory);
         }
         if (!Strings.isNullOrEmpty(checkName)) {
-            result.put("check_name", checkName);
+            result.put(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME, checkName);
         }
         if (!Strings.isNullOrEmpty(checkType)) {
-            result.put("check_type", checkType);
+            result.put(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
         }
         if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(CommonColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
+            result.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
-            result.put(CommonColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
+            result.put(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
         }
         if (!Strings.isNullOrEmpty(qualityDimension)) {
-            result.put("quality_dimension", qualityDimension);
+            result.put(ErrorsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);
         }
         if (!Strings.isNullOrEmpty(timeGradient)) {
-            result.put("time_gradient", timeGradient);
+            result.put(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME, timeGradient);
         }
 
         return result;

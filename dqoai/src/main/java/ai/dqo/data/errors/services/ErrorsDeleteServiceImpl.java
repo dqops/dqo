@@ -16,6 +16,7 @@
 
 package ai.dqo.data.errors.services;
 
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.normalization.CommonColumnNames;
@@ -32,7 +33,7 @@ import java.util.Map;
 
 @Service
 public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
-    private final String TIME_SERIES_COLUMN_NAME = "time_period";
+    private final String TIME_SERIES_COLUMN_NAME = ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME;
 
     private ParquetPartitionStorageService parquetPartitionStorageService;
 

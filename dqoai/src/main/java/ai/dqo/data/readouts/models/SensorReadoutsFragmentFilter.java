@@ -18,6 +18,7 @@ package ai.dqo.data.readouts.models;
 
 import ai.dqo.data.models.ParquetDataFragmentFilter;
 import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
@@ -53,28 +54,28 @@ public class SensorReadoutsFragmentFilter extends ParquetDataFragmentFilter {
     public Map<String, String> getColumnConditions() {
         Map<String, String> result = new HashMap<>();
         if (!Strings.isNullOrEmpty(checkCategory)) {
-            result.put("check_category", checkCategory);
+            result.put(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, checkCategory);
         }
         if (!Strings.isNullOrEmpty(checkName)) {
-            result.put("check_name", checkName);
+            result.put(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, checkName);
         }
         if (!Strings.isNullOrEmpty(checkType)) {
-            result.put("check_type", checkType);
+            result.put(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
         }
         if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(CommonColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
+            result.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
-            result.put(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
+            result.put(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
-            result.put(CommonColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
+            result.put(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
         }
         if (!Strings.isNullOrEmpty(qualityDimension)) {
-            result.put("quality_dimension", qualityDimension);
+            result.put(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);
         }
         if (!Strings.isNullOrEmpty(timeGradient)) {
-            result.put("time_gradient", timeGradient);
+            result.put(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, timeGradient);
         }
 
         return result;
