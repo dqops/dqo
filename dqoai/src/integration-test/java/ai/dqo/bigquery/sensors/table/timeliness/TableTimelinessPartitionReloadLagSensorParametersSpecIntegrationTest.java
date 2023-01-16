@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.table.relevance;
+package ai.dqo.bigquery.sensors.table.timeliness;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
-import ai.dqo.checks.table.relevance.TableRelevanceMovingWeekAverageCheckSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,18 +29,19 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.relevance.TableRelevanceMovingWeekAverageSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessPartitionReloadLagSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+
 @SpringBootTest
-public class TableRelevanceMovingWeekAverageSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private TableRelevanceMovingWeekAverageSensorParametersSpec sut;
+public class TableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private TableTimelinessPartitionReloadLagSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableRelevanceMovingWeekAverageCheckSpec checkSpec;
+    private TablePartitionReloadLagCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     /**
@@ -52,23 +54,43 @@ public class TableRelevanceMovingWeekAverageSensorParametersSpecIntegrationTest 
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableRelevanceMovingWeekAverageSensorParametersSpec();
-        this.checkSpec = new TableRelevanceMovingWeekAverageCheckSpec();
+        this.sut = new TableTimelinessPartitionReloadLagSensorParametersSpec();
+        this.checkSpec = new TablePartitionReloadLagCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(9.125, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(21.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
     }
 }

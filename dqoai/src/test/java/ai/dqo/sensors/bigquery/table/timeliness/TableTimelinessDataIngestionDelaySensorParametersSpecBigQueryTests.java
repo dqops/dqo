@@ -118,13 +118,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -153,13 +155,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -184,13 +188,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -215,13 +221,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -251,13 +259,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -285,13 +295,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -319,13 +331,15 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
             SELECT
                 TIMESTAMP_DIFF(
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MAX(
-                        CAST(%s AS TIMESTAMP)
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
                     ),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
