@@ -9,6 +9,7 @@ import qs from 'query-string';
 import { useTree } from '../../contexts/treeContext';
 import { findTreeNode } from '../../utils/tree';
 import { TREE_LEVEL } from '../../shared/enums';
+import { ROUTES } from "../../shared/routes";
 
 interface ICheckSettingsTabProps {
   check?: UICheckModel;
@@ -53,13 +54,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
       }
       changeActiveTab(node, true);
     }
-    const searchQuery = qs.stringify({
-      connection,
-      schema,
-      table,
-      tab: 'data-streams'
-    });
-    history.replace(`/checks?${searchQuery}`);
+    history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, 'data-streams'));
   };
 
   return (
