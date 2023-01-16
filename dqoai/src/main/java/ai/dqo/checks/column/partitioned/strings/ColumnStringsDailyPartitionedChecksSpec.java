@@ -65,6 +65,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
             put("daily_partition_string_invalid_uuid_count", o -> o.dailyPartitionStringInvalidUuidCount);
             put("daily_partition_valid_uuid_percent", o -> o.dailyPartitionValidUuidPercent);
+            put("daily_partition_string_invalid_ip4_address_count", o -> o.dailyPartitionStringInvalidIp4AddressCount);
+
 
 
             put("daily_partition_string_not_match_regex_count", o -> o.dailyPartitionStringNotMatchRegexCount);
@@ -149,6 +151,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidUuidPercentCheckSpec dailyPartitionValidUuidPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringInvalidIp4AddressCountCheckSpec dailyPartitionStringInvalidIp4AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
@@ -614,6 +619,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValidUuidPercent, dailyPartitionValidUuidPercent));
         this.dailyPartitionValidUuidPercent = dailyPartitionValidUuidPercent;
         propagateHierarchyIdToField(dailyPartitionValidUuidPercent, "daily_partition_valid_uuid_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP4 address count check.
+     * @return Maximum invalid IP4 address count check.
+     */
+    public ColumnStringInvalidIp4AddressCountCheckSpec getDailyPartitionStringInvalidIp4AddressCount() {
+        return dailyPartitionStringInvalidIp4AddressCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid IP4 address count check.
+     * @param dailyPartitionStringInvalidIp4AddressCount Maximum invalid IP4 address count check.
+     */
+    public void setDailyPartitionStringInvalidIp4AddressCount(ColumnStringInvalidIp4AddressCountCheckSpec dailyPartitionStringInvalidIp4AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInvalidIp4AddressCount, dailyPartitionStringInvalidIp4AddressCount));
+        this.dailyPartitionStringInvalidIp4AddressCount = dailyPartitionStringInvalidIp4AddressCount;
+        propagateHierarchyIdToField(dailyPartitionStringInvalidIp4AddressCount, "daily_partition_string_invalid_ip4_address_count");
     }
 
     /**
