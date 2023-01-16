@@ -65,6 +65,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_valid_email_percent", o -> o.stringValidEmailPercent);
             put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
             put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
+            put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
 
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
@@ -152,6 +153,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage.")
     private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -617,6 +621,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringValidUuidPercent, stringValidUuidPercent));
         this.stringValidUuidPercent = stringValidUuidPercent;
         propagateHierarchyIdToField(stringValidUuidPercent, "string_valid_uuid_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP4 address count check.
+     * @return Maximum invalid IP4 address count check.
+     */
+    public ColumnStringInvalidIp4AddressCountCheckSpec getStringInvalidIp4AddressCount() {
+        return stringInvalidIp4AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP4 address count check.
+     * @param stringInvalidIp4AddressCount Invalid IP4 address count check.
+     */
+    public void setStringInvalidIp4AddressCount(ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp4AddressCount, stringInvalidIp4AddressCount));
+        this.stringInvalidIp4AddressCount = stringInvalidIp4AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp4AddressCount, "string_invalid_ip4_address_count");
     }
 
     /**
