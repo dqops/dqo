@@ -54,7 +54,7 @@ public class DqoHomeContext {
      * @param dqoHome Dqo home model
      */
     public void setDqoHome(DqoHome dqoHome) {
-        assert dqoHome instanceof ai.dqo.metadata.storage.localfiles.dqohome.FileDqoHomeImpl &&  ((ai.dqo.metadata.storage.localfiles.dqohome.FileDqoHomeImpl)dqoHome).getHomeFolder() == this.homeRoot;
+        assert dqoHome instanceof FileDqoHomeImpl && ((FileDqoHomeImpl)dqoHome).getHomeFolder() == this.homeRoot;
         this.dqoHome = dqoHome;
     }
 

@@ -169,6 +169,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @return Self - for fluent continuation.
      */
     public DashboardsFolderSpec withFolder(String folderName, Consumer<DashboardsFolderSpec> childFolderConfigurer) {
+        if (this.folders.stream().anyMatch(f -> Objects.equals(f.getFolderName(), folderName))) {
+            throw new IllegalStateException("Folder name '" + folderName + "' was already added");
+        }
+
         DashboardsFolderSpec childFolder = new DashboardsFolderSpec();
         childFolder.setFolderName(folderName);
         if (childFolderConfigurer != null) {
@@ -188,6 +192,10 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * @return Self.
      */
     public DashboardsFolderSpec withDqoCloudDashboard(String dashboardName, String url, Integer width, Integer height) {
+        if (this.dashboards.stream().anyMatch(d -> Objects.equals(d.getDashboardName(), dashboardName))) {
+            throw new IllegalStateException("Dashboard name '" + dashboardName + "' was already added");
+        }
+
         DashboardSpec dashboardSpec = new DashboardSpec() {{
             setDashboardName(dashboardName);
             setUrl(url);

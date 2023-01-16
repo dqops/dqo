@@ -33,4 +33,12 @@ public class LocalDqoHomeFileStorageServiceImpl extends LocalFileStorageServiceI
     public LocalDqoHomeFileStorageServiceImpl(HomeLocationFindService homeLocationFindService) {
         super(homeLocationFindService.getDqoHomePath());
     }
+
+    /**
+     * Creates a local DQO home file storage service given a direct path to the DQO_HOME folder.
+     * @param homePath Path to the DQO_HOME folder.
+     */
+    public LocalDqoHomeFileStorageServiceImpl(String homePath) {
+        super(homePath);
+    }
 }

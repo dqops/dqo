@@ -75,7 +75,7 @@ const TablePage = () => {
   } = useSelector((state: IRootState) => state.table);
 
   const onChangeTab = (tab: string) => {
-    history.replace(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, tab));
+    history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, tab));
     setTabMap({
       ...tabMap,
       [pageTab]: tab

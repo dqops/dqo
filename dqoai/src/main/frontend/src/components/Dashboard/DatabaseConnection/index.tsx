@@ -11,6 +11,8 @@ import {
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import { useHistory } from 'react-router-dom';
+import TimezoneSelect from "../../TimezoneSelect";
+import { ROUTES } from "../../../shared/routes";
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -38,7 +40,7 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push('/?tab=schemas');
+    history.push(ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas'));
   };
 
   return (
@@ -75,11 +77,11 @@ const DatabaseConnection = ({
             onChange({ ...database, connection_name: e.target.value })
           }
         />
-        <Input
+        <TimezoneSelect
           label="Timezone"
           className="mb-4"
+          onChange={(value) => onChange({ ...database, time_zone: value })}
           value={database.time_zone}
-          onChange={(e) => onChange({ ...database, time_zone: e.target.value })}
         />
 
         {database.provider_type !==

@@ -6,9 +6,16 @@ import { Option } from "../DataQualityChecks/ColumnSelect";
 interface ITimezoneSelectProps {
   value?: string;
   onChange: (value: string) => void;
+  className?: string;
+  label?: string;
 }
 
-const TimezoneSelect = ({ value, onChange }: ITimezoneSelectProps) => {
+const TimezoneSelect = ({
+  value,
+  onChange,
+  className,
+  label
+}: ITimezoneSelectProps) => {
   const [options, setOptions] = useState<Option[]>([]);
 
   useEffect(() => {
@@ -21,7 +28,12 @@ const TimezoneSelect = ({ value, onChange }: ITimezoneSelectProps) => {
   }, []);
 
   return (
-    <div>
+    <div className={className}>
+      {label && (
+        <div className="text-gray-700 text-sm mb-1">
+          {label}
+        </div>
+      )}
       <SelectInput options={options} value={value} onChange={onChange} limit={10} />
     </div>
   );

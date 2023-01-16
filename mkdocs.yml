@@ -1,6 +1,18 @@
 site_name: DQO AI
 site_url: https://docs.dqo.ai/latest/
 
+# Plugins
+plugins:
+  - search
+  - include-markdown:
+      opening_tag: "{%"
+      closing_tag: "%}"
+      preserve_includer_indent: false
+  - macros:
+      #      include_dir: home/sensors/dialects/
+      include_dir: docs/dialects/
+      module_name: docs/render_macros
+
 # Docs navigation
 nav:
   - Home: 'index.md'
@@ -93,7 +105,111 @@ nav:
           - not_null_count: 'examples/validity/not_null_count/not_null_count.md'
           - non_negative_count: 'examples/validity/non_negative_count/non_negative_count.md'
           - numerical_type_percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
+########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
   - Sensor reference:
+    - column:
+      - bool:
+        - false_percent: 'sensors/column/bool/false_percent.md'
+        - true_percent: 'sensors/column/bool/true_percent.md'
+      - completeness:
+        - missing_dates_count: 'sensors/column/completeness/missing_dates_count.md'
+      - consistency:
+        - not_null_percent: 'sensors/column/consistency/not_null_percent.md'
+      - datetime:
+        - date_values_in_future_percent: 'sensors/column/datetime/date_values_in_future_percent.md'
+      - nulls:
+        - not_null_count: 'sensors/column/nulls/not_null_count.md'
+        - null_count: 'sensors/column/nulls/null_count.md'
+        - null_percent: 'sensors/column/nulls/null_percent.md'
+      - numeric:
+        - negative_count: 'sensors/column/numeric/negative_count.md'
+        - negative_percent: 'sensors/column/numeric/negative_percent.md'
+        - numbers_in_set_count: 'sensors/column/numeric/numbers_in_set_count.md'
+        - numbers_in_set_percent: 'sensors/column/numeric/numbers_in_set_percent.md'
+        - values_in_range_integers_percent: 'sensors/column/numeric/values_in_range_integers_percent.md'
+        - values_in_range_numeric_percent: 'sensors/column/numeric/values_in_range_numeric_percent.md'
+      - pii:
+        - contains_usa_phone_percent: 'sensors/column/pii/contains_usa_phone_percent.md'
+        - contains_usa_zipcode_percent: 'sensors/column/pii/contains_usa_zipcode_percent.md'
+      - range:
+        - max_value: 'sensors/column/range/max_value.md'
+        - min_value: 'sensors/column/range/min_value.md'
+      - sql:
+        - sql_aggregated_expression: 'sensors/column/sql/sql_aggregated_expression.md'
+        - sql_condition_failed_count: 'sensors/column/sql/sql_condition_failed_count.md'
+        - sql_condition_failed_percent: 'sensors/column/sql/sql_condition_failed_percent.md'
+        - sql_condition_passed_count: 'sensors/column/sql/sql_condition_passed_count.md'
+        - sql_condition_passed_percent: 'sensors/column/sql/sql_condition_passed_percent.md'
+      - strings:
+        - string_boolean_placeholder_percent: 'sensors/column/strings/string_boolean_placeholder_percent.md'
+        - string_empty_count: 'sensors/column/strings/string_empty_count.md'
+        - string_empty_percent: 'sensors/column/strings/string_empty_percent.md'
+        - string_in_set_count: 'sensors/column/strings/string_in_set_count.md'
+        - string_in_set_percent: 'sensors/column/strings/string_in_set_percent.md'
+        - string_invalid_email_count: 'sensors/column/strings/string_invalid_email_count.md'
+        - string_invalid_uuid_count: 'sensors/column/strings/string_invalid_uuid_count.md'
+        - string_match_date_regex_percent: 'sensors/column/strings/string_match_date_regex_percent.md'
+        - string_match_name_regex_percent: 'sensors/column/strings/string_match_name_regex_percent.md'
+        - string_max_length: 'sensors/column/strings/string_max_length.md'
+        - string_mean_length: 'sensors/column/strings/string_mean_length.md'
+        - string_min_length: 'sensors/column/strings/string_min_length.md'
+        - string_not_match_date_regex_count: 'sensors/column/strings/string_not_match_date_regex_count.md'
+        - string_not_match_regex_count: 'sensors/column/strings/string_not_match_regex_count.md'
+        - string_null_placeholder_count: 'sensors/column/strings/string_null_placeholder_count.md'
+        - string_null_placeholder_percent: 'sensors/column/strings/string_null_placeholder_percent.md'
+        - string_parsable_to_float_percent: 'sensors/column/strings/string_parsable_to_float_percent.md'
+        - string_parsable_to_integer_percent: 'sensors/column/strings/string_parsable_to_integer_percent.md'
+        - string_regex_match_percent: 'sensors/column/strings/string_regex_match_percent.md'
+        - string_surrounded_by_whitespace_count: 'sensors/column/strings/string_surrounded_by_whitespace_count.md'
+        - string_surrounded_by_whitespace_percent: 'sensors/column/strings/string_surrounded_by_whitespace_percent.md'
+        - string_valid_country_code_percent: 'sensors/column/strings/string_valid_country_code_percent.md'
+        - string_valid_currency_code_percent: 'sensors/column/strings/string_valid_currency_code_percent.md'
+        - string_valid_date_percent: 'sensors/column/strings/string_valid_date_percent.md'
+        - string_valid_email_percent: 'sensors/column/strings/string_valid_email_percent.md'
+        - string_valid_usa_phone_percent: 'sensors/column/strings/string_valid_usa_phone_percent.md'
+        - string_valid_usa_zipcode_percent: 'sensors/column/strings/string_valid_usa_zipcode_percent.md'
+        - string_valid_uuid_percent: 'sensors/column/strings/string_valid_uuid_percent.md'
+        - string_whitespace_count: 'sensors/column/strings/string_whitespace_count.md'
+        - string_whitespace_percent: 'sensors/column/strings/string_whitespace_percent.md'
+      - uniqueness:
+        - unique_count: 'sensors/column/uniqueness/unique_count.md'
+        - distinct_percent: 'sensors/column/uniqueness/distinct_percent.md'
+        - duplicate_count: 'sensors/column/uniqueness/duplicate_count.md'
+        - duplicate_percent: 'sensors/column/uniqueness/duplicate_percent.md'
+        - unique_count: 'sensors/column/uniqueness/unique_count.md'
+      - validity:
+        - date_type_percent: 'sensors/column/validity/date_type_percent.md'
+        - non_negative_count: 'sensors/column/validity/non_negative_count.md'
+        - non_negative_percent: 'sensors/column/validity/non_negative_percent.md'
+        - not_null_count: 'sensors/column/validity/not_null_count.md'
+        - numerical_type_percent: 'sensors/column/validity/numerical_type_percent.md'
+        - regex_match_percent: 'sensors/column/validity/regex_match_percent.md'
+        - string_length_in_range_percent: 'sensors/column/validity/string_length_in_range_percent.md'
+        - value_in_range_date_percent: 'sensors/column/validity/value_in_range_date_percent.md'
+        - value_in_range_numerical_percent: 'sensors/column/validity/value_in_range_numerical_percent.md'
+        - values_in_set_percent: 'sensors/column/validity/values_in_set_percent.md'
+    - table:
+      - consistency:
+        - row_count: 'sensors/table/consistency/row_count.md'
+      - relevance:
+        - moving_week_average: 'sensors/table/relevance/moving_week_average.md'
+      - sql:
+        - sql_aggregated_expression: 'sensors/table/sql/sql_aggregated_expression.md'
+        - sql_condition_failed_count: 'sensors/table/sql/sql_condition_failed_count.md'
+        - sql_condition_failed_percent: 'sensors/table/sql/sql_condition_failed_percent.md'
+        - sql_condition_passed_count: 'sensors/table/sql/sql_condition_passed_count.md'
+        - sql_condition_passed_percent: 'sensors/table/sql/sql_condition_passed_percent.md'
+      - standard:
+        - row_count: 'sensors/table/standard/row_count.md'
+      - timeliness:
+        - data_ingestion_delay: 'sensors/table/timeliness/data_ingestion_delay.md'
+        - days_since_most_recent_event: 'sensors/table/timeliness/days_since_most_recent_event.md'
+        - days_since_most_recent_ingestion: 'sensors/table/timeliness/days_since_most_recent_ingestion.md'
+        - partition_reload_lag: 'sensors/table/timeliness/partition_reload_lag.md'
+      - validity:
+        - row_count: 'sensors/table/validity/row_count.md'
+########## END INCLUDE
+  - Sensor reference (old):
       - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
       - Timeliness:
           - Average delay: 'sensor_reference/timeliness/average_delay/average_delay.md'
@@ -163,14 +279,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
-# Plugins
-plugins:
-  - search
-  - macros:
-#      include_dir: home/sensors/dialects/
-      include_dir: docs/dialects/
-      module_name: docs/render_macros
 
 extra:
   analytics:

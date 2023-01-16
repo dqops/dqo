@@ -64,6 +64,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
             put("string_valid_email_percent", o -> o.stringValidEmailPercent);
             put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
+            put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
+
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
@@ -147,6 +149,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage.")
+    private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -596,6 +601,23 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(stringInvalidUuidCount, "string_invalid_uuid_count");
     }
 
+    /**
+     * Returns a valid UUID percent check.
+     * @return Valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getStringValidUuidPercent() {
+        return stringValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid UUID percent check.
+     * @param stringValidUuidPercent Valid UUID percent check.
+     */
+    public void setStringValidUuidPercent(ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidUuidPercent, stringValidUuidPercent));
+        this.stringValidUuidPercent = stringValidUuidPercent;
+        propagateHierarchyIdToField(stringValidUuidPercent, "string_valid_uuid_percent");
+    }
 
     /**
      * Returns a maximum not match regex count check.
