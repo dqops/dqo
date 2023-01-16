@@ -2,36 +2,50 @@
 
 {% macro render_ingestion_event_max_diff() -%}
     {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' and
-     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
-         TIMESTAMP_DIFF(
-             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-             MILLISECOND)
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+    TIMESTAMP_DIFF(
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
-         DATE_DIFF(
-             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-             MILLISECOND)
+    DATE_DIFF(
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' and
     table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
-        DATETIME_DIFF(
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-            MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-            MILLISECOND)
+    DATETIME_DIFF(
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
     table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
-        DATETIME_DIFF(
-            MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-                ),
-            MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-                ),
-            MILLISECOND)
+    TIMESTAMP_DIFF(
+        MAX(
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MAX(
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MILLISECOND
+    )
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
+    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
+    TIMESTAMP_DIFF(
+        MAX(
+            CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MAX(
+            CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MILLISECOND
+    )
     {%- else -%}
-    <INVALID DATA TYPE: table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type OR
-    table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type/>
+    <INVALID DATA TYPE>
     {%- endif -%}
 {%- endmacro -%}
 

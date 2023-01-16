@@ -116,14 +116,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -148,22 +146,20 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-                SELECT
-                    TIMESTAMP_DIFF(
-                        CURRENT_TIMESTAMP(),
-                        MAX(
-                            CASE
-                                WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                    THEN CAST(%s AS TIMESTAMP)
-                                ELSE NULL
-                            END
-                        ),
-                        MILLISECOND
-                    ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
-                FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
-                GROUP BY time_period
-                ORDER BY time_period""";
+            SELECT
+                TIMESTAMP_DIFF(
+                    CURRENT_TIMESTAMP(),
+                    MAX(
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
+                    MILLISECOND
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s
+            GROUP BY time_period
+            ORDER BY time_period""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -184,14 +180,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),   
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -216,14 +210,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -253,14 +245,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -288,14 +278,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -323,14 +311,12 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
                     MAX(
-                        CASE
-                            WHEN CAST(%1$s AS TIMESTAMP) <= CURRENT_TIMESTAMP()
-                                THEN CAST(%s AS TIMESTAMP)
-                            ELSE NULL
-                        END
-                    ),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP)
+                    ),    
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period

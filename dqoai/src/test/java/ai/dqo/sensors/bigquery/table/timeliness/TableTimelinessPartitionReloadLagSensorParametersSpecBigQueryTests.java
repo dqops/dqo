@@ -105,7 +105,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/timeliness/max_row_data_ingestion_delay", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/timeliness/partition_reload_lag", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -118,11 +118,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -151,11 +153,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -180,11 +184,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -209,11 +215,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -243,11 +251,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -275,11 +285,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -307,11 +319,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(%s AS TIMESTAMP),
-                        CAST(%s AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        CAST(analyzed_table.`%s` AS TIMESTAMP),
                         MILLISECOND
                     )
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
