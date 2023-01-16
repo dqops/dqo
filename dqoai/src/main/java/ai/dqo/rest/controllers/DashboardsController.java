@@ -100,7 +100,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
     }
@@ -141,7 +141,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                 folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -190,7 +190,7 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard.getUrl());
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                 folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200

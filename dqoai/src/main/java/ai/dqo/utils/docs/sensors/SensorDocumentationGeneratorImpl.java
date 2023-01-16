@@ -65,6 +65,10 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
             }
             SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(abstractSensorParametersSpec);
 
+            if (sensorDocumentation == null) {
+                continue; // sensor not found
+            }
+
             DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorDocumentation.getFullSensorName() + ".md");
             documentationMarkdownFile.setRenderContext(sensorDocumentation);
 

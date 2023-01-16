@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -202,6 +204,34 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
             setWidth(width);
             setHeight(height);
             setDqoCloudCredentials(true);
+        }};
+        this.dashboards.add(dashboardSpec);
+
+        return this;
+    }
+
+    /**
+     * Adds a DQO Cloud dashboard using a fluent interface.
+     * @param dashboardName Dashboard name.
+     * @param url Looker studio dashboard url.
+     * @param width Width in pixels.
+     * @param height Height in pixels.
+     * @param parameters Dictionary of additional parameters.
+     * @return Self.
+     */
+    public DashboardsFolderSpec withDqoCloudDashboard(String dashboardName, String url, Integer width, Integer height,
+                                                      LinkedHashMap<String, String> parameters) {
+        if (this.dashboards.stream().anyMatch(d -> Objects.equals(d.getDashboardName(), dashboardName))) {
+            throw new IllegalStateException("Dashboard name '" + dashboardName + "' was already added");
+        }
+
+        DashboardSpec dashboardSpec = new DashboardSpec() {{
+            setDashboardName(dashboardName);
+            setUrl(url);
+            setWidth(width);
+            setHeight(height);
+            setDqoCloudCredentials(true);
+            setParameters(parameters);
         }};
         this.dashboards.add(dashboardSpec);
 

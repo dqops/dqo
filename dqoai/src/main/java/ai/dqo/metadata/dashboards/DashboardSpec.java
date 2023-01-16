@@ -19,12 +19,15 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -51,9 +54,17 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Dashboard height (px)")
     private Integer height;
 
-
     @JsonPropertyDescription("The dashboard is a DQO Cloud dashboard (Looker Studio) that requires DQO Cloud credentials to access the private data quality data lake")
     private boolean dqoCloudCredentials = true;
+
+    @JsonPropertyDescription("Key/value dictionary of additional parameters to be passed to the dashboard")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
+
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
 
     /**
      * Returns the name of the dashboard.
@@ -141,6 +152,44 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns a key/value map of additional parameters passed to the dashboard in an url.
+     * @return Key/value dictionary of additional dashboard parameters.
+     */
+    public LinkedHashMap<String, String> getParameters() {
+        return parameters;
+    }
+
+    /**
+     * Sets a dictionary of additional parameters passed to the dashboard.
+     * @param parameters Key/value dictionary with extra parameters.
+     */
+    public void setParameters(LinkedHashMap<String, String> parameters) {
+        setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters;
+        this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
+    }
+
+    /**
+     * Check if the object is dirty (has changes).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @Override
+    public boolean isDirty() {
+        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
+    }
+
+    /**
+     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
+     * @param propagateToChildren When true, clears also the dirty status of child objects.
+     */
+    @Override
+    public void clearDirty(boolean propagateToChildren) {
+        super.clearDirty(propagateToChildren);
+        this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -168,6 +217,12 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     public DashboardSpec clone() {
         try {
             DashboardSpec cloned = (DashboardSpec)super.clone();
+            if (cloned.parameters != null) {
+                cloned.parameters = (LinkedHashMap<String, String>) cloned.parameters.clone();
+            }
+            if (cloned.originalParameters != null) {
+                cloned.originalParameters = (LinkedHashMap<String, String>) cloned.originalParameters.clone();
+            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

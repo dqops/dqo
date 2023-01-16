@@ -74,6 +74,11 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
 
         SensorDefinitionList sensors = this.dqoHomeContext.getDqoHome().getSensors();
         SensorDefinitionWrapper sensorDefinitionWrapper = sensors.getByObjectName(sensorDefinitionName, true);
+        if (sensorDefinitionWrapper == null) {
+            System.err.println("Sensor definition for sensor " + sensorDefinitionName + " was not found");
+            return null;
+        }
+
         documentationModel.setDefinition(sensorDefinitionWrapper);
 
         List<UIFieldModel> fieldsForSensorParameters = this.specToUiCheckMappingService.createFieldsForSensorParameters(sensorParametersSpec);

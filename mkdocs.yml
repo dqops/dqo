@@ -147,6 +147,7 @@ nav:
         - string_in_set_count: 'sensors/column/strings/string_in_set_count.md'
         - string_in_set_percent: 'sensors/column/strings/string_in_set_percent.md'
         - string_invalid_email_count: 'sensors/column/strings/string_invalid_email_count.md'
+        - string_invalid_ip4_address_count: 'sensors/column/strings/string_invalid_ip4_address_count.md'
         - string_invalid_uuid_count: 'sensors/column/strings/string_invalid_uuid_count.md'
         - string_match_date_regex_percent: 'sensors/column/strings/string_match_date_regex_percent.md'
         - string_match_name_regex_percent: 'sensors/column/strings/string_match_name_regex_percent.md'
@@ -189,10 +190,6 @@ nav:
         - value_in_range_numerical_percent: 'sensors/column/validity/value_in_range_numerical_percent.md'
         - values_in_set_percent: 'sensors/column/validity/values_in_set_percent.md'
     - table:
-      - consistency:
-        - row_count: 'sensors/table/consistency/row_count.md'
-      - relevance:
-        - moving_week_average: 'sensors/table/relevance/moving_week_average.md'
       - sql:
         - sql_aggregated_expression: 'sensors/table/sql/sql_aggregated_expression.md'
         - sql_condition_failed_count: 'sensors/table/sql/sql_condition_failed_count.md'
@@ -206,8 +203,6 @@ nav:
         - days_since_most_recent_event: 'sensors/table/timeliness/days_since_most_recent_event.md'
         - days_since_most_recent_ingestion: 'sensors/table/timeliness/days_since_most_recent_ingestion.md'
         - partition_reload_lag: 'sensors/table/timeliness/partition_reload_lag.md'
-      - validity:
-        - row_count: 'sensors/table/validity/row_count.md'
 ########## END INCLUDE
   - Sensor reference (old):
       - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
