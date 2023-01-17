@@ -9,7 +9,7 @@ const LeftView = () => {
   const { changeActiveTab } = useDashboard();
 
   return (
-    <div className="fixed left-0 top-0 h-full w-70 shadow border-r border-gray-300 p-4 pt-12 bg-white">
+    <div className="fixed left-0 top-0 h-full w-80 shadow border-r border-gray-300 p-4 pt-12 bg-white">
       {dashboardFolders.map((folder, index) => (
         <div key={index} className="mb-3">
           <div className="flex space-x-1.5 items-center mb-1">
@@ -23,8 +23,8 @@ const LeftView = () => {
                 className="cursor-pointer flex space-x-1.5 items-center"
                 onClick={() => changeActiveTab(dashboard, folder.folder_name)}
               >
-                <SvgIcon name="grid" className="w-4 h-4" />
-                <div className="text-[13px] leading-1.5">{dashboard.dashboard_name}</div>
+                <SvgIcon name="grid" className="w-4 h-4 shrink-0" />
+                <div className="text-[13px] leading-1.5 whitespace-nowrap">{dashboard.dashboard_name}</div>
               </div>
             ))}
           </div>
