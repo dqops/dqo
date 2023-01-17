@@ -2,7 +2,7 @@
 When we want to evaluate query results of data quality checks, we have to config rule that is supposed to be used.
 We can do it in `yaml` files which consist of dataset's metadata.
 
-An example `yaml` file has a structure presented below. You can see three columns' metadata `name_of_timestamp_column1`, `name_of_timestamp_column2 and `emails`. 
+An example `yaml` file has a structure presented below. You can see three columns' metadata `name_of_timestamp_column1`, `name_of_timestamp_column2` and `emails`. 
 
 ```yaml linenums="1" 
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json

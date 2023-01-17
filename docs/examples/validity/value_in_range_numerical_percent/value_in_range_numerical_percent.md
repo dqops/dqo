@@ -48,9 +48,6 @@ The data quality checks will be executed.
 ```bash
 cloud sync
 ```
-The result files will be pushed to cloud.dqo.ai
-
-Now, you can open the browser and navigate to https://cloud.dqo.ai/ and review the sensor results on the dashboards.
 
 The result files will be pushed to cloud.dqo.ai
 

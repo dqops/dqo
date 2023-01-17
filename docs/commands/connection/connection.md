@@ -7,6 +7,7 @@ __Synopsis__
  <pre><code>connection add [-h] [-hl] [-of=&lt;outputFormat&gt] [-P=&lt;String=String&gt] [-d=&lt;database&gt] [-j=&lt;url&gt] [-n=&lt;name&gt] [-p=&lt;password&gt] [-t=&lt;providerType&gt] [-u=&lt;user&gt]</code></pre>
 ___
 __Description__
+
 Add connection with specified details
 ___
 __Options__
@@ -32,6 +33,7 @@ __Synopsis__
  <pre><code>connection list [-h] [-hl] [-of=&lt;outputFormat&gt] [-n=&lt;name&gt]</code></pre>
 ___
 __Description__
+
 List connections which match filters
 ___
 __Options__
@@ -49,6 +51,7 @@ __Synopsis__
  <pre><code>connection remove [-h] [-hl] [-of=&lt;outputFormat&gt] [-n=&lt;name&gt]</code></pre>
 ___
 __Description__
+
 Remove connection or connections which match filters
 ___
 __Options__
@@ -66,6 +69,7 @@ __Synopsis__
  <pre><code>connection update [-h] [-hl] [-of=&lt;outputFormat&gt] [-d=&lt;database&gt] [-j=&lt;url&gt] [-n=&lt;name&gt] [-p=&lt;password&gt] [-t=&lt;providerType&gt] [-u=&lt;user&gt]</code></pre>
 ___
 __Description__
+
 Update connection or connections which match filters
 ___
 __Options__

@@ -181,7 +181,7 @@ Below are the results of our example:
 |58.01757017355903|2022-10-14 |
 +-----------------+-----------+
 ```
-The actual_value(in this example is the percentage of valid values) is 58.01, it means the result is invalid.
+The actual_value (in this example is the percentage of valid values) is 58.01, it means the result is invalid.
 
 The table above is the exact same as the one you would see on the provider's platform (in this case BigQuery).
 
