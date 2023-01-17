@@ -29,6 +29,8 @@ import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactoryImpl;
 import ai.dqo.data.storage.*;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.search.TableSearchFilters;
@@ -52,6 +54,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings sensorReadoutsStorageSettings;
     private SensorReadoutsTableFactory sensorReadoutsTableFactory;
+    private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
 
     /**
      * Called before each test.
@@ -72,27 +75,32 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
-        this.sut = new SensorReadoutsDeleteServiceImpl(this.parquetPartitionStorageService);
 
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
         this.sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
+
+        this.sensorReadoutsSnapshotFactory = new SensorReadoutsSnapshotFactoryImpl(
+                this.parquetPartitionStorageService,
+                this.sensorReadoutsTableFactory);
+
+        this.sut = new SensorReadoutsDeleteServiceImpl(this.sensorReadoutsSnapshotFactory);
     }
 
-    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate) {
+    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table sensorReadoutsTable = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
 
         Row row1 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
@@ -102,17 +110,17 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterCapturesCertainRows_thenDeleteTheseRows() {
         String connectionName = "connection";
-        String tableName1 = "tab1";
+        String tableName = "tab";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
-        PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate, "");
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
-                physicalTableName1,
+                physicalTableName,
                 month);
 
         this.parquetPartitionStorageService.savePartition(
@@ -123,7 +131,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
                 setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate.plusDays(1).toLocalDate());
             setDateEnd(startDate.plusDays(1).toLocalDate());
@@ -145,28 +153,28 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterCapturesAllRows_thenDeleteWholeFile() {
         String connectionName = "connection";
-        String tableName1 = "tab1";
+        String tableName = "tab";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
-        PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
+        Table table = prepareSimplePartitionTable(tableName, startDate, tableName);
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
-                physicalTableName1,
+                physicalTableName,
                 month);
 
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
-                new TableDataChanges(table1),
+                new TableDataChanges(table),
                 this.sensorReadoutsStorageSettings);
 
         SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
                 setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate.plusDays(1).toLocalDate());
             setDateEnd(startDate.plusDays(1).toLocalDate());
@@ -184,7 +192,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -192,8 +202,8 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -234,16 +244,18 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -251,8 +263,8 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -294,18 +306,18 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
 
-    private Table prepareComplexPartitionTable(String tableName, LocalDateTime startDate) {
+    private Table prepareComplexPartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table sensorReadoutsTable = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
 
         Row row1 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
@@ -318,7 +330,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
 
         Row row2 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
@@ -329,7 +341,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
 
         Row row3 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
@@ -338,7 +350,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
         Row row4 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row4.getRowNumber(), 1000);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
@@ -347,7 +359,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
 
         Row row5 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
+        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row5.getRowNumber(), 10000);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
         sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
@@ -361,11 +373,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterByCheckCategory_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month = LocalDate.of(2023, 1, 1);
-        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -404,11 +416,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterByCheckNameAndCheckType_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month = LocalDate.of(2023, 1, 1);
-        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -448,11 +460,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterByColumnNameAndDataStreamAndSensorName_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month = LocalDate.of(2023, 1, 1);
-        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -493,11 +505,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterByQualityDimensionAndTimeGradient_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month = LocalDate.of(2023, 1, 1);
-        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),
@@ -537,11 +549,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedSensorReadoutsFragment_whenFilterBySensorNameAndTimePeriod_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month = LocalDate.of(2023, 1, 1);
-        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
                 this.sensorReadoutsStorageSettings.getTableType(),

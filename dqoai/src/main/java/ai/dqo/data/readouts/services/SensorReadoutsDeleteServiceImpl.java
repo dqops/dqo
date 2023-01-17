@@ -16,30 +16,24 @@
 
 package ai.dqo.data.readouts.services;
 
-import ai.dqo.data.normalization.CommonColumnNames;
-import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.data.storage.*;
+import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.selection.Selection;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.Map;
 
 @Service
 public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
-    private final String TIME_SERIES_COLUMN_NAME = SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME;
-
-    private ParquetPartitionStorageService parquetPartitionStorageService;
+    private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
 
     @Autowired
-    public SensorReadoutsDeleteServiceImpl(ParquetPartitionStorageService parquetPartitionStorageService) {
-        this.parquetPartitionStorageService = parquetPartitionStorageService;
+    public SensorReadoutsDeleteServiceImpl(SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory) {
+        this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
     }
 
     /**
@@ -49,56 +43,20 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
     @Override
     public void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
         Map<String, String> conditions = filter.getColumnConditions();
-        List<String> columnNames = new ArrayList<>(conditions.keySet());
-        columnNames.add(CommonColumnNames.ID_COLUMN_NAME);
-        if (!filter.isIgnoreDateDay()) {
-            columnNames.add(TIME_SERIES_COLUMN_NAME);
+
+        SensorReadoutsSnapshot currentSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(
+                filter.getTableSearchFilters().getConnectionName(),
+                PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
+        );
+
+        LocalDate startDeletionRange = filter.getDateStart();
+        LocalDate endDeletionRange = filter.getDateEnd();
+        if (filter.isIgnoreDateDay()) {
+            startDeletionRange = LocalDateTimeTruncateUtility.truncateMonth(startDeletionRange);
+            endDeletionRange = LocalDateTimeTruncateUtility.truncateMonth(endDeletionRange).plusMonths(1L).minusDays(1L);
         }
 
-        FileStorageSettings fileStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
-
-        Map<ParquetPartitionId, LoadedMonthlyPartition> presentData =
-                parquetPartitionStorageService.loadPartitionsForMonthsRange(
-                        filter.getTableSearchFilters().getConnectionName(),
-                        PhysicalTableName.fromSchemaTableFilter(
-                                filter.getTableSearchFilters().getSchemaTableName()),
-                        filter.getDateStart(),
-                        filter.getDateEnd(),
-                        fileStorageSettings,
-                        columnNames.toArray(new String[0])
-                );
-
-        for (LoadedMonthlyPartition loadedMonthlyPartition : presentData.values()) {
-            if (loadedMonthlyPartition.getData() == null) {
-                continue;
-            }
-
-            Table monthlyPartitionTable = loadedMonthlyPartition.getData();
-            Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
-
-            // Filter by accurate date.
-            if (!filter.isIgnoreDateDay()) {
-                toDelete = toDelete.and(
-                        monthlyPartitionTable.dateTimeColumn(TIME_SERIES_COLUMN_NAME).date()
-                                .isBetweenIncluding(filter.getDateStart(), filter.getDateEnd()));
-            }
-
-            // Filter by string columns' conditions.
-            for (Map.Entry<String, String> conditionEntry : conditions.entrySet()) {
-                String colName = conditionEntry.getKey();
-                String colValue = conditionEntry.getValue();
-                toDelete = toDelete.and(
-                        monthlyPartitionTable.stringColumn(colName)
-                                .isEqualTo(colValue));
-            }
-
-            List<String> idsToDelete = monthlyPartitionTable.stringColumn(CommonColumnNames.ID_COLUMN_NAME).where(toDelete).asList();
-
-            if (!idsToDelete.isEmpty()) {
-                TableDataChanges changes = new TableDataChanges(null);
-                changes.getDeletedIds().addAll(idsToDelete);
-                this.parquetPartitionStorageService.savePartition(loadedMonthlyPartition, changes, fileStorageSettings);
-            }
-        }
+        currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+        currentSnapshot.save();
     }
 }

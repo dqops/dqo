@@ -19,11 +19,14 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -234,12 +237,66 @@ public class TableDataSnapshot {
         return this.loadedMonthlyPartitions.get(partitionId);
     }
 
+    public boolean isReadOnly() {
+        return columnNames != null;
+    }
+
+    public void markSelectedForDeletion(LocalDate startDate, LocalDate endDate, Map<String, String> columnConditions) {
+        if (this.isReadOnly()) {
+            throw new DataStorageIOException("Read-only snapshots do not support deleting.");
+        }
+
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startDate);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endDate);
+        this.ensureMonthsAreLoaded(startMonth, endMonth);
+        List<String> idsToDelete = new ArrayList<>();
+
+        for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
+             currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
+
+            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
+            Table monthlyPartitionTable = loadedMonthlyPartition.getData();
+            if (monthlyPartitionTable == null) {
+                continue;
+            }
+
+            Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
+
+            // Filter by date.
+            toDelete = toDelete.and(
+                    monthlyPartitionTable.dateTimeColumn(this.storageSettings.getTimePeriodColumnName()).date()
+                            .isBetweenIncluding(startDate, endDate));
+
+            // Filter by string columns' conditions.
+            try {
+                for (Map.Entry<String, String> columnCondition : columnConditions.entrySet()) {
+                    String colName = columnCondition.getKey();
+                    String colValue = columnCondition.getValue();
+                    toDelete = toDelete.and(
+                            monthlyPartitionTable.stringColumn(colName)
+                                    .isEqualTo(colValue));
+                }
+            }
+            catch (IllegalStateException e) {
+                throw new DataStorageIOException("Condition on column that doesn't exist", e);
+            }
+
+            List<String> idsToDeleteInPartition = monthlyPartitionTable
+                    .stringColumn(this.storageSettings.getIdStringColumnName())
+                    .where(toDelete).asList();
+            idsToDelete.addAll(idsToDeleteInPartition);
+        }
+
+        tableDataChanges.getDeletedIds().addAll(idsToDelete);
+    }
+
     /**
      * Saves all results to a persistent storage (like files). New rows are added, rows with matching IDs are updated.
      * Rows identified by an ID column are deleted.
      */
     public void save() {
-        if (this.columnNames != null) {
+        if (this.isReadOnly()) {
             throw new DataStorageIOException("Read-only snapshots do not support saving.");
         }
 
@@ -275,6 +332,7 @@ public class TableDataSnapshot {
 
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
+
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings);
