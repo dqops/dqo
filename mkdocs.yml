@@ -6,13 +6,13 @@ nav:
   - Home: 'index.md'
   - What is DQO: 'what_is_dqo/what_is_dqo.md'
   - Getting started:
-      - Set up: 'getting_started/set_up/set_up.md'
-      - Connect to a data source: 'getting_started/connect_to_a_data_source/connect_to_a_data_source.md'
-      - Import metadata: 'getting_started/import_metadata/import_metadata.md'
-      - Enable data quality checks: 'getting_started/enable_data_quality_checks/enable_data_quality_checks.md'
-      - Run data quality checks: 'getting_started/run_data_quality_checks/run_data_quality_checks.md'
-      - Use the DQO shell: 'getting_started/use_the_DQO_shell/use_the_DQO_shell.md'
-      - Push data to the cloud: 'getting_started/push_data_to_the_cloud/push_data_to_the_cloud.md'
+    - Set up: 'getting_started/set_up/set_up.md'
+    - Connect to a data source: 'getting_started/connect_to_a_data_source/connect_to_a_data_source.md'
+    - Import metadata: 'getting_started/import_metadata/import_metadata.md'
+    - Enable data quality checks: 'getting_started/enable_data_quality_checks/enable_data_quality_checks.md'
+    - Run data quality checks: 'getting_started/run_data_quality_checks/run_data_quality_checks.md'
+    - Use the DQO shell: 'getting_started/use_the_DQO_shell/use_the_DQO_shell.md'
+    - Push data to the cloud: 'getting_started/push_data_to_the_cloud/push_data_to_the_cloud.md'
   - DQO concept:
     - Sensors: 'dqo_concept/sensors/sensors.md'
     - Rules: 'dqo_concept/rules/rules.md'
@@ -21,12 +21,12 @@ nav:
   - Working with DQO:
     - Adding connections: 'working_with_dqo/add_connection.md'
   - Commands:
-      - check: 'commands/check/check.md'
-      - column: 'commands/column/column.md'
-      - table: 'commands/table/table.md'
-      - connection: 'commands/connection/connection.md'
-        #TODO: tbd:
-      - cloud: 'commands/cloud/cloud.md'
+    - check: 'commands/check/check.md'
+    - column: 'commands/column/column.md'
+    - table: 'commands/table/table.md'
+    - connection: 'commands/connection/connection.md'
+      #TODO: tbd:
+    - cloud: 'commands/cloud/cloud.md'
   - Scheduler:
     - Introduction to the scheduler: 'scheduler/introduction_to_the_scheduler.md'
     - Cron formatting: 'scheduler/cron_formatting.md'
@@ -37,12 +37,12 @@ nav:
   - Check reference:
     - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
     - Timeliness:
-        - average_delay: 'check_reference/timeliness/average_delay/average_delay.md'
-        - current_delay: 'check_reference/timeliness/current_delay/current_delay.md'
-        - column_datetime_difference_percent: 'check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+      - average_delay: 'check_reference/timeliness/average_delay/average_delay.md'
+      - current_delay: 'check_reference/timeliness/current_delay/current_delay.md'
+      - column_datetime_difference_percent: 'check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
     - Uniqueness:
-        - distinct_count: 'check_reference/uniqueness/distinct_count/distinct_count.md'
-        - distinct_count_percent: 'check_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
+      - distinct_count: 'check_reference/uniqueness/distinct_count/distinct_count.md'
+      - distinct_count_percent: 'check_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
     - Validity:
       - date_type_percent: 'check_reference/validity/date_type_percent/date_type_percent.md'
       - regex_match_percent: 'check_reference/validity/regex_match_percent/regex_match_percent.md'
@@ -55,45 +55,50 @@ nav:
       - non_negative_count: 'check_reference/validity/non_negative_count/non_negative_count.md'
       - numerical_type_percent: 'check_reference/validity/numerical_type_percent/numerical_type_percent.md'
   - Examples:
-      - Running examples: 'examples/running_examples.md'
-      - Timeliness:
-          - current_delay: 'examples/timeliness/current_delay/current_delay.md'
-          - average_delay: 'examples/timeliness/average_delay/average_delay.md'
-          - column_datetime_difference_percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-      - Uniqueness:
-          - distinct_count: 'examples/uniqueness/distinct_count/distinct_count.md'
-          - distinct_count_percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
-      - Validity:
-          - date_type_percent: 'examples/validity/date_type_percent/date_type_percent.md'
-          - values_in_set_percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
-          - value_in_range_date_percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-          - value_in_range_numerical_percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-          - string_length_in_range_percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-          - regex_match_percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
-          - non_negative_percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
-          - not_null_count: 'examples/validity/not_null_count/not_null_count.md'
-          - non_negative_count: 'examples/validity/non_negative_count/non_negative_count.md'
-          - numerical_type_percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
+    - Running examples: 'examples/running_examples.md'
+    - Timeliness:
+      - current_delay: 'examples/timeliness/current_delay/current_delay.md'
+      - average_delay: 'examples/timeliness/average_delay/average_delay.md'
+      - column_datetime_difference_percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+    - Uniqueness:
+      - distinct_count: 'examples/uniqueness/distinct_count/distinct_count.md'
+      - distinct_count_percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
+    - Validity:
+      - date_type_percent: 'examples/validity/date_type_percent/date_type_percent.md'
+      - values_in_set_percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
+      - value_in_range_date_percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+      - value_in_range_numerical_percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+      - string_length_in_range_percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+      - regex_match_percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
+      - non_negative_percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
+      - not_null_count: 'examples/validity/not_null_count/not_null_count.md'
+      - non_negative_count: 'examples/validity/non_negative_count/non_negative_count.md'
+      - numerical_type_percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
   - Sensor reference:
-      - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
-      - Timeliness:
-          - Average delay: 'sensor_reference/timeliness/average_delay/average_delay.md'
-          - Current delay: 'sensor_reference/timeliness/current_delay/current_delay.md'
-          - Column datetime difference percent: 'sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-      - Uniqueness:
-          - Distinct count: 'sensor_reference/uniqueness/distinct_count/distinct_count.md'
-          - Distinct count percent: 'sensor_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
-      - Validity:
-        - Date type percent: 'sensor_reference/validity/date_type_percent/date_type_percent.md'
-        - Regex match percent: 'sensor_reference/validity/regex_match_percent/regex_match_percent.md'
-        - Values in set percent: 'sensor_reference/validity/values_in_set_percent/values_in_set_percent.md'
-        - Non negative percent: 'sensor_reference/validity/non_negative_percent/non_negative_percent.md'
-        - Value in range numerical percent: 'sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-        - Value in range date percent: 'sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-        - String length in range percent: 'sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-        - Not null count: 'sensor_reference/validity/not_null_count/not_null_count.md'
-        - Non negative count: 'sensor_reference/validity/non_negative_count/non_negative_count.md'
-        - Numerical type percent: 'sensor_reference/validity/numerical_type_percent/numerical_type_percent.md'
+    - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
+    - Timeliness:
+      #ToDo: jinja sample
+      - Average delay: 'sensor_reference/timeliness/average_delay/average_delay.md'
+      #ToDo: jinja sample
+      - Current delay: 'sensor_reference/timeliness/current_delay/current_delay.md'
+      #ToDo: jinja sample
+      - Column datetime difference percent: 'sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
+    - Uniqueness:
+      #ToDo: jinja sample
+      - Distinct count: 'sensor_reference/uniqueness/distinct_count/distinct_count.md'
+      #ToDo: jinja sample
+      - Distinct count percent: 'sensor_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
+    - Validity:
+      - Date type percent: 'sensor_reference/validity/date_type_percent/date_type_percent.md'
+      - Regex match percent: 'sensor_reference/validity/regex_match_percent/regex_match_percent.md'
+      - Values in set percent: 'sensor_reference/validity/values_in_set_percent/values_in_set_percent.md'
+      - Non negative percent: 'sensor_reference/validity/non_negative_percent/non_negative_percent.md'
+      - Value in range numerical percent: 'sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
+      - Value in range date percent: 'sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
+      - String length in range percent: 'sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
+      - Not null count: 'sensor_reference/validity/not_null_count/not_null_count.md'
+      - Non negative count: 'sensor_reference/validity/non_negative_count/non_negative_count.md'
+      - Numerical type percent: 'sensor_reference/validity/numerical_type_percent/numerical_type_percent.md'
   - Rule reference:
     - What are rules: 'rule_reference/what_are_rules.md'
     - How to configure a rule: 'rule_reference/how_to_configure_rules.md'
