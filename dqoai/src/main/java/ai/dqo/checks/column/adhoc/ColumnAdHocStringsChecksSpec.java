@@ -63,12 +63,16 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_valid_currency_code_percent", o -> o.stringValidCurrencyCodePercent);
             put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
             put("string_valid_email_percent", o -> o.stringValidEmailPercent);
+            put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
+            put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
+            put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
+
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
             put("string_not_match_date_regex_count", o -> o.stringNotMatchDateRegexCount);
             put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
-
+            put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
 
         }
@@ -144,6 +148,15 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnStringValidEmailPercentCheckSpec stringValidEmailPercent;
 
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage.")
+    private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount;
+
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
 
@@ -155,6 +168,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.")
     private ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
 
     /**
@@ -572,6 +588,60 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a maximum invalid UUID count check.
+     * @return Maximum invalid UUID count check.
+     */
+    public ColumnStringInvalidUuidCountCheckSpec getStringInvalidUuidCount() {
+        return stringInvalidUuidCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid UUID count check.
+     * @param stringInvalidUuidCount Invalid UUID count check.
+     */
+    public void setStringInvalidUuidCount(ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidUuidCount, stringInvalidUuidCount));
+        this.stringInvalidUuidCount = stringInvalidUuidCount;
+        propagateHierarchyIdToField(stringInvalidUuidCount, "string_invalid_uuid_count");
+    }
+
+    /**
+     * Returns a valid UUID percent check.
+     * @return Valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getStringValidUuidPercent() {
+        return stringValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid UUID percent check.
+     * @param stringValidUuidPercent Valid UUID percent check.
+     */
+    public void setStringValidUuidPercent(ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidUuidPercent, stringValidUuidPercent));
+        this.stringValidUuidPercent = stringValidUuidPercent;
+        propagateHierarchyIdToField(stringValidUuidPercent, "string_valid_uuid_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP4 address count check.
+     * @return Maximum invalid IP4 address count check.
+     */
+    public ColumnStringInvalidIp4AddressCountCheckSpec getStringInvalidIp4AddressCount() {
+        return stringInvalidIp4AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP4 address count check.
+     * @param stringInvalidIp4AddressCount Invalid IP4 address count check.
+     */
+    public void setStringInvalidIp4AddressCount(ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp4AddressCount, stringInvalidIp4AddressCount));
+        this.stringInvalidIp4AddressCount = stringInvalidIp4AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp4AddressCount, "string_invalid_ip4_address_count");
+    }
+
+    /**
      * Returns a maximum not match regex count check.
      * @return Maximum not match regex count check.
      */
@@ -641,6 +711,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringMatchDateRegexPercent, stringMatchDateRegexPercent));
         this.stringMatchDateRegexPercent = stringMatchDateRegexPercent;
         propagateHierarchyIdToField(stringMatchDateRegexPercent, "string_match_date_regex_percent");
+    }
+
+    /**
+     * Returns a maximum match name regex percent check.
+     * @return Maximum match name regex percent check.
+     */
+    public ColumnStringMatchNameRegexPercentCheckSpec getStringMatchNameRegexPercent() {
+        return stringMatchNameRegexPercent;
+    }
+
+    /**
+     * Sets a new definition of a maximum match name regex percent check.
+     * @param stringMatchNameRegexPercent Maximum match name regex percent check.
+     */
+    public void setStringMatchNameRegexPercent(ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringMatchNameRegexPercent, stringMatchNameRegexPercent));
+        this.stringMatchNameRegexPercent = stringMatchNameRegexPercent;
+        propagateHierarchyIdToField(stringMatchNameRegexPercent, "string_match_name_regex_percent");
     }
 
     /**

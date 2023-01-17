@@ -105,14 +105,8 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
             AbstractSpec checkNodeObject = (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(categorySpec);
 
-            if (checkNodeObject instanceof AbstractCheckDeprecatedSpec) {
-                AbstractCheckDeprecatedSpec checkSpec = (AbstractCheckDeprecatedSpec) checkNodeObject;
-                updateLegacyCheckSpec(checkModel, checkSpec);
-            }
-            else {
-                AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>)checkNodeObject;
-                updateCheckSpec(checkModel, checkSpec);
-            }
+            AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>)checkNodeObject;
+            updateCheckSpec(checkModel, checkSpec);
 
             if (checkNodeObject.isDefault()) {
                 checkFieldInfo.setFieldValue(null, categorySpec);  // when UI has sent no configuration (all fields nulls or defaults)
@@ -143,46 +137,6 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     }
 
     /**
-     * Updates the check specification <code>checkSpec</code> from the changes in the <code>checkModel</code> UI model.
-     *
-     * @param checkModel Source UI model for the data quality check.
-     * @param checkSpec  Target check specification to update.
-     */
-    protected void updateLegacyCheckSpec(UICheckModel checkModel, AbstractCheckDeprecatedSpec checkSpec) {
-        checkSpec.setDataStreamsOverride(checkModel.getDataStreamsOverride());
-        checkSpec.setTimeSeriesOverride(checkModel.getTimeSeriesOverride());
-        checkSpec.setScheduleOverride(checkModel.getScheduleOverride());
-        checkSpec.setComments(checkModel.getComments());
-        checkSpec.getSensorParameters().setDisabled(checkModel.isDisabled());
-        checkSpec.getSensorParameters().setFilter(checkModel.getFilter());
-
-        updateFieldValues(checkModel.getSensorParameters(), checkSpec.getSensorParameters());
-
-        ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
-        AbstractRuleSetSpec ruleSet = checkSpec.getRuleSet();
-        ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleSet.getClass());
-        List<UIRuleThresholdsModel> ruleThresholdsModels = new ArrayList<>() {{ checkModel.getRule(); }};
-
-        if (ruleThresholdsModels == null) {
-            return;
-        }
-
-        for (UIRuleThresholdsModel ruleThresholdsModel : ruleThresholdsModels) {
-            String yamlRuleName = ruleThresholdsModel.getFieldName();
-            FieldInfo ruleThresholdsFieldInfo = ruleThresholdsClassInfo.getFieldByYamlName(yamlRuleName);
-            AbstractRuleThresholdsSpec ruleThresholdsSpec = (AbstractRuleThresholdsSpec) ruleThresholdsFieldInfo.getFieldValueOrNewObject(ruleSet);
-
-            updateLegacyRuleThresholdsSpec(ruleThresholdsModel, ruleThresholdsSpec);
-
-            if (ruleThresholdsSpec.isDefault()) {
-                ruleThresholdsFieldInfo.setFieldValue(null, ruleSet);
-            } else {
-                ruleThresholdsFieldInfo.setFieldValue(ruleThresholdsSpec, ruleSet);
-            }
-        }
-    }
-
-    /**
      * Updates the rule thresholds from the changes in the UI model.
      *
      * @param ruleThresholdsModel Source rule thresholds model with changes to the low, medium and high severities.
@@ -201,26 +155,6 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     }
 
     /**
-     * Updates the rule thresholds from the changes in the UI model.
-     *
-     * @param ruleThresholdsModel Source rule thresholds model with changes to the low, medium and high severities.
-     * @param ruleThresholdsSpec  Target rule thresholds specification to update.
-     */
-    protected void updateLegacyRuleThresholdsSpec(UIRuleThresholdsModel ruleThresholdsModel, AbstractRuleThresholdsSpec ruleThresholdsSpec) {
-//        ruleThresholdsSpec.setTimeWindow(ruleThresholdsModel.getTimeWindow());
-
-        ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(ruleThresholdsSpec.getClass());
-        FieldInfo lowFieldInfo = ruleThresholdsClassInfo.getField("low");
-        updateLegacySeveritySpec(ruleThresholdsModel.getWarning(), lowFieldInfo, ruleThresholdsSpec);
-
-        FieldInfo mediumFieldInfo = ruleThresholdsClassInfo.getField("medium");
-        updateLegacySeveritySpec(ruleThresholdsModel.getError(), mediumFieldInfo, ruleThresholdsSpec);
-
-        FieldInfo highFieldInfo = ruleThresholdsClassInfo.getField("high");
-        updateLegacySeveritySpec(ruleThresholdsModel.getFatal(), highFieldInfo, ruleThresholdsSpec);
-    }
-
-    /**
      * Updates the severity object (with the parameters) in the parent rule threshold object. First retrieves (or creates) the rule parameters object,
      * then updates all rule parameter fields and finally stores the resulting object in the parent rule thresholds specification.
      * @param ruleParametersModel Source rule parameters object.
@@ -228,8 +162,8 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param checkSpec Target parent rule thresholds object to update.
      */
     protected void updateSeveritySpec(UIRuleParametersModel ruleParametersModel,
-                                            FieldInfo severityFieldInfo,
-                                            AbstractCheckSpec<?,?,?,?> checkSpec) {
+                                      FieldInfo severityFieldInfo,
+                                      AbstractCheckSpec<?,?,?,?> checkSpec) {
         if (ruleParametersModel.isConfigured()) {
             AbstractRuleParametersSpec ruleParametersSpec = (AbstractRuleParametersSpec)
                     severityFieldInfo.getFieldValueOrNewObject(checkSpec);
@@ -239,30 +173,6 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
             severityFieldInfo.setFieldValue(ruleParametersSpec, checkSpec);
         } else {
             severityFieldInfo.setFieldValue(null, checkSpec);
-        }
-    }
-
-    /**
-     * Updates the severity object (with the parameters) in the parent rule threshold object. First retrieves (or creates) the rule parameters object,
-     * then updates all rule parameter fields and finally stores the resulting object in the parent rule thresholds specification.
-     * @param ruleParametersModel Source rule parameters object.
-     * @param severityFieldInfo Field info for the severity field (low, medium, high) that will be updated.
-     * @param parentRuleThresholdsSpec Target parent rule thresholds object to update.
-     */
-    protected void updateLegacySeveritySpec(UIRuleParametersModel ruleParametersModel,
-                                            FieldInfo severityFieldInfo,
-                                            AbstractRuleThresholdsSpec parentRuleThresholdsSpec) {
-        AbstractRuleParametersSpec ruleParametersSpec = (AbstractRuleParametersSpec)
-                severityFieldInfo.getFieldValueOrNewObject(parentRuleThresholdsSpec);
-//        ruleParametersSpec.setDisabled(ruleParametersModel.isDisabled());
-        List<UIFieldModel> ruleParameterModels = ruleParametersModel.getRuleParameters();
-
-        updateFieldValues(ruleParameterModels, ruleParametersSpec);
-
-        if (ruleParametersSpec.isDefault()) {
-            severityFieldInfo.setFieldValue(null, parentRuleThresholdsSpec);
-        } else {
-            severityFieldInfo.setFieldValue(ruleParametersSpec, parentRuleThresholdsSpec);
         }
     }
 

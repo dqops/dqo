@@ -15,8 +15,8 @@
  */
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.rest.controllers.remote.services.SourceTablesService;
-import ai.dqo.rest.controllers.remote.services.SourceTablesServiceException;
+import ai.dqo.services.remote.sourcetables.SourceTablesService;
+import ai.dqo.services.remote.sourcetables.SourceTablesServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.TableRemoteBasicModel;
 import io.swagger.annotations.*;
@@ -35,7 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/remote/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceTablesController", description = "Tables remote management")
+@Api(value = "SourceTables", description = "Tables remote management")
 public class SourceTablesController {
     private SourceTablesService sourceTablesService;
 

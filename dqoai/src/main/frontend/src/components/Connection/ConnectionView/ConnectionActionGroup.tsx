@@ -4,8 +4,8 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
-import qs from 'query-string';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { ROUTES } from "../../../shared/routes";
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -26,7 +26,6 @@ const ConnectionActionGroup = ({
   const { connectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
-  const location = useLocation();
   const history = useHistory();
 
   const removeConnection = async () => {
@@ -37,14 +36,7 @@ const ConnectionActionGroup = ({
     }
   };
   const goToSchemas = () => {
-    const params = qs.parse(location.search);
-
-    const searchQuery = qs.stringify({
-      ...params,
-      tab: 'schemas',
-      source: true
-    });
-    history.replace(`/checks?${searchQuery}`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(connectionBasic?.connection_name || '', 'schemas')}?import_schema=true`)
 
     if (onImport) {
       onImport();

@@ -15,8 +15,8 @@
  */
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.rest.controllers.remote.services.SourceSchemasService;
-import ai.dqo.rest.controllers.remote.services.SourceSchemasServiceException;
+import ai.dqo.services.remote.sourceschemas.SourceSchemasService;
+import ai.dqo.services.remote.sourceschemas.SourceSchemasServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.SchemaRemoteModel;
 import io.swagger.annotations.*;
@@ -36,7 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/remote/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "SourceSchemasController", description = "Schema remote management")
+@Api(value = "SourceSchemas", description = "Schema remote management")
 public class SourceSchemasController {
     private SourceSchemasService sourceSchemasService;
 

@@ -18,7 +18,11 @@ package ai.dqo.rest.models.checks.mapping;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.rest.models.checks.UIFieldModel;
 import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
+
+import java.util.List;
 
 /**
  * Service that creates a UI friendly model from the data quality check specifications,
@@ -43,4 +47,11 @@ public interface SpecToUiCheckMappingService {
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec);
+
+    /**
+     * Creates a list of fields to edit all values in the sensor parameters specification.
+     * @param parametersSpec Sensor parameters specification.
+     * @return List of UI fields for all sensor parameter fields.
+     */
+    List<UIFieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec);
 }

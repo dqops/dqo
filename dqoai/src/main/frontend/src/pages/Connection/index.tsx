@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import Tabs from "../../components/Tabs";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import ConnectionLabelsView from "../../components/Connection/ConnectionView/Con
 import SourceSchemasView from "../../components/Connection/ConnectionView/SourceSchemasView";
 import SchemasView from "../../components/Connection/ConnectionView/SchemasView";
 import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
+import qs from 'query-string';
 
 const initTabs = [
   {
@@ -54,7 +55,8 @@ const ConnectionPage = () => {
     isUpdatedLabels,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.connection);
-  const [showMetaData, setShowMetaData] = useState(false);
+  const location = useLocation() as any;
+  const { import_schema } = qs.parse(location.search);
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.CONNECTION_DETAIL(connection, tab));
@@ -130,7 +132,7 @@ const ConnectionPage = () => {
         {activeTab === 'comments' && <ConnectionCommentView />}
         {activeTab === 'labels' && <ConnectionLabelsView />}
         {activeTab === 'schemas' && (
-          showMetaData ? <SourceSchemasView /> : <SchemasView />
+          import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />
         )}
         {activeTab === 'data-streams' && <ConnectionDataStream />}
       </div>

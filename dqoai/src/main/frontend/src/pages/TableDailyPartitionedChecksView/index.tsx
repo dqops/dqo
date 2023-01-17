@@ -54,6 +54,7 @@ const TableDailyPartitionedChecksView = () => {
     await dispatch(
       getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
     );
+    setIsUpdated(false);
   };
 
   const onChangeUI = (ui: UIAllChecksModel) => {

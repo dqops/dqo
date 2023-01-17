@@ -18,7 +18,7 @@ package ai.dqo.checks.table.partitioned.timeliness;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
-import ai.dqo.checks.table.checkspecs.timeliness.TableMaxRowDataIngestionDelayCheckSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TablePartitionReloadLagCheckSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
            put("daily_partition_days_since_most_recent_event", o -> o.dailyPartitionDaysSinceMostRecentEvent);
            put("daily_partition_data_ingestion_delay", o -> o.dailyPartitionDataIngestionDelay);
            put("daily_partition_days_since_most_recent_ingestion", o -> o.dailyPartitionDaysSinceMostRecentIngestion);
-           put("daily_partition_max_row_data_ingestion_delay", o -> o.dailyPartitionMaxRowDataIngestionDelay);
+           put("daily_partition_reload_lag", o -> o.dailyPartitionReloadLag);
         }
     };
 
@@ -66,7 +66,7 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Daily partition checkpoint calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay;
+    private TablePartitionReloadLagCheckSpec dailyPartitionReloadLag;
 
     /**
      * Returns the number of days since the most recent event check configuration.
@@ -126,18 +126,18 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a maximum row data ingestion delay check configuration.
      * @return A maximum row data ingestion delay check configuration.
      */
-    public TableMaxRowDataIngestionDelayCheckSpec getDailyPartitionMaxRowDataIngestionDelay() {
-        return dailyPartitionMaxRowDataIngestionDelay;
+    public TablePartitionReloadLagCheckSpec getDailyPartitionReloadLag() {
+        return dailyPartitionReloadLag;
     }
 
     /**
      * Sets a maximum row data ingestion delay.
-     * @param dailyPartitionMaxRowDataIngestionDelay New maximum row data ingestion delay.
+     * @param dailyPartitionReloadLag New maximum row data ingestion delay.
      */
-    public void setDailyPartitionMaxRowDataIngestionDelay(TableMaxRowDataIngestionDelayCheckSpec dailyPartitionMaxRowDataIngestionDelay) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxRowDataIngestionDelay, dailyPartitionMaxRowDataIngestionDelay));
-        this.dailyPartitionMaxRowDataIngestionDelay = dailyPartitionMaxRowDataIngestionDelay;
-        this.propagateHierarchyIdToField(dailyPartitionMaxRowDataIngestionDelay, "daily_partition_max_row_data_ingestion_delay");
+    public void setDailyPartitionReloadLag(TablePartitionReloadLagCheckSpec dailyPartitionReloadLag) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionReloadLag, dailyPartitionReloadLag));
+        this.dailyPartitionReloadLag = dailyPartitionReloadLag;
+        this.propagateHierarchyIdToField(dailyPartitionReloadLag, "daily_partition_reload_lag");
     }
 
     /**

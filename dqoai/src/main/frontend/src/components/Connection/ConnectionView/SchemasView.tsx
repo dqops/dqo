@@ -10,6 +10,7 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import qs from 'query-string';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { ROUTES } from "../../../shared/routes";
 
 const SchemasView = () => {
   const { connection }: { connection: string } = useParams();
@@ -47,13 +48,7 @@ const SchemasView = () => {
   };
 
   const goToSchemas = () => {
-    const params = qs.parse(location.search);
-    const searchQuery = qs.stringify({
-      ...params,
-      tab: 'schemas',
-      source: true
-    });
-    history.replace(`/checks?${searchQuery}`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(connection, 'schemas')}?import_schema=true`)
   };
 
   return (

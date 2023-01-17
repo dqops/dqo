@@ -4,7 +4,7 @@ package ai.dqo.data.ruleresults.services.models;
  * Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.
  */
 public enum CheckResultStatus {
-    success(0),
+    valid(0),
     warning(1),
     error(2),
     fatal(3),
@@ -39,7 +39,7 @@ public enum CheckResultStatus {
      */
     public static CheckResultStatus fromSeverity(int severity) {
         switch (severity) {
-            case 0: return success;
+            case 0: return valid;
             case 1: return warning;
             case 2: return error;
             case 3: return fatal;
