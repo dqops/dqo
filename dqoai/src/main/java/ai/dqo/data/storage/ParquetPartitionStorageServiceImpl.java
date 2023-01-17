@@ -290,18 +290,10 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     }
 
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
-        if (!(tableType == DqoRoot.DATA_ERRORS
-                || tableType == DqoRoot.DATA_PROFILING_RESULTS
-                || tableType == DqoRoot.DATA_RULE_RESULTS
-                || tableType == DqoRoot.DATA_SENSOR_READOUTS)) {
-            return false;
-        }
-
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
             Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);
 
-            // TODO: Hoist the magic constant.
-            if (Files.isDirectory(homeRelativePath) || homeRelativePath.getNameCount() != 6) {
+            if (Files.isDirectory(homeRelativePath)) {
                 return false;
             }
 
