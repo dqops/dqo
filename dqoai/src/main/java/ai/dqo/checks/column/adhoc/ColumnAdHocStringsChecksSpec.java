@@ -646,8 +646,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a maximum valid IP4 address percent check.
-     * @return Maximum valid IP4 address percent check.
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
      */
     public ColumnStringValidIp4AddressPercentCheckSpec getStringValidIp4AddressPercent() {
         return stringValidIp4AddressPercent;

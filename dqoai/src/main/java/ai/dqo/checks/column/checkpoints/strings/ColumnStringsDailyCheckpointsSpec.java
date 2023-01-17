@@ -643,16 +643,16 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a maximum valid IP4 address percent check.
-     * @return Maximum valid IP4 address percent check.
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
      */
     public ColumnStringValidIp4AddressPercentCheckSpec getDailyCheckpointStringValidIp4AddressPercent() {
         return dailyCheckpointStringValidIp4AddressPercent;
     }
 
     /**
-     * Sets a new definition of a maximum valid IP4 address percent check.
-     * @param dailyCheckpointStringValidIp4AddressPercent Maximum valid IP4 address percent check.
+     * Sets a new definition of a minimum valid IP4 address percent check.
+     * @param dailyCheckpointStringValidIp4AddressPercent Minimum valid IP4 address percent check.
      */
     public void setDailyCheckpointStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec dailyCheckpointStringValidIp4AddressPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidIp4AddressPercent, dailyCheckpointStringValidIp4AddressPercent));

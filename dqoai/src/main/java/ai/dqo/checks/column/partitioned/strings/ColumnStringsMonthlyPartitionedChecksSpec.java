@@ -648,16 +648,16 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a maximum valid IP4 address percent check.
-     * @return Maximum valid IP4 address percent check.
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
      */
     public ColumnStringValidIp4AddressPercentCheckSpec getMonthlyPartitionStringValidIp4AddressPercent() {
         return monthlyPartitionStringValidIp4AddressPercent;
     }
 
     /**
-     * Sets a new definition of a maximum valid IP4 address percent check.
-     * @param monthlyPartitionStringValidIp4AddressPercent Maximum valid IP4 address percent check.
+     * Sets a new definition of a minimum valid IP4 address percent check.
+     * @param monthlyPartitionStringValidIp4AddressPercent Minimum valid IP4 address percent check.
      */
     public void setMonthlyPartitionStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec monthlyPartitionStringValidIp4AddressPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidIp4AddressPercent, monthlyPartitionStringValidIp4AddressPercent));

@@ -644,16 +644,16 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a maximum valid IP4 address percent check.
-     * @return Maximum valid IP4 address percent check.
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
      */
     public ColumnStringValidIp4AddressPercentCheckSpec getMonthlyCheckpointStringValidIp4AddressPercent() {
         return monthlyCheckpointStringValidIp4AddressPercent;
     }
 
     /**
-     * Sets a new definition of a maximum valid IP4 address percent check.
-     * @param monthlyCheckpointStringValidIp4AddressPercent Maximum valid IP4 address percent check.
+     * Sets a new definition of a minimum valid IP4 address percent check.
+     * @param monthlyCheckpointStringValidIp4AddressPercent Minimum valid IP4 address percent check.
      */
     public void setMonthlyCheckpointStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec monthlyCheckpointStringValidIp4AddressPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidIp4AddressPercent, monthlyCheckpointStringValidIp4AddressPercent));
