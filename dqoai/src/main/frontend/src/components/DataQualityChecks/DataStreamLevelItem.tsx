@@ -9,13 +9,17 @@ interface IDataStreamLevelItemProps {
   idx: number;
   onChange: (dataStreamLevel: DataStreamLevelSpec) => void;
   scope?: string;
+  error?: string;
+  onClearError?: (idx: number) => void;
 }
 
 const DataStreamLevelItem = ({
   idx,
   onChange,
   dataStreamLevel,
-  scope
+  scope,
+  error,
+  onClearError
 }: IDataStreamLevelItemProps) => {
   return (
     <div className="mb-4 last:mb-0">
@@ -48,16 +52,22 @@ const DataStreamLevelItem = ({
           <Input
             className="h-8"
             value={dataStreamLevel?.tag}
-            onChange={(e) =>
+            onChange={(e) => {
               onChange({
                 ...dataStreamLevel,
                 tag: e.target.value
-              })
-            }
+              });
+              if (onClearError) {
+                onClearError(idx + 1);
+              }
+            }}
             disabled={
               dataStreamLevel?.source !== DataStreamLevelSpecSourceEnum.tag
             }
           />
+          {error && (
+            <div className="text-red-700 text-xs">{error}</div>
+          )}
         </div>
         <RadioButton
           checked={

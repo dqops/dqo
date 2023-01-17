@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import ActionGroup from "./TableActionGroup";
 import DataStreamsMappingView from "../DataStreamsMappingView";
-import { DataStreamBasicModel, DataStreamMappingSpec } from "../../../api";
+import { DataStreamBasicModel, DataStreamLevelSpecSourceEnum, DataStreamMappingSpec } from "../../../api";
 import Input from "../../Input";
 import Button from "../../Button";
 import SvgIcon from "../../SvgIcon";
@@ -16,6 +16,10 @@ interface IDataStreamEditViewProps {
   getDataStreams: () => void;
 }
 
+export interface Errors {
+  [key: string]: string;
+}
+
 const DataStreamEditView = ({
   onBack,
   selectedDataStream,
@@ -28,6 +32,8 @@ const DataStreamEditView = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [dataStreamsMapping, setDataStreamMapping] = useState<DataStreamMappingSpec>();
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [levelErrors, setLevelErrors] = useState<Errors>({});
 
   useEffect(() => {
     if (selectedDataStream) {
@@ -57,6 +63,23 @@ const DataStreamEditView = ({
           }
         )
       } else {
+        if (!dataStreamsMapping) {
+          setError('Stream Mapping is Required');
+          return;
+        }
+        const errors: Errors = {};
+
+        Object.entries(dataStreamsMapping).forEach(([level, item]) => {
+          if (item.source === DataStreamLevelSpecSourceEnum.tag && !item.tag) {
+            errors[level] = 'Tag is Required';
+          }
+        });
+
+        if (Object.values(errors).length) {
+          setLevelErrors(errors);
+          return;
+        }
+
         await DataStreamsApi.createDataStream(connection, schema, table, {
           data_stream_name: name,
           spec: dataStreamsMapping
@@ -82,6 +105,13 @@ const DataStreamEditView = ({
     setDataStreamMapping(spec);
   }
 
+  const onClearError = (idx: number) => {
+    setLevelErrors({
+      ...levelErrors,
+      [`level_${idx}`]: ''
+    });
+  };
+
   return (
     <div>
       <ActionGroup
@@ -106,9 +136,14 @@ const DataStreamEditView = ({
           onClick={onBack}
         />
       </div>
+      {error && (
+        <div className="text-red-700 text-xs pt-4 px-6">{error}</div>
+      )}
       <DataStreamsMappingView
         dataStreamsMapping={dataStreamsMapping}
         onChange={onChangeDataStreamsMapping}
+        errors={levelErrors}
+        onClearError={onClearError}
       />
     </div>
   );
