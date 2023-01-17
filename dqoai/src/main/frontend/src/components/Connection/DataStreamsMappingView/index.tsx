@@ -1,15 +1,20 @@
 import React from 'react';
 import { DataStreamMappingSpec, DataStreamLevelSpec } from '../../../api';
 import DataStreamLevelItem from '../../DataQualityChecks/DataStreamLevelItem';
+import { Errors } from "../TableView/DataStreamEditView";
 
 interface IDataStreamsMappingViewProps {
   dataStreamsMapping?: DataStreamMappingSpec;
   onChange: (value: DataStreamMappingSpec) => void;
+  errors?: Errors;
+  onClearError?: (idx: number) => void;
 }
 
 const DataStreamsMappingView = ({
   dataStreamsMapping,
   onChange,
+  errors,
+  onClearError
 }: IDataStreamsMappingViewProps) => {
   const getDataStreamLevel = (index: number) => {
     if (index === 0) return dataStreamsMapping?.level_1;
@@ -46,6 +51,8 @@ const DataStreamsMappingView = ({
               onChangeDataStreamsLevel(dataStreamsLevel, index)
             }
             scope="connection"
+            error={errors ? errors[`level_${index + 1}`] : ''}
+            onClearError={onClearError}
           />
         ))}
     </div>
