@@ -19,6 +19,8 @@ import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
 import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
+
 /**
  * Service that returns the list of built-in data quality dashboards, divided into folders.
  */
@@ -61,8 +63,16 @@ public class DashboardServiceImpl implements DashboardService {
                                     "https://datastudio.google.com/embed/reporting/85dc0bb8-e187-406b-b4f0-a343df5fb52a/page/c5B8C", 1580, 2200);
                            f.withDqoCloudDashboard("Most incomplete columns - count",
                                     "https://datastudio.google.com/embed/reporting/1d7ca470-04d4-479d-b702-c610cfda6601/page/c5B8C", 1580, 1700);
-                           f.withDqoCloudDashboard("Most incomplete columns - percent",
+                           /**f.withDqoCloudDashboard("Most incomplete columns - percent",
                                     "https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c", 1580, 1700);
+                            */
+                           f.withDqoCloudDashboard("Most incomplete columns - percent",
+                                    "https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c", 1580, 1700,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.check_type", "checkpoint");
+                                        put("ds0.check_name", "row_count");
+                                    }});
+
                         });
     }
 
