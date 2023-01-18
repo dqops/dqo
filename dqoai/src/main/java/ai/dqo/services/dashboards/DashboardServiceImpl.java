@@ -69,8 +69,7 @@ public class DashboardServiceImpl implements DashboardService {
                            f.withDqoCloudDashboard("Most incomplete columns - percent",
                                     "https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c", 1580, 1700,
                                     new LinkedHashMap<>() {{
-                                        put("ds0.check_type", "checkpoint");
-                                        put("ds0.check_name", "row_count");
+                                        put("ds0.p_check_type", "adhoc");
                                     }});
 
                         });
