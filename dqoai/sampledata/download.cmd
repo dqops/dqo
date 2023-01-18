@@ -59,3 +59,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1b7x33WH7NHX2jMpud6ISuQrX9mAU33byk9OM-77d7ps
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1b7x33WH7NHX2jMpud6ISuQrX9mAU33byk9OM-77d7ps/export?exportFormat=csv" > ip4_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1JUlg3cdTQBZk4TXbK_Vpn8d4vwWLOeAl2D4Ry0zoOxM
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1JUlg3cdTQBZk4TXbK_Vpn8d4vwWLOeAl2D4Ry0zoOxM/export?exportFormat=csv" > ip6_test.csv

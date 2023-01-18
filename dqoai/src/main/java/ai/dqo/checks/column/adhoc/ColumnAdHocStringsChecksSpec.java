@@ -67,6 +67,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
             put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
             put("string_valid_ip4_address_percent", o -> o.stringValidIp4AddressPercent);
+            put("string_invalid_ip6_address_count", o -> o.stringInvalidIp6AddressCount);
 
 
 
@@ -160,6 +161,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
     private ColumnStringValidIp4AddressPercentCheckSpec stringValidIp4AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -661,6 +665,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringValidIp4AddressPercent, stringValidIp4AddressPercent));
         this.stringValidIp4AddressPercent = stringValidIp4AddressPercent;
         propagateHierarchyIdToField(stringValidIp4AddressPercent, "string_valid_ip4_address_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP6 address count check.
+     * @return Maximum invalid IP6 address count check.
+     */
+    public ColumnStringInvalidIp6AddressCountCheckSpec getStringInvalidIp6AddressCount() {
+        return stringInvalidIp6AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP6 address count check.
+     * @param stringInvalidIp6AddressCount Invalid IP6 address count check.
+     */
+    public void setStringInvalidIp6AddressCount(ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp6AddressCount, stringInvalidIp6AddressCount));
+        this.stringInvalidIp6AddressCount = stringInvalidIp6AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp6AddressCount, "string_invalid_ip6_address_count");
     }
 
     /**
