@@ -16,14 +16,14 @@
         MILLISECOND
     )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' and
-    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
     DATETIME_DIFF(
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
     TIMESTAMP_DIFF(
         MAX(
             SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -34,7 +34,7 @@
         MILLISECOND
     )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-    table.columns[timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
+    table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
     TIMESTAMP_DIFF(
         MAX(
             CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
