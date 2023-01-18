@@ -17,7 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.checks.table.custom.CustomTableCheckSpec;
+import ai.dqo.checks.table.checkspecs.custom.CustomTableCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;

@@ -16,8 +16,8 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentCheckSpec;
-import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentRulesSpec;
+import ai.dqo.checks.column.checkspecs.validity.ColumnValidityDateTypePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.validity.ColumnValidityDateTypePercentRulesSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
