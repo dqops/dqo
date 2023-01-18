@@ -1,1 +1,10 @@
+# {{fullSensorName}}
 {{sensorParametersJavaDoc}}
+___
+## Jinja Template
+{{#each definition.providerSensors}}
+=== "{{provider}}"
+    ```
+    --8<-- "home/sensors/{{target}}/{{category}}/{{sensorName}}/{{provider}}.sql.jinja2"
+    ```
+{{/each}}
