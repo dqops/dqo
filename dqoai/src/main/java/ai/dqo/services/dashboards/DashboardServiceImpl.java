@@ -35,8 +35,26 @@ public class DashboardServiceImpl implements DashboardService {
         this.dashboards =
                 new DashboardsFolderSpec("")
                         .withFolder("Governance", f -> {
-                            f.withDqoCloudDashboard("KPIs",
-                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800);
+                            f.withDqoCloudDashboard("KPIs all check types",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs adhoc",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs checkpoint",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs partitioned",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                         })
                         .withFolder("Operational", f -> {
                             f.withDqoCloudDashboard("Tables with most alerts",
