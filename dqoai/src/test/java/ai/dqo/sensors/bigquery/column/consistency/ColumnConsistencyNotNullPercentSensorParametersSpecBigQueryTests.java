@@ -16,7 +16,7 @@
 package ai.dqo.sensors.bigquery.column.consistency;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.consistency.ColumnConsistencyNotNullPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyNotNullPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
