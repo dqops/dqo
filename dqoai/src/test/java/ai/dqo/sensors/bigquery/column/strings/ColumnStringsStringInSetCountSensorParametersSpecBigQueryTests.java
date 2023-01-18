@@ -150,7 +150,7 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                0 AS actual_value
+                NULL AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 

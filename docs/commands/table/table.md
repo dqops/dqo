@@ -5,6 +5,7 @@ __Synopsis__
  <pre><code>table add [-h] [-hl] [-c=&lt;connetionName&gt] [-of=&lt;outputFormat&gt] [-t=&lt;fullTableName&gt]</code></pre>
 ___
 __Description__
+
 Add table with specified name
 ___
 __Options__
@@ -23,6 +24,7 @@ __Synopsis__
 <pre><code>table edit [-h] [-hl] [-c=&lt;connetion&gt] [-of=&lt;outputFormat&gt] [-t=&lt;table&gt]</code></pre>
 ___
 __Description__
+
 Edit table which match filters
 ___
 __Options__
@@ -60,14 +62,13 @@ It is possible to a open table configuration in an editor by specifying a connec
 table edit -c=<connection_name> -t=<table_name>
 ```
 
-For example
-
 
 ## import
 __Synopsis__
  <pre><code>table import [-h] [-hl] [-c=&lt;connetion&gt] [-of=&lt;outputFormat&gt] [-s=&lt;schema&gt] [-t=&lt;fullTableName&gt]</code></pre>
 ___
 __Description__
+
 Import tables from a specified database
 ___
 __Options__
@@ -85,7 +86,7 @@ ___
 ### Importing tables from the connection
 To edit table configuration, it has to be imported in the first place.
 
-Once a connection is added (see how to [add connection](/commands/connection/connection/#add)) we can import tables 
+Once a connection is added (see how to [add connection](../connection/connection.md) we can import tables 
 to access the configuration with the following command
 
 ```
@@ -104,6 +105,7 @@ __Synopsis__
  <pre><code>table list [-h] [-hl] [-c=&lt;connetionName&gt] [-of=&lt;outputFormat&gt] [-t=&lt;tableName&gt]</code></pre>
 ___
 __Description__
+
 List tables which match filters
 ___
 __Options__
@@ -122,6 +124,7 @@ __Synopsis__
  <pre><code>table remove [-h] [-hl] [-c=&lt;connetionName&gt] [-of=&lt;outputFormat&gt] [-t=&lt;fullTableName&gt]</code></pre>
 ___
 __Description__
+
 Remove tables which match filters
 ___
 __Options__
@@ -140,6 +143,7 @@ __Synopsis__
  <pre><code>table update [-h] [-hl] [-c=&lt;connetionName&gt] [-of=&lt;outputFormat&gt] [-n=&lt;newTableName&gt] [-t=&lt;fullTableName&gt]</code></pre>
 ___
 __Description__
+
 Update tables which match filters
 ___
 __Options__

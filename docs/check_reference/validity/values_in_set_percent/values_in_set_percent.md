@@ -46,9 +46,9 @@ Those values are then summed (so effectively we perform count of valid values), 
 and multiplicated by a 100.0 so that the results is in percent.
 
 !!! Warning
-Running this check defining the wrong data type for the column might result with an error.
-This is because casting some types to another is impossible, for e.g. `DATE` to `NUMERIC`. That is why we
-recommend using this query on `STRING` types, where such errors do not occur.
+    Running this check defining the wrong data type for the column might result with an error.
+    This is because casting some types to another is impossible, for e.g. `DATE` to `NUMERIC`. That is why we
+    recommend using this query on `STRING` types, where such errors do not occur.
 
 
 Please see [Values in set percent](../../../sensor_reference/validity/values_in_set_percent/values_in_set_percent.md) for more information.

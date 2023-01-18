@@ -34,7 +34,7 @@ const TimezoneSelect = ({
           {label}
         </div>
       )}
-      <SelectInput options={options} value={value} onChange={onChange} limit={10} />
+      <SelectInput options={options} value={value} onChange={onChange} />
     </div>
   );
 };
