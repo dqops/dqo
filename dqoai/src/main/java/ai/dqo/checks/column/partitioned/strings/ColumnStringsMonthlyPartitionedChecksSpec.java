@@ -67,6 +67,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_valid_uuid_percent", o -> o.monthlyPartitionValidUuidPercent);
             put("monthly_partition_string_invalid_ip4_address_count", o -> o.monthlyPartitionStringInvalidIp4AddressCount);
             put("monthly_partition_string_valid_ip4_address_percent", o -> o.monthlyPartitionStringValidIp4AddressPercent);
+            put("monthly_partition_string_invalid_ip6_address_count", o -> o.monthlyPartitionStringInvalidIp6AddressCount);
 
 
 
@@ -159,6 +160,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidIp4AddressPercentCheckSpec monthlyPartitionStringValidIp4AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringInvalidIp6AddressCountCheckSpec monthlyPartitionStringInvalidIp6AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyPartitionStringNotMatchRegexCount;
@@ -663,6 +667,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidIp4AddressPercent, monthlyPartitionStringValidIp4AddressPercent));
         this.monthlyPartitionStringValidIp4AddressPercent = monthlyPartitionStringValidIp4AddressPercent;
         propagateHierarchyIdToField(monthlyPartitionStringValidIp4AddressPercent, "monthly_partition_string_valid_ip4_address_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP6 address count check.
+     * @return Maximum invalid IP6 address count check.
+     */
+    public ColumnStringInvalidIp6AddressCountCheckSpec getMonthlyPartitionStringInvalidIp6AddressCount() {
+        return monthlyPartitionStringInvalidIp6AddressCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid IP6 address count check.
+     * @param monthlyPartitionStringInvalidIp6AddressCount Maximum invalid IP6 address count check.
+     */
+    public void setMonthlyPartitionStringInvalidIp6AddressCount(ColumnStringInvalidIp6AddressCountCheckSpec monthlyPartitionStringInvalidIp6AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInvalidIp6AddressCount, monthlyPartitionStringInvalidIp6AddressCount));
+        this.monthlyPartitionStringInvalidIp6AddressCount = monthlyPartitionStringInvalidIp6AddressCount;
+        propagateHierarchyIdToField(monthlyPartitionStringInvalidIp6AddressCount, "monthly_partition_string_invalid_ip6_address_count");
     }
 
     /**
