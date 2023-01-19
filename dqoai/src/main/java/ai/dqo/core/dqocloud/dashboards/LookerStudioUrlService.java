@@ -1,5 +1,7 @@
 package ai.dqo.core.dqocloud.dashboards;
 
+import ai.dqo.metadata.dashboards.DashboardSpec;
+
 /**
  * Service that creates authenticated URLS for Looker studio dashboards.
  */
@@ -14,8 +16,8 @@ public interface LookerStudioUrlService {
     /**
      * Creates an authenticated URL for a looker studio dashboard.
      *
-     * @param unauthenticatedDashboardUrl URL to the Looker Studio dashboard.
+     * @param dashboardSpec Dashboard specification.
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
-    String makeAuthenticatedDashboardUrl(String unauthenticatedDashboardUrl);
+    String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec);
 }

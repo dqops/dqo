@@ -1,5 +1,0 @@
-{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-SELECT
-  AVG({{ lib.render_target_column('analyzed_table') }}) OVER(ORDER BY date DESC ROWS BETWEEN CURRENT ROW AND 6 FOLLOWING) AS actual_value
-FROM {{ lib.render_target_table() }} AS analyzed_table
-LIMIT 1

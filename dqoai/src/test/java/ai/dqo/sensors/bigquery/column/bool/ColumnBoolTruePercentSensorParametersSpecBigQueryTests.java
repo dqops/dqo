@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.bool;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.bool.ColumnTruePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;

@@ -63,6 +63,7 @@ public class RuleResultsColumnNames extends SensorReadoutsColumnNames {
             CHECK_NAME_COLUMN_NAME,
             DATA_STREAM_NAME_COLUMN_NAME,
             SEVERITY_COLUMN_NAME,
-            TIME_PERIOD_COLUMN_NAME
+            TIME_PERIOD_COLUMN_NAME,
+            EXECUTED_AT_COLUMN_NAME
     };
 }

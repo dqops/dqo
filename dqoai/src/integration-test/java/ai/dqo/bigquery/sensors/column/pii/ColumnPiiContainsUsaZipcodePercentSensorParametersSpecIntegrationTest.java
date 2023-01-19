@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.pii;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;

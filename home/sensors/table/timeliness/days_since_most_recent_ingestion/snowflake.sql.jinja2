@@ -2,29 +2,41 @@
 
 {% macro render_current_ingestion_diff() -%}
     {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
-         TIMESTAMP_DIFF(
-             CURRENT_TIMESTAMP(),
-             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-             MILLISECOND)
+    TIMESTAMP_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
-         DATE_DIFF(
-             CURRENT_TIMESTAMP(),
-             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-             MILLISECOND)
-    {%- elif table.columns[timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
-        DATETIME_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-            MILLISECOND)
-    {%- elif table.columns[timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
-        DATETIME_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-                ),
-            MILLISECOND)
+    DATE_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+    DATETIME_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+        MILLISECOND
+    )
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+    TIMESTAMP_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX(
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MILLISECOND
+    )
+    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
+    TIMESTAMP_DIFF(
+        CURRENT_TIMESTAMP(),
+        MAX(
+            CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        MILLISECOND
+    )
     {%- else -%}
-    <INVALID DATA TYPE: table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type/>
+    <INVALID DATA TYPE>
     {%- endif -%}
 {%- endmacro -%}
 

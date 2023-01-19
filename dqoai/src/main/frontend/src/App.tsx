@@ -25,13 +25,13 @@ const App = () => {
   }, [lastSequenceNumber]);
 
   return (
-    <AppProvider>
-      <ThemeProvider value={{}}>
-        <Router>
+    <Router>
+      <AppProvider>
+        <ThemeProvider value={{}}>
           <Routes />
-        </Router>
-      </ThemeProvider>
-    </AppProvider>
+        </ThemeProvider>
+      </AppProvider>
+    </Router>
   );
 };
 

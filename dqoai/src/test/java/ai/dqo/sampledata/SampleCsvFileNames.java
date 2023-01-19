@@ -35,4 +35,8 @@ public class SampleCsvFileNames {
 
     public static final String uuid_test = "uuid_test.csv";
 
+    public static final String ip4_test = "ip4_test.csv";
+
+    public static final String ip6_test = "ip6_test.csv";
+
 }

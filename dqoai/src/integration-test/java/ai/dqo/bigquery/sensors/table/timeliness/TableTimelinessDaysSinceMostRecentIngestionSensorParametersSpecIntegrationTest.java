@@ -17,7 +17,6 @@ package ai.dqo.bigquery.sensors.table.timeliness;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.adhoc.TableAdHocTimelinessChecksSpec;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -63,9 +62,6 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecInte
         this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
         this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableAdHocTimelinessChecksSpec category = new TableAdHocTimelinessChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getChecks().setTimeliness(category);
-        category.setDaysSinceMostRecentIngestion(this.checkSpec);
     }
 
     @Test

@@ -116,14 +116,14 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date1");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.125, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date1");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

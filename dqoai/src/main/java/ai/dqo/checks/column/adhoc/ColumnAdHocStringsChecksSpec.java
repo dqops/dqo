@@ -16,7 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.strings.*;
+import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -64,6 +64,12 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
             put("string_valid_email_percent", o -> o.stringValidEmailPercent);
             put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
+            put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
+            put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
+            put("string_valid_ip4_address_percent", o -> o.stringValidIp4AddressPercent);
+            put("string_invalid_ip6_address_count", o -> o.stringInvalidIp6AddressCount);
+
+
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
@@ -111,7 +117,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage.")
     private ColumnStringBooleanPlaceholderPercentCheckSpec stringBooleanPlaceholderPercent;
 
-
     @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage.")
     private ColumnStringParsableToIntegerPercentCheckSpec stringParsableToIntegerPercent;
 
@@ -147,6 +152,18 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage.")
+    private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringValidIp4AddressPercentCheckSpec stringValidIp4AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count.")
+    private ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -598,6 +615,77 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(stringInvalidUuidCount, "string_invalid_uuid_count");
     }
 
+    /**
+     * Returns a valid UUID percent check.
+     * @return Valid UUID percent check.
+     */
+    public ColumnStringValidUuidPercentCheckSpec getStringValidUuidPercent() {
+        return stringValidUuidPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid UUID percent check.
+     * @param stringValidUuidPercent Valid UUID percent check.
+     */
+    public void setStringValidUuidPercent(ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidUuidPercent, stringValidUuidPercent));
+        this.stringValidUuidPercent = stringValidUuidPercent;
+        propagateHierarchyIdToField(stringValidUuidPercent, "string_valid_uuid_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP4 address count check.
+     * @return Maximum invalid IP4 address count check.
+     */
+    public ColumnStringInvalidIp4AddressCountCheckSpec getStringInvalidIp4AddressCount() {
+        return stringInvalidIp4AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP4 address count check.
+     * @param stringInvalidIp4AddressCount Invalid IP4 address count check.
+     */
+    public void setStringInvalidIp4AddressCount(ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp4AddressCount, stringInvalidIp4AddressCount));
+        this.stringInvalidIp4AddressCount = stringInvalidIp4AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp4AddressCount, "string_invalid_ip4_address_count");
+    }
+
+    /**
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
+     */
+    public ColumnStringValidIp4AddressPercentCheckSpec getStringValidIp4AddressPercent() {
+        return stringValidIp4AddressPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid IP4 address percent check.
+     * @param stringValidIp4AddressPercent valid IP4 address percent check.
+     */
+    public void setStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec stringValidIp4AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidIp4AddressPercent, stringValidIp4AddressPercent));
+        this.stringValidIp4AddressPercent = stringValidIp4AddressPercent;
+        propagateHierarchyIdToField(stringValidIp4AddressPercent, "string_valid_ip4_address_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP6 address count check.
+     * @return Maximum invalid IP6 address count check.
+     */
+    public ColumnStringInvalidIp6AddressCountCheckSpec getStringInvalidIp6AddressCount() {
+        return stringInvalidIp6AddressCount;
+    }
+
+    /**
+     * Sets a new definition of an invalid IP6 address count check.
+     * @param stringInvalidIp6AddressCount Invalid IP6 address count check.
+     */
+    public void setStringInvalidIp6AddressCount(ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.stringInvalidIp6AddressCount, stringInvalidIp6AddressCount));
+        this.stringInvalidIp6AddressCount = stringInvalidIp6AddressCount;
+        propagateHierarchyIdToField(stringInvalidIp6AddressCount, "string_invalid_ip6_address_count");
+    }
 
     /**
      * Returns a maximum not match regex count check.

@@ -15,7 +15,7 @@
  */
 package ai.dqo.snowflake.sensors.column.consistency;
 
-import ai.dqo.checks.column.consistency.ColumnConsistencyNotNullPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyNotNullPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;

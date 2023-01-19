@@ -28,7 +28,7 @@ There is also `mode: previous_redaings` that enables calculating rules threshold
 
 === "Current value"
     ```yaml
-    --8<-- "docs/dqo_concept/rules/rule_config_current.md"
+    --8<-- "docs/dqo_concept/rules/rule_config_current.yaml"
     ```
 === "Historical values"
     ```yaml

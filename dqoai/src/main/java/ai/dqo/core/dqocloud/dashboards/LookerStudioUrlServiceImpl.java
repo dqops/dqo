@@ -3,11 +3,13 @@ package ai.dqo.core.dqocloud.dashboards;
 import ai.dqo.cloud.rest.api.LookerStudioKeyRequestApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
+import ai.dqo.metadata.dashboards.DashboardSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 /**
  * Service that creates authenticated URLS for Looker studio dashboards.
@@ -40,21 +42,56 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
     /**
      * Creates an authenticated URL for a looker studio dashboard.
-     * @param unauthenticatedDashboardUrl URL to the Looker Studio dashboard.
+     * @param dashboardSpec Dashboard specification.
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
     @Override
-    public String makeAuthenticatedDashboardUrl(String unauthenticatedDashboardUrl) {
+    public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec) {
         String refreshToken = this.issueLookerStudioQueryApiKey();
 
         StringBuilder stringBuilder = new StringBuilder();
-        String jsonParameters = String.format("{\"ds0.token\":\"%s\"}", refreshToken);
+        String jsonParameters = formatDashboardParameters(refreshToken, dashboardSpec.getParameters());
         String urlEncodedLookerStudioParameters = URLEncoder.encode(jsonParameters, StandardCharsets.UTF_8);
-        stringBuilder.append(unauthenticatedDashboardUrl);
+        stringBuilder.append(dashboardSpec.getUrl());
         stringBuilder.append("?params=");
         stringBuilder.append(urlEncodedLookerStudioParameters);
         String authenticatedUrl = stringBuilder.toString();
 
         return authenticatedUrl;
+    }
+
+    /**
+     * Generates the Looker Studio JSON parameter string.
+     * @param refreshToken Refresh token.
+     * @param parameters Optional dictionary of key/value parameter pairs.
+     * @return JSON string to be submitted as a parameter.
+     */
+    public String formatDashboardParameters(String refreshToken, Map<String, String> parameters) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("{");
+        stringBuilder.append('"');
+        stringBuilder.append("ds0.token");
+        stringBuilder.append('"');
+        stringBuilder.append(':');
+        stringBuilder.append('"');
+        stringBuilder.append(refreshToken);
+        stringBuilder.append('"');
+
+        if (parameters != null && parameters.size() > 0) {
+            for (Map.Entry<String, String> paramValuePair : parameters.entrySet()) {
+                stringBuilder.append(',');
+                stringBuilder.append('"');
+                stringBuilder.append(paramValuePair.getKey());
+                stringBuilder.append('"');
+                stringBuilder.append(':');
+                stringBuilder.append('"');
+                stringBuilder.append(paramValuePair.getValue());
+                stringBuilder.append('"');
+            }
+        }
+        
+        stringBuilder.append("}");
+
+        return stringBuilder.toString();
     }
 }

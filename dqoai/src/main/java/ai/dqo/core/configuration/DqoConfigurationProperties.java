@@ -49,7 +49,7 @@ public class DqoConfigurationProperties implements Cloneable {
     private DqoLoggingConfigurationProperties logging;
 
     private String home;
-    private String yamlSchemaServer;
+    private String yamlSchemaServer = "https://cloud.dqo.ai/dqo-yaml-schema/";
 
 
     /**
