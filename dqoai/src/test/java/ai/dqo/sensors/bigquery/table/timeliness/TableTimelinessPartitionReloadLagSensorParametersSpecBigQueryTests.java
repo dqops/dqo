@@ -148,10 +148,9 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                     DATE_DIFF(
                         analyzed_table.`%s`,
                         analyzed_table.`%s`,
-                        MILLISECOND
+                        DAY
                     )
                 )
-                / 24.0 / 3600.0 / 1000.0
                 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";

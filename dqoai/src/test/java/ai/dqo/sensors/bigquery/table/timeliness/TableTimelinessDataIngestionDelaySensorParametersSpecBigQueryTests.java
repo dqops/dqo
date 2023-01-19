@@ -145,9 +145,8 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
                 DATE_DIFF(
                     MAX(analyzed_table.`%s`),
                     MAX(analyzed_table.`%s`),
-                    MILLISECOND
+                    DAY
                 )
-                / 24.0 / 3600.0 / 1000.0
                 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
@@ -227,7 +226,6 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
-
 
     @Test
     void renderSensorWithTimestampInput_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
