@@ -34,7 +34,6 @@ export interface IConnectionState {
   schedule?: RecurringScheduleSpec;
   timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
-  defaultDataStreams?: DataStreamMappingSpec;
   labels: string[];
   isUpdatedConnectionBasic?: boolean;
   updatedSchedule?: RecurringScheduleSpec;
@@ -234,7 +233,7 @@ const connectionReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
-        defaultDataStreams: action.data,
+        updatedDataStreamsMapping: action.data,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR:
