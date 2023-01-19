@@ -67,6 +67,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_valid_uuid_percent", o -> o.monthlyCheckpointStringValidUuidPercent);
             put("monthly_checkpoint_string_invalid_ip4_address_count", o -> o.monthlyCheckpointStringInvalidIp4AddressCount);
             put("monthly_checkpoint_string_valid_ip4_address_percent", o -> o.monthlyCheckpointStringValidIp4AddressPercent);
+            put("monthly_checkpoint_string_invalid_ip6_address_count", o -> o.monthlyCheckpointStringInvalidIp6AddressCount);
 
 
 
@@ -159,6 +160,9 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringValidIp4AddressPercentCheckSpec monthlyCheckpointStringValidIp4AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringInvalidIp6AddressCountCheckSpec monthlyCheckpointStringInvalidIp6AddressCount;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyCheckpointStringNotMatchRegexCount;
@@ -659,6 +663,24 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidIp4AddressPercent, monthlyCheckpointStringValidIp4AddressPercent));
         this.monthlyCheckpointStringValidIp4AddressPercent = monthlyCheckpointStringValidIp4AddressPercent;
         propagateHierarchyIdToField(monthlyCheckpointStringValidIp4AddressPercent, "monthly_checkpoint_string_valid_ip4_address_percent");
+    }
+
+    /**
+     * Returns a maximum invalid IP6 address count check.
+     * @return Maximum invalid IP6 address count check.
+     */
+    public ColumnStringInvalidIp6AddressCountCheckSpec getMonthlyCheckpointStringInvalidIp6AddressCount() {
+        return monthlyCheckpointStringInvalidIp6AddressCount;
+    }
+
+    /**
+     * Sets a new definition of a maximum invalid IP6 address count check.
+     * @param monthlyCheckpointStringInvalidIp6AddressCount Maximum invalid IP6 address count check.
+     */
+    public void setMonthlyCheckpointStringInvalidIp6AddressCount(ColumnStringInvalidIp6AddressCountCheckSpec monthlyCheckpointStringInvalidIp6AddressCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInvalidIp6AddressCount, monthlyCheckpointStringInvalidIp6AddressCount));
+        this.monthlyCheckpointStringInvalidIp6AddressCount = monthlyCheckpointStringInvalidIp6AddressCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringInvalidIp6AddressCount, "monthly_checkpoint_string_invalid_ip6_address_count");
     }
 
     /**

@@ -63,3 +63,5 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/160zswzfKyJGvR1EdKE59zDbLMc4atTw_eh7qNO9ObWc/
 curl -L --header "Authorization: Bearer %access_token%" "https://docs.google.com/spreadsheets/d/160zswzfKyJGvR1EdKE59zDbLMc4atTw_eh7qNO9ObWc/export?exportFormat=csv" > test_data_timeliness_sensors.csv
 
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1JUlg3cdTQBZk4TXbK_Vpn8d4vwWLOeAl2D4Ry0zoOxM
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1JUlg3cdTQBZk4TXbK_Vpn8d4vwWLOeAl2D4Ry0zoOxM/export?exportFormat=csv" > ip6_test.csv
