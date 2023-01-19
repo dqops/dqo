@@ -16,7 +16,7 @@
 package ai.dqo.snowflake.sensors.column.bool;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.bool.ColumnFalsePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
