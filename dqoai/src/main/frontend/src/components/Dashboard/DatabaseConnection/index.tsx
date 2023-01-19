@@ -40,7 +40,7 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push(ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas'));
+    history.push(`${ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas')}?import_schema=true`);
   };
 
   return (
