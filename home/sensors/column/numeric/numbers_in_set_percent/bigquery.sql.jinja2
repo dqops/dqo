@@ -7,7 +7,7 @@
 {%- macro actual_value() -%}
     {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
     {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
-    0.0
+    NULL
     {%- else -%}
     CASE
         WHEN COUNT(*) = 0 THEN 100.0
