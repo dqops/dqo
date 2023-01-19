@@ -73,15 +73,8 @@ public abstract class TerminalWriterAbstract implements TerminalWriter {
      */
     @Override
     public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-        TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
-
-        TableBuilder tableBuilder = new TableBuilder(model);
-        if (addBorder) {
-            tableBuilder.addInnerBorder(BorderStyle.oldschool);
-            tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-        }
-        String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
-        this.write(renderedTable);
+        TableModel tableModel = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
+        this.writeTable(tableModel, addBorder);
     }
 
     /**
@@ -92,13 +85,7 @@ public abstract class TerminalWriterAbstract implements TerminalWriter {
     @Override
     public void writeTable(Table table, boolean addBorder) {
         TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
-        TableBuilder tableBuilder = new TableBuilder(tableModel);
-        if (addBorder) {
-            tableBuilder.addInnerBorder(BorderStyle.oldschool);
-            tableBuilder.addHeaderBorder(BorderStyle.oldschool);
-        }
-        String renderedTable = tableBuilder.build().render(this.terminal.getWidth() - 1);
-        this.write(renderedTable);
+        this.writeTable(tableModel, addBorder);
     }
 
     /**

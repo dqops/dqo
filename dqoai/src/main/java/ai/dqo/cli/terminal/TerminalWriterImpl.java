@@ -17,18 +17,14 @@ package ai.dqo.cli.terminal;
 
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 
 /**
  * Console terminal wrapper. Provides access to the terminal services.
  */
-@Component
 public class TerminalWriterImpl extends TerminalWriterAbstract {
     private final Terminal terminal;
 
-    @Autowired
     public TerminalWriterImpl(Terminal terminal) {
         this.terminal = terminal;
     }

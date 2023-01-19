@@ -36,6 +36,10 @@ public class CliApplication {
 
 	private static boolean runningInteractiveMode;
 
+	public static boolean isRunningInteractiveMode() {
+		return runningInteractiveMode;
+	}
+
 	/**
 	 * Filter the non-parameter arguments from the args given to main.
 	 * A non-parameter argument doesn't start with '-'.

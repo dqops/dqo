@@ -15,19 +15,16 @@
  */
 package ai.dqo.cli.terminal;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-
 /**
  * Console terminal wrapper. Provides access to the terminal services.
  * Implementation relying on the standard output (StdOut).
  */
-@Component
 public class TerminalWriterSystemImpl extends TerminalWriterAbstract {
 
-    @Autowired
-    public TerminalWriterSystemImpl() {
+    private Integer terminalWidth;
+
+    public TerminalWriterSystemImpl(Integer terminalWidth) {
+        this.terminalWidth = terminalWidth;
     }
 
     /**
@@ -54,8 +51,7 @@ public class TerminalWriterSystemImpl extends TerminalWriterAbstract {
      */
     @Override
     public Integer getTerminalWidth() {
-        // TODO: Add constant to configuration properties.
-        return 100;
+        return this.terminalWidth;
     }
 
     /**

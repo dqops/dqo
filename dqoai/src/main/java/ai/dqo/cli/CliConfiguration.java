@@ -17,10 +17,13 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
+import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.TerminalWriterImpl;
+import ai.dqo.cli.terminal.TerminalWriterSystemImpl;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
@@ -30,6 +33,7 @@ import org.jline.reader.*;
 import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.widget.TailTipWidgets;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,6 +72,21 @@ public class CliConfiguration {
         builtins.alias("zle", "widget");
         builtins.alias("bindkey", "keymap");
         return builtins;
+    }
+
+    /**
+     * Creates a configuration of terminal writer based on application's running mode.
+     * @param beanFactory Bean factory.
+     * @return Terminal writer applicable to the application's running mode.
+     */
+    @Bean(name = "terminalWriter")
+    public TerminalWriter terminalWriter(BeanFactory beanFactory,
+                                         DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
+        if (CliApplication.isRunningInteractiveMode()) {
+            Terminal terminal = beanFactory.getBean(Terminal.class);
+            return new TerminalWriterImpl(terminal);
+        }
+        return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
     }
 
     /**
