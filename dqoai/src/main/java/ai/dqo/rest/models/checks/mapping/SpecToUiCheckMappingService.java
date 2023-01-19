@@ -20,6 +20,7 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.rest.models.checks.UIAllChecksModel;
 import ai.dqo.rest.models.checks.UIFieldModel;
 import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
+import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 
 import java.util.List;
@@ -54,4 +55,11 @@ public interface SpecToUiCheckMappingService {
      * @return List of UI fields for all sensor parameter fields.
      */
     List<UIFieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec);
+
+    /**
+     * Creates a list of fields to edit all values in the rule parameters specification.
+     * @param ruleParametersSpec Rule parameters specification.
+     * @return List of UI fields for all rule parameter fields.
+     */
+    List<UIFieldModel> createFieldsForRuleParameters(AbstractRuleParametersSpec ruleParametersSpec);
 }
