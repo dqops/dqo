@@ -15,22 +15,19 @@
  */
 package ai.dqo.cli.terminal;
 
-import org.jline.terminal.Terminal;
-import org.jline.utils.InfoCmp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
 /**
  * Console terminal wrapper. Provides access to the terminal services.
+ * Implementation relying on the standard output (StdOut).
  */
 @Component
-public class TerminalWriterImpl extends TerminalWriterAbstract {
-    private final Terminal terminal;
+public class TerminalWriterSystemImpl extends TerminalWriterAbstract {
 
     @Autowired
-    public TerminalWriterImpl(Terminal terminal) {
-        this.terminal = terminal;
+    public TerminalWriterSystemImpl() {
     }
 
     /**
@@ -39,17 +36,16 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public void write(String text) {
-		this.terminal.writer().write(text);
-		this.terminal.flush();
+        if (text != null) {
+            System.out.print(text);
+            System.out.flush();
+        }
     }
 
     /**
      * Clears the screen.
      */
-    @Override
     public void clearScreen() {
-        this.terminal.puts(InfoCmp.Capability.clear_screen);
-        this.terminal.flush();
     }
 
     /**
@@ -58,15 +54,15 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public Integer getTerminalWidth() {
-        return this.terminal.getWidth();
+        // TODO: Add constant to configuration properties.
+        return 100;
     }
 
     /**
      * Gets terminal height.
      * @return Terminal height.
      */
-    @Override
     public Integer getTerminalHeight() {
-        return this.terminal.getHeight();
+        return Integer.MAX_VALUE;
     }
 }
