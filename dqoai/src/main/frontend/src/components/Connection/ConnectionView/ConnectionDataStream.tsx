@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import DataStreamsMappingView from '../DataStreamsMappingView';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
+  getConnectionBasic,
   getConnectionDefaultDataStreamsMapping,
   setIsUpdatedDataStreamsMapping,
   setUpdatedDataStreamsMapping,
@@ -16,14 +17,21 @@ import { useParams } from "react-router-dom";
 const ConnectionDataStream = () => {
   const { connection }: { connection: string } = useParams();
   const dispatch = useActionDispatch();
-  const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
+  const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
     useSelector((state: IRootState) => state.connection);
 
   useEffect(() => {
-    if (!updatedDataStreamsMapping) {
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(connection));
       dispatch(getConnectionDefaultDataStreamsMapping(connection));
     }
   }, [connection]);
+
+  useEffect(() => {
+    if (!updatedDataStreamsMapping || (connectionBasic && connectionBasic?.connection_name !== connection)) {
+      dispatch(getConnectionDefaultDataStreamsMapping(connection));
+    }
+  }, [connection, connectionBasic]);
 
   const onUpdate = async () => {
     if (!updatedDataStreamsMapping) {
