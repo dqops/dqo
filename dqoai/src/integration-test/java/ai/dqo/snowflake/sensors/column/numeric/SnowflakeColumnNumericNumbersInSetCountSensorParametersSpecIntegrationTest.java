@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.numeric;
+package ai.dqo.snowflake.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersInSetCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -30,6 +29,8 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import net.snowflake.client.jdbc.internal.apache.arrow.vector.types.pojo.ArrowType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class ColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnNumericNumbersInSetCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNumbersInSetCountCheckSpec checkSpec;
@@ -56,7 +57,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest e
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericNumbersInSetCountSensorParametersSpec();
@@ -77,7 +78,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals("", resultTable.column(0).get(0));
     }
 
     @Test
