@@ -16,8 +16,8 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.pii.ColumnPiiContainsUsaPhonePercentCheckSpec;
-import ai.dqo.checks.column.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsUsaPhonePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

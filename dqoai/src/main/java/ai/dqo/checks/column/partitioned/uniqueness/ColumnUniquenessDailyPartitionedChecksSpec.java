@@ -16,9 +16,9 @@
 package ai.dqo.checks.column.partitioned.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.uniqueness.ColumnDuplicateCountCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

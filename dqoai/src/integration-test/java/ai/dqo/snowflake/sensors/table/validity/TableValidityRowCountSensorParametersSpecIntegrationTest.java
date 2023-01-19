@@ -15,7 +15,7 @@
  */
 package ai.dqo.snowflake.sensors.table.validity;
 
-import ai.dqo.checks.table.validity.TableValidityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.validity.TableValidityRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;

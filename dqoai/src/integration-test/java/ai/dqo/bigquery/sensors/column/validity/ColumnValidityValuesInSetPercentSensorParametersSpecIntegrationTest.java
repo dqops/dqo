@@ -16,7 +16,7 @@
 package ai.dqo.bigquery.sensors.column.validity;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
-import ai.dqo.checks.column.validity.ColumnValidityValuesInSetPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.validity.ColumnValidityValuesInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
