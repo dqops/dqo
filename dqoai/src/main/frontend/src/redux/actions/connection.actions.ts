@@ -321,7 +321,7 @@ export const updateConnectionDefaultDataStreamsMapping =
     }
   };
 
-export const setUpdatedConnectionBasic = (
+export const setConnectionBasic = (
   connectionBasic?: ConnectionBasicModel
 ) => ({
   type: CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC,

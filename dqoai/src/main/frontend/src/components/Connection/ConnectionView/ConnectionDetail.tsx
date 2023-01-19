@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { ConnectionSpecProviderTypeEnum } from '../../../api';
-import Input from '../../Input';
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
 import { useSelector } from 'react-redux';
@@ -8,7 +7,7 @@ import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
   setIsUpdatedConnectionBasic,
-  setUpdatedConnectionBasic,
+  setConnectionBasic,
   updateConnectionBasic
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -19,7 +18,7 @@ import TimezoneSelect from "../../TimezoneSelect";
 const ConnectionDetail = () => {
   const { connection }: { connection: string } = useParams();
 
-  const { updatedConnectionBasic, isUpdatedConnectionBasic } = useSelector(
+  const { connectionBasic, isUpdatedConnectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
 
@@ -27,15 +26,15 @@ const ConnectionDetail = () => {
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    if (!updatedConnectionBasic) {
+    if (connectionBasic?.connection_name !== connection) {
       dispatch(getConnectionBasic(connection));
     }
   }, [connection]);
 
   const onChange = (obj: any) => {
     dispatch(
-      setUpdatedConnectionBasic({
-        ...updatedConnectionBasic,
+      setConnectionBasic({
+        ...connectionBasic,
         ...obj
       })
     );
@@ -43,11 +42,11 @@ const ConnectionDetail = () => {
   };
 
   const onUpdate = async () => {
-    if (!updatedConnectionBasic) {
+    if (!connectionBasic) {
       return;
     }
     await dispatch(
-      updateConnectionBasic(connection, updatedConnectionBasic)
+      updateConnectionBasic(connection, connectionBasic)
     );
     await dispatch(getConnectionBasic(connection));
     dispatch(setIsUpdatedConnectionBasic(false));
@@ -67,7 +66,7 @@ const ConnectionDetail = () => {
               <div>Connection name:</div>
             </td>
             <td className="px-4 py-2">
-              <div>{updatedConnectionBasic?.connection_name}</div>
+              <div>{connectionBasic?.connection_name}</div>
             </td>
           </tr>
           <tr>
@@ -76,7 +75,7 @@ const ConnectionDetail = () => {
             </td>
             <td className="px-4 py-2">
               <TimezoneSelect
-                value={updatedConnectionBasic?.time_zone}
+                value={connectionBasic?.time_zone}
                 onChange={(value) => onChange({ time_zone: value })}
               />
             </td>
@@ -85,14 +84,14 @@ const ConnectionDetail = () => {
       </table>
 
       <div className="px-4">
-        {updatedConnectionBasic?.provider_type ===
+        {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.bigquery && (
           <BigqueryConnection
-            bigquery={updatedConnectionBasic?.bigquery}
+            bigquery={connectionBasic?.bigquery}
             onChange={(bigquery) => onChange({ bigquery })}
           />
         )}
-        {updatedConnectionBasic?.provider_type ===
+        {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.snowflake && <SnowflakeConnection />}
       </div>
     </div>
