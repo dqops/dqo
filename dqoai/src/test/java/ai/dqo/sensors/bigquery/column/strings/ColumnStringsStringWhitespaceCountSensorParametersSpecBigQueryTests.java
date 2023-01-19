@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.strings.ColumnStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringWhitespaceCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;

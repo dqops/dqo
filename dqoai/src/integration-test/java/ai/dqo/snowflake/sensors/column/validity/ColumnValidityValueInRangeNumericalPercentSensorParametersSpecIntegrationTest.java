@@ -15,7 +15,7 @@
  */
 package ai.dqo.snowflake.sensors.column.validity;
 
-import ai.dqo.checks.column.validity.ColumnValidityValueInRangeNumericalPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.validity.ColumnValidityValueInRangeNumericalPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;

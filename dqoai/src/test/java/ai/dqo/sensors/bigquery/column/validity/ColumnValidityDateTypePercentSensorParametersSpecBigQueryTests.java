@@ -16,7 +16,7 @@
 package ai.dqo.sensors.bigquery.column.validity;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.validity.ColumnValidityDateTypePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.validity.ColumnValidityDateTypePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
