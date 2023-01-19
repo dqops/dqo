@@ -41,7 +41,6 @@ export interface IConnectionState {
   isUpdatedSchedule?: boolean;
   updatedComments?: CommentSpec[];
   isUpdatedComments?: boolean;
-  updatedLabels?: string[];
   isUpdatedLabels?: boolean;
   updatedDataStreamsMapping?: DataStreamMappingSpec;
   isUpdatedDataStreamsMapping?: boolean;
@@ -200,6 +199,7 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         labels: action.data,
+        isUpdatedLabels: false,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_LABELS_ERROR:
@@ -293,7 +293,7 @@ const connectionReducer = (state = initialState, action: any) => {
     case CONNECTION_ACTION.SET_UPDATED_LABELS:
       return {
         ...state,
-        updatedLabels: action.labels
+        labels: action.labels
       };
     case CONNECTION_ACTION.SET_IS_UPDATED_LABELS:
       return {
