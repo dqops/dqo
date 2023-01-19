@@ -1,3 +1,0 @@
-apiVersion: dqo/v1
-kind: provider_sensor
-spec: {}
