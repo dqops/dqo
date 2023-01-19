@@ -8,12 +8,13 @@
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     )
+    / 24.0 / 3600.0 / 1000.0
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
     DATE_DIFF(
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
-        MILLISECOND
+        DAY
     )
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' and
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
@@ -22,6 +23,7 @@
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     )
+    / 24.0 / 3600.0 / 1000.0
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
     TIMESTAMP_DIFF(
@@ -33,6 +35,7 @@
         ),
         MILLISECOND
     )
+    / 24.0 / 3600.0 / 1000.0
     {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
     TIMESTAMP_DIFF(
@@ -44,14 +47,14 @@
         ),
         MILLISECOND
     )
+    / 24.0 / 3600.0 / 1000.0
     {%- else -%}
-    <INVALID DATA TYPE>
+    <INVALID OR NOT MATCHING DATA TYPE>
     {%- endif -%}
 {%- endmacro -%}
 
 SELECT
     {{ render_ingestion_event_max_diff() }}
-    / 24.0 / 3600.0 / 1000.0
     AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
