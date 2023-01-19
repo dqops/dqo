@@ -4,7 +4,7 @@ import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionLabels,
   setIsUpdatedLabels,
-  setUpdatedLabels,
+  setLabels,
   updateConnectionLabels
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -14,24 +14,24 @@ import { useParams } from "react-router-dom";
 
 const ConnectionLabelsView = () => {
   const { connection }: { connection: string } = useParams();
-  const { isUpdating, updatedLabels, isUpdatedLabels } = useSelector(
+  const { isUpdating, labels, isUpdatedLabels, connectionBasic } = useSelector(
     (state: IRootState) => state.connection
   );
   const dispatch = useActionDispatch();
 
   useEffect(() => {
-    if (!updatedLabels) {
+    if (!labels || connectionBasic?.connection_name !== connection) {
       dispatch(getConnectionLabels(connection));
     }
   }, [connection]);
 
   const onUpdate = async () => {
-    await dispatch(updateConnectionLabels(connection, updatedLabels || []));
+    await dispatch(updateConnectionLabels(connection, labels || []));
     await dispatch(getConnectionLabels(connection));
   };
 
   const handleChange = (value: string[]) => {
-    dispatch(setUpdatedLabels(value));
+    dispatch(setLabels(value));
     dispatch(setIsUpdatedLabels(true));
   };
 
@@ -42,7 +42,7 @@ const ConnectionLabelsView = () => {
         isUpdated={isUpdatedLabels}
         isUpdating={isUpdating}
       />
-      <LabelsView labels={updatedLabels || []} onChange={handleChange} />
+      <LabelsView labels={labels || []} onChange={handleChange} />
     </div>
   );
 };
