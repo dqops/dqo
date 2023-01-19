@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.sensors.column.bool;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.bool.ColumnFalsePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -38,7 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+public class SnowflakeColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnBoolFalsePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnFalsePercentCheckSpec checkSpec;

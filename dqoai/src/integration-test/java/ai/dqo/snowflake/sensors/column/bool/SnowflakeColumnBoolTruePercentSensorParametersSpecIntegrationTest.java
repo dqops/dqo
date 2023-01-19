@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.sensors.column.bool;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.bool.ColumnTruePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -30,6 +29,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.bool.ColumnBoolTruePercentSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class ColumnBoolTruePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeColumnBoolTruePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnBoolTruePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTruePercentCheckSpec checkSpec;
@@ -53,7 +53,7 @@ public class ColumnBoolTruePercentSensorParametersSpecIntegrationTest extends Ba
     @BeforeEach
     protected void setUp() throws Throwable {
         super.setUp();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnBoolTruePercentSensorParametersSpec();
