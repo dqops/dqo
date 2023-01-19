@@ -36,7 +36,6 @@ export interface IConnectionState {
   comments: CommentSpec[];
   defaultDataStreams?: DataStreamMappingSpec;
   labels: string[];
-  updatedConnectionBasic?: ConnectionBasicModel;
   isUpdatedConnectionBasic?: boolean;
   updatedSchedule?: RecurringScheduleSpec;
   isUpdatedSchedule?: boolean;
@@ -88,7 +87,7 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         connectionBasic: action.data,
-        updatedConnectionBasic: action.data,
+        isUpdatedConnectionBasic: false,
         error: null
       };
     case CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR:
@@ -264,7 +263,7 @@ const connectionReducer = (state = initialState, action: any) => {
     case CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC:
       return {
         ...state,
-        updatedConnectionBasic: action.connectionBasic
+        connectionBasic: action.connectionBasic
       };
     case CONNECTION_ACTION.SET_IS_UPDATED_CONNECTION_BASIC:
       return {
