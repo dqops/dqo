@@ -44,10 +44,13 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List columns which match filters")
 public class ColumnListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalWriter terminalWriter;
-	private final TerminalTableWritter terminalTableWritter;
-	private final FileWritter fileWritter;
+	private ColumnService columnService;
+	private TerminalWriter terminalWriter;
+	private TerminalTableWritter terminalTableWritter;
+	private FileWritter fileWritter;
+
+	public ColumnListCliCommand() {
+	}
 
 	@Autowired
 	public ColumnListCliCommand(TerminalWriter terminalWriter,

@@ -37,9 +37,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", description = "Remove tables which match filters")
 public class TableRemoveCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TableService tableImportService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public TableRemoveCliCommand() {
+    }
 
     @Autowired
     public TableRemoveCliCommand(TerminalReader terminalReader,

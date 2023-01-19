@@ -34,9 +34,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", description = "Show editor settings")
 public class SettingsEditorShowCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsEditorShowCliCommand() {
+	}
 
 	@Autowired
 	public SettingsEditorShowCliCommand(SettingsService settingsService,

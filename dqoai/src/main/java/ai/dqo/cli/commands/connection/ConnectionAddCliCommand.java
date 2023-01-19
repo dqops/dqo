@@ -40,9 +40,12 @@ import java.util.LinkedHashMap;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", description = "Add connection with specified details")
 public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
-    private final ConnectionService connectionService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private ConnectionService connectionService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public ConnectionAddCliCommand() {
+    }
 
     @Autowired
     public ConnectionAddCliCommand(ConnectionService connectionService,

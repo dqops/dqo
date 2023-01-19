@@ -34,9 +34,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", description = "Remove api key")
 public class SettingsApiKeyRemoveCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsApiKeyRemoveCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeyRemoveCliCommand(SettingsService settingsService,

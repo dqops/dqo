@@ -37,11 +37,14 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", description = "Show table for connection")
 public class ConnectionTableShowCliCommand extends BaseCommand implements ICommand {
-	private final ConnectionService connectionService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
-	private final TerminalTableWritter terminalTableWritter;
-	private final FileWritter fileWritter;
+	private ConnectionService connectionService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private TerminalTableWritter terminalTableWritter;
+	private FileWritter fileWritter;
+
+	public ConnectionTableShowCliCommand() {
+	}
 
 	@Autowired
 	public ConnectionTableShowCliCommand(ConnectionService connectionService,

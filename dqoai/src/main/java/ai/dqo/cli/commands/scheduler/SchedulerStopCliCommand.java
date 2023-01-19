@@ -33,6 +33,9 @@ import picocli.CommandLine;
 public class SchedulerStopCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
 
+    public SchedulerStopCliCommand() {
+    }
+
     /**
      * Creates a cli command given the dependencies.
      * @param jobSchedulerService Job scheduler dependency.

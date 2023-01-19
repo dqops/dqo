@@ -40,10 +40,13 @@ import static java.lang.Integer.parseInt;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "init", description = "Init settings file in user home")
 public class SettingsInitCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
-	private final EditorFinderService editorFinderService;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private EditorFinderService editorFinderService;
+
+	public SettingsInitCliCommand() {
+	}
 
 	@Autowired
 	public SettingsInitCliCommand(SettingsService settingsService,

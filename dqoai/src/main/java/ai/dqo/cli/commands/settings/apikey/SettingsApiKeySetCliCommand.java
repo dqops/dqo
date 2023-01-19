@@ -37,10 +37,13 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", description = "Set api key")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
-	private final DqoCloudApiKeyProvider apiKeyProvider;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private DqoCloudApiKeyProvider apiKeyProvider;
+
+	public SettingsApiKeySetCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeySetCliCommand(SettingsService settingsService,

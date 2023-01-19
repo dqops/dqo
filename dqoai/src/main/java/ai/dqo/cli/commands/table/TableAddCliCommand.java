@@ -38,9 +38,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", description = "Add table with specified name")
 public class TableAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TableService tableImportService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public TableAddCliCommand() {
+    }
 
     @Autowired
     public TableAddCliCommand(TerminalReader terminalReader,

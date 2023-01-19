@@ -33,6 +33,9 @@ import picocli.CommandLine;
 public class CloudLoginCliCommand extends BaseCommand implements ICommand {
     private CloudLoginService cloudLoginService;
 
+    public CloudLoginCliCommand() {
+    }
+
     @Autowired
     public CloudLoginCliCommand(CloudLoginService cloudLoginService) {
         this.cloudLoginService = cloudLoginService;

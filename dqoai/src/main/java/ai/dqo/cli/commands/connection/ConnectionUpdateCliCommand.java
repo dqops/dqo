@@ -38,9 +38,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", description = "Update connection or connections which match filters")
 public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand {
-    private final ConnectionService connectionService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private ConnectionService connectionService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public ConnectionUpdateCliCommand() {
+    }
 
     @Autowired
     public ConnectionUpdateCliCommand(ConnectionService connectionService,

@@ -40,9 +40,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit sensor that match filters")
 public class SensorEditCliCommand extends BaseCommand implements ICommand {
-	private final SensorService sensorService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SensorService sensorService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SensorEditCliCommand() {
+	}
 
 	@Autowired
 	public SensorEditCliCommand(SensorService sensorService, TerminalReader terminalReader, TerminalWriter terminalWriter) {

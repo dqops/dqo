@@ -39,9 +39,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", description = "Update tables which match filters")
 public class TableUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TableService tableImportService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public TableUpdateCliCommand() {
+    }
 
     @Autowired
     public TableUpdateCliCommand(TerminalReader terminalReader,

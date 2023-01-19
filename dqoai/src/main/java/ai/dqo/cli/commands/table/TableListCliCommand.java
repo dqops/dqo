@@ -43,10 +43,13 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List tables which match filters")
 public class TableListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalWriter terminalWriter;
-    private final TerminalTableWritter terminalTableWritter;
-    private final FileWritter fileWritter;
+    private TableService tableImportService;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+    private FileWritter fileWritter;
+
+    public TableListCliCommand() {
+    }
 
     @Autowired
     public TableListCliCommand(TerminalWriter terminalWriter,
