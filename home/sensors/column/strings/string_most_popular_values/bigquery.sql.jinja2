@@ -10,43 +10,43 @@
     {%- endfor -%}
 {% endmacro -%}
 
-{%- macro actual_value() -%}
+{%- macro top_value() -%}
     {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
     NULL
     {%- else -%}
-    CASE
-        WHEN top_value.value = {{parameters.limit}} THEN 1
-        ELSE 0
-    END
+    SUM(
+        CASE
+            WHEN top_values IN ({{ extract_in_list({{parameters['values']}}) }}) THEN 1
+            ELSE 0
+        END
+    ) AS actual_value,
+    time_period
     {%- endif -%}
 {% endmacro -%}
 
 {%- macro top_value() -%}
-    (
-      SELECT
-        SUM(
-          CASE
-            WHEN top_col_values.top_values IN ({{extract_in_list(parameters['values'])}}) THEN 1
-            ELSE 0
-          END
-        ) AS value
+(
+    SELECT
+        top_col_values.top_values as top_values,
+        top_col_values.time_period as time_period,
+        RANK() OVER(partition by top_col_values.time_period ORDER BY top_col_values.ct) as rg
     FROM (
            SELECT
-            DISTINCT({{ lib.render_target_column('analyzed_table') }}) AS top_values,
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
             COUNT(*) AS ct
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
            FROM {{ lib.render_target_table() }} AS analyzed_table
-           GROUP BY top_values
-           ORDER BY ct DESC LIMIT {{parameters.limit}}
+           {{- lib.render_group_by() -}}, top_values
+           {{- lib.render_order_by() -}}, ct
          ) top_col_values
-    ) top_value
+    )
 {% endmacro -%}
 
 SELECT
-    {{ actual_value() }} AS actual_value
-    {{- lib.render_data_stream_projections('analyzed_table') }}
-    {{- lib.render_time_dimension_projection('analyzed_table') }}
-FROM {{ top_value() -}}
-{{- lib.render_where_clause() -}}
+    {{ top_value() }}
+FROM {{- top_values_column() }}
+WHERE rg <= {{parameters.limit}}
 {{- lib.render_group_by() -}},
 {{- lib.render_order_by() -}}
 
