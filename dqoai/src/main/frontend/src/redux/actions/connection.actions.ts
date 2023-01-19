@@ -353,7 +353,7 @@ export const setIsUpdatedComments = (isUpdated: boolean) => ({
   isUpdated
 });
 
-export const setUpdatedLabels = (labels?: string[]) => ({
+export const setLabels = (labels?: string[]) => ({
   type: CONNECTION_ACTION.SET_UPDATED_LABELS,
   labels
 });
