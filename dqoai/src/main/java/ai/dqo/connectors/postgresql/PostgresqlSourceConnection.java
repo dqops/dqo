@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors.snowflake;
+package ai.dqo.connectors.postgresql;
 
+import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
 import ai.dqo.core.secrets.SecretValueProvider;
@@ -29,21 +30,21 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 /**
- * Snowflake source connection.
+ * Postgresql source connection.
  */
-@Component("snowflake-connection")
+@Component("postgresql-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
+public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
     /**
      * Injection constructor for the snowflake connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
      */
     @Autowired
-    public SnowflakeSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-									 SecretValueProvider secretValueProvider,
-									 SnowflakeConnectionProvider snowflakeConnectionProvider) {
-        super(jdbcConnectionPool, secretValueProvider, snowflakeConnectionProvider);
+    public PostgresqlSourceConnection(JdbcConnectionPool jdbcConnectionPool,
+                                      SecretValueProvider secretValueProvider,
+                                      PostgresqlConnectionProvider postgresqlConnectionProvider) {
+        super(jdbcConnectionPool, secretValueProvider, postgresqlConnectionProvider);
     }
 
     /**
@@ -55,30 +56,46 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
     public HikariConfig createHikariConfig() {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
-        SnowflakeParametersSpec snowflakeSpec = connectionSpec.getSnowflake();
+        PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
 
-        String snowflakeAccount = this.getSecretValueProvider().expandValue(snowflakeSpec.getAccount());
-        hikariConfig.setJdbcUrl("jdbc:snowflake://" + snowflakeAccount + ".snowflakecomputing.com/");
+        String host = this.getSecretValueProvider().expandValue(postgresqlSpec.getHost());
+        StringBuilder jdbcConnectionBuilder = new StringBuilder();
+        jdbcConnectionBuilder.append("jdbc:postgresql://");
+        jdbcConnectionBuilder.append(host);
+
+        String port = this.getSecretValueProvider().expandValue(postgresqlSpec.getPort());
+        if (!Strings.isNullOrEmpty(port)) {
+            try {
+                int portNumber = Integer.parseInt(port);
+                jdbcConnectionBuilder.append(':');
+                jdbcConnectionBuilder.append(portNumber);
+            }
+            catch (NumberFormatException nfe) {
+                throw new ConnectorOperationFailedException("Cannot create a connection to PostgreSQL, the port number is invalid: " + port, nfe);
+            }
+        }
+        jdbcConnectionBuilder.append('/');
+        String database = this.getSecretValueProvider().expandValue(connectionSpec.getDatabaseName());
+        if (!Strings.isNullOrEmpty(database)) {
+            jdbcConnectionBuilder.append(database);
+        }
+
+        String jdbcUrl = jdbcConnectionBuilder.toString();
+        hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
         hikariConfig.setDataSourceProperties(dataSourceProperties);
-
-        String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
-        dataSourceProperties.put("warehouse", warehouse);
-
-        String databaseName = this.getSecretValueProvider().expandValue(connectionSpec.getDatabaseName());
-        dataSourceProperties.put("db", databaseName);
-
-        String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole());
-        if (!Strings.isNullOrEmpty(role)) {
-            dataSourceProperties.put("role", role);
-        }
 
         String userName = this.getSecretValueProvider().expandValue(connectionSpec.getUser());
         hikariConfig.setUsername(userName);
 
         String password = this.getSecretValueProvider().expandValue(connectionSpec.getPassword());
         hikariConfig.setPassword(password);
+
+        String options =  this.getSecretValueProvider().expandValue(postgresqlSpec.getOptions());
+        if (!Strings.isNullOrEmpty(options)) {
+            dataSourceProperties.put("options", options);
+        }
 
         return hikariConfig;
     }

@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class SnowflakeSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
+public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
     private SnowflakeSourceConnection sut;
     private ConnectionSpec connectionSpec;
 

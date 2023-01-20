@@ -51,52 +51,52 @@ public class FileConnectionListImplTests extends BaseTest {
     void createAndAddNew_whenNewSourceAddedAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        model.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("src1", true);
-        Assertions.assertEquals("url", wrapper2.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapper2.getSpec().getUser());
     }
 
     @Test
     void createAndAddNew_whenNewSourceAddedInSubFolderAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("area/src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        model.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("area/src1", true);
-        Assertions.assertEquals("url", wrapper2.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapper2.getSpec().getUser());
     }
 
     @Test
     void flush_whenExistingSourceLoadedModifiedAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        model.setUser("uses");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("src1", true);
-        wrapper2.getSpec().setUrl("newurl");
+        wrapper2.getSpec().setUser("newuser");
         homeContext2.flush();
 
         UserHomeContext homeContext3 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources3 = homeContext3.getUserHome().getConnections();
         ConnectionWrapper wrapper3 = sources3.getByObjectName("src1", true);
-        Assertions.assertEquals("newurl", wrapper3.getSpec().getUrl());
+        Assertions.assertEquals("newuser", wrapper3.getSpec().getUser());
     }
 
     @Test
     void iterator_whenConnectionAdded_thenReturnsConnection() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src3");
         ConnectionSpec spec = wrapper.getSpec();
-        spec.setUrl("url");
+        spec.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
@@ -105,7 +105,7 @@ public class FileConnectionListImplTests extends BaseTest {
         Assertions.assertTrue(iterator.hasNext());
         ConnectionWrapper wrapperLoaded = iterator.next();
         Assertions.assertNotNull(wrapperLoaded);
-        Assertions.assertEquals("url", wrapperLoaded.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapperLoaded.getSpec().getUser());
         Assertions.assertFalse(iterator.hasNext());
     }
 }

@@ -96,12 +96,6 @@ const DatabaseConnection = ({
               }
             />
             <Input
-              label="JDBC driver url"
-              className="mb-4"
-              value={database.url}
-              onChange={(e) => onChange({ ...database, url: e.target.value })}
-            />
-            <Input
               label="Username"
               className="mb-4"
               value={database.user}

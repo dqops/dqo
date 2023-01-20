@@ -17,6 +17,7 @@ package ai.dqo.metadata.sources;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -57,6 +58,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 			put("default_data_stream_mapping", o -> o.defaultDataStreamMapping);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
+            put("postgresql", o -> o.postgresql);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
             put("notifications", o -> o.notifications);
@@ -69,9 +71,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("JDBC driver url (overrides custom configuration for the provider and uses a hardcoded JDBC url).")
-    private String url;
-
     @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
     private String user;
 
@@ -83,6 +82,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
     private SnowflakeParametersSpec snowflake;
+
+    @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
+    private PostgresqlParametersSpec postgresql;
 
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
@@ -176,23 +178,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a JDBC database connection url.
-     * @return JDBC database connection url.
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Sets a JDBC database connection url.
-     * @param url JDBC connection url.
-     */
-    public void setUrl(String url) {
-		setDirtyIf(!Objects.equals(this.url, url));
-        this.url = url;
-    }
-
-    /**
      * Returns the user that is used to log in to the data source (JDBC user or similar).
      * @return User name.
      */
@@ -266,6 +251,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 		setDirtyIf(!Objects.equals(this.snowflake, snowflake));
         this.snowflake = snowflake;
 		propagateHierarchyIdToField(snowflake, "snowflake");
+    }
+
+    /**
+     * Returns the connection parameters for PostgreSQL.
+     * @return PostgreSQL connection parameters.
+     */
+    public PostgresqlParametersSpec getPostgresql() {
+        return postgresql;
+    }
+
+    /**
+     * Sets the PostgreSQL connection parameters.
+     * @param postgresql New PostgreSQL connection parameters.
+     */
+    public void setPostgresql(PostgresqlParametersSpec postgresql) {
+        setDirtyIf(!Objects.equals(this.postgresql, postgresql));
+        this.postgresql = postgresql;
+        propagateHierarchyIdToField(postgresql, "postgresql");
     }
 
     /**
@@ -481,6 +484,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.clone();
             }
+            if (cloned.postgresql != null) {
+                cloned.postgresql = cloned.postgresql.clone();
+            }
             if (cloned.defaultDataStreamMapping != null) {
                 cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.clone();
             }
@@ -515,7 +521,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
             cloned.databaseName = secretValueProvider.expandValue(cloned.databaseName);
-            cloned.url = secretValueProvider.expandValue(cloned.url);
             cloned.user = secretValueProvider.expandValue(cloned.user);
             cloned.password = secretValueProvider.expandValue(cloned.password);
             cloned.properties = secretValueProvider.expandProperties(cloned.properties);
@@ -527,6 +532,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             }
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.postgresql != null) {
+                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);

@@ -140,23 +140,6 @@ public class ConnectionSpecTests extends BaseTest {
     }
 
     @Test
-    void isDirty_whenUrlSet_thenIsDirtyIsTrue() {
-		this.sut.setUrl("test");
-        Assertions.assertEquals("test", this.sut.getUrl());
-        Assertions.assertTrue(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenSameUrlStringAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setUrl("test");
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setUrl("test");
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void isDirty_whenUserSet_thenIsDirtyIsTrue() {
 		this.sut.setUser("test");
         Assertions.assertEquals("test", this.sut.getUser());

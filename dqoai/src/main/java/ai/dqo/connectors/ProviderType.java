@@ -28,5 +28,8 @@ public enum ProviderType {
     @JsonProperty("snowflake")
     snowflake,
 
+    @JsonProperty("postgresql")
+    postgresql,
+
     // TODO: add more connectors
 }

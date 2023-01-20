@@ -17,6 +17,7 @@ package ai.dqo.rest.models.metadata;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.ProfilerSearchFilters;
@@ -48,9 +49,6 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("JDBC driver url (overrides custom configuration for the provider and uses a hardcoded JDBC url).")
-    private String url;
-
     @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
     private String user;
 
@@ -60,8 +58,11 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
 
-    @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
+    @JsonPropertyDescription("Snowflake connection parameters.")
     private SnowflakeParametersSpec snowflake;
+
+    @JsonPropertyDescription("PostgreSQL connection parameters.")
+    private PostgresqlParametersSpec postgresql;
 
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
@@ -84,12 +85,12 @@ public class ConnectionBasicModel {
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setDatabaseName(connectionSpec.getDatabaseName());
             setProviderType(connectionSpec.getProviderType());
-            setUrl(connectionSpec.getUrl());
             setUser(connectionSpec.getUser());
             setPassword(connectionSpec.getPassword());  // TODO: to verify if we want to return it
             setTimeZone(connectionSpec.getTimeZone());
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
+            setPostgresql(connectionSpec.getPostgresql());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -110,11 +111,11 @@ public class ConnectionBasicModel {
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setDatabaseName(this.getDatabaseName());
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setUrl(this.getUrl());
         targetConnectionSpec.setUser(this.getUser());
         targetConnectionSpec.setPassword(this.getPassword());
         targetConnectionSpec.setTimeZone(this.getTimeZone());
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
+        targetConnectionSpec.setPostgresql(this.getPostgresql());
     }
 }

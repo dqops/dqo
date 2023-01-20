@@ -69,9 +69,6 @@ public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-d", "--database"}, description = "Database name", required = false)
     private String database;
 
-    @CommandLine.Option(names = {"-j", "--jdbc"}, description = "JDBC connection url", required = false)
-    private String url;
-
     @CommandLine.Option(names = {"-u", "--user"}, description = "Username", required = false)
     private String user;
 
@@ -103,14 +100,6 @@ public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
 
     public void setDatabase(String database) {
         this.database = database;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getUser() {
@@ -157,7 +146,6 @@ public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
 
         ConnectionSpec connectionSpec = new ConnectionSpec();
         connectionSpec.setProviderType(providerType);
-        connectionSpec.setUrl(url);
         connectionSpec.setUser(user);
         connectionSpec.setPassword(password);
         connectionSpec.setDatabaseName(this.database);

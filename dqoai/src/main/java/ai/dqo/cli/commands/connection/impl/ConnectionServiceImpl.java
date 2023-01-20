@@ -365,7 +365,6 @@ public class ConnectionServiceImpl implements ConnectionService {
                     model.setId(spec.getHierarchyId().hashCode64());
                     model.setName(spec.getConnectionName());
                     model.setDialect(spec.getProviderType());
-                    model.setUrl(spec.getUrl());
                     model.setDatabaseName(spec.getDatabaseName());
 
                     return model;
@@ -377,7 +376,6 @@ public class ConnectionServiceImpl implements ConnectionService {
         formattedTable.addColumnHeader("id", "Hash Id");
         formattedTable.addColumnHeader("name", "Connection Name");
         formattedTable.addColumnHeader("dialect", "Connection Type");
-        formattedTable.addColumnHeader("url", "JDBC Url");
         formattedTable.addColumnHeader("databaseName", "Physical Database Name");
 
         return formattedTable;
@@ -491,10 +489,6 @@ public class ConnectionServiceImpl implements ConnectionService {
 
                     if (connectionSpec.getDatabaseName() != null) {
                         wrapperSpec.setDatabaseName(connectionSpec.getDatabaseName());
-                    }
-
-                    if (connectionSpec.getUrl() != null) {
-                        wrapperSpec.setUrl(connectionSpec.getUrl());
                     }
 
                     if (connectionSpec.getPassword() != null) {
