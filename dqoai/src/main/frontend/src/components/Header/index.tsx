@@ -13,6 +13,12 @@ const Header = ({ sidebarWidth }: HeaderProps) => {
   const history = useHistory();
   const location = useLocation();
 
+  const handleDataQualityChecks = () => {
+    if (!location.pathname.startsWith('/checks')) {
+      history.push('/checks');
+    }
+  };
+
   return (
     <div
       className="fixed top-0 right-0 min-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4"
@@ -24,8 +30,8 @@ const Header = ({ sidebarWidth }: HeaderProps) => {
         </div>
         <div className="flex items-center">
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname === '/checks' ? 'font-bold' : '' )}
-            onClick={() => history.push('/checks')}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith('/checks') ? 'font-bold' : '' )}
+            onClick={handleDataQualityChecks}
           >
             Data Quality Checks
           </div>
