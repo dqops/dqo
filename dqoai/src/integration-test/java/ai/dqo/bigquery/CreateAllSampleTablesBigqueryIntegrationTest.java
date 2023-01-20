@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseIntegrationTest {
+public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseBigQueryIntegrationTest {
     /**
      * Called before each test.
      * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.

@@ -271,6 +271,14 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
     public abstract Table executeQuery(String sqlQueryStatement);
 
     /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     */
+    @Override
+    public abstract long executeCommand(String sqlStatement);
+
+    /**
      * Creates a target table following the table specification.
      *
      * @param tableSpec Table specification with the physical table name, column names and physical column data types.
@@ -329,7 +337,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("\n)");
 
         String createTableSql = sqlBuilder.toString();
-		this.executeQuery(createTableSql);
+		this.executeCommand(createTableSql);
     }
 
     /**
@@ -387,6 +395,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String insertValueSql = sqlBuilder.toString();
-		this.executeQuery(insertValueSql);
+		this.executeCommand(insertValueSql);
     }
 }

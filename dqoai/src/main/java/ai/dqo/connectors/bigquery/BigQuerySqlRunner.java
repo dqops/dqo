@@ -127,6 +127,31 @@ public class BigQuerySqlRunner {
     }
 
     /**
+     * Executes an SQL statement that does not return results (DML or DDL).
+     * @param connection Connection object.
+     * @param sql SQL string to execute.
+     * @return Number of rows affected.
+     */
+    public long executeStatement(BigQuerySourceConnection connection, String sql) {
+        try {
+            String projectId = connection.getConnectionSpec().getDatabaseName();
+            QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
+            JobId.Builder jobBuilder = JobId.newBuilder();
+            if (!Strings.isNullOrEmpty(projectId)) {
+                jobBuilder = jobBuilder.setProject(projectId);
+            }
+            JobId jobId = jobBuilder.build();
+            BigQuery bigQueryService = connection.getBigQueryService();
+
+            TableResult tableResult = bigQueryService.query(queryJobConfiguration, jobId);
+            return tableResult.getTotalRows();
+        }
+        catch (Exception ex) {
+            throw new ConnectionQueryException(String.format("Failed to execute query: %s, error: %s", sql, ex.getMessage()), ex);
+        }
+    }
+
+    /**
      * Creates a list of columns for a bigquery result schema.
      * @param tableSchema Table schema.
      * @return List of columns.
