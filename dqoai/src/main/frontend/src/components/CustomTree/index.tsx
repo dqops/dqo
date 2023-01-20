@@ -111,7 +111,7 @@ const CustomTree = () => {
           nodes={treeData}
           RenderIcon={renderIcon}
           RenderNode={renderNode}
-          openNodes={openNodes}
+          openNodes={openNodes.map((item: CustomTreeNode) => item.id)}
           theme="custom"
           themes={{
             custom: theme
