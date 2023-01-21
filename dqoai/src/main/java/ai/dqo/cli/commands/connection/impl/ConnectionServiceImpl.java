@@ -361,7 +361,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                     model.setId(spec.getHierarchyId().hashCode64());
                     model.setName(spec.getConnectionName());
                     model.setDialect(spec.getProviderType());
-                    model.setDatabaseName(spec.getDatabaseName());
+                    model.setDatabaseName(spec.getProviderSpecificConfiguration().getDatabase());
 
                     return model;
                 }
@@ -434,7 +434,7 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName, null, null);
         this.terminalTableWritter.writeTable(connectionTables, true);
-        this.terminalFactory.getWriter().writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
+        this.terminalFactory.getWriter().writeLine("Do you want to remove these " + connectionTables.getRows().size() + " connections?");
         boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
         if (!response) {
             cliOperationStatus.setFailedMessage("You deleted 0 connections");
@@ -479,12 +479,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
         connectionSpecs.forEach(
                 wrapperSpec -> {
-                    wrapperSpec.copyNotNullPropertiesFrom(connectionSpec);
+                    wrapperSpec.copyNotNullPropertiesFrom(connectionSpec.clone());
                 }
         );
         userHomeContext.flush();
 
-        cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d connection(s)", connectionSpecs.size()));
         return cliOperationStatus;
     }
 

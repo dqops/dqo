@@ -61,14 +61,13 @@ public class PostgresqlConnectionSpecObjectMother {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
 			setProviderType(ProviderType.postgresql);
-			setDatabaseName(testContainer.getDatabaseName());
-			setUser(testContainer.getUsername());
-			setPassword(testContainer.getPassword());
-
             setPostgresql(new PostgresqlParametersSpec()
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(PORT).toString());
+                setDatabase(testContainer.getDatabaseName());
+                setUser(testContainer.getUsername());
+                setPassword(testContainer.getPassword());
                 setSsl(false);
             }});
         }};

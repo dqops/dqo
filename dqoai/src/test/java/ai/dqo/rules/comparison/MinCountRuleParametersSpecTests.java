@@ -27,10 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MinCountRuleParametersSpecTests extends BaseTest {
     private MinCountRule0ParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = new MinCountRule0ParametersSpec();
     }
 

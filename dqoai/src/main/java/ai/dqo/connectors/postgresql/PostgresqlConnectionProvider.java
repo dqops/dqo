@@ -92,70 +92,50 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-        HashMap<String, String> connectionProperties = connectionSpec.getProperties();
         PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
         if (postgresqlSpec == null) {
             postgresqlSpec = new PostgresqlParametersSpec();
             connectionSpec.setPostgresql(postgresqlSpec);
         }
 
-        if (connectionProperties.containsKey("postgresql-host")) {
-            postgresqlSpec.setHost(connectionProperties.get("postgresql-host"));
-            connectionProperties.remove("postgresql-host");
-        }
         if (Strings.isNullOrEmpty(postgresqlSpec.getHost())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=postgresql-host");
+                throw new CliRequiredParameterMissingException("--postgresql-host");
             }
 
-            postgresqlSpec.setHost(terminalReader.prompt("PostgreSQL host name (-P=postgresql-host)", "${POSTGRESQL_HOST}", false));
+            postgresqlSpec.setHost(terminalReader.prompt("PostgreSQL host name (--postgresql-host)", "${POSTGRESQL_HOST}", false));
         }
 
-        if (connectionProperties.containsKey("postgresql-port")) {
-            postgresqlSpec.setHost(connectionProperties.get("postgresql-port"));
-            connectionProperties.remove("postgresql-port");
-        }
-
-
-        if (connectionProperties.containsKey("postgresql-ssl")) {
-            postgresqlSpec.setSsl("true".equalsIgnoreCase(connectionProperties.get("postgresql-ssl")) ? true : null);
-            connectionProperties.remove("postgresql-ssl");
-        }
         if (postgresqlSpec.getSsl() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=postgresql-ssl");
+                throw new CliRequiredParameterMissingException("--postgresql-ssl");
             }
 
-            postgresqlSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (-P=postgresql-ssl)", true));
+            postgresqlSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--postgresql-ssl)", true));
         }
 
-        if (connectionProperties.containsKey("postgresql-options")) {
-            postgresqlSpec.setOptions(connectionProperties.get("postgresql-options"));
-            connectionProperties.remove("postgresql-options");
-        }
-
-        if (Strings.isNullOrEmpty(connectionSpec.getDatabaseName())) {
+        if (Strings.isNullOrEmpty(postgresqlSpec.getDatabase())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--database");
+                throw new CliRequiredParameterMissingException("--postgresql-database");
             }
 
-            connectionSpec.setDatabaseName(terminalReader.prompt("PostgreSQL database name (--database)", "${POSTGRESQL_DATABASE}", false));
+            postgresqlSpec.setDatabase(terminalReader.prompt("PostgreSQL database name (--postgresql-database)", "${POSTGRESQL_DATABASE}", false));
         }
 
-        if (Strings.isNullOrEmpty(connectionSpec.getUser())) {
+        if (Strings.isNullOrEmpty(postgresqlSpec.getUser())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--user");
+                throw new CliRequiredParameterMissingException("--postgresql-user");
             }
 
-            connectionSpec.setUser(terminalReader.prompt("PostgreSQL user name (--user)", "${POSTGRESQL_USER}", false));
+            postgresqlSpec.setUser(terminalReader.prompt("PostgreSQL user name (--postgresql-user)", "${POSTGRESQL_USER}", false));
         }
 
-        if (Strings.isNullOrEmpty(connectionSpec.getPassword())) {
+        if (Strings.isNullOrEmpty(postgresqlSpec.getPassword())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--password");
+                throw new CliRequiredParameterMissingException("--postgresql-password");
             }
 
-            connectionSpec.setPassword(terminalReader.prompt("PostgreSQL user password (--password)", "${POSTGRESQL_PASSWORD}", false));
+            postgresqlSpec.setPassword(terminalReader.prompt("PostgreSQL user password (--postgresql-password)", "${POSTGRESQL_PASSWORD}", false));
         }
     }
 

@@ -15,31 +15,16 @@
  */
 package ai.dqo.bigquery;
 
-import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseBigQueryIntegrationTest {
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-
-    @Override
-    @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-    }
-
     @Test
     void runTest_whenTestDataFileNamedContinuousDaysOneRowPerDayIsCreated_thenPutItInBigquery() {
 

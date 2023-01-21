@@ -37,17 +37,13 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Autowired
     private LocalHomeTestUtilities localUserHomeTestUtilities;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = LocalHomeStorageServiceObjectMother.createLocalUserHomeStorageServiceForTestableHome(true);
     }
 
-    @Override
     @AfterEach
-    protected void tearDown() throws Throwable {
-        super.tearDown();
+    void tearDown() {
 		this.localUserHomeTestUtilities.recreateTestUserHome();
     }
 

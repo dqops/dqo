@@ -21,17 +21,8 @@ public class RuleDocumentationGeneratorImplTests extends BaseTest {
     private Path projectRootPath;
     private DqoHome dqoHome;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-
+    void setUp() {
         this.projectRootPath = Path.of(".");
         HandlebarsDocumentationUtilities.configure(this.projectRootPath);
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));

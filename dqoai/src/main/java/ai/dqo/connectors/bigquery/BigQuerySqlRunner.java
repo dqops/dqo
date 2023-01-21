@@ -42,8 +42,7 @@ public class BigQuerySqlRunner {
      */
     public Table executeQuery(BigQuerySourceConnection connection, String sql) {
         try {
-            BigQuerySourceConnection bgConn = connection;
-            String projectId = connection.getConnectionSpec().getDatabaseName();
+            String projectId = connection.getConnectionSpec().getBigquery().getSourceProjectId();
             QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
             JobId.Builder jobBuilder = JobId.newBuilder();
             if (!Strings.isNullOrEmpty(projectId)) {
@@ -134,7 +133,7 @@ public class BigQuerySqlRunner {
      */
     public long executeStatement(BigQuerySourceConnection connection, String sql) {
         try {
-            String projectId = connection.getConnectionSpec().getDatabaseName();
+            String projectId = connection.getConnectionSpec().getBigquery().getSourceProjectId();
             QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
             JobId.Builder jobBuilder = JobId.newBuilder();
             if (!Strings.isNullOrEmpty(projectId)) {

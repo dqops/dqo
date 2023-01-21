@@ -30,10 +30,8 @@ import java.nio.file.Path;
 public class LocalFolderTreeNodeTests extends BaseTest {
     private LocalFolderTreeNode sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
     }
 

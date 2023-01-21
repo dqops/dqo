@@ -31,16 +31,8 @@ public class TableMergeUtilityTests extends BaseTest {
     private Table newTable;
     private String[] joinColumnNames;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.currentTable = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("current");
 		this.newTable = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new");
 		this.joinColumnNames = new String[] {

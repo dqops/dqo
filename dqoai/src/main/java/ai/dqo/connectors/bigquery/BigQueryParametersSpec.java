@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors.bigquery;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,7 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BigQueryParametersSpec extends BaseProviderParametersSpec implements Cloneable {
+public class BigQueryParametersSpec extends BaseProviderParametersSpec implements Cloneable,
+        ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<BigQueryParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -228,5 +231,16 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
                 this.quotaProjectId == null &&
 				this.jsonKeyContent == null &&
 				this.jsonKeyPath == null;
+    }
+
+    /**
+     * Returns a database name. Used only for the CLI connection list command to return the GCP project name.
+     *
+     * @return Database name.
+     */
+    @JsonIgnore
+    @Override
+    public String getDatabase() {
+        return this.sourceProjectId;
     }
 }

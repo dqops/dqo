@@ -43,17 +43,8 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
     private Long connectionHash;
 
-    @JsonPropertyDescription("Database name (for those sources that have a database/schema/table separation).")
-    private String databaseName;
-
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
-
-    @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String user;
-
-    @JsonPropertyDescription("Database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String password;
 
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
@@ -83,10 +74,7 @@ public class ConnectionBasicModel {
         return new ConnectionBasicModel() {{
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
-            setDatabaseName(connectionSpec.getDatabaseName());
             setProviderType(connectionSpec.getProviderType());
-            setUser(connectionSpec.getUser());
-            setPassword(connectionSpec.getPassword());  // TODO: to verify if we want to return it
             setTimeZone(connectionSpec.getTimeZone());
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
@@ -109,10 +97,7 @@ public class ConnectionBasicModel {
      * @param targetConnectionSpec Target connection specification to update.
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
-        targetConnectionSpec.setDatabaseName(this.getDatabaseName());
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setUser(this.getUser());
-        targetConnectionSpec.setPassword(this.getPassword());
         targetConnectionSpec.setTimeZone(this.getTimeZone());
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());

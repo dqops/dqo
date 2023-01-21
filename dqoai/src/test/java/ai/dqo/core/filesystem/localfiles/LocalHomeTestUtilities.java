@@ -29,7 +29,7 @@ public class LocalHomeTestUtilities {
     /**
      * Recreates the testable user home, cleaning it back to the default structure.
      */
-    public void recreateTestUserHome() throws Exception {
+    public void recreateTestUserHome() {
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
@@ -37,7 +37,7 @@ public class LocalHomeTestUtilities {
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
         }
         catch( Exception ex) {
-            throw ex;
+            throw new RuntimeException(ex);
         }
     }
 }

@@ -15,19 +15,10 @@
  */
 package ai.dqo;
 
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.data.storage.TablesawParquetSupportFix;
-import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.testutils.BeforeAllTestExtension;
-import ai.dqo.utils.BeanFactoryObjectMother;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
@@ -38,29 +29,4 @@ import org.springframework.test.context.ActiveProfiles;
 @Tag("unittest")
 @ExtendWith(BeforeAllTestExtension.class)
 public abstract class BaseTest {
-//    @Autowired
-//    private BeanFactory beanFactory;
-
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     * @throws Throwable
-     */
-    @BeforeEach
-    protected void setUp() throws Throwable {
-//        BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
-//        TablesawParquetSupportFix.ensureInitialized();
-//        LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
-        // to be extended in the future when the need appears
-    }
-
-    /**
-     * Called after each test.
-     * This method should be overriden in derived super classes (test classes), but remember to add @AfterEach in a derived test class. JUnit5 demands it.
-     * @throws Throwable
-     */
-    @AfterEach
-    protected void tearDown() throws Throwable  {
-        // to be extended in the future when the need appears
-    }
 }

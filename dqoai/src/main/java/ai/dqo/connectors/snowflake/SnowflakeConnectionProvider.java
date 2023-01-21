@@ -92,65 +92,51 @@ public class SnowflakeConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-        HashMap<String, String> connectionProperties = connectionSpec.getProperties();
         SnowflakeParametersSpec snowflakeSpec = connectionSpec.getSnowflake();
         if (snowflakeSpec == null) {
             snowflakeSpec = new SnowflakeParametersSpec();
             connectionSpec.setSnowflake(snowflakeSpec);
         }
 
-        if (connectionProperties.containsKey("snowflake-account")) {
-            snowflakeSpec.setAccount(connectionProperties.get("snowflake-account"));
-            connectionProperties.remove("snowflake-account");
-        }
         if (Strings.isNullOrEmpty(snowflakeSpec.getAccount())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=snowflake-account");
+                throw new CliRequiredParameterMissingException("--snowflake-account");
             }
 
-            snowflakeSpec.setAccount(terminalReader.prompt("Snowflake account name (-P=snowflake-account)", "${SNOWFLAKE_ACCOUNT}", false));
+            snowflakeSpec.setAccount(terminalReader.prompt("Snowflake account name (--snowflake-account)", "${SNOWFLAKE_ACCOUNT}", false));
         }
 
-        if (connectionProperties.containsKey("snowflake-warehouse")) {
-            snowflakeSpec.setWarehouse(connectionProperties.get("snowflake-warehouse"));
-            connectionProperties.remove("snowflake-warehouse");
-        }
         if (Strings.isNullOrEmpty(snowflakeSpec.getWarehouse())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=snowflake-warehouse");
+                throw new CliRequiredParameterMissingException("--snowflake-warehouse");
             }
 
-            snowflakeSpec.setWarehouse(terminalReader.prompt("Snowflake warehouse name (-P=snowflake-warehouse)", "${SNOWFLAKE_WAREHOUSE}", false));
+            snowflakeSpec.setWarehouse(terminalReader.prompt("Snowflake warehouse name (--snowflake-warehouse)", "${SNOWFLAKE_WAREHOUSE}", false));
         }
 
-        if (connectionProperties.containsKey("snowflake-role")) {
-            snowflakeSpec.setRole(connectionProperties.get("snowflake-role"));
-            connectionProperties.remove("snowflake-role");
-        }
-
-        if (Strings.isNullOrEmpty(connectionSpec.getDatabaseName())) {
+        if (Strings.isNullOrEmpty(snowflakeSpec.getDatabase())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--database");
+                throw new CliRequiredParameterMissingException("--snowflake-database");
             }
 
-            connectionSpec.setDatabaseName(terminalReader.prompt("Snowflake database name (--database)", "${SNOWFLAKE_DATABASE}", false));
+            snowflakeSpec.setDatabase(terminalReader.prompt("Snowflake database name (--snowflake-database)", "${SNOWFLAKE_DATABASE}", false));
         }
 
-        if (Strings.isNullOrEmpty(connectionSpec.getUser())) {
+        if (Strings.isNullOrEmpty(snowflakeSpec.getUser())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--user");
+                throw new CliRequiredParameterMissingException("--snowflake-user");
             }
 
-            connectionSpec.setUser(terminalReader.prompt("Snowflake user name (--user)", "${SNOWFLAKE_USER}", false));
+            snowflakeSpec.setUser(terminalReader.prompt("Snowflake user name (--snowflake-user)", "${SNOWFLAKE_USER}", false));
         }
 
         // TODO: support password or private key authentication (but here we must ask for the authentication method, show a prompt with a value selection)
-        if (Strings.isNullOrEmpty(connectionSpec.getPassword())) {
+        if (Strings.isNullOrEmpty(snowflakeSpec.getPassword())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--password");
+                throw new CliRequiredParameterMissingException("--snowflake-password");
             }
 
-            connectionSpec.setPassword(terminalReader.prompt("Snowflake user password (--password)", "${SNOWFLAKE_PASSWORD}", false));
+            snowflakeSpec.setPassword(terminalReader.prompt("Snowflake user password (--snowflake-password)", "${SNOWFLAKE_PASSWORD}", false));
         }
     }
 

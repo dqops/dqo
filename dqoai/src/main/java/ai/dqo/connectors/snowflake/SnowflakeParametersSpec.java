@@ -15,6 +15,7 @@
  */
 package ai.dqo.connectors.snowflake;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -37,7 +38,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SnowflakeParametersSpec extends BaseProviderParametersSpec implements Cloneable {
+public class SnowflakeParametersSpec extends BaseProviderParametersSpec implements Cloneable,
+        ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<SnowflakeParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
