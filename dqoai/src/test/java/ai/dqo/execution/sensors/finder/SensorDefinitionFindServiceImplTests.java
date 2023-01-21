@@ -54,14 +54,14 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
 
-        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, "table/consistency/row_count", ProviderType.bigquery);
+        SensorDefinitionFindResult result = this.sut.findProviderSensorDefinition(executionContext, "table/standard/row_count", ProviderType.bigquery);
 
         Assertions.assertNotNull(result);
         Assertions.assertNotNull(result.getSensorDefinitionSpec());
         Assertions.assertNotNull(result.getProviderSensorDefinitionSpec());
         Assertions.assertNull(result.getSqlTemplateText());
         Assertions.assertNotNull(result.getTemplateFilePath());
-        Assertions.assertEquals("table/consistency/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
+        Assertions.assertEquals("table/standard/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
         Assertions.assertEquals(HomeType.DQO_HOME, result.getHome());
     }
 
@@ -106,7 +106,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
         UserHome userHome = inMemoryFileHomeContext.getUserHome();
-        final String sensorName = "table/consistency/row_count";
+        final String sensorName = "table/standard/row_count";
         SensorDefinitionWrapper userSensorDef = userHome.getSensors().createAndAddNew(sensorName);
         Assertions.assertNotNull(userSensorDef.getSpec());
 
@@ -118,7 +118,7 @@ public class SensorDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotSame(userSensorDef.getSpec(), result.getSensorDefinitionSpec());
         Assertions.assertNull(result.getSqlTemplateText());
         Assertions.assertEquals(ProviderType.bigquery, result.getProviderType());
-        Assertions.assertEquals("table/consistency/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
+        Assertions.assertEquals("table/standard/row_count/bigquery.sql.jinja2", result.getTemplateFilePath().toString());
         Assertions.assertEquals(HomeType.DQO_HOME, result.getHome());
     }
 }

@@ -17,6 +17,7 @@ package ai.dqo.cli.commands.cloud.sync.impl;
 
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
@@ -42,8 +43,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     private FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider;
     private DqoCloudApiKeyProvider apiKeyProvider;
     private CloudLoginService cloudLoginService;
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
 
@@ -53,8 +53,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param systemSynchronizationListenerProvider Synchronization listener provider.
      * @param apiKeyProvider Api key provider - used to check if the user logged in to DQO Cloud.
      * @param cloudLoginService Cloud login service - used to log in.
-     * @param terminalReader Terminal reader.
-     * @param terminalWriter Terminal writer to write the results.
+     * @param terminalFactory Terminal factory.
      * @param dqoQueueJobFactory DQO job factory used to create a new instance of a folder synchronization job.
      * @param dqoJobQueue DQO job queue to execute a background synchronization.
      */
@@ -64,16 +63,14 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider,
             DqoCloudApiKeyProvider apiKeyProvider,
             CloudLoginService cloudLoginService,
-            TerminalReader terminalReader,
-            TerminalWriter terminalWriter,
+            TerminalFactory terminalFactory,
             DqoQueueJobFactory dqoQueueJobFactory,
             DqoJobQueue dqoJobQueue) {
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
         this.systemSynchronizationListenerProvider = systemSynchronizationListenerProvider;
         this.apiKeyProvider = apiKeyProvider;
         this.cloudLoginService = cloudLoginService;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
@@ -99,7 +96,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
                 throw new CliRequiredParameterMissingException("API Key is missing, please run \"cloud login\" to configure your DQO Cloud API KEY");
             }
 
-            Boolean loginMe = this.terminalReader.promptBoolean("DQO Cloud API Key is missing, do you want to log in or register to DOQ Cloud?",
+            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQO Cloud API Key is missing, do you want to log in or register to DOQ Cloud?",
                     true);
             if (loginMe) {
                 if (!this.cloudLoginService.logInToDqoCloud()) {
@@ -124,7 +121,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationListener);
         }
 
-        this.terminalWriter.writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");
+        this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");
 
         return 0;
     }

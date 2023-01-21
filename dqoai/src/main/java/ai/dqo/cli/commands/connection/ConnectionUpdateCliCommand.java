@@ -24,6 +24,7 @@ import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -71,6 +72,9 @@ public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand 
     @CommandLine.Option(names = {"-p", "--password"}, description = "Password", required = false)
     private String password;
 
+    @CommandLine.Mixin
+    private ConnectionSpec connection;
+
     public String getName() {
         return name;
     }
@@ -111,6 +115,14 @@ public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand 
         this.password = password;
     }
 
+    public ConnectionSpec getConnection() {
+        return connection;
+    }
+
+    public void setConnection(ConnectionSpec connection) {
+        this.connection = connection;
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -119,8 +131,7 @@ public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand 
      */
     @Override
     public Integer call() throws Exception {
-
-        ConnectionSpec connectionSpec = new ConnectionSpec();
+        ConnectionSpec connectionSpec = this.connection != null ? new ConnectionSpec() : this.connection;
         connectionSpec.setProviderType(providerType);
         connectionSpec.setDatabaseName(database);
         connectionSpec.setUser(user);

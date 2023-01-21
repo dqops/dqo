@@ -27,6 +27,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -75,7 +77,7 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(connectionSpec.getDatabaseName());
+        String database = this.getSecretValueProvider().expandValue(postgresqlSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
         }
@@ -84,12 +86,15 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+        if (postgresqlSpec.getProperties() != null) {
+            dataSourceProperties.putAll(postgresqlSpec.getProperties());
+        }
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
-        String userName = this.getSecretValueProvider().expandValue(connectionSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser());
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(connectionSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(postgresqlSpec.getPassword());
         hikariConfig.setPassword(password);
 
         String options =  this.getSecretValueProvider().expandValue(postgresqlSpec.getOptions());

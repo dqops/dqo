@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import picocli.CommandLine;
 
 import java.util.Objects;
 
@@ -39,21 +40,27 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
         }
     };
 
+    @CommandLine.Option(names = {"--bigquery-source-project-id"}, description = "Bigquery source GCP project id. This is the project that has datasets that will be imported.")
     @JsonPropertyDescription("Source GCP project ID. This is the project that has datasets that will be imported.")
     private String sourceProjectId;
 
+    @CommandLine.Option(names = {"--bigquery-billing-project-id"}, description = "Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     @JsonPropertyDescription("Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     private String billingProjectId;
 
+    @CommandLine.Option(names = {"--bigquery-authentication-mode"}, description = "Bigquery authentication mode.")
     @JsonPropertyDescription("Authentication mode to the Google Cloud.")
     private BigQueryAuthenticationMode authenticationMode;
 
+    @CommandLine.Option(names = {"--bigquery-json-key-content"}, description = "Bigquery service account key content as JSON.")
     @JsonPropertyDescription("JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.")
     private String jsonKeyContent;
 
+    @CommandLine.Option(names = {"--bigquery-json-key-path"}, description = "Path to a GCP service account key JSON file used to authenticate to Bigquery.")
     @JsonPropertyDescription("A path to the JSON key file. Requires the authentication-mode: json_key_path.")
     private String jsonKeyPath;
 
+    @CommandLine.Option(names = {"--bigquery-quota-project-id"}, description = "Bigquery quota GCP project id.")
     @JsonPropertyDescription("Quota GCP project ID.")
     private String quotaProjectId;
 

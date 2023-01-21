@@ -61,12 +61,15 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl("jdbc:snowflake://" + snowflakeAccount + ".snowflakecomputing.com/");
 
         Properties dataSourceProperties = new Properties();
+        if (snowflakeSpec.getProperties() != null) {
+            dataSourceProperties.putAll(snowflakeSpec.getProperties());
+        }
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
         dataSourceProperties.put("warehouse", warehouse);
 
-        String databaseName = this.getSecretValueProvider().expandValue(connectionSpec.getDatabaseName());
+        String databaseName = this.getSecretValueProvider().expandValue(snowflakeSpec.getDatabase());
         dataSourceProperties.put("db", databaseName);
 
         String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole());
@@ -74,10 +77,10 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.put("role", role);
         }
 
-        String userName = this.getSecretValueProvider().expandValue(connectionSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(snowflakeSpec.getUser());
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(connectionSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(snowflakeSpec.getPassword());
         hikariConfig.setPassword(password);
 
         return hikariConfig;

@@ -17,6 +17,7 @@ package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -154,5 +155,56 @@ public class ConnectionSpecTests extends BaseTest {
         Assertions.assertFalse(this.sut.isDirty());
 		this.sut.setUser("test");
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void copyNotNullPropertiesFrom_whenNoFieldsUpdated_thenNothingChangedAndNotDirty() {
+        ConnectionSpec source = new ConnectionSpec();
+        this.sut.clearDirty(true);
+        this.sut.copyNotNullPropertiesFrom(source);
+
+        Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void copyNotNullPropertiesFrom_whenProviderUpdated_thenIsDirtyAndFieldUpdated() {
+        ConnectionSpec source = new ConnectionSpec();
+        source.setProviderType(ProviderType.snowflake);
+        this.sut.clearDirty(true);
+        this.sut.copyNotNullPropertiesFrom(source);
+
+        Assertions.assertTrue(this.sut.isDirty());
+        Assertions.assertEquals(ProviderType.snowflake, this.sut.getProviderType());
+    }
+
+    @Test
+    void copyNotNullPropertiesFrom_whenHostNameInPostgresqlUpdatedAndPostgresWasMissing_thenCreatesAndUpdatesField() {
+        ConnectionSpec source = new ConnectionSpec();
+        source.setPostgresql(new PostgresqlParametersSpec() {{
+            setHost("somehost");
+        }});
+        this.sut.clearDirty(true);
+        this.sut.copyNotNullPropertiesFrom(source);
+
+        Assertions.assertTrue(this.sut.isDirty());
+        Assertions.assertEquals("somehost", this.sut.getPostgresql().getHost());
+    }
+
+    @Test
+    void copyNotNullPropertiesFrom_whenHostNameInPostgresqlUpdatedAndPostgresWasAlreadyPresent_thenUpdatesOnlyRequestedFields() {
+        ConnectionSpec source = new ConnectionSpec();
+        source.setPostgresql(new PostgresqlParametersSpec() {{
+            setHost("somehost");
+        }});
+        this.sut.setPostgresql(new PostgresqlParametersSpec() {{
+            setHost("oldhost");
+            setPort("7777");
+        }});
+        this.sut.clearDirty(true);
+        this.sut.copyNotNullPropertiesFrom(source);
+
+        Assertions.assertTrue(this.sut.isDirty());
+        Assertions.assertEquals("somehost", this.sut.getPostgresql().getHost());
+        Assertions.assertEquals("7777", this.sut.getPostgresql().getPort());
     }
 }

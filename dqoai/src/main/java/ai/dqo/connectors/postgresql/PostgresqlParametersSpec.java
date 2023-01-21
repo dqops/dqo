@@ -19,12 +19,16 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import picocli.CommandLine;
 
+import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -39,17 +43,42 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
         }
     };
 
+    @CommandLine.Option(names = {"--postgresql-host"}, description = "PostgreSQL host name")
     @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
     private String host;
 
+    @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number", defaultValue = "5432")
     @JsonPropertyDescription("PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
-    private String port = "5432";
+    private String port;
 
+    @CommandLine.Option(names = {"--postgresql-database"}, description = "PostgreSQL database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("PostgreSQL database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    private String database;
+
+    @CommandLine.Option(names = {"--postgresql-user"}, description = "PostgreSQL user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("PostgreSQL user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    private String user;
+
+    @CommandLine.Option(names = {"--postgresql-password"}, description = "PostgreSQL database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("PostgreSQL database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    private String password;
+
+    @CommandLine.Option(names = {"--postgresql-options"}, description = "PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
     @JsonPropertyDescription("PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
+    @CommandLine.Option(names = {"--postgresql-ssl"}, description = "Connect to PostgreSQL using SSL", defaultValue = "false")
     @JsonPropertyDescription("Connect to PostgreSQL using SSL. The default value is false.")
     private Boolean ssl;
+
+    @CommandLine.Option(names = {"--postgresql-properties"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
 
     /**
      * Returns the host name.
@@ -83,6 +112,57 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
+    }
+
+    /**
+     * Returns a physical database name.
+     * @return Physical database name.
+     */
+    public String getDatabase() {
+        return database;
+    }
+
+    /**
+     * Sets a physical database name.
+     * @param database Physical database name.
+     */
+    public void setDatabase(String database) {
+        setDirtyIf(!Objects.equals(this.database, database));
+        this.database = database;
+    }
+
+    /**
+     * Returns the user that is used to log in to the data source (JDBC user or similar).
+     * @return User name.
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     * Sets a user name.
+     * @param user User name.
+     */
+    public void setUser(String user) {
+        setDirtyIf(!Objects.equals(this.user, user));
+        this.user = user;
+    }
+
+    /**
+     * Returns a password used to authenticate to the server.
+     * @return Password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets a password that is used to connect to the database.
+     * @param password Password.
+     */
+    public void setPassword(String password) {
+        setDirtyIf(!Objects.equals(this.password, password));
+        this.password = password;
     }
 
     /**
@@ -120,6 +200,24 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
     }
 
     /**
+     * Returns a key/value map of additional properties that are included in the JDBC connection string.
+     * @return Key/value dictionary of additional JDBC properties.
+     */
+    public LinkedHashMap<String, String> getProperties() {
+        return properties;
+    }
+
+    /**
+     * Sets a dictionary of additional connection parameters that are added to the JDBC connection string.
+     * @param properties Key/value dictionary with extra parameters.
+     */
+    public void setProperties(LinkedHashMap<String, String> properties) {
+        setDirtyIf(!Objects.equals(this.properties, properties));
+        this.properties = properties;
+        this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -136,6 +234,12 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
     public PostgresqlParametersSpec clone() {
         try {
             PostgresqlParametersSpec cloned = (PostgresqlParametersSpec)super.clone();
+            if (cloned.properties != null) {
+                cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
+            }
+            if (cloned.originalProperties != null) {
+                cloned.originalProperties = (LinkedHashMap<String, String>) cloned.originalProperties.clone();
+            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -152,12 +256,37 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
             PostgresqlParametersSpec cloned = (PostgresqlParametersSpec) super.clone();
             cloned.host = secretValueProvider.expandValue(cloned.host);
             cloned.port = secretValueProvider.expandValue(cloned.port);
+            cloned.database = secretValueProvider.expandValue(cloned.database);
+            cloned.user = secretValueProvider.expandValue(cloned.user);
+            cloned.password = secretValueProvider.expandValue(cloned.password);
             cloned.options = secretValueProvider.expandValue(cloned.options);
+            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+            cloned.originalProperties = null;
 
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned", ex);
         }
+    }
+
+    /**
+     * Check if the object is dirty (has changes).
+     *
+     * @return True when the object is dirty and has modifications.
+     */
+    @Override
+    public boolean isDirty() {
+        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
+    }
+
+    /**
+     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
+     * @param propagateToChildren When true, clears also the dirty status of child objects.
+     */
+    @Override
+    public void clearDirty(boolean propagateToChildren) {
+        super.clearDirty(propagateToChildren);
+        this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
     }
 }

@@ -39,6 +39,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.springframework.stereotype.Component;
+import picocli.CommandLine;
 
 import java.time.ZoneId;
 import java.util.LinkedHashMap;
@@ -66,23 +68,29 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     };
 
     @JsonPropertyDescription("Database name (for those sources that have a database/schema/table separation).")
+    @Deprecated
     private String databaseName;
 
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
     @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @Deprecated
     private String user;
 
     @JsonPropertyDescription("Database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @Deprecated
     private String password;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
     private SnowflakeParametersSpec snowflake;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
     private PostgresqlParametersSpec postgresql;
 
@@ -147,6 +155,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Returns a physical database name.
      * @return Physical database name.
      */
+    @Deprecated
     public String getDatabaseName() {
         return databaseName;
     }
@@ -155,6 +164,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Sets a physical database name.
      * @param databaseName Physical database name.
      */
+    @Deprecated
     public void setDatabaseName(String databaseName) {
 		setDirtyIf(!Objects.equals(this.databaseName, databaseName));
         this.databaseName = databaseName;
@@ -181,6 +191,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Returns the user that is used to log in to the data source (JDBC user or similar).
      * @return User name.
      */
+    @Deprecated
     public String getUser() {
         return user;
     }
@@ -189,6 +200,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Sets a user name.
      * @param user User name.
      */
+    @Deprecated
     public void setUser(String user) {
 		setDirtyIf(!Objects.equals(this.user, user));
         this.user = user;
@@ -198,6 +210,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Returns a password used to authenticate to the server.
      * @return Password.
      */
+    @Deprecated
     public String getPassword() {
         return password;
     }
@@ -206,6 +219,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Sets a password that is used to connect to the database.
      * @param password Password.
      */
+    @Deprecated
     public void setPassword(String password) {
         // TODO: support storing passwords in a credentials file,
         // we can support a special format like "$secret"
