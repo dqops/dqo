@@ -16,8 +16,7 @@
 package ai.dqo.connectors.postgresql;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
-import ai.dqo.core.secrets.DevelopmentCredentialsSecretNames;
+import ai.dqo.connectors.testcontainers.TestContainersObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.PostgreSQLContainer;
 
@@ -26,6 +25,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
  */
 public class PostgresqlConnectionSpecObjectMother {
     private static PostgreSQLContainer<?> sharedContainer;
+    private static final int PORT = 5432;
 
     /**
      * Creates a shared PostgreSQL container using Testcontainers. The container will be stopped when the unit/integration session will finish.
@@ -33,7 +33,13 @@ public class PostgresqlConnectionSpecObjectMother {
      */
     public static PostgreSQLContainer<?> getSharedContainer() {
         if (sharedContainer == null) {
-            sharedContainer = new PostgreSQLContainer<>(PostgreSQLContainer.IMAGE);
+            //noinspection resource
+            sharedContainer = new PostgreSQLContainer<>(PostgreSQLContainer.IMAGE)
+                    .withExposedPorts(PORT)
+                    .withDatabaseName("test")
+                    .withUsername("test")
+                    .withPassword("test")
+                    .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
         }
 
@@ -62,7 +68,7 @@ public class PostgresqlConnectionSpecObjectMother {
             setPostgresql(new PostgresqlParametersSpec()
             {{
                 setHost("localhost");
-                setPort(testContainer.getMappedPort(5432).toString());
+                setPort(testContainer.getMappedPort(PORT).toString());
                 setSsl(false);
             }});
         }};
