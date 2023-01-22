@@ -84,34 +84,6 @@ const DatabaseConnection = ({
           value={database.time_zone}
         />
 
-        {database.provider_type !==
-          ConnectionBasicModelProviderTypeEnum.bigquery && (
-          <>
-            <Input
-              label="Database Name"
-              className="mb-4"
-              value={database.database_name}
-              onChange={(e) =>
-                onChange({ ...database, database_name: e.target.value })
-              }
-            />
-            <Input
-              label="Username"
-              className="mb-4"
-              value={database.user}
-              onChange={(e) => onChange({ ...database, user: e.target.value })}
-            />
-            <Input
-              label="Password"
-              className="mb-6"
-              value={database.password}
-              onChange={(e) =>
-                onChange({ ...database, password: e.target.value })
-              }
-            />
-          </>
-        )}
-
         <div className="mt-6">
           {database.provider_type ===
           ConnectionBasicModelProviderTypeEnum.bigquery ? (
