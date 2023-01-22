@@ -38,17 +38,9 @@ public class RuleDefinitionSearchFiltersVisitorTests extends BaseTest {
     UserHomeContext userHomeContext;
 	ArrayList<HierarchyNode> ruleDefinitionWrappers;
 
-	/**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
+    void setUp() {
+        this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.ruleDefinitionSearchFilters = new RuleDefinitionSearchFilters();
 		this.ruleDefinitionSearchFilters.setRuleName("test");
 		this.sut = new RuleDefinitionSearchFiltersVisitor(this.ruleDefinitionSearchFilters);

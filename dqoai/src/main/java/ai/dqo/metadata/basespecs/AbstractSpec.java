@@ -246,6 +246,52 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
     }
 
     /**
+     * Copies non-null properties from <code>sourceObject</code> to the current instance.
+     * @param sourceObject Source object.
+     */
+    public void copyNotNullPropertiesFrom(AbstractSpec sourceObject) {
+        if (sourceObject == null) {
+            return;
+        }
+
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+        List<FieldInfo> fields = myClassInfo.getFields();
+        for (FieldInfo fieldInfo : fields) {
+            ParameterDataType dataType = fieldInfo.getDataType();
+            Object newValue = fieldInfo.getRawFieldValue(sourceObject);
+            Object currentValue = fieldInfo.getRawFieldValue(this);
+
+            if (newValue == null) {
+                continue;
+            }
+
+            if (dataType == ParameterDataType.object_type) {
+                if (AbstractSpec.class.isAssignableFrom(fieldInfo.getClazz())) {
+                    if (currentValue == null) {
+                        fieldInfo.setRawFieldValue(newValue, this);
+                    }
+                    else {
+                        AbstractSpec currentObject = (AbstractSpec) currentValue;
+                        currentObject.copyNotNullPropertiesFrom((AbstractSpec) newValue);
+                    }
+                } else if (Map.class.isAssignableFrom(fieldInfo.getClazz())) {
+                    if (currentValue == null) {
+                        fieldInfo.setRawFieldValue(newValue, this);
+                    } else {
+                        @SuppressWarnings("rawtypes") Map currentObjectMap = (Map) currentValue;
+                        //noinspection rawtypes
+                        currentObjectMap.putAll((Map)newValue);
+                    }
+                }
+            } else {
+                fieldInfo.setRawFieldValue(newValue, this);
+            }
+        }
+    }
+
+    /**
      * Called after the object was deserialized from JSON or YAML.
      */
     @Override

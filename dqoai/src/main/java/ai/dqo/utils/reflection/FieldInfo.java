@@ -362,4 +362,33 @@ public class FieldInfo {
             throw new FieldAccessException("Illegal access exception", e);
         }
     }
+
+    /**
+     * Sets the raw field value. Does not convert enum names to enum values.
+     * @param value Value to store in the field.
+     * @param targetObject Target object.
+     */
+    public void setRawFieldValue(Object value, Object targetObject) {
+        try {
+            if (this.setterMethod == null) {
+                throw new NullPointerException("Field " + this.classFieldName + " on class " + targetObject.getClass().getName() + " has no setter.");
+            }
+
+            this.setterMethod.invoke(targetObject, value);
+        }
+        catch (InvocationTargetException e) {
+            throw new FieldAccessException("Invocation exception", e);
+        } catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception", e);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "FieldInfo{" +
+                "classFieldName='" + classFieldName + '\'' +
+                ", clazz=" + clazz +
+                ", dataType=" + dataType +
+                '}';
+    }
 }

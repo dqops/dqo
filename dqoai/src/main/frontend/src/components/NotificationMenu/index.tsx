@@ -68,11 +68,27 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         <table>
           <tbody>
             <tr>
+              <td className="px-2 capitalize">Status</td>
+              <td className="px-2 truncate">
+                {job?.status}
+              </td>
+            </tr>
+            <tr>
               <td className="px-2 capitalize">Last Changed</td>
               <td className="px-2 truncate">
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
+            {job?.errorMessage && (
+              <>
+                <tr>
+                  <td className="px-2 capitalize">Error Message</td>
+                  <td className="px-2">
+                    {job?.errorMessage}
+                  </td>
+                </tr>
+              </>
+            )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters

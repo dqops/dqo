@@ -27,10 +27,8 @@ import java.util.LinkedHashMap;
 public class TableTargetSpecTests extends BaseTest {
     private TableTargetSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TableTargetSpec();
     }
 

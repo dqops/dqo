@@ -16,6 +16,7 @@
 package ai.dqo.metadata.storage.localfiles.sources;
 
 import ai.dqo.BaseTest;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
@@ -33,16 +34,8 @@ public class FileConnectionListImplTests extends BaseTest {
     private FileConnectionListImpl sut;
     private UserHomeContext homeContext;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		homeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.sut = (FileConnectionListImpl) homeContext.getUserHome().getConnections();
     }
@@ -51,52 +44,60 @@ public class FileConnectionListImplTests extends BaseTest {
     void createAndAddNew_whenNewSourceAddedAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        model.setPostgresql(postgresql);
+        postgresql.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("src1", true);
-        Assertions.assertEquals("url", wrapper2.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapper2.getSpec().getPostgresql().getUser());
     }
 
     @Test
     void createAndAddNew_whenNewSourceAddedInSubFolderAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("area/src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        model.setPostgresql(postgresql);
+        postgresql.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("area/src1", true);
-        Assertions.assertEquals("url", wrapper2.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapper2.getSpec().getPostgresql().getUser());
     }
 
     @Test
     void flush_whenExistingSourceLoadedModifiedAndFlushed_thenIsSaved() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src1");
         ConnectionSpec model = wrapper.getSpec();
-        model.setUrl("url");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        model.setPostgresql(postgresql);
+        postgresql.setUser("user");;
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
         ConnectionWrapper wrapper2 = sources2.getByObjectName("src1", true);
-        wrapper2.getSpec().setUrl("newurl");
+        wrapper2.getSpec().getPostgresql().setUser("newuser");
         homeContext2.flush();
 
         UserHomeContext homeContext3 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources3 = homeContext3.getUserHome().getConnections();
         ConnectionWrapper wrapper3 = sources3.getByObjectName("src1", true);
-        Assertions.assertEquals("newurl", wrapper3.getSpec().getUrl());
+        Assertions.assertEquals("newuser", wrapper3.getSpec().getPostgresql().getUser());
     }
 
     @Test
     void iterator_whenConnectionAdded_thenReturnsConnection() {
         ConnectionWrapper wrapper = this.sut.createAndAddNew("src3");
         ConnectionSpec spec = wrapper.getSpec();
-        spec.setUrl("url");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setUser("user");
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
@@ -105,7 +106,7 @@ public class FileConnectionListImplTests extends BaseTest {
         Assertions.assertTrue(iterator.hasNext());
         ConnectionWrapper wrapperLoaded = iterator.next();
         Assertions.assertNotNull(wrapperLoaded);
-        Assertions.assertEquals("url", wrapperLoaded.getSpec().getUrl());
+        Assertions.assertEquals("user", wrapperLoaded.getSpec().getPostgresql().getUser());
         Assertions.assertFalse(iterator.hasNext());
     }
 }

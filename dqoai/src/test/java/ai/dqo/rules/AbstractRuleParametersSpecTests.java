@@ -24,10 +24,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class AbstractRuleParametersSpecTests extends BaseTest {
     private AbstractRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TestableAbstractRuleParametersSpec();
     }
 

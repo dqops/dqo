@@ -31,11 +31,12 @@ import java.util.TimeZone;
 @Component
 public class FileWritterImpl implements FileWritter {
 	private final UserHomeContextFactory userHomeContextFactory;
-	private final TerminalReader terminalReader;
+	private final TerminalFactory terminalFactory;
 
 	@Autowired
-	public FileWritterImpl(TerminalReader terminalReader, UserHomeContextFactory userHomeContextFactory) {
-		this.terminalReader = terminalReader;
+	public FileWritterImpl(TerminalFactory terminalFactory,
+						   UserHomeContextFactory userHomeContextFactory) {
+		this.terminalFactory = terminalFactory;
 		this.userHomeContextFactory = userHomeContextFactory;
 	}
 
@@ -60,7 +61,7 @@ public class FileWritterImpl implements FileWritter {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 		Path userHomeFolderPath = this.userHomeContextFactory.openLocalUserHome().getHomeRoot().getPhysicalAbsolutePath();
 
-		boolean response = this.terminalReader.promptBoolean("Do you want to use default file name?", true);
+		boolean response = this.terminalFactory.getReader().promptBoolean("Do you want to use default file name?", true);
 		try {
 			if (response) {
 				String newTableFileName = getISO8601StringForCurrentDate(new Date()).replaceAll("\\s+","")
@@ -77,7 +78,7 @@ public class FileWritterImpl implements FileWritter {
 
 				return cliOperationStatus;
 			}
-			String filePath = this.terminalReader.prompt("Write full file path:\n", "", false);
+			String filePath = this.terminalFactory.getReader().prompt("Write full file path:\n", "", false);
 			File newTableFile = new File(filePath);
 			FileWriter myWriter = new FileWriter(newTableFile);
 			myWriter.write(content);

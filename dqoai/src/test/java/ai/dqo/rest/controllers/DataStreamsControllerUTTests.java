@@ -53,16 +53,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
     private final static String DATASTREAM_NAME_1 = "date_level3";
     private final static String DATASTREAM_NAME_2 = "value_level5";
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         this.sut = new DataStreamsController(this.userHomeContextFactory);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();

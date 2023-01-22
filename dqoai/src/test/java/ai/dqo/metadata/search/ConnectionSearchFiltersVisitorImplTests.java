@@ -38,16 +38,8 @@ public class ConnectionSearchFiltersVisitorImplTests extends BaseTest {
     UserHomeContext userHomeContext;
 	ArrayList<HierarchyNode> connectionSpecs;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.connectionSearchFilters = new ConnectionSearchFilters();
 		connectionSearchFilters.setConnectionName("test");

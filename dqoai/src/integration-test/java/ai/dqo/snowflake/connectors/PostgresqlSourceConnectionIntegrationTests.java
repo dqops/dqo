@@ -34,35 +34,19 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class SnowflakeSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
+public class PostgresqlSourceConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
     private SnowflakeSourceConnection sut;
     private ConnectionSpec connectionSpec;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.snowflake);
 		connectionSpec = SnowflakeConnectionSpecObjectMother.create().expandAndTrim(SecretValueProviderObjectMother.getInstance());
 		this.sut = (SnowflakeSourceConnection)connectionProvider.createConnection(connectionSpec, false);
     }
 
-    /**
-     * Called after each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add @AfterEach in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @AfterEach
-    protected void tearDown() throws Throwable {
-        super.tearDown();
+    void tearDown() {
 		this.sut.close(); // maybe it does nothing, but it should be called anyway as an example
     }
 

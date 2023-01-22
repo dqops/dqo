@@ -15,6 +15,8 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalFactoryObjectMother;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
@@ -36,12 +38,11 @@ public class LocalUserHomeCreatorObjectMother {
      */
     public static LocalUserHomeCreator createNewNoLogging() {
         HomeLocationFindService homeLocationFindService = BeanFactoryObjectMother.getBeanFactory().getBean(HomeLocationFindService.class);
-        TerminalReader terminalReader = BeanFactoryObjectMother.getBeanFactory().getBean(TerminalReader.class);
-        TerminalWriter terminalWriter = BeanFactoryObjectMother.getBeanFactory().getBean(TerminalWriter.class);
         DqoLoggingConfigurationProperties noLoggingConfiguration = DqoLoggingConfigurationPropertiesObjectMother.getNoLoggingConfiguration();
         DqoUserConfigurationProperties defaultUserConfiguration = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        TerminalFactory terminalFactory = TerminalFactoryObjectMother.getDefault();
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
-                homeLocationFindService, terminalReader, terminalWriter, noLoggingConfiguration, defaultUserConfiguration);
+                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration);
         return localUserHomeCreator;
     }
 

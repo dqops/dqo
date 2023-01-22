@@ -71,6 +71,13 @@ public interface SourceConnection extends Closeable {
     Table executeQuery(String sqlQueryStatement);
 
     /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     */
+    long executeCommand(String sqlStatement);
+
+    /**
      * Creates a target table following the table specification.
      * @param tableSpec Table specification with the physical table name, column names and physical column data types.
      */

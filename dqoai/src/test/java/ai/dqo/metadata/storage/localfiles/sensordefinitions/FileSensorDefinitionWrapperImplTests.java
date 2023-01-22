@@ -37,10 +37,8 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     private FolderTreeNode fileCheckFolder;
     private YamlSerializer yamlSerializer;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.fileCheckDefinitionList = (FileSensorDefinitionListImpl) userHomeContext.getUserHome().getSensors();
 		this.fileCheckFolder = this.fileCheckDefinitionList.getSensorsFolder().getOrAddDirectFolder("conn");

@@ -38,10 +38,8 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     private FolderTreeNode ruleFolder;
     private YamlSerializer yamlSerializer;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.fileRuleDefinitionList = (FileRuleDefinitionListImpl) userHomeContext.getUserHome().getRules();
 		this.ruleFolder = this.fileRuleDefinitionList.getRulesFolder().getOrAddDirectFolder("conn");
