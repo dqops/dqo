@@ -312,6 +312,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                         clonedJobEntryModel.setStatusChangedAt(dqoUpdatedJobChangeModel.getStatusChangedAt());
                         if (jobChange.getErrorMessage() != null) {
                             clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
+                            dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
                         }
                         this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
                     }

@@ -17,6 +17,7 @@ package ai.dqo.connectors;
 
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.utils.conversion.NumericTypeConverter;
 import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -190,7 +191,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             tech.tablesaw.api.Table tableResult = this.executeQuery(sql);
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
-                column.setName(column.name().toUpperCase(Locale.ENGLISH));
+                column.setName(column.name().toLowerCase(Locale.ENGLISH));
             }
 
             HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
@@ -198,7 +199,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
                 String columnName = colRow.getString("column_name");
-                long ordinalPosition = colRow.getLong("ordinal_position");
                 boolean isNullable = Objects.equals(colRow.getString("is_nullable"),"YES");
                 String dataType = colRow.getString("data_type");
 
@@ -213,6 +213,36 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
                 ColumnSpec columnSpec = new ColumnSpec();
                 ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                if (tableResult.containsColumn("character_maximum_length") &&
+                        !colRow.isMissing("character_maximum_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_maximum_length")));
+                }
+                else if (tableResult.containsColumn("character_octet_length") &&
+                        !colRow.isMissing("character_octet_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_octet_length")));
+                }
+
+                if (tableResult.containsColumn("numeric_precision") &&
+                        !colRow.isMissing("numeric_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_precision")));
+                }
+
+                if (tableResult.containsColumn("numeric_scale") &&
+                        !colRow.isMissing("numeric_scale")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_scale")));
+                }
+
+                if (tableResult.containsColumn("datetime_precision") &&
+                        !colRow.isMissing("datetime_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("datetime_precision")));
+                }
+
+                if (tableResult.containsColumn("interval_precision") &&
+                        !colRow.isMissing("interval_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("interval_precision")));
+                }
+
                 columnType.setNullable(isNullable);
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
