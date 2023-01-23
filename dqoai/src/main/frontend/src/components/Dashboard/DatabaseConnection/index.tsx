@@ -43,6 +43,9 @@ const DatabaseConnection = ({
     history.push(`${ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas')}?import_schema=true`);
   };
 
+  const onTestConnection = async () => {
+  };
+
   return (
     <div>
       <div className="flex justify-between mb-4">
@@ -97,6 +100,13 @@ const DatabaseConnection = ({
         </div>
 
         <div className="flex space-x-4 justify-end mt-6">
+          <Button
+            color="primary"
+            variant="outlined"
+            label="Test Connection"
+            onClick={onTestConnection}
+          />
+
           <Button
             color="primary"
             variant="contained"
