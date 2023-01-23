@@ -28,12 +28,11 @@ public class ColumnNullsNotNullPercentSensorParametersSpecTests extends BaseTest
     private ColumnNullsNotNullPercentSensorParametersSpec sut;
 
     @BeforeEach
-    @BeforeEach
     void setUp() {
         this.sut = new ColumnNullsNotNullPercentSensorParametersSpec();
+    }
 
-
-        @Test
+    @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenDefinitionFoundInDqoHome() {
         SensorDefinitionWrapper sensorDefinitionWrapper =
                 SensorDefinitionWrapperObjectMother.findDqoHomeSensorDefinition(this.sut.getSensorDefinitionName());
