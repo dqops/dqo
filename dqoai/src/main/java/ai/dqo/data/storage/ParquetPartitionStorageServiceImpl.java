@@ -289,6 +289,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         }
     }
 
+    /**
+     * Deletes a parquet file responsible for holding a partition, along with its .crc checksum file.
+     * If there are no other files or folders in this folder, deletes the folders in a cascading pattern until it reaches the root .data folder.
+     * @param targetPartitionFilePath Path to the .parquet file with the partition.
+     * @param tableType Table type to delete (RuleResults, SensorReadouts, etc.)
+     * @return True if deletion proceeded successfully. False otherwise.
+     */
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
             Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);

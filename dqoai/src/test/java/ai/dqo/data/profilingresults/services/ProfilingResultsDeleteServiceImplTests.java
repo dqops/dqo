@@ -29,6 +29,8 @@ import ai.dqo.data.profilingresults.factory.ProfilingResultsTableFactory;
 import ai.dqo.data.profilingresults.factory.ProfilingResultsTableFactoryImpl;
 import ai.dqo.data.profilingresults.models.ProfilingResultsFragmentFilter;
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshot;
+import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshotFactory;
+import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshotFactoryImpl;
 import ai.dqo.data.storage.*;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.search.TableSearchFilters;
@@ -49,7 +51,6 @@ import java.time.LocalDateTime;
 public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
     private ProfilingResultsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings profilingResultsStorageSettings;
     private ProfilingResultsTableFactory profilingResultsTableFactory;
 
@@ -59,11 +60,9 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
      *
      * @throws Throwable
      */
-    @Override
     @BeforeEach
     protected void setUp() throws Throwable {
-        super.setUp();
-        this.dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
@@ -72,25 +71,31 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
-        this.sut = new ProfilingResultsDeleteServiceImpl(this.parquetPartitionStorageService);
 
         this.profilingResultsStorageSettings = ProfilingResultsSnapshot.createProfilingResultsStorageSettings();
         this.profilingResultsTableFactory = new ProfilingResultsTableFactoryImpl();
+
+        ProfilingResultsSnapshotFactory profilingResultsSnapshotFactory = new ProfilingResultsSnapshotFactoryImpl(
+                this.parquetPartitionStorageService,
+                this.profilingResultsTableFactory
+        );
+
+        this.sut = new ProfilingResultsDeleteServiceImpl(profilingResultsSnapshotFactory);
     }
 
-    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate) {
+    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table profilingResultsTable = this.profilingResultsTableFactory.createEmptyProfilingResultsTable(tableName);
 
         Row row1 = profilingResultsTable.appendRow();
-        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         profilingResultsTable.dateTimeColumn(ProfilingResultsColumnNames.PROFILED_AT_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = profilingResultsTable.appendRow();
-        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         profilingResultsTable.dateTimeColumn(ProfilingResultsColumnNames.PROFILED_AT_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = profilingResultsTable.appendRow();
-        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        profilingResultsTable.stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         profilingResultsTable.dateTimeColumn(ProfilingResultsColumnNames.PROFILED_AT_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
         return profilingResultsTable;
@@ -103,7 +108,7 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
@@ -146,7 +151,7 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
@@ -182,6 +187,8 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
     void deleteSelectedProfilingResultsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
         String connectionName = "connection";
         String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -189,8 +196,8 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.profilingResultsStorageSettings.getTableType(),
@@ -231,9 +238,9 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.profilingResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -241,6 +248,8 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
     void deleteSelectedProfilingResultsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -248,8 +257,8 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.profilingResultsStorageSettings.getTableType(),
@@ -291,9 +300,9 @@ public class ProfilingResultsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.profilingResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ProfilingResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 

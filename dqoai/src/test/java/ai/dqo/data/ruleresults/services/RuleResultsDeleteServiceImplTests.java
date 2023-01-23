@@ -30,6 +30,8 @@ import ai.dqo.data.ruleresults.factory.RuleResultsTableFactory;
 import ai.dqo.data.ruleresults.factory.RuleResultsTableFactoryImpl;
 import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactoryImpl;
 import ai.dqo.data.storage.*;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.search.TableSearchFilters;
@@ -50,7 +52,6 @@ import java.time.LocalDateTime;
 public class RuleResultsDeleteServiceImplTests extends BaseTest {
     private RuleResultsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings ruleResultsStorageSettings;
     private RuleResultsTableFactory ruleResultsTableFactory;
 
@@ -60,11 +61,9 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
      *
      * @throws Throwable
      */
-    @Override
     @BeforeEach
     protected void setUp() throws Throwable {
-        super.setUp();
-        this.dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
@@ -73,27 +72,32 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
-        this.sut = new RuleResultsDeleteServiceImpl(this.parquetPartitionStorageService);
 
         this.ruleResultsStorageSettings = RuleResultsSnapshot.createRuleResultsStorageSettings();
         this.ruleResultsTableFactory = new RuleResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
+
+        RuleResultsSnapshotFactory ruleResultsSnapshotFactory = new RuleResultsSnapshotFactoryImpl(
+                this.parquetPartitionStorageService,
+                this.ruleResultsTableFactory);
+
+        this.sut = new RuleResultsDeleteServiceImpl(ruleResultsSnapshotFactory);
     }
 
-    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate) {
+    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table ruleResultsTable = this.ruleResultsTableFactory.createEmptyRuleResultsTable(tableName);
 
         Row row1 = ruleResultsTable.appendRow();
-        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         ruleResultsTable.doubleColumn(RuleResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         ruleResultsTable.dateTimeColumn(RuleResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = ruleResultsTable.appendRow();
-        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         ruleResultsTable.doubleColumn(RuleResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         ruleResultsTable.dateTimeColumn(RuleResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = ruleResultsTable.appendRow();
-        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        ruleResultsTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         ruleResultsTable.doubleColumn(RuleResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         ruleResultsTable.dateTimeColumn(RuleResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
@@ -107,7 +111,7 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
@@ -150,7 +154,7 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
@@ -185,7 +189,9 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
     @Test
     void deleteSelectedRuleResultsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -193,8 +199,8 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.ruleResultsStorageSettings.getTableType(),
@@ -235,16 +241,18 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.ruleResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
     @Test
     void deleteSelectedRuleResultsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
         String connectionName = "connection";
-        String tableName = "tab1";
+        String tableName = "tab";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -252,8 +260,8 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.ruleResultsStorageSettings.getTableType(),
@@ -295,9 +303,9 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.ruleResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 

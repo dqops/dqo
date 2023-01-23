@@ -51,10 +51,8 @@ import java.time.LocalDateTime;
 public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
     private SensorReadoutsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings sensorReadoutsStorageSettings;
     private SensorReadoutsTableFactory sensorReadoutsTableFactory;
-    private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
 
     /**
      * Called before each test.
@@ -62,11 +60,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
      *
      * @throws Throwable
      */
-    @Override
     @BeforeEach
     protected void setUp() throws Throwable {
-        super.setUp();
-        this.dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
@@ -79,11 +75,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
         this.sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
 
-        this.sensorReadoutsSnapshotFactory = new SensorReadoutsSnapshotFactoryImpl(
+        SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory = new SensorReadoutsSnapshotFactoryImpl(
                 this.parquetPartitionStorageService,
                 this.sensorReadoutsTableFactory);
 
-        this.sut = new SensorReadoutsDeleteServiceImpl(this.sensorReadoutsSnapshotFactory);
+        this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {

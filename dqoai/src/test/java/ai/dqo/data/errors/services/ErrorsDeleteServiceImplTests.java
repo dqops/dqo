@@ -27,6 +27,8 @@ import ai.dqo.data.errors.factory.ErrorsTableFactory;
 import ai.dqo.data.errors.factory.ErrorsTableFactoryImpl;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
+import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactoryImpl;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
@@ -51,7 +53,6 @@ import java.util.List;
 public class ErrorsDeleteServiceImplTests extends BaseTest {
     private ErrorsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private FileStorageSettings errorsStorageSettings;
     private ErrorsTableFactory errorsTableFactory;
 
@@ -61,11 +62,9 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
      *
      * @throws Throwable
      */
-    @Override
     @BeforeEach
     protected void setUp() throws Throwable {
-        super.setUp();
-        this.dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
@@ -74,29 +73,35 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
                 HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
-        this.sut = new ErrorsDeleteServiceImpl(this.parquetPartitionStorageService);
 
         this.errorsStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         this.errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
+
+        ErrorsSnapshotFactory errorsSnapshotFactory = new ErrorsSnapshotFactoryImpl(
+                this.parquetPartitionStorageService,
+                this.errorsTableFactory
+        );
+
+        this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory);
     }
 
-    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate) {
+    private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table errorsTable = this.errorsTableFactory.createEmptyErrorsTable(tableName);
 
         Row row1 = errorsTable.appendRow();
-        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = errorsTable.appendRow();
-        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = errorsTable.appendRow();
-        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        errorsTable.stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         errorsTable.doubleColumn(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         errorsTable.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
         errorsTable.dateTimeColumn(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
@@ -111,7 +116,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         List<LocalDateTime> inspect = table1.dateTimeColumn(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME).asList();
 
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
@@ -156,7 +161,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName1, startDate);
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate, "");
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
@@ -192,6 +197,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
     void deleteSelectedErrorsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
         String connectionName = "connection";
         String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -199,8 +206,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.errorsStorageSettings.getTableType(),
@@ -241,9 +248,9 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.errorsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -251,6 +258,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
     void deleteSelectedErrorsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
@@ -258,8 +267,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
         LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
 
-        Table table1 = prepareSimplePartitionTable(tableName, startDate1);
-        Table table2 = prepareSimplePartitionTable(tableName, startDate2);
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
                 this.errorsStorageSettings.getTableType(),
@@ -301,9 +310,9 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.errorsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
