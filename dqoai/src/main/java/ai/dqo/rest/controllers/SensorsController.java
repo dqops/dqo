@@ -111,7 +111,7 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
         SensorDefinitionList sensorDefinitionList = dqoHome.getSensors();
-        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, false);
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, true);
 
         if(sensorDefinitionWrapper==null){
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -138,7 +138,7 @@ public class SensorsController {
     })
     public ResponseEntity<Flux<ProviderSensorModel>> getAllProviderBuiltInSensor(
             @ApiParam("Provider type") @PathVariable ProviderType providerType
-    ) {
+    ){
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -173,7 +173,7 @@ public class SensorsController {
     public ResponseEntity<Mono<ProviderSensorModel>> getProviderBuiltInSensor(
             @ApiParam("Provider type") @PathVariable ProviderType providerType,
             @ApiParam("Sensor name") @PathVariable String sensorName
-    ) {
+    ){
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -247,7 +247,7 @@ public class SensorsController {
     })
     public ResponseEntity<Mono<SensorModel>> getCustomSensor(
             @ApiParam("Sensor name") @PathVariable String sensorName
-            ) {
+    ){
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -267,7 +267,7 @@ public class SensorsController {
 
     /**
      * Creates (adds) a new custom sensor given sensor information.
-     * @param sensorName Connection name.
+     * @param sensorName Sensor name.
      * @param sensorDefinitionSpec List of sensor definitions.
      * @return Empty response.
      */
@@ -307,7 +307,7 @@ public class SensorsController {
 
     /**
      * Updates an existing custom sensor.
-     * @param sensorName Connection name.
+     * @param sensorName Sensor name.
      * @param sensorDefinitionSpec List of sensor definitions.
      * @return Empty response.
      */
@@ -317,7 +317,7 @@ public class SensorsController {
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom sensor successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
-            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 404, message = "Sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateCustomSensor(
@@ -345,7 +345,7 @@ public class SensorsController {
 
     /**
      * Deletes a custom sensor.
-     * @param sensorName sensor name to delete.
+     * @param sensorName Sensor name to delete.
      * @return Empty response.
      */
     @DeleteMapping("/custom/{sensorName}")
@@ -381,8 +381,8 @@ public class SensorsController {
 
     /**
      * Returns a custom provider sensor.
-     * @param sensorName sensor name.
-     * @param providerType provider type.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
      * @return Custom provider sensor model.
      */
     @GetMapping("/custom/provider/{sensorName}/{providerType}")
@@ -429,7 +429,7 @@ public class SensorsController {
 
     /**
      * Returns a list of custom provider sensors.
-     * @param providerType provider type.
+     * @param providerType Provider type.
      * @return List of custom provider sensor model.
      */
     @GetMapping("/custom/provider/{providerType}")
@@ -463,9 +463,9 @@ public class SensorsController {
 
     /**
      * Creates (adds) a new custom provider sensor given sensor information.
-     * @param sensorName sensor name.
-     * @param providerType provider type.
-     * @param providerSensorModel provider sensor model.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
+     * @param providerSensorModel Provider sensor model.
      * @return Empty response.
      */
     @PostMapping("/custom/provider/{sensorName}/{providerType}")
@@ -513,7 +513,7 @@ public class SensorsController {
 
     /**
      * Updates a SQL template for existing custom provider sensor.
-     * @param sensorName Connection name.
+     * @param sensorName Sensor name.
      * @param providerType Provider type.
      * @param providerSensorModel Provider Sensor model.
      * @return Empty response.
@@ -561,7 +561,7 @@ public class SensorsController {
 
     /**
      * Updates a providerSensorSpec for existing custom provider sensor.
-     * @param sensorName Connection name.
+     * @param sensorName Sensor name.
      * @param providerType Provider type.
      * @param providerSensorDefinitionSpec List of provider sensor definitions.
      * @return Empty response.
@@ -609,7 +609,7 @@ public class SensorsController {
 
     /**
      * Deletes a custom provider sensor.
-     * @param sensorName sensor name.
+     * @param sensorName Sensor name.
      * @param providerType Provider type to delete.
      * @return Empty response.
      */
