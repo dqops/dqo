@@ -29,7 +29,10 @@
     SELECT
         top_col_values.top_values as top_values,
         top_col_values.time_period as time_period,
-        RANK() OVER(partition by top_col_values.time_period ORDER BY top_col_values.ct) as rg
+        {{- lib.render_data_stream_projections('top_col_values') }}
+        RANK() OVER(partition by top_col_values.time_period
+        {{- lib.render_data_stream_projections('top_col_values') }}
+        ORDER BY top_col_values.ct) as rg
     FROM (
            SELECT
             {{ lib.render_target_column('analyzed_table') }} AS top_values,
@@ -37,6 +40,7 @@
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
            FROM {{ lib.render_target_table() }} AS analyzed_table
+           {{- lib.render_where_clause() -}}
            {{- lib.render_group_by() -}}, top_values
            {{- lib.render_order_by() -}}, ct
          ) top_col_values

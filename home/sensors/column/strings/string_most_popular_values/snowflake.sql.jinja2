@@ -37,6 +37,7 @@
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
            FROM {{ lib.render_target_table() }} AS analyzed_table
+           {{- lib.render_where_clause() -}}
            {{- lib.render_group_by() -}}, top_values
            {{- lib.render_order_by() -}}, ct
          ) top_col_values
