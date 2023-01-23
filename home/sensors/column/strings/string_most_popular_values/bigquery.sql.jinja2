@@ -10,47 +10,65 @@
     {%- endfor -%}
 {% endmacro -%}
 
+{% macro render_data_stream(table_alias_prefix = '') %}
+    {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+        {%- for attribute in lib.data_streams -%}
+            {{ ', ' }}
+            {%- with data_stream_level = lib.data_streams[attribute] -%}
+                {%- if data_stream_level.source == 'tag' -%}
+                    {{ make_text_constant(data_stream_level.tag) }}
+                {%- elif data_stream_level.source == 'column_value' -%}
+                    {{ table_alias_prefix }}.stream_{{ attribute }}
+                {%- endif -%}
+            {%- endwith %}
+        {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
 {%- macro top_value() -%}
-    {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-    NULL
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+    NULL AS actual_value,
+    {{parameters.expected_values|length}}
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
     {%- else -%}
     SUM(
         CASE
-            WHEN top_values IN ({{ extract_in_list({{parameters['values']}}) }}) THEN 1
+            WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
             ELSE 0
         END
     ) AS actual_value,
     time_period
+{{ top_values_column() }}
     {%- endif -%}
 {% endmacro -%}
 
-{%- macro top_value() -%}
-(
+{%- macro top_values_column() -%}
+FROM(
     SELECT
         top_col_values.top_values as top_values,
         top_col_values.time_period as time_period,
-        {{- lib.render_data_stream_projections('top_col_values') }}
         RANK() OVER(partition by top_col_values.time_period
-        {{- lib.render_data_stream_projections('top_col_values') }}
-        ORDER BY top_col_values.ct) as rg
+        {{- render_data_stream('top_col_values') }}
+        ORDER BY top_col_values.total_values) as top_values_rank
+        {{- render_data_stream('top_col_values') }}
     FROM (
            SELECT
             {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS ct
+            COUNT(*) AS total_values
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
            FROM {{ lib.render_target_table() }} AS analyzed_table
-           {{- lib.render_where_clause() -}}
-           {{- lib.render_group_by() -}}, top_values
-           {{- lib.render_order_by() -}}, ct
+           {{- lib.render_where_clause() }}
+           {{- lib.render_group_by() }}, top_values
+           {{- lib.render_order_by() }}, total_values
          ) top_col_values
     )
-{% endmacro -%}
+WHERE top_values_rank <= {{ parameters.top_values }}
+{%- endmacro -%}
 
 SELECT
-    {{ top_value() }}
-FROM {{- top_values_column() }}
-WHERE rg <= {{parameters.limit}}
-{{- lib.render_group_by() -}},
+    {{ top_value() -}}
+{{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
-

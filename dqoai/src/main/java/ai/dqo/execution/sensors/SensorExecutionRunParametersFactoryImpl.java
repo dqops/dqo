@@ -105,7 +105,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
 
         TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
         DataStreamMappingSpec dataStreams = check.getDataStream() != null ?
-                expandedTable.getDataStreams().get(check.getDataStream()) : null;
+                expandedTable.getDataStreams().get(check.getDataStream()) : expandedTable.getDataStreams().getFirstDataStreamMapping();
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 check, null, checkType, timeSeries, dataStreams, sensorParameters, dialectSettings);
