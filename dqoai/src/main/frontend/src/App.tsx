@@ -9,6 +9,8 @@ import { useActionDispatch } from './hooks/useActionDispatch';
 import { getAllJobs, getJobsChanges } from './redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from './redux/reducers';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const dispatch = useActionDispatch();
@@ -29,6 +31,7 @@ const App = () => {
       <AppProvider>
         <ThemeProvider value={{}}>
           <Routes />
+          <ToastContainer />
         </ThemeProvider>
       </AppProvider>
     </Router>
