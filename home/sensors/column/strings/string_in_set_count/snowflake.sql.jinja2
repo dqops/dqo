@@ -23,10 +23,9 @@
     {%- endif -%}
 {% endmacro -%}
 
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
+SELECT CASE
+    WHEN COUNT(*) = 0 THEN NULL
+    ELSE {{render_else()}}
     END AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}

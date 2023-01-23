@@ -23,8 +23,7 @@
     {%- endif -%}
 {% endmacro -%}
 
-SELECT
-    CASE
+SELECT CASE
         WHEN COUNT(*) = 0 THEN NULL
         ELSE {{render_else()}}
     END AS actual_value

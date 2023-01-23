@@ -14,11 +14,11 @@ SELECT CASE
             CASE
                 WHEN REGEXP_CONTAINS(
                     {{ lib.render_target_column('analyzed_table') }},
-                    {{ render_regex(parameters.regex) }}
-                ) IS TRUE THEN 1
+                    {{ render_regex(parameters.regex) }}) IS TRUE THEN 1
                 ELSE 0
             END
-        ) / COUNT(*) END AS actual_value
+        ) / COUNT(*)
+    END AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table

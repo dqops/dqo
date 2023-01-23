@@ -7,7 +7,8 @@ SELECT
             OR TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{ lib.render_date_format(parameters.named_date_format, custom_date_format) }}) IS NOT NULL THEN 1
             ELSE 0
         END
-    ) / COUNT(*) AS actual_value
+    ) / COUNT(*)
+    AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table

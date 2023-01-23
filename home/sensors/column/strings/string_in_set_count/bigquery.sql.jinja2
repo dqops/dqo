@@ -16,8 +16,7 @@
     {%- else -%}
     SUM(
         CASE
-            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                THEN 1
+            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }}) THEN 1
             ELSE 0
         END
     )
