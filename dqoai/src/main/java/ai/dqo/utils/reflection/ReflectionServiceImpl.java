@@ -182,7 +182,7 @@ public class ReflectionServiceImpl implements ReflectionService {
         }
         fieldInfo.setDataType(parameterDataType);
 
-        String getterMethodPrefix = fieldType == Boolean.class || fieldType == boolean.class ? "is" : "get";
+        String getterMethodPrefix = fieldType == boolean.class ? "is" : "get";
         String getterSetterSuffix = Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
         String getterMethodName = getterMethodPrefix + getterSetterSuffix;
         String setterMethodName = "set" + getterSetterSuffix;

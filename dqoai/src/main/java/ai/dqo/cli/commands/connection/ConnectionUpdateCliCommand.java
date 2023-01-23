@@ -21,9 +21,11 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.connection.impl.ConnectionService;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,87 +41,55 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "update", description = "Update connection or connections which match filters")
 public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand {
     private ConnectionService connectionService;
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
 
     public ConnectionUpdateCliCommand() {
     }
 
     @Autowired
     public ConnectionUpdateCliCommand(ConnectionService connectionService,
-									  TerminalReader terminalReader,
-									  TerminalWriter terminalWriter) {
+                                      TerminalFactory terminalFactory) {
         this.connectionService = connectionService;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
     }
 
-    @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name", required = false,
+    @CommandLine.Option(names = {"-n", "--name"}, description = "Connection name, supports wildcards for changing multiple connections at once, i.e. \"conn*\"", required = false,
             completionCandidates = ConnectionNameCompleter.class)
     private String name;
 
-    @CommandLine.Option(names = {"-t", "--provider"}, description = "Connection provider type", required = false,
-            completionCandidates = ProviderTypeCompleter.class)
-    private ProviderType providerType;
+    @CommandLine.Mixin
+    private ConnectionSpec connection;
 
-    @CommandLine.Option(names = {"-d", "--database"}, description = "Database name", required = false, defaultValue = "")
-    private String database;
-
-    @CommandLine.Option(names = {"-j", "--jdbc"}, description = "JDBC connection url", required = false)
-    private String url;
-
-    @CommandLine.Option(names = {"-u", "--user"}, description = "Username", required = false)
-    private String user;
-
-    @CommandLine.Option(names = {"-p", "--password"}, description = "Password", required = false)
-    private String password;
-
+    /**
+     * Returns a connection name or a wildcard to modify multiple connections.
+     * @return Connection wildcard.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the connection name.
+     * @param name Connection name.
+     */
     public void setName(String name) {
         this.name = name;
     }
 
-    public ProviderType getProviderType() {
-        return providerType;
+    /**
+     * Returns a connection object filled with options provided in the cli.
+     * @return Connection object, filled with new parameters.
+     */
+    public ConnectionSpec getConnection() {
+        return connection;
     }
 
-    public void setProviderType(ProviderType providerType) {
-        this.providerType = providerType;
-    }
-
-    public String getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    /**
+     * Sets a connection object that will have new values.
+     * @param connection Connection options.
+     */
+    public void setConnection(ConnectionSpec connection) {
+        this.connection = connection;
     }
 
     /**
@@ -130,16 +100,10 @@ public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand 
      */
     @Override
     public Integer call() throws Exception {
-
-        ConnectionSpec connectionSpec = new ConnectionSpec();
-        connectionSpec.setProviderType(providerType);
-        connectionSpec.setDatabaseName(database);
-        connectionSpec.setUrl(url);
-        connectionSpec.setUser(user);
-        connectionSpec.setPassword(password);
+        ConnectionSpec connectionSpec = this.connection == null ? new ConnectionSpec() : this.connection;
 
         CliOperationStatus cliOperationStatus = this.connectionService.updateConnection(this.name, connectionSpec);
-        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+        this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
         return cliOperationStatus.isSuccess() ? 0 : -1;
     }
 }

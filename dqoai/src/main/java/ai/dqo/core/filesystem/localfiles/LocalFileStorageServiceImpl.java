@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Local folder access service, manages files in a given folder. Manages files in the on the disk in the given file system folder.
+ * Local folder access service, manages files in a given folder. Manages files on the disk in the given file system folder.
  */
 public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     private final String homePath;

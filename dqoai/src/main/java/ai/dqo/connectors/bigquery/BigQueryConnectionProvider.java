@@ -118,58 +118,38 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-        HashMap<String, String> connectionProperties = connectionSpec.getProperties();
         BigQueryParametersSpec bigquerySpec = connectionSpec.getBigquery();
         if (bigquerySpec == null) {
             bigquerySpec = new BigQueryParametersSpec();
             connectionSpec.setBigquery(bigquerySpec);
         }
 
-        if (connectionProperties.containsKey("bigquery-source-project-id")) {
-            bigquerySpec.setSourceProjectId(connectionProperties.get("bigquery-source-project-id"));
-            connectionProperties.remove("bigquery-source-project-id");
-        }
         if (Strings.isNullOrEmpty(bigquerySpec.getSourceProjectId())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-source-project-id");
+                throw new CliRequiredParameterMissingException("--bigquery-source-project-id\"");
             }
 
             String sourceProjectId = tryGetCurrentGcpProject();
             String defaultGcpProject = sourceProjectId != null ? sourceProjectId : "${GCP_PROJECT}";
-            bigquerySpec.setSourceProjectId(terminalReader.prompt("Source GCP project ID (-P=bigquery-source-project-id)", defaultGcpProject, false));
+            bigquerySpec.setSourceProjectId(terminalReader.prompt("Source GCP project ID (--bigquery-source-project-id\")", defaultGcpProject, false));
         }
 
-        if (connectionProperties.containsKey("bigquery-billing-project-id")) {
-            bigquerySpec.setBillingProjectId(connectionProperties.get("bigquery-billing-project-id"));
-            connectionProperties.remove("bigquery-billing-project-id");
-        }
         if (Strings.isNullOrEmpty(bigquerySpec.getBillingProjectId())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-billing-project-id");
+                throw new CliRequiredParameterMissingException("--bigquery-billing-project-id");
             }
 
             String billingProjectId = tryGetCurrentGcpProject();
             String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
-            bigquerySpec.setBillingProjectId(terminalReader.prompt("Billing GCP project ID (-P=bigquery-billing-project-id), leave null to use the default GCP project from credentials" + defaultProjectMessage, null, true));
+            bigquerySpec.setBillingProjectId(terminalReader.prompt("Billing GCP project ID (--bigquery-billing-project-id), leave null to use the default GCP project from credentials" + defaultProjectMessage, null, true));
         }
 
-        if (connectionProperties.containsKey("bigquery-authentication-mode")) {
-            String authenticationModeText = connectionProperties.get("bigquery-authentication-mode");
-            try {
-                BigQueryAuthenticationMode bigQueryAuthenticationMode = BigQueryAuthenticationMode.valueOf(authenticationModeText);
-                bigquerySpec.setAuthenticationMode(bigQueryAuthenticationMode);
-            }
-            catch (Exception ex) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-authentication-mode");  // TODO: we could throw a specific error that tells the user that the value was incorrect
-            }
-            connectionProperties.remove("bigquery-authentication-mode");
-        }
         if (bigquerySpec.getAuthenticationMode() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-authentication-mode");
+                throw new CliRequiredParameterMissingException("--bigquery-authentication-mode");
             }
 
-            BigQueryAuthenticationMode authenticationMode = terminalReader.promptEnum("GCP Authentication Mode", BigQueryAuthenticationMode.class, BigQueryAuthenticationMode.google_application_credentials, false);
+            BigQueryAuthenticationMode authenticationMode = terminalReader.promptEnum("GCP Authentication Mode (--bigquery-authentication-mode)", BigQueryAuthenticationMode.class, BigQueryAuthenticationMode.google_application_credentials, false);
             bigquerySpec.setAuthenticationMode(authenticationMode);
         }
 
@@ -185,44 +165,32 @@ public class BigQueryConnectionProvider extends AbstractSqlConnectionProvider {
             }
         }
 
-        if (connectionProperties.containsKey("bigquery-json-key-content")) {
-            bigquerySpec.setJsonKeyContent(connectionProperties.get("bigquery-json-key-content"));
-            connectionProperties.remove("bigquery-json-key-content");
-        }
         if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.json_key_content &&
                 Strings.isNullOrEmpty(bigquerySpec.getJsonKeyContent())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-json-key-content");
+                throw new CliRequiredParameterMissingException("--bigquery-json-key-content");
             }
 
-            bigquerySpec.setJsonKeyContent(terminalReader.prompt("JSON key content (-P=bigquery-json-key-content)", "${JSON_KEY_CONTENT}", false));
+            bigquerySpec.setJsonKeyContent(terminalReader.prompt("JSON key content (--bigquery-json-key-content)", "${JSON_KEY_CONTENT}", false));
         }
 
-        if (connectionProperties.containsKey("bigquery-json-key-path")) {
-            bigquerySpec.setJsonKeyPath(connectionProperties.get("bigquery-json-key-path"));
-            connectionProperties.remove("bigquery-json-key-path");
-        }
         if (bigquerySpec.getAuthenticationMode() == BigQueryAuthenticationMode.json_key_path &&
                 Strings.isNullOrEmpty(bigquerySpec.getJsonKeyPath())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-json-key-path");
+                throw new CliRequiredParameterMissingException("--bigquery-json-key-path");
             }
 
-            bigquerySpec.setJsonKeyPath(terminalReader.prompt("JSON key path (-P=bigquery-json-key-path)", "${GOOGLE_APPLICATION_CREDENTIALS}", false));
+            bigquerySpec.setJsonKeyPath(terminalReader.prompt("JSON key path (--bigquery-json-key-path)", "${GOOGLE_APPLICATION_CREDENTIALS}", false));
         }
 
-        if (connectionProperties.containsKey("bigquery-quota-project-id")) {
-            bigquerySpec.setQuotaProjectId(connectionProperties.get("bigquery-quota-project-id"));
-            connectionProperties.remove("bigquery-quota-project-id");
-        }
         if (Strings.isNullOrEmpty(bigquerySpec.getQuotaProjectId())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("-P=bigquery-quota-project-id");
+                throw new CliRequiredParameterMissingException("--bigquery-quota-project-id");
             }
 
             String billingProjectId = bigquerySpec.getBillingProjectId() != null ? bigquerySpec.getBillingProjectId() : tryGetCurrentGcpProject();
             String defaultProjectMessage = billingProjectId != null ? " (" + billingProjectId + ")" : "";
-            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (-P=bigquery-quota-project-id), leave blank to use the default GCP project from credentials" + defaultProjectMessage, null, true));
+            bigquerySpec.setQuotaProjectId(terminalReader.prompt("GCP quota (billing) project ID (--bigquery-quota-project-id), leave blank to use the default GCP project from credentials" + defaultProjectMessage, null, true));
         }
     }
 

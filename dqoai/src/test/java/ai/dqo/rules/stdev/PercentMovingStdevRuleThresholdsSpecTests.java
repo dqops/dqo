@@ -25,12 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class PercentMovingStdevRuleThresholdsSpecTests extends BaseTest {
     private PercentMovingStdevRuleThresholdsSpec sut;
 
-
-
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = new PercentMovingStdevRuleThresholdsSpec();
     }
 

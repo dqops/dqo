@@ -16,18 +16,22 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.localfiles.LocalFileStorageService;
+import ai.dqo.core.filesystem.virtual.FolderName;
+import ai.dqo.core.filesystem.virtual.HomeFilePath;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.storage.parquet.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriter;
 import org.apache.hadoop.conf.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,11 +42,12 @@ import tech.tablesaw.selection.Selection;
 import java.io.File;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -52,21 +57,25 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
+    private LocalUserHomeFileStorageService localUserHomeFileStorageService;
 
     /**
      * Dependency injection constructor.
      * @param localDqoUserHomePathProvider DQO User home finder.
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
+     * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
             LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
             UserHomeLockManager userHomeLockManager,
-            HadoopConfigurationProvider hadoopConfigurationProvider) {
+            HadoopConfigurationProvider hadoopConfigurationProvider,
+            LocalUserHomeFileStorageService localUserHomeFileStorageService) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
+        this.localUserHomeFileStorageService = localUserHomeFileStorageService;
     }
 
     /**
@@ -190,6 +199,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+
             String hivePartitionFolderName = makeHivePartitionPath(loadedPartition.getPartitionId());
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
             Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
@@ -250,6 +260,21 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 }
             }
 
+            if (dataToSave == null || dataToSave.isEmpty()) {
+                // ensure the partition data is deleted
+                if (targetParquetFile.exists()) {
+                    boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                    if (success) {
+                        return;
+                    }
+                    // If unsuccessful, then proceed with the regular deleting method.
+                }
+                else {
+                    // there is no file, therefore no data to delete
+                    return;
+                }
+            }
+
             DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
                     .dqoBuilder(targetParquetFile)
                     .withOverwrite(true)
@@ -261,6 +286,72 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Deletes a parquet file responsible for holding a partition, along with its .crc checksum file.
+     * If there are no other files or folders in this folder, deletes the folders in a cascading pattern until it reaches the root .data folder.
+     * @param targetPartitionFilePath Path to the .parquet file with the partition.
+     * @param tableType Table type to delete (RuleResults, SensorReadouts, etc.)
+     * @return True if deletion proceeded successfully. False otherwise.
+     */
+    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
+            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath().relativize(targetPartitionFilePath);
+
+            if (Files.isDirectory(homeRelativePath)) {
+                return false;
+            }
+
+            LinkedList<FolderName> homeRelativeFoldersList = new LinkedList<>();
+            for (Path fileSystemName : homeRelativePath.getParent()) {
+                homeRelativeFoldersList.add(
+                        FolderName.fromFileSystemName(fileSystemName.toString())
+                );
+            }
+
+            if (!this.localUserHomeFileStorageService.deleteFile(
+                    new HomeFilePath(
+                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                            homeRelativePath.getFileName().toString()
+                    )
+            )) {
+                // Deleting .parquet file failed.
+                return false;
+            }
+
+            if (!this.localUserHomeFileStorageService.deleteFile(
+                    new HomeFilePath(
+                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+                            ".%s.crc".formatted(homeRelativePath.getFileName().toString())
+                    )
+            )) {
+                // Deleting .crc file failed.
+                return false;
+            }
+
+            while (homeRelativeFoldersList.size() > 1) {
+                // Delete all remaining folders, if empty, to the extent allowed by the lock.
+                HomeFolderPath homeFolderPath = new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));
+
+                int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath).size();
+                int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath).size();
+                if (filesInFolderCount + foldersInFolderCount != 0) {
+                    // Folder is not empty
+                    break;
+                }
+
+                if (!this.localUserHomeFileStorageService.tryDeleteFolder(homeFolderPath)) {
+                    // Deleting the folder failed
+                    // TODO: Add a warn log message.
+                    break;
+                }
+
+                homeRelativeFoldersList.removeLast();
+            }
+
+            return true;
         }
     }
 }

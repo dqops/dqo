@@ -28,7 +28,7 @@ import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.sensors.table.consistency.TableConsistencyRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvService;
 import ai.dqo.utils.python.PythonVirtualEnvServiceObjectMother;
@@ -43,16 +43,8 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
     private JinjaTemplateRenderServiceImpl sut;
     private JinjaTemplateRenderParameters renderParameters;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
         PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(dqoConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
@@ -62,7 +54,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new TableSpec(),
                 new ColumnSpec(),
                 null,
-                new TableConsistencyRowCountSensorParametersSpec(),
+                new TableStandardRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),

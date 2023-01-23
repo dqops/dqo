@@ -26,6 +26,6 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "check", description = "Run checks matching specified filters", subcommands = CheckRunCliCommand.class)
+@CommandLine.Command(name = "check", description = "Commands related to checks and rules", subcommands = {CheckRunCliCommand.class})
 public class CheckCliCommand extends BaseCommand {
 }

@@ -40,16 +40,8 @@ public class ColumnsControllerITTests extends BaseTest {
     private SampleTableMetadata sampleTable;
     private WebClient webClient;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.userHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(true);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
         this.webClient = WebClientObjectMother.create();

@@ -16,6 +16,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.BaseIntegrationTest;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.listeners.SilentFileSystemSynchronizationListener;
@@ -33,16 +34,8 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
     private DqoCloudSynchronizationService sut;
     private FileSystemSynchronizationListener listener;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(DqoCloudSynchronizationService.class);
         this.listener = new SilentFileSystemSynchronizationListener();
     }
@@ -51,7 +44,9 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
     void synchronizeFolder_whenSourcesAddedAndSyncOnNewUserCome_thenSendsAndDownloadsBackTheSource() {
         UserHomeContext firstUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(true);
         ConnectionWrapper initialConnWrapper = firstUserHomeContext.getUserHome().getConnections().createAndAddNew("src1");
-        initialConnWrapper.getSpec().setDatabaseName("DB1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        initialConnWrapper.getSpec().setPostgresql(postgresql);
+        postgresql.setDatabase("DB1");
         firstUserHomeContext.flush();
 
         this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);
@@ -64,7 +59,7 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
         UserHomeContext restoredUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(false);
         ConnectionWrapper secondConnWrapper = restoredUserHomeContext.getUserHome().getConnections().getByObjectName("src1", true);
         Assertions.assertNotNull(secondConnWrapper);
-        Assertions.assertEquals("DB1", secondConnWrapper.getSpec().getDatabaseName());
+        Assertions.assertEquals("DB1", secondConnWrapper.getSpec().getPostgresql().getDatabase());
 
         secondConnWrapper.markForDeletion();
         restoredUserHomeContext.flush();

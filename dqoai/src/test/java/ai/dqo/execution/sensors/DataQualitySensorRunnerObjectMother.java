@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.connectors.ConnectionQueryException;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
@@ -44,7 +45,11 @@ public class DataQualitySensorRunnerObjectMother {
     public static SensorExecutionResult executeSensor(ExecutionContext executionContext, SensorExecutionRunParameters sensorRunParameters) {
         DataQualitySensorRunnerImpl sensorRunner = getDefault();
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        return sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false);
+        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false);
+        if (!sensorExecutionResult.isSuccess()) {
+            throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());
+        }
+        return sensorExecutionResult;
     }
 
     /**
@@ -55,6 +60,10 @@ public class DataQualitySensorRunnerObjectMother {
      */
     public static SensorExecutionResult executeSensor(UserHomeContext userHomeContext, SensorExecutionRunParameters sensorRunParameters) {
         ExecutionContext executionContext = new ExecutionContext(userHomeContext, DqoHomeContextObjectMother.getRealDqoHomeContext());
-        return executeSensor(executionContext, sensorRunParameters);
+        SensorExecutionResult sensorExecutionResult = executeSensor(executionContext, sensorRunParameters);
+        if (!sensorExecutionResult.isSuccess()) {
+            throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());
+        }
+        return sensorExecutionResult;
     }
 }

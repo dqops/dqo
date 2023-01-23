@@ -21,10 +21,7 @@ import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.edit.EditorLaunchService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FormattedTableDto;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.*;
 import ai.dqo.connectors.*;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.search.ConnectionSearchFilters;
@@ -38,6 +35,8 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Row;
@@ -56,27 +55,24 @@ import java.util.stream.Collectors;
 @Component
 public class ConnectionServiceImpl implements ConnectionService {
     private final UserHomeContextFactory userHomeContextFactory;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private final TerminalFactory terminalFactory;
     private final TerminalTableWritter terminalTableWritter;
     private final ConnectionProviderRegistry connectionProviderRegistry;
-    private SecretValueProvider secretValueProvider;
+    private final SecretValueProvider secretValueProvider;
     private final OutputFormatService outputFormatService;
     private final EditorLaunchService editorLaunchService;
 
     @Autowired
     public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
 								 ConnectionProviderRegistry connectionProviderRegistry,
-                                 TerminalReader terminalReader,
-                                 TerminalWriter terminalWriter,
+                                 TerminalFactory terminalFactory,
                                  TerminalTableWritter terminalTableWritter,
                                  SecretValueProvider secretValueProvider,
                                  OutputFormatService outputFormatService,
                                  EditorLaunchService editorLaunchService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.terminalTableWritter = terminalTableWritter;
         this.secretValueProvider = secretValueProvider;
         this.outputFormatService = outputFormatService;
@@ -365,8 +361,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                     model.setId(spec.getHierarchyId().hashCode64());
                     model.setName(spec.getConnectionName());
                     model.setDialect(spec.getProviderType());
-                    model.setUrl(spec.getUrl());
-                    model.setDatabaseName(spec.getDatabaseName());
+                    model.setDatabaseName(spec.getProviderSpecificConfiguration().getDatabase());
 
                     return model;
                 }
@@ -377,7 +372,6 @@ public class ConnectionServiceImpl implements ConnectionService {
         formattedTable.addColumnHeader("id", "Hash Id");
         formattedTable.addColumnHeader("name", "Connection Name");
         formattedTable.addColumnHeader("dialect", "Connection Type");
-        formattedTable.addColumnHeader("url", "JDBC Url");
         formattedTable.addColumnHeader("databaseName", "Physical Database Name");
 
         return formattedTable;
@@ -440,8 +434,8 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         FormattedTableDto<ConnectionListModel> connectionTables = loadConnectionTable(connectionName, null, null);
         this.terminalTableWritter.writeTable(connectionTables, true);
-        this.terminalWriter.writeLine("Do You want to remove these " + connectionTables.getRows().size() + " connections?");
-        boolean response = this.terminalReader.promptBoolean("Yes or No", false);
+        this.terminalFactory.getWriter().writeLine("Do you want to remove these " + connectionTables.getRows().size() + " connections?");
+        boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
         if (!response) {
             cliOperationStatus.setFailedMessage("You deleted 0 connections");
             return cliOperationStatus;
@@ -485,30 +479,12 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
         connectionSpecs.forEach(
                 wrapperSpec -> {
-                    if (connectionSpec.getUser() != null) {
-                        wrapperSpec.setUser(connectionSpec.getUser());
-                    }
-
-                    if (connectionSpec.getDatabaseName() != null) {
-                        wrapperSpec.setDatabaseName(connectionSpec.getDatabaseName());
-                    }
-
-                    if (connectionSpec.getUrl() != null) {
-                        wrapperSpec.setUrl(connectionSpec.getUrl());
-                    }
-
-                    if (connectionSpec.getPassword() != null) {
-                        wrapperSpec.setPassword(connectionSpec.getPassword());
-                    }
-
-                    if (connectionSpec.getProviderType() != null) {
-                        wrapperSpec.setProviderType(connectionSpec.getProviderType());
-                    }
-                    userHomeContext.flush();
+                    wrapperSpec.copyNotNullPropertiesFrom(connectionSpec.clone());
                 }
         );
+        userHomeContext.flush();
 
-        cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d connection(s)", connectionSpecs.size()));
         return cliOperationStatus;
     }
 
@@ -557,7 +533,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
-            this.terminalWriter.writeLine(String.format("Connection '%s' not found", connectionName));
+            this.terminalFactory.getWriter().writeLine(String.format("Connection '%s' not found", connectionName));
             return -1;
         }
         this.editorLaunchService.openEditorForConnection(connectionWrapper);

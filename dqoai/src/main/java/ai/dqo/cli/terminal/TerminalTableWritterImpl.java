@@ -32,16 +32,13 @@ import tech.tablesaw.api.Table;
  */
 @Component
 public class TerminalTableWritterImpl implements TerminalTableWritter {
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
 	private final FileWritter fileWritter;
+	private final TerminalFactory terminalFactory;
 
 	@Autowired
-	TerminalTableWritterImpl(TerminalReader terminalReader,
-							 TerminalWriter terminalWriter,
+	TerminalTableWritterImpl(TerminalFactory terminalFactory,
 							 FileWritter fileWritter) {
-		this.terminalReader = terminalReader;
-		this.terminalWriter = terminalWriter;
+		this.terminalFactory = terminalFactory;
 		this.fileWritter = fileWritter;
 	}
 
@@ -53,24 +50,26 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	public Integer pickTableRowWithPaging(String question, Table table) {
 		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
+		TerminalReader terminalReader = this.terminalFactory.getReader();
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
-		this.terminalWriter.writeLine(question);
+		terminalWriter.writeLine(question);
 		this.writeTable(tableModel, false);
 
 		while (true) {
-			String line = this.terminalReader.prompt("Please enter one of the [] values: ", "", false);
+			String line = terminalReader.prompt("Please enter one of the [] values: ", "", false);
 
 			int rowCount = table.rowCount();
 			try {
 				int pickedNumber = Integer.parseInt(line.trim());
 				if (pickedNumber <= 0 || pickedNumber > rowCount) {
-					this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+					terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
 				}
 				else {
 					return pickedNumber - 1;  // WATCH OUT: the user picks a 1-based row index, so the user picks [1] to get the very first row, but rows are 0-based indexed and we will return 0 as the selected row index
 				}
 			} catch (NumberFormatException nfe) {
-				this.terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
+				terminalWriter.write(String.format("Please enter a number between 1 .. %d", rowCount));
 			}
 		}
 	}
@@ -120,7 +119,10 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		TerminalReader terminalReader = this.terminalFactory.getReader();
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+
+		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
 		if( height == 0) {
 			height = 1;
 		}
@@ -141,13 +143,13 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 				tableBuilder.addInnerBorder(BorderStyle.oldschool);
 				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 			}
-			String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
 
-			this.terminalWriter.write(renderedTable);
+			terminalWriter.write(renderedTable);
 
 			if (rowsLeft >= height) {
 				try {
-					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
 					if (response == 'N' || response == 'n') {
 						return;
 					}
@@ -157,7 +159,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 					}
 					else if (response == 's' || response == 'S') {
 						CliOperationStatus cliOperationStatus = this.writeTableToFile(tableData);
-						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+						terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
 					else if (response == 'y' || response == 'Y') {
@@ -181,7 +183,10 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
-		int height = addBorder ? this.terminalWriter.getTerminalHeight() / 3 : this.terminalWriter.getTerminalHeight() - 2;
+		TerminalReader terminalReader = this.terminalFactory.getReader();
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+
+		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
 		if( height == 0) {
 			height = 1;
 		}
@@ -202,13 +207,13 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 				tableBuilder.addInnerBorder(BorderStyle.oldschool);
 				tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 			}
-			String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+			String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
 
-			this.terminalWriter.write(renderedTable);
+			terminalWriter.write(renderedTable);
 
 			if (rowsLeft >= height) {
 				try {
-					int response = this.terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
+					int response = terminalReader.promptChar("Show next page? [Y]es / [n]o / [a]ll / [s]ave to file: ", 'y', false);
 					if (response == 'N' || response == 'n') {
 						return;
 					}
@@ -218,7 +223,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 					}
 					else if (response == 's' || response == 'S') {
 						CliOperationStatus cliOperationStatus = this.writeTableToFile(table);
-						this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+						terminalWriter.writeLine(cliOperationStatus.getMessage());
 						return;
 					}
 					else if (response == 'y' || response == 'Y') {
@@ -272,6 +277,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
 
 		TableBuilder tableBuilder = new TableBuilder(model);
@@ -279,8 +285,8 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
 			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 		}
-		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-		this.terminalWriter.write(renderedTable);
+		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
+		terminalWriter.write(renderedTable);
 	}
 
 	/**
@@ -290,14 +296,15 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(Table table, boolean addBorder) {
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
 			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 		}
-		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-		this.terminalWriter.write(renderedTable);
+		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
+		terminalWriter.write(renderedTable);
 	}
 
 	/**
@@ -307,12 +314,13 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
+		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
 			tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 		}
-		String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-		this.terminalWriter.write(renderedTable);
+		String renderedTable = tableBuilder.build().render(terminalWriter.getTerminalWidth() - 1);
+        terminalWriter.write(renderedTable);
 	}
 }

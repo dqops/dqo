@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
@@ -36,4 +37,5 @@ public class DqoJobEntryParametersModel {
     private RunProfilersQueueJobParameters runProfilersParameters;
     private ImportSchemaQueueJobParameters importSchemaParameters;
     private ImportTablesQueueJobParameters importTableParameters;
+    private DeleteStoredDataQueueJobParameters deleteStoredDataParameters;
 }

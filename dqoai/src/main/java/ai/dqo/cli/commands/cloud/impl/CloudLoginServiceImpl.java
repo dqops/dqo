@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.commands.cloud.impl;
 
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.cloud.rest.api.ApiKeyRequestApi;
@@ -48,8 +49,7 @@ import java.util.concurrent.CompletableFuture;
 public class CloudLoginServiceImpl implements CloudLoginService {
     private UserHomeContextFactory userHomeContextFactory;
     private OpenBrowserService openBrowserService;
-    private TerminalWriter terminalWriter;
-    private TerminalReader terminalReader;
+    private TerminalFactory terminalFactory;
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private DqoCloudApiClientFactory dqoCloudApiClientFactory;
 
@@ -57,22 +57,19 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * Injection constructor.
      * @param userHomeContextFactory User home context factory - to store the api key in the settings.
      * @param openBrowserService Open browser service.
-     * @param terminalWriter  Terminal writer.
-     * @param terminalReader Terminal reader.
+     * @param terminalFactory Terminal factory.
      * @param dqoCloudConfigurationProperties Configuration properties.
      * @param dqoCloudApiClientFactory DQO Cloud API client factory.
      */
     @Autowired
     public CloudLoginServiceImpl(UserHomeContextFactory userHomeContextFactory,
                                  OpenBrowserService openBrowserService,
-                                 TerminalWriter terminalWriter,
-                                 TerminalReader terminalReader,
+                                 TerminalFactory terminalFactory,
                                  DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                  DqoCloudApiClientFactory dqoCloudApiClientFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.openBrowserService = openBrowserService;
-        this.terminalWriter = terminalWriter;
-        this.terminalReader = terminalReader;
+        this.terminalFactory = terminalFactory;
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
     }
@@ -90,6 +87,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             String apiKeyRequest = apiKeyRequestApi.requestApiKeyVersion(DqoCloudApiKeyPayload.CURRENT_API_KEY_VERSION, challenge);
             String apiKeyRequestUrl = this.dqoCloudConfigurationProperties.getApiKeyRequestUrl() + apiKeyRequest;
 
+            TerminalWriter terminalWriter = this.terminalFactory.getWriter();
             terminalWriter.writeLine("Opening the DQO Cloud API Key request, please log in or create your DQO Cloud account.");
             terminalWriter.writeLine("DQO Cloud API Key request may be opened manually by navigating to: " + apiKeyRequestUrl);
             terminalWriter.writeLine("Please wait up to 30 seconds after signup/login or press any key to cancel");
@@ -105,7 +103,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             Duration waitDuration = Duration.of(this.dqoCloudConfigurationProperties.getApiKeyPickupTimeoutSeconds(), ChronoUnit.SECONDS);
             Instant startTime = Instant.now();
             Instant timeoutTime = startTime.plus(waitDuration);
-            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalReader.waitForConsoleInput(waitDuration);
+            CompletableFuture<Boolean> waitForConsoleInputMono = this.terminalFactory.getReader().waitForConsoleInput(waitDuration);
 
             // now waiting for the api key...
             while (Instant.now().isBefore(timeoutTime) && !waitForConsoleInputMono.isDone()) {
@@ -128,12 +126,12 @@ public class CloudLoginServiceImpl implements CloudLoginService {
             }
 
             if (waitForConsoleInputMono.isDone() && Objects.equals(true, waitForConsoleInputMono.get())) {
-                this.terminalReader.tryReadChar(0); // read that character that was typed
-                this.terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
+                this.terminalFactory.getReader().tryReadChar(0); // read that character that was typed
+                terminalWriter.writeLine("API Key retrieval cancelled, run the \"cloud login\" command again from the shell.");
             }
         }
         catch (Exception ex) {
-            terminalWriter.writeLine("Failed to retrieve the API key. " + ex.getMessage());
+            this.terminalFactory.getWriter().writeLine("Failed to retrieve the API key. " + ex.getMessage());
         }
 
         return false;

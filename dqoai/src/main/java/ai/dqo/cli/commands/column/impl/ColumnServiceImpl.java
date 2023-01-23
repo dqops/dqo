@@ -18,6 +18,7 @@ package ai.dqo.cli.commands.column.impl;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.output.OutputFormatService;
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -44,20 +45,17 @@ import java.util.Collection;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ColumnServiceImpl implements ColumnService {
 	private final UserHomeContextFactory userHomeContextFactory;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private TerminalFactory terminalFactory;
 	private final TerminalTableWritter terminalTableWritter;
 	private final OutputFormatService outputFormatService;
 
 	@Autowired
 	public ColumnServiceImpl(UserHomeContextFactory userHomeContextFactory,
-							 TerminalReader terminalReader,
-							 TerminalWriter terminalWriter,
+							 TerminalFactory terminalFactory,
 							 TerminalTableWritter terminalTableWritter,
 							 OutputFormatService outputFormatService) {
 		this.userHomeContextFactory = userHomeContextFactory;
-		this.terminalReader = terminalReader;
-		this.terminalWriter = terminalWriter;
+		this.terminalFactory = terminalFactory;
 		this.terminalTableWritter = terminalTableWritter;
 		this.outputFormatService = outputFormatService;
 	}
@@ -202,8 +200,8 @@ public class ColumnServiceImpl implements ColumnService {
 
 		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName, TabularOutputFormat.TABLE, null, null);
 		this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
-		this.terminalWriter.writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
-		boolean response = this.terminalReader.promptBoolean("Yes or No", false);
+		this.terminalFactory.getWriter().writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
+		boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
 		if (!response) {
 			cliOperationStatus.setFailedMessage("You deleted 0 columns");
 			return cliOperationStatus;

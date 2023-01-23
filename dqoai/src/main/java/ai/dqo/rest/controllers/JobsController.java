@@ -20,6 +20,9 @@ import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
@@ -241,6 +244,27 @@ public class JobsController {
         ImportTablesQueueJob importTablesJob = this.dqoQueueJobFactory.createImportTablesJob();
         importTablesJob.setImportParameters(importParameters);
         PushJobResult<ImportTablesQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importTablesJob);
+        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Starts a new background job that will delete specified data from the registry (.data folder).
+     * @param deleteStoredDataParameters Delete stored data job parameters.
+     * @return Job summary response with the identity of the started job.
+     */
+    @PostMapping("/deletestoreddata")
+    @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored registry data.", response = DqoQueueJobId.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New job that will delete stored registry data was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoQueueJobId>> deleteStoredData(
+            @ApiParam("Delete stored data job parameters")
+            @RequestBody DeleteStoredDataQueueJobParameters deleteStoredDataParameters) {
+        DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
+        deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
+        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 }

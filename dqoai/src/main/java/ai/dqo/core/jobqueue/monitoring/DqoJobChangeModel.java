@@ -82,6 +82,14 @@ public class DqoJobChangeModel implements Comparable<DqoJobChangeModel> {
     }
 
     /**
+     * Updates the job entry model.
+     * @param updatedModel New job entry model.
+     */
+    public void setUpdatedModel(DqoJobHistoryEntryModel updatedModel) {
+        this.updatedModel = updatedModel;
+    }
+
+    /**
      * Returns the timestamp when the job was added or changed.
      * @return Job status change timestamp.
      */
