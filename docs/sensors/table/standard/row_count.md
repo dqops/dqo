@@ -12,3 +12,8 @@ ___
     ```
     --8<-- "home/sensors/table/standard/row_count/snowflake.sql.jinja2"
     ```
+
+=== "postgresql"
+    ```
+    --8<-- "home/sensors/table/standard/row_count/postgresql.sql.jinja2"
+    ```

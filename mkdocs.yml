@@ -14,7 +14,7 @@ plugins:
       module_name: docs/render_macros
 
 # Docs navigation
-nav:
+nav[]:
   - Home: 'index.md'
   - What is DQO: 'what_is_dqo/what_is_dqo.md'
   - Getting started:
@@ -32,6 +32,9 @@ nav:
     - Time series: 'dqo_concept/time_series/time_series.md'
   - Working with DQO:
     - Adding connections: 'working_with_dqo/add_connection.md'
+########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
+  - CLI Command:
+########## END INCLUDE CLI COMMANDS
   - Commands:
     - check: 'commands/check/check.md'
     - column: 'commands/column/column.md'
@@ -99,18 +102,21 @@ nav:
         - string_valid_country_code_percent: 'sensors/column/strings/string_valid_country_code_percent.md'
         - string_min_length: 'sensors/column/strings/string_min_length.md'
         - string_max_length: 'sensors/column/strings/string_max_length.md'
+        - string_invalid_ip6_address_count: 'sensors/column/strings/string_invalid_ip6_address_count.md'
         - string_invalid_ip4_address_count: 'sensors/column/strings/string_invalid_ip4_address_count.md'
         - string_in_set_count: 'sensors/column/strings/string_in_set_count.md'
         - string_regex_match_percent: 'sensors/column/strings/string_regex_match_percent.md'
         - string_valid_currency_code_percent: 'sensors/column/strings/string_valid_currency_code_percent.md'
         - string_not_match_regex_count: 'sensors/column/strings/string_not_match_regex_count.md'
         - string_whitespace_percent: 'sensors/column/strings/string_whitespace_percent.md'
+        - string_valid_ip6_address_percent: 'sensors/column/strings/string_valid_ip6_address_percent.md'
         - string_mean_length: 'sensors/column/strings/string_mean_length.md'
         - string_valid_uuid_percent: 'sensors/column/strings/string_valid_uuid_percent.md'
         - string_surrounded_by_whitespace_percent: 'sensors/column/strings/string_surrounded_by_whitespace_percent.md'
         - string_in_set_percent: 'sensors/column/strings/string_in_set_percent.md'
         - string_null_placeholder_count: 'sensors/column/strings/string_null_placeholder_count.md'
         - string_match_date_regex_percent: 'sensors/column/strings/string_match_date_regex_percent.md'
+        - string_valid_ip4_address_percent: 'sensors/column/strings/string_valid_ip4_address_percent.md'
         - string_valid_date_percent: 'sensors/column/strings/string_valid_date_percent.md'
         - string_invalid_email_count: 'sensors/column/strings/string_invalid_email_count.md'
         - string_match_name_regex_percent: 'sensors/column/strings/string_match_name_regex_percent.md'
@@ -133,12 +139,17 @@ nav:
       - consistency:
         - not_null_percent: 'sensors/column/consistency/not_null_percent.md'
       - numeric:
+        - stddev_samp: 'sensors/column/numeric/stddev_samp.md'
+        - sum: 'sensors/column/numeric/sum.md'
         - values_in_range_numeric_percent: 'sensors/column/numeric/values_in_range_numeric_percent.md'
         - numbers_in_set_percent: 'sensors/column/numeric/numbers_in_set_percent.md'
         - negative_count: 'sensors/column/numeric/negative_count.md'
         - negative_percent: 'sensors/column/numeric/negative_percent.md'
+        - var_pop: 'sensors/column/numeric/var_pop.md'
         - numbers_in_set_count: 'sensors/column/numeric/numbers_in_set_count.md'
+        - var_samp: 'sensors/column/numeric/var_samp.md'
         - values_in_range_integers_percent: 'sensors/column/numeric/values_in_range_integers_percent.md'
+        - stddev_pop: 'sensors/column/numeric/stddev_pop.md'
       - validity:
         - value_in_range_date_percent: 'sensors/column/validity/value_in_range_date_percent.md'
         - numerical_type_percent: 'sensors/column/validity/numerical_type_percent.md'
