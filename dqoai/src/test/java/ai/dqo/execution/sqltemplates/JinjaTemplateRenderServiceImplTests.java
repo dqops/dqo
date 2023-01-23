@@ -28,7 +28,7 @@ import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.sensors.table.consistency.TableConsistencyRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvService;
 import ai.dqo.utils.python.PythonVirtualEnvServiceObjectMother;
@@ -62,7 +62,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 new TableSpec(),
                 new ColumnSpec(),
                 null,
-                new TableConsistencyRowCountSensorParametersSpec(),
+                new TableStandardRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),

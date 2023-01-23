@@ -18,11 +18,9 @@ package ai.dqo.metadata.search;
 import ai.dqo.checks.*;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkspecs.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkspecs.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -58,9 +56,7 @@ import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
-import ai.dqo.sensors.table.AllTableSensorsSpec;
 
 /**
  * Base class for search visitors that simply visits all nodes.
@@ -259,30 +255,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     }
 
     /**
-     * Accepts a collection (dictionary) of custom table level data quality checks.
-     *
-     * @param customTableCheckSpecMap Dictionary of custom checks.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomTableCheckSpecMap customTableCheckSpecMap, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a custom column check specification.
-     *
-     * @param customColumnCheckSpecMap Custom column check specification.
-     * @param parameter                Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomColumnCheckSpecMap customColumnCheckSpecMap, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts any check specification.
      *
      * @param abstractCheckSpec Data quality check specification (any).
@@ -303,30 +275,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractRuleSetSpec abstractRuleSetSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a container object with all possible built-in table level data quality sensors.
-     *
-     * @param allTableSensorsSpec All possible table sensors.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AllTableSensorsSpec allTableSensorsSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a list of all supported built-in column sensors.
-     *
-     * @param allColumnSensorsSpec List of all supported column sensors.
-     * @param parameter            Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AllColumnSensorsSpec allColumnSensorsSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
