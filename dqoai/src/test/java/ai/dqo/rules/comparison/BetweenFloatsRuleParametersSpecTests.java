@@ -30,10 +30,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
     private BetweenFloatsRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new BetweenFloatsRuleParametersSpec();
     }
 

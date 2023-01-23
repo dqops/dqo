@@ -40,9 +40,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "rename", description = "Rename column which match filters")
 public class ColumnRenameCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnService columnService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnRenameCliCommand() {
+	}
 
 	@Autowired
 	public ColumnRenameCliCommand(TerminalReader terminalReader,

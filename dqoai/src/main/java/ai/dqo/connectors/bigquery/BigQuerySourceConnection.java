@@ -101,6 +101,16 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     }
 
     /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     */
+    @Override
+    public long executeCommand(String sqlStatement) {
+        return this.bigQuerySqlRunner.executeStatement(this, sqlStatement);
+    }
+
+    /**
      * Returns a list of schemas from the source.
      *
      * @return List of schemas.

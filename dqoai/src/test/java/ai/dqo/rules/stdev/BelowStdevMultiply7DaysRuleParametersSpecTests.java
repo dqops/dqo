@@ -45,10 +45,8 @@ public class BelowStdevMultiply7DaysRuleParametersSpecTests extends BaseTest {
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
 
-    @Override
     @BeforeEach
-    protected void  setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = new BelowStdevMultiply7DaysRule1ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

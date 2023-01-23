@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
@@ -43,28 +44,25 @@ import java.nio.file.Path;
 @Component
 public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
     private DqoUserConfigurationProperties dqoUserConfigurationProperties;
 
     /**
      * Default constructor called by the IoC container.
      * @param homeLocationFindService User home location finder.
-     * @param terminalReader Terminal reader - used to prompt the user before the default user home is created.
-     * @param terminalWriter Terminal writer - used to notify the user that the default user home will not be created.
+     * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
+     *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
      * @param dqoUserConfigurationProperties DQO user home configuration parameters.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
-                                    TerminalReader terminalReader,
-                                    TerminalWriter terminalWriter,
+                                    TerminalFactory terminalFactory,
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
                                     DqoUserConfigurationProperties dqoUserConfigurationProperties) {
         this.homeLocationFindService = homeLocationFindService;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
         this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
     }
@@ -207,13 +205,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             activateFileLoggingInUserHome();
         }
         else {
-            if (this.terminalReader.promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
+            if (this.terminalFactory.getReader().promptBoolean("Initialize a DQO user home at " + userHomePathString, true)) {
                 this.initializeDefaultDqoUserHome();
                 activateFileLoggingInUserHome();
                 return;
             }
 
-            this.terminalWriter.writeLine("DQO user home will not be created, exiting.");
+            this.terminalFactory.getWriter().writeLine("DQO user home will not be created, exiting.");
             System.exit(100);
         }
     }

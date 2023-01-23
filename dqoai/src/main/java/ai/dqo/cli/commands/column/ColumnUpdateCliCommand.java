@@ -41,9 +41,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", description = "Update column or columns which match filters")
 public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnService columnService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnUpdateCliCommand() {
+	}
 
 	@Autowired
 	public ColumnUpdateCliCommand(TerminalReader terminalReader,

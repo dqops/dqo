@@ -74,6 +74,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
         try {
             HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig());
 			this.jdbcConnection = dataSource.getConnection();
+            this.jdbcConnection.setAutoCommit(true);
         }
         catch (Exception ex) {
             if (this.getConnectionSpec().getHierarchyId() != null) {
@@ -128,6 +129,27 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
             throw new JdbcQueryFailedException(
                     String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
                     ex, sqlQueryStatement, connectionName);
+        }
+    }
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     */
+    @Override
+    public long executeCommand(String sqlStatement) {
+        try {
+            try (Statement statement = this.jdbcConnection.createStatement()) {
+                statement.execute(sqlStatement);
+                return statement.getLargeUpdateCount();
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
+                    ex, sqlStatement, connectionName);
         }
     }
 }

@@ -34,9 +34,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", description = "Show api key")
 public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsApiKeyShowCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeyShowCliCommand(SettingsService settingsService,

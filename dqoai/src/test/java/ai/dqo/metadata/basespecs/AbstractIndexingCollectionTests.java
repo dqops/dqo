@@ -32,16 +32,8 @@ import java.util.*;
 public class AbstractIndexingCollectionTests extends BaseTest {
     private TestableAbstractIndexingCollection sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add @BeforeEach in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TestableAbstractIndexingCollection();
     }
 

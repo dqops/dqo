@@ -15,20 +15,20 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyId;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.id.*;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.datetime.TimeZoneUtility;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,9 +38,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import picocli.CommandLine;
 
 import java.time.ZoneId;
-import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
@@ -57,32 +57,27 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 			put("default_data_stream_mapping", o -> o.defaultDataStreamMapping);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
+            put("postgresql", o -> o.postgresql);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
             put("notifications", o -> o.notifications);
         }
     };
 
-    @JsonPropertyDescription("Database name (for those sources that have a database/schema/table separation).")
-    private String databaseName;
-
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("JDBC driver url (overrides custom configuration for the provider and uses a hardcoded JDBC url).")
-    private String url;
-
-    @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String user;
-
-    @JsonPropertyDescription("Database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String password;
-
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
     private SnowflakeParametersSpec snowflake;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
+    private PostgresqlParametersSpec postgresql;
 
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
@@ -114,14 +109,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
-
     @JsonPropertyDescription("Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -142,23 +129,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a physical database name.
-     * @return Physical database name.
-     */
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
-    /**
-     * Sets a physical database name.
-     * @param databaseName Physical database name.
-     */
-    public void setDatabaseName(String databaseName) {
-		setDirtyIf(!Objects.equals(this.databaseName, databaseName));
-        this.databaseName = databaseName;
-    }
-
-    /**
      * Returns a database provider type to be used.
      * @return Connection provider type.
      */
@@ -173,63 +143,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public void setProviderType(ProviderType providerType) {
 		setDirtyIf(!Objects.equals(this.providerType, providerType));
         this.providerType = providerType;
-    }
-
-    /**
-     * Returns a JDBC database connection url.
-     * @return JDBC database connection url.
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Sets a JDBC database connection url.
-     * @param url JDBC connection url.
-     */
-    public void setUrl(String url) {
-		setDirtyIf(!Objects.equals(this.url, url));
-        this.url = url;
-    }
-
-    /**
-     * Returns the user that is used to log in to the data source (JDBC user or similar).
-     * @return User name.
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * Sets a user name.
-     * @param user User name.
-     */
-    public void setUser(String user) {
-		setDirtyIf(!Objects.equals(this.user, user));
-        this.user = user;
-    }
-
-    /**
-     * Returns a password used to authenticate to the server.
-     * @return Password.
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets a password that is used to connect to the database.
-     * @param password Password.
-     */
-    public void setPassword(String password) {
-        // TODO: support storing passwords in a credentials file,
-        // we can support a special format like "$secret"
-        // which means that the password must be stored locally or taken from an env variable $secret,
-        // the format could be a name of an ENV variable or a variable in .credentials folder,
-        // we can also support notation @filename which could be used for special files like private keys (GCP),
-        // those files would be stored in the .credentials folder only
-		setDirtyIf(!Objects.equals(this.password, password));
-        this.password = password;
     }
 
     /**
@@ -266,6 +179,24 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
 		setDirtyIf(!Objects.equals(this.snowflake, snowflake));
         this.snowflake = snowflake;
 		propagateHierarchyIdToField(snowflake, "snowflake");
+    }
+
+    /**
+     * Returns the connection parameters for PostgreSQL.
+     * @return PostgreSQL connection parameters.
+     */
+    public PostgresqlParametersSpec getPostgresql() {
+        return postgresql;
+    }
+
+    /**
+     * Sets the PostgreSQL connection parameters.
+     * @param postgresql New PostgreSQL connection parameters.
+     */
+    public void setPostgresql(PostgresqlParametersSpec postgresql) {
+        setDirtyIf(!Objects.equals(this.postgresql, postgresql));
+        this.postgresql = postgresql;
+        propagateHierarchyIdToField(postgresql, "postgresql");
     }
 
     /**
@@ -335,24 +266,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public void setParallelRunsLimit(Integer parallelRunsLimit) {
         this.setDirtyIf(!Objects.equals(this.parallelRunsLimit, parallelRunsLimit));
         this.parallelRunsLimit = parallelRunsLimit;
-    }
-
-    /**
-     * Returns a key/value map of additional provider specific properties.
-     * @return Key/value dictionary of additional properties.
-     */
-    public LinkedHashMap<String, String> getProperties() {
-        return properties;
-    }
-
-    /**
-     * Sets a dictionary of additional connection parameters.
-     * @param properties Key/value dictionary with extra parameters.
-     */
-    public void setProperties(LinkedHashMap<String, String> properties) {
-		setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties;
-		this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
     }
 
     /**
@@ -428,26 +341,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
-    }
-
-    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -481,6 +374,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.clone();
             }
+            if (cloned.postgresql != null) {
+                cloned.postgresql = cloned.postgresql.clone();
+            }
             if (cloned.defaultDataStreamMapping != null) {
                 cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.clone();
             }
@@ -492,12 +388,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.clone();
-            }
-            if (cloned.properties != null) {
-                cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
-            }
-            if (cloned.originalProperties != null) {
-                cloned.originalProperties = (LinkedHashMap<String, String>) cloned.originalProperties.clone();
             }
 
             return cloned;
@@ -514,11 +404,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
-            cloned.databaseName = secretValueProvider.expandValue(cloned.databaseName);
-            cloned.url = secretValueProvider.expandValue(cloned.url);
-            cloned.user = secretValueProvider.expandValue(cloned.user);
-            cloned.password = secretValueProvider.expandValue(cloned.password);
-            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
             if (cloned.defaultDataStreamMapping != null) {
                 cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.expandAndTrim(secretValueProvider);
             }
@@ -528,12 +413,14 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
             }
+            if (cloned.postgresql != null) {
+                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+            }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
             }
             cloned.comments = null;
             cloned.schedule = null; // we probably don't need it here
-            cloned.originalProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -553,7 +440,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             cloned.comments = null;
             cloned.schedule = null;
             cloned.notifications = null;
-            cloned.originalProperties = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -572,5 +458,22 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             return null;
         }
         return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns the provider specific configuration object. Takes the name of the provider and returns the child object of that name (postgresql, snowflake, bigquery).
+     * @return Provider specific configuration.
+     */
+    @JsonIgnore
+    public ConnectionProviderSpecificParameters getProviderSpecificConfiguration() {
+        if (this.providerType == null) {
+            throw new DqoRuntimeException("Missing provider type in the connection");
+        }
+
+        HierarchyNode providerConfigChild = this.getChild(this.providerType.name());
+        ConnectionProviderSpecificParameters providerConfiguration =
+                (ConnectionProviderSpecificParameters) providerConfigChild;
+
+        return providerConfiguration;
     }
 }

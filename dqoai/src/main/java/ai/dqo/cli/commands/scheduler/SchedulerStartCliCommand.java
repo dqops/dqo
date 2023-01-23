@@ -37,6 +37,9 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;
 
+    public SchedulerStartCliCommand() {
+    }
+
     /**
      * Creates a cli command given the dependencies.
      * @param jobSchedulerService Job scheduler dependency.

@@ -20,6 +20,10 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationFolderFactory;
+import ai.dqo.utils.docs.rules.RuleDocumentationGenerator;
+import ai.dqo.utils.docs.rules.RuleDocumentationGeneratorImpl;
+import ai.dqo.utils.docs.rules.RuleDocumentationModelFactory;
+import ai.dqo.utils.docs.rules.RuleDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationGenerator;
 import ai.dqo.utils.docs.sensors.SensorDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
@@ -53,6 +57,7 @@ public class GenerateDocumentationPostProcessor {
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
         generateDocumentationForSensors(projectDir, dqoHomeContext);
+        generateDocumentationForRules(projectDir, dqoHomeContext);
     }
 
     /**
@@ -73,7 +78,7 @@ public class GenerateDocumentationPostProcessor {
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY",
-                "########## END INCLUDE");
+                "########## END INCLUDE SENSOR REFERENCE");
     }
 
     /**
@@ -85,5 +90,37 @@ public class GenerateDocumentationPostProcessor {
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return sensorDocumentationModelFactory;
+    }
+
+    /**
+     * Generates documentation for rules.
+     * @param projectRoot Path to the project root.
+     * @param dqoHomeContext DQO home instance with access to the rule references.
+     */
+    public static void generateDocumentationForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
+        Path rulesDocPath = projectRoot.resolve("../docs/rules").toAbsolutePath().normalize();
+        DocumentationFolder currentRuleDocFiles = DocumentationFolderFactory.loadCurrentFiles(rulesDocPath);
+        RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(dqoHomeContext);
+        RuleDocumentationGenerator ruleDocumentationGenerator = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
+
+        DocumentationFolder renderedDocumentation = ruleDocumentationGenerator.renderRuleDocumentation(projectRoot, dqoHomeContext.getDqoHome());
+        renderedDocumentation.writeModifiedFiles(currentRuleDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE RULE REFERENCE");
+    }
+
+    /**
+     * Create a rule documentation model factory.
+     * @param dqoHomeContext DQO home.
+     * @return Rule documentation model factory.
+     */
+    private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
+        RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
+        return ruleDocumentationModelFactory;
     }
 }

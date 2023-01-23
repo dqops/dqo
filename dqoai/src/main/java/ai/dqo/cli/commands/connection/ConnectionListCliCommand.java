@@ -43,11 +43,14 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List connections which match filters")
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
-    private final ConnectionService connectionService;
-    private final TerminalWriter terminalWriter;
-    private final TerminalTableWritter terminalTableWritter;
-    private final OutputFormatService outputFormatService;
-    private final FileWritter fileWritter;
+    private ConnectionService connectionService;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+    private OutputFormatService outputFormatService;
+    private FileWritter fileWritter;
+
+    public ConnectionListCliCommand() {
+    }
 
     @Autowired
     public ConnectionListCliCommand(ConnectionService connectionService,

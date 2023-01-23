@@ -34,9 +34,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", description = "Remove editor settings")
 public class SettingsEditorRemoveCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsEditorRemoveCliCommand() {
+	}
 
 	@Autowired
 	public SettingsEditorRemoveCliCommand(SettingsService settingsService,

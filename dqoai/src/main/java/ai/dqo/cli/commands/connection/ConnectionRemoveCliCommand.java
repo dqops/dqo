@@ -36,9 +36,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", description = "Remove connection or connections which match filters")
 public class ConnectionRemoveCliCommand extends BaseCommand implements ICommand {
-    private final ConnectionService connectionService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private ConnectionService connectionService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public ConnectionRemoveCliCommand() {
+    }
 
     @Autowired
     public ConnectionRemoveCliCommand(ConnectionService connectionService,

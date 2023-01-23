@@ -44,27 +44,11 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     private TablePartitionReloadLagCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TableTimelinessPartitionReloadLagSensorParametersSpec();
         this.sut.setFilter("{table}.correct = 0");
-
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
-        this.sampleTableMetadata.getTableSpec().setTimestampColumns(
-                new TimestampColumnsSpec() {{
-                    setEventTimestampColumn("date1");
-                    setIngestionTimestampColumn("date2");
-                }}
-        );
-
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_timeliness_sensors, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.checkSpec = new TablePartitionReloadLagCheckSpec();
         this.checkSpec.setParameters(this.sut);
@@ -109,7 +93,10 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(null);
 
@@ -118,8 +105,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
                     )
                 )
@@ -138,14 +125,114 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
         ), renderedTemplate);
     }
 
+    @Test
+    void renderSensorWithDateInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_date");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_date");
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                MAX(
+                    DATE_DIFF(
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
+                        DAY
+                    )
+                )
+                AS actual_value
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getIngestionTimestampColumn(),
+                this.getEventTimestampColumn(),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDatetimeInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_datetime");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_datetime");
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                MAX(
+                    DATETIME_DIFF(
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
+                        MILLISECOND
+                    )
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getIngestionTimestampColumn(),
+                this.getEventTimestampColumn(),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensorWithStringInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_string");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_string");
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                MAX(
+                    TIMESTAMP_DIFF(
+                        SAFE_CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        SAFE_CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        MILLISECOND
+                    )
+                )
+                / 24.0 / 3600.0 / 1000.0
+                AS actual_value
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getIngestionTimestampColumn(),
+                this.getEventTimestampColumn(),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensorWithTimestampInput_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.DAY);
-            setTimestampColumn("date4");
+            setTimestampColumn("earlier_datetime");
         }});
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -153,13 +240,13 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
                     )
                 )
                 / 24.0 / 3600.0 / 1000.0
-                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -176,7 +263,10 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -184,8 +274,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
                     )
                 )
@@ -207,21 +297,24 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     }
 
     @Test
-    void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date4");
+    void renderSensorWithTimestampInput_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "earlier_datetime");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
                     )
                 )
                 / 24.0 / 3600.0 / 1000.0
-                AS actual_value, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -237,27 +330,29 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
         ), renderedTemplate);
     }
 
-
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
                     )
                 )
                 / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`date3` AS stream_level_1
+                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -274,24 +369,27 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                    DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
+                    DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
-                    )
+                    )      
                 )
                 / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`date3` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -308,24 +406,27 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
     }
 
     @Test
-    void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date4");
+    void renderSensorWithTimestampInput_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("earlier_timestamp");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
+
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "earlier_datetime");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("date3")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("earlier_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 MAX(
                     TIMESTAMP_DIFF(
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
-                        CAST(analyzed_table.`%s` AS TIMESTAMP),
+                        analyzed_table.`%s`,
+                        analyzed_table.`%s`,
                         MILLISECOND
-                    )
+                    )                
                 )
                 / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`date3` AS stream_level_1, CAST(analyzed_table.`date4` AS DATE) AS time_period
+                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period

@@ -26,6 +26,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.Properties;
+
 /**
  * Snowflake source connection.
  */
@@ -58,20 +60,27 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
         String snowflakeAccount = this.getSecretValueProvider().expandValue(snowflakeSpec.getAccount());
         hikariConfig.setJdbcUrl("jdbc:snowflake://" + snowflakeAccount + ".snowflakecomputing.com/");
 
-        String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
-        hikariConfig.addDataSourceProperty("warehouse", warehouse);
+        Properties dataSourceProperties = new Properties();
+        if (snowflakeSpec.getProperties() != null) {
+            dataSourceProperties.putAll(snowflakeSpec.getProperties());
+        }
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
 
-        String databaseName = this.getSecretValueProvider().expandValue(connectionSpec.getDatabaseName());
-        hikariConfig.addDataSourceProperty("db", databaseName);
-        if (!Strings.isNullOrEmpty(snowflakeSpec.getRole())) {
-            String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole());
-            hikariConfig.addDataSourceProperty("role", role);
+        String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
+        dataSourceProperties.put("warehouse", warehouse);
+
+        String databaseName = this.getSecretValueProvider().expandValue(snowflakeSpec.getDatabase());
+        dataSourceProperties.put("db", databaseName);
+
+        String role = this.getSecretValueProvider().expandValue(snowflakeSpec.getRole());
+        if (!Strings.isNullOrEmpty(role)) {
+            dataSourceProperties.put("role", role);
         }
 
-        String userName = this.getSecretValueProvider().expandValue(connectionSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(snowflakeSpec.getUser());
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(connectionSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(snowflakeSpec.getPassword());
         hikariConfig.setPassword(password);
 
         return hikariConfig;

@@ -24,7 +24,6 @@ public class ConnectionListModel {
     private long id;
     private String name;
     private ProviderType dialect;
-    private String url;
     private String databaseName;
 
     public long getId() {
@@ -49,14 +48,6 @@ public class ConnectionListModel {
 
     public void setDialect(ProviderType dialect) {
         this.dialect = dialect;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getDatabaseName() { return databaseName; }

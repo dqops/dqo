@@ -18,6 +18,8 @@ package ai.dqo.cli;
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import org.jline.console.SystemRegistry;
@@ -31,6 +33,7 @@ import org.jline.widget.TailTipWidgets;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
@@ -41,6 +44,7 @@ import java.util.function.Supplier;
 /**
  * Configuration class to configure the terminal and line reader beans.
  */
+@Lazy
 @Configuration
 public class CliConfiguration {
     /**
@@ -71,7 +75,7 @@ public class CliConfiguration {
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
      * @param terminal Terminal.
-     * @param terminalWriter Terminal writer.
+     * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
      * @param coreConfigurationProperties Core configuration properties.
      * @return Command line.
      */
@@ -79,12 +83,12 @@ public class CliConfiguration {
     public CommandLine commandLine(DqoRootCliCommand rootShellCommand,
 								   CommandLine.IFactory factory,
 								   Terminal terminal,
-								   TerminalWriter terminalWriter,
+                                   TerminalFactory terminalFactory,
 								   DqoCoreConfigurationProperties coreConfigurationProperties) {
         PicocliCommands.PicocliCommandsFactory shellCommandFactory = new PicocliCommands.PicocliCommandsFactory(factory);
         shellCommandFactory.setTerminal(terminal);
         CommandLine commandLine = new CommandLine(rootShellCommand, factory);
-        commandLine.setExecutionExceptionHandler(new CommandExecutionErrorHandler(terminalWriter, coreConfigurationProperties));
+        commandLine.setExecutionExceptionHandler(new CommandExecutionErrorHandler(terminalFactory, coreConfigurationProperties));
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
 //        CommandHelpStrategy helpExecutionStrategy = new CommandHelpStrategy(commandLine.getExecutionStrategy(), terminalWriter);
 //        commandLine.setExecutionStrategy(helpExecutionStrategy);

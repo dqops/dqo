@@ -32,6 +32,9 @@ import picocli.CommandLine;
 public class ClearScreenCliCommand implements ICommand {
     private TerminalWriter terminalWriter;
 
+    public ClearScreenCliCommand() {
+    }
+
     /**
      * Default injection constructor.
      * @param terminalWriter Terminal writer.

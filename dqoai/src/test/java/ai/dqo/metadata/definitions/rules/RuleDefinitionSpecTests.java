@@ -27,10 +27,8 @@ import java.util.LinkedHashMap;
 public class RuleDefinitionSpecTests extends BaseTest {
     private RuleDefinitionSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new RuleDefinitionSpec();
     }
 

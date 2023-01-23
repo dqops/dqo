@@ -51,13 +51,16 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
-    private final TerminalWriter terminalWriter;
-    private final TerminalTableWritter terminalTableWritter;
-    private final CheckService checkService;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+    private CheckService checkService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
-    private final OutputFormatService outputFormatService;
-    private final FileWritter fileWritter;
+    private OutputFormatService outputFormatService;
+    private FileWritter fileWritter;
+
+    public CheckRunCliCommand() {
+    }
 
     /**
      * Dependency injection constructor.

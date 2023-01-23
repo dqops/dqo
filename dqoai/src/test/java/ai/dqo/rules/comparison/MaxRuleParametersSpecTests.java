@@ -27,10 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MaxRuleParametersSpecTests extends BaseTest {
     private MaxRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = new MaxRuleParametersSpec();
     }
 

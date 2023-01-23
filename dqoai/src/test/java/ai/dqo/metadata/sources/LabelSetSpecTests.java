@@ -25,10 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class LabelSetSpecTests extends BaseTest {
     private LabelSetSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new LabelSetSpec();
     }
 

@@ -44,17 +44,9 @@ public class ColumnValidityValueInRangeDatePercentSensorParametersSpecBigQueryTe
     private ColumnValidityValueInRangeDatePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnValidityValueInRangeDatePercentSensorParametersSpec();
 		this.checkSpec = new ColumnValidityValueInRangeDatePercentCheckSpec();

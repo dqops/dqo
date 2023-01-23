@@ -68,6 +68,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
             put("string_valid_ip4_address_percent", o -> o.stringValidIp4AddressPercent);
             put("string_invalid_ip6_address_count", o -> o.stringInvalidIp6AddressCount);
+            put("string_valid_ip6_address_percent", o -> o.stringValidIp6AddressPercent);
 
 
 
@@ -164,6 +165,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage.")
+    private ColumnStringValidIp6AddressPercentCheckSpec stringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -685,6 +689,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringInvalidIp6AddressCount, stringInvalidIp6AddressCount));
         this.stringInvalidIp6AddressCount = stringInvalidIp6AddressCount;
         propagateHierarchyIdToField(stringInvalidIp6AddressCount, "string_invalid_ip6_address_count");
+    }
+
+    /**
+     * Returns a minimum valid IP6 address percent check.
+     * @return Minimum valid IP6 address percent check.
+     */
+    public ColumnStringValidIp6AddressPercentCheckSpec getStringValidIp6AddressPercent() {
+        return stringValidIp6AddressPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid IP6 address percent check.
+     * @param stringValidIp6AddressPercent valid IP6 address percent check.
+     */
+    public void setStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec stringValidIp6AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValidIp6AddressPercent, stringValidIp6AddressPercent));
+        this.stringValidIp6AddressPercent = stringValidIp6AddressPercent;
+        propagateHierarchyIdToField(stringValidIp6AddressPercent, "string_valid_ip6_address_percent");
     }
 
     /**

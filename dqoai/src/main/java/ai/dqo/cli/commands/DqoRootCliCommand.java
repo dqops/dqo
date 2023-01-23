@@ -66,9 +66,12 @@ import java.util.List;
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {
-    private final BeanFactory beanFactory;
+    private BeanFactory beanFactory;
     private JobSchedulerService jobSchedulerService;
     private TerminalWriter terminalWriter;
+
+    public DqoRootCliCommand() {
+    }
 
     /**
      * Creates a default root CLI command.

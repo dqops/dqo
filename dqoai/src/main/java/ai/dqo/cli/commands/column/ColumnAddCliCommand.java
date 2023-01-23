@@ -41,9 +41,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", description = "Add a column with specified details")
 public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnService columnService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnAddCliCommand() {
+	}
 
 	@Autowired
 	public ColumnAddCliCommand(TerminalReader terminalReader,

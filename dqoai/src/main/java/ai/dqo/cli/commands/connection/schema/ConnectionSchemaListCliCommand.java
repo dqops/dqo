@@ -37,11 +37,14 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", description = "List schemas in source connection")
 public class ConnectionSchemaListCliCommand extends BaseCommand implements ICommand {
-	private final ConnectionService connectionService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
-	private final TerminalTableWritter terminalTableWritter;
-	private final FileWritter fileWritter;
+	private ConnectionService connectionService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private TerminalTableWritter terminalTableWritter;
+	private FileWritter fileWritter;
+
+	public ConnectionSchemaListCliCommand() {
+	}
 
 	@Autowired
 	public ConnectionSchemaListCliCommand(ConnectionService connectionService,

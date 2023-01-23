@@ -34,8 +34,11 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit connection which match filters")
 public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
-	private final TerminalReader terminalReader;
-	private final ConnectionService connectionService;
+	private TerminalReader terminalReader;
+	private ConnectionService connectionService;
+
+	public ConnectionEditCliCommand() {
+	}
 
 	/**
 	 * Default injection constructor.

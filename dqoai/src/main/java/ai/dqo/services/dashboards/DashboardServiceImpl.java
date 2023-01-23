@@ -19,6 +19,8 @@ import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
 import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
+
 /**
  * Service that returns the list of built-in data quality dashboards, divided into folders.
  */
@@ -34,19 +36,109 @@ public class DashboardServiceImpl implements DashboardService {
                 new DashboardsFolderSpec("")
                         .withFolder("Governance", f -> {
                             f.withDqoCloudDashboard("KPIs",
-                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800);
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs adhoc",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs checkpoint",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("KPIs partitioned",
+                                    "https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                         })
                         .withFolder("Operational", f -> {
                             f.withDqoCloudDashboard("Tables with most alerts",
-                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800);
+                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("Tables with most alerts - adhoc",
+                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("Tables with most alerts - checkpoint",
+                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("Tables with most alerts - partitioned",
+                                    "https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C", 1580, 1800,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                         })
                         .withFolder("Details", f -> {
                             f.withDqoCloudDashboard("History of alerts",
-                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 2500);
+                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 2500,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("History of alerts - adhoc",
+                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 2500,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("History of alerts - checkpoint",
+                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 2500,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("History of alerts - partitioned",
+                                    "https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C", 1580, 2500,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                             f.withDqoCloudDashboard("Alerts per check",
-                                    "https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C", 1580, 2100);
+                                    "https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per check - adhoc",
+                                    "https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per check - checkpoints",
+                                    "https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per check - partitioned",
+                                    "https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                             f.withDqoCloudDashboard("Alerts per table",
-                                    "https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C", 1580, 2100);
+                                    "https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per table - adhoc",
+                                    "https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per table - checkpoints",
+                                    "https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "checkpoint");
+                                    }});
+                            f.withDqoCloudDashboard("Alerts per table - partitioned",
+                                    "https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C", 1580, 2100,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "partitioned");
+                                    }});
                            f.withDqoCloudDashboard("Partitioned row count readouts",
                                     "https://datastudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C", 1580, 2100);
                            f.withDqoCloudDashboard("Biggest tables from daily checkpoints",
@@ -61,8 +153,15 @@ public class DashboardServiceImpl implements DashboardService {
                                     "https://datastudio.google.com/embed/reporting/85dc0bb8-e187-406b-b4f0-a343df5fb52a/page/c5B8C", 1580, 2200);
                            f.withDqoCloudDashboard("Most incomplete columns - count",
                                     "https://datastudio.google.com/embed/reporting/1d7ca470-04d4-479d-b702-c610cfda6601/page/c5B8C", 1580, 1700);
-                           f.withDqoCloudDashboard("Most incomplete columns - percent",
+                           /**f.withDqoCloudDashboard("Most incomplete columns - percent",
                                     "https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c", 1580, 1700);
+                            */
+                           f.withDqoCloudDashboard("Most incomplete columns - percent",
+                                    "https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c", 1580, 1700,
+                                    new LinkedHashMap<>() {{
+                                        put("ds0.p_check_type", "adhoc");
+                                    }});
+
                         });
     }
 

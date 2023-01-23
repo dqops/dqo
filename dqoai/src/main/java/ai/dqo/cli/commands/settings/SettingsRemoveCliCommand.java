@@ -34,9 +34,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "remove", description = "Remove settings file from user home")
 public class SettingsRemoveCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsRemoveCliCommand() {
+	}
 
 	@Autowired
 	public SettingsRemoveCliCommand(SettingsService settingsService,

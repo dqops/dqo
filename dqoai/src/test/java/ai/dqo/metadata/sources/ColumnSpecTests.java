@@ -25,10 +25,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnSpecTests extends BaseTest {
     private ColumnSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new ColumnSpec();
     }
 

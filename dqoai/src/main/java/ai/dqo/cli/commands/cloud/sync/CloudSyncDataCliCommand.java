@@ -35,6 +35,9 @@ import picocli.CommandLine;
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
 
+    public CloudSyncDataCliCommand() {
+    }
+
     @Autowired
     public CloudSyncDataCliCommand(CloudSynchronizationService cloudSynchronizationService) {
         this.cloudSynchronizationService = cloudSynchronizationService;

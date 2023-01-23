@@ -68,6 +68,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_invalid_ip4_address_count", o -> o.dailyPartitionStringInvalidIp4AddressCount);
             put("daily_partition_string_valid_ip4_address_percent", o -> o.dailyPartitionStringValidIp4AddressPercent);
             put("daily_partition_string_invalid_ip6_address_count", o -> o.dailyPartitionStringInvalidIp6AddressCount);
+            put("daily_partition_string_valid_ip6_address_percent", o -> o.dailyPartitionStringValidIp6AddressPercent);
 
 
 
@@ -164,6 +165,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidIp6AddressCountCheckSpec dailyPartitionStringInvalidIp6AddressCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringValidIp6AddressPercentCheckSpec dailyPartitionStringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
@@ -686,6 +690,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInvalidIp6AddressCount, dailyPartitionStringInvalidIp6AddressCount));
         this.dailyPartitionStringInvalidIp6AddressCount = dailyPartitionStringInvalidIp6AddressCount;
         propagateHierarchyIdToField(dailyPartitionStringInvalidIp6AddressCount, "daily_partition_string_invalid_ip6_address_count");
+    }
+
+    /**
+     * Returns a minimum valid IP6 address percent check.
+     * @return Minimum valid IP6 address percent check.
+     */
+    public ColumnStringValidIp6AddressPercentCheckSpec getDailyPartitionStringValidIp6AddressPercent() {
+        return dailyPartitionStringValidIp6AddressPercent;
+    }
+
+    /**
+     * Sets a new definition of a minimum valid IP6 address percent check.
+     * @param dailyPartitionStringValidIp6AddressPercent Minimum valid IP6 address percent check.
+     */
+    public void setDailyPartitionStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec dailyPartitionStringValidIp6AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidIp6AddressPercent, dailyPartitionStringValidIp6AddressPercent));
+        this.dailyPartitionStringValidIp6AddressPercent = dailyPartitionStringValidIp6AddressPercent;
+        propagateHierarchyIdToField(dailyPartitionStringValidIp6AddressPercent, "daily_partition_string_valid_ip6_address_percent");
     }
 
     /**

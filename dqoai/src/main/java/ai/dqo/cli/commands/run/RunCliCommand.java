@@ -44,8 +44,11 @@ public class RunCliCommand extends BaseCommand implements ICommand {
 
     private JobSchedulerService jobSchedulerService;
     private TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TerminalWriter terminalWriter;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+
+    public RunCliCommand() {
+    }
 
     /**
      * Creates a cli command given the dependencies.

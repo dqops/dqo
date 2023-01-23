@@ -20,6 +20,7 @@ import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
 
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeoutException;
  * Terminal input reader used to ask the user to provide answers.
  */
 @Component
+@Lazy
 public class TerminalReaderImpl implements TerminalReader {
     private final TerminalWriter writer;
     private final LineReader lineReader;

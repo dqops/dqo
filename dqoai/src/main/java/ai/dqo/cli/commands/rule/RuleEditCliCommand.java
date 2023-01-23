@@ -38,9 +38,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit rule that match filters")
 public class RuleEditCliCommand extends BaseCommand implements ICommand {
-	private final RuleService ruleService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private RuleService ruleService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public RuleEditCliCommand() {
+	}
 
 	@Autowired
 	public RuleEditCliCommand(RuleService ruleService, TerminalReader terminalReader, TerminalWriter terminalWriter) {

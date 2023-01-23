@@ -19,6 +19,7 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.sources.*;
@@ -44,6 +45,9 @@ public class SampleTableMetadataObjectMother {
 
             case snowflake:
                 return SnowflakeConnectionSpecObjectMother.create();
+
+            case postgresql:
+                return PostgresqlConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -62,6 +66,9 @@ public class SampleTableMetadataObjectMother {
 
             case snowflake:
                 return SnowflakeConnectionSpecObjectMother.getSchemaName();
+
+            case postgresql:
+                return PostgresqlConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

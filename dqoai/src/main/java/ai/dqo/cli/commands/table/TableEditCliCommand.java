@@ -37,9 +37,12 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "edit", description = "Edit table which match filters")
 public class TableEditCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
-    private final TableEditService tableEditService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+    private TableEditService tableEditService;
+
+    public TableEditCliCommand() {
+    }
 
     /**
      * Default injection constructor.
