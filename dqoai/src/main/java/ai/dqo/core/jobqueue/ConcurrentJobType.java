@@ -48,4 +48,9 @@ public enum ConcurrentJobType {
 //     * Import a table from a source connection.
 //     */
 //    IMPORT_TABLE,
+
+    /**
+     * Delete data from user's ".data" folders, given some specifying parameters.
+     */
+    DELETE_STORED_DATA,
 }

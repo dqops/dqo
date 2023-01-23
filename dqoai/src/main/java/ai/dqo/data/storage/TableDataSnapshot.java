@@ -19,11 +19,14 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -143,6 +146,14 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Returns the read-only state of the table.
+     * @return True if table is read-only, false otherwise.
+     */
+    public boolean isReadOnly() {
+        return columnNames != null;
+    }
+
+    /**
      * Creates a table with a combined data from all loaded partitions as a single tablesaw table.
      * The order of partitions whose data is appended to the result table is not ensured.
      * @return Table with the data from all partitions or null when no partitions were loaded or all loaded partitions were empty.
@@ -235,11 +246,71 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Marks id strings to delete upon saving the snapshot, based on a selection date range and specific equals conditions on column values.
+     * To mark a row for deletion it has to match all conditions.
+     * [NOT ON READ-ONLY]
+     * @param startDate Start of the date range (to the day).
+     * @param endDate End of the date range (to the day).
+     * @param columnConditions Column name to column value conditions. Column name must be a name of a valid string column in the table. Column value is tested for equality among the rows.
+     */
+    public void markSelectedForDeletion(LocalDate startDate, LocalDate endDate, Map<String, String> columnConditions) {
+        if (this.isReadOnly()) {
+            throw new DataStorageIOException("Read-only snapshots do not support deleting.");
+        }
+
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startDate);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endDate);
+        this.ensureMonthsAreLoaded(startMonth, endMonth);
+        List<String> idsToDelete = new ArrayList<>();
+
+        for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
+             currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
+
+            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
+            Table monthlyPartitionTable = loadedMonthlyPartition.getData();
+            if (monthlyPartitionTable == null) {
+                continue;
+            }
+
+            Selection toDelete = Selection.withRange(0, monthlyPartitionTable.rowCount());
+
+            // Filter by date.
+            toDelete = toDelete.and(
+                    monthlyPartitionTable.dateTimeColumn(this.storageSettings.getTimePeriodColumnName()).date()
+                            .isBetweenIncluding(startDate, endDate));
+
+            // Filter by string columns' conditions.
+            try {
+                for (Map.Entry<String, String> columnCondition : columnConditions.entrySet()) {
+                    String colName = columnCondition.getKey();
+                    String colValue = columnCondition.getValue();
+                    toDelete = toDelete.and(
+                            monthlyPartitionTable.stringColumn(colName)
+                                    .isEqualTo(colValue));
+                }
+            }
+            catch (IllegalStateException e) {
+                throw new DataStorageIOException("Condition on column that doesn't exist", e);
+            }
+
+            List<String> idsToDeleteInPartition = monthlyPartitionTable
+                    .stringColumn(this.storageSettings.getIdStringColumnName())
+                    .where(toDelete).asList();
+            idsToDelete.addAll(idsToDeleteInPartition);
+        }
+
+        // Assuming not read-only.
+        tableDataChanges.getDeletedIds().addAll(idsToDelete);
+    }
+
+    /**
      * Saves all results to a persistent storage (like files). New rows are added, rows with matching IDs are updated.
      * Rows identified by an ID column are deleted.
+     * [NOT ON READ-ONLY]
      */
     public void save() {
-        if (this.columnNames != null) {
+        if (this.isReadOnly()) {
             throw new DataStorageIOException("Read-only snapshots do not support saving.");
         }
 
@@ -275,6 +346,7 @@ public class TableDataSnapshot {
 
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
+
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings);

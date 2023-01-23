@@ -3,8 +3,6 @@ package ai.dqo.data.ruleresults.services;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
 
-import java.util.Collection;
-
 /**
  * Service that returns data from the check results.
  */

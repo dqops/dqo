@@ -11,7 +11,6 @@ import ai.dqo.data.ruleresults.services.models.CheckResultStatus;
 import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**

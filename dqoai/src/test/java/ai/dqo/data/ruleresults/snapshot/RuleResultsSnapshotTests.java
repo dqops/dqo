@@ -55,8 +55,9 @@ public class RuleResultsSnapshotTests extends BaseTest {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
 		LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+        // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
         parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault());
+                HadoopConfigurationProviderObjectMother.getDefault(), null);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new RuleResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);
