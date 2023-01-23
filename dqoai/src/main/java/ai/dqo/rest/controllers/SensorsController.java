@@ -20,9 +20,13 @@ import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.ProviderSensorModel;
 import ai.dqo.rest.models.metadata.SensorModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,14 +49,18 @@ import java.util.stream.Stream;
 public class SensorsController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
+    private UserHomeContextFactory userHomeContextFactory;
+
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param dqoHomeContextFactory      Dqo home context factory.
+     * @param userHomeContextFactory      User home context factory.
      */
     @Autowired
-    public SensorsController(DqoHomeContextFactory dqoHomeContextFactory) {
+    public SensorsController(DqoHomeContextFactory dqoHomeContextFactory,UserHomeContextFactory userHomeContextFactory) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -103,7 +111,7 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
         SensorDefinitionList sensorDefinitionList = dqoHome.getSensors();
-        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, false);
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, true);
 
         if(sensorDefinitionWrapper==null){
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -130,7 +138,7 @@ public class SensorsController {
     })
     public ResponseEntity<Flux<ProviderSensorModel>> getAllProviderBuiltInSensor(
             @ApiParam("Provider type") @PathVariable ProviderType providerType
-    ) {
+    ){
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -165,7 +173,7 @@ public class SensorsController {
     public ResponseEntity<Mono<ProviderSensorModel>> getProviderBuiltInSensor(
             @ApiParam("Provider type") @PathVariable ProviderType providerType,
             @ApiParam("Sensor name") @PathVariable String sensorName
-    ) {
+    ){
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -196,6 +204,450 @@ public class SensorsController {
         providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionWrapper.getSpec());
 
         return new ResponseEntity<>(Mono.just(providerSensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of custom sensors.
+     * @return List of custom sensor model.
+     */
+    @GetMapping("/custom")
+    @ApiOperation(value = "getAllCustomSensors", notes = "Returns a list of custom sensors", response = SensorModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<SensorModel>> getAllCustomSensors() {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        List<SensorDefinitionWrapper> SensorDefinitionWrapperList = sensorDefinitionList.toList();
+        Stream<SensorModel> sensorModel = SensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
+            setSensorName(s.getName());
+            setSensorDefinitionSpec(s.getSpec());
+        }});
+
+        return new ResponseEntity<>(Flux.fromStream(sensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a configuration of custom sensors.
+     * @return Configuration of custom sensor model.
+     */
+    @GetMapping("/custom/{sensorName}")
+    @ApiOperation(value = "getCustomSensor", notes = "Returns a custom sensors", response = SensorModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorModel.class),
+            @ApiResponse(code = 404, message = "Sensor name not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<SensorModel>> getCustomSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName
+    ){
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+        SensorModel sensorModel = new SensorModel();
+        sensorModel.setSensorName(existingSensorDefinitionWrapper.getName());
+        sensorModel.setSensorDefinitionSpec(existingSensorDefinitionWrapper.getSpec());
+
+        return new ResponseEntity<>(Mono.just(sensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Creates (adds) a new custom sensor given sensor information.
+     * @param sensorName Sensor name.
+     * @param sensorDefinitionSpec List of sensor definitions.
+     * @return Empty response.
+     */
+    @PostMapping("/custom/{sensorName}")
+    @ApiOperation(value = "createSensor", notes = "Creates (adds) a new custom sensor given sensor information.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New custom sensor successfully created"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Custom sensor with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> createCustomSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("List of sensor definitions") @RequestBody SensorDefinitionSpec sensorDefinitionSpec) {
+        if (Strings.isNullOrEmpty(sensorName) || sensorDefinitionSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper != null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+        }
+
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.createAndAddNew(sensorName);
+        sensorDefinitionWrapper.setSpec(sensorDefinitionSpec);
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+    }
+
+    /**
+     * Updates an existing custom sensor.
+     * @param sensorName Sensor name.
+     * @param sensorDefinitionSpec List of sensor definitions.
+     * @return Empty response.
+     */
+    @PutMapping("/custom/{sensorName}")
+    @ApiOperation(value = "updateCustomSensor", notes = "Updates an existing custom sensor")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Custom sensor successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Sensor not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateCustomSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("List of sensor definitions") @RequestBody SensorDefinitionSpec sensorDefinitionSpec) {
+        if (Strings.isNullOrEmpty(sensorName) || sensorDefinitionSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+        }
+
+        existingSensorDefinitionWrapper.setSpec(sensorDefinitionSpec);
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Deletes a custom sensor.
+     * @param sensorName Sensor name to delete.
+     * @return Empty response.
+     */
+    @DeleteMapping("/custom/{sensorName}")
+    @ApiOperation(value = "deleteCustomSensor", notes = "Deletes an existing custom sensor")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Custom sensor successfully deleted"),
+            @ApiResponse(code = 404, message = "Custom sensor not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> deleteCustomSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName) {
+        if (Strings.isNullOrEmpty(sensorName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList = userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        existingSensorDefinitionWrapper.markForDeletion();
+        userHomeContext.flush();
+
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Returns a custom provider sensor.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
+     * @return Custom provider sensor model.
+     */
+    @GetMapping("/custom/provider/{sensorName}/{providerType}")
+    @ApiOperation(value = "getCustomProviderSensor", notes = "Returns a custom provider sensor", response = ProviderSensorModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ProviderSensorModel.class),
+            @ApiResponse(code = 404, message = "Provider sensor name not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<ProviderSensorModel>> getCustomProviderSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("Provider type") @PathVariable ProviderType providerType
+    ) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList = userHome.getSensors();
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, true);
+
+        if(sensorDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = sensorDefinitionWrapper
+                .getProviderSensors()
+                .getByObjectName(providerType, true);
+
+        if(providerSensorDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinitionWrapper.getSpec();
+
+        ProviderSensorModel providerSensorModel = new ProviderSensorModel();
+        providerSensorModel.setSensorName(sensorName);
+        providerSensorModel.setProviderType(providerType);
+        providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
+        providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionSpec);
+
+        return new ResponseEntity<>(Mono.just(providerSensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a list of custom provider sensors.
+     * @param providerType Provider type.
+     * @return List of custom provider sensor model.
+     */
+    @GetMapping("/custom/provider/{providerType}")
+    @ApiOperation(value = "getAllCustomProviderSensors", notes = "Returns a list of custom provider sensors", response = ProviderSensorModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ProviderSensorModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<ProviderSensorModel>> getAllCustomProviderSensors(
+            @ApiParam("Provider type") @PathVariable ProviderType providerType
+    ) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        Stream<ProviderSensorModel> providerSensorModel = sensorDefinitionList.toList().stream()
+                .map(sp -> Pair.of(sp, sp.getProviderSensors().getByObjectName(providerType,true)))
+                .filter(pair -> pair.getRight() != null)
+                .map(pair -> new ProviderSensorModel(){{
+                    setSensorName(pair.getLeft().getName());
+                    setProviderType(providerType);
+                    setProviderSensorDefinitionSpec(pair.getRight().getSpec());
+                    setSqlTemplate(pair.getRight().getSqlTemplate());
+                }});
+
+        return new ResponseEntity<>(Flux.fromStream(providerSensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Creates (adds) a new custom provider sensor given sensor information.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
+     * @param providerSensorModel Provider sensor model.
+     * @return Empty response.
+     */
+    @PostMapping("/custom/provider/{sensorName}/{providerType}")
+    @ApiOperation(value = "createProviderSensor", notes = "Creates (adds) a new custom provider sensor given sensor information.")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New custom provider sensor successfully created"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 409, message = "Provider sensor with the same name already exists"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> createCustomProviderSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("ProviderType") @PathVariable ProviderType providerType,
+            @ApiParam("Provider sensor model") @RequestBody ProviderSensorModel providerSensorModel) {
+        if (Strings.isNullOrEmpty(sensorName) || providerSensorModel == null || providerType == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+
+        if (sensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
+        ProviderSensorDefinitionWrapper existingProviderSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(providerType, true);
+        if (existingProviderSensorDefinitionWrapper != null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+        }
+
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerType);
+        providerSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+        providerSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
+    }
+
+    /**
+     * Updates a SQL template for existing custom provider sensor.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
+     * @param providerSensorModel Provider Sensor model.
+     * @return Empty response.
+     */
+    @PutMapping("/custom/provider/{sensorName}/{providerType}/sqltemplate")
+    @ApiOperation(value = "updateCustomProviderSensorSqlTemplate", notes = "Updates an existing custom provider sensor SQL templates")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Custom provider sensor SQL template successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Provider sensor not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateCustomProviderSensorSqlTemplate(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("Provider type") @PathVariable ProviderType providerType,
+            @ApiParam("Provider sensor model") @RequestBody ProviderSensorModel providerSensorModel) {
+        if (Strings.isNullOrEmpty(sensorName) ||  providerSensorModel.getSqlTemplate() == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = existingSensorDefinitionWrapper
+                .getProviderSensors().getByObjectName(providerType, true);
+
+        if (providerSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        providerSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Updates a providerSensorSpec for existing custom provider sensor.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type.
+     * @param providerSensorDefinitionSpec List of provider sensor definitions.
+     * @return Empty response.
+     */
+    @PutMapping("/custom/provider/{sensorName}/{providerType}/spec")
+    @ApiOperation(value = "updateCustomProviderSensorSpec", notes = "Updates an existing custom provider sensor spec")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Custom provider sensor spec successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Provider sensor not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateCustomProviderSensorSpec(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("Provider type") @PathVariable ProviderType providerType,
+            @ApiParam("Provider sensor model") @RequestBody ProviderSensorDefinitionSpec providerSensorDefinitionSpec) {
+        if (Strings.isNullOrEmpty(sensorName) || providerType == null || providerSensorDefinitionSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = existingSensorDefinitionWrapper
+                .getProviderSensors().getByObjectName(providerType, true);
+
+        if (providerSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        providerSensorDefinitionWrapper.setSpec(providerSensorDefinitionSpec);
+
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Deletes a custom provider sensor.
+     * @param sensorName Sensor name.
+     * @param providerType Provider type to delete.
+     * @return Empty response.
+     */
+    @DeleteMapping("/custom/provider/{sensorName}/{providerType}")
+    @ApiOperation(value = "deleteCustomProviderSensor", notes = "Deletes an existing custom provider sensor")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Custom provider sensor successfully deleted"),
+            @ApiResponse(code = 404, message = "Custom sensor not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> deleteCustomProviderSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName,
+            @ApiParam("Provider type") @PathVariable ProviderType providerType) {
+        if (Strings.isNullOrEmpty(sensorName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
+
+        SensorDefinitionWrapper existingSensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName,true);
+        if (existingSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = existingSensorDefinitionWrapper
+                .getProviderSensors().getByObjectName(providerType, true);
+
+        if (providerSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        providerSensorDefinitionWrapper.markForDeletion();
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
     }
 
 }

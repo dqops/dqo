@@ -76,6 +76,9 @@ const schemaReducer = (state = initialState, action: any) => {
           if (jobChange.statusChangedAt) {
             existingJob.statusChangedAt = jobChange.statusChangedAt;
           }
+          if (jobChange.updatedModel) {
+            Object.assign(existingJob, jobChange.updatedModel);
+          }
         } else {
           if (jobChange.updatedModel) {
             newJobs.push(jobChange.updatedModel);

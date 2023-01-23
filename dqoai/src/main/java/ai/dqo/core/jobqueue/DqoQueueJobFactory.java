@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
@@ -69,4 +70,10 @@ public interface DqoQueueJobFactory {
      * @return Schema import job.
      */
     ImportTablesQueueJob createImportTablesJob();
+
+    /**
+     * Creates a job that data from user's ".data" directory.
+     * @return Delete stored data job.
+     */
+    DeleteStoredDataQueueJob createDeleteStoredDataJob();
 }

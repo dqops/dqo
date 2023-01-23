@@ -44,7 +44,7 @@ public class ProfilingResultsSnapshot extends TableDataSnapshot {
                                     PhysicalTableName tableName,
                                     ParquetPartitionStorageService storageService,
                                     Table newResults) {
-        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), newResults);
+        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), newResults);
     }
 
     /**
@@ -58,14 +58,14 @@ public class ProfilingResultsSnapshot extends TableDataSnapshot {
                                     PhysicalTableName tableName,
                                     ParquetPartitionStorageService storageService,
                                     String[] columnNames) {
-        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), columnNames);
+        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), columnNames);
     }
 
     /**
-     * Creates the storage settings for storing the rule results.
+     * Creates the storage settings for storing the profiling results.
      * @return Storage settings.
      */
-    public static FileStorageSettings createRuleResultsStorageSettings() {
+    public static FileStorageSettings createProfilingResultsStorageSettings() {
         return new FileStorageSettings(DqoRoot.DATA_PROFILING_RESULTS,
                 BuiltInFolderNames.PROFILING_RESULTS,
                 PARQUET_FILE_NAME,

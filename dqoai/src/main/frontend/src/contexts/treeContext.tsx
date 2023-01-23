@@ -25,9 +25,10 @@ const TreeContext = React.createContext({} as any);
 
 function TreeProvider(props: any) {
   const [treeData, setTreeData] = useState<CustomTreeNode[]>([]);
-  const [openNodes, setOpenNodes] = useState<TreeNodeId[]>([]);
+  const [openNodes, setOpenNodes] = useState<CustomTreeNode[]>([]);
   const [tabMap, setTabMap] = useState<{[key: string]: string}>({});
   const [tabs, setTabs] = useState<ITab[]>([]);
+  const [activeNode, setActiveNode] = useState<CustomTreeNode>();
   const [activeTab, setActiveTab] = useState<string>();
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
@@ -76,9 +77,9 @@ function TreeProvider(props: any) {
   const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {
     setOpenNodes([
       ...openNodes.filter(
-        (item) => item.toString().indexOf(node.id.toString()) !== 0
+        (item) => item.id.toString().indexOf(node.id.toString()) !== 0
       ),
-      node.id
+      node
     ]);
     const newTreeData = treeData
       .filter(
@@ -384,8 +385,8 @@ function TreeProvider(props: any) {
     resetTreeData(node, items);
   }
   const toggleOpenNode = async (id: TreeNodeId) => {
-    if (openNodes.includes(id)) {
-      setOpenNodes(openNodes.filter((item) => item !== id));
+    if (openNodes.map((item) => item.id).includes(id)) {
+      setOpenNodes(openNodes.filter((item) => item.id !== id));
       setTreeData(
         treeData
           .filter((item) => item.parentId !== id)
@@ -405,7 +406,10 @@ function TreeProvider(props: any) {
     const newTabs = tabs.filter((item) => item.value !== value);
     setTabs(newTabs);
     if (value === activeTab) {
-      setActiveTab(newTabs[newTabs.length - 1]?.value);
+      const newActiveTab = newTabs[newTabs.length - 1]?.value;
+      const newActiveNode = findTreeNode(treeData, newActiveTab);
+      setActiveTab(newActiveTab);
+      setActiveNode(newActiveNode);
     }
   };
 
@@ -423,6 +427,7 @@ function TreeProvider(props: any) {
 
     setTabs([...tabs, newTab]);
     setActiveTab(newTab.value);
+    setActiveNode(undefined);
   };
 
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
@@ -430,6 +435,7 @@ function TreeProvider(props: any) {
     const existTab = tabs.find((item) => item.value === node.id.toString());
     if (existTab) {
       setActiveTab(node.id.toString());
+      setActiveNode(node);
     } else {
       const newTab = {
         label: node.label ?? '',
@@ -446,25 +452,31 @@ function TreeProvider(props: any) {
         setTabs([newTab]);
       }
       setActiveTab(node.id.toString());
+      setActiveNode(node);
     }
   };
 
   const removeTreeNode = (id: string) => {
-    setOpenNodes(openNodes.filter((item) => item !== id));
+    setOpenNodes(openNodes.filter((item) => item.id !== id));
     setTreeData(treeData.filter((item) => item.id !== id));
     const tabIndex = tabs.findIndex((tab) => tab.value === id);
     if (tabIndex > -1) {
-      setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
-      setTabs(tabs.filter((item) => item.value !== id));
+      const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
+      const newActiveNode = findTreeNode(treeData, newActiveTab);
+      setActiveTab(newActiveTab);
+      setActiveNode(newActiveNode);
     }
   };
 
   const removeNode = async (node: CustomTreeNode) => {
-    setOpenNodes(openNodes.filter((item) => item !== node.id));
+    setOpenNodes(openNodes.filter((item) => item.id !== node.id));
     setTreeData(treeData.filter((item) => item.id !== node.id));
     const tabIndex = tabs.findIndex((tab) => tab.value === node.id);
     if (tabIndex > -1) {
-      setActiveTab(tabs[(tabIndex + 1) % tabs.length]?.value);
+      const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
+      const newActiveNode = findTreeNode(treeData, newActiveTab);
+      setActiveTab(newActiveTab);
+      setActiveNode(newActiveNode);
       setTabs(tabs.filter((item) => item.value !== node.id));
     }
 
@@ -678,6 +690,12 @@ function TreeProvider(props: any) {
     }
   };
 
+  const handleChangeActiveTab = (newActiveTab: string) => {
+    const newActiveNode = findTreeNode(treeData, newActiveTab);
+    setActiveTab(newActiveTab);
+    setActiveNode(newActiveNode);
+  };
+
   const switchTab = (node: CustomTreeNode) => {
     if (!node) return;
 
@@ -780,6 +798,7 @@ function TreeProvider(props: any) {
       history.push('/checks');
     }
   }
+
   return (
     <TreeContext.Provider
       value={{
@@ -787,11 +806,10 @@ function TreeProvider(props: any) {
         setTreeData,
         tabs,
         activeTab,
-        setActiveTab,
+        setActiveTab: handleChangeActiveTab,
         closeTab,
         onAddTab,
         openNodes,
-        setOpenNodes,
         toggleOpenNode,
         tabMap,
         setTabMap,
@@ -804,7 +822,8 @@ function TreeProvider(props: any) {
         runChecks,
         runProfilersOnTable,
         addConnection,
-        switchTab
+        switchTab,
+        activeNode
       }}
       {...props}
     />

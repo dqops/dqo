@@ -43,16 +43,8 @@ public class ColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest exte
     private ColumnUniqueCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

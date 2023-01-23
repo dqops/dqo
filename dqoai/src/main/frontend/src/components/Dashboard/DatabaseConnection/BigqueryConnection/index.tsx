@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { BigQueryAuthenticationMode } from '../../../../shared/enums/bigquery.enum';
-import Input from '../../../Input';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
 import {
   BigQueryParametersSpec,
   BigQueryParametersSpecAuthenticationModeEnum
 } from '../../../../api';
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeSelect";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+import FieldTypeTextarea from "../../../Connection/ConnectionView/FieldTypeTextarea";
 
 const options = [
   {
@@ -68,7 +68,7 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
       />
       {bigquery?.authentication_mode ===
         BigQueryParametersSpecAuthenticationModeEnum.json_key_content && (
-        <FieldTypeInput
+        <FieldTypeTextarea
           label="JSON key content"
           className="mb-4"
           name="json_key_content"

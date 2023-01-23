@@ -27,17 +27,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecTests extends BaseTest {
     private ColumnDatetimeValueInRangeDatePercentSensorParametersSpec sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-		this.sut = new ColumnDatetimeValueInRangeDatePercentSensorParametersSpec();
+    void setUp() {
+        this.sut = new ColumnDatetimeValueInRangeDatePercentSensorParametersSpec();
     }
 
     @Test

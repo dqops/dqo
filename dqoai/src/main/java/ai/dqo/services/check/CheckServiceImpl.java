@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service called from the "check" cli commands to run checks or operate on checks.
+ * Service called to run checks or operate on checks.
  */
 @Service
 public class CheckServiceImpl implements CheckService {
@@ -48,7 +48,7 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Runs checks given the filters.
      * @param checkSearchFilters Check search filters.
-     * @param checkExecutionProgressListener Progress listener that will report the progress to the console.
+     * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @return Check execution summary.
      */

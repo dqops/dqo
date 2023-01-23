@@ -11,13 +11,19 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab } =
+  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
     useTree();
 
   const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
   const match = useRouteMatch();
 
+
   useEffect(() => {
+    if (activeNode) {
+      switchTab(activeNode);
+      return;
+    }
+
     if (activeTab) return;
 
     (async () => {
@@ -192,7 +198,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
         }
       }
     })();
-  }, [treeData]);
+  }, [treeData, activeTab]);
 
   const handleChange = (value: string) => {
     const node = findTreeNode(treeData, value);

@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.exceptions;
 
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import org.apache.parquet.Strings;
@@ -30,18 +31,18 @@ import picocli.CommandLine;
 public class CommandExecutionErrorHandler implements CommandLine.IExecutionExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CommandExecutionErrorHandler.class);
 
-    private final TerminalWriter terminalWriter;
     private final DqoCoreConfigurationProperties coreConfigurationProperties;
+    private final TerminalFactory terminalFactory;
 
     /**
      * Command error handler.
-     * @param terminalWriter Terminal writer.
+     * @param terminalFactory Terminal writer factory.
      * @param coreConfigurationProperties core configuration properties.
      */
     @Autowired
-    public CommandExecutionErrorHandler(TerminalWriter terminalWriter,
-										DqoCoreConfigurationProperties coreConfigurationProperties) {
-        this.terminalWriter = terminalWriter;
+    public CommandExecutionErrorHandler(TerminalFactory terminalFactory,
+                                        DqoCoreConfigurationProperties coreConfigurationProperties) {
+        this.terminalFactory = terminalFactory;
         this.coreConfigurationProperties = coreConfigurationProperties;
     }
 
@@ -57,9 +58,9 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
     public int handleExecutionException(Exception e, CommandLine commandLine, CommandLine.ParseResult parseResult) throws Exception {
         if (e instanceof CliRequiredParameterMissingException) {
             CliRequiredParameterMissingException parameterMissingException = (CliRequiredParameterMissingException)e;
-			this.terminalWriter.writeLine("Missing required parameter: " + parameterMissingException.getParameterName());
+			this.terminalFactory.getWriter().writeLine("Missing required parameter: " + parameterMissingException.getParameterName());
             String usageMessage = commandLine.getUsageMessage();
-			this.terminalWriter.writeLine(usageMessage);
+			this.terminalFactory.getWriter().writeLine(usageMessage);
 
             return -2;
         }
@@ -70,13 +71,13 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
 
         String exceptionMessage = e.getMessage();
         if (Strings.isNullOrEmpty(exceptionMessage)) {
-			this.terminalWriter.writeLine("Command failed");
+			this.terminalFactory.getWriter().writeLine("Command failed");
             if (this.coreConfigurationProperties.isPrintStackTrace()) {
                 e.printStackTrace();
             }
         }
         else {
-			this.terminalWriter.writeLine("Command failed, error message: " + exceptionMessage);
+			this.terminalFactory.getWriter().writeLine("Command failed, error message: " + exceptionMessage);
             if (this.coreConfigurationProperties.isPrintStackTrace()) {
                 e.printStackTrace();
             }

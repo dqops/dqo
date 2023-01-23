@@ -11,18 +11,6 @@ import java.time.temporal.ChronoUnit;
 
 @SpringBootTest
 public class DurationParseUtilityTests extends BaseTest {
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
-    @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-    }
-
     @Test
     public void parseSimpleDuration_whenEmptyString_thenReturnsNull() {
         Assertions.assertNull(DurationParseUtility.parseSimpleDuration(""));

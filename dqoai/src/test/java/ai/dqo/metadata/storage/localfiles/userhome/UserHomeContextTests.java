@@ -16,6 +16,7 @@
 package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.BaseTest;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
@@ -33,13 +34,15 @@ public class UserHomeContextTests extends BaseTest {
         ConnectionList sources = userHome.getConnections();
         ConnectionWrapper sourceWrapper = sources.createAndAddNew("src1");
         ConnectionSpec sourceModel = sourceWrapper.getSpec();
-        sourceModel.setUrl("jdbcurl");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        sourceModel.setPostgresql(postgresql);
+        postgresql.setUser("user");
 
         sut.flush();
 
         UserHomeContext sut2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionWrapper reloadedSource = sut2.getUserHome().getConnections().getByObjectName("src1", true);
         ConnectionSpec reloadedModel = reloadedSource.getSpec();
-        Assertions.assertEquals("jdbcurl", reloadedModel.getUrl());
+        Assertions.assertEquals("user", reloadedModel.getPostgresql().getUser());
     }
 }

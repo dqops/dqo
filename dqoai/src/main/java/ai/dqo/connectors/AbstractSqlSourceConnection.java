@@ -17,6 +17,7 @@ package ai.dqo.connectors;
 
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.utils.conversion.NumericTypeConverter;
 import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -103,8 +104,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return Information schema name.
      */
     public String getInformationSchemaName() {
-        if (this.getDialectSettings().isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            return this.getDialectSettings().quoteIdentifier(this.getConnectionSpec().getDatabaseName()) + ".INFORMATION_SCHEMA";
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
+        if (this.getDialectSettings().isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            return this.getDialectSettings().quoteIdentifier(providerSpecificConfiguration.getDatabase()) + ".INFORMATION_SCHEMA";
         }
         return "INFORMATION_SCHEMA";
     }
@@ -141,6 +144,8 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      */
     @Override
     public List<SourceTableModel> listTables(String schemaName) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
@@ -148,7 +153,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("WHERE TABLE_SCHEMA='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
-        String databaseName = this.secretValueProvider.expandValue(this.connectionSpec.getDatabaseName());
+        String databaseName = this.secretValueProvider.expandValue(providerSpecificConfiguration.getDatabase());
         if (!Strings.isNullOrEmpty(databaseName)) {
             sqlBuilder.append(" AND TABLE_CATALOG='");
             sqlBuilder.append(databaseName.replace("'", "''"));
@@ -186,7 +191,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             tech.tablesaw.api.Table tableResult = this.executeQuery(sql);
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
-                column.setName(column.name().toUpperCase(Locale.ENGLISH));
+                column.setName(column.name().toLowerCase(Locale.ENGLISH));
             }
 
             HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
@@ -194,7 +199,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
                 String columnName = colRow.getString("column_name");
-                long ordinalPosition = colRow.getLong("ordinal_position");
                 boolean isNullable = Objects.equals(colRow.getString("is_nullable"),"YES");
                 String dataType = colRow.getString("data_type");
 
@@ -209,6 +213,36 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
                 ColumnSpec columnSpec = new ColumnSpec();
                 ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                if (tableResult.containsColumn("character_maximum_length") &&
+                        !colRow.isMissing("character_maximum_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_maximum_length")));
+                }
+                else if (tableResult.containsColumn("character_octet_length") &&
+                        !colRow.isMissing("character_octet_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_octet_length")));
+                }
+
+                if (tableResult.containsColumn("numeric_precision") &&
+                        !colRow.isMissing("numeric_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_precision")));
+                }
+
+                if (tableResult.containsColumn("numeric_scale") &&
+                        !colRow.isMissing("numeric_scale")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_scale")));
+                }
+
+                if (tableResult.containsColumn("datetime_precision") &&
+                        !colRow.isMissing("datetime_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("datetime_precision")));
+                }
+
+                if (tableResult.containsColumn("interval_precision") &&
+                        !colRow.isMissing("interval_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("interval_precision")));
+                }
+
                 columnType.setNullable(isNullable);
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
@@ -228,9 +262,11 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return SQL of the INFORMATION_SCHEMA query.
      */
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT * FROM ");
-        String databaseName = this.connectionSpec.getDatabaseName();
+        String databaseName = providerSpecificConfiguration.getDatabase();
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".COLUMNS ");
         sqlBuilder.append("WHERE TABLE_SCHEMA='");
@@ -271,17 +307,27 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
     public abstract Table executeQuery(String sqlQueryStatement);
 
     /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     */
+    @Override
+    public abstract long executeCommand(String sqlStatement);
+
+    /**
      * Creates a target table following the table specification.
      *
      * @param tableSpec Table specification with the physical table name, column names and physical column data types.
      */
     @Override
     public void createTable(TableSpec tableSpec) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE TABLE ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(this.getConnectionSpec().getDatabaseName()));
+        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
         sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
@@ -329,7 +375,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("\n)");
 
         String createTableSql = sqlBuilder.toString();
-		this.executeQuery(createTableSql);
+		this.executeCommand(createTableSql);
     }
 
     /**
@@ -344,11 +390,12 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             return;
         }
 
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("INSERT INTO ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(this.getConnectionSpec().getDatabaseName()));
+        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
         sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
@@ -387,6 +434,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String insertValueSql = sqlBuilder.toString();
-		this.executeQuery(insertValueSql);
+		this.executeCommand(insertValueSql);
     }
 }

@@ -45,10 +45,8 @@ public class BelowPercentPopulationStdev60DaysRuleParametersSpecTests extends Ba
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
 
-    @Override
     @BeforeEach
-    protected void  setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         this.sut = new BelowPercentPopulationStdev60DaysRule1ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

@@ -37,10 +37,8 @@ import java.util.Objects;
 public class AbstractSpecTests extends BaseTest {
     private AbstractSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TableSpec();
     }
 

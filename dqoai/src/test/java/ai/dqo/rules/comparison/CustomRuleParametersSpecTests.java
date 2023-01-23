@@ -27,10 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class CustomRuleParametersSpecTests extends BaseTest {
     private MinValueRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new MinValueRuleParametersSpec();
     }
 
