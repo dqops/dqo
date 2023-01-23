@@ -83,7 +83,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               <>
                 <tr>
                   <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2">
+                  <td className="px-2 max-w-78">
                     {job?.errorMessage}
                   </td>
                 </tr>
@@ -198,7 +198,7 @@ const NotificationMenu = () => {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-80 max-w-80 px-0 ">
+      <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
         <div className="border-b border-gray-300 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
         </div>
