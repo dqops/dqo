@@ -1,11 +1,27 @@
+/*
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package ai.dqo.data.profilingresults.services;
 
 import ai.dqo.core.configuration.DqoProfilerConfigurationProperties;
 import ai.dqo.data.profilingresults.factory.ProfilingResultDataType;
 import ai.dqo.data.profilingresults.factory.ProfilingResultsColumnNames;
-import ai.dqo.data.profilingresults.services.models.ProfilerMetricModel;
 import ai.dqo.data.profilingresults.services.models.ProfilerResultsForColumnModel;
 import ai.dqo.data.profilingresults.services.models.ProfilerResultsForTableModel;
+import ai.dqo.data.profilingresults.services.models.ProfilerMetricModel;
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshot;
 import ai.dqo.data.profilingresults.snapshot.ProfilingResultsSnapshotFactory;
 import ai.dqo.metadata.sources.PhysicalTableName;

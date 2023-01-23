@@ -20,6 +20,7 @@ import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.registry.RegistryCliCommand;
 import ai.dqo.cli.commands.rule.RuleCliCommand;
 import ai.dqo.cli.commands.run.RunCliCommand;
 import ai.dqo.cli.commands.scheduler.SchedulerCliCommand;
@@ -61,6 +62,7 @@ import java.util.List;
             CloudCliCommand.class,
             SensorCliCommand.class,
             SchedulerCliCommand.class,
+            RegistryCliCommand.class,
             RunCliCommand.class,
             RuleCliCommand.class
         }
