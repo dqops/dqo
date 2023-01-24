@@ -18,11 +18,9 @@ package ai.dqo.metadata.id;
 import ai.dqo.checks.*;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkspecs.custom.CustomColumnCheckSpecMap;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkspecs.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -56,9 +54,7 @@ import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.column.AllColumnSensorsSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
-import ai.dqo.sensors.table.AllTableSensorsSpec;
 
 /**
  * Hierarchy node visitor (for the visitor design pattern) whose "accept" methods return a result.
@@ -187,44 +183,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, P parameter);
 
     /**
-     * Accepts a collection (dictionary) of custom table level data quality checks.
-     * @param customTableCheckSpecMap Dictionary of custom checks.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(CustomTableCheckSpecMap customTableCheckSpecMap, P parameter);
-
-    /**
-     * Accepts a custom column check specification.
-     * @param customColumnCheckSpecMap Custom column check specification.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(CustomColumnCheckSpecMap customColumnCheckSpecMap, P parameter);
-
-    /**
      * Accepts any check specification.
      * @param abstractCheckSpec Data quality check specification (any).
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
     R accept(AbstractCheckDeprecatedSpec abstractCheckSpec, P parameter);
-
-    /**
-     * Accepts a container object with all possible built-in table level data quality sensors.
-     * @param allTableSensorsSpec All possible table sensors.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(AllTableSensorsSpec allTableSensorsSpec, P parameter);
-
-    /**
-     * Accepts a list of all supported built-in column sensors.
-     * @param allColumnSensorsSpec List of all supported column sensors.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(AllColumnSensorsSpec allColumnSensorsSpec, P parameter);
 
     /**
      * Accepts any table level sensor specification (sensor call parameters).

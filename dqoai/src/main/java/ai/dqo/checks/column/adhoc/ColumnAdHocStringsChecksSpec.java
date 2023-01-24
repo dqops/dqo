@@ -78,7 +78,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
             put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
-
+            put("string_most_popular_values", o -> o.stringMostPopularValues);
         }
     };
 
@@ -184,6 +184,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage.")
     private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
 
     /**
      * Returns a maximum string length below check.
@@ -795,6 +797,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringMatchNameRegexPercent, stringMatchNameRegexPercent));
         this.stringMatchNameRegexPercent = stringMatchNameRegexPercent;
         propagateHierarchyIdToField(stringMatchNameRegexPercent, "string_match_name_regex_percent");
+    }
+
+    /**
+     * Returns a count of expected values in most popular values set count check.
+     * @return Most popular values count check.
+     */
+    public ColumnStringMostPopularValuesCheckSpec getStringMostPopularValues() {
+        return stringMostPopularValues;
+    }
+
+    /**
+     * Sets a new definition of a most popular values count check.
+     * @param stringMostPopularValues Most popular values count check.
+     */
+    public void setStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec stringMostPopularValues) {
+        this.setDirtyIf(!Objects.equals(this.stringMostPopularValues, stringMostPopularValues));
+        this.stringMostPopularValues = stringMostPopularValues;
+        propagateHierarchyIdToField(stringMostPopularValues, "string_most_popular_values");
     }
 
     /**

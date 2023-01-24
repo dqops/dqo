@@ -79,6 +79,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_match_date_regex_percent", o -> o.dailyCheckpointStringMatchDateRegexPercent);
             put("daily_checkpoint_string_match_name_regex_percent", o -> o.dailyCheckpointStringMatchNameRegexPercent);
 
+            put("daily_checkpoint_string_most_popular_values", o -> o.dailyCheckpointStringMostPopularValues);
         }
     };
 
@@ -182,6 +183,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyCheckpointStringMatchNameRegexPercent;
+
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    private ColumnStringMostPopularValuesCheckSpec dailyCheckpointStringMostPopularValues;
 
     /**
      * Returns a maximum string length below check.
@@ -793,6 +797,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMatchNameRegexPercent, dailyCheckpointStringMatchNameRegexPercent));
         this.dailyCheckpointStringMatchNameRegexPercent = dailyCheckpointStringMatchNameRegexPercent;
         propagateHierarchyIdToField(dailyCheckpointStringMatchNameRegexPercent, "daily_checkpoint_string_match_name_regex_percent");
+    }
+
+    /**
+     * Returns a count of expected values in most popular values set count check.
+     * @return Most popular values count check.
+     */
+    public ColumnStringMostPopularValuesCheckSpec getDailyCheckpointStringMostPopularValues() {
+        return dailyCheckpointStringMostPopularValues;
+    }
+
+    /**
+     * Sets a new definition of a most popular values count check.
+     * @param dailyCheckpointStringMostPopularValues Most popular values count check.
+     */
+    public void setDailyCheckpointStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec dailyCheckpointStringMostPopularValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMostPopularValues, dailyCheckpointStringMostPopularValues));
+        this.dailyCheckpointStringMostPopularValues = dailyCheckpointStringMostPopularValues;
+        propagateHierarchyIdToField(dailyCheckpointStringMostPopularValues, "daily_checkpoint_string_most_popular_values");
     }
 
     /**

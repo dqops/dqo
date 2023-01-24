@@ -69,13 +69,13 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
           <tbody>
             <tr>
               <td className="px-2 capitalize">Status</td>
-              <td className="px-2 truncate">
+              <td className="px-2 max-w-76">
                 {job?.status}
               </td>
             </tr>
             <tr>
               <td className="px-2 capitalize">Last Changed</td>
-              <td className="px-2 truncate">
+              <td className="px-2 max-w-76">
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
@@ -83,7 +83,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               <>
                 <tr>
                   <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2">
+                  <td className="px-2 max-w-76">
                     {job?.errorMessage}
                   </td>
                 </tr>
@@ -95,26 +95,26 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2 capitalize">{key}</td>
-                  <td className="px-2 truncate">{renderValue(value)}</td>
+                  <td className="px-2 max-w-76">{renderValue(value)}</td>
                 </tr>
               ))}
              {job?.parameters?.importSchemaParameters &&(
               <>
                 <tr>
                   <td className="px-2 capitalize">Connection Name</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize">Schema Name</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.schemaName}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables pattern</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNamePattern}
                   </td>
                 </tr>
@@ -124,7 +124,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               <>
                 <tr>
                   <td className="px-2 capitalize">Synchronized folder</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.synchronizeRootFolderParameters?.rootType}
                   </td>
                 </tr>
@@ -136,26 +136,26 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2 capitalize">{key}</td>
-                  <td className="px-2 truncate">{renderValue(value)}</td>
+                  <td className="px-2 max-w-76">{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importTableParameters && (
               <>
                 <tr>
                   <td className="px-2 capitalize">Connection Name</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize">Schema Name</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.schemaName}
                   </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables</td>
-                  <td className="px-2 truncate">
+                  <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.tableNames?.map(
                       (item, index) => (
                         <div key={index}>{item}</div>
@@ -198,7 +198,7 @@ const NotificationMenu = () => {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-80 max-w-80 px-0 ">
+      <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
         <div className="border-b border-gray-300 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
         </div>

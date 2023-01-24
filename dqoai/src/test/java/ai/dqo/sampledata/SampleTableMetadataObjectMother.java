@@ -22,6 +22,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.sampledata.files.CsvSampleFilesObjectMother;
 import ai.dqo.sampledata.files.SampleTableFromCsv;
@@ -99,6 +100,7 @@ public class SampleTableMetadataObjectMother {
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
         TableTargetSpec tableTargetSpec = new TableTargetSpec(targetSchema, sampleTable.getHashedTableName());
         TableSpec tableSpec = new TableSpec(tableTargetSpec);
+        tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {
