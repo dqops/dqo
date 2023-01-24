@@ -48,6 +48,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+            put("availability", o -> o.availability);
 //          put("consistency", o -> o.consistency);
 //          put("custom", o -> o.custom);
         }
@@ -67,6 +68,12 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAdHocSqlChecksSpec sql;
+
+    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAdHocAvailabilityChecksSpec availability;
+
 
     /**
      * Returns a container of standard check configuration on a table level.
@@ -120,6 +127,24 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAdHocAvailabilityChecksSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a custom sql checks container.
+     * @param availability Custom sql checks.
+     */
+    public void setAvailability(TableAdHocAvailabilityChecksSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
     }
 
     /**

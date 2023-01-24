@@ -1,0 +1,73 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ai.dqo.checks.table.adhoc;
+
+import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
+
+/**
+ * Container of built-in preconfigured standard data quality checks on a table level.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@EqualsAndHashCode(callSuper = true)
+public class TableAdHocAvailabilityChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAdHocAvailabilityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+        {
+            put("row_count", o -> o.rowCount);
+        }
+    };
+
+    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
+    private TableAvailabilityRowCountCheckSpec rowCount;
+
+    /**
+     * Returns a row count check.
+     * @return Row count check.
+     */
+    public TableAvailabilityRowCountCheckSpec getRowCount() {
+        return rowCount;
+    }
+
+    /**
+     * Sets a new definition of a row count check.
+     * @param rowCount Row count check.
+     */
+    public void setRowCount(TableAvailabilityRowCountCheckSpec rowCount) {
+        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
+        this.rowCount = rowCount;
+        propagateHierarchyIdToField(rowCount, "row_count");
+    }
+
+    /**
+     * Returns the child map on the spec class with all fields.
+     *
+     * @return Return the field map.
+     */
+    @Override
+    protected ChildHierarchyNodeFieldMap getChildMap() {
+        return FIELDS;
+    }
+}

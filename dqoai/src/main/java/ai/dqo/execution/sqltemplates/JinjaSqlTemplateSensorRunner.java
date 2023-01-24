@@ -31,10 +31,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 import java.time.LocalDateTime;
 
@@ -113,13 +110,12 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * @return Dummy result table.
      */
     public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
-        Table dummyResultTable = Table.create("dummy_results", DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
+        Table dummyResultTable = Table.create("dummy_results", DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME), DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
         row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, 10.0);
 
-        TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getEffectiveTimeSeries();
+        TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
         if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
-            dummyResultTable.addColumns(DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
             row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
         }
 
