@@ -18,6 +18,9 @@ package ai.dqo.data.storage;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
+import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -28,6 +31,9 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.storage.localfiles.dqohome.LocalDqoHomeFileStorageService;
+import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
+import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,8 +56,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+
+        HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoConfigurationProperties.getUser(), dqoConfigurationProperties);
+        LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
+
         this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault());
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 
@@ -358,7 +368,42 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
     }
 
     @Test
-    void savePartition_whenLoadedPartitionWasModifiedAndAddingRows_thenReloadsCurrentPartitionAndAdsRow() {
+    void savePartition_whenDeleteRequestedForWholeTable_thenRemovesThatTableFile() {
+        SensorReadoutsNormalizedResult normalizedResultsCurrent = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
+        Table sourceTable = normalizedResultsCurrent.getTable();
+        Row row1 = sourceTable.appendRow();
+        normalizedResultsCurrent.getActualValueColumn().set(row1.getRowNumber(), 10.5);
+        normalizedResultsCurrent.getTimePeriodColumn().set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+        normalizedResultsCurrent.getIdColumn().set(row1.getRowNumber(), "id1");
+        Row row2 = sourceTable.appendRow();
+        normalizedResultsCurrent.getActualValueColumn().set(row2.getRowNumber(), 15.5);
+        normalizedResultsCurrent.getTimePeriodColumn().set(row2.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+        normalizedResultsCurrent.getIdColumn().set(row2.getRowNumber(), "id2");
+
+        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
+        LocalDate month = LocalDate.of(2022, 1, 1);
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                "connection",
+                tableName,
+                month);
+        this.sut.savePartition(new LoadedMonthlyPartition(partitionId), new TableDataChanges(sourceTable), this.sensorReadoutsStorageSettings);
+        LoadedMonthlyPartition loadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
+
+        SensorReadoutsNormalizedResult normalizedResultsNew = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
+        Table changesTable = normalizedResultsNew.getTable();
+        TableDataChanges tableDataChanges = new TableDataChanges(changesTable);
+        tableDataChanges.getDeletedIds().add("id1");
+        tableDataChanges.getDeletedIds().add("id2");
+        this.sut.savePartition(loadedPartition, tableDataChanges, this.sensorReadoutsStorageSettings);
+
+        LoadedMonthlyPartition reloadedPartition = this.sut.loadPartition(partitionId, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNull(reloadedPartition.getData());
+        Assertions.assertEquals(0L, reloadedPartition.getLastModified());
+    }
+
+    @Test
+    void savePartition_whenLoadedPartitionWasModifiedAndAddingRows_thenReloadsCurrentPartitionAndAddsRow() {
         SensorReadoutsNormalizedResult normalizedResultsCurrent = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
         Table sourceTable = normalizedResultsCurrent.getTable();
         Row row1 = sourceTable.appendRow();

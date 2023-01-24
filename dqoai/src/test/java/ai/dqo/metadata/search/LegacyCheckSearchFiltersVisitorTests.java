@@ -17,7 +17,6 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.checks.table.checkspecs.custom.CustomTableCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
@@ -62,7 +61,6 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
 		this.columnSpecMap = this.tableSpec.getColumns();
 		this.columnSpec = new ColumnSpec();
 		this.columnSpecMap.put("test", columnSpec);
-		this.abstractCheckSpec = new CustomTableCheckSpec();
     }
 
     @Test

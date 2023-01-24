@@ -47,4 +47,7 @@ public enum DqoJobType {
 
 //    @JsonProperty("import table")
 //    IMPORT_TABLE,
+
+    @JsonProperty("delete stored data")
+    DELETE_STORED_DATA,
 }

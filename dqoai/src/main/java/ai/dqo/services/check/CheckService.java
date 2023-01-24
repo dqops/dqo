@@ -20,16 +20,17 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.metadata.search.CheckSearchFilters;
 
 /**
- * Service called from the "check" cli commands to run checks or operate on checks.
+ * Service called to run checks or operate on checks.
  */
 public interface CheckService {
     /**
      * Runs checks given the filters.
      * @param checkSearchFilters Check search filters.
-     * @param checkExecutionProgressListener Progress listener that will report the progress to the console.
+     * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @return Check execution summary.
      */
-    CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters, CheckExecutionProgressListener checkExecutionProgressListener,
+    CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
+                                    CheckExecutionProgressListener checkExecutionProgressListener,
                                     boolean dummyRun);
 }

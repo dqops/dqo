@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '../../Button';
 import Input from '../../Input';
@@ -6,13 +6,16 @@ import BigqueryConnection from './BigqueryConnection';
 import SnowflakeConnection from './SnowflakeConnection';
 import {
   ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum
+  ConnectionBasicModelProviderTypeEnum, ConnectionRemoteModel, ConnectionRemoteModelConnectionStatusEnum
 } from '../../../api';
-import { ConnectionApiClient } from '../../../services/apiClient';
+import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import { useHistory } from 'react-router-dom';
 import TimezoneSelect from "../../TimezoneSelect";
 import { ROUTES } from "../../../shared/routes";
+import Loader from "../../Loader";
+import ErrorModal from "./ErrorModal";
+import ConfirmErrorModal from "./ConfirmErrorModal";
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -26,12 +29,19 @@ const DatabaseConnection = ({
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const history = useHistory();
+  const [isTesting, setIsTesting] = useState(false);
+  const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
+  const [showError, setShowError] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [message, setMessage] = useState<string>();
 
-  const onSave = async () => {
+  const onConfirmSave = async () => {
     if (!database.connection_name) {
       return;
     }
 
+    setIsSaving(true);
     await ConnectionApiClient.createConnectionBasic(
       database?.connection_name ?? '',
       database
@@ -41,6 +51,40 @@ const DatabaseConnection = ({
     );
     addConnection(res.data);
     history.push(`${ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas')}?import_schema=true`);
+    setIsSaving(false);
+  };
+
+  const onSave = async () => {
+    if (!database.connection_name) {
+      return;
+    }
+
+    setIsTesting(true);
+    const testRes = await SourceConnectionApi.checkConnection(database);
+    setIsTesting(false);
+
+    if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
+      await onConfirmSave();
+    } else {
+      setShowConfirm(true);
+      setMessage(testRes.data?.errorMessage);
+    }
+  };
+
+  const onTestConnection = async () => {
+    try {
+      setIsTesting(true);
+      const res = await SourceConnectionApi.checkConnection(database);
+      setTestResult(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsTesting(false);
+    }
+  };
+
+  const openErrorModal = () => {
+    setShowError(true);
   };
 
   return (
@@ -96,16 +140,59 @@ const DatabaseConnection = ({
           )}
         </div>
 
-        <div className="flex space-x-4 justify-end mt-6">
+        <div className="flex space-x-4 justify-end items-center mt-6">
+          {isTesting && (
+            <Loader isFull={false} className="w-8 h-8 !text-green-700" />
+          )}
+          {
+            testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+              <div className="text-green-700 text-sm">
+                Connection successful
+              </div>
+            )
+          }
+          {
+            testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+              <div className="text-red-700 text-sm">
+                <span>Connection failed</span>
+                <span
+                  className="ml-2 underline cursor-pointer"
+                  onClick={openErrorModal}
+                >
+                  Show more
+                </span>
+              </div>
+            )
+          }
+          <Button
+            color="primary"
+            variant="outlined"
+            label="Test Connection"
+            onClick={onTestConnection}
+            disabled={isTesting}
+          />
+
           <Button
             color="primary"
             variant="contained"
             label="Save"
             className="w-40"
             onClick={onSave}
+            disabled={isTesting || isSaving}
           />
         </div>
       </div>
+      <ErrorModal
+        open={showError}
+        onClose={() => setShowError(false)}
+        message={testResult?.errorMessage}
+      />
+      <ConfirmErrorModal
+        open={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        message={message}
+        onConfirm={onConfirmSave}
+      />
     </div>
   );
 };

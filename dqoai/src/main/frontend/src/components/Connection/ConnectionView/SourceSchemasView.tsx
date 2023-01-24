@@ -13,6 +13,7 @@ import { IRootState } from '../../../redux/reducers';
 import { isEqual } from 'lodash';
 import SourceTablesView from './SourceTablesView';
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const SourceSchemasView = () => {
   const { connection }: { connection: string } = useParams();
@@ -27,6 +28,15 @@ const SourceSchemasView = () => {
     SourceSchemasApi.getRemoteSchemas(connection)
       .then((res) => {
         setSchemas(res.data);
+      })
+      .catch(err => {
+        const statusText = err.response?.statusText || err.response?.data?.error;
+        const message = err.response?.data?.trace;
+        toast(statusText + '\n' + message.slice(0, 100), {
+          position: 'top-right',
+          type: "error"
+        })
+        console.log('err', err);
       })
       .finally(() => {
         setLoading(false);
