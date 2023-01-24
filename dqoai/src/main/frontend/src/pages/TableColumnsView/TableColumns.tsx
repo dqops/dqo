@@ -33,7 +33,7 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns().then();
-  }, []);
+  }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnProfileModel) => {
     setIsOpen(true);
