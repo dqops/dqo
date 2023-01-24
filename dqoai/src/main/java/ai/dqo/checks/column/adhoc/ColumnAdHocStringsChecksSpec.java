@@ -39,6 +39,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_max_length", o -> o.stringMaxLength);
             put("string_min_length", o -> o.stringMinLength);
             put("string_mean_length", o -> o.stringMeanLength);
+            put("string_length_above_min_length_count", o -> o.stringLengthAboveMinLengthCount);
+
 
             put("string_empty_count", o -> o.stringEmptyCount);
             put("string_empty_percent", o -> o.stringEmptyPercent);
@@ -90,6 +92,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
     private ColumnStringMeanLengthCheckSpec stringMeanLength;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the length indicated by the user.")
+    private ColumnStringLengthAboveMinLengthCountCheckSpec stringLengthAboveMinLengthCount;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
     private ColumnStringEmptyCountCheckSpec stringEmptyCount;
@@ -239,6 +244,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringMeanLength, stringMeanLength));
         this.stringMeanLength = stringMeanLength;
         propagateHierarchyIdToField(stringMeanLength, "string_mean_length");
+    }
+
+    /**
+     * Returns a string length above min length count check.
+     * @return String length above min length count check.
+     */
+    public ColumnStringLengthAboveMinLengthCountCheckSpec getStringLengthAboveMinLengthCount() {
+        return stringLengthAboveMinLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above min length count check.
+     * @param stringLengthAboveMinLengthCount String length above min length count check.
+     */
+    public void setStringLengthAboveMinLengthCount(ColumnStringLengthAboveMinLengthCountCheckSpec stringLengthAboveMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthAboveMinLengthCount, stringLengthAboveMinLengthCount));
+        this.stringLengthAboveMinLengthCount = stringLengthAboveMinLengthCount;
+        propagateHierarchyIdToField(stringLengthAboveMinLengthCount, "string_length_above_min_length_count");
     }
 
     /**

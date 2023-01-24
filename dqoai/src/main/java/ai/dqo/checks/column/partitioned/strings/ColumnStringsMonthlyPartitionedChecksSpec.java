@@ -39,6 +39,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_max_length", o -> o.monthlyPartitionStringMaxLength);
             put("monthly_partition_string_min_length", o -> o.monthlyPartitionStringMinLength);
             put("monthly_partition_string_mean_length", o -> o.monthlyPartitionStringMeanLength);
+            put("monthly_partition_string_length_above_min_length_count", o -> o.monthlyPartitionStringLengthAboveMinLengthCount);
+
 
             put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
             put("monthly_partition_string_empty_percent", o -> o.monthlyPartitionStringEmptyPercent);
@@ -90,6 +92,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMeanLengthCheckSpec monthlyPartitionStringMeanLength;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the length indicated by the user. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringLengthAboveMinLengthCountCheckSpec monthlyPartitionStringLengthAboveMinLengthCount;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
@@ -239,6 +244,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMeanLength, monthlyPartitionStringMeanLength));
         this.monthlyPartitionStringMeanLength = monthlyPartitionStringMeanLength;
         propagateHierarchyIdToField(monthlyPartitionStringMeanLength, "monthly_partition_string_mean_length");
+    }
+
+    /**
+     * Returns a string length above min length count check.
+     * @return String length above min length count check.
+     */
+    public ColumnStringLengthAboveMinLengthCountCheckSpec getMonthlyPartitionStringLengthAboveMinLengthCount() {
+        return monthlyPartitionStringLengthAboveMinLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above min length count check.
+     * @param monthlyPartitionStringLengthAboveMinLengthCount String length above min length count check.
+     */
+    public void setMonthlyPartitionStringLengthAboveMinLengthCount(ColumnStringLengthAboveMinLengthCountCheckSpec monthlyPartitionStringLengthAboveMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringLengthAboveMinLengthCount, monthlyPartitionStringLengthAboveMinLengthCount));
+        this.monthlyPartitionStringLengthAboveMinLengthCount = monthlyPartitionStringLengthAboveMinLengthCount;
+        propagateHierarchyIdToField(monthlyPartitionStringLengthAboveMinLengthCount, "monthly_partition_string_length_above_min_length_count");
     }
 
     /**

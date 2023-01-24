@@ -39,6 +39,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_max_length", o -> o.dailyPartitionStringMaxLength);
             put("daily_partition_string_min_length", o -> o.dailyPartitionStringMinLength);
             put("daily_partition_string_mean_length", o -> o.dailyPartitionStringMeanLength);
+            put("daily_partition_string_length_above_min_length_count", o -> o.dailyPartitionStringLengthAboveMinLengthCount);
+
 
             put("daily_partition_string_empty_count", o -> o.dailyPartitionStringEmptyCount);
             put("daily_partition_string_empty_percent", o -> o.dailyPartitionStringEmptyPercent);
@@ -90,6 +92,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMeanLengthCheckSpec dailyPartitionStringMeanLength;
+
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the length indicated by the user. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringLengthAboveMinLengthCountCheckSpec dailyPartitionStringLengthAboveMinLengthCount;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount;
@@ -239,6 +244,24 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMeanLength, dailyPartitionStringMeanLength));
         this.dailyPartitionStringMeanLength = dailyPartitionStringMeanLength;
         propagateHierarchyIdToField(dailyPartitionStringMeanLength, "daily_partition_string_mean_length");
+    }
+
+    /**
+     * Returns a string length above min length count check.
+     * @return Mean string length above min length count check.
+     */
+    public ColumnStringLengthAboveMinLengthCountCheckSpec getDailyPartitionStringLengthAboveMinLengthCount() {
+        return dailyPartitionStringLengthAboveMinLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above min length count check.
+     * @param dailyPartitionStringLengthAboveMinLengthCount String length above min length count check.
+     */
+    public void setDailyPartitionStringLengthAboveMinLengthCount(ColumnStringLengthAboveMinLengthCountCheckSpec dailyPartitionStringLengthAboveMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringLengthAboveMinLengthCount, dailyPartitionStringLengthAboveMinLengthCount));
+        this.dailyPartitionStringLengthAboveMinLengthCount = dailyPartitionStringLengthAboveMinLengthCount;
+        propagateHierarchyIdToField(dailyPartitionStringLengthAboveMinLengthCount, "daily_partition_string_length_above_min_length_count");
     }
 
     /**
