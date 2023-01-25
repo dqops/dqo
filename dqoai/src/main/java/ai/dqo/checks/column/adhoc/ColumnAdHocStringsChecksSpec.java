@@ -40,6 +40,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_min_length", o -> o.stringMinLength);
             put("string_mean_length", o -> o.stringMeanLength);
             put("string_length_above_min_length_count", o -> o.stringLengthAboveMinLengthCount);
+            put("string_length_below_min_length_percent", o -> o.stringLengthBelowMinLengthPercent);
+
 
 
             put("string_empty_count", o -> o.stringEmptyCount);
@@ -93,8 +95,11 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
     private ColumnStringMeanLengthCheckSpec stringMeanLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the length indicated by the user.")
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column.")
     private ColumnStringLengthAboveMinLengthCountCheckSpec stringLengthAboveMinLengthCount;
+
+    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column.")
+    private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
     private ColumnStringEmptyCountCheckSpec stringEmptyCount;
@@ -262,6 +267,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringLengthAboveMinLengthCount, stringLengthAboveMinLengthCount));
         this.stringLengthAboveMinLengthCount = stringLengthAboveMinLengthCount;
         propagateHierarchyIdToField(stringLengthAboveMinLengthCount, "string_length_above_min_length_count");
+    }
+
+    /**
+     * Returns a string length below min length percent check.
+     * @return Mean string length below min length percent check.
+     */
+    public ColumnStringLengthBelowMinLengthPercentCheckSpec getStringLengthBelowMinLengthPercent() {
+        return stringLengthBelowMinLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length percent check.
+     * @param stringLengthBelowMinLengthPercent String length below min length percent check.
+     */
+    public void setStringLengthBelowMinLengthPercent(ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthBelowMinLengthPercent, stringLengthBelowMinLengthPercent));
+        this.stringLengthBelowMinLengthPercent = stringLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(stringLengthBelowMinLengthPercent, "string_length_below_min_length_percent");
     }
 
     /**
