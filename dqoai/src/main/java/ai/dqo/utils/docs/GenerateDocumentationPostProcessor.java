@@ -20,7 +20,6 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
-import ai.dqo.utils.docs.cli.CliCommandDocumentationModelFactory;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationFolderFactory;
@@ -47,22 +46,27 @@ public class GenerateDocumentationPostProcessor {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            System.out.println("Documentation generator utility");
-            System.out.println("Missing required parameter: <path to the project dir>");
-            return;
+        try {
+            if (args.length == 0) {
+                System.out.println("Documentation generator utility");
+                System.out.println("Missing required parameter: <path to the project dir>");
+                return;
+            }
+
+            System.out.println("Generating documentation for the project: " + args[0]);
+            Path projectDir = Path.of(args[0]);
+            HandlebarsDocumentationUtilities.configure(projectDir);
+
+            Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
+            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+
+            generateDocumentationForSensors(projectDir, dqoHomeContext);
+            generateDocumentationForRules(projectDir, dqoHomeContext);
+            generateDocumentationForCliCommands(projectDir);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        System.out.println("Generating documentation for the project: " + args[0]);
-        Path projectDir = Path.of(args[0]);
-        HandlebarsDocumentationUtilities.configure(projectDir);
-
-        Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-
-        generateDocumentationForSensors(projectDir, dqoHomeContext);
-        generateDocumentationForRules(projectDir, dqoHomeContext);
-//        generateDocumentationForCliCommands(projectDir);
     }
 
     /**
