@@ -40,6 +40,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_min_length", o -> o.dailyCheckpointStringMinLength);
             put("daily_checkpoint_string_mean_length", o -> o.dailyCheckpointStringMeanLength);
             put("daily_checkpoint_string_length_above_min_length_count", o -> o.dailyCheckpointStringLengthAboveMinLengthCount);
+            put("daily_checkpoint_string_length_below_min_length_percent", o -> o.dailyCheckpointStringLengthBelowMinLengthPercent);
 
 
             put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);
@@ -94,8 +95,11 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec dailyCheckpointStringMeanLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the length indicated by the user. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMinLengthCountCheckSpec dailyCheckpointStringLengthAboveMinLengthCount;
+
+    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyCheckpointStringLengthBelowMinLengthPercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount;
@@ -262,6 +266,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringLengthAboveMinLengthCount, dailyCheckpointStringLengthAboveMinLengthCount));
         this.dailyCheckpointStringLengthAboveMinLengthCount = dailyCheckpointStringLengthAboveMinLengthCount;
         propagateHierarchyIdToField(dailyCheckpointStringLengthAboveMinLengthCount, "daily_checkpoint_string_length_above_min_length_count");
+    }
+
+    /**
+     * Returns a string length below min length percent check.
+     * @return Mean string length below min length percent check.
+     */
+    public ColumnStringLengthBelowMinLengthPercentCheckSpec getDailyCheckpointStringLengthBelowMinLengthPercent() {
+        return dailyCheckpointStringLengthBelowMinLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length percent check.
+     * @param dailyCheckpointStringLengthBelowMinLengthPercent String length below min length percent check.
+     */
+    public void setDailyCheckpointStringLengthBelowMinLengthPercent(ColumnStringLengthBelowMinLengthPercentCheckSpec dailyCheckpointStringLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringLengthBelowMinLengthPercent, dailyCheckpointStringLengthBelowMinLengthPercent));
+        this.dailyCheckpointStringLengthBelowMinLengthPercent = dailyCheckpointStringLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(dailyCheckpointStringLengthBelowMinLengthPercent, "daily_checkpoint_string_length_below_min_length_percent");
     }
 
     /**
