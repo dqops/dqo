@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.services.dashboards;
+package ai.dqo.metadata.dashboards;
 
-import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
+import ai.dqo.metadata.basespecs.ElementWrapper;
+import ai.dqo.metadata.basespecs.ObjectName;
 
 /**
- * Service that returns the list of built-in data quality dashboards, divided into folders.
+ * List of custom dashboards.
  */
-public interface DashboardService {
-    /**
-     * Returns the list of root folders with the dashboards.
-     *
-     * @return List of root folders with dashboards.
-     */
-    DashboardsFolderListSpec getDashboards();
+public interface DashboardFolderListSpecWrapper extends ElementWrapper<DashboardsFolderListSpec>, ObjectName<String> {
+
 }

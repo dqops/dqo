@@ -40,5 +40,6 @@ public class DqoHomeContextFactoryImplTests extends BaseTest {
         Assertions.assertNotNull(dqoHome);
         Assertions.assertNotNull(dqoHome.getSensors());
         Assertions.assertNotNull(dqoHome.getRules());
+        Assertions.assertNotNull(dqoHome.getDashboards());
     }
 }

@@ -1,0 +1,220 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SettingsYaml-schema.json
+apiVersion: dqo/v1
+kind: dashboards
+spec:
+  - folder_name: Governance
+    dashboards:
+      - dashboard_name: KPIs
+        url: >-
+          https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: KPIs adhoc
+        url: >-
+          https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc
+      - dashboard_name: KPIs checkpoint
+        url: >-
+          https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: checkpoint
+      - dashboard_name: KPIs partitioned
+        url: >-
+          https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: partitioned
+  - folder_name: Operational
+    dashboards:
+      - dashboard_name: Tables with most alerts
+        url: >-
+          https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: Tables with most alerts - adhoc
+        url: >-
+          https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc
+      - dashboard_name: Tables with most alerts - checkpoint
+        url: >-
+          https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: checkpoint
+      - dashboard_name: Tables with most alerts - partitioned
+        url: >-
+          https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: partitioned
+  - folder_name: Details
+    dashboards:
+      - dashboard_name: History of alerts
+        url: >-
+          https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+        width: 1580
+        height: 2500
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: History of alerts - adhoc
+        url: >-
+          https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+        width: 1580
+        height: 2500
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc
+      - dashboard_name: History of alerts - checkpoint
+        url: >-
+          https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+        width: 1580
+        height: 2500
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: checkpoint
+      - dashboard_name: History of alerts - partitioned
+        url: >-
+          https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+        width: 1580
+        height: 2500
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: partitioned
+      - dashboard_name: Alerts per check
+        url: >-
+          https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: Alerts per check - adhoc
+        url: >-
+          https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc
+      - dashboard_name: Alerts per check - checkpoints
+        url: >-
+          https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: checkpoint
+      - dashboard_name: Alerts per check - partitioned
+        url: >-
+          https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: partitioned
+      - dashboard_name: Alerts per table
+        url: >-
+          https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: Alerts per table - adhoc
+        url: >-
+          https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc
+      - dashboard_name: Alerts per table - checkpoints
+        url: >-
+          https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: checkpoint
+      - dashboard_name: Alerts per table - partitioned
+        url: >-
+          https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: partitioned
+      - dashboard_name: Partitioned row count readouts
+        url: >-
+          https://datastudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
+        width: 1580
+        height: 2100
+        dqo_cloud_credentials: true
+      - dashboard_name: Biggest tables from daily checkpoints
+        url: >-
+          https://datastudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
+        width: 1580
+        height: 1900
+        dqo_cloud_credentials: true
+      - dashboard_name: Biggest tables from monthly checkpoints
+        url: >-
+          https://datastudio.google.com/embed/reporting/812c1047-f2d7-4155-b1c8-de39c50e371b/page/c5B8C
+        width: 1580
+        height: 1900
+        dqo_cloud_credentials: true
+      - dashboard_name: Table freshness known from checkpoints
+        url: >-
+          https://datastudio.google.com/embed/reporting/e5d9a738-4592-4e46-99a5-295791fad600/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+      - dashboard_name: Table freshness- the last ingested event
+        url: >-
+          https://datastudio.google.com/embed/reporting/19ab1796-a679-42ed-8a83-db6c56bdd0e6/page/c5B8C
+        width: 1580
+        height: 1800
+        dqo_cloud_credentials: true
+      - dashboard_name: Tables ingestion delay
+        url: >-
+          https://datastudio.google.com/embed/reporting/85dc0bb8-e187-406b-b4f0-a343df5fb52a/page/c5B8C
+        width: 1580
+        height: 2200
+        dqo_cloud_credentials: true
+      - dashboard_name: Most incomplete columns - count
+        url: >-
+          https://datastudio.google.com/embed/reporting/1d7ca470-04d4-479d-b702-c610cfda6601/page/c5B8C
+        width: 1580
+        height: 1700
+        dqo_cloud_credentials: true
+      - dashboard_name: Most incomplete columns - percent
+        url: >-
+          https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c
+        width: 1580
+        height: 1700
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: adhoc

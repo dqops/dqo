@@ -17,9 +17,10 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.core.dqocloud.dashboards.LookerStudioUrlService;
 import ai.dqo.metadata.dashboards.DashboardSpec;
+import ai.dqo.metadata.dqohome.DqoHome;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
-import ai.dqo.rest.models.metadata.ConnectionModel;
-import ai.dqo.services.dashboards.DashboardService;
 import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
 import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
@@ -39,19 +40,20 @@ import reactor.core.publisher.Mono;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
 public class DashboardsController {
-    private DashboardService dashboardService;
     private final LookerStudioUrlService lookerStudioUrlService;
+    private DqoHomeContextFactory dqoHomeContextFactory;
+
 
     /**
      * Default dependency injection constructor.
-     * @param dashboardService Dashboard service that returns a list of built-in dashboards.
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
+     * @param dqoHomeContextFactory Dqo home context factory.
      */
     @Autowired
-    public DashboardsController(DashboardService dashboardService,
-                                LookerStudioUrlService lookerStudioUrlService) {
-        this.dashboardService = dashboardService;
+    public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
+                                DqoHomeContextFactory dqoHomeContextFactory) {
         this.lookerStudioUrlService = lookerStudioUrlService;
+        this.dqoHomeContextFactory = dqoHomeContextFactory;
     }
 
     /**
@@ -66,7 +68,10 @@ public class DashboardsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
-        DashboardsFolderListSpec dashboardList = this.dashboardService.getDashboards();
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        DashboardsFolderListSpec dashboardList= dqoHome.getDashboards().getSpec();
 
         return new ResponseEntity<>(Flux.fromStream(dashboardList.stream()), HttpStatus.OK); // 200
     }
@@ -88,7 +93,11 @@ public class DashboardsController {
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel1(
             @ApiParam("Root folder name") @PathVariable String folder,
             @ApiParam("Dashboard name") @PathVariable String dashboardName) {
-        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder);
         if (folder1Spec == null) {
@@ -124,7 +133,10 @@ public class DashboardsController {
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Dashboard name") @PathVariable String dashboardName) {
-        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
@@ -168,7 +180,11 @@ public class DashboardsController {
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
             @ApiParam("Dashboard name") @PathVariable String dashboardName) {
-        DashboardsFolderListSpec rootFolders = this.dashboardService.getDashboards();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {

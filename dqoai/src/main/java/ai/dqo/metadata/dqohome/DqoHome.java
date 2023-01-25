@@ -16,12 +16,13 @@
 package ai.dqo.metadata.dqohome;
 
 import ai.dqo.metadata.basespecs.Flushable;
+import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.id.HierarchyNode;
 
 /**
- * Dqo.io home model to access the content of the DQO_HOME folder. Provides access to the data in the application home, like built-in rules and sensor definitions.
+ * Dqo.io home model to access the content of the DQO_HOME folder. Provides access to the data in the application home, like built-in rules, sensors and dashboards definitions.
  * The actual implementation can use a local file system, a virtual file system or a database.
  */
 public interface DqoHome extends Flushable, HierarchyNode {
@@ -36,4 +37,10 @@ public interface DqoHome extends Flushable, HierarchyNode {
      * @return Collection of sensor definitions.
      */
     RuleDefinitionList getRules();
+
+    /**
+     * Returns a list of dashboards definitions.
+     * @return Collection of dashboards definitions.
+     */
+    DashboardFolderListSpecWrapperImpl getDashboards();
 }
