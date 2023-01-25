@@ -21,10 +21,7 @@ import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Object that aggregates models (information) about all similar checks in other categories.
@@ -72,5 +69,25 @@ public class SimilarChecksContainer {
                 similarCheckGroup.addSimilarCheck(similarCheckModel);
             }
         }
+    }
+
+    /**
+     * Returns a view of the checks, grouped by the category name of the first check.
+     * @return Dictionary keyed by the category name, containing a collection of checks in that category.
+     */
+    public Map<String, Collection<SimilarChecksGroup>> getChecksPerGroup() {
+        Map<String, Collection<SimilarChecksGroup>> checksByCategory = new LinkedHashMap<>();
+
+        for (SimilarChecksGroup similarChecksGroup : checkGroups.values()) {
+            String category = similarChecksGroup.getFirstCheckCategory();
+            Collection<SimilarChecksGroup> checksInCategory = checksByCategory.get(category);
+            if (checksInCategory == null) {
+                checksInCategory = new ArrayList<>();
+                checksByCategory.put(category, checksInCategory);
+            }
+            checksInCategory.add(similarChecksGroup);
+        }
+
+        return checksByCategory;
     }
 }

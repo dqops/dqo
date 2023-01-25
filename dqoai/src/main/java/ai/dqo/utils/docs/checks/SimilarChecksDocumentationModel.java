@@ -19,11 +19,14 @@ import ai.dqo.utils.docs.rules.RuleDocumentationModel;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModel;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Documentation model that describes one check.
+ * Documentation model that describes multiple similar checks.
  */
 @Data
-public class CheckDocumentationModel {
+public class SimilarChecksDocumentationModel {
     /**
      * Sensor documentation model.
      */
@@ -45,6 +48,11 @@ public class CheckDocumentationModel {
     private String checkDocumentation;
 
     /**
+     * Sensor target ('table' or 'column')
+     */
+    private String target;
+
+    /**
      * Sensor category.
      */
     private String category;
@@ -52,40 +60,10 @@ public class CheckDocumentationModel {
     /**
      * Check name inside the category.
      */
-    private String checkName;
+    private String primaryCheckName;
 
     /**
-     * Help text on the warning rule.
+     * List of all similar checks.
      */
-    private String warningRuleHelp;
-
-    /**
-     * Help text on the alert rule.
-     */
-    private String alertRuleHelp;
-
-    /**
-     * Help text on the fatal severity rule.
-     */
-    private String fatalRuleHelp;
-
-    /**
-     * Example yaml.
-     */
-    private String exampleYaml;
-
-    /**
-     * CLI line with precise parameters to run this check on all tables within a connection.
-     */
-    private String runOnConnectionCliCommand;
-
-    /**
-     * CLI line with precise parameters to run this check on a selected table.
-     */
-    private String runOnTableCliCommand;
-
-    /**
-     * CLI line with precise parameters to run this check on a selected column.
-     */
-    private String runOnColumnCliCommand;
+    private List<CheckDocumentationModel> allChecks = new ArrayList<>();
 }

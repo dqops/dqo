@@ -57,4 +57,12 @@ public class SimilarChecksGroup {
     public void addSimilarCheck(SimilarCheckModel similarCheckModel) {
         this.similarChecks.add(similarCheckModel);
     }
+
+    /**
+     * Returns the category of the first similar sensor. We assume that all other similar sensors are in the same category (the built-in sensors should be).
+     * @return The category name of the first sensor.
+     */
+    public String getFirstCheckCategory() {
+        return this.similarChecks.get(0).getCategory();
+    }
 }
