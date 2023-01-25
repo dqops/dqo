@@ -27,7 +27,7 @@ import com.github.jknack.handlebars.Template;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
 
 /**
  * Sensor documentation generator that generates documentation for sensors.
@@ -42,7 +42,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
     /**
      * Renders documentation for all sensors as markdown files.
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
-     * @param dqoHome DQO home.
+     * @param dqoHome         DQO home.
      * @return Folder structure with rendered markdown files.
      */
     @Override
@@ -53,6 +53,27 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         sensorsFolder.setDirectPath(projectRootPath.resolve("../docs/sensors").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
+
+        List<SensorDocumentationModel> sensorDocumentationModels = createSensorDocumentationModels(projectRootPath);
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensorsByTarget(sensorDocumentationModels);
+
+        for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
+            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() + ".md");
+            documentationMarkdownFile.setRenderContext(sensorGroupedDocumentation);
+
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sensorGroupedDocumentation);
+            documentationMarkdownFile.setFileContent(renderedDocument);
+        }
+        return sensorsFolder;
+    }
+
+    /**
+     * Creates a list of all sensors used for documentation.
+     * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @return Sensors documentation model list.
+     */
+    public List<SensorDocumentationModel> createSensorDocumentationModels(Path projectRootPath) {
+        List<SensorDocumentationModel> sensorDocumentationModels = new ArrayList<>();
 
         List<? extends Class<? extends AbstractSensorParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.sensors", projectRootPath, AbstractSensorParametersSpec.class);
@@ -68,15 +89,36 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
             if (sensorDocumentation == null) {
                 continue; // sensor not found
             }
-
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorDocumentation.getFullSensorName() + ".md");
-            documentationMarkdownFile.setRenderContext(sensorDocumentation);
-
-            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sensorDocumentation);
-            documentationMarkdownFile.setFileContent(renderedDocument);
+            sensorDocumentationModels.add(sensorDocumentation);
         }
+        return sensorDocumentationModels;
+    }
 
-        return sensorsFolder;
+    /**
+     * Groups into list sensor documentation models by target ('table' or 'column').
+     * @param sensorDocumentationModels List of all sensorDocumentationModel, used to iterating and grouping by target.
+     * @return Sensor grouped documentation list.
+     */
+    public List<SensorGroupedDocumentationModel> groupSensorsByTarget(List<SensorDocumentationModel> sensorDocumentationModels) {
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = new ArrayList<>();
+        SensorGroupedDocumentationModel columnGroupedDocumentationModel = new SensorGroupedDocumentationModel();
+        columnGroupedDocumentationModel.setTarget("column");
+        SensorGroupedDocumentationModel tableGroupedDocumentationModel = new SensorGroupedDocumentationModel();
+        tableGroupedDocumentationModel.setTarget("table");
+        Map<String, List<SensorDocumentationModel>> columnSensors = new HashMap<>();
+        Map<String, List<SensorDocumentationModel>> tableSensors = new HashMap<>();
+
+        for (SensorDocumentationModel model : sensorDocumentationModels) {
+            if (model.getTarget().equals("column")) {
+                columnSensors.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);
+            } else {
+                tableSensors.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);
+            }
+        }
+        columnGroupedDocumentationModel.setGroupedSensors(columnSensors);
+        tableGroupedDocumentationModel.setGroupedSensors(tableSensors);
+        Collections.addAll(sensorGroupedDocumentationModels, columnGroupedDocumentationModel, tableGroupedDocumentationModel);
+        return sensorGroupedDocumentationModels;
     }
 
     /**
