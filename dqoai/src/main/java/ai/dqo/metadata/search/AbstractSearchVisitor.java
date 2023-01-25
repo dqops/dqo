@@ -24,10 +24,7 @@ import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.dashboards.DashboardListSpec;
-import ai.dqo.metadata.dashboards.DashboardSpec;
-import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
-import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
+import ai.dqo.metadata.dashboards.*;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -814,6 +811,18 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(DashboardsFolderListSpec dashboardsFolderSpecs, SearchParameterObject parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboards list.
+     *
+     * @param dashboardDefinitionWrapper List of dashboards list.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

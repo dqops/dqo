@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.dqohome;
 
+import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionListImpl;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
@@ -23,13 +24,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Root dqo.io home model for reading and managing the definitions in the application's home (DQO_HOME).
- * Those are built in rule and sensor definitions.
+ * Those are built in rule, sensor and dashboard definitions.
  */
 public class DqoHomeImpl implements DqoHome {
     private static final ChildHierarchyNodeFieldMapImpl<DqoHomeImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(ChildHierarchyNodeFieldMap.empty()) {
         {
 			put("sensors", o -> o.sensors);
 			put("rules", o -> o.rules);
+			put("dashboards", o -> o.dashboards);
         }
     };
 
@@ -37,6 +39,7 @@ public class DqoHomeImpl implements DqoHome {
     private HierarchyId hierarchyId = HierarchyId.getRoot();
     private RuleDefinitionListImpl rules;
     private SensorDefinitionListImpl sensors;
+    private DashboardFolderListSpecWrapperImpl dashboards;
     @JsonIgnore
     private boolean dirty;
 
@@ -46,16 +49,19 @@ public class DqoHomeImpl implements DqoHome {
     public DqoHomeImpl() {
 		this.setSensors(new SensorDefinitionListImpl());
 		this.setRules(new RuleDefinitionListImpl());
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
     }
 
     /**
      * Creates a dqo.io home implementation with alternative implementations (file based) of collections.
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
+     * @param dashboards Collection of custom dashboard definitions.
      */
-    public DqoHomeImpl(SensorDefinitionListImpl sensors, RuleDefinitionListImpl rules) {
+    public DqoHomeImpl(SensorDefinitionListImpl sensors, RuleDefinitionListImpl rules, DashboardFolderListSpecWrapperImpl dashboards) {
 		this.setSensors(sensors);
 		this.setRules(rules);
+        this.setDashboards(dashboards);
     }
 
     /**
@@ -73,6 +79,14 @@ public class DqoHomeImpl implements DqoHome {
     @Override
     public RuleDefinitionList getRules() {
         return rules;
+    }
+
+    /**
+     * Returns a collection of custom dashboards in the user home folder.
+     * @return Collection of user's custom dashboards.
+     */
+    public DashboardFolderListSpecWrapperImpl getDashboards() {
+        return dashboards;
     }
 
     /**
@@ -102,6 +116,18 @@ public class DqoHomeImpl implements DqoHome {
     }
 
     /**
+     * Changes the collection of custom dashboards.
+     * @param dashboards New collection of custom dashboards.
+     */
+    public void setDashboards(DashboardFolderListSpecWrapperImpl dashboards) {
+        this.dashboards = dashboards;
+        if (dashboards != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "dashboards");
+            dashboards.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("dashboards").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+    /**
      * Flushes an object to a persistent store.
      */
     @Override
@@ -109,6 +135,7 @@ public class DqoHomeImpl implements DqoHome {
         // synchronize changes back to the virtual file system
 		this.getSensors().flush();
 		this.getRules().flush();
+		this.getDashboards().flush();
 
 		this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
         assert !this.isDirty();
