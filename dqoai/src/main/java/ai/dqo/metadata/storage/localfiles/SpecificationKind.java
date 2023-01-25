@@ -43,5 +43,5 @@ public enum SpecificationKind {
     FILE_INDEX,
 
     @JsonProperty("dashboards")
-    DASHBOARDS,
+    DASHBOARDS
 }

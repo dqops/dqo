@@ -63,4 +63,10 @@ public final class SpecFileNames {
      * Custom settings file.
      */
     public static final String SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
+
+    /**
+     * Data quality dashboards definitions file name.
+     */
+    public static final String DASHBOARDS_SPEC_FILE_NAME_YAML = "dashboardslist.dqodashboards.yaml";
+
 }

@@ -26,10 +26,7 @@ import ai.dqo.checks.table.checkspecs.custom.CustomTableCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.dashboards.DashboardListSpec;
-import ai.dqo.metadata.dashboards.DashboardSpec;
-import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
-import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
+import ai.dqo.metadata.dashboards.*;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -601,4 +598,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(DashboardsFolderListSpec dashboardsFolderSpecs, P parameter);
+
+    /**
+     * Accepts a list of dashboards definitions wrapper.
+     * @param dashboardDefinitionWrapper List of dashboards definitions wrapper.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, P parameter);
 }
