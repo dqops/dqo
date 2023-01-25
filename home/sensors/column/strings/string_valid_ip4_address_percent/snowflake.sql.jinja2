@@ -1,11 +1,11 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 SELECT
-    100.0 * SUM(
-        CASE
-            WHEN REGEXP_CONTAINS(SAFE_CAST(
-            {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 1
-            ELSE 0
-        END
+  100.0 * SUM(
+    CASE
+      WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 1
+    ELSE
+    0
+  END
     ) / COUNT(*) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}

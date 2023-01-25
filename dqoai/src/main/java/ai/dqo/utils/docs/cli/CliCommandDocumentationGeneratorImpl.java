@@ -1,13 +1,18 @@
 package ai.dqo.utils.docs.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
+import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.docs.files.DocumentationFolder;
+import ai.dqo.utils.docs.files.DocumentationMarkdownFile;
+import com.github.jknack.handlebars.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generates documentation about CLI commands.
@@ -29,10 +34,22 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     @Override
     public DocumentationFolder generateDocumentationForCliCommands(Path projectRootPath) {
         DocumentationFolder cliFolder = new DocumentationFolder();
-        cliFolder.setFolderName("sensors");
-        cliFolder.setLinkName("Sensor reference");
+        cliFolder.setFolderName("cli");
+        cliFolder.setLinkName("CLI Command");
         cliFolder.setDirectPath(projectRootPath.resolve("../docs/cli").toAbsolutePath().normalize());
 
+        //TODO: dołożyć renderowanie
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("cli/cli_documentation");
+
+        List<CliRootCommandDocumentationModel> commandModels = new ArrayList<>(createCommandModels());
+        for (CliRootCommandDocumentationModel command : commandModels) {
+
+            DocumentationMarkdownFile documentationMarkdownFile = cliFolder.addNestedFile(command.getRootCommandName() + ".md");
+            documentationMarkdownFile.setRenderContext(command);
+
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, command);
+            documentationMarkdownFile.setFileContent(renderedDocument);
+        }
         return cliFolder;
     }
 

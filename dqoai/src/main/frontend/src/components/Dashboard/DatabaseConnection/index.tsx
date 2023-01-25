@@ -52,6 +52,7 @@ const DatabaseConnection = ({
     addConnection(res.data);
     history.push(`${ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas')}?import_schema=true`);
     setIsSaving(false);
+    setShowConfirm(false);
   };
 
   const onSave = async () => {

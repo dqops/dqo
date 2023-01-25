@@ -1,0 +1,39 @@
+#{{rootCommandName}}
+{{#each commands}}
+___
+###<b><u>{{qualifiedName}}</u></b>
+{{#each header}}
+{{this}}
+{{/each}}
+<b>Description:</b>
+{{#each description}}
+{{this}}
+{{else}}
+For this command description is not added yet.
+{{/each}}
+<b>Synopsis:</b>
+<pre><code>{{synopsis}}</code></pre>
+{{#each customSynopsis}}
+{{this}}
+{{/each}}
+=== "Options"
+    <table>
+    <thead>
+    <tr>
+    <th>Command</th>
+    <th>Description</th>
+    <th>Accepted values:</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each options}}
+    <tr>
+    <td>{{#each names}}`{{this}}`<br/>{{/each}}</td>
+    <td>{{#each description}}{{this}}{{/each}}</td>
+    <td>{{#each acceptedValues}}{{this}}<br/>{{/each}}</td>
+    </tr>
+    {{else}}
+    {{/each}}
+    </tbody>
+    </table>
+{{/each}}
