@@ -55,7 +55,7 @@ const Tree = () => {
 
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK) {
-      return <div className="w-6 shrink-0" />;
+      return <div className="w-0 shrink-0" />;
     }
     return (
       <SvgIcon
@@ -73,7 +73,7 @@ const Tree = () => {
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
-            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-1',
+            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : ''
           )}
         >
