@@ -7,3 +7,8 @@ ___
     ```
     --8<-- "home/sensors/column/strings/string_invalid_ip4_address_count/bigquery.sql.jinja2"
     ```
+
+=== "snowflake"
+    ```
+    --8<-- "home/sensors/column/strings/string_invalid_ip4_address_count/snowflake.sql.jinja2"
+    ```

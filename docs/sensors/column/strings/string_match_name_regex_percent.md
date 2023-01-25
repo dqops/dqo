@@ -7,3 +7,8 @@ ___
     ```
     --8<-- "home/sensors/column/strings/string_match_name_regex_percent/bigquery.sql.jinja2"
     ```
+
+=== "snowflake"
+    ```
+    --8<-- "home/sensors/column/strings/string_match_name_regex_percent/snowflake.sql.jinja2"
+    ```

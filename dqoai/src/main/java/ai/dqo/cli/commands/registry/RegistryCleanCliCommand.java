@@ -50,14 +50,16 @@ import java.time.LocalDate;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "clean", description = "Delete stored registry data matching specified filters")
 public class RegistryCleanCliCommand extends BaseCommand implements ICommand {
-    private final TerminalWriter terminalWriter;
-    private final TerminalTableWritter terminalTableWritter;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
     private JsonSerializer jsonSerializer;
-    private final OutputFormatService outputFormatService;
-    private final FileWritter fileWritter;
-    private final DqoJobQueue dqoJobQueue;
-    private final DqoQueueJobFactory dqoQueueJobFactory;
+    private OutputFormatService outputFormatService;
+    private FileWritter fileWritter;
+    private DqoJobQueue dqoJobQueue;
+    private DqoQueueJobFactory dqoQueueJobFactory;
 
+    public RegistryCleanCliCommand() {
+    }
 
     /**
      * Dependency injection constructor.

@@ -7,3 +7,8 @@ ___
     ```
     --8<-- "home/sensors/column/strings/string_invalid_uuid_count/bigquery.sql.jinja2"
     ```
+
+=== "snowflake"
+    ```
+    --8<-- "home/sensors/column/strings/string_invalid_uuid_count/snowflake.sql.jinja2"
+    ```

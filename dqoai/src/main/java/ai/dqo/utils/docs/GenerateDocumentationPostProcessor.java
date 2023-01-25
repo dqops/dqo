@@ -18,6 +18,9 @@ package ai.dqo.utils.docs;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
+import ai.dqo.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
+import ai.dqo.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationFolderFactory;
 import ai.dqo.utils.docs.rules.RuleDocumentationGenerator;
@@ -43,21 +46,27 @@ public class GenerateDocumentationPostProcessor {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
-            System.out.println("Documentation generator utility");
-            System.out.println("Missing required parameter: <path to the project dir>");
-            return;
+        try {
+            if (args.length == 0) {
+                System.out.println("Documentation generator utility");
+                System.out.println("Missing required parameter: <path to the project dir>");
+                return;
+            }
+
+            System.out.println("Generating documentation for the project: " + args[0]);
+            Path projectDir = Path.of(args[0]);
+            HandlebarsDocumentationUtilities.configure(projectDir);
+
+            Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
+            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
+
+            generateDocumentationForSensors(projectDir, dqoHomeContext);
+            generateDocumentationForRules(projectDir, dqoHomeContext);
+            generateDocumentationForCliCommands(projectDir);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        System.out.println("Generating documentation for the project: " + args[0]);
-        Path projectDir = Path.of(args[0]);
-        HandlebarsDocumentationUtilities.configure(projectDir);
-
-        Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-        DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-
-        generateDocumentationForSensors(projectDir, dqoHomeContext);
-        generateDocumentationForRules(projectDir, dqoHomeContext);
     }
 
     /**
@@ -122,5 +131,24 @@ public class GenerateDocumentationPostProcessor {
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
+    }
+
+    /**
+     * Generates documentation for CLI Commands.
+     * @param projectRoot Path to the project root.
+     */
+    public static void generateDocumentationForCliCommands(Path projectRoot) {
+        Path cliDocPath = projectRoot.resolve("../docs/cli").toAbsolutePath().normalize();
+        DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
+        CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
+
+        DocumentationFolder renderedDocumentation = cliCommandDocumentationGenerator.generateDocumentationForCliCommands(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentCliDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE CLI COMMANDS");
     }
 }
