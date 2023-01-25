@@ -1,5 +1,5 @@
 # column/uniqueness/unique_count
-Column level sensor that counts not null values in a column.
+Column level sensor that calculates the number of unique non-null values.
 ___
 ## Jinja Template
 

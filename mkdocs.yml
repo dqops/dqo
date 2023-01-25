@@ -34,6 +34,18 @@ nav[]:
     - Adding connections: 'working_with_dqo/add_connection.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - CLI Command:
+    - cls: 'cli/cls.md'
+    - connection: 'cli/connection.md'
+    - table: 'cli/table.md'
+    - check: 'cli/check.md'
+    - column: 'cli/column.md'
+    - settings: 'cli/settings.md'
+    - cloud: 'cli/cloud.md'
+    - sensor: 'cli/sensor.md'
+    - scheduler: 'cli/scheduler.md'
+    - registry: 'cli/registry.md'
+    - run: 'cli/run.md'
+    - rule: 'cli/rule.md'
 ########## END INCLUDE CLI COMMANDS
   - Commands:
     - check: 'commands/check/check.md'

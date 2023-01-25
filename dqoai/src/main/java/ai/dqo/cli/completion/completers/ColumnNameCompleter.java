@@ -37,14 +37,16 @@ import java.util.Iterator;
  * Command line completer that will complete the list of column names when the connection name and table name was already provided in the command line.
  */
 public class ColumnNameCompleter extends AbstractCommandAwareCompleter<ITableNameCommand> {
-    private final UserHomeContextCache userHomeContextCache;
+    private UserHomeContextCache userHomeContextCache;
 
     /**
      * Default constructor called by the auto-completion system.
      */
     public ColumnNameCompleter() {
         BeanFactory beanFactory = StaticBeanFactory.getBeanFactory();
-		this.userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
+        if (beanFactory != null) {
+            this.userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
+        }
     }
 
     /**
@@ -63,7 +65,7 @@ public class ColumnNameCompleter extends AbstractCommandAwareCompleter<ITableNam
      */
     @Override
     public Iterator<String> createIterator(ITableNameCommand command) {
-        if (command == null) {
+        if (command == null || this.userHomeContextCache == null) {
             return createEmptyCompletionIterator();
         }
 
