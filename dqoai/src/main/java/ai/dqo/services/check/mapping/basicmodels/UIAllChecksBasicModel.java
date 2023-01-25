@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.services.check.mapping.basicmodels;
 
-import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -27,22 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit all checks within a single category.
+ * Simplistic UI model that returns the list of data quality checks, their names, categories and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIQualityCategoryModel", description = "UI model that returns the form definition and the form data to edit all checks within a single category.")
-public class UIQualityCategoryModel {
-    @JsonPropertyDescription("Data quality category name.")
-    private String category;
-
-    @JsonPropertyDescription("Help text that describes the category.")
-    private String helpText;
-
-    @JsonPropertyDescription("List of data quality checks within the category.")
-    private List<UICheckModel> checks = new ArrayList<>();
-
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
-    private CheckSearchFilters runChecksJobTemplate;
+@ApiModel(value = "UIAllChecksBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
+public class UIAllChecksBasicModel {
+    @JsonPropertyDescription("List of all data quality categories that contain basic models of data quality checks inside.")
+    private List<UIQualityCategoryBasicModel> categories = new ArrayList<>();
 }

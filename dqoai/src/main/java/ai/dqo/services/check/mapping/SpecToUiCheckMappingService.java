@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks.mapping;
+package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.rest.models.checks.UIAllChecksModel;
-import ai.dqo.rest.models.checks.UIFieldModel;
-import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UIFieldModel;
+import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 

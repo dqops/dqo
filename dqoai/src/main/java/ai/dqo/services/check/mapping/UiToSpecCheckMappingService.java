@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks.mapping;
+package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 
 /**
  * Service that updates the check specification from the UI model that was filled with updates.

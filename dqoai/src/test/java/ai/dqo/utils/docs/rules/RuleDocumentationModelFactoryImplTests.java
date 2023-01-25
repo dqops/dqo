@@ -3,7 +3,7 @@ package ai.dqo.utils.docs.rules;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.rules.averages.BetweenPercentMovingAverage7DaysRule5ParametersSpec;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;

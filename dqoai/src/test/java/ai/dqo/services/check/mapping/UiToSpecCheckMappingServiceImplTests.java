@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks.mapping;
+package ai.dqo.services.check.mapping;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.rest.models.checks.UIAllChecksModel;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

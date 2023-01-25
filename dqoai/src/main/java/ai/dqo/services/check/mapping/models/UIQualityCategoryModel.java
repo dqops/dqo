@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -22,22 +23,26 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).
+ * UI model that returns the form definition and the form data to edit all checks within a single category.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIRuleParametersModel", description = "UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).")
-public class UIRuleParametersModel {
-    @JsonPropertyDescription("List of fields for editing the rule parameters like thresholds.")
-    private List<UIFieldModel> ruleParameters;
+@ApiModel(value = "UIQualityCategoryModel", description = "UI model that returns the form definition and the form data to edit all checks within a single category.")
+public class UIQualityCategoryModel {
+    @JsonPropertyDescription("Data quality check category name.")
+    private String category;
 
-    @JsonPropertyDescription("Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.")
-    private boolean disabled;
+    @JsonPropertyDescription("Help text that describes the category.")
+    private String helpText;
 
-    @JsonPropertyDescription("Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).")
-    private boolean configured;
+    @JsonPropertyDescription("List of data quality checks within the category.")
+    private List<UICheckModel> checks = new ArrayList<>();
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
+    private CheckSearchFilters runChecksJobTemplate;
 }

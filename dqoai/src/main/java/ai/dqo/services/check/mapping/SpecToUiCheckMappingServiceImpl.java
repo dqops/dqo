@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks.mapping;
+package ai.dqo.services.check.mapping;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.rest.models.checks.*;
-import ai.dqo.rest.models.checks.basic.UIAllChecksBasicModel;
-import ai.dqo.rest.models.checks.basic.UICheckBasicModel;
-import ai.dqo.rest.models.checks.basic.UIQualityCategoryBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UIQualityCategoryBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
@@ -124,7 +121,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                                          CheckSearchFilters runChecksTemplate,
                                                          String defaultDataStreamName) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
-        categoryModel.setCategory(categoryFieldInfo.getDisplayName());
+        categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
         categoryModel.setHelpText(categoryFieldInfo.getHelpText());
         CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
         runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
@@ -153,15 +150,15 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
     /**
      * Creates a UI model for all data quality checks for one category.
-     * @param dimensionFieldInfo      Field info for the category field.
+     * @param categoryFieldInfo      Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
      * @return UI model for a category with all quality checks.
      */
-    protected UIQualityCategoryBasicModel createCategoryBasicModel(FieldInfo dimensionFieldInfo,
+    protected UIQualityCategoryBasicModel createCategoryBasicModel(FieldInfo categoryFieldInfo,
                                                                    Object checkCategoryParentNode) {
         UIQualityCategoryBasicModel categoryModel = new UIQualityCategoryBasicModel();
-        categoryModel.setCategory(dimensionFieldInfo.getDisplayName());
-        categoryModel.setHelpText(dimensionFieldInfo.getHelpText());
+        categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
+        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
@@ -204,6 +201,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
         AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
         checkModel.setFilter(parametersSpec.getFilter());
+        checkModel.setSensorName(parametersSpec.getSensorDefinitionName());
 
         List<UIFieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
         checkModel.setSensorParameters(fieldsForParameterSpec);
@@ -264,6 +262,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 (AbstractRuleParametersSpec)severityFieldInfo.getFieldValueOrNewObject(abstractCheckSpec);
 
         parametersModel.setConfigured(parametersValueNullable != null);
+        parametersModel.setRuleName(parametersSpecNotNull.getRuleDefinitionName());
 
         List<UIFieldModel> uiFieldModels = createFieldsForRuleParameters(parametersSpecNotNull);
         parametersModel.setRuleParameters(uiFieldModels);

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.services.check.mapping.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -30,24 +30,6 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIRuleThresholdsModel", description = "UI model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).")
 public class UIRuleThresholdsModel {
-    /**
-     * Field name that matches the field name (snake_case) used in the YAML specification.
-     */
-    @JsonPropertyDescription("Rule field name (snake_case) used in the YAML specification to configure the rule in the code.")
-    @Deprecated
-    private String fieldName;
-
-    @JsonPropertyDescription("Field display name that should be shown as a user friendly name of the rule.")
-    @Deprecated
-    private String displayName;
-
-    @JsonPropertyDescription("Help text (full description) that will be shown to the user as a hint when the user clicks a help (question mark) icon.")
-    @Deprecated
-    private String helpHext;
-
-    @JsonPropertyDescription("Relative path to the rule definition (a python file name) within the rules folder in the DQO Home or User Home.")
-    private String rulePath;
-
     @JsonPropertyDescription("Rule parameters for the error severity rule.")
     private UIRuleParametersModel error;
 

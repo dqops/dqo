@@ -254,7 +254,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
      * Returns a string length below min length count check.
      * @return String length below min length count check.
      */
-    public ColumnStringLengthBelowMinLengthCountCheckSpec getdailyCheckpointStringLengthBelowMinLengthCount() {
+    public ColumnStringLengthBelowMinLengthCountCheckSpec getDailyCheckpointStringLengthBelowMinLengthCount() {
         return dailyCheckpointStringLengthBelowMinLengthCount;
     }
 
@@ -262,7 +262,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
      * Sets a new definition of a string length below min length count check.
      * @param dailyCheckpointStringLengthBelowMinLengthCount String length below min length count check.
      */
-    public void setdailyCheckpointStringLengthBelowMinLengthCount(ColumnStringLengthBelowMinLengthCountCheckSpec dailyCheckpointStringLengthBelowMinLengthCount) {
+    public void setDailyCheckpointStringLengthBelowMinLengthCount(ColumnStringLengthBelowMinLengthCountCheckSpec dailyCheckpointStringLengthBelowMinLengthCount) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringLengthBelowMinLengthCount, dailyCheckpointStringLengthBelowMinLengthCount));
         this.dailyCheckpointStringLengthBelowMinLengthCount = dailyCheckpointStringLengthBelowMinLengthCount;
         propagateHierarchyIdToField(dailyCheckpointStringLengthBelowMinLengthCount, "daily_checkpoint_string_length_below_min_length_count");

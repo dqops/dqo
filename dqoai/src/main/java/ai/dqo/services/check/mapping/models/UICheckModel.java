@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks;
+package ai.dqo.services.check.mapping.models;
 
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.matching.SimilarCheckSensorRuleKey;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -48,6 +49,9 @@ public class UICheckModel {
 
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
     private List<UIFieldModel> sensorParameters;
+
+    @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
+    private String sensorName;
 
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;
@@ -87,4 +91,16 @@ public class UICheckModel {
 
     @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
+
+    /**
+     * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
+     * @return Check sensor rule key.
+     */
+    public SimilarCheckSensorRuleKey createSimilarCheckMatchKey() {
+        return new SimilarCheckSensorRuleKey(
+                this.sensorName,
+                this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
+                this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
+                this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);
+    }
 }

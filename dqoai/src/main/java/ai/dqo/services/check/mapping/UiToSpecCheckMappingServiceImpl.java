@@ -13,24 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rest.models.checks.mapping;
+package ai.dqo.services.check.mapping;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
-import ai.dqo.rest.models.checks.*;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
+import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,8 +61,8 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         }
 
         for (UIQualityCategoryModel categoryModel : categoryModelList) {
-            String qualityDimension = categoryModel.getCategory();
-            FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(qualityDimension);
+            String categoryDisplayName = categoryModel.getCategory();
+            FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(categoryDisplayName);
             AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
 
             updateCategoryChecksSpec(categoryModel, categorySpec);
