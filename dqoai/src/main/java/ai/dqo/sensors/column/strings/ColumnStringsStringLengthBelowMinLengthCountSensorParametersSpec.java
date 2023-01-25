@@ -28,13 +28,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the count of values that are not shorter than a given length in a column.
+ * Column level sensor that calculates the count of values that are shorter than a given length in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringLengthAboveMinLengthCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringLengthAboveMinLengthCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -76,7 +76,7 @@ public class ColumnStringsStringLengthAboveMinLengthCountSensorParametersSpec ex
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_length_above_min_length_count";
+        return "column/strings/string_length_below_min_length_count";
     }
 
 }

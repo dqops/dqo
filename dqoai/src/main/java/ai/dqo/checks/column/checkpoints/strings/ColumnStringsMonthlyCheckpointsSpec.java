@@ -39,7 +39,7 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_max_length", o -> o.monthlyCheckpointStringMaxLength);
             put("monthly_checkpoint_string_min_length", o -> o.monthlyCheckpointStringMinLength);
             put("monthly_checkpoint_string_mean_length", o -> o.monthlyCheckpointStringMeanLength);
-            put("monthly_checkpoint_string_length_above_min_length_count", o -> o.monthlyCheckpointStringLengthAboveMinLengthCount);
+            put("monthly_checkpoint_string_length_below_min_length_count", o -> o.monthlyCheckpointStringLengthBelowMinLengthCount);
             put("monthly_checkpoint_string_length_below_min_length_percent", o -> o.monthlyCheckpointStringLengthBelowMinLengthPercent);
 
 
@@ -94,10 +94,10 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec monthlyCheckpointStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringLengthAboveMinLengthCountCheckSpec monthlyCheckpointStringLengthAboveMinLengthCount;
-
     @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringLengthBelowMinLengthCountCheckSpec monthlyCheckpointStringLengthBelowMinLengthCount;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec monthlyCheckpointStringLengthBelowMinLengthPercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
@@ -251,21 +251,21 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a string length above min length count check.
-     * @return String length above min length count check.
+     * Returns a string length below min length count check.
+     * @return String length below min length count check.
      */
-    public ColumnStringLengthAboveMinLengthCountCheckSpec getMonthlyCheckpointStringLengthAboveMinLengthCount() {
-        return monthlyCheckpointStringLengthAboveMinLengthCount;
+    public ColumnStringLengthBelowMinLengthCountCheckSpec getMonthlyCheckpointStringLengthBelowMinLengthCount() {
+        return monthlyCheckpointStringLengthBelowMinLengthCount;
     }
 
     /**
-     * Sets a new definition of a string length above min length count check.
-     * @param monthlyCheckpointStringLengthAboveMinLengthCount String length above min length count check.
+     * Sets a new definition of a string length below min length count check.
+     * @param monthlyCheckpointStringLengthBelowMinLengthCount String length below min length count check.
      */
-    public void setMonthlyCheckpointStringLengthAboveMinLengthCount(ColumnStringLengthAboveMinLengthCountCheckSpec monthlyCheckpointStringLengthAboveMinLengthCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthAboveMinLengthCount, monthlyCheckpointStringLengthAboveMinLengthCount));
-        this.monthlyCheckpointStringLengthAboveMinLengthCount = monthlyCheckpointStringLengthAboveMinLengthCount;
-        propagateHierarchyIdToField(monthlyCheckpointStringLengthAboveMinLengthCount, "monthly_checkpoint_string_length_above_min_length_count");
+    public void setMonthlyCheckpointStringLengthBelowMinLengthCount(ColumnStringLengthBelowMinLengthCountCheckSpec monthlyCheckpointStringLengthBelowMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthBelowMinLengthCount, monthlyCheckpointStringLengthBelowMinLengthCount));
+        this.monthlyCheckpointStringLengthBelowMinLengthCount = monthlyCheckpointStringLengthBelowMinLengthCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringLengthBelowMinLengthCount, "monthly_checkpoint_string_length_below_min_length_count");
     }
 
     /**
