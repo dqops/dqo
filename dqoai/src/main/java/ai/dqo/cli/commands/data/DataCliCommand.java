@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.registry;
+package ai.dqo.cli.commands.data;
 
 import ai.dqo.cli.commands.BaseCommand;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -22,10 +22,10 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "registry" 1st level CLI command - a grouping command for performing actions on the local registry, like displaying the check results, deleting results, etc.
+ * "data" 1st level CLI command - a grouping command for performing actions on the local data, like displaying the check results, deleting results, etc.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "registry", description = "Commands related to the registry", subcommands = {RegistryCleanCliCommand.class})
-public class RegistryCliCommand extends BaseCommand {
+@CommandLine.Command(name = "data", description = "Commands related to the data", subcommands = {DataCleanCliCommand.class})
+public class DataCliCommand extends BaseCommand {
 }
