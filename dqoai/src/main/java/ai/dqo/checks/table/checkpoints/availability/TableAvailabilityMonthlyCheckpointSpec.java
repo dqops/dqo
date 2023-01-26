@@ -48,7 +48,7 @@ public class TableAvailabilityMonthlyCheckpointSpec extends AbstractCheckCategor
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getAvailabilityRowCount() {
+    public TableAvailabilityRowCountCheckSpec getMonthlyPartitionAvailabilityRowCount() {
         return monthlyPartitionAvailabilityRowCount;
     }
 
@@ -56,7 +56,7 @@ public class TableAvailabilityMonthlyCheckpointSpec extends AbstractCheckCategor
      * Sets a new check specification.
      * @param monthlyPartitionAvailabilityRowCount Check specification.
      */
-    public void setAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyPartitionAvailabilityRowCount) {
+    public void setMonthlyPartitionAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyPartitionAvailabilityRowCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionAvailabilityRowCount, monthlyPartitionAvailabilityRowCount));
         this.monthlyPartitionAvailabilityRowCount = monthlyPartitionAvailabilityRowCount;
         propagateHierarchyIdToField(monthlyPartitionAvailabilityRowCount, "monthly_partition_availability_row_count");

@@ -47,7 +47,7 @@ public class TableAvailabilityDailyCheckpointSpec extends AbstractCheckCategoryS
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getAvailabilityRowCount() {
+    public TableAvailabilityRowCountCheckSpec getDailyCheckpointAvailabilityRowCount() {
         return dailyCheckpointAvailabilityRowCount;
     }
 

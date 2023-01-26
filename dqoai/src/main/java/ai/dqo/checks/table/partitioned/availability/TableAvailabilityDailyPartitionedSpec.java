@@ -47,7 +47,7 @@ public class TableAvailabilityDailyPartitionedSpec extends AbstractCheckCategory
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getAvailabilityRowCount() {
+    public TableAvailabilityRowCountCheckSpec getDailyPartitionAvailabilityRowCount() {
         return dailyPartitionAvailabilityRowCount;
     }
 
@@ -55,7 +55,7 @@ public class TableAvailabilityDailyPartitionedSpec extends AbstractCheckCategory
      * Sets a new check specification.
      * @param dailyPartitionAvailabilityRowCount Check specification.
      */
-    public void setDailyCheckpointAvailabilityRowCount(TableAvailabilityRowCountCheckSpec dailyPartitionAvailabilityRowCount) {
+    public void setDailyPartitionAvailabilityRowCount(TableAvailabilityRowCountCheckSpec dailyPartitionAvailabilityRowCount) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionAvailabilityRowCount, dailyPartitionAvailabilityRowCount));
         this.dailyPartitionAvailabilityRowCount = dailyPartitionAvailabilityRowCount;
         propagateHierarchyIdToField(dailyPartitionAvailabilityRowCount, "daily_partition_availability_row_count");

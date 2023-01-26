@@ -47,7 +47,7 @@ public class TableAvailabilityMonthlyPartitionedSpec extends AbstractCheckCatego
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getAvailabilityRowCount() {
+    public TableAvailabilityRowCountCheckSpec getMonthlyCheckpointAvailabilityRowCount() {
         return monthlyCheckpointAvailabilityRowCount;
     }
 
@@ -55,7 +55,7 @@ public class TableAvailabilityMonthlyPartitionedSpec extends AbstractCheckCatego
      * Sets a new check specification.
      * @param monthlyCheckpointAvailabilityRowCount Check specification.
      */
-    public void setAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyCheckpointAvailabilityRowCount) {
+    public void setMonthlyCheckpointAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyCheckpointAvailabilityRowCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointAvailabilityRowCount, monthlyCheckpointAvailabilityRowCount));
         this.monthlyCheckpointAvailabilityRowCount = monthlyCheckpointAvailabilityRowCount;
         propagateHierarchyIdToField(monthlyCheckpointAvailabilityRowCount, "monthly_checkpoint_availability_row_count");
