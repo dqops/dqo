@@ -1,13 +1,9 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
-{%- macro render_minimum_length(minimum_length) -%}
-     {{ minimum_length }}
-{% endmacro %}
-
 SELECT
   SUM(
     CASE
-      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{ render_minimum_length(parameters.minimum_length) }} THEN 1
+      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
     ELSE
     0
   END

@@ -1,13 +1,9 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
-{%- macro render_maximum_length(maximum_length) -%}
-     {{ maximum_length }}
-{% endmacro %}
-
 SELECT
   SUM(
     CASE
-      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{ render_maximum_length(parameters.maximum_length) }} THEN 1
+      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
     ELSE
     0
   END

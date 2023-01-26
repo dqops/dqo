@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class BigQueryColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnStringLengthBelowMinLengthPercentCheckSpec checkSpec;
