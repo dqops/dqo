@@ -6,7 +6,7 @@ SELECT
   ELSE
   100.0 * SUM(
     CASE
-      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
+      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
     ELSE
     0
   END
