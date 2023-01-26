@@ -15,18 +15,16 @@
  */
 package ai.dqo.cli.terminal;
 
-import org.jline.terminal.Terminal;
-import org.jline.utils.InfoCmp;
-
-
 /**
  * Console terminal wrapper. Provides access to the terminal services.
+ * Implementation relying on the standard output (StdOut).
  */
-public class TerminalWriterImpl extends TerminalWriterAbstract {
-    private final Terminal terminal;
+public class TerminalWriterSystemImpl extends TerminalWriterAbstract {
 
-    public TerminalWriterImpl(Terminal terminal) {
-        this.terminal = terminal;
+    private Integer terminalWidth;
+
+    public TerminalWriterSystemImpl(Integer terminalWidth) {
+        this.terminalWidth = terminalWidth;
     }
 
     /**
@@ -35,17 +33,16 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public void write(String text) {
-		this.terminal.writer().write(text);
-		this.terminal.flush();
+        if (text != null) {
+            System.out.print(text);
+            System.out.flush();
+        }
     }
 
     /**
      * Clears the screen.
      */
-    @Override
     public void clearScreen() {
-        this.terminal.puts(InfoCmp.Capability.clear_screen);
-        this.terminal.flush();
     }
 
     /**
@@ -54,15 +51,14 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public Integer getTerminalWidth() {
-        return this.terminal.getWidth();
+        return this.terminalWidth;
     }
 
     /**
      * Gets terminal height.
      * @return Terminal height.
      */
-    @Override
     public Integer getTerminalHeight() {
-        return this.terminal.getHeight();
+        return Integer.MAX_VALUE;
     }
 }
