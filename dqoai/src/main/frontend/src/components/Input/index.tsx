@@ -21,6 +21,7 @@ interface IInputProps {
   dataTestId?: string;
   tooltipText?: string;
   disabled?: boolean;
+  defaultValue?: string;
 }
 
 const Input = ({
@@ -37,7 +38,8 @@ const Input = ({
   onClear,
   dataTestId,
   tooltipText,
-  disabled
+  disabled,
+  defaultValue
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
@@ -83,6 +85,7 @@ const Input = ({
         onChange={onChange}
         onBlur={onBlur}
         data-testid={dataTestId}
+        defaultValue={defaultValue}
       />
       {value && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">

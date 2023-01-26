@@ -137,7 +137,10 @@ const DatabaseConnection = ({
               onChange={(bigquery) => onChange({ ...database, bigquery })}
             />
           ) : (
-            <SnowflakeConnection />
+            <SnowflakeConnection
+              snowflake={database.snowflake}
+              onChange={(snowflake) => onChange({ ...database, snowflake })}
+            />
           )}
         </div>
 
