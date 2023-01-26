@@ -30,7 +30,6 @@ import org.jline.reader.*;
 import org.jline.reader.impl.DefaultParser;
 import org.jline.terminal.Terminal;
 import org.jline.widget.TailTipWidgets;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,19 +72,17 @@ public class CliConfiguration {
 
     /**
      * Creates a configuration of terminal writer based on application's running mode.
-     * @param beanFactory Bean factory, used to get Terminal if needed.
      * @param dqoCliOneshotConfigurationProperties Properties for CLI if running in one-shot mode.
      * @return Terminal writer applicable to the application's running mode.
      */
     @Lazy
     @Bean(name = "terminalWriter")
-    public TerminalWriter terminalWriter(BeanFactory beanFactory,
-                                         DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
+    public TerminalWriter terminalWriter(DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
         if (CliApplication.isRunningOneShotMode()) {
             return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
         }
 
-        Terminal terminal = beanFactory.getBean(Terminal.class);
+        Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
         return new TerminalWriterImpl(terminal);
     }
 
@@ -173,7 +170,8 @@ public class CliConfiguration {
         if (CliApplication.isRunningOneShotMode()) {
             return new TerminalReaderSystemImpl(terminalWriter);
         }
-        LineReader cliLineReader = StaticBeanFactory.getBeanFactory().getBean(LineReader.class);
+
+        LineReader cliLineReader = (LineReader) StaticBeanFactory.getBeanFactory().getBean("cliLineReader");
         return new TerminalReaderImpl(terminalWriter, cliLineReader);
     }
 }

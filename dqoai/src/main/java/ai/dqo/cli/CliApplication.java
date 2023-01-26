@@ -76,7 +76,7 @@ public class CliApplication {
 		return true; // no parameters, just the shell mode, so we start the web server
 	}
 
-	public static boolean areParametersForOneShot(String[] args) {
+	public static boolean hasArgumentsForOneShot(String[] args) {
 		if (args == null || args.length == 0) {
 			// running just "dqo" in shell starts the interactive mode
 			return false;
@@ -102,7 +102,7 @@ public class CliApplication {
 			TablesawParquetSupportFix.ensureInitialized();
 
 			boolean commandThatRequiresWebServer = isCommandThatRequiresWebServer(args);
-			runningOneShotMode = areParametersForOneShot(args);
+			runningOneShotMode = hasArgumentsForOneShot(args);
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
