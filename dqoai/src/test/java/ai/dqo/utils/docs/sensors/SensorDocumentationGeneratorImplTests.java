@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.nio.file.Path;
+import java.util.List;
 
 @SpringBootTest
 public class SensorDocumentationGeneratorImplTests extends BaseTest {
@@ -37,6 +38,19 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
     @Test
     void renderSensorDocumentation_whenCalled_generatesDocumentationForAllSensorsInMemory() {
         DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
-        Assertions.assertEquals(2, documentationFolder.getSubFolders().size());
+        Assertions.assertEquals(0, documentationFolder.getSubFolders().size());
+    }
+
+    @Test
+    void createSensorDocumentationModels_whenCalled_generatesListOfSensorDocumentationModel() {
+        List<SensorDocumentationModel> sensorDocumentationModels = this.sut.createSensorDocumentationModels(this.projectRootPath);
+        Assertions.assertTrue(sensorDocumentationModels.size() > 1);
+    }
+
+    @Test
+    void groupSensorsByTarget_whenCalled_generatesListOfSensorGroupedDocumentationModel() {
+        List<SensorDocumentationModel> sensorDocumentationModels = this.sut.createSensorDocumentationModels(this.projectRootPath);
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = this.sut.groupSensorsByTarget(sensorDocumentationModels);
+        Assertions.assertEquals(2, sensorGroupedDocumentationModels.size());
     }
 }
