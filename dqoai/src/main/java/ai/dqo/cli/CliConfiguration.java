@@ -19,12 +19,9 @@ import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
 import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
-import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.cli.terminal.TerminalWriterImpl;
-import ai.dqo.cli.terminal.TerminalWriterSystemImpl;
+import ai.dqo.cli.terminal.*;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
+import ai.dqo.utils.StaticBeanFactory;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
 import org.jline.console.impl.SystemRegistryImpl;
@@ -76,24 +73,26 @@ public class CliConfiguration {
 
     /**
      * Creates a configuration of terminal writer based on application's running mode.
-     * @param beanFactory Bean factory.
+     * @param beanFactory Bean factory, used to get Terminal if needed.
+     * @param dqoCliOneshotConfigurationProperties Properties for CLI if running in one-shot mode.
      * @return Terminal writer applicable to the application's running mode.
      */
+    @Lazy
     @Bean(name = "terminalWriter")
     public TerminalWriter terminalWriter(BeanFactory beanFactory,
                                          DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
-        if (CliApplication.isRunningInteractiveMode()) {
-            Terminal terminal = beanFactory.getBean(Terminal.class);
-            return new TerminalWriterImpl(terminal);
+        if (CliApplication.isRunningOneShotMode()) {
+            return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
         }
-        return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
+
+        Terminal terminal = beanFactory.getBean(Terminal.class);
+        return new TerminalWriterImpl(terminal);
     }
 
     /**
-     * Configures a picocli command line using the root command.
+     * Configures a picocli command line using the root command, based on the application's running mode.
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
-     * @param terminal Terminal.
      * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
      * @param coreConfigurationProperties Core configuration properties.
      * @return Command line.
@@ -101,11 +100,14 @@ public class CliConfiguration {
     @Bean(name = "commandLine")
     public CommandLine commandLine(DqoRootCliCommand rootShellCommand,
 								   CommandLine.IFactory factory,
-								   Terminal terminal,
                                    TerminalFactory terminalFactory,
 								   DqoCoreConfigurationProperties coreConfigurationProperties) {
         PicocliCommands.PicocliCommandsFactory shellCommandFactory = new PicocliCommands.PicocliCommandsFactory(factory);
-        shellCommandFactory.setTerminal(terminal);
+        if (!CliApplication.isRunningOneShotMode()) {
+            Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
+            shellCommandFactory.setTerminal(terminal);
+        }
+
         CommandLine commandLine = new CommandLine(rootShellCommand, factory);
         commandLine.setExecutionExceptionHandler(new CommandExecutionErrorHandler(terminalFactory, coreConfigurationProperties));
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
@@ -158,5 +160,20 @@ public class CliConfiguration {
         keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
         return lineReader;
+    }
+
+    /**
+     * Creates a configuration of terminal reader based on application's running mode.
+     * @param terminalWriter Configured terminal writer.
+     * @return Terminal reader applicable to the application's running mode.
+     */
+    @Lazy
+    @Bean(name = "terminalReader")
+    public TerminalReader terminalReader(TerminalWriter terminalWriter) {
+        if (CliApplication.isRunningOneShotMode()) {
+            return new TerminalReaderSystemImpl(terminalWriter);
+        }
+        LineReader cliLineReader = StaticBeanFactory.getBeanFactory().getBean(LineReader.class);
+        return new TerminalReaderImpl(terminalWriter, cliLineReader);
     }
 }

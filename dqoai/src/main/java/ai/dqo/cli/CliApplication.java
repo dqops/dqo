@@ -34,10 +34,10 @@ import java.util.stream.Collectors;
 public class CliApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
 
-	private static boolean runningInteractiveMode;
+	private static boolean runningOneShotMode;
 
-	public static boolean isRunningInteractiveMode() {
-		return runningInteractiveMode;
+	public static boolean isRunningOneShotMode() {
+		return runningOneShotMode;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class CliApplication {
 		return true; // no parameters, just the shell mode, so we start the web server
 	}
 
-	public static boolean isOneShotMode(String[] args) {
+	public static boolean areParametersForOneShot(String[] args) {
 		if (args == null || args.length == 0) {
 			// running just "dqo" in shell starts the interactive mode
 			return false;
@@ -102,7 +102,7 @@ public class CliApplication {
 			TablesawParquetSupportFix.ensureInitialized();
 
 			boolean commandThatRequiresWebServer = isCommandThatRequiresWebServer(args);
-			runningInteractiveMode = !isOneShotMode(args);
+			runningOneShotMode = areParametersForOneShot(args);
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
