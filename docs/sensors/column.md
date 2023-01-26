@@ -1,9 +1,15 @@
-#column sensors:
+#column
 
-##category: <b>pii</b>
+##<b>pii</b> column sensors
 ___
 
 ###<b>contains_usa_zipcode_percent</b>
+<b>Full sensor name:</b>
+```
+column/pii/contains_usa_zipcode_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percent of values that contain a USA zip code number in a column.
 <br/>
 <br/>
@@ -22,6 +28,12 @@ Column level sensor that calculates the percent of values that contain a USA zip
 ___
 
 ###<b>contains_usa_phone_percent</b>
+<b>Full sensor name:</b>
+```
+column/pii/contains_usa_phone_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percent of values that contains a USA phone number in a column.
 <br/>
 <br/>
@@ -40,10 +52,16 @@ Column level sensor that calculates the percent of values that contains a USA ph
 ___
 
 
-##category: <b>datetime</b>
+##<b>datetime</b> column sensors
 ___
 
 ###<b>date_values_in_future_percent</b>
+<b>Full sensor name:</b>
+```
+column/datetime/date_values_in_future_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
 <br/>
 <br/>
@@ -62,10 +80,16 @@ Column level sensor that calculates the percentage of rows with a date value in 
 ___
 
 
-##category: <b>bool</b>
+##<b>bool</b> column sensors
 ___
 
 ###<b>true_percent</b>
+<b>Full sensor name:</b>
+```
+column/bool/true_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a true value in a column.
 <br/>
 <br/>
@@ -84,6 +108,12 @@ Column level sensor that calculates the percentage of rows with a true value in 
 ___
 
 ###<b>false_percent</b>
+<b>Full sensor name:</b>
+```
+column/bool/false_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a false value in a column.
 <br/>
 <br/>
@@ -102,10 +132,16 @@ Column level sensor that calculates the percentage of rows with a false value in
 ___
 
 
-##category: <b>strings</b>
+##<b>strings</b> column sensors
 ___
 
 ###<b>string_parsable_to_integer_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_parsable_to_integer_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with parsable to integer string column value.
 <br/>
 <br/>
@@ -124,6 +160,12 @@ Column level sensor that calculates the number of rows with parsable to integer 
 ___
 
 ###<b>string_valid_email_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_email_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a valid email value in a column.
 <br/>
 <br/>
@@ -142,6 +184,12 @@ Column level sensor that calculates the percentage of rows with a valid email va
 ___
 
 ###<b>string_valid_usa_phone_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_usa_phone_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percent of values that fit to a USA phone regex in a column.
 <br/>
 <br/>
@@ -159,25 +207,37 @@ Column level sensor that calculates the percent of values that fit to a USA phon
 
 ___
 
-###<b>string_length_above_min_length_count</b>
-Column level sensor that calculates the count of values that are not shorter than a given length in a column.
+###<b>string_length_below_min_length_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_length_below_min_length_count
+```
+<b>Description:</b>
+<br/>
+Column level sensor that calculates the count of values that are shorter than a given length in a column.
 <br/>
 <br/>
 <b><u>Jinja Template:</u></b>
 
 === "bigquery"
     ```
-    --8<-- "home/sensors/column/strings/string_length_above_min_length_count/bigquery.sql.jinja2"
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_count/bigquery.sql.jinja2"
     ```
 
 === "snowflake"
     ```
-    --8<-- "home/sensors/column/strings/string_length_above_min_length_count/snowflake.sql.jinja2"
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_count/snowflake.sql.jinja2"
     ```
 
 ___
 
 ###<b>string_whitespace_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_whitespace_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an whitespace string column value.
 <br/>
 <br/>
@@ -196,6 +256,12 @@ Column level sensor that calculates the number of rows with an whitespace string
 ___
 
 ###<b>string_valid_usa_zipcode_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_usa_zipcode_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percent of values that fit to a USA ZIP code regex in a column.
 <br/>
 <br/>
@@ -214,6 +280,12 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
 ___
 
 ###<b>string_boolean_placeholder_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_boolean_placeholder_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a boolean placeholder string column value.
 <br/>
 <br/>
@@ -232,6 +304,12 @@ Column level sensor that calculates the number of rows with a boolean placeholde
 ___
 
 ###<b>string_valid_country_code_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_country_code_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a valid country code string column value.
 <br/>
 <br/>
@@ -250,6 +328,12 @@ Column level sensor that calculates the number of rows with a valid country code
 ___
 
 ###<b>string_min_length</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_min_length
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -268,6 +352,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_max_length</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_max_length
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -286,6 +376,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_invalid_ip6_address_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_invalid_ip6_address_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an invalid IP6 address value in a column.
 <br/>
 <br/>
@@ -304,6 +400,12 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
 ___
 
 ###<b>string_invalid_ip4_address_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_invalid_ip4_address_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an invalid IP4 address value in a column.
 <br/>
 <br/>
@@ -321,7 +423,37 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
 
 ___
 
+###<b>string_length_below_min_length_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_length_below_min_length_percent
+```
+<b>Description:</b>
+<br/>
+Column level sensor that calculates the percentage of values that are shorter than a given length in a column.
+<br/>
+<br/>
+<b><u>Jinja Template:</u></b>
+
+=== "bigquery"
+    ```
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_percent/bigquery.sql.jinja2"
+    ```
+
+=== "snowflake"
+    ```
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_percent/snowflake.sql.jinja2"
+    ```
+
+___
+
 ###<b>string_in_set_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_in_set_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -340,6 +472,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_regex_match_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_regex_match_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percent of values that fit to a regex in a column.
 <br/>
 <br/>
@@ -358,6 +496,12 @@ Column level sensor that calculates the percent of values that fit to a regex in
 ___
 
 ###<b>string_valid_currency_code_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_currency_code_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a valid currency code string column value.
 <br/>
 <br/>
@@ -376,6 +520,12 @@ Column level sensor that calculates the number of rows with a valid currency cod
 ___
 
 ###<b>string_not_match_regex_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_not_match_regex_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of values that does not fit to a regex in a column.
 <br/>
 <br/>
@@ -394,6 +544,12 @@ Column level sensor that calculates the number of values that does not fit to a 
 ___
 
 ###<b>string_whitespace_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_whitespace_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a whitespace string column value.
 <br/>
 <br/>
@@ -412,6 +568,12 @@ Column level sensor that calculates the number of rows with a whitespace string 
 ___
 
 ###<b>string_valid_ip6_address_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_ip6_address_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a valid IP6 address value in a column.
 <br/>
 <br/>
@@ -430,6 +592,12 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
 ___
 
 ###<b>string_mean_length</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_mean_length
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -448,6 +616,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_valid_uuid_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_uuid_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a valid UUID value in a column.
 <br/>
 <br/>
@@ -466,6 +640,12 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
 ___
 
 ###<b>string_surrounded_by_whitespace_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_surrounded_by_whitespace_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
 <br/>
 <br/>
@@ -484,6 +664,12 @@ Column level sensor that calculates the number of rows with string surrounded by
 ___
 
 ###<b>string_in_set_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_in_set_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -502,6 +688,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_null_placeholder_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_null_placeholder_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null placeholder string column value.
 <br/>
 <br/>
@@ -520,6 +712,12 @@ Column level sensor that calculates the number of rows with a null placeholder s
 ___
 
 ###<b>string_match_date_regex_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_match_date_regex_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
 <br/>
 <br/>
@@ -538,6 +736,12 @@ Column level sensor that calculates the percentage of values that does fit a giv
 ___
 
 ###<b>string_valid_ip4_address_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_ip4_address_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with a valid IP4 address value in a column.
 <br/>
 <br/>
@@ -556,6 +760,12 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
 ___
 
 ###<b>string_valid_date_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_valid_date_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -574,6 +784,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_most_popular_values</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_most_popular_values
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -592,6 +808,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>string_invalid_email_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_invalid_email_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an invalid emails value in a column.
 <br/>
 <br/>
@@ -610,6 +832,12 @@ Column level sensor that calculates the number of rows with an invalid emails va
 ___
 
 ###<b>string_match_name_regex_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_match_name_regex_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of values that does fit a given name regex in a column.
 <br/>
 <br/>
@@ -628,6 +856,12 @@ Column level sensor that calculates the percentage of values that does fit a giv
 ___
 
 ###<b>string_empty_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_empty_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an empty string column value.
 <br/>
 <br/>
@@ -646,6 +880,12 @@ Column level sensor that calculates the number of rows with an empty string colu
 ___
 
 ###<b>string_invalid_uuid_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_invalid_uuid_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with an invalid uuid value in a column.
 <br/>
 <br/>
@@ -664,6 +904,12 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
 ___
 
 ###<b>string_not_match_date_regex_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_not_match_date_regex_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of values that does not fit to a date regex in a column.
 <br/>
 <br/>
@@ -682,6 +928,12 @@ Column level sensor that calculates the number of values that does not fit to a 
 ___
 
 ###<b>string_parsable_to_float_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_parsable_to_float_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with parsable to float string column value.
 <br/>
 <br/>
@@ -700,6 +952,12 @@ Column level sensor that calculates the number of rows with parsable to float st
 ___
 
 ###<b>string_surrounded_by_whitespace_count</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_surrounded_by_whitespace_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
 <br/>
 <br/>
@@ -718,6 +976,12 @@ Column level sensor that calculates the number of rows with string surrounded by
 ___
 
 ###<b>string_empty_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_empty_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows with an empty string column value.
 <br/>
 <br/>
@@ -736,6 +1000,12 @@ Column level sensor that calculates the percentage of rows with an empty string 
 ___
 
 ###<b>string_null_placeholder_percent</b>
+<b>Full sensor name:</b>
+```
+column/strings/string_null_placeholder_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null placeholder string column value.
 <br/>
 <br/>
@@ -754,10 +1024,16 @@ Column level sensor that calculates the number of rows with a null placeholder s
 ___
 
 
-##category: <b>uniqueness</b>
+##<b>uniqueness</b> column sensors
 ___
 
 ###<b>duplicate_count</b>
+<b>Full sensor name:</b>
+```
+column/uniqueness/duplicate_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of rows with a null column value.
 <br/>
 <br/>
@@ -776,6 +1052,12 @@ Column level sensor that calculates the number of rows with a null column value.
 ___
 
 ###<b>duplicate_percent</b>
+<b>Full sensor name:</b>
+```
+column/uniqueness/duplicate_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of rows that are duplicates.
 <br/>
 <br/>
@@ -794,6 +1076,12 @@ Column level sensor that calculates the percentage of rows that are duplicates.
 ___
 
 ###<b>unique_count</b>
+<b>Full sensor name:</b>
+```
+column/uniqueness/unique_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the number of unique non-null values.
 <br/>
 <br/>
@@ -812,10 +1100,16 @@ Column level sensor that calculates the number of unique non-null values.
 ___
 
 
-##category: <b>nulls</b>
+##<b>nulls</b> column sensors
 ___
 
 ###<b>null_percent</b>
+<b>Full sensor name:</b>
+```
+column/nulls/null_percent
+```
+<b>Description:</b>
+<br/>
 Column-level sensor that calculates the percentage of rows with null values.
 <br/>
 <br/>
@@ -834,6 +1128,12 @@ Column-level sensor that calculates the percentage of rows with null values.
 ___
 
 ###<b>not_null_count</b>
+<b>Full sensor name:</b>
+```
+column/nulls/not_null_count
+```
+<b>Description:</b>
+<br/>
 Column-level sensor that calculates the number of rows with not null values.
 <br/>
 <br/>
@@ -852,6 +1152,12 @@ Column-level sensor that calculates the number of rows with not null values.
 ___
 
 ###<b>null_count</b>
+<b>Full sensor name:</b>
+```
+column/nulls/null_count
+```
+<b>Description:</b>
+<br/>
 Column-level sensor that calculates the number of rows with null values.
 <br/>
 <br/>
@@ -870,10 +1176,16 @@ Column-level sensor that calculates the number of rows with null values.
 ___
 
 
-##category: <b>range</b>
+##<b>range</b> column sensors
 ___
 
 ###<b>min_value</b>
+<b>Full sensor name:</b>
+```
+column/range/min_value
+```
+<b>Description:</b>
+<br/>
 Column level sensor that finds the minimum value. It works on any data type that supports the MIN functions.
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 <br/>
@@ -893,6 +1205,12 @@ Column level sensor that finds the minimum value. It works on any data type that
 ___
 
 ###<b>max_value</b>
+<b>Full sensor name:</b>
+```
+column/range/max_value
+```
+<b>Description:</b>
+<br/>
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 <br/>
@@ -912,10 +1230,16 @@ Column level sensor that finds the maximum value. It works on any data type that
 ___
 
 
-##category: <b>numeric</b>
+##<b>numeric</b> column sensors
 ___
 
 ###<b>stddev_samp</b>
+<b>Full sensor name:</b>
+```
+column/numeric/stddev_samp
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -934,6 +1258,12 @@ Column level sensor that counts negative values in a column.
 ___
 
 ###<b>sum</b>
+<b>Full sensor name:</b>
+```
+column/numeric/sum
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -952,6 +1282,12 @@ Column level sensor that counts negative values in a column.
 ___
 
 ###<b>values_in_range_numeric_percent</b>
+<b>Full sensor name:</b>
+```
+column/numeric/values_in_range_numeric_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 <br/>
@@ -971,6 +1307,12 @@ Column level sensor that finds the maximum value. It works on any data type that
 ___
 
 ###<b>numbers_in_set_percent</b>
+<b>Full sensor name:</b>
+```
+column/numeric/numbers_in_set_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that calculates the percentage of values that are members of a given set.
 <br/>
 <br/>
@@ -989,6 +1331,12 @@ Column level sensor that calculates the percentage of values that are members of
 ___
 
 ###<b>negative_count</b>
+<b>Full sensor name:</b>
+```
+column/numeric/negative_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -1007,6 +1355,12 @@ Column level sensor that counts negative values in a column.
 ___
 
 ###<b>negative_percent</b>
+<b>Full sensor name:</b>
+```
+column/numeric/negative_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts percentage of negative values in a column.
 <br/>
 <br/>
@@ -1025,6 +1379,12 @@ Column level sensor that counts percentage of negative values in a column.
 ___
 
 ###<b>var_pop</b>
+<b>Full sensor name:</b>
+```
+column/numeric/var_pop
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -1043,6 +1403,12 @@ Column level sensor that counts negative values in a column.
 ___
 
 ###<b>numbers_in_set_count</b>
+<b>Full sensor name:</b>
+```
+column/numeric/numbers_in_set_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts values that are members of a given set.
 <br/>
 <br/>
@@ -1061,6 +1427,12 @@ Column level sensor that counts values that are members of a given set.
 ___
 
 ###<b>var_samp</b>
+<b>Full sensor name:</b>
+```
+column/numeric/var_samp
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -1079,6 +1451,12 @@ Column level sensor that counts negative values in a column.
 ___
 
 ###<b>values_in_range_integers_percent</b>
+<b>Full sensor name:</b>
+```
+column/numeric/values_in_range_integers_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 <br/>
@@ -1098,6 +1476,12 @@ Column level sensor that finds the maximum value. It works on any data type that
 ___
 
 ###<b>stddev_pop</b>
+<b>Full sensor name:</b>
+```
+column/numeric/stddev_pop
+```
+<b>Description:</b>
+<br/>
 Column level sensor that counts negative values in a column.
 <br/>
 <br/>
@@ -1116,10 +1500,16 @@ Column level sensor that counts negative values in a column.
 ___
 
 
-##category: <b>sql</b>
+##<b>sql</b> column sensors
 ___
 
 ###<b>sql_condition_passed_count</b>
+<b>Full sensor name:</b>
+```
+column/sql/sql_condition_passed_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that meet the condition.
 <br/>
 <br/>
@@ -1138,6 +1528,12 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 ___
 
 ###<b>sql_aggregated_expression</b>
+<b>Full sensor name:</b>
+```
+column/sql/sql_aggregated_expression
+```
+<b>Description:</b>
+<br/>
 Column level sensor that executes a given SQL expression on a column.
 <br/>
 <br/>
@@ -1156,6 +1552,12 @@ Column level sensor that executes a given SQL expression on a column.
 ___
 
 ###<b>sql_condition_failed_percent</b>
+<b>Full sensor name:</b>
+```
+column/sql/sql_condition_failed_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.
 <br/>
 <br/>
@@ -1174,6 +1576,12 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 ___
 
 ###<b>sql_condition_failed_count</b>
+<b>Full sensor name:</b>
+```
+column/sql/sql_condition_failed_count
+```
+<b>Description:</b>
+<br/>
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.
 <br/>
 <br/>
@@ -1192,6 +1600,12 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 ___
 
 ###<b>sql_condition_passed_percent</b>
+<b>Full sensor name:</b>
+```
+column/sql/sql_condition_passed_percent
+```
+<b>Description:</b>
+<br/>
 Column level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that meet the condition.
 <br/>
 <br/>

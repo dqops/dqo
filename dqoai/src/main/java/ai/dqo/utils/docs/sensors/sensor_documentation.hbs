@@ -1,9 +1,15 @@
-#{{target}} sensors:
+#{{target}}
 {{#each groupedSensors}}
-##category: <b>{{@key}}</b>
+##<b>{{@key}}</b> {{target}} sensors
 ___
 {{#each this}}
 ###<b>{{sensorName}}</b>
+<b>Full sensor name:</b>
+```
+{{fullSensorName}}
+```
+<b>Description:</b>
+<br/>
 {{sensorParametersJavaDoc}}
 <br/>
 <br/>

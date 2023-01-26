@@ -1,9 +1,15 @@
-#table sensors:
+#table
 
-##category: <b>standard</b>
+##<b>standard</b> table sensors
 ___
 
 ###<b>row_count</b>
+<b>Full sensor name:</b>
+```
+table/standard/row_count
+```
+<b>Description:</b>
+<br/>
 Tabular sensor that executes a row count query on a table.
 <br/>
 <br/>
@@ -27,10 +33,16 @@ Tabular sensor that executes a row count query on a table.
 ___
 
 
-##category: <b>timeliness</b>
+##<b>timeliness</b> table sensors
 ___
 
 ###<b>days_since_most_recent_event</b>
+<b>Full sensor name:</b>
+```
+table/timeliness/days_since_most_recent_event
+```
+<b>Description:</b>
+<br/>
 Tabular sensor that runs a query calculating maximum days since the most recent event.
 <br/>
 <br/>
@@ -49,6 +61,12 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
 ___
 
 ###<b>partition_reload_lag</b>
+<b>Full sensor name:</b>
+```
+table/timeliness/partition_reload_lag
+```
+<b>Description:</b>
+<br/>
 Tabular sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
 <br/>
 <br/>
@@ -67,6 +85,12 @@ Tabular sensor that runs a query calculating maximum difference in days between 
 ___
 
 ###<b>days_since_most_recent_ingestion</b>
+<b>Full sensor name:</b>
+```
+table/timeliness/days_since_most_recent_ingestion
+```
+<b>Description:</b>
+<br/>
 Tabular sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
 <br/>
 <br/>
@@ -85,6 +109,12 @@ Tabular sensor that runs a query calculating the time difference in days between
 ___
 
 ###<b>data_ingestion_delay</b>
+<b>Full sensor name:</b>
+```
+table/timeliness/data_ingestion_delay
+```
+<b>Description:</b>
+<br/>
 Tabular sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
 <br/>
 <br/>
@@ -103,10 +133,16 @@ Tabular sensor that runs a query calculating the time difference in days between
 ___
 
 
-##category: <b>sql</b>
+##<b>sql</b> table sensors
 ___
 
 ###<b>sql_condition_passed_percent</b>
+<b>Full sensor name:</b>
+```
+table/sql/sql_condition_passed_percent
+```
+<b>Description:</b>
+<br/>
 Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that meet the condition.
 <br/>
 <br/>
@@ -125,6 +161,12 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 ___
 
 ###<b>sql_condition_failed_count</b>
+<b>Full sensor name:</b>
+```
+table/sql/sql_condition_failed_count
+```
+<b>Description:</b>
+<br/>
 Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that do not meet the condition.
 <br/>
 <br/>
@@ -143,6 +185,12 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 ___
 
 ###<b>sql_aggregated_expression</b>
+<b>Full sensor name:</b>
+```
+table/sql/sql_aggregated_expression
+```
+<b>Description:</b>
+<br/>
 Table level sensor that executes a given SQL expression on a table.
 <br/>
 <br/>
@@ -161,6 +209,12 @@ Table level sensor that executes a given SQL expression on a table.
 ___
 
 ###<b>sql_condition_passed_count</b>
+<b>Full sensor name:</b>
+```
+table/sql/sql_condition_passed_count
+```
+<b>Description:</b>
+<br/>
 Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count rows that meet the condition.
 <br/>
 <br/>
@@ -179,6 +233,12 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 ___
 
 ###<b>sql_condition_failed_percent</b>
+<b>Full sensor name:</b>
+```
+table/sql/sql_condition_failed_percent
+```
+<b>Description:</b>
+<br/>
 Table level sensor that uses a custom SQL condition (an SQL expression that returns a boolean value) to count the percentage of rows that do not meet the condition.
 <br/>
 <br/>
