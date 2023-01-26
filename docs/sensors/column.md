@@ -159,20 +159,20 @@ Column level sensor that calculates the percent of values that fit to a USA phon
 
 ___
 
-###<b>string_length_above_min_length_count</b>
-Column level sensor that calculates the count of values that are not shorter than a given length in a column.
+###<b>string_length_below_min_length_count</b>
+Column level sensor that calculates the count of values that are shorter than a given length in a column.
 <br/>
 <br/>
 <b><u>Jinja Template:</u></b>
 
 === "bigquery"
     ```
-    --8<-- "home/sensors/column/strings/string_length_above_min_length_count/bigquery.sql.jinja2"
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_count/bigquery.sql.jinja2"
     ```
 
 === "snowflake"
     ```
-    --8<-- "home/sensors/column/strings/string_length_above_min_length_count/snowflake.sql.jinja2"
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_count/snowflake.sql.jinja2"
     ```
 
 ___
@@ -317,6 +317,24 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
 === "snowflake"
     ```
     --8<-- "home/sensors/column/strings/string_invalid_ip4_address_count/snowflake.sql.jinja2"
+    ```
+
+___
+
+###<b>string_length_below_min_length_percent</b>
+Column level sensor that calculates the percentage of values that are shorter than a given length in a column.
+<br/>
+<br/>
+<b><u>Jinja Template:</u></b>
+
+=== "bigquery"
+    ```
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_percent/bigquery.sql.jinja2"
+    ```
+
+=== "snowflake"
+    ```
+    --8<-- "home/sensors/column/strings/string_length_below_min_length_percent/snowflake.sql.jinja2"
     ```
 
 ___

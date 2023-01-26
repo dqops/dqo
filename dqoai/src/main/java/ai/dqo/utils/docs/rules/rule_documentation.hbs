@@ -1,7 +1,10 @@
-#{{ruleName}}
+#{{category}}
+{{#each ruleDocumentationModels}}
+##{{ruleName}}
 ###{{ruleParametersJavaDoc}}
 ___
 ## Example
 ``` yaml
 --8<-- "home/rules/{{category}}/{{ruleName}}.dqrule.yaml"
 ```
+{{/each}}
