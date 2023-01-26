@@ -12,11 +12,12 @@ interface LayoutProps {
 
 const MainLayout = ({ children }: LayoutProps) => {
   const { sidebarWidth } = useTree();
+
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Sidebar />
       <div className="flex flex-1">
-        <Header sidebarWidth={sidebarWidth} />
+        <Header />
         <div
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
