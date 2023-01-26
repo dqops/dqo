@@ -24,7 +24,7 @@ const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesV
   };
 
   return (
-    <div className="p-4">
+    <div className="py-4">
       <table className="my-3 w-full">
         <thead>
           <th className="text-left min-w-40 w-full pr-4 py-2">JDBC connection property</th>

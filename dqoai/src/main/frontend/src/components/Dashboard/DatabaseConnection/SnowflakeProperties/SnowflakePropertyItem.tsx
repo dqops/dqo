@@ -36,7 +36,7 @@ const SnowflakePropertyItem = ({
           onChange={(val) => onChange(idx, [name, val])}
         />
       </td>
-      <td className="px-8 min-w-20 py-2">
+      <td className="px-8 min-w-20 py-2 text-center">
         {isLast ? (
           <IconButton size="sm">
             <SvgIcon name="add" className="w-4" />
