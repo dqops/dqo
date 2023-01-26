@@ -23,6 +23,7 @@ import Loader from "../../Loader";
 import Button from "../../Button";
 import { SourceConnectionApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
+import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 
 const ConnectionDetail = () => {
   const { connection }: { connection: string } = useParams();
@@ -141,7 +142,21 @@ const ConnectionDetail = () => {
           />
         )}
         {connectionBasic?.provider_type ===
-          ConnectionSpecProviderTypeEnum.snowflake && <SnowflakeConnection />}
+          ConnectionSpecProviderTypeEnum.snowflake && (
+            <SnowflakeConnection
+              snowflake={connectionBasic?.snowflake}
+              onChange={(snowflake) => onChange({ snowflake })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.postgresql && (
+            <PostgreSQLConnection
+              postgresql={connectionBasic?.postgresql}
+              onChange={(postgresql) => onChange({ postgresql })}
+            />
+          )
+        }
       </div>
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">

@@ -13,6 +13,7 @@ export interface CheckboxProps {
   tooltipText?: string;
   disabled?: boolean;
   error?: boolean;
+  labelPosition?: "left" | "right"
 }
 
 const Checkbox = ({
@@ -22,34 +23,37 @@ const Checkbox = ({
   onChange,
   tooltipText,
   disabled,
-  error
+  error,
+  labelPosition = "right"
 }: CheckboxProps) => {
   return (
-    <label className={`relative cursor-pointer rounded-sm ${className}`}>
-      <input
-        disabled={disabled}
-        className="absolute opacity-0"
-        type="checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-      />
-      <span
-        className={clsx(
-          'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
-          checked ? 'bg-blue-600 border-0' : 'border',
-          error ? 'border-red-500' : 'border-gray-150'
-        )}
-      >
-        {checked && (
-          <SvgIcon
-            name="check"
-            className="absolute w-3 top-1/2 transform -translate-y-1/2 text-white"
-          />
-        )}
-      </span>
+    <label className={clsx('relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
+      <div className="relative">
+        <input
+          disabled={disabled}
+          className="absolute opacity-0"
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+        />
+        <span
+          className={clsx(
+            'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
+            checked ? 'bg-blue-600 border-0' : 'border',
+            error ? 'border-red-500' : 'border-gray-150'
+          )}
+        >
+          {checked && (
+            <SvgIcon
+              name="check"
+              className="absolute w-3 top-1/2 transform -translate-y-1/2 text-white"
+            />
+          )}
+        </span>
+      </div>
       {label && (
-        <div className="flex space-x-1 items-center">
-          <span className="text-sm pl-5">{label}</span>
+        <div className={clsx('inline-flex space-x-1 items-center', labelPosition === "left" ? "mr-2" : "ml-5")}>
+          <span className="text-sm">{label}</span>
           {!!tooltipText && (
             <Tooltip
               content={tooltipText}

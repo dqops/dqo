@@ -57,6 +57,7 @@ import { ReactComponent as FolderSvg } from './svg/folder.svg';
 import { ReactComponent as StarSvg } from './svg/star.svg';
 import { ReactComponent as ColumnCheckSvg } from './svg/column-check.svg';
 import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
+import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -115,7 +116,8 @@ const iconsMap: any = {
   folder: FolderSvg,
   star: StarSvg,
   'column-check': ColumnCheckSvg,
-  'table-check': TableCheckSvg
+  'table-check': TableCheckSvg,
+  postgresql: PostgreSQLSvg
 };
 
 interface SvgIconProps {
