@@ -12,7 +12,7 @@ interface LayoutProps {
 const DashboardLayout = ({ children }: LayoutProps) => {
   return (
     <div className="flex min-h-screen overflow-hidden">
-      <Header sidebarWidth={320} />
+      <Header />
       <LeftView />
       <div className="flex flex-1">
         <div

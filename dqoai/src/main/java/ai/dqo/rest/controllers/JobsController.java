@@ -248,12 +248,12 @@ public class JobsController {
     }
 
     /**
-     * Starts a new background job that will delete specified data from the registry (.data folder).
+     * Starts a new background job that will delete specified data from the .data folder.
      * @param deleteStoredDataParameters Delete stored data job parameters.
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping("/deletestoreddata")
-    @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored registry data.", response = DqoQueueJobId.class)
+    @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored data about check results, sensor readouts etc.", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New job that will delete stored registry data was added to the queue", response = DqoQueueJobId.class),

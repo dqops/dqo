@@ -41,6 +41,9 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_mean_length", o -> o.dailyPartitionStringMeanLength);
             put("daily_partition_string_length_below_min_length_count", o -> o.dailyPartitionStringLengthBelowMinLengthCount);
             put("daily_partition_string_length_below_min_length_percent", o -> o.dailyPartitionStringLengthBelowMinLengthPercent);
+            put("daily_partition_string_length_above_max_length_count", o -> o.dailyPartitionStringLengthAboveMaxLengthCount);
+            put("daily_partition_string_length_above_max_length_percent", o -> o.dailyPartitionStringLengthAboveMaxLengthPercent);
+
 
 
             put("daily_partition_string_empty_count", o -> o.dailyPartitionStringEmptyCount);
@@ -99,6 +102,12 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyPartitionStringLengthBelowMinLengthPercent;
+
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyPartitionStringLengthAboveMaxLengthCount;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount;
@@ -284,6 +293,42 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringLengthBelowMinLengthPercent, dailyPartitionStringLengthBelowMinLengthPercent));
         this.dailyPartitionStringLengthBelowMinLengthPercent = dailyPartitionStringLengthBelowMinLengthPercent;
         propagateHierarchyIdToField(dailyPartitionStringLengthBelowMinLengthPercent, "daily_partition_string_length_below_min_length_percent");
+    }
+
+    /**
+     * Returns a string length above max length count check.
+     * @return Mean string length above max length count check.
+     */
+    public ColumnStringLengthAboveMaxLengthCountCheckSpec getDailyPartitionStringLengthAboveMaxLengthCount() {
+        return dailyPartitionStringLengthAboveMaxLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length count check.
+     * @param dailyPartitionStringLengthAboveMaxLengthCount String length above max length count check.
+     */
+    public void setDailyPartitionStringLengthAboveMaxLengthCount(ColumnStringLengthAboveMaxLengthCountCheckSpec dailyPartitionStringLengthAboveMaxLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringLengthAboveMaxLengthCount, dailyPartitionStringLengthAboveMaxLengthCount));
+        this.dailyPartitionStringLengthAboveMaxLengthCount = dailyPartitionStringLengthAboveMaxLengthCount;
+        propagateHierarchyIdToField(dailyPartitionStringLengthAboveMaxLengthCount, "daily_partition_string_length_above_max_length_count");
+    }
+
+    /**
+     * Returns a string length above max length percent check.
+     * @return Mean string length above max length percent check.
+     */
+    public ColumnStringLengthAboveMaxLengthPercentCheckSpec getDailyPartitionStringLengthAboveMaxLengthPercent() {
+        return dailyPartitionStringLengthAboveMaxLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length percent check.
+     * @param dailyPartitionStringLengthAboveMaxLengthPercent String length above max length percent check.
+     */
+    public void setDailyPartitionStringLengthAboveMaxLengthPercent(ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringLengthAboveMaxLengthPercent, dailyPartitionStringLengthAboveMaxLengthPercent));
+        this.dailyPartitionStringLengthAboveMaxLengthPercent = dailyPartitionStringLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(dailyPartitionStringLengthAboveMaxLengthPercent, "daily_partition_string_length_above_max_length_percent");
     }
 
     /**

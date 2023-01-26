@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthBelowMinLengthPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec sut;
+public class BigQueryColumnStringsStringMinLengthAboveMaxLengthPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringLengthBelowMinLengthPercentCheckSpec checkSpec;
+    private ColumnStringLengthAboveMaxLengthPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,14 +49,14 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec();
-        this.checkSpec = new ColumnStringLengthBelowMinLengthPercentCheckSpec();
+        this.sut = new ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec();
+        this.checkSpec = new ColumnStringLengthAboveMaxLengthPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setMinimumLength(3);
+        this.sut.setMaximumLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "TEXT", this.checkSpec);
@@ -66,12 +66,12 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(95.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setMinimumLength(3);
+        this.sut.setMaximumLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.daily);
@@ -81,12 +81,12 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(95.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setMinimumLength(3);
+        this.sut.setMaximumLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.monthly);
@@ -96,12 +96,12 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(95.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinimumLength(3);
+        this.sut.setMaximumLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.daily,"DATE");
@@ -111,12 +111,12 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinimumLength(3);
+        this.sut.setMaximumLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.monthly,"DATE");
@@ -126,6 +126,6 @@ public class ColumnStringsStringMinLengthBelowMinLengthPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 }

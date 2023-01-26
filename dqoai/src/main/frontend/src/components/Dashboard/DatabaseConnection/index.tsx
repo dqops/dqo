@@ -16,6 +16,7 @@ import { ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
+import PostgreSQLConnection from "./PostgreSQLConnection";
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -61,14 +62,19 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    const testRes = await SourceConnectionApi.checkConnection(database);
-    setIsTesting(false);
-
-    if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
-      await onConfirmSave();
-    } else {
-      setShowConfirm(true);
-      setMessage(testRes.data?.errorMessage);
+    let testRes;
+    try {
+      testRes = await SourceConnectionApi.checkConnection(database);
+      setIsTesting(false);
+    } catch (err) {
+      setIsTesting(false);
+    } finally {
+      if (testRes?.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
+        await onConfirmSave();
+      } else {
+        setShowConfirm(true);
+        setMessage(testRes?.data?.errorMessage);
+      }
     }
   };
 
@@ -88,18 +94,46 @@ const DatabaseConnection = ({
     setShowError(true);
   };
 
+  const getTitle = (provider?: ConnectionBasicModelProviderTypeEnum) => {
+    switch (provider) {
+      case ConnectionBasicModelProviderTypeEnum.bigquery:
+        return 'Google Bigquery Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.snowflake:
+        return 'Snowflake Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.postgresql:
+        return 'PostgreSQL Connection Settings';
+      default:
+        return 'Database Connection Settings'
+    }
+  };
+
+  const components = {
+    [ConnectionBasicModelProviderTypeEnum.bigquery]: (
+      <BigqueryConnection
+        bigquery={database.bigquery}
+        onChange={(bigquery) => onChange({ ...database, bigquery })}
+      />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.snowflake]: (
+      <SnowflakeConnection
+        snowflake={database.snowflake}
+        onChange={(snowflake) => onChange({ ...database, snowflake })}
+      />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.postgresql]: (
+      <PostgreSQLConnection
+        postgresql={database.postgresql}
+        onChange={(postgresql) => onChange({ ...database, postgresql })}
+      />
+    )
+  };
+
   return (
     <div>
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>
-            {database.provider_type ===
-            ConnectionBasicModelProviderTypeEnum.bigquery
-              ? 'Google Bigquery'
-              : 'Snowflake'}{' '}
-            Connection Settings
-          </div>
+          <div>{getTitle(database.provider_type)}</div>
         </div>
         <img
           src={
@@ -130,15 +164,7 @@ const DatabaseConnection = ({
         />
 
         <div className="mt-6">
-          {database.provider_type ===
-          ConnectionBasicModelProviderTypeEnum.bigquery ? (
-            <BigqueryConnection
-              bigquery={database.bigquery}
-              onChange={(bigquery) => onChange({ ...database, bigquery })}
-            />
-          ) : (
-            <SnowflakeConnection />
-          )}
+          {database.provider_type ? components[database.provider_type] : ''}
         </div>
 
         <div className="flex space-x-4 justify-end items-center mt-6">

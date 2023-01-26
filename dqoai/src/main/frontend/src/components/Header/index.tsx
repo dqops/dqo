@@ -4,12 +4,7 @@ import Logo from '../Logo';
 import clsx from 'clsx';
 import { useHistory, useLocation } from 'react-router-dom';
 
-interface HeaderProps {
-  sidebarWidth: number;
-  isHome?: boolean;
-}
-
-const Header = ({ sidebarWidth }: HeaderProps) => {
+const Header = () => {
   const history = useHistory();
   const location = useLocation();
 
@@ -21,8 +16,7 @@ const Header = ({ sidebarWidth }: HeaderProps) => {
 
   return (
     <div
-      className="fixed top-0 right-0 min-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4"
-      style={{ left: sidebarWidth }}
+      className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4"
     >
       <div className="flex space-x-2">
         <div onClick={() => history.push('/')}>

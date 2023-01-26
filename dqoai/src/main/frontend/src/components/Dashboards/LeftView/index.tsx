@@ -9,7 +9,7 @@ const LeftView = () => {
   const { changeActiveTab } = useDashboard();
 
   return (
-    <div className="fixed left-0 top-0 h-full w-80 shadow border-r border-gray-300 p-4 pt-12 bg-white">
+    <div className="fixed left-0 top-16 h-full w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
       {dashboardFolders.map((folder, index) => (
         <div key={index} className="mb-3">
           <div className="flex space-x-1.5 items-center mb-1">

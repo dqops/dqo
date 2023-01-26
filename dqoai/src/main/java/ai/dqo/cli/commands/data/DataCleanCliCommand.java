@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.registry;
+package ai.dqo.cli.commands.data;
 
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
@@ -44,12 +44,12 @@ import picocli.CommandLine;
 import java.time.LocalDate;
 
 /**
- * "registry clean" 2nd level CLI command that deletes data selectively from the registry.
+ * "data clean" 2nd level CLI command that deletes data selectively from the data.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "clean", description = "Delete stored registry data matching specified filters")
-public class RegistryCleanCliCommand extends BaseCommand implements ICommand {
+@CommandLine.Command(name = "clean", description = "Delete stored data data matching specified filters")
+public class DataCleanCliCommand extends BaseCommand implements ICommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
     private JsonSerializer jsonSerializer;
@@ -58,7 +58,7 @@ public class RegistryCleanCliCommand extends BaseCommand implements ICommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
 
-    public RegistryCleanCliCommand() {
+    public DataCleanCliCommand() {
     }
 
     /**
@@ -72,7 +72,7 @@ public class RegistryCleanCliCommand extends BaseCommand implements ICommand {
      * @param dqoQueueJobFactory Job queue factory.
      */
     @Autowired
-    public RegistryCleanCliCommand(TerminalWriter terminalWriter,
+    public DataCleanCliCommand(TerminalWriter terminalWriter,
                                    TerminalTableWritter terminalTableWritter,
                                    JsonSerializer jsonSerializer,
                                    OutputFormatService outputFormatService,
@@ -221,7 +221,7 @@ public class RegistryCleanCliCommand extends BaseCommand implements ICommand {
 
 
     /**
-     * Cleans the registry based on the supplied filters, or throws an exception if unable to do so.
+     * Cleans the data based on the supplied filters, or throws an exception if unable to do so.
      *
      * @return computed result
      * @throws Exception if unable to compute a result

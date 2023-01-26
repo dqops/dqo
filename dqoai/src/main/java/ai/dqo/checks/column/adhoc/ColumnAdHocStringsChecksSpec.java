@@ -41,6 +41,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_mean_length", o -> o.stringMeanLength);
             put("string_length_below_min_length_count", o -> o.stringLengthBelowMinLengthCount);
             put("string_length_below_min_length_percent", o -> o.stringLengthBelowMinLengthPercent);
+            put("string_length_above_max_length_count", o -> o.stringLengthAboveMaxLengthCount);
+            put("string_length_above_max_length_percent", o -> o.stringLengthAboveMaxLengthPercent);
 
 
 
@@ -100,6 +102,12 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
+
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. ")
+    private ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. ")
+    private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
     private ColumnStringEmptyCountCheckSpec stringEmptyCount;
@@ -271,7 +279,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     /**
      * Returns a string length below min length percent check.
-     * @return Mean string length below min length percent check.
+     * @return String length below min length percent check.
      */
     public ColumnStringLengthBelowMinLengthPercentCheckSpec getStringLengthBelowMinLengthPercent() {
         return stringLengthBelowMinLengthPercent;
@@ -285,6 +293,42 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringLengthBelowMinLengthPercent, stringLengthBelowMinLengthPercent));
         this.stringLengthBelowMinLengthPercent = stringLengthBelowMinLengthPercent;
         propagateHierarchyIdToField(stringLengthBelowMinLengthPercent, "string_length_below_min_length_percent");
+    }
+
+    /**
+     * Returns a string length above max length count check.
+     * @return String length above max length count check.
+     */
+    public ColumnStringLengthAboveMaxLengthCountCheckSpec getStringLengthAboveMaxLengthCount() {
+        return stringLengthAboveMaxLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length count check.
+     * @param stringLengthAboveMaxLengthCount String length above max length count check.
+     */
+    public void setStringLengthAboveMaxLengthCount(ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthCount, stringLengthAboveMaxLengthCount));
+        this.stringLengthAboveMaxLengthCount = stringLengthAboveMaxLengthCount;
+        propagateHierarchyIdToField(stringLengthAboveMaxLengthCount, "string_length_above_max_length_count");
+    }
+
+    /**
+     * Returns a string length above max length percent check.
+     * @return String length above max length percent check.
+     */
+    public ColumnStringLengthAboveMaxLengthPercentCheckSpec getStringLengthAboveMaxLengthPercent() {
+        return stringLengthAboveMaxLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length percent check.
+     * @param stringLengthAboveMaxLengthPercent String length above max length percent check.
+     */
+    public void setStringLengthAboveMaxLengthPercent(ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthPercent, stringLengthAboveMaxLengthPercent));
+        this.stringLengthAboveMaxLengthPercent = stringLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(stringLengthAboveMaxLengthPercent, "string_length_above_max_length_percent");
     }
 
     /**

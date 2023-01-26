@@ -6,7 +6,7 @@ import Logo from '../../components/Logo';
 const HomePage = () => {
   return (
     <div className="flex min-h-screen overflow-hidden">
-      <Header sidebarWidth={0} isHome />
+      <Header />
       <div className="flex w-full">
         <div className="p-12 mt-16 flex-1">
           <h1 className="text-3xl italic mb-4">Welcome to your DQO account</h1>
