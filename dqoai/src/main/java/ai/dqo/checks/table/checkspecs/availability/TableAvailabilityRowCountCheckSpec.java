@@ -19,8 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
+import ai.dqo.rules.comparison.*;
 import ai.dqo.sensors.table.availability.TableAvailabilityRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +37,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableAvailabilityRowCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec, MinCountRuleParametersSpec> {
+public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableAvailabilityRowCountSensorParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule10ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +51,17 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
     @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
+    private MaxFailuresRule5ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec warning;
+    private MaxFailuresRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleParametersSpec fatal;
+    private MaxFailuresRule10ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -89,7 +88,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRule0ParametersSpec getError() {
+    public MaxFailuresRule5ParametersSpec getError() {
         return this.error;
     }
 
@@ -97,7 +96,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRule0ParametersSpec error) {
+    public void setError(MaxFailuresRule5ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -109,7 +108,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getWarning() {
+    public MaxFailuresRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -117,7 +116,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleParametersSpec warning) {
+    public void setWarning(MaxFailuresRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +128,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleParametersSpec getFatal() {
+    public MaxFailuresRule10ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +136,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleParametersSpec fatal) {
+    public void setFatal(MaxFailuresRule10ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

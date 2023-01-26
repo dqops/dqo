@@ -1,3 +1,5 @@
 apiVersion: dqo/v1
 kind: provider_sensor
-spec: {}
+spec:
+  type: java_class
+  java_class_name: ai.dqo.execution.runners.AvailabilitySensorRunner

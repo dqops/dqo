@@ -18,6 +18,7 @@ package ai.dqo.checks.table.checkpoints;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.checkpoints.availability.TableAvailabilityDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessDailyCheckpointSpec;
@@ -51,7 +52,7 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
            put("standard", o -> o.standard);
            put("timeliness", o -> o.timeliness);
            put("sql", o -> o.sql);
-
+           put("availability", o -> o.availability);
         }
     };
 
@@ -70,7 +71,10 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyCheckpointSpec sql;
 
-
+    @JsonPropertyDescription("Daily checkpoints availability checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAvailabilityDailyCheckpointSpec availability;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -124,6 +128,24 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAvailabilityDailyCheckpointSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param availability Container of custom sql checks.
+     */
+    public void setAvailability(TableAvailabilityDailyCheckpointSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
     }
 
     /**
