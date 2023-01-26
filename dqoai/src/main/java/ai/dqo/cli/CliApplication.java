@@ -34,6 +34,24 @@ import java.util.stream.Collectors;
 public class CliApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
 
+	private static boolean runningOneShotMode;
+
+	public static boolean isRunningOneShotMode() {
+		return runningOneShotMode;
+	}
+
+	/**
+	 * Filter the non-parameter arguments from the args given to main.
+	 * A non-parameter argument doesn't start with '-'.
+	 * @param args Arguments supplied to the main function.
+	 * @return List of arguments that are non-parameter.
+	 */
+	protected static List<String> filterNonParameterArguments(String[] args) {
+		return Arrays.stream(args)
+				.filter(a -> !a.startsWith("-"))
+				.collect(Collectors.toList());
+	}
+
 	/**
 	 * Parse the command line parameters and check if the command will require a web server to start, or it is just a single shot command
 	 * that we don't want to delay by starting a web server (that will be shutdown instantly).
@@ -46,18 +64,33 @@ public class CliApplication {
 			return true;
 		}
 
-		List<String> nonParameterArguments = Arrays.stream(args)
-				.filter(a -> !a.startsWith("-"))
-				.collect(Collectors.toList());
+		List<String> nonParameterArguments = filterNonParameterArguments(args);
 
 		if (nonParameterArguments.size() > 0) {
 			// possibly some commands
 			if (!Objects.equals(nonParameterArguments.get(0), "run")) {
-				return false; // it is any other command than "run", so it is a one shot command, we don't want delay it by starting the web server
+				return false; // it is any other command than "run", so it is a one shot command, we don't want to delay it by starting the web server
 			}
 		}
 
 		return true; // no parameters, just the shell mode, so we start the web server
+	}
+
+	public static boolean hasArgumentsForOneShot(String[] args) {
+		if (args == null || args.length == 0) {
+			// running just "dqo" in shell starts the interactive mode
+			return false;
+		}
+
+		List<String> nonParameterArguments = filterNonParameterArguments(args);
+
+		if (nonParameterArguments.size() > 0) {
+			// running "dqo ..." with non-parameter arguments means a one-shot mode
+			return true;
+		}
+
+		// running "dqo" with some parameters results in interactive mode
+		return false;
 	}
 
 	/**
@@ -69,6 +102,7 @@ public class CliApplication {
 			TablesawParquetSupportFix.ensureInitialized();
 
 			boolean commandThatRequiresWebServer = isCommandThatRequiresWebServer(args);
+			runningOneShotMode = hasArgumentsForOneShot(args);
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");

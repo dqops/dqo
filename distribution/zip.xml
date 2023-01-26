@@ -59,6 +59,10 @@
             <outputDirectory>/</outputDirectory>
         </file>
         <file>
+            <source>${project.basedir}/../home/dashboardslist.dqodashboards.yaml</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+        <file>
             <source>${project.basedir}/../VERSION</source>
             <outputDirectory>/</outputDirectory>
         </file>

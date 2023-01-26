@@ -3,6 +3,7 @@ import { CheckResultsOverviewDataModel, UIAllChecksModel, UICheckModel } from '.
 import CheckListItem from './CheckListItem';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
+import { useParams } from "react-router-dom";
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
@@ -56,6 +57,8 @@ const TableHeader = () => {
 };
 
 const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate }: IDataQualityChecksProps) => {
+  const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
+
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
     check: UICheckModel,
@@ -83,7 +86,7 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
 
   useEffect(() => {
     getCheckOverview();
-  }, []);
+  }, [connection, schema, table, column]);
 
   if (!checksUI?.categories) {
     return <div className="p-4">No Checks</div>;

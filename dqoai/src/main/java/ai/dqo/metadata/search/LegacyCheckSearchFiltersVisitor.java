@@ -261,16 +261,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
-        boolean sensorEnabled = sensorParameters != null && !sensorParameters.isDisabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && !sensorEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && sensorEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
-
         LabelSetSpec overriddenLabels = new LabelSetSpec();
 
         if (labelsSearcherObject.getColumnLabels() != null) {
@@ -286,10 +276,6 @@ public class LegacyCheckSearchFiltersVisitor extends AbstractSearchVisitor {
         }
 
         if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
-
-        if (!sensorEnabled) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

@@ -4,7 +4,7 @@ import ai.dqo.BaseTest;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;

@@ -16,7 +16,7 @@
 package ai.dqo.rest.controllers.remote;
 
 import ai.dqo.metadata.sources.ConnectionSpec;
-import ai.dqo.rest.controllers.remote.services.SourceConnectionsService;
+import ai.dqo.services.remote.connections.SourceConnectionsService;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.ConnectionRemoteModel;

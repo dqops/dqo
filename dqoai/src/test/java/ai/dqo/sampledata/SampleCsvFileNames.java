@@ -39,4 +39,5 @@ public class SampleCsvFileNames {
 
     public static final String ip6_test = "ip6_test.csv";
 
+    public static final String string_min_length_test = "string_min_length_test.csv";
 }

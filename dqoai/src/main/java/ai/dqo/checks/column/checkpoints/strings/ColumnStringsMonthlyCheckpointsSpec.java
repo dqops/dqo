@@ -39,6 +39,12 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_max_length", o -> o.monthlyCheckpointStringMaxLength);
             put("monthly_checkpoint_string_min_length", o -> o.monthlyCheckpointStringMinLength);
             put("monthly_checkpoint_string_mean_length", o -> o.monthlyCheckpointStringMeanLength);
+            put("monthly_checkpoint_string_length_below_min_length_count", o -> o.monthlyCheckpointStringLengthBelowMinLengthCount);
+            put("monthly_checkpoint_string_length_below_min_length_percent", o -> o.monthlyCheckpointStringLengthBelowMinLengthPercent);
+            put("monthly_checkpoint_string_length_above_max_length_count", o -> o.monthlyCheckpointStringLengthAboveMaxLengthCount);
+            put("monthly_checkpoint_string_length_above_max_length_percent", o -> o.monthlyCheckpointStringLengthAboveMaxLengthPercent);
+
+
 
             put("monthly_checkpoint_string_empty_count", o -> o.monthlyCheckpointStringEmptyCount);
             put("monthly_checkpoint_string_empty_percent", o -> o.monthlyCheckpointStringEmptyPercent);
@@ -90,6 +96,19 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec monthlyCheckpointStringMeanLength;
+
+    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringLengthBelowMinLengthCountCheckSpec monthlyCheckpointStringLengthBelowMinLengthCount;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringLengthBelowMinLengthPercentCheckSpec monthlyCheckpointStringLengthBelowMinLengthPercent;
+
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringLengthAboveMaxLengthCountCheckSpec monthlyCheckpointStringLengthAboveMaxLengthCount;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyCheckpointStringLengthAboveMaxLengthPercent;
+
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount;
@@ -239,6 +258,78 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringMeanLength, monthlyCheckpointStringMeanLength));
         this.monthlyCheckpointStringMeanLength = monthlyCheckpointStringMeanLength;
         propagateHierarchyIdToField(monthlyCheckpointStringMeanLength, "monthly_checkpoint_string_mean_length");
+    }
+
+    /**
+     * Returns a string length below min length count check.
+     * @return String length below min length count check.
+     */
+    public ColumnStringLengthBelowMinLengthCountCheckSpec getMonthlyCheckpointStringLengthBelowMinLengthCount() {
+        return monthlyCheckpointStringLengthBelowMinLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length count check.
+     * @param monthlyCheckpointStringLengthBelowMinLengthCount String length below min length count check.
+     */
+    public void setMonthlyCheckpointStringLengthBelowMinLengthCount(ColumnStringLengthBelowMinLengthCountCheckSpec monthlyCheckpointStringLengthBelowMinLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthBelowMinLengthCount, monthlyCheckpointStringLengthBelowMinLengthCount));
+        this.monthlyCheckpointStringLengthBelowMinLengthCount = monthlyCheckpointStringLengthBelowMinLengthCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringLengthBelowMinLengthCount, "monthly_checkpoint_string_length_below_min_length_count");
+    }
+
+    /**
+     * Returns a string length below min length percent check.
+     * @return Mean string length below min length percent check.
+     */
+    public ColumnStringLengthBelowMinLengthPercentCheckSpec getMonthlyCheckpointStringLengthBelowMinLengthPercent() {
+        return monthlyCheckpointStringLengthBelowMinLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length below min length percent check.
+     * @param monthlyCheckpointStringLengthBelowMinLengthPercent String length below min length percent check.
+     */
+    public void setMonthlyCheckpointStringLengthBelowMinLengthPercent(ColumnStringLengthBelowMinLengthPercentCheckSpec monthlyCheckpointStringLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthBelowMinLengthPercent, monthlyCheckpointStringLengthBelowMinLengthPercent));
+        this.monthlyCheckpointStringLengthBelowMinLengthPercent = monthlyCheckpointStringLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringLengthBelowMinLengthPercent, "monthly_checkpoint_string_length_below_min_length_percent");
+    }
+
+    /**
+     * Returns a string length above max length count check.
+     * @return String length above max length count check.
+     */
+    public ColumnStringLengthAboveMaxLengthCountCheckSpec getMonthlyCheckpointStringLengthAboveMaxLengthCount() {
+        return monthlyCheckpointStringLengthAboveMaxLengthCount;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length count check.
+     * @param monthlyCheckpointStringLengthAboveMaxLengthCount String length above max length count check.
+     */
+    public void setMonthlyCheckpointStringLengthAboveMaxLengthCount(ColumnStringLengthAboveMaxLengthCountCheckSpec monthlyCheckpointStringLengthAboveMaxLengthCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthAboveMaxLengthCount, monthlyCheckpointStringLengthAboveMaxLengthCount));
+        this.monthlyCheckpointStringLengthAboveMaxLengthCount = monthlyCheckpointStringLengthAboveMaxLengthCount;
+        propagateHierarchyIdToField(monthlyCheckpointStringLengthAboveMaxLengthCount, "monthly_checkpoint_string_length_above_max_length_count");
+    }
+
+    /**
+     * Returns a string length above max length percent check.
+     * @return String length above max length percent check.
+     */
+    public ColumnStringLengthAboveMaxLengthPercentCheckSpec getMonthlyCheckpointStringLengthAboveMaxLengthPercent() {
+        return monthlyCheckpointStringLengthAboveMaxLengthPercent;
+    }
+
+    /**
+     * Sets a new definition of a string length above max length percent check.
+     * @param monthlyCheckpointStringLengthAboveMaxLengthPercent String length above max length percent check.
+     */
+    public void setMonthlyCheckpointStringLengthAboveMaxLengthPercent(ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyCheckpointStringLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringLengthAboveMaxLengthPercent, monthlyCheckpointStringLengthAboveMaxLengthPercent));
+        this.monthlyCheckpointStringLengthAboveMaxLengthPercent = monthlyCheckpointStringLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(monthlyCheckpointStringLengthAboveMaxLengthPercent, "monthly_checkpoint_string_length_above_max_length_percent");
     }
 
     /**

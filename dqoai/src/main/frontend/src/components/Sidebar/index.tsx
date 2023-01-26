@@ -46,7 +46,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className="fixed top-0 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
+      className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
       style={{ width: sidebarWidth }}

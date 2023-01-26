@@ -3,7 +3,7 @@ package ai.dqo.utils.docs.sensors;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.rest.models.checks.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.sensors.column.strings.ColumnStringsStringRegexMatchPercentSensorParametersSpec;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;

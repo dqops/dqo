@@ -1,10 +1,50 @@
-# {{fullSensorName}}
-{{sensorParametersJavaDoc}}
+#{{target}}
+{{#each groupedSensors}}
+##<b>{{@key}}</b> {{target}} sensors
 ___
-## Jinja Template
+{{#each this}}
+###<b>{{sensorName}}</b>
+<b>Full sensor name</b>
+```
+{{fullSensorName}}
+```
+<b>Description</b>
+<br/>
+{{sensorParametersJavaDoc}}
+<br/>
+{{#if definition.spec.fields}}
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+{{#each definition.spec.fields}}
+<tr>
+<td>{{displayName}}</td>
+<td>{{helpText}}</td>
+<td>{{dataType}}</td>
+<td>{{#if required}}{{required}}Yes{{else}}{{/if}}</td>
+<td>{{#each allowedValues}}{{this}}<br/>{{/each}}</td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+{{else}}
+{{/if}}
+<b>SQL Template (Jinja2)</b>
 {{#each definition.providerSensors}}
 === "{{provider}}"
     ```
     --8<-- "home/sensors/{{target}}/{{category}}/{{sensorName}}/{{provider}}.sql.jinja2"
     ```
+{{/each}}
+___
+{{/each}}
 {{/each}}

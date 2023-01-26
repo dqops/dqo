@@ -141,16 +141,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject foundNodes) {
-        Boolean enabledFilter = this.filters.getEnabled();
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
-
-        if (enabledFilter != null) {
-            boolean checkIsEnabled = !sensorParameters.isDisabled();
-            if (enabledFilter != checkIsEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
-
         RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule().getRecurringSchedule() != null;
 
