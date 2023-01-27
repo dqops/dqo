@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
@@ -296,5 +297,16 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns the check target, where the check could be applied.
+     *
+     * @return Check target, "table" or "column".
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
     }
 }

@@ -38,7 +38,6 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         cliFolder.setLinkName("CLI Command");
         cliFolder.setDirectPath(projectRootPath.resolve("../docs/cli").toAbsolutePath().normalize());
 
-        //TODO: dołożyć renderowanie
         Template template = HandlebarsDocumentationUtilities.compileTemplate("cli/cli_documentation");
 
         List<CliRootCommandDocumentationModel> commandModels = new ArrayList<>(createCommandModels());
