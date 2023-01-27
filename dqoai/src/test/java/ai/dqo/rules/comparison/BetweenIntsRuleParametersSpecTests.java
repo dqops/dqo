@@ -34,8 +34,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualBegin_thenReturnsPassed() {
-		this.sut.setBegin(1L);
-        this.sut.setEnd(5L);
+		this.sut.setFrom(1L);
+        this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
@@ -44,8 +44,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualEnd_thenReturnsPassed() {
-        this.sut.setBegin(1L);
-        this.sut.setEnd(5L);
+        this.sut.setFrom(1L);
+        this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
@@ -54,8 +54,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBetweenBeginAndEnd_thenReturnsPassed() {
-        this.sut.setBegin(1L);
-        this.sut.setEnd(5L);
+        this.sut.setFrom(1L);
+        this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
@@ -64,8 +64,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsAboveEnd_thenReturnsFailed() {
-        this.sut.setBegin(1L);
-        this.sut.setEnd(5L);
+        this.sut.setFrom(1L);
+        this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
@@ -74,8 +74,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBelowBegin_thenReturnsFailed() {
-        this.sut.setBegin(1L);
-        this.sut.setEnd(5L);
+        this.sut.setFrom(1L);
+        this.sut.setTo(5L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1, ruleExecutionResult.getLowerBound());
@@ -84,8 +84,8 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenBeginSet_thenIsDirtyIsTrue() {
-        this.sut.setBegin(1L);
-        Assertions.assertEquals(1, this.sut.getBegin());
+        this.sut.setFrom(1L);
+        Assertions.assertEquals(1, this.sut.getFrom());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -93,18 +93,18 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenBeginNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setBegin(1L);
+        this.sut.setFrom(1L);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setBegin(1L);
+        this.sut.setFrom(1L);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenEndSet_thenIsDirtyIsTrue() {
-        this.sut.setEnd(1L);
-        Assertions.assertEquals(1, this.sut.getEnd());
+        this.sut.setTo(1L);
+        Assertions.assertEquals(1, this.sut.getTo());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -112,11 +112,11 @@ public class BetweenIntsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenEndNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setEnd(1L);
+        this.sut.setTo(1L);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setEnd(1L);
+        this.sut.setTo(1L);
         Assertions.assertFalse(this.sut.isDirty());
     }
 

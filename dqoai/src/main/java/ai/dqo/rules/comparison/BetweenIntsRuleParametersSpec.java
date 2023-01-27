@@ -39,43 +39,43 @@ public class BetweenIntsRuleParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Long begin;
+    private Long from;
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Long end;
+    private Long to;
 
     /**
      * Returns a minimum value for a data quality check readout, for example a minimum row count.
      * @return Minimum value for a data quality check readout.
      */
-    public Long getBegin() {
-        return begin;
+    public Long getFrom() {
+        return from;
     }
 
     /**
      * Sets a minimum data quality check readout that is accepted, for example a minimum row count.
-     * @param begin Minimum value that is accepted.
+     * @param from Minimum value that is accepted.
      */
-    public void setBegin(Long begin) {
-		this.setDirtyIf(!Objects.equals(this.begin, begin));
-        this.begin = begin;
+    public void setFrom(Long from) {
+		this.setDirtyIf(!Objects.equals(this.from, from));
+        this.from = from;
     }
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
      * @return Maximum value for a data quality check readout.
      */
-    public Long getEnd() {
-        return end;
+    public Long getTo() {
+        return to;
     }
 
     /**
      * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
-     * @param end Maximum value that is accepted.
+     * @param to Maximum value that is accepted.
      */
-    public void setEnd(Long end) {
-        this.setDirtyIf(!Objects.equals(this.end, end));
-        this.end = end;
+    public void setTo(Long to) {
+        this.setDirtyIf(!Objects.equals(this.to, to));
+        this.to = to;
     }
 
     /**

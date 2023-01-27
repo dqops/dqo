@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is between begin and end values.
+ * Data quality rule that verifies if a data quality check readout is between from and to values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -39,43 +39,43 @@ public class BetweenFloatsRuleParametersSpec extends AbstractRuleParametersSpec 
     };
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double begin;
+    private Double from;
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double end;
+    private Double to;
 
     /**
      * Returns a minimum value for a data quality check readout, for example a minimum row count.
      * @return Minimum value for a data quality check readout.
      */
-    public Double getBegin() {
-        return begin;
+    public Double getFrom() {
+        return from;
     }
 
     /**
      * Sets a minimum data quality check readout that is accepted, for example a minimum row count.
-     * @param begin Minimum value that is accepted.
+     * @param from Minimum value that is accepted.
      */
-    public void setBegin(Double begin) {
-		this.setDirtyIf(!Objects.equals(this.begin, begin));
-        this.begin = begin;
+    public void setFrom(Double from) {
+		this.setDirtyIf(!Objects.equals(this.from, from));
+        this.from = from;
     }
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
      * @return Maximum value for a data quality check readout.
      */
-    public Double getEnd() {
-        return end;
+    public Double getTo() {
+        return to;
     }
 
     /**
      * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
-     * @param end Maximum value that is accepted.
+     * @param to Maximum value that is accepted.
      */
-    public void setEnd(Double end) {
-        this.setDirtyIf(!Objects.equals(this.end, end));
-        this.end = end;
+    public void setTo(Double to) {
+        this.setDirtyIf(!Objects.equals(this.to, to));
+        this.to = to;
     }
 
     /**

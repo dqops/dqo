@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.checkspecs.timeliness;
+package ai.dqo.checks.column.checkspecs.numeric;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxDaysRule1ParametersSpec;
-import ai.dqo.rules.comparison.MaxDaysRule2ParametersSpec;
-import ai.dqo.rules.comparison.MaxDaysRule7ParametersSpec;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericMinInRangeSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,43 +32,44 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that calculates the maximal number of days since the most recent event timestamp.
+ * Column level check that ensures that the minimal values are in a set range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentEventSensorParametersSpec, MaxDaysRule2ParametersSpec, MaxDaysRule1ParametersSpec, MaxDaysRule7ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableDaysSinceMostRecentEventCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMinInRangeCheckSpec
+        extends AbstractCheckSpec<ColumnNumericMinInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMinInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Max days since most recent event sensor parameters")
+    @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec parameters = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
+    private ColumnNumericMinInRangeSensorParametersSpec parameters = new ColumnNumericMinInRangeSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a minimal values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDaysRule2ParametersSpec error;
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDaysRule1ParametersSpec warning;
+    private BetweenFloatsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDaysRule7ParametersSpec fatal;
+    private BetweenFloatsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public TableTimelinessDaysSinceMostRecentEventSensorParametersSpec getParameters() {
+    public ColumnNumericMinInRangeSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +77,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableTimelinessDaysSinceMostRecentEventSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericMinInRangeSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
@@ -90,7 +89,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxDaysRule2ParametersSpec getError() {
+    public BetweenFloatsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -98,7 +97,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxDaysRule2ParametersSpec error) {
+    public void setError(BetweenFloatsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -110,7 +109,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxDaysRule1ParametersSpec getWarning() {
+    public BetweenFloatsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -118,7 +117,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxDaysRule1ParametersSpec warning) {
+    public void setWarning(BetweenFloatsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -130,7 +129,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxDaysRule7ParametersSpec getFatal() {
+    public BetweenFloatsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +137,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxDaysRule7ParametersSpec fatal) {
+    public void setFatal(BetweenFloatsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -149,6 +148,7 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      *
      * @return Return the field map.
      */
+
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
@@ -161,6 +161,6 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.TIMELINESS;
+        return DefaultDataQualityDimensions.COMPLETENESS;
     }
 }
