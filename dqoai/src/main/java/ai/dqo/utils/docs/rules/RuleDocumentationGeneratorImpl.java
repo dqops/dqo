@@ -26,7 +26,7 @@ import com.github.jknack.handlebars.Template;
 
 import java.lang.reflect.Constructor;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
 
 /**
  * Rule documentation generator that generates documentation for rules.
@@ -53,6 +53,27 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
 
+        List<RuleDocumentationModel> ruleDocumentationModels = createRuleDocumentationModels(projectRootPath);
+        List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = groupRulesByCategory(ruleDocumentationModels);
+
+        for (RuleGroupedDocumentationModel ruleGroupedDocumentationModel : ruleGroupedDocumentationModels) {
+            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(ruleGroupedDocumentationModel.getCategory() + ".md");
+            documentationMarkdownFile.setRenderContext(ruleGroupedDocumentationModel);
+
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, ruleGroupedDocumentationModel);
+            documentationMarkdownFile.setFileContent(renderedDocument);
+        }
+        return rulesFolder;
+    }
+
+    /**
+     * Creates a list of all rules used for documentation.
+     * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
+     * @return Rules documentation model list.
+     */
+    public List<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
+        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>();
+
         List<? extends Class<? extends AbstractRuleParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
 
@@ -66,15 +87,30 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             if (ruleDocumentation == null) {
                 continue; // rule not found
             }
-
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(ruleDocumentation.getFullRuleName() + ".md");
-            documentationMarkdownFile.setRenderContext(ruleDocumentation);
-
-            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, ruleDocumentation);
-            documentationMarkdownFile.setFileContent(renderedDocument);
+            ruleDocumentationModels.add(ruleDocumentation);
         }
+        return ruleDocumentationModels;
+    }
 
-        return rulesFolder;
+    /**
+     * Groups into list rule documentation models by category.
+     * @param ruleDocumentationModels List of all ruleDocumentationModel, used to iterating and grouping by category.
+     * @return Rule grouped documentation list.
+     */
+    public List<RuleGroupedDocumentationModel> groupRulesByCategory(List<RuleDocumentationModel> ruleDocumentationModels) {
+        List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = new ArrayList<>();
+        Map<String, List<RuleDocumentationModel>> groupedRules = new HashMap<>();
+
+        for (RuleDocumentationModel model : ruleDocumentationModels) {
+            groupedRules.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);
+        }
+        for (Map.Entry<String, List<RuleDocumentationModel>> groupOfRules : groupedRules.entrySet()) {
+            RuleGroupedDocumentationModel ruleGroupedDocumentationModel = new RuleGroupedDocumentationModel();
+            ruleGroupedDocumentationModel.setCategory(groupOfRules.getKey());
+            ruleGroupedDocumentationModel.setRuleDocumentationModels(groupOfRules.getValue());
+            ruleGroupedDocumentationModels.add(ruleGroupedDocumentationModel);
+        }
+        return ruleGroupedDocumentationModels;
     }
 
     /**
