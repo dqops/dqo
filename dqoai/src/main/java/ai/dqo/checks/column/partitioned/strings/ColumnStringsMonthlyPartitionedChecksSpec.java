@@ -43,6 +43,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_length_below_min_length_percent", o -> o.monthlyPartitionStringLengthBelowMinLengthPercent);
             put("monthly_partition_string_length_above_max_length_count", o -> o.monthlyPartitionStringLengthAboveMaxLengthCount);
             put("monthly_partition_string_length_above_max_length_percent", o -> o.monthlyPartitionStringLengthAboveMaxLengthPercent);
+            put("monthly_partition_string_value_below_min_value_count", o -> o.monthlyPartitionStringValueBelowMinValueCount);
 
 
 
@@ -108,6 +109,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyPartitionStringLengthAboveMaxLengthPercent;
+
+    @JsonPropertyDescription("The check counts those strings with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringValueBelowMinValueCountCheckSpec monthlyPartitionStringValueBelowMinValueCount;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
@@ -329,6 +333,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringLengthAboveMaxLengthPercent, monthlyPartitionStringLengthAboveMaxLengthPercent));
         this.monthlyPartitionStringLengthAboveMaxLengthPercent = monthlyPartitionStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionStringLengthAboveMaxLengthPercent, "monthly_partition_string_length_above_max_length_percent");
+    }
+
+    /**
+     * Returns a string value below min value count check.
+     * @return String value below min value count check.
+     */
+    public ColumnStringValueBelowMinValueCountCheckSpec getMonthlyPartitionStringValueBelowMinValueCount() {
+        return monthlyPartitionStringValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a string value below min value count check.
+     * @param monthlyPartitionStringValueBelowMinValueCount String value below min value count check.
+     */
+    public void setMonthlyPartitionStringValueBelowMinValueCount(ColumnStringValueBelowMinValueCountCheckSpec monthlyPartitionStringValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueBelowMinValueCount, monthlyPartitionStringValueBelowMinValueCount));
+        this.monthlyPartitionStringValueBelowMinValueCount = monthlyPartitionStringValueBelowMinValueCount;
+        propagateHierarchyIdToField(monthlyPartitionStringValueBelowMinValueCount, "monthly_partition_string_value_below_min_value_count");
     }
 
 
