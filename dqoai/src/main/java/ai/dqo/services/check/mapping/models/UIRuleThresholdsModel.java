@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.rules.AbstractRuleParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,4 +39,20 @@ public class UIRuleThresholdsModel {
 
     @JsonPropertyDescription("Rule parameters for the fatal severity rule.")
     private UIRuleParametersModel fatal;
+
+    /**
+     * Finds the first not-null rule that is used for generating the documentation.
+     * @return The first not null rule.
+     */
+    public UIRuleParametersModel findFirstNotNullRule() {
+        if (this.error != null) {
+            return this.error;
+        }
+
+        if (this.warning != null) {
+            return this.warning;
+        }
+
+        return this.fatal;
+    }
 }

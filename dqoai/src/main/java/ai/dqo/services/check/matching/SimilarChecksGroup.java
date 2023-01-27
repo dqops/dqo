@@ -16,7 +16,6 @@
 package ai.dqo.services.check.matching;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,8 +45,8 @@ public class SimilarChecksGroup {
     /**
      * Returns a read-only collection of similar checks.
      */
-    public Collection<SimilarCheckModel> getSimilarChecks() {
-        return Collections.unmodifiableCollection(this.similarChecks);
+    public List<SimilarCheckModel> getSimilarChecks() {
+        return Collections.unmodifiableList(this.similarChecks);
     }
 
     /**

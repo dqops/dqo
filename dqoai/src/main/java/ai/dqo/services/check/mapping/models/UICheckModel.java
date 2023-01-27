@@ -15,12 +15,15 @@
  */
 package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.matching.SimilarCheckSensorRuleKey;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -52,6 +55,18 @@ public class UICheckModel {
 
     @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
     private String sensorName;
+
+    /**
+     * Sensor parameters, returned only for reference and for tools such as the documentation generator.
+     */
+    @JsonIgnore
+    private AbstractSensorParametersSpec sensorParametersSpec;
+
+    /**
+     * Check specification object, returned only for reference and for tools such as the documentation generator.
+     */
+    @JsonIgnore
+    private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
 
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;

@@ -196,12 +196,14 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setSupportsTimeSeries(false);
         checkModel.setSupportsDataStreams(false);
         checkModel.setDataStream(checkSpec.getDataStream());
+        checkModel.setCheckSpec(checkSpec);
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
         AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
         checkModel.setFilter(parametersSpec.getFilter());
         checkModel.setSensorName(parametersSpec.getSensorDefinitionName());
+        checkModel.setSensorParametersSpec(parametersSpec);
 
         List<UIFieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
         checkModel.setSensorParameters(fieldsForParameterSpec);
@@ -263,6 +265,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
         parametersModel.setConfigured(parametersValueNullable != null);
         parametersModel.setRuleName(parametersSpecNotNull.getRuleDefinitionName());
+        parametersModel.setRuleParametersSpec(parametersSpecNotNull);
 
         List<UIFieldModel> uiFieldModels = createFieldsForRuleParameters(parametersSpecNotNull);
         parametersModel.setRuleParameters(uiFieldModels);

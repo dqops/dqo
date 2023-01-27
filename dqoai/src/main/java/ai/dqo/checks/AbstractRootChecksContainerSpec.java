@@ -65,6 +65,13 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     public abstract CheckTimeScale getCheckTimeScale();
 
     /**
+     * Returns the check target, where the check could be applied.
+     * @return Check target, "table" or "column".
+     */
+    @JsonIgnore
+    public abstract CheckTarget getCheckTarget();
+
+    /**
      * Checks if there are any configured checks (not null) in any check category.
      * @return True when there are some checks configured, false when all checks are nulls.
      */

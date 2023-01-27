@@ -15,8 +15,7 @@
  */
 package ai.dqo.utils.docs.checks;
 
-import ai.dqo.utils.docs.rules.RuleDocumentationModel;
-import ai.dqo.utils.docs.sensors.SensorDocumentationModel;
+import ai.dqo.services.check.mapping.models.UICheckModel;
 import lombok.Data;
 
 /**
@@ -25,27 +24,17 @@ import lombok.Data;
 @Data
 public class CheckDocumentationModel {
     /**
-     * Sensor documentation model.
+     * Check description extracted from the JavaDoc comment for the whole check specification object.
      */
-    private SensorDocumentationModel sensor;
-
-    /**
-     * Rule documentation model.
-     */
-    private RuleDocumentationModel rule;
-
-    /**
-     * Check description extracted from the JavaDoc comment for the whole check definition parameter.
-     */
-    private String checkParametersJavaDoc;
+    private String checkSpecClassJavaDoc;
 
     /**
      * Check help text that is configured on the parent check container.
      */
-    private String checkDocumentation;
+    private String checkHelp;
 
     /**
-     * Sensor category.
+     * Check category.
      */
     private String category;
 
@@ -55,19 +44,19 @@ public class CheckDocumentationModel {
     private String checkName;
 
     /**
-     * Help text on the warning rule.
+     * Check type.
      */
-    private String warningRuleHelp;
+    private String checkType;
 
     /**
-     * Help text on the alert rule.
+     * Check time scale (daily, monthly, or empty).
      */
-    private String alertRuleHelp;
+    private String timeScale;
 
     /**
-     * Help text on the fatal severity rule.
+     * Check model with all remaining documentation.
      */
-    private String fatalRuleHelp;
+    private UICheckModel checkModel;
 
     /**
      * Example yaml.

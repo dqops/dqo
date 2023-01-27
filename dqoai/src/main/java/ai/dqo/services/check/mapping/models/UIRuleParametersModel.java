@@ -15,6 +15,8 @@
  */
 package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.rules.AbstractRuleParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,6 +36,12 @@ import java.util.List;
 public class UIRuleParametersModel {
     @JsonPropertyDescription("Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.")
     private String ruleName;
+
+    /**
+     * Rule parameters specification, returned for reference and debugging. Used by the document generation utilities.
+     */
+    @JsonIgnore
+    private AbstractRuleParametersSpec ruleParametersSpec;
 
     @JsonPropertyDescription("List of fields for editing the rule parameters like thresholds.")
     private List<UIFieldModel> ruleParameters;

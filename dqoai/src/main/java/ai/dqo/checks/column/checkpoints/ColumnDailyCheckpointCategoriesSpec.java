@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.checkpoints.bool.ColumnBoolDailyCheckpointsSpec;
@@ -294,5 +295,16 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns the check target, where the check could be applied.
+     *
+     * @return Check target, "table" or "column".
+     */
+    @Override
+    @JsonIgnore
+    public CheckTarget getCheckTarget() {
+        return CheckTarget.column;
     }
 }

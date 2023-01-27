@@ -38,14 +38,9 @@ public class SimilarChecksDocumentationModel {
     private RuleDocumentationModel rule;
 
     /**
-     * Check description extracted from the JavaDoc comment for the whole check definition parameter.
+     * Check description extracted from the JavaDoc comment for the whole check definition class.
      */
-    private String checkParametersJavaDoc;
-
-    /**
-     * Check help text that is configured on the parent check container.
-     */
-    private String checkDocumentation;
+    private String checkSpecClassJavaDoc;
 
     /**
      * Sensor target ('table' or 'column')
@@ -58,7 +53,7 @@ public class SimilarChecksDocumentationModel {
     private String category;
 
     /**
-     * Check name inside the category.
+     * Check name inside the category. It is usually the name of the experiment check.
      */
     private String primaryCheckName;
 
