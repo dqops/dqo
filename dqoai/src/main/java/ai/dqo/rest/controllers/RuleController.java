@@ -35,7 +35,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -344,6 +346,99 @@ public class RuleController {
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
 
+    }
+
+    /**
+     * Returns a list of combined rules.
+     * @return List of combined rules model.
+     */
+    @GetMapping("/combined")
+    @ApiOperation(value = "getAllCombinedRules", notes = "Returns a list of combined rules", response = RuleModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = RuleModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<RuleModel>> getAllCombinedRules() {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        RuleDefinitionList CustomRuleDefinitionList = userHome.getRules();
+
+        List<RuleDefinitionWrapper> CustomRuleDefinitionWrapperList = CustomRuleDefinitionList.toList();
+
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
+
+        List<RuleDefinitionWrapper> ruleDefinitionWrapperList = ruleDefinitionList.toList();
+
+        /*
+         * If the same rule is defined both as custom (in user home)
+         * and as builtin (in dqo home), we return the custom definition.
+         */
+        List<RuleDefinitionWrapper> ruleModel = new ArrayList<>(Stream.of(CustomRuleDefinitionWrapperList, ruleDefinitionWrapperList)
+                .flatMap(List::stream)
+                .collect(Collectors.toMap(RuleDefinitionWrapper::getRuleName,
+                        providerSensor -> providerSensor,
+                        (RuleDefinitionWrapper custom, RuleDefinitionWrapper builtIn) -> custom))
+                .values());
+
+        Stream<RuleModel> ruleModelStream =ruleModel.stream().map(s -> new RuleModel() {{
+            setRuleName(s.getRuleName());
+            setRulePythonModuleContent(s.getRulePythonModuleContent());
+            setRuleDefinitionSpec(s.getSpec());
+        }});
+
+        return new ResponseEntity<>(Flux.fromStream(ruleModelStream), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a combined rule.
+     * @return Combined rule model.
+     */
+    @GetMapping("/combined/{ruleName}")
+    @ApiOperation(value = "getCombinedRule", notes = "Returns a list of combined rules", response = RuleModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = RuleModel.class),
+            @ApiResponse(code = 404, message = "Rule name not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<RuleModel>> getCombinedRule(
+            @ApiParam("Rule name") @PathVariable String ruleName
+            ) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        RuleDefinitionList CustomRuleDefinitionList = userHome.getRules();
+
+        RuleDefinitionWrapper ruleDefinitionWrapper = CustomRuleDefinitionList.getByObjectName(ruleName, true);
+
+        /*
+         * Check if the rule definition exists in User home.
+         * If not exists, find rule definition in DQO Home.
+         */
+        if(ruleDefinitionWrapper == null){
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
+            ruleDefinitionWrapper =  ruleDefinitionList.getByObjectName(ruleName, true);
+        }
+
+        if(ruleDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        RuleModel ruleModel = new RuleModel();
+        ruleModel.setRuleName(ruleDefinitionWrapper.getRuleName());
+        ruleModel.setRulePythonModuleContent(ruleDefinitionWrapper.getRulePythonModuleContent());
+        ruleModel.setRuleDefinitionSpec(ruleDefinitionWrapper.getSpec());
+
+        return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
     }
 
 }
