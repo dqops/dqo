@@ -27,7 +27,7 @@ class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
-    sensor_readout: int
+    sensor_readout: float
 
 
 class RuleTimeWindowSettingsSpec:
@@ -64,8 +64,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult(True, None, None, None)
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
 
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     straight  = 0
     max_straight = 0
     tmp = 0
