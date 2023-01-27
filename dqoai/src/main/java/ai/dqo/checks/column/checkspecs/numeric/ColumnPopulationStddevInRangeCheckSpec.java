@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericSumInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPopulationStddevInRangeSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the sum of values in a monitored column is in a set range.
+ * Column level check that ensures that the population standard deviation is in a set range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSumInRangeCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnSumInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnPopulationStddevInRangeCheckSpec
+        extends AbstractCheckSpec<ColumnNumericPopulationStddevInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPopulationStddevInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,9 +47,9 @@ public class ColumnSumInRangeCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericSumInRangeSensorParametersSpec parameters = new ColumnNumericSumInRangeSensorParametersSpec();
+    private ColumnNumericPopulationStddevInRangeSensorParametersSpec parameters = new ColumnNumericPopulationStddevInRangeSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a sum in range in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a population (biased) standard deviation in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec error;
@@ -69,7 +69,7 @@ public class ColumnSumInRangeCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericSumInRangeSensorParametersSpec getParameters() {
+    public ColumnNumericPopulationStddevInRangeSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnSumInRangeCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericSumInRangeSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericPopulationStddevInRangeSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

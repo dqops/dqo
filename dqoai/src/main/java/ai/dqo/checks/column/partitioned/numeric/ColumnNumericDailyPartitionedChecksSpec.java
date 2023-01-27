@@ -45,6 +45,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
+            put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
+            put("daily_partition_sample_stddev_in_range", o -> o.dailyPartitionSampleStddevInRange);
+            put("daily_partition_population_stddev_in_range", o -> o.dailyPartitionPopulationStddevInRange);
         }
     };
 
@@ -66,14 +69,23 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinInRangeCheckSpec dailyPartitionMinInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
+
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMeanInRangeCheckSpec dailyPartitionMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPopulationStddevInRangeCheckSpec dailyPartitionPopulationStddevInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -236,6 +248,60 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSumInRange, dailyPartitionSumInRange));
         this.dailyPartitionSumInRange = dailyPartitionSumInRange;
         propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
+    }
+
+    /**
+     * Returns a mean in range check specification.
+     * @return Mean in range check specification.
+     */
+    public ColumnMeanInRangeCheckSpec getDailyPartitionMeanInRange() {
+        return dailyPartitionMeanInRange;
+    }
+
+    /**
+     * Sets a new specification of a mean in range check.
+     * @param dailyPartitionMeanInRange mean in range check specification.
+     */
+    public void setDailyPartitionMeanInRange(ColumnMeanInRangeCheckSpec dailyPartitionMeanInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanInRange, dailyPartitionMeanInRange));
+        this.dailyPartitionMeanInRange = dailyPartitionMeanInRange;
+        propagateHierarchyIdToField(dailyPartitionMeanInRange, "daily_partition_mean_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleStddevInRangeCheckSpec getDailyPartitionSampleStddevInRange() {
+        return dailyPartitionSampleStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param dailyPartitionSampleStddevInRange Sample standard deviation in range check specification.
+     */
+    public void setDailyPartitionSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSampleStddevInRange, dailyPartitionSampleStddevInRange));
+        this.dailyPartitionSampleStddevInRange = dailyPartitionSampleStddevInRange;
+        propagateHierarchyIdToField(dailyPartitionSampleStddevInRange, "daily_partition_sample_stddev_in_range");
+    }
+
+    /**
+     * Returns a population standard deviation in range check specification.
+     * @return Population standard deviation in range check specification.
+     */
+    public ColumnPopulationStddevInRangeCheckSpec getDailyPartitionPopulationStddevInRange() {
+        return dailyPartitionPopulationStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a population standard deviation in range check.
+     * @param dailyPartitionPopulationStddevInRange Population standard deviation in range check specification.
+     */
+    public void setDailyPartitionPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec dailyPartitionPopulationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPopulationStddevInRange, dailyPartitionPopulationStddevInRange));
+        this.dailyPartitionPopulationStddevInRange = dailyPartitionPopulationStddevInRange;
+        propagateHierarchyIdToField(dailyPartitionPopulationStddevInRange, "daily_partition_population_stddev_in_range");
     }
 
 

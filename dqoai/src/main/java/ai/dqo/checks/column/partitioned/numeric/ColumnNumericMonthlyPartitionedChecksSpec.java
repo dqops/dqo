@@ -45,6 +45,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
+            put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
+            put("monthly_partition_sample_stddev_in_range", o -> o.monthlyPartitionSampleStddevInRange);
+            put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
         }
     };
 
@@ -66,14 +69,23 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
+
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPopulationStddevInRangeCheckSpec monthlyPartitionPopulationStddevInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -238,6 +250,59 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
     }
 
+    /**
+     * Returns a mean in range check specification.
+     * @return mean in range check specification.
+     */
+    public ColumnMeanInRangeCheckSpec getMonthlyPartitionMeanInRange() {
+        return monthlyPartitionMeanInRange;
+    }
+
+    /**
+     * Sets a new specification of a mean in range check.
+     * @param monthlyPartitionMeanInRange Mean in range check specification.
+     */
+    public void setMonthlyPartitionMeanInRange(ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanInRange, monthlyPartitionMeanInRange));
+        this.monthlyPartitionMeanInRange = monthlyPartitionMeanInRange;
+        propagateHierarchyIdToField(monthlyPartitionMeanInRange, "monthly_partition_mean_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleStddevInRangeCheckSpec getMonthlyPartitionSampleStddevInRange() {
+        return monthlyPartitionSampleStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param monthlyPartitionSampleStddevInRange Sample standard deviation in range check specification.
+     */
+    public void setMonthlyPartitionSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSampleStddevInRange, monthlyPartitionSampleStddevInRange));
+        this.monthlyPartitionSampleStddevInRange = monthlyPartitionSampleStddevInRange;
+        propagateHierarchyIdToField(monthlyPartitionSampleStddevInRange, "monthly_partition_sample_stddev_in_range");
+    }
+
+    /**
+     * Returns a population standard deviation in range check specification.
+     * @return Population standard deviation in range check specification.
+     */
+    public ColumnPopulationStddevInRangeCheckSpec getMonthlyPartitionPopulationStddevInRange() {
+        return monthlyPartitionPopulationStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a population standard deviation in range check.
+     * @param monthlyPartitionPopulationStddevInRange Population standard deviation in range check specification.
+     */
+    public void setMonthlyPartitionPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec monthlyPartitionPopulationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPopulationStddevInRange, monthlyPartitionPopulationStddevInRange));
+        this.monthlyPartitionPopulationStddevInRange = monthlyPartitionPopulationStddevInRange;
+        propagateHierarchyIdToField(monthlyPartitionPopulationStddevInRange, "monthly_partition_population_stddev_in_range");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
