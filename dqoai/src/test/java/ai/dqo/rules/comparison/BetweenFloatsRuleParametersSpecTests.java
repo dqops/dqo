@@ -16,11 +16,8 @@
 package ai.dqo.rules.comparison;
 
 import ai.dqo.BaseTest;
-import ai.dqo.execution.rules.HistoricDataPoint;
-import ai.dqo.execution.rules.HistoricDataPointObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +34,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualBegin_thenReturnsPassed() {
-		this.sut.setBegin(1.0);
-        this.sut.setEnd(5.0);
+		this.sut.setFrom(1.0);
+        this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
@@ -47,8 +44,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsEqualEnd_thenReturnsPassed() {
-        this.sut.setBegin(1.0);
-        this.sut.setEnd(5.0);
+        this.sut.setFrom(1.0);
+        this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(5.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
@@ -57,8 +54,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBetweenBeginAndEnd_thenReturnsPassed() {
-        this.sut.setBegin(1.0);
-        this.sut.setEnd(5.0);
+        this.sut.setFrom(1.0);
+        this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(3.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
@@ -67,8 +64,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsAboveEnd_thenReturnsFailed() {
-        this.sut.setBegin(1.0);
-        this.sut.setEnd(5.0);
+        this.sut.setFrom(1.0);
+        this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(7.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
@@ -77,8 +74,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBelowBegin_thenReturnsFailed() {
-        this.sut.setBegin(1.0);
-        this.sut.setEnd(5.0);
+        this.sut.setFrom(1.0);
+        this.sut.setTo(5.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
@@ -87,8 +84,8 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenBeginSet_thenIsDirtyIsTrue() {
-        this.sut.setBegin(1.0);
-        Assertions.assertEquals(1.0, this.sut.getBegin());
+        this.sut.setFrom(1.0);
+        Assertions.assertEquals(1.0, this.sut.getFrom());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -96,18 +93,18 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenBeginNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setBegin(1.0);
+        this.sut.setFrom(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setBegin(1.0);
+        this.sut.setFrom(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenEndSet_thenIsDirtyIsTrue() {
-        this.sut.setEnd(1.0);
-        Assertions.assertEquals(1.0, this.sut.getEnd());
+        this.sut.setTo(1.0);
+        Assertions.assertEquals(1.0, this.sut.getTo());
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -115,11 +112,11 @@ public class BetweenFloatsRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenEndNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setEnd(1.0);
+        this.sut.setTo(1.0);
         Assertions.assertTrue(this.sut.isDirty());
         this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setEnd(1.0);
+        this.sut.setTo(1.0);
         Assertions.assertFalse(this.sut.isDirty());
     }
 

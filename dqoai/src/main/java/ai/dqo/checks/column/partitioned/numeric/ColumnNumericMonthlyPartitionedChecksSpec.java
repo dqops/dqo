@@ -42,6 +42,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_numbers_in_set_percent", o -> o.monthlyPartitionNumbersInSetPercent);
             put("monthly_partition_values_in_range_numeric_percent", o -> o.monthlyPartitionValuesInRangeNumericPercent);
             put("monthly_partition_values_in_range_integers_percent", o -> o.monthlyPartitionValuesInRangeIntegersPercent);
+            put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
+            put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
+            put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
         }
     };
 
@@ -62,6 +65,15 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of a column does not exceed the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -171,6 +183,61 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.monthlyPartitionValuesInRangeIntegersPercent = monthlyPartitionValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(monthlyPartitionValuesInRangeIntegersPercent, "monthly_partition_values_in_range_integers_percent");
     }
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getMonthlyPartitionMaxInRange() {
+        return monthlyPartitionMaxInRange;
+    }
+
+    /**
+     * Sets a new specification of a max in range check.
+     * @param monthlyPartitionMaxInRange Max in range check specification.
+     */
+    public void setMonthlyPartitionMaxInRange(ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxInRange, monthlyPartitionMaxInRange));
+        this.monthlyPartitionMaxInRange = monthlyPartitionMaxInRange;
+        propagateHierarchyIdToField(monthlyPartitionMaxInRange, "monthly_partition_max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getMonthlyPartitionMinInRange() {
+        return monthlyPartitionMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param monthlyPartitionMinInRange Min in range check specification.
+     */
+    public void setMonthlyPartitionMinInRange(ColumnMinInRangeCheckSpec monthlyPartitionMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinInRange, monthlyPartitionMinInRange));
+        this.monthlyPartitionMinInRange = monthlyPartitionMinInRange;
+        propagateHierarchyIdToField(monthlyPartitionMinInRange, "monthly_partition_min_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getMonthlyPartitionSumInRange() {
+        return monthlyPartitionSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param monthlyPartitionSumInRange Sum in range check specification.
+     */
+    public void setMonthlyPartitionSumInRange(ColumnSumInRangeCheckSpec monthlyPartitionSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumInRange, monthlyPartitionSumInRange));
+        this.monthlyPartitionSumInRange = monthlyPartitionSumInRange;
+        propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

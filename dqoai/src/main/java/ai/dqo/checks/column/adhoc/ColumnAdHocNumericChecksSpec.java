@@ -42,6 +42,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("numbers_in_set_percent", o -> o.numbersInSetPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
+            put("max_in_range", o -> o.maxInRange);
+            put("min_in_range", o -> o.minInRange);
+            put("sum_in_range", o -> o.sumInRange);
         }
     };
 
@@ -62,6 +65,15 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range.")
+    private ColumnMaxInRangeCheckSpec maxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range.")
+    private ColumnMinInRangeCheckSpec minInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of a column does not exceed the set range.")
+    private ColumnSumInRangeCheckSpec sumInRange;
 
     /**
      * Returns a negative count check specification.
@@ -170,6 +182,61 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.valuesInRangeIntegersPercent = valuesInRangeIntegersPercent;
         propagateHierarchyIdToField(valuesInRangeIntegersPercent, "values_in_range_integers_percent");
     }
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getMaxInRange() {
+        return maxInRange;
+    }
+
+    /**
+     * Sets a max in range percent check.
+     * @param maxInRange Max in range check specification.
+     */
+    public void setMaxInRange(ColumnMaxInRangeCheckSpec maxInRange) {
+        this.setDirtyIf(!Objects.equals(this.maxInRange, maxInRange));
+        this.maxInRange = maxInRange;
+        propagateHierarchyIdToField(maxInRange, "max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getMinInRange() {
+        return minInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param minInRange Min in range check specification.
+     */
+    public void setMinInRange(ColumnMinInRangeCheckSpec minInRange) {
+        this.setDirtyIf(!Objects.equals(this.minInRange, minInRange));
+        this.minInRange = minInRange;
+        propagateHierarchyIdToField(minInRange, "min_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getSumInRange() {
+        return sumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param sumInRange Sum in range check specification.
+     */
+    public void setSumInRange(ColumnSumInRangeCheckSpec sumInRange) {
+        this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
+        this.sumInRange = sumInRange;
+        propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    }
+
     
     /**
      * Returns the child map on the spec class with all fields.

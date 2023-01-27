@@ -42,6 +42,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_numbers_in_set_percent", o -> o.dailyPartitionNumbersInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
             put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
+            put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
+            put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
+            put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
         }
     };
 
@@ -62,6 +65,15 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMinInRangeCheckSpec dailyPartitionMinInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of a column does not exceed the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -171,6 +183,61 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.dailyPartitionValuesInRangeIntegersPercent = dailyPartitionValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(dailyPartitionValuesInRangeIntegersPercent, "daily_partition_values_in_range_integers_percent");
     }
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getDailyPartitionMaxInRange() {
+        return dailyPartitionMaxInRange;
+    }
+
+    /**
+     * Sets a new specification of a max in range check.
+     * @param dailyPartitionMaxInRange Max in range check specification.
+     */
+    public void setDailyPartitionMaxInRange(ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxInRange, dailyPartitionMaxInRange));
+        this.dailyPartitionMaxInRange = dailyPartitionMaxInRange;
+        propagateHierarchyIdToField(dailyPartitionMaxInRange, "daily_partition_max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getDailyPartitionMinInRange() {
+        return dailyPartitionMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param dailyPartitionMinInRange Min in range check specification.
+     */
+    public void setDailyPartitionMinInRange(ColumnMinInRangeCheckSpec dailyPartitionMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinInRange, dailyPartitionMinInRange));
+        this.dailyPartitionMinInRange = dailyPartitionMinInRange;
+        propagateHierarchyIdToField(dailyPartitionMinInRange, "daily_partition_min_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getDailyPartitionSumInRange() {
+        return dailyPartitionSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param dailyPartitionSumInRange Sum in range check specification.
+     */
+    public void setDailyPartitionSumInRange(ColumnSumInRangeCheckSpec dailyPartitionSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumInRange, dailyPartitionSumInRange));
+        this.dailyPartitionSumInRange = dailyPartitionSumInRange;
+        propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.
