@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
@@ -46,36 +45,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     @Autowired
     public SensorExecutionRunParametersFactoryImpl(SecretValueProvider secretValueProvider) {
         this.secretValueProvider = secretValueProvider;
-    }
-
-    /**
-     * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
-     * specifications for the target connection, table, column, check.
-     * @param connection Connection specification.
-     * @param table Table specification.
-     * @param column Optional column specification for column sensors.
-     * @param check Check specification.
-     * @param dialectSettings Dialect settings.
-     * @return Sensor execution run parameters.
-     */
-    @Override
-    public SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
-                                                                     TableSpec table,
-                                                                     ColumnSpec column,
-                                                                     AbstractCheckDeprecatedSpec check,
-                                                                     ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        HierarchyId checkHierarchyId = check.getHierarchyId();
-        AbstractSensorParametersSpec sensorParameters = check.getSensorParameters().expandAndTrim(this.secretValueProvider);
-        AbstractCheckDeprecatedSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
-
-        TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
-        DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
-
-        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
     /**

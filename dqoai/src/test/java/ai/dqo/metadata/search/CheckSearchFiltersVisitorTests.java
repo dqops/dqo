@@ -16,7 +16,8 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
-    LegacyCheckSearchFiltersVisitor sut;
+public class CheckSearchFiltersVisitorTests extends BaseTest {
+    CheckSearchFiltersVisitor sut;
     ConnectionList connectionList;
     ConnectionWrapper connectionWrapper;
     TableList tableList;
@@ -41,7 +42,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
     TableSpec tableSpec;
     ColumnSpecMap columnSpecMap;
     ColumnSpec columnSpec;
-    AbstractCheckDeprecatedSpec abstractCheckSpec;
+    AbstractCheckSpec abstractCheckSpec;
     CheckSearchFilters checkSearchFilters;
     UserHomeContext userHomeContext;
 
@@ -52,7 +53,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
 		checkSearchFilters.setConnectionName("test");
 		checkSearchFilters.setSchemaTableName("test.test");
 		checkSearchFilters.setColumnName("test");
-		this.sut = new LegacyCheckSearchFiltersVisitor(checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(checkSearchFilters);
 		this.connectionList = this.userHomeContext.getUserHome().getConnections();
 		this.connectionWrapper = connectionList.createAndAddNew("test");
 		this.tableList = this.connectionWrapper.getTables();
@@ -61,12 +62,13 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
 		this.columnSpecMap = this.tableSpec.getColumns();
 		this.columnSpec = new ColumnSpec();
 		this.columnSpecMap.put("test", columnSpec);
+        this.abstractCheckSpec = new TableRowCountCheckSpec();
     }
 
     @Test
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setConnectionName("test2");
-		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
@@ -80,7 +82,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
 		this.checkSearchFilters.setConnectionName("test2");
-		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
@@ -94,7 +96,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptTableList_whenCalledForTableList_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setSchemaTableName("test2.test2");
-		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
@@ -108,7 +110,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptTableWrapper_whenCalledForTableWrapper_thenReturnsSkipChildren() {
 		this.checkSearchFilters.setSchemaTableName("test2.test2");
-		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
@@ -144,7 +146,7 @@ public class LegacyCheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptColumnSpecMap_whenCalledForColumnSpecMap_thenReturnsTraverseChildren() {
 		this.checkSearchFilters.setColumnName("test2");
-		this.sut = new LegacyCheckSearchFiltersVisitor(this.checkSearchFilters);
+		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }

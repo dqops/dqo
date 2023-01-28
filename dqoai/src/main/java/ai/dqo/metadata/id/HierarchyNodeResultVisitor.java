@@ -47,9 +47,7 @@ import ai.dqo.profiling.AbstractProfilerCategorySpec;
 import ai.dqo.profiling.AbstractProfilerSpec;
 import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
 
@@ -180,14 +178,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, P parameter);
 
     /**
-     * Accepts any check specification.
-     * @param abstractCheckSpec Data quality check specification (any).
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(AbstractCheckDeprecatedSpec abstractCheckSpec, P parameter);
-
-    /**
      * Accepts any table level sensor specification (sensor call parameters).
      * @param abstractTableSensorParameters Table level sensor specification (parameters).
      * @param parameter Additional parameter.
@@ -276,22 +266,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(DqoHomeImpl dqoHome, P parameter);
 
     /**
-     * Accepts a rule set for a single check.
-     * @param abstractRuleSetSpec Rule set specification.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(AbstractRuleSetSpec abstractRuleSetSpec, P parameter);
-
-    /**
-     * Accepts an abstract rule threshold object with multiple level of thresholds.
-     * @param abstractRuleThresholdsSpec Abstract rule thresholds.
-     * @param parameter Visitor parameter.
-     * @return Accept's result.
-     */
-    R accept(AbstractRuleThresholdsSpec abstractRuleThresholdsSpec, P parameter);
-
-    /**
      * Accepts a custom rule definition specification. Those are the rule requirements.
      * @param ruleDefinitionSpec Rule definition specification.
      * @param parameter Additional visitor's parameter.
@@ -346,14 +320,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(DataStreamLevelSpec dataStreamLevelSpec, P parameter);
-
-    /**
-     * Accepts a dictionary of custom rules.
-     * @param customRuleThresholdsMap Dictionary of custom rules.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(CustomRuleThresholdsMap customRuleThresholdsMap, P parameter);
 
     /**
      * Accepts a provider specific connection specification nested specification.

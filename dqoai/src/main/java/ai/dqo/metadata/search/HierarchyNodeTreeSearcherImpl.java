@@ -15,7 +15,6 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
@@ -49,24 +48,6 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     @Autowired
     public HierarchyNodeTreeSearcherImpl(HierarchyNodeTreeWalker hierarchyNodeTreeWalker) {
         this.hierarchyNodeTreeWalker = hierarchyNodeTreeWalker;
-    }
-
-    /**
-     * Search for checks in the tree.
-     * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param checkSearchFilters Search filters.
-     * @return Collection of check nodes that passed the filter.
-     */
-    @Deprecated
-    public Collection<AbstractCheckDeprecatedSpec> findLegacyChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters) {
-        LegacyCheckSearchFiltersVisitor searchFilterVisitor = checkSearchFilters.createLegacyCheckSearchFilterVisitor();
-        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
-        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
-        SearchParameterObject searchParameterObject = new SearchParameterObject(matchingNodes, dataStreamSearcherObject, labelsSearcherObject);
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor, searchParameterObject));
-
-        return (List<AbstractCheckDeprecatedSpec>)(ArrayList<?>)matchingNodes;
     }
 
     /**
@@ -214,11 +195,11 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     /**
      * Search for all nodes that have a schedule defined and are not disabled. Schedule roots are nodes that have a schedule, so all nested checks should be executed
      * within that schedule.
-     * Possible types of returned nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckDeprecatedSpec}
+     * Possible types of returned nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec}
      *
      * @param startNode                  Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
      * @param scheduleRootsSearchFilters Search filters.
-     * @return Collection of nodes of type {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckDeprecatedSpec} that may have a custom schedule defined.
+     * @return Collection of nodes of type {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec} that may have a custom schedule defined.
      */
     @Override
     public Collection<HierarchyNode> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters) {
@@ -235,7 +216,7 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      *
      * @param startNode                    Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.).
      *                                     The root node must have a schedule defined and it must match the schedule (cron expression) in the filter.
-     *                                     Possible start nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckDeprecatedSpec}
+     *                                     Possible start nodes are: {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec}
      * @param scheduledChecksSearchFilters Search filters to find all nested checks that would be included in the schedule.
      * @return Collection of check nodes that passed the filter.
      */
