@@ -14,7 +14,7 @@ plugins:
       module_name: docs/render_macros
 
 # Docs navigation
-nav[]:
+nav:
   - Home: 'index.md'
   - What is DQO: 'what_is_dqo/what_is_dqo.md'
   - Getting started:
@@ -43,7 +43,7 @@ nav[]:
     - cloud: 'cli/cloud.md'
     - sensor: 'cli/sensor.md'
     - scheduler: 'cli/scheduler.md'
-    - registry: 'cli/registry.md'
+    - data: 'cli/data.md'
     - run: 'cli/run.md'
     - rule: 'cli/rule.md'
 ########## END INCLUDE CLI COMMANDS

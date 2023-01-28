@@ -63,3 +63,8 @@ def define_env(env):
             return yaml.dump(request)
         except Exception as ex:
             return traceback.format_exc()
+
+    @env.macro
+    def replace_chars_in_string(string_to_transform: str, marker_to_replace: str, substitution_marker: str) -> str:
+        string_after_transform = string_to_transform.replace(marker_to_replace, substitution_marker)
+        return f"{string_after_transform}"
