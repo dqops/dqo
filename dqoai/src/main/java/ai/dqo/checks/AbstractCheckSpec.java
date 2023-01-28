@@ -342,7 +342,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             return this.qualityDimension;
         }
 
-        return this.getDefaultDataQualityDimension().getDisplayName();
+        return this.getDefaultDataQualityDimension().name();
     }
 
     /**

@@ -161,6 +161,6 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.TIMELINESS;
+        return DefaultDataQualityDimensions.Timeliness;
     }
 }

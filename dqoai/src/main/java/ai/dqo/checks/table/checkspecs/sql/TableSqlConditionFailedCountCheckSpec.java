@@ -161,6 +161,6 @@ public class TableSqlConditionFailedCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.VALIDITY;
+        return DefaultDataQualityDimensions.Validity;
     }
 }
