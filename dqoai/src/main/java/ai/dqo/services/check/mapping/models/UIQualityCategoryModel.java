@@ -45,4 +45,15 @@ public class UIQualityCategoryModel {
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    public UIQualityCategoryModel() {
+    }
+
+    /**
+     * Creates a UI check category model, given a category name.
+     * @param category Category name.
+     */
+    public UIQualityCategoryModel(String category) {
+        this.category = category;
+    }
 }

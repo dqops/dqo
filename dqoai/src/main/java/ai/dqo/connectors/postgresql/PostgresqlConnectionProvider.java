@@ -31,7 +31,6 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
-import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 /**
@@ -41,7 +40,7 @@ import java.util.NoSuchElementException;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
-    private final ProviderDialectSettings dialectSettings = new ProviderDialectSettings("\"", "\"", "\"\"", false);
+    public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("\"", "\"", "\"\"", false);
 
     /**
      * Injection constructor.
@@ -78,7 +77,7 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public ProviderDialectSettings getDialectSettings(ConnectionSpec connectionSpec) {
-        return this.dialectSettings;
+        return this.DIALECT_SETTINGS;
     }
 
     /**

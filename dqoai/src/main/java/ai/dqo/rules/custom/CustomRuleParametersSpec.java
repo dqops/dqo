@@ -41,6 +41,19 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    @JsonPropertyDescription("Custom rule name. It is a path to a custom rule python module that starts at the user home rules folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule")
+    private String ruleName;
+
+
+    @JsonPropertyDescription("Dictionary of additional parameters (key / value pairs) that are passed to the rule.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private LinkedHashMap<String, Object> params = new LinkedHashMap<>();
+
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private LinkedHashMap<String, Object> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+
+
     /**
      * Default constructor, the minimum accepted value is 0.
      */
@@ -54,18 +67,6 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
     public CustomRuleParametersSpec(String ruleName) {
         this.ruleName = ruleName;
     }
-
-    @JsonPropertyDescription("Custom rule name. It is a path to a custom rule python module that starts at the user home rules folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule")
-    private String ruleName;
-
-
-    @JsonPropertyDescription("Dictionary of additional parameters (key / value pairs) that are passed to the rule.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private LinkedHashMap<String, Object> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
 
     /**
      * Returns the rule definition name.

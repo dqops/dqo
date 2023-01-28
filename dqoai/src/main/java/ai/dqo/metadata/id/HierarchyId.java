@@ -61,6 +61,20 @@ public class HierarchyId {
     }
 
     /**
+     * Creates a child hierarchy id given a parent hierarchy id and a child object.
+     * @param parentHierarchyId Parent hierarchy id. Null value is accepted.
+     * @param childName Child name (child object).
+     * @return Child hierarchy id that is a copy of the parent path concatenated with the child name or null when the parent hierarchy id is null.
+     */
+    public static HierarchyId makeChildOrNull(HierarchyId parentHierarchyId, Object childName) {
+        if (parentHierarchyId == null) {
+            return null;
+        }
+
+        return new HierarchyId(parentHierarchyId, childName);
+    }
+
+    /**
      * Returns a path element at the given index.
      * @param index 0-based index of the hierarchy path element to retrieve.
      * @return Hierarchy path element.

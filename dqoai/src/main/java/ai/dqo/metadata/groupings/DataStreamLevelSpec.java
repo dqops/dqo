@@ -45,7 +45,7 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
     };
 
     @JsonPropertyDescription("The source of the data stream level value. The default stream level source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
-    private DataStreamLevelSource source = DataStreamLevelSource.TAG;
+    private DataStreamLevelSource source = DataStreamLevelSource.tag;
 
     @JsonPropertyDescription("Data stream tag. Assign a hardcoded (static) data stream level value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.")
     private String tag;
@@ -56,6 +56,30 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Data stream level name.")
     private String name;
+
+    /**
+     * Creates a new data stream level object for a tag (static value assigned to all data quality results).
+     * @param tag Tag value.
+     * @return Data stream level specification for a tag.
+     */
+    public static DataStreamLevelSpec createForTag(String tag) {
+        DataStreamLevelSpec dataStreamLevelSpec = new DataStreamLevelSpec();
+        dataStreamLevelSpec.setSource(DataStreamLevelSource.tag);
+        dataStreamLevelSpec.setTag(tag);
+        return dataStreamLevelSpec;
+    }
+
+    /**
+     * Creates a new data stream level object for a column, the queries will apply a GROUP BY clause over the given column for data segmentation.
+     * @param column Column name.
+     * @return Data stream level specification for a column.
+     */
+    public static DataStreamLevelSpec createForColumn(String column) {
+        DataStreamLevelSpec dataStreamLevelSpec = new DataStreamLevelSpec();
+        dataStreamLevelSpec.setSource(DataStreamLevelSource.column_value);
+        dataStreamLevelSpec.setColumn(column);
+        return dataStreamLevelSpec;
+    }
 
     /**
      * Data stream level value source.

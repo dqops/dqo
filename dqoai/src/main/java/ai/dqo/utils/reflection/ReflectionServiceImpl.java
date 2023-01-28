@@ -124,6 +124,8 @@ public class ReflectionServiceImpl implements ReflectionService {
                 field.getAnnotation(DisplayName.class).value() : null;
         DisplayHint displayHint = field.isAnnotationPresent(ControlDisplayHint.class) ?
                 field.getAnnotation(ControlDisplayHint.class).value() : null;
+        String[] sampleValues = field.isAnnotationPresent(SampleValues.class) ?
+                field.getAnnotation(SampleValues.class).values() : null;
 
         PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
         String yamlFieldName = snakeCaseStrategy.translate(fieldName);
@@ -137,6 +139,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             setDirectField(targetClass == field.getDeclaringClass());
             setDefaultValue(DEFAULT_VALUES.getOrDefault(fieldType, null));
             setDisplayHint(displayHint);
+            setSampleValues(sampleValues);
         }};
 
         ParameterDataType parameterDataType = field.isAnnotationPresent(ControlType.class) ?

@@ -18,6 +18,9 @@ package ai.dqo.utils.docs.checks;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Documentation model that describes one check.
  */
@@ -59,9 +62,24 @@ public class CheckDocumentationModel {
     private UICheckModel checkModel;
 
     /**
-     * Example yaml.
+     * Sample yaml.
      */
-    private String exampleYaml;
+    private String sampleYaml;
+
+    /**
+     * Examples how the SQL for the sensor would be rendered for each template, when the sample yaml is used.
+     */
+    private List<CheckProviderRenderedSqlDocumentationModel> providerTemplates = new ArrayList<>();
+
+    /**
+     * Sample yaml with data streams.
+     */
+    private String sampleYamlWithDataStreams;
+
+    /**
+     * Examples how the SQL for the sensor would be rendered for each template, when the sample yaml is used and data streams are enabled.
+     */
+    private List<CheckProviderRenderedSqlDocumentationModel> providerTemplatesDataStreams = new ArrayList<>();
 
     /**
      * CLI line with precise parameters to run this check on all tables within a connection.

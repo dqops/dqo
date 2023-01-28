@@ -16,6 +16,7 @@
 
 package ai.dqo.sensors.column.strings;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -40,7 +41,8 @@ public class ColumnStringsStringRegexMatchPercentSensorParametersSpec extends Ab
     };
 
     @JsonPropertyDescription("This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null")
-    private String regex = null;
+    @SampleValues(values = { "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$" })
+    private String regex;
 
     /**
      * Returns the regex.

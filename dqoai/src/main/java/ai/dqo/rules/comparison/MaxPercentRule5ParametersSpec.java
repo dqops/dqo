@@ -38,6 +38,9 @@ public class MaxPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
+    private Double maxPercent = 5.0;
+
     /**
      * Default constructor, the minimum accepted value is 0.
      */
@@ -52,9 +55,6 @@ public class MaxPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
         this.maxPercent = maxPercent;
     }
 
-    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxPercent = 5.0;
-
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
      * @return Maximum value for a data quality check readout.
@@ -62,7 +62,6 @@ public class MaxPercentRule5ParametersSpec extends AbstractRuleParametersSpec {
     public Double getMaxPercent() {
         return maxPercent;
     }
-
 
     /**
      * Sets a maximum data quality check readout that is accepted, for example a maximum row count.

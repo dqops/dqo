@@ -15,6 +15,7 @@
  */
 package ai.dqo.sensors.column.strings;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +42,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends Ab
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
+    @SampleValues(values = { "USD", "GBP", "EUR" })
     private List<String> expectedValues;
 
     @JsonPropertyDescription("Provided limit of top popular values.")
@@ -59,7 +62,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends Ab
      */
     public void setExpectedValues(List<String> expectedValues) {
         this.setDirtyIf(!Objects.equals(this.expectedValues, expectedValues));
-        this.expectedValues = expectedValues;
+        this.expectedValues = expectedValues != null ? Collections.unmodifiableList(expectedValues) : null;
     }
 
     /**

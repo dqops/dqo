@@ -34,7 +34,7 @@ import java.util.List;
  * It should be only used from post processor classes that are called by Maven during build.
  */
 public class SensorDocumentationModelFactoryImpl implements SensorDocumentationModelFactory {
-    private static final CommentFormatter formatter = new CommentFormatter();
+    private static final CommentFormatter commentFormatter = new CommentFormatter();
     private DqoHomeContext dqoHomeContext;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
 
@@ -60,7 +60,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
         ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(sensorParametersSpec.getClass());
         if (classJavadoc != null) {
             if (classJavadoc.getComment() != null) {
-                String formattedClassComment = formatter.format(classJavadoc.getComment());
+                String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
                 documentationModel.setSensorParametersJavaDoc(formattedClassComment);
             }
         }

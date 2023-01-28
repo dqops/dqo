@@ -68,27 +68,27 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         TableAdHocCheckCategoriesSpec adHocChecks = tableSpec.getChecks();
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                 checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
+                adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
         TableDailyCheckpointCategoriesSpec dailyCheckpoints = Objects.requireNonNullElseGet(tableSpec.getCheckpoints().getDaily(), TableDailyCheckpointCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyCheckpoints,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
+                dailyCheckpoints.getCheckTarget(), dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
 
         TableMonthlyCheckpointCategoriesSpec monthlyCheckpoints = Objects.requireNonNullElseGet(tableSpec.getCheckpoints().getMonthly(), TableMonthlyCheckpointCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyCheckpoints,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
+                monthlyCheckpoints.getCheckTarget(), monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
 
         TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getDaily(), TableDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyPartitioned,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
+                dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getMonthly(), TableMonthlyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyPartitioned,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
+                monthlyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
         return similarChecksContainer;
     }
@@ -110,29 +110,29 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         ColumnAdHocCheckCategoriesSpec adHocChecks = Objects.requireNonNullElseGet(columnSpec.getChecks(), ColumnAdHocCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
+                adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
         ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(columnSpec.getCheckpoints(), ColumnCheckpointsSpec::new);
         ColumnDailyCheckpointCategoriesSpec dailyCheckpoints = Objects.requireNonNullElseGet(checkpoints.getDaily(), ColumnDailyCheckpointCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyCheckpoints,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
+                dailyCheckpoints.getCheckTarget(), dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
 
         ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpoints = Objects.requireNonNullElseGet(checkpoints.getMonthly(), ColumnMonthlyCheckpointCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyCheckpoints,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
+                monthlyCheckpoints.getCheckTarget(), monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
 
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyPartitioned,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
+                dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getMonthly(), ColumnMonthlyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyPartitioned,
                         checkSearchFilters, tableSpec.getDataStreams().getFirstDataStreamMappingName()),
-                monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
+                dailyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
         return similarChecksContainer;
     }

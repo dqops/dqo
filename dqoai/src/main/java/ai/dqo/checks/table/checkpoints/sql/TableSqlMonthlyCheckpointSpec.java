@@ -40,11 +40,9 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlMonthlyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_checkpoint_sql_condition_passed_percent_on_table", o -> o.monthlyCheckpointSqlConditionPassedPercentOnTable);
-
             put("monthly_checkpoint_sql_condition_failed_count_on_table", o -> o.monthlyCheckpointSqlConditionFailedCountOnTable);
-
             put("monthly_checkpoint_sql_aggregated_expression_value_on_table_min", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin);
-            put("monthly_checkpoint_max_sql_aggregated_expression_value_on_table", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax);
+            put("monthly_checkpoint_sql_aggregated_expression_value_on_table_max", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax);
         }
     };
 

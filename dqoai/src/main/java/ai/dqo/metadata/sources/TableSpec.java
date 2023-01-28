@@ -15,8 +15,15 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -24,10 +31,12 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.profiling.table.TableProfilerRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -425,6 +434,141 @@ public class TableSpec extends AbstractSpec implements Cloneable {
                 existingColumnSpec.setTypeSnapshot(sourceColumnEntry.getValue().getTypeSnapshot());
                 // quality checks are not modified for existing columns, only the type snapshot
             }
+        }
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the table specification.
+     * @param checkType Check type.
+     * @param checkTimeScale Time scale. Null value is accepted for adhoc checks, for other time scale aware checks, the proper time scale is required.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
+                                                                      CheckTimeScale checkTimeScale) {
+        switch (checkType) {
+            case ADHOC: {
+                if (this.checks != null) {
+                    return this.checks;
+                }
+
+                TableAdHocCheckCategoriesSpec tableAdHocCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
+                tableAdHocCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
+                return tableAdHocCheckCategoriesSpec;
+            }
+
+            case CHECKPOINT: {
+                TableCheckpointsSpec checkpointsSpec = this.checkpoints;
+                if (checkpointsSpec == null) {
+                    checkpointsSpec = new TableCheckpointsSpec();
+                    checkpointsSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checkpoints"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (checkpointsSpec.getDaily() != null) {
+                            return checkpointsSpec.getDaily();
+                        }
+
+                        TableDailyCheckpointCategoriesSpec dailyCheckpointCategoriesSpec = new TableDailyCheckpointCategoriesSpec();
+                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "daily"));
+                        return dailyCheckpointCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (checkpointsSpec.getMonthly() != null) {
+                            return checkpointsSpec.getMonthly();
+                        }
+
+                        TableMonthlyCheckpointCategoriesSpec monthlyCheckpointCategoriesSpec = new TableMonthlyCheckpointCategoriesSpec();
+                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "monthly"));
+                        return monthlyCheckpointCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case PARTITIONED: {
+                TablePartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    partitionedChecksSpec = new TablePartitionedChecksRootSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new TableDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new TableMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be an adhoc check container, one of checkpoint containers or one of partitioned checks container.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setTableCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof TableAdHocCheckCategoriesSpec) {
+            this.setChecks((TableAdHocCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new TableCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setDaily((TableDailyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new TableCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setMonthly((TableMonthlyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((TableDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((TableMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
         }
     }
 

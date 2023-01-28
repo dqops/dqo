@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check.matching;
 
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
@@ -56,16 +57,17 @@ public class SimilarChecksContainer {
     /**
      * Appends all checks from a category.
      * @param uiAllChecksModel All UI checks.
+     * @param checkTarget Check target (table or column).
      * @param checkType Check type.
      * @param timeScale Check's time scale or null.
      */
-    public void appendAllChecks(UIAllChecksModel uiAllChecksModel, CheckType checkType, CheckTimeScale timeScale) {
+    public void appendAllChecks(UIAllChecksModel uiAllChecksModel, CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale) {
         for (UIQualityCategoryModel categoryModel : uiAllChecksModel.getCategories()) {
             for (UICheckModel checkModel : categoryModel.getChecks()) {
                 SimilarCheckSensorRuleKey similarCheckMatchKey = checkModel.createSimilarCheckMatchKey();
 
                 SimilarChecksGroup similarCheckGroup = this.getSimilarCheckGroup(similarCheckMatchKey);
-                SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkType, timeScale, categoryModel.getCategory(), checkModel);
+                SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkTarget, checkType, timeScale, categoryModel.getCategory(), checkModel);
                 similarCheckGroup.addSimilarCheck(similarCheckModel);
             }
         }

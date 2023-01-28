@@ -17,6 +17,7 @@ package ai.dqo.sensors.column.sql;
 
 import ai.dqo.metadata.fields.ControlDisplayHint;
 import ai.dqo.metadata.fields.DisplayHint;
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -43,6 +44,7 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpec extends AbstractT
     @JsonPropertyDescription("SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ControlDisplayHint(DisplayHint.textarea)
+    @SampleValues(values = { "MAX({column})" })
     private String sqlExpression;
 
     /**
