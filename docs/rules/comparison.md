@@ -10,7 +10,31 @@ comparison/max_count
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_count</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_count.dqrule.yaml"
@@ -100,7 +124,39 @@ comparison/between_ints
 <br/>
 Data quality rule that verifies if a data quality check readout is between begin and end values.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>begin</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>end</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/between_ints.dqrule.yaml"
@@ -191,7 +247,31 @@ comparison/min_count
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_count</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_count.dqrule.yaml"
@@ -281,7 +361,31 @@ comparison/min_count
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_count</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_count.dqrule.yaml"
@@ -371,7 +475,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -461,7 +589,31 @@ comparison/max_value
 <br/>
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_value</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_value.dqrule.yaml"
@@ -551,7 +703,31 @@ comparison/max_count
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_count</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_count.dqrule.yaml"
@@ -641,7 +817,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -731,7 +931,31 @@ comparison/min
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_value</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min.dqrule.yaml"
@@ -821,7 +1045,31 @@ comparison/max_days
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_days</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_days.dqrule.yaml"
@@ -911,7 +1159,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1001,7 +1273,31 @@ comparison/max_days
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_days</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_days.dqrule.yaml"
@@ -1091,7 +1387,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -1181,7 +1501,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -1271,7 +1615,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1361,7 +1729,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -1451,7 +1843,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1541,7 +1957,31 @@ comparison/max_days
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_days</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_days.dqrule.yaml"
@@ -1631,7 +2071,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1721,7 +2185,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1811,7 +2299,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -1901,7 +2413,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -1991,7 +2527,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -2081,7 +2641,31 @@ comparison/max_percent
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_percent.dqrule.yaml"
@@ -2171,7 +2755,39 @@ comparison/between_floats
 <br/>
 Data quality rule that verifies if a data quality check readout is between begin and end values.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>begin</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>end</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/between_floats.dqrule.yaml"
@@ -2262,7 +2878,31 @@ comparison/max_count
 <br/>
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_count</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max_count.dqrule.yaml"
@@ -2352,7 +2992,31 @@ comparison/max
 <br/>
 Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_value</td>
+<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/max.dqrule.yaml"
@@ -2442,7 +3106,31 @@ comparison/min_value
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_value</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_value.dqrule.yaml"
@@ -2532,7 +3220,39 @@ comparison/equals
 <br/>
 Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>expected_value</td>
+<td>Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>error_margin</td>
+<td>Error margin for comparison.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/equals.dqrule.yaml"
@@ -2623,7 +3343,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"
@@ -2713,7 +3457,31 @@ comparison/min_percent
 <br/>
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>min_percent</td>
+<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/comparison/min_percent.dqrule.yaml"

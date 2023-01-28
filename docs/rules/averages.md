@@ -10,7 +10,31 @@ averages/within_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
@@ -114,7 +138,31 @@ averages/within_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
@@ -213,7 +261,39 @@ averages/between_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"
@@ -318,7 +398,39 @@ averages/between_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
@@ -423,7 +535,39 @@ averages/between_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
@@ -528,7 +672,31 @@ averages/within_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
@@ -632,7 +800,39 @@ averages/percent_moving_average
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/percent_moving_average.dqrule.yaml"
@@ -732,7 +932,31 @@ averages/within_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
@@ -831,7 +1055,31 @@ averages/within_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
@@ -935,7 +1183,39 @@ averages/between_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
@@ -1040,7 +1320,39 @@ averages/between_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
@@ -1145,7 +1457,39 @@ averages/between_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
@@ -1250,7 +1594,31 @@ averages/within_percent_moving_average_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
@@ -1349,7 +1717,39 @@ averages/between_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"
@@ -1454,7 +1854,31 @@ averages/within_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
@@ -1558,7 +1982,39 @@ averages/between_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
@@ -1663,7 +2119,31 @@ averages/within_percent_moving_average_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
@@ -1767,7 +2247,31 @@ averages/within_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_within</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
@@ -1871,7 +2375,39 @@ averages/between_percent_moving_average_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>max_percent_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>max_percent_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"

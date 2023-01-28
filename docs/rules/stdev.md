@@ -10,7 +10,39 @@ stdev/percentile_moving_stdev
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percentile_stdev_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>percentile_stdev_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensorreadout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/percentile_moving_stdev.dqrule.yaml"
@@ -121,7 +153,31 @@ stdev/below_percent_population_stdev_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
@@ -219,7 +275,31 @@ stdev/below_percent_population_stdev_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
@@ -317,7 +397,31 @@ stdev/below_stdev_multiply_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
@@ -421,7 +525,31 @@ stdev/below_percent_population_stdev_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
@@ -519,7 +647,31 @@ stdev/below_stdev_multiply_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
@@ -623,7 +775,31 @@ stdev/below_stdev_multiply_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
@@ -728,7 +904,31 @@ stdev/below_stdev_multiply_60_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
@@ -832,7 +1032,31 @@ stdev/below_stdev_multiply_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
@@ -937,7 +1161,31 @@ stdev/below_stdev_multiply_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
@@ -1042,7 +1290,31 @@ stdev/below_percent_population_stdev_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
@@ -1141,7 +1413,31 @@ stdev/below_percent_population_stdev_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
@@ -1240,7 +1536,39 @@ stdev/percent_moving_stdev
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>multiple_stdev_above</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>multiple_stdev_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/percent_moving_stdev.dqrule.yaml"
@@ -1350,7 +1678,31 @@ stdev/below_percent_population_stdev_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
@@ -1449,7 +1801,31 @@ stdev/below_stdev_multiply_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
@@ -1554,7 +1930,31 @@ stdev/below_percent_population_stdev_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
@@ -1653,7 +2053,31 @@ stdev/below_percent_population_stdev_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
@@ -1752,7 +2176,31 @@ stdev/below_stdev_multiply_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
@@ -1857,7 +2305,31 @@ stdev/below_percent_population_stdev_30_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>percent_population_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
@@ -1956,7 +2428,31 @@ stdev/below_stdev_multiply_7_days
 <br/>
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
 <br/>
-<br/>
+
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>stdev_multiplier_below</td>
+<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
+<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody>
+</table>
+
 <b>Example</b>
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
