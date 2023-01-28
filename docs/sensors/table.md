@@ -3,7 +3,7 @@
 ##<b>standard</b> table sensors
 ___
 
-###<b>row_count</b>
+###<b>{{replace_chars_in_string('row_count', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/standard/row_count
@@ -37,7 +37,7 @@ ___
 ##<b>timeliness</b> table sensors
 ___
 
-###<b>days_since_most_recent_event</b>
+###<b>{{replace_chars_in_string('days_since_most_recent_event', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/timeliness/days_since_most_recent_event
@@ -62,7 +62,7 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
 
 ___
 
-###<b>partition_reload_lag</b>
+###<b>{{replace_chars_in_string('partition_reload_lag', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/timeliness/partition_reload_lag
@@ -87,7 +87,7 @@ Tabular sensor that runs a query calculating maximum difference in days between 
 
 ___
 
-###<b>days_since_most_recent_ingestion</b>
+###<b>{{replace_chars_in_string('days_since_most_recent_ingestion', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/timeliness/days_since_most_recent_ingestion
@@ -112,7 +112,7 @@ Tabular sensor that runs a query calculating the time difference in days between
 
 ___
 
-###<b>data_ingestion_delay</b>
+###<b>{{replace_chars_in_string('data_ingestion_delay', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/timeliness/data_ingestion_delay
@@ -141,7 +141,7 @@ ___
 ##<b>sql</b> table sensors
 ___
 
-###<b>sql_condition_passed_percent</b>
+###<b>{{replace_chars_in_string('sql_condition_passed_percent', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/sql/sql_condition_passed_percent
@@ -167,7 +167,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 <tr>
 <td>sql_condition</td>
 <td>SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.</td>
-<td>string_type</td>
+<td>{{replace_chars_in_string('string_type', '_type', '')}}</td>
 <td></td>
 <td></td>
 </tr>
@@ -189,7 +189,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 ___
 
-###<b>sql_condition_failed_count</b>
+###<b>{{replace_chars_in_string('sql_condition_failed_count', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/sql/sql_condition_failed_count
@@ -215,7 +215,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 <tr>
 <td>sql_condition</td>
 <td>SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.</td>
-<td>string_type</td>
+<td>{{replace_chars_in_string('string_type', '_type', '')}}</td>
 <td></td>
 <td></td>
 </tr>
@@ -237,7 +237,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 ___
 
-###<b>sql_aggregated_expression</b>
+###<b>{{replace_chars_in_string('sql_aggregated_expression', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/sql/sql_aggregated_expression
@@ -263,7 +263,7 @@ Table level sensor that executes a given SQL expression on a table.
 <tr>
 <td>sql_expression</td>
 <td>SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} placeholder that is replaced with a full table name.</td>
-<td>string_type</td>
+<td>{{replace_chars_in_string('string_type', '_type', '')}}</td>
 <td></td>
 <td></td>
 </tr>
@@ -285,7 +285,7 @@ Table level sensor that executes a given SQL expression on a table.
 
 ___
 
-###<b>sql_condition_passed_count</b>
+###<b>{{replace_chars_in_string('sql_condition_passed_count', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/sql/sql_condition_passed_count
@@ -311,7 +311,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 <tr>
 <td>sql_condition</td>
 <td>SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.</td>
-<td>string_type</td>
+<td>{{replace_chars_in_string('string_type', '_type', '')}}</td>
 <td></td>
 <td></td>
 </tr>
@@ -333,7 +333,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 
 ___
 
-###<b>sql_condition_failed_percent</b>
+###<b>{{replace_chars_in_string('sql_condition_failed_percent', '_', ' ')}}</b>
 <b>Full sensor name</b>
 ```
 table/sql/sql_condition_failed_percent
@@ -359,7 +359,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 <tr>
 <td>sql_condition</td>
 <td>SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.</td>
-<td>string_type</td>
+<td>{{replace_chars_in_string('string_type', '_type', '')}}</td>
 <td></td>
 <td></td>
 </tr>
