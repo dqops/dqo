@@ -82,9 +82,9 @@ dqo:
   core:
     print-stack-trace: true
     lock-wait-timeout-seconds: 900
-  profiler:
+  statistics:
     truncated-strings-length: 50
-    viewed-profile-age-months: 3
+    viewed-statistics-age-months: 3
   queue:
     threads: 10
     keep-finished-jobs-history-seconds: 3600

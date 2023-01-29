@@ -16,7 +16,7 @@
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.TableOwnerSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableTargetSpec;
@@ -68,8 +68,8 @@ public class TableBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this table.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this table.")
-    private ProfilerSearchFilters runProfilerJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table.")
+    private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
     /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
@@ -91,7 +91,7 @@ public class TableBasicModel {
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setEnabled(true);
             }});
-            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());

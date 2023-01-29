@@ -19,8 +19,8 @@ import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.services.ErrorsDeleteService;
-import ai.dqo.data.profilingresults.models.ProfilingResultsFragmentFilter;
-import ai.dqo.data.profilingresults.services.ProfilingResultsDeleteService;
+import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
+import ai.dqo.data.statistics.services.StatisticsResultsDeleteService;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.services.SensorReadoutsDeleteService;
 import ai.dqo.data.ruleresults.services.RuleResultsDeleteService;
@@ -38,18 +38,18 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJobResult> {
     private ErrorsDeleteService errorsDeleteService;
-    private ProfilingResultsDeleteService profilingResultsDeleteService;
+    private StatisticsResultsDeleteService statisticsResultsDeleteService;
     private RuleResultsDeleteService ruleResultsDeleteService;
     private SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
     public DeleteStoredDataQueueJob(ErrorsDeleteService errorsDeleteService,
-                                    ProfilingResultsDeleteService profilingResultsDeleteService,
+                                    StatisticsResultsDeleteService statisticsResultsDeleteService,
                                     RuleResultsDeleteService ruleResultsDeleteService,
                                     SensorReadoutsDeleteService sensorReadoutsDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
-        this.profilingResultsDeleteService = profilingResultsDeleteService;
+        this.statisticsResultsDeleteService = statisticsResultsDeleteService;
         this.ruleResultsDeleteService = ruleResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
     }
@@ -90,8 +90,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
         }};
     }
 
-    protected ProfilingResultsFragmentFilter getProfilingResultsFragmentFilter() {
-        return new ProfilingResultsFragmentFilter() {{
+    protected StatisticsResultsFragmentFilter getStatisticsResultsFragmentFilter() {
+        return new StatisticsResultsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
                 setConnectionName(deletionParameters.getConnectionName());
                 setSchemaTableName(deletionParameters.getSchemaTableName());
@@ -99,9 +99,9 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
             setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
-            setProfilerCategory(deletionParameters.getProfilerCategory());
-            setProfilerName(deletionParameters.getProfilerName());
-            setProfilerType(deletionParameters.getProfilerType());
+            setCollectorCategory(deletionParameters.getCollectorCategory());
+            setCollectorName(deletionParameters.getCollectorName());
+            setCollectorTarget(deletionParameters.getCollectorTarget());
             setColumnName(deletionParameters.getColumnName());
             setDataStreamName(deletionParameters.getDataStreamName());
             setSensorName(deletionParameters.getSensorName());
@@ -162,7 +162,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
         }
         if (this.deletionParameters.isDeleteProfilingResults()) {
-            this.profilingResultsDeleteService.deleteSelectedProfilingResultsFragment(this.getProfilingResultsFragmentFilter());
+            this.statisticsResultsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
         }
         if (this.deletionParameters.isDeleteRuleResults()) {
             this.ruleResultsDeleteService.deleteSelectedRuleResultsFragment(this.getRuleResultsFragmentFilter());

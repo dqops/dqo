@@ -50,9 +50,9 @@ public final class BuiltInFolderNames {
     public static final String RULE_RESULTS = "rule_results";
 
     /**
-     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the profiling results are stored.
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the statistics results (basic profile) are stored.
      */
-    public static final String PROFILING_RESULTS = "profiling_results";
+    public static final String STATISTICS = "statistics";
 
     /**
      * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the errors are stored.

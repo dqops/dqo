@@ -32,7 +32,7 @@ import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.data.profilingresults.factory.ProfilerTargetType;
+import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,8 +91,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the errors")
     private boolean deleteErrors = false;
 
-    @CommandLine.Option(names = {"-pr", "--profiling-results"}, description = "Delete the profiling results")
-    private boolean deleteProfilingResults = false;
+    @CommandLine.Option(names = {"-st", "--statistics"}, description = "Delete the statistics")
+    private boolean deleteStatistics = false;
 
     @CommandLine.Option(names = {"-rr", "--rule-results"}, description = "Delete the rule results")
     private boolean deleteRuleResults = false;
@@ -135,14 +135,14 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
     private String checkCategory;
 
-    @CommandLine.Option(names = {"-p", "--profiler"}, description = "Data quality profiler name")
-    private String profiler;
+    @CommandLine.Option(names = {"-sc", "--statistics-collector"}, description = "Data quality statistics collector name")
+    private String statisticsCollector;
 
-    @CommandLine.Option(names = {"-pt", "--profiler-type"}, description = "Data quality profiler target type (table, column)")
-    private ProfilerTargetType profilerType;
+    @CommandLine.Option(names = {"-stt", "--statistics-target"}, description = "Data quality statistics target (table, column)")
+    private StatisticsCollectorTarget statisticsTarget;
 
-    @CommandLine.Option(names = {"-pcat", "--profiler-category"}, description = "Profiler category name (standard, nulls, numeric, etc.)")
-    private String profilerCategory;
+    @CommandLine.Option(names = {"-stc", "--statistics-category"}, description = "Statistics category name (standard, nulls, numeric, etc.)")
+    private String statisticsCategory;
 
     @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name)")
     private String sensor;
@@ -166,7 +166,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         );
         
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteProfilingResults);
+        deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteStatistics);
         deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
         
@@ -180,12 +180,12 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
             deleteStoredDataJobParameters.setCheckName(this.check);
         }
 
-        if (!Strings.isNullOrEmpty(this.profilerCategory)) {
-            deleteStoredDataJobParameters.setProfilerCategory(this.profilerCategory);
+        if (!Strings.isNullOrEmpty(this.statisticsCategory)) {
+            deleteStoredDataJobParameters.setCollectorCategory(this.statisticsCategory);
         }
 
-        if (!Strings.isNullOrEmpty(this.profiler)) {
-            deleteStoredDataJobParameters.setProfilerName(this.profiler);
+        if (!Strings.isNullOrEmpty(this.statisticsCollector)) {
+            deleteStoredDataJobParameters.setCollectorName(this.statisticsCollector);
         }
 
         if (!Strings.isNullOrEmpty(this.column)) {
@@ -212,8 +212,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
             deleteStoredDataJobParameters.setCheckType(this.checkType.getDisplayName());
         }
 
-        if (this.profilerType != null) {
-            deleteStoredDataJobParameters.setProfilerType(this.profilerType.name());
+        if (this.statisticsTarget != null) {
+            deleteStoredDataJobParameters.setCollectorTarget(this.statisticsTarget.name());
         }
         
         return deleteStoredDataJobParameters;

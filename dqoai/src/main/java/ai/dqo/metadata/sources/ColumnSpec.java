@@ -25,13 +25,6 @@ import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -40,7 +33,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.profiling.column.ColumnProfilerRootCategoriesSpec;
+import ai.dqo.profiling.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -67,7 +60,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
-            put("profiler", o -> o.profiler);
+            put("statistics_collector", o -> o.statisticsCollector);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -97,10 +90,10 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPartitionedChecksRootSpec partitionedChecks;
 
-    @JsonPropertyDescription("Custom configuration of a column level profiler. Enables customization of the profiler settings when the profiler is analysing this column.")
+    @JsonPropertyDescription("Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilerRootCategoriesSpec profiler;
+    private ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -221,21 +214,21 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a custom configuration of a column level profiler for this column.
-     * @return Custom profiler instance or null when the default (built-in) configuration settings should be used.
+     * Returns a custom configuration of a column level statistics collector for this column.
+     * @return Custom statistics collector instance or null when the default (built-in) configuration settings should be used.
      */
-    public ColumnProfilerRootCategoriesSpec getProfiler() {
-        return profiler;
+    public ColumnStatisticsCollectorsRootCategoriesSpec getStatisticsCollector() {
+        return statisticsCollector;
     }
 
     /**
-     * Sets a reference to a custom profiler configuration on a column level.
-     * @param profiler Custom profiler configuration.
+     * Sets a reference to a custom statistics collector configuration on a column level.
+     * @param statisticsCollector Custom statistics collector configuration.
      */
-    public void setProfiler(ColumnProfilerRootCategoriesSpec profiler) {
-        setDirtyIf(!Objects.equals(this.profiler, profiler));
-        this.profiler = profiler;
-        propagateHierarchyIdToField(profiler, "profiler");
+    public void setStatisticsCollector(ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector) {
+        setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
+        this.statisticsCollector = statisticsCollector;
+        propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
     }
 
     /**
@@ -486,9 +479,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
             }
 
-            if (cloned.profiler != null) {
+            if (cloned.statisticsCollector != null) {
                 Cloner cloner = new Cloner();
-                cloned.profiler = cloner.deepClone(cloned.profiler);
+                cloned.statisticsCollector = cloner.deepClone(cloned.statisticsCollector);
             }
 
             return cloned;
@@ -526,7 +519,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
@@ -557,7 +550,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.labels = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

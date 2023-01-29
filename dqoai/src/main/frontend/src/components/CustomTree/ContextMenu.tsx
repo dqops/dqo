@@ -19,7 +19,7 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
-  const { refreshNode, runChecks, runProfilersOnTable } = useTree();
+  const { refreshNode, runChecks, collectStatisticsOnTable } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
 
@@ -33,8 +33,8 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     setOpen(false);
   };
 
-  const handleRunProfilersOnTable = () => {
-    runProfilersOnTable(node);
+  const handleCollectStatisticsOnTable = () => {
+    collectStatisticsOnTable(node);
     setOpen(false);
   };
 
@@ -82,9 +82,9 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           ].includes(node.level) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={handleRunProfilersOnTable}
+              onClick={handleCollectStatisticsOnTable}
             >
-              Run profilers
+              Collect statistics
             </div>
           )}
           {node.level === TREE_LEVEL.DATABASE && (

@@ -43,9 +43,9 @@ import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.profiling.AbstractProfilerCategorySpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -471,7 +471,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(AbstractProfilerSpec<?> profileSpec, P parameter);
+    R accept(AbstractStatisticsCollectorSpec<?> profileSpec, P parameter);
 
     /**
      * Accepts a container of profiling checks (a profiling category) instance.
@@ -479,7 +479,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(AbstractProfilerCategorySpec profileCategorySpec, P parameter);
+    R accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, P parameter);
 
     /**
      * Accepts a root container of profiling checks (a profiling category) instance.
@@ -487,7 +487,7 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, P parameter);
+    R accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, P parameter);
 
     /**
      * Accepts a notification settings object.

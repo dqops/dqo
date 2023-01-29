@@ -24,7 +24,7 @@ import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableWrapper;
-import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
 
 import java.util.Collection;
 
@@ -41,12 +41,12 @@ public interface HierarchyNodeTreeSearcher {
     Collection<AbstractCheckSpec<?, ?, ?, ?>> findChecks(HierarchyNode startNode, CheckSearchFilters checkSearchFilters);
 
     /**
-     * Search for profilers in the tree.
+     * Search for statistics collectors in the tree.
      * @param startNode Start node to begin search. It could be the user home root or any other nested node (ConnectionSpec, TableSpec, etc.)
-     * @param profilerSearchFilters Search filters.
+     * @param statisticsCollectorSearchFilters Search filters.
      * @return Collection of profilers nodes that passed the filter.
      */
-    Collection<AbstractProfilerSpec<?>> findProfilers(HierarchyNode startNode, ProfilerSearchFilters profilerSearchFilters);
+    Collection<AbstractStatisticsCollectorSpec<?>> findStatisticsCollectors(HierarchyNode startNode, StatisticsCollectorSearchFilters statisticsCollectorSearchFilters);
 
     /**
      * Search for connection in the tree.

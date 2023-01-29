@@ -130,9 +130,9 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 </tr>
               </>
             )}
-            {job?.parameters?.runProfilersParameters?.profilerSearchFilters &&
+            {job?.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters &&
               Object.entries(
-                job?.parameters?.runProfilersParameters?.profilerSearchFilters
+                job?.parameters?.collectStatisticsParameters?.statisticsCollectorSearchFilters
               ).map(([key, value], index) => (
                 <tr key={index}>
                   <td className="px-2 capitalize">{key}</td>

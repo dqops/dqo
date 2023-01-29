@@ -45,9 +45,9 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.profiling.AbstractProfilerCategorySpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -676,7 +676,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractProfilerSpec<?> profileSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorSpec<?> profileSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -688,7 +688,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractProfilerCategorySpec profileCategorySpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -700,7 +700,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
