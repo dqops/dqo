@@ -20,7 +20,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   useEffect(() => {
     if (activeNode) {
-      switchTab(activeNode);
       return;
     }
 
