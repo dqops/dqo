@@ -213,4 +213,21 @@ public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & Hiera
     public boolean isDefault() {
         return this.size() == 0;
     }
+
+    /**
+     * Returns an object at the given index. The map uses a linked hash map which preserves the insert order, so the object will be returned from the given index.
+     * NOTE: this method will iterate over values to find the object at the requested index, it should not be called in a loop.
+     * @param index 0-based index of the object to return.
+     * @return Returned object or null if there is no such index.
+     */
+    public V getAt(int index) {
+        int currentIndex = 0;
+        for (V value : this.values()) {
+            if (currentIndex++ == index) {
+                return value;
+            }
+        }
+
+        return null; // not found
+    }
 }

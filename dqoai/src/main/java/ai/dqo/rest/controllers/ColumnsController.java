@@ -25,8 +25,8 @@ import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
-import ai.dqo.data.profilingresults.services.ProfilerDataService;
-import ai.dqo.data.profilingresults.services.models.ProfilerResultsForTableModel;
+import ai.dqo.data.statistics.services.StatisticsDataService;
+import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -40,7 +40,7 @@ import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
-import ai.dqo.rest.models.metadata.ColumnProfileModel;
+import ai.dqo.rest.models.metadata.ColumnStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -67,24 +67,24 @@ public class ColumnsController {
     private UserHomeContextFactory userHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
     private UiToSpecCheckMappingService uiToSpecCheckMappingService;
-    private final ProfilerDataService profilerDataService;
+    private final StatisticsDataService statisticsDataService;
 
     /**
      * Creates a columns rest controller.
      * @param userHomeContextFactory      User home context factory.
      * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
-     * @param profilerDataService         Profiler data service.
+     * @param statisticsDataService       Statistics data service.
      */
     @Autowired
     public ColumnsController(UserHomeContextFactory userHomeContextFactory,
                              SpecToUiCheckMappingService specToUiCheckMappingService,
                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
-                             ProfilerDataService profilerDataService) {
+                             StatisticsDataService statisticsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
         this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
-        this.profilerDataService = profilerDataService;
+        this.statisticsDataService = statisticsDataService;
     }
 
     /**
@@ -124,23 +124,23 @@ public class ColumnsController {
     }
 
     /**
-     * Returns a list of columns inside a table with the profiler metrics.
+     * Returns a list of columns inside a table with the statistics metrics.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name
      * @return List of columns inside a table with additional summary of the most recent profiler session.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiledcolumns")
-    @ApiOperation(value = "getProfiledColumns",
-            notes = "Returns a list of columns inside a table with the metrics captured by the most recent profiler execution.",
-            response = ColumnProfileModel[].class)
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnswithstatistics")
+    @ApiOperation(value = "getColumnsWithStatistics",
+            notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
+            response = ColumnStatisticsModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ColumnProfileModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = ColumnStatisticsModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ColumnProfileModel>> getProfiledColumns(
+    public ResponseEntity<Flux<ColumnStatisticsModel>> getColumnsWithStatistics(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -160,19 +160,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
         }
 
-        ProfilerResultsForTableModel mostRecentProfilerMetricsForTable =
-                this.profilerDataService.getMostRecentProfilerMetricsForTable(connectionName, physicalTableName,
+        StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
+                this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
                         CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
 
-        Stream<ColumnProfileModel> columnModels = tableWrapper.getSpec().getColumns()
+        Stream<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
-                .map(kv -> ColumnProfileModel.fromColumnSpecificationAndProfile(
+                .map(kv -> ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
                         connectionName, tableWrapper.getPhysicalTableName(),
                         kv.getKey(), // column name
                         kv.getValue(), // column specification
-                        mostRecentProfilerMetricsForTable.getColumns().get(kv.getKey())));
+                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey())));
 
         return new ResponseEntity<>(Flux.fromStream(columnModels), HttpStatus.OK);
     }

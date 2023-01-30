@@ -248,10 +248,22 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public abstract S getParameters();
 
     /**
+     * Sets a new instance of sensor parameter parameters.
+     * @param parameters New parameters specification object.
+     */
+    public abstract void setParameters(S parameters);
+
+    /**
      * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
      * @return Default "error" alerting thresholds.
      */
     public abstract RError getError();
+
+    /**
+     * Sets a new instance of an alerting rule for the error severity.
+     * @param error New rule parameters for the error severity or null to disable the severity level.
+     */
+    public abstract void setError(RError error);
 
     /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
@@ -260,10 +272,22 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public abstract RWarning getWarning();
 
     /**
+     * Sets a new instance of an alerting rule for the warning severity.
+     * @param warning New rule parameters for the warning severity or null to disable the severity level.
+     */
+    public abstract void setWarning(RWarning warning);
+
+    /**
      * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
      * @return Fatal severity rule parameters.
      */
     public abstract RFatal getFatal();
+
+    /**
+     * Sets a new instance of an alerting rule for the fatal severity.
+     * @param fatal New rule parameters for the fatal severity or null to disable the severity level.
+     */
+    public abstract void setFatal(RFatal fatal);
 
     /**
      * Creates and returns a copy of this object.
@@ -272,6 +296,18 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public AbstractCheckSpec clone() {
         try {
             AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
+            if (cloned.getParameters() != null) {
+                cloned.setParameters(cloned.getParameters().clone());
+            }
+            if (cloned.getError() != null) {
+                cloned.setError(cloned.getError().clone());
+            }
+            if (cloned.getWarning() != null) {
+                cloned.setWarning(cloned.getWarning().clone());
+            }
+            if (cloned.getFatal() != null) {
+                cloned.setFatal(cloned.getFatal().clone());
+            }
             if (cloned.scheduleOverride != null) {
                 cloned.scheduleOverride = cloned.scheduleOverride.clone();
             }
@@ -342,7 +378,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
             return this.qualityDimension;
         }
 
-        return this.getDefaultDataQualityDimension().getDisplayName();
+        return this.getDefaultDataQualityDimension().name();
     }
 
     /**

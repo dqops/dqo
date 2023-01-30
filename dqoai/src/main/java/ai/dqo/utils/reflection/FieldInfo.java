@@ -42,6 +42,7 @@ public class FieldInfo {
     private Constructor<?> constructor;
     private Object defaultValue;
     private boolean isDirectField;
+    private String[] sampleValues;
 
     /**
      * Returns the field name used on the class.
@@ -250,6 +251,22 @@ public class FieldInfo {
      */
     public void setDirectField(boolean directField) {
         isDirectField = directField;
+    }
+
+    /**
+     * Returns an array of sample values for a field.
+     * @return Array of sample values for a field.
+     */
+    public String[] getSampleValues() {
+        return sampleValues;
+    }
+
+    /**
+     * Sets an array of sample values for a field.
+     * @param sampleValues Sample values.
+     */
+    public void setSampleValues(String[] sampleValues) {
+        this.sampleValues = sampleValues;
     }
 
     /**

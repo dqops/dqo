@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.comparison;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -38,6 +39,10 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
+    @SampleValues(values = "0.5")
+    private Double maxPercent;
+
     /**
      * Default constructor, the minimum accepted value is 0.
      */
@@ -51,9 +56,6 @@ public class MaxPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     public MaxPercentRuleParametersSpec(Double maxPercent) {
         this.maxPercent = maxPercent;
     }
-
-    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxPercent;
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.

@@ -42,6 +42,12 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("numbers_in_set_percent", o -> o.numbersInSetPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
+            put("max_in_range", o -> o.maxInRange);
+            put("min_in_range", o -> o.minInRange);
+            put("sum_in_range", o -> o.sumInRange);
+            put("mean_in_range", o -> o.meanInRange);
+            put("sample_stddev_in_range", o -> o.sampleStddevInRange);
+            put("population_stddev_in_range", o -> o.populationStddevInRange);
         }
     };
 
@@ -62,6 +68,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
+    private ColumnMaxInRangeCheckSpec maxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range.")
+    private ColumnMinInRangeCheckSpec minInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
+    private ColumnSumInRangeCheckSpec sumInRange;
+
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
+    private ColumnMeanInRangeCheckSpec meanInRange;
+
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
+    private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range.")
+    private ColumnPopulationStddevInRangeCheckSpec populationStddevInRange;
 
     /**
      * Returns a negative count check specification.
@@ -170,7 +194,115 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.valuesInRangeIntegersPercent = valuesInRangeIntegersPercent;
         propagateHierarchyIdToField(valuesInRangeIntegersPercent, "values_in_range_integers_percent");
     }
-    
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getMaxInRange() {
+        return maxInRange;
+    }
+
+    /**
+     * Sets a max in range percent check.
+     * @param maxInRange Max in range check specification.
+     */
+    public void setMaxInRange(ColumnMaxInRangeCheckSpec maxInRange) {
+        this.setDirtyIf(!Objects.equals(this.maxInRange, maxInRange));
+        this.maxInRange = maxInRange;
+        propagateHierarchyIdToField(maxInRange, "max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getMinInRange() {
+        return minInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param minInRange Min in range check specification.
+     */
+    public void setMinInRange(ColumnMinInRangeCheckSpec minInRange) {
+        this.setDirtyIf(!Objects.equals(this.minInRange, minInRange));
+        this.minInRange = minInRange;
+        propagateHierarchyIdToField(minInRange, "min_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getSumInRange() {
+        return sumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param sumInRange Sum in range check specification.
+     */
+    public void setSumInRange(ColumnSumInRangeCheckSpec sumInRange) {
+        this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
+        this.sumInRange = sumInRange;
+        propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    }
+
+    /**
+     * Returns a mean in range check specification.
+     * @return Mean in range check specification.
+     */
+    public ColumnMeanInRangeCheckSpec getMeanInRange() {
+        return meanInRange;
+    }
+
+    /**
+     * Sets a new specification of a mean in range check.
+     * @param meanInRange Mean in range check specification.
+     */
+    public void setMeanInRange(ColumnMeanInRangeCheckSpec meanInRange) {
+        this.setDirtyIf(!Objects.equals(this.meanInRange, meanInRange));
+        this.meanInRange = meanInRange;
+        propagateHierarchyIdToField(meanInRange, "mean_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleStddevInRangeCheckSpec getSampleStddevInRange() {
+        return sampleStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param sampleStddevInRange Sample standard deviation in range check specification.
+     */
+    public void setSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec sampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.sampleStddevInRange, sampleStddevInRange));
+        this.sampleStddevInRange = sampleStddevInRange;
+        propagateHierarchyIdToField(sampleStddevInRange, "sample_stddev_in_range");
+    }
+
+    /**
+     * Returns a population standard deviation in range check specification.
+     * @return Population standard deviation in range check specification.
+     */
+    public ColumnPopulationStddevInRangeCheckSpec getPopulationStddevInRange() {
+        return populationStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a Population standard deviation in range check.
+     * @param populationStddevInRange Population standard deviation in range check specification.
+     */
+    public void setPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec populationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.populationStddevInRange, populationStddevInRange));
+        this.populationStddevInRange = populationStddevInRange;
+        propagateHierarchyIdToField(populationStddevInRange, "population_stddev_in_range");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

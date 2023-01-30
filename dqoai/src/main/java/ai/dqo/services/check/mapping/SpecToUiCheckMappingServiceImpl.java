@@ -35,10 +35,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -334,6 +331,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         parameterDefinitionSpec.setDisplayName(fieldInfo.getDisplayName());
         parameterDefinitionSpec.setHelpText(fieldInfo.getHelpText());
         parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());
+        parameterDefinitionSpec.setSampleValues(fieldInfo.getSampleValues() != null ? List.of(fieldInfo.getSampleValues()) : null);
         if (fieldInfo.getDataType() == ParameterDataType.enum_type) {
             List<String> supportedEnumValues = fieldInfo.getEnumValuesByName().values()
                     .stream().map(e -> e.getYamlName())

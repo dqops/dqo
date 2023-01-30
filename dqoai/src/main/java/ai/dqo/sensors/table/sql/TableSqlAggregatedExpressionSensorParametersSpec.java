@@ -17,6 +17,7 @@ package ai.dqo.sensors.table.sql;
 
 import ai.dqo.metadata.fields.ControlDisplayHint;
 import ai.dqo.metadata.fields.DisplayHint;
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -43,6 +44,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpec extends AbstractTa
     @JsonPropertyDescription("SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} placeholder that is replaced with a full table name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ControlDisplayHint(DisplayHint.textarea)
+    @SampleValues(values = { "SUM(col_net_price) + SUM(col_tax)" })
     private String sqlExpression;
 
     /**

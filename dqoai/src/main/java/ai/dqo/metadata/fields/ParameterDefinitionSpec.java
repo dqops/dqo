@@ -73,6 +73,13 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
     private List<String> allowedValues;
 
     /**
+     * List of sample values for a field. Sample values are used when generating example YAML files for the documentation.
+     */
+    @JsonPropertyDescription("List of sample values. The sample values are used in the documentation or help messages.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<String> sampleValues;
+
+    /**
      * Returns the field type as used in the yaml file.
      * @return Field name.
      */
@@ -183,12 +190,29 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Sets a list of allowed field values for an enum field.
+     * Sets a list of allowed field values for an enum field. The list is converted to an unmodifiable list.
      * @param allowedValues List of allowed fields.
      */
     public void setAllowedValues(List<String> allowedValues) {
         this.setDirtyIf(!Objects.equals(this.allowedValues, allowedValues));
         this.allowedValues = allowedValues != null ? Collections.unmodifiableList(allowedValues) : null;
+    }
+
+    /**
+     * Returns an optional array of sample values for the field.
+     * @return List of sample values.
+     */
+    public List<String> getSampleValues() {
+        return sampleValues;
+    }
+
+    /**
+     * Sets a list of sample values. The list is converted to an unmodifiable list.
+     * @param sampleValues List of sample values.
+     */
+    public void setSampleValues(List<String> sampleValues) {
+        this.setDirtyIf(!Objects.equals(this.sampleValues, sampleValues));
+        this.sampleValues = sampleValues != null ? Collections.unmodifiableList(sampleValues) : null;
     }
 
     /**

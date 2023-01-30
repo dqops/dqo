@@ -46,7 +46,7 @@ function TreeProvider(props: any) {
         level: TREE_LEVEL.DATABASE,
         tooltip: item.connection_name,
         run_checks_job_template: item.run_checks_job_template,
-        run_profilers_job_template: item.run_profiler_job_template,
+        collect_statistics_job_template: item.collect_statistics_job_template,
         open: false
       }))
     );
@@ -61,7 +61,7 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.DATABASE,
       tooltip: connection.connection_name,
       run_checks_job_template: connection.run_checks_job_template,
-      run_profilers_job_template: connection.run_profiler_job_template,
+      collect_statistics_job_template: connection.collect_statistics_job_template,
       open: false
     };
     setTreeData([...treeData, newNode]);
@@ -107,7 +107,7 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema.run_checks_job_template,
-      run_profilers_job_template: schema.run_profiler_job_template,
+      collect_statistics_job_template: schema.collect_statistics_job_template,
       open: false
     }));
 
@@ -129,7 +129,7 @@ function TreeProvider(props: any) {
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
       hasCheck: table?.has_any_configured_checks,
       run_checks_job_template: table.run_checks_job_template,
-      run_profilers_job_template: table.run_profiler_job_template,
+      collect_statistics_job_template: table.collect_statistics_job_template,
       open: false
     }));
     resetTreeData(node, items);
@@ -273,7 +273,7 @@ function TreeProvider(props: any) {
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
       hasCheck: column?.has_any_configured_checks,
       run_checks_job_template: column.run_checks_job_template,
-      run_profilers_job_template: column.run_profiler_job_template,
+      collect_statistics_job_template: column.collect_statistics_job_template,
       open: false
     }));
     resetTreeData(node, items);
@@ -683,9 +683,9 @@ function TreeProvider(props: any) {
     }
   };
 
-  const runProfilersOnTable = async (node: CustomTreeNode) => {
-    if (node.run_profilers_job_template) {
-      JobApiClient.runProfilersOnTable(node.run_profilers_job_template);
+  const collectStatisticsOnTable = async (node: CustomTreeNode) => {
+    if (node.collect_statistics_job_template) {
+      JobApiClient.collectStatisticsOnTable(node.collect_statistics_job_template);
       return;
     }
   };
@@ -820,7 +820,7 @@ function TreeProvider(props: any) {
         removeNode,
         refreshNode,
         runChecks,
-        runProfilersOnTable,
+        collectStatisticsOnTable,
         addConnection,
         switchTab,
         activeNode

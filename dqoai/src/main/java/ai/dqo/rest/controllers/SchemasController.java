@@ -17,7 +17,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -91,7 +91,7 @@ public class SchemasController {
                 setSchemaTableName(s + ".*");
                 setEnabled(true);
             }});
-            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(s + ".*");

@@ -1,10 +1,48 @@
 #{{category}}
-{{#each ruleDocumentationModels}}
-##{{ruleName}}
-###{{ruleParametersJavaDoc}}
 ___
-## Example
-``` yaml
+{{#each ruleDocumentationModels}}
+##<b>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{ruleName}}', '_', ' '){{#with "}}"}}{{.}}{{/with}}</b>
+<b>Full rule name</b>
+```
+{{fullRuleName}}
+```
+<b>Description</b>
+<br/>
+{{ruleParametersJavaDoc}}
+<br/>
+{{#if definition.spec.fields}}
+<b>Parameters</b>
+<table>
+<thead>
+<tr>
+<th>Field name</th>
+<th>Description</th>
+<th>Allowed data type</th>
+<th>Is it required?</th>
+<th>Allowed values</th>
+</tr>
+</thead>
+<tbody>
+{{#each definition.spec.fields}}
+<tr>
+<td>{{displayName}}</td>
+<td>{{helpText}}</td>
+<td>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{dataType}}', '_type', ''){{#with "}}"}}{{.}}{{/with}}</td>
+<td>{{#if required}}Yes{{else}}{{/if}}</td>
+<td>{{#each allowedValues}}{{this}}<br/>{{/each}}</td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+{{else}}
+{{/if}}
+<b>Example</b>
+```yaml
 --8<-- "home/rules/{{category}}/{{ruleName}}.dqrule.yaml"
 ```
+<b>Rule implementation (Python)</b>
+```python
+{{{definition.rulePythonModuleContent.textContent}}}
+```
+___
 {{/each}}

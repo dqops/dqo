@@ -15,8 +15,15 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -26,7 +33,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.profiling.column.ColumnProfilerRootCategoriesSpec;
+import ai.dqo.profiling.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -53,7 +60,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
-            put("profiler", o -> o.profiler);
+            put("statistics_collector", o -> o.statisticsCollector);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -83,10 +90,10 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPartitionedChecksRootSpec partitionedChecks;
 
-    @JsonPropertyDescription("Custom configuration of a column level profiler. Enables customization of the profiler settings when the profiler is analysing this column.")
+    @JsonPropertyDescription("Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilerRootCategoriesSpec profiler;
+    private ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -207,21 +214,21 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a custom configuration of a column level profiler for this column.
-     * @return Custom profiler instance or null when the default (built-in) configuration settings should be used.
+     * Returns a custom configuration of a column level statistics collector for this column.
+     * @return Custom statistics collector instance or null when the default (built-in) configuration settings should be used.
      */
-    public ColumnProfilerRootCategoriesSpec getProfiler() {
-        return profiler;
+    public ColumnStatisticsCollectorsRootCategoriesSpec getStatisticsCollector() {
+        return statisticsCollector;
     }
 
     /**
-     * Sets a reference to a custom profiler configuration on a column level.
-     * @param profiler Custom profiler configuration.
+     * Sets a reference to a custom statistics collector configuration on a column level.
+     * @param statisticsCollector Custom statistics collector configuration.
      */
-    public void setProfiler(ColumnProfilerRootCategoriesSpec profiler) {
-        setDirtyIf(!Objects.equals(this.profiler, profiler));
-        this.profiler = profiler;
-        propagateHierarchyIdToField(profiler, "profiler");
+    public void setStatisticsCollector(ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector) {
+        setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
+        this.statisticsCollector = statisticsCollector;
+        propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
     }
 
     /**
@@ -276,6 +283,141 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 		setDirtyIf(!Objects.equals(this.comments, comments));
         this.comments = comments;
 		propagateHierarchyIdToField(comments, "comments");
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column specification.
+     * @param checkType Check type.
+     * @param checkTimeScale Time scale. Null value is accepted for adhoc checks, for other time scale aware checks, the proper time scale is required.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale) {
+        switch (checkType) {
+            case ADHOC: {
+                if (this.checks != null) {
+                    return this.checks;
+                }
+
+                ColumnAdHocCheckCategoriesSpec columnAdHocCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
+                columnAdHocCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
+                return columnAdHocCheckCategoriesSpec;
+            }
+
+            case CHECKPOINT: {
+                ColumnCheckpointsSpec checkpointsSpec = this.checkpoints;
+                if (checkpointsSpec == null) {
+                    checkpointsSpec = new ColumnCheckpointsSpec();
+                    checkpointsSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checkpoints"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (checkpointsSpec.getDaily() != null) {
+                            return checkpointsSpec.getDaily();
+                        }
+
+                        ColumnDailyCheckpointCategoriesSpec dailyCheckpointCategoriesSpec = new ColumnDailyCheckpointCategoriesSpec();
+                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "daily"));
+                        return dailyCheckpointCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (checkpointsSpec.getMonthly() != null) {
+                            return checkpointsSpec.getMonthly();
+                        }
+
+                        ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpointCategoriesSpec = new ColumnMonthlyCheckpointCategoriesSpec();
+                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "monthly"));
+                        return monthlyCheckpointCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case PARTITIONED: {
+                ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be an adhoc check container, one of checkpoint containers or one of partitioned checks container.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setColumnCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof ColumnAdHocCheckCategoriesSpec) {
+            this.setChecks((ColumnAdHocCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new ColumnCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setDaily((ColumnDailyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new ColumnCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setMonthly((ColumnMonthlyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((ColumnDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
+        }
     }
 
     /**
@@ -337,9 +479,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
             }
 
-            if (cloned.profiler != null) {
+            if (cloned.statisticsCollector != null) {
                 Cloner cloner = new Cloner();
-                cloned.profiler = cloner.deepClone(cloned.profiler);
+                cloned.statisticsCollector = cloner.deepClone(cloned.statisticsCollector);
             }
 
             return cloned;
@@ -377,7 +519,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
@@ -408,7 +550,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.partitionedChecks = null;
             cloned.scheduleOverride = null;
             cloned.labels = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

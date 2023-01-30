@@ -15,6 +15,7 @@
  */
 package ai.dqo.sensors.column.numeric;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +42,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpec extends Abstract
     };
 
     @JsonPropertyDescription("Provided list of values to match the data.")
+    @SampleValues(values = { "2", "3" })
     private List<Long> values;
 
     /**
@@ -56,7 +59,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpec extends Abstract
      */
     public void setValues(List<Long> values) {
         this.setDirtyIf(!Objects.equals(this.values, values));
-        this.values = values;
+        this.values = values != null ? Collections.unmodifiableList(values) : null;
     }
 
     /**

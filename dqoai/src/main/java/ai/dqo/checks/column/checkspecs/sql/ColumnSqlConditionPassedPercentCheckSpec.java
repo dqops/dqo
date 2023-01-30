@@ -162,6 +162,6 @@ public class ColumnSqlConditionPassedPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.VALIDITY;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

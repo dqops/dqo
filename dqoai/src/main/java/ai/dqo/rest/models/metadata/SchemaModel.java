@@ -17,7 +17,7 @@ package ai.dqo.rest.models.metadata;
 
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -42,8 +42,8 @@ public class SchemaModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this schema.")
-    private ProfilerSearchFilters runProfilerJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this schema.")
+    private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
     @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
     private ImportTablesQueueJobParameters importTableJobParameters;

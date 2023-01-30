@@ -15,22 +15,22 @@
  */
 package ai.dqo.checks.column.checkspecs.strings;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
-import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.EqualsAndHashCode;
-
-import java.util.Objects;
+//import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+//import ai.dqo.checks.AbstractRuleSetSpec;
+//import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
+//import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+//import ai.dqo.sensors.AbstractSensorParametersSpec;
+//import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+//import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonInclude;
+//import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+//import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+//import com.fasterxml.jackson.databind.annotation.JsonNaming;
+//import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+//import lombok.EqualsAndHashCode;
+//
+//import java.util.Objects;
 
 ///**
 // * Column string length in range percent (select count(column_name) from ...) check that counts string length in range percent in a column.

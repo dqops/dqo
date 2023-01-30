@@ -161,6 +161,6 @@ public class TableDaysSinceMostRecentIngestionCheckSpec extends AbstractCheckSpe
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.Timeliness;
     }
 }

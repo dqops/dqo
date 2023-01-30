@@ -23,7 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,7 +48,7 @@ public class SensorExecutionRunParameters {
     @JsonIgnore
     private AbstractCheckSpec<?,?,?,?> check;
     @JsonIgnore
-    private AbstractProfilerSpec<?> profiler;
+    private AbstractStatisticsCollectorSpec<?> profiler;
     private TimeSeriesConfigurationSpec timeSeries;
     private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
@@ -76,7 +76,7 @@ public class SensorExecutionRunParameters {
 			TableSpec table,
 			ColumnSpec column,
 			AbstractCheckSpec check,
-            AbstractProfilerSpec profiler,
+            AbstractStatisticsCollectorSpec profiler,
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             DataStreamMappingSpec dataStreams,
@@ -163,7 +163,7 @@ public class SensorExecutionRunParameters {
      * Returns the profiler instance that is executed.
      * @return Profiler instance.
      */
-    public AbstractProfilerSpec<?> getProfiler() {
+    public AbstractStatisticsCollectorSpec<?> getProfiler() {
         return profiler;
     }
 
@@ -171,7 +171,7 @@ public class SensorExecutionRunParameters {
      * Sets the profiler instance.
      * @param profiler Profiler instance.
      */
-    public void setProfiler(AbstractProfilerSpec<?> profiler) {
+    public void setProfiler(AbstractStatisticsCollectorSpec<?> profiler) {
         this.profiler = profiler;
     }
 

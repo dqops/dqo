@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnProfileModel } from '../../api';
+import { ColumnStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -17,14 +17,14 @@ const TableColumns = ({
   schemaName,
   tableName
 }: ITableColumnsProps) => {
-  const [columns, setColumns] = useState<ColumnProfileModel[]>();
+  const [columns, setColumns] = useState<ColumnStatisticsModel[]>();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedColumn, setSelectedColumn] = useState<ColumnProfileModel>();
+  const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
 
   const fetchColumns = async () => {
     try {
-      const res: AxiosResponse<ColumnProfileModel[]> =
-        await ColumnApiClient.getProfiledColumns(connectionName, schemaName, tableName);
+      const res: AxiosResponse<ColumnStatisticsModel[]> =
+        await ColumnApiClient.getColumnsWithStatistics(connectionName, schemaName, tableName);
       setColumns(res.data);
     } catch (err) {
       console.error(err);
@@ -35,7 +35,7 @@ const TableColumns = ({
     fetchColumns().then();
   }, [connectionName, schemaName, tableName]);
 
-  const onRemoveColumn = (column: ColumnProfileModel) => {
+  const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
     setSelectedColumn(column);
   };
@@ -76,7 +76,7 @@ const TableColumns = ({
             Scale
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
-            Profiler metrics
+            Statistics
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Action
@@ -101,13 +101,13 @@ const TableColumns = ({
                 {column.type_snapshot?.scale}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-                {column?.metrics && (
+                {column?.statistics && (
                   <table>
                     <tbody>
-                      {column?.metrics?.map((metric, index) => (
+                      {column?.statistics?.map((metric, index) => (
                         <tr key={index}>
                           <td className="px-2">{metric.category}</td>
-                          <td className="px-2">{metric.profiler}</td>
+                          <td className="px-2">{metric.collector}</td>
                           <td className="px-2 truncate">{renderValue(metric.result)}</td>
                         </tr>
                       ))}

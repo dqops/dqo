@@ -16,6 +16,7 @@
 
 package ai.dqo.sensors.column.strings;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -40,6 +41,7 @@ public class ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec ex
     };
 
     @JsonPropertyDescription("This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0")
+    @SampleValues(values = "5")
     private int maximumLength = 0;
 
     /**

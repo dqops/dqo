@@ -42,6 +42,12 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_numbers_in_set_percent", o -> o.dailyCheckpointNumbersInSetPercent);
             put("daily_checkpoint_values_in_range_numeric_percent", o -> o.dailyCheckpointValuesInRangeNumericPercent);
             put("daily_checkpoint_values_in_range_integers_percent", o -> o.dailyCheckpointValuesInRangeIntegersPercent);
+            put("daily_checkpoint_max_in_range", o -> o.dailyCheckpointMaxInRange);
+            put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
+            put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
+            put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
+            put("daily_checkpoint_sample_stddev_in_range", o -> o.dailyCheckpointSampleStddevInRange);
+            put("daily_checkpoint_population_stddev_in_range", o -> o.dailyCheckpointPopulationStddevInRange);
         }
     };
 
@@ -62,6 +68,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyCheckpointValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMaxInRangeCheckSpec dailyCheckpointMaxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMinInRangeCheckSpec dailyCheckpointMinInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnSumInRangeCheckSpec dailyCheckpointSumInRange;
+
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnMeanInRangeCheckSpec dailyCheckpointMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnSampleStddevInRangeCheckSpec dailyCheckpointSampleStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPopulationStddevInRangeCheckSpec dailyCheckpointPopulationStddevInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -170,7 +194,115 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.dailyCheckpointValuesInRangeIntegersPercent = dailyCheckpointValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(dailyCheckpointValuesInRangeIntegersPercent, "daily_checkpoint_values_in_range_integers_percent");
     }
-    
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getDailyCheckpointMaxInRange() {
+        return dailyCheckpointMaxInRange;
+    }
+
+    /**
+     * Sets a new specification of a max in range check.
+     * @param dailyCheckpointMaxInRange Max in range check specification.
+     */
+    public void setDailyCheckpointMaxInRange(ColumnMaxInRangeCheckSpec dailyCheckpointMaxInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMaxInRange, dailyCheckpointMaxInRange));
+        this.dailyCheckpointMaxInRange = dailyCheckpointMaxInRange;
+        propagateHierarchyIdToField(dailyCheckpointMaxInRange, "daily_checkpoint_max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getDailyCheckpointMinInRange() {
+        return dailyCheckpointMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param dailyCheckpointMinInRange Min in range check specification.
+     */
+    public void setDailyCheckpointMinInRange(ColumnMinInRangeCheckSpec dailyCheckpointMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinInRange, dailyCheckpointMinInRange));
+        this.dailyCheckpointMinInRange = dailyCheckpointMinInRange;
+        propagateHierarchyIdToField(dailyCheckpointMinInRange, "daily_checkpoint_min_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getDailyCheckpointSumInRange() {
+        return dailyCheckpointSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param dailyCheckpointSumInRange Sum in range check specification.
+     */
+    public void setDailyCheckpointSumInRange(ColumnSumInRangeCheckSpec dailyCheckpointSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSumInRange, dailyCheckpointSumInRange));
+        this.dailyCheckpointSumInRange = dailyCheckpointSumInRange;
+        propagateHierarchyIdToField(dailyCheckpointSumInRange, "daily_checkpoint_sum_in_range");
+    }
+
+    /**
+     * Returns a mean in range check specification.
+     * @return Mean in range check specification.
+     */
+    public ColumnMeanInRangeCheckSpec getDailyCheckpointMeanInRange() {
+        return dailyCheckpointMeanInRange;
+    }
+
+    /**
+     * Sets a new specification of a mean in range check.
+     * @param dailyCheckpointMeanInRange Mean in range check specification.
+     */
+    public void setDailyCheckpointMeanInRange(ColumnMeanInRangeCheckSpec dailyCheckpointMeanInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanInRange, dailyCheckpointMeanInRange));
+        this.dailyCheckpointMeanInRange = dailyCheckpointMeanInRange;
+        propagateHierarchyIdToField(dailyCheckpointMeanInRange, "daily_checkpoint_mean_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleStddevInRangeCheckSpec getDailyCheckpointSampleStddevInRange() {
+        return dailyCheckpointSampleStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param dailyCheckpointSampleStddevInRange Sample standard deviation in range check specification.
+     */
+    public void setDailyCheckpointSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec dailyCheckpointSampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSampleStddevInRange, dailyCheckpointSampleStddevInRange));
+        this.dailyCheckpointSampleStddevInRange = dailyCheckpointSampleStddevInRange;
+        propagateHierarchyIdToField(dailyCheckpointSampleStddevInRange, "daily_checkpoint_sample_stddev_in_range");
+    }
+
+    /**
+     * Returns a population standard deviation in range check specification.
+     * @return Population standard deviation in range check specification.
+     */
+    public ColumnPopulationStddevInRangeCheckSpec getDailyCheckpointPopulationStddevInRange() {
+        return dailyCheckpointPopulationStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a population standard deviation in range check.
+     * @param dailyCheckpointPopulationStddevInRange Population standard deviation in range check specification.
+     */
+    public void setDailyCheckpointPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec dailyCheckpointPopulationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPopulationStddevInRange, dailyCheckpointPopulationStddevInRange));
+        this.dailyCheckpointPopulationStddevInRange = dailyCheckpointPopulationStddevInRange;
+        propagateHierarchyIdToField(dailyCheckpointPopulationStddevInRange, "daily_checkpoint_population_stddev_in_range");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

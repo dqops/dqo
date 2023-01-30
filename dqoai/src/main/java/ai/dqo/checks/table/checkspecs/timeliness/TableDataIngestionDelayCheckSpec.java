@@ -161,6 +161,6 @@ public class TableDataIngestionDelayCheckSpec extends AbstractCheckSpec<TableTim
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.Timeliness;
     }
 }

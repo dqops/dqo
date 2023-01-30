@@ -51,14 +51,6 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
      * @return Search visitor.
      */
-    public LegacyCheckSearchFiltersVisitor createLegacyCheckSearchFilterVisitor() {
-        return new LegacyCheckSearchFiltersVisitor(this);
-    }
-
-    /**
-     * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
-     * @return Search visitor.
-     */
     public CheckSearchFiltersVisitor createCheckSearchFilterVisitor() {
         return new CheckSearchFiltersVisitor(this);
     }

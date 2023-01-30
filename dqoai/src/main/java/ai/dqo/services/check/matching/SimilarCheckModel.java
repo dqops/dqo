@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check.matching;
 
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.services.check.mapping.models.UICheckModel;
@@ -23,6 +24,7 @@ import ai.dqo.services.check.mapping.models.UICheckModel;
  * Describes a single check that is similar to other checks in other check types.
  */
 public class SimilarCheckModel {
+    private CheckTarget checkTarget;
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String category;
@@ -30,16 +32,30 @@ public class SimilarCheckModel {
 
     /**
      * Creates a similar check model.
+     * @param checkTarget Check target (table or column).
      * @param checkType Check type.
      * @param timeScale Time scale (optional, null for experiments).
      * @param category Check category name.
      * @param checkModel Check UI model with the check name and additional information about the check.
      */
-    public SimilarCheckModel(CheckType checkType, CheckTimeScale timeScale, String category, UICheckModel checkModel) {
+    public SimilarCheckModel(CheckTarget checkTarget,
+                             CheckType checkType,
+                             CheckTimeScale timeScale,
+                             String category,
+                             UICheckModel checkModel) {
+        this.checkTarget = checkTarget;
         this.checkType = checkType;
         this.timeScale = timeScale;
         this.category = category;
         this.checkModel = checkModel;
+    }
+
+    /**
+     * Returns the check target (table or column).
+     * @return Check target.
+     */
+    public CheckTarget getCheckTarget() {
+        return checkTarget;
     }
 
     /**

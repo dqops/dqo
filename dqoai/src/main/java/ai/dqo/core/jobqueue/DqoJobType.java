@@ -24,8 +24,8 @@ public enum DqoJobType {
     @JsonProperty("run checks")
     RUN_CHECKS,
 
-    @JsonProperty("run profilers")
-    RUN_PROFILERS,
+    @JsonProperty("collect statistics")
+    COLLECT_STATISTICS,
 
     @JsonProperty("queue thread shutdown")
     QUEUE_THREAD_SHUTDOWN,

@@ -82,7 +82,7 @@ public class BigQueryColumnStringsStringMostPopularValuesSensorParametersSpecInt
         this.sut.setFilter("id < 5");
         DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
         dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
-            setSource(DataStreamLevelSource.COLUMN_VALUE);
+            setSource(DataStreamLevelSource.column_value);
             setColumn("id");
         }});
         this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);

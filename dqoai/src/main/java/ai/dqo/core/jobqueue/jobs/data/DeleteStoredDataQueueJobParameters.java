@@ -46,9 +46,9 @@ public class DeleteStoredDataQueueJobParameters {
     private String qualityDimension;
     private String timeGradient;
 
-    private String profilerCategory;
-    private String profilerName;
-    private String profilerType;
+    private String collectorCategory;
+    private String collectorName;
+    private String collectorTarget;
 
     public DeleteStoredDataQueueJobParameters() {
     }

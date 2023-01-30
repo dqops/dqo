@@ -15,15 +15,45 @@
  */
 package ai.dqo.utils.docs.checks;
 
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
+import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
+import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
+import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
+import ai.dqo.execution.sqltemplates.JinjaTemplateRenderService;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.storage.localfiles.HomeType;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
 import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarChecksContainer;
 import ai.dqo.services.check.matching.SimilarChecksGroup;
 import ai.dqo.utils.docs.rules.RuleDocumentationModelFactory;
+import ai.dqo.utils.docs.sensors.SensorDocumentationModel;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.YamlSerializer;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
@@ -49,30 +79,78 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         // TODO: add more
     }};
 
-    private static final CommentFormatter formatter = new CommentFormatter();
+    private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     private DqoHomeContext dqoHomeContext;
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
+    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
+    private JinjaTemplateRenderService jinjaTemplateRenderService;
 
     /**
      * Creates a check documentation service.
      * @param dqoHomeContext DQO Home.
-     * @param yamlSerializer Yaml serializer.
+     * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
+     * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
+     * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
+     * @param uiToSpecCheckMappingService UI check model to specification adapter that can generate a sample usage for us.
+     * @param yamlSerializer Yaml serializer, used to render the table yaml files with a sample usage.
+     * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
     @Autowired
     public CheckDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
                                               SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
-                                              YamlSerializer yamlSerializer) {
+                                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                                              YamlSerializer yamlSerializer,
+                                              JinjaTemplateRenderService jinjaTemplateRenderService) {
         this.dqoHomeContext = dqoHomeContext;
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
+        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
         this.yamlSerializer = yamlSerializer;
+        this.jinjaTemplateRenderService = jinjaTemplateRenderService;
+    }
+
+    /**
+     * Creates a column specification with a label.
+     * @param label Label to add to the column.
+     * @return Column specification.
+     */
+    private ColumnSpec createColumnWithLabel(String label) {
+        ColumnSpec columnSpec = new ColumnSpec();
+        LabelSetSpec labels = new LabelSetSpec();
+        labels.add(label);
+        columnSpec.setLabels(labels);
+        return columnSpec;
+    }
+
+    /**
+     * Creates a table specification with one sample table and the timestamp columns configured.
+     * @param addAnalyzedColumn Boolean value - add the analyzed column.
+     * @return Table specification.
+     */
+    private TableSpec createTableSpec(boolean addAnalyzedColumn) {
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.getTarget().setSchemaName("target_schema");
+        tableSpec.getTarget().setTableName("target_table");
+
+        if (addAnalyzedColumn) {
+            ColumnSpec columnSpec = createColumnWithLabel("This is the column that is analyzed for data quality issues");
+            tableSpec.getColumns().put("target_column", columnSpec);
+        }
+
+        tableSpec.getColumns().put("col_event_timestamp", createColumnWithLabel("optional column that stores the timestamp when the event/transaction happened"));
+        tableSpec.getColumns().put("col_inserted_at", createColumnWithLabel("optional column that stores the timestamp when row was ingested"));
+        TimestampColumnsSpec timestampColumns = tableSpec.getTimestampColumns();
+        timestampColumns.setEventTimestampColumn("col_event_timestamp");
+        timestampColumns.setIngestionTimestampColumn("col_inserted_at");
+
+        return tableSpec;
     }
 
     /**
@@ -84,12 +162,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         UserHomeImpl userHome = new UserHomeImpl();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
-        TableSpec tableSpec = new TableSpec();
+        TableSpec tableSpec = createTableSpec(false);
         tableWrapper.setSpec(tableSpec);
 
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks(tableSpec);
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, "table");
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
         return resultList;
     }
@@ -103,14 +181,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         UserHomeImpl userHome = new UserHomeImpl();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
-        TableSpec tableSpec = new TableSpec();
+        TableSpec tableSpec = createTableSpec(true);
         tableWrapper.setSpec(tableSpec);
-        ColumnSpec columnSpec = new ColumnSpec();
-        tableSpec.getColumns().put("<target_column>", columnSpec);
 
+        ColumnSpec columnSpec = tableSpec.getColumns().getAt(0);
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, "column");
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
 
         return resultList;
     }
@@ -128,7 +205,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             Map<String, Collection<SimilarChecksGroup>> checksPerGroup,
             Map<String, String> categoryHelpMap,
             TableSpec tableSpec,
-            String target) {
+            CheckTarget target) {
         List<CheckCategoryDocumentationModel> resultList = new ArrayList<>();
 
         for (Map.Entry<String, Collection<SimilarChecksGroup>> similarChecksInGroup : checksPerGroup.entrySet()) {
@@ -141,24 +218,25 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarChecksDocumentationModel similarChecksDocumentationModel = new SimilarChecksDocumentationModel();
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
-                similarChecksDocumentationModel.setTarget(target);
+                similarChecksDocumentationModel.setTarget(target.name());
                 similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName());
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
                 if (checkClassJavadoc != null) {
                     if (checkClassJavadoc.getComment() != null) {
-                        String formattedClassComment = formatter.format(checkClassJavadoc.getComment());
+                        String formattedClassComment = commentFormatter.format(checkClassJavadoc.getComment());
                         similarChecksDocumentationModel.setCheckSpecClassJavaDoc(formattedClassComment);
                     }
                 }
 
-                similarChecksDocumentationModel.setSensor(this.sensorDocumentationModelFactory.createSensorDocumentation(
-                        firstCheckModel.getCheckModel().getSensorParametersSpec()));
+                SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(
+                        firstCheckModel.getCheckModel().getSensorParametersSpec());
+                similarChecksDocumentationModel.setSensor(sensorDocumentation);
                 similarChecksDocumentationModel.setRule(this.ruleDocumentationModelFactory.createRuleDocumentation(
                         firstCheckModel.getCheckModel().getRule().findFirstNotNullRule().getRuleParametersSpec()));
 
                 for (SimilarCheckModel similarCheckModel : similarChecksGroup.getSimilarChecks()) {
-                    CheckDocumentationModel checkDocumentationModel = buildCheckDocumentationModel(similarCheckModel, tableSpec);
+                    CheckDocumentationModel checkDocumentationModel = buildCheckDocumentationModel(similarCheckModel, tableSpec, sensorDocumentation);
                     similarChecksDocumentationModel.getAllChecks().add(checkDocumentationModel);
                 }
 
@@ -174,28 +252,180 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * Builds documentation for a single check.
      * @param similarCheckModel Similar check model.
      * @param tableSpec Table specification that will be used to generate a YAML example.
+     * @param sensorDocumentation Sensor documentation, useful to render the SQL.
      * @return Documentation for a single check.
      */
-    public CheckDocumentationModel buildCheckDocumentationModel(SimilarCheckModel similarCheckModel, TableSpec tableSpec) {
+    public CheckDocumentationModel buildCheckDocumentationModel(SimilarCheckModel similarCheckModel,
+                                                                TableSpec tableSpec,
+                                                                SensorDocumentationModel sensorDocumentation) {
         CheckDocumentationModel checkDocumentationModel = new CheckDocumentationModel();
-        checkDocumentationModel.setCheckName(similarCheckModel.getCheckModel().getCheckName());
+        UICheckModel checkModel = similarCheckModel.getCheckModel();
+        checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
-        checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale().name());
-        checkDocumentationModel.setCheckHelp(similarCheckModel.getCheckModel().getHelpText());
-        checkDocumentationModel.setCheckModel(similarCheckModel.getCheckModel());
+        checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
+        checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
+        checkDocumentationModel.setCheckModel(checkModel);
         checkDocumentationModel.setCategory(similarCheckModel.getCategory());
 
-        ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(similarCheckModel.getCheckModel().getCheckSpec().getClass());
+        ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(checkModel.getCheckSpec().getClass());
         if (checkClassJavadoc != null) {
             if (checkClassJavadoc.getComment() != null) {
-                String formattedClassComment = formatter.format(checkClassJavadoc.getComment());
+                String formattedClassComment = commentFormatter.format(checkClassJavadoc.getComment());
                 checkDocumentationModel.setCheckSpecClassJavaDoc(formattedClassComment);
             }
         }
 
-        // TODO: generate sample YAML and sample CLI commands
-        // TODO: in the future, we can also show the generated JSON for the "run sensors" rest rest api job
+        TableSpec trimmedTableSpec = tableSpec.trim();
+        trimmedTableSpec.setDataStreams(new DataStreamMappingSpecMap());
+        ColumnSpec columnSpec = trimmedTableSpec.getColumns().getAt(0);
+        for (int i = 0; i < trimmedTableSpec.getColumns().size(); i++) {
+            trimmedTableSpec.getColumns().getAt(i).setLabels(tableSpec.getColumns().getAt(i).getLabels().clone());
+        }
+
+        AbstractRootChecksContainerSpec checkRootContainer =
+            (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
+                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale()) :
+                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale());
+        if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
+            trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
+        }
+        else {
+            columnSpec.setColumnCheckRootContainer(checkRootContainer);
+        }
+
+        UIAllChecksModel allChecksModel = new UIAllChecksModel();
+        UIQualityCategoryModel uiCategoryModel = new UIQualityCategoryModel(similarCheckModel.getCategory());
+        UICheckModel sampleCheckModel = checkModel.cloneForUpdate();
+        sampleCheckModel.setConfigured(true);
+        if (sampleCheckModel.getRule().getError() != null) {
+            sampleCheckModel.getRule().getError().setConfigured(true);
+        }
+        if (sampleCheckModel.getRule().getWarning() != null) {
+            sampleCheckModel.getRule().getWarning().setConfigured(true);
+        }
+        if (sampleCheckModel.getRule().getFatal() != null) {
+            sampleCheckModel.getRule().getFatal().setConfigured(true);
+        }
+        sampleCheckModel.applySampleValues();
+        uiCategoryModel.getChecks().add(sampleCheckModel);
+        allChecksModel.getCategories().add(uiCategoryModel);
+        this.uiToSpecCheckMappingService.updateAllChecksSpecs(allChecksModel, checkRootContainer);
+
+        HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
+        AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>) checkCategoryContainer.getChild(checkModel.getCheckName());
+
+        TableYaml tableYaml = new TableYaml(trimmedTableSpec);
+        String yamlSample = this.yamlSerializer.serialize(tableYaml);
+        checkDocumentationModel.setSampleYaml(yamlSample);
+
+        checkDocumentationModel.setProviderTemplates(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+
+        trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
+        trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
+        DataStreamMappingSpec dataStreamMapping = new DataStreamMappingSpec();
+        dataStreamMapping.setLevel1(DataStreamLevelSpec.createForColumn("country"));
+        dataStreamMapping.setLevel2(DataStreamLevelSpec.createForColumn("state"));
+        trimmedTableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
+        String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
+        checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+
+        checkDocumentationModel.setProviderTemplatesDataStreams(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+
+
+        // TODO: generate sample CLI commands
+        // TODO: in the future, we can also show the generated JSON for the "run sensors" rest rest api job and cli command to enable this sensor
 
         return checkDocumentationModel;
+    }
+
+    /**
+     * Renders provider specific sensors for one check.
+     * @param tableSpec Table specification.
+     * @param checkSpec Check specification with filled sensor parameters that are using the sample data.
+     * @param checkRootContainer Check container.
+     * @param sensorDocumentation Sensor documentation to find the templates.
+     * @return List of rendered SQLs for each supported provider.
+     */
+    protected List<CheckProviderRenderedSqlDocumentationModel> generateProviderSamples(
+            TableSpec tableSpec, AbstractCheckSpec<?,?,?,?> checkSpec, AbstractRootChecksContainerSpec checkRootContainer, SensorDocumentationModel sensorDocumentation) {
+        List<CheckProviderRenderedSqlDocumentationModel> results = new ArrayList<>();
+
+        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDocumentation.getDefinition();
+        for (ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper : sensorDefinitionWrapper.getProviderSensors()) {
+            ProviderType providerType = providerSensorDefinitionWrapper.getProvider();
+
+            CheckProviderRenderedSqlDocumentationModel providerDocModel = new CheckProviderRenderedSqlDocumentationModel();
+            providerDocModel.setProviderType(providerType);
+            String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
+            providerDocModel.setJinjaTemplate(sqlTemplate);
+
+            if (sqlTemplate != null) {
+                SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
+                        providerSensorDefinitionWrapper.getSpec(), sqlTemplate,
+                        providerType, HomeType.DQO_HOME, null);
+
+                ConnectionSpec connectionSpec = new ConnectionSpec();
+                connectionSpec.setBigquery(new BigQueryParametersSpec() {{
+                    setSourceProjectId("your-google-project-id");
+                }});
+                connectionSpec.setSnowflake(new SnowflakeParametersSpec() {{
+                    setDatabase("your_snowflake_database");
+                }});
+                connectionSpec.setPostgresql(new PostgresqlParametersSpec() {{
+                    setDatabase("your_postgresql_database");
+                }});
+                connectionSpec.setProviderType(providerType);
+
+                TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
+                ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
+
+                SensorExecutionRunParameters sensorRunParameters = new SensorExecutionRunParameters(
+                        connectionSpec,
+                        tableSpec,
+                        tableSpec.getColumns().getAt(0),
+                        checkSpec,
+                        null,
+                        checkRootContainer.getCheckType(),
+                        timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
+                        tableSpec.getDataStreams().getFirstDataStreamMapping(),
+                        checkSpec.getParameters(),
+                        providerDialectSettings
+                );
+
+                JinjaTemplateRenderParameters templateRenderParameters = JinjaTemplateRenderParameters.createFromTrimmedObjects(
+                        sensorRunParameters, sensorDefinitionFindResult);
+                try {
+                    String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
+                    providerDocModel.setRenderedTemplate(renderedTemplate);
+                }
+                catch (Exception ex) {
+                    throw new DqoRuntimeException("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", exception: " + ex.getMessage(), ex);
+                }
+            }
+            results.add(providerDocModel);
+        }
+
+        return results;
+    }
+
+
+    /**
+     * Creates a provider specific default provider settings that describe how the provider renders quoted identifiers or other objects.
+     * @param providerType Provider type.
+     * @return Provider dialect settings.
+     */
+    protected ProviderDialectSettings getProviderDialectSettings(ProviderType providerType) {
+        switch (providerType) {
+            case bigquery:
+                return BigQueryConnectionProvider.DIALECT_SETTINGS;
+            case snowflake:
+                return SnowflakeConnectionProvider.DIALECT_SETTINGS;
+            case postgresql:
+                return PostgresqlConnectionProvider.DIALECT_SETTINGS;
+            default:
+                throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
+        }
     }
 }

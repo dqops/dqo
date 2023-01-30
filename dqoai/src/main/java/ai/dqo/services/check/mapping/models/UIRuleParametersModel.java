@@ -16,6 +16,7 @@
 package ai.dqo.services.check.mapping.models;
 
 import ai.dqo.rules.AbstractRuleParametersSpec;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).
@@ -33,7 +35,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIRuleParametersModel", description = "UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).")
-public class UIRuleParametersModel {
+public class UIRuleParametersModel implements Cloneable {
     @JsonPropertyDescription("Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.")
     private String ruleName;
 
@@ -51,4 +53,41 @@ public class UIRuleParametersModel {
 
     @JsonPropertyDescription("Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).")
     private boolean configured;
+
+    /**
+     * Creates a selective deep/shallow clone of the object. Definition objects are not cloned, but all other editable objects are.
+     * @return Cloned instance.
+     */
+    public UIRuleParametersModel cloneForUpdate() {
+        try {
+            UIRuleParametersModel cloned = (UIRuleParametersModel)super.clone();
+            if (cloned.ruleParametersSpec != null) {
+                cloned.ruleParametersSpec = cloned.ruleParametersSpec.clone();
+            }
+
+            if (cloned.ruleParameters != null) {
+                cloned.ruleParameters = cloned.ruleParameters
+                        .stream()
+                        .map(uiFieldModel -> uiFieldModel.cloneForUpdate())
+                        .collect(Collectors.toList());
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported: " + ex.toString(), ex);
+        }
+    }
+
+    /**
+     * Applies sample values for fields that have a sample value. Overrides the current values.
+     * The model filled with sample values is used for generating the documentation model.
+     */
+    public void applySampleValues() {
+        if (this.ruleParameters != null) {
+            for (UIFieldModel ruleParameterFieldModel : this.ruleParameters) {
+                ruleParameterFieldModel.applySampleValues();
+            }
+        }
+    }
 }
