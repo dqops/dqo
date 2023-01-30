@@ -81,9 +81,9 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
         SensorDefinitionList sensorDefinitionList= dqoHome.getSensors();
-        List<SensorDefinitionWrapper> SensorDefinitionWrapperList = sensorDefinitionList.toList();
+        List<SensorDefinitionWrapper> sensorDefinitionWrapperList = sensorDefinitionList.toList();
 
-        Stream<SensorModel> sensorModel = SensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
+        Stream<SensorModel> sensorModel = sensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
             setSensorName(s.getName());
             setSensorDefinitionSpec(s.getSpec());
         }});
@@ -225,8 +225,8 @@ public class SensorsController {
 
         SensorDefinitionList sensorDefinitionList= userHome.getSensors();
 
-        List<SensorDefinitionWrapper> SensorDefinitionWrapperList = sensorDefinitionList.toList();
-        Stream<SensorModel> sensorModel = SensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
+        List<SensorDefinitionWrapper> sensorDefinitionWrapperList = sensorDefinitionList.toList();
+        Stream<SensorModel> sensorModel = sensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
             setSensorName(s.getName());
             setSensorDefinitionSpec(s.getSpec());
         }});
@@ -375,7 +375,6 @@ public class SensorsController {
 
         existingSensorDefinitionWrapper.markForDeletion();
         userHomeContext.flush();
-
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
     }
@@ -677,17 +676,28 @@ public class SensorsController {
         List<SensorDefinitionWrapper> userSensorDefinitionWrapperList = userHomeSensors.toList();
 
         /*
+         * Create a Hashmap to store data on combined sensors.
+         * The key is sensor name and the value is SensorDefinitionWrapper.
+         */
+        Map<String, SensorDefinitionWrapper> sensorDefinitionMap = new HashMap<>();
+
+        /*
+         * All custom sensors (in user home) stored in user home are added first.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: userSensorDefinitionWrapperList) {
+            sensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+        }
+
+        /*
          * If the same sensor is defined both as custom (in user home)
          * and as builtin (in dqo home), we return the custom definition.
          */
-        List<SensorDefinitionWrapper> sensorModel = new ArrayList<>(Stream.of(userSensorDefinitionWrapperList, sensorDefinitionWrapperList)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toMap(SensorDefinitionWrapper::getName,
-                                sensor -> sensor,
-                                (SensorDefinitionWrapper custom, SensorDefinitionWrapper builtIn) -> custom))
-                        .values());
-
-        Stream<SensorModel> sensorModelStream = sensorModel.stream().map(s -> new SensorModel(){{
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: sensorDefinitionWrapperList) {
+            if(!sensorDefinitionMap.containsKey(sensorDefinitionWrapper.getName())){
+                sensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+            }
+        }
+        Stream<SensorModel> sensorModelStream = sensorDefinitionMap.values().stream().map(s -> new SensorModel(){{
                     setSensorName(s.getName());
                     setSensorDefinitionSpec(s.getSpec());
         }});
@@ -760,7 +770,7 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList sensorDefinitionList= dqoHome.getSensors(); //Get sensors definitions from DQO Home
 
-        List<SensorDefinitionWrapper> providerSensorModel = sensorDefinitionList.toList().stream()
+        List<SensorDefinitionWrapper> homeSensorDefinitionWrapper = sensorDefinitionList.toList().stream()
                 .map(sp -> Pair.of(sp, sp.getProviderSensors().getByObjectName(providerType,true)))
                 .filter(pair -> pair.getRight() != null).map(Pair::getLeft).collect(Collectors.toList()); //Check if the builtin sensor definition exists for the specified provider
 
@@ -768,22 +778,34 @@ public class SensorsController {
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorsDefinitionList = userHome.getSensors(); //Get sensors definitions from UserHome
 
-        List<SensorDefinitionWrapper> userProviderSensorModel = userHomeSensorsDefinitionList.toList().stream()
+        List<SensorDefinitionWrapper> userSensorDefinitionWrapper = userHomeSensorsDefinitionList.toList().stream()
                 .map(sp -> Pair.of(sp, sp.getProviderSensors().getByObjectName(providerType,true)))
                 .filter(pair -> pair.getRight() != null).map(Pair::getLeft).collect(Collectors.toList()); //Check if the custom sensor definition exists for the specified provider
+
+        /*
+         * Create a Hashmap to store data on combined sensors.
+         * The key is sensor name and the value is SensorDefinitionWrapper.
+         */
+        Map<String, SensorDefinitionWrapper> providerSensorDefinitionMap = new HashMap<>();
+
+        /*
+         * All custom provider sensors (in user home) stored in user home are added first.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: userSensorDefinitionWrapper) {
+            providerSensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+        }
 
         /*
          * If the same provider sensor is defined both as custom (in user home)
          * and as builtin (in dqo home), we return the custom definition.
          */
-        List<SensorDefinitionWrapper> combinedProviderSensorModel = new ArrayList<>(Stream.of(userProviderSensorModel, providerSensorModel)
-                .flatMap(List::stream)
-                .collect(Collectors.toMap(SensorDefinitionWrapper::getName,
-                        providerSensor -> providerSensor,
-                        (SensorDefinitionWrapper custom, SensorDefinitionWrapper builtIn) -> custom))
-                .values());
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: homeSensorDefinitionWrapper) {
+            if(!providerSensorDefinitionMap.containsKey(sensorDefinitionWrapper.getName())){
+                providerSensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+            }
+        }
 
-        Stream<ProviderSensorModel> providerSensorModelStream = combinedProviderSensorModel.stream().map(s -> new ProviderSensorModel(){{
+        Stream<ProviderSensorModel> providerSensorModelStream = providerSensorDefinitionMap.values().stream().map(s -> new ProviderSensorModel(){{
                     setSensorName(s.getName());
                     setProviderType(providerType);
                     setProviderSensorDefinitionSpec(s.getProviderSensors().getByObjectName(providerType, true).getSpec());

@@ -35,9 +35,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /**
@@ -364,9 +364,9 @@ public class RuleController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
-        RuleDefinitionList CustomRuleDefinitionList = userHome.getRules();
+        RuleDefinitionList customRuleDefinitionList = userHome.getRules();
 
-        List<RuleDefinitionWrapper> CustomRuleDefinitionWrapperList = CustomRuleDefinitionList.toList();
+        List<RuleDefinitionWrapper> customRuleDefinitionWrapperList = customRuleDefinitionList.toList();
 
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
@@ -377,17 +377,29 @@ public class RuleController {
         List<RuleDefinitionWrapper> ruleDefinitionWrapperList = ruleDefinitionList.toList();
 
         /*
+         * Create a Hashmap to store data on rules.
+         * The key is rule name and the value is RuleDefinitionWrapper.
+         */
+        Map<String, RuleDefinitionWrapper> ruleDefinitionMap = new HashMap<>();
+
+        /*
+         * All custom rules (in user home) stored in user home are added first.
+         */
+        for (RuleDefinitionWrapper ruleDefinitionWrapper: customRuleDefinitionWrapperList) {
+            ruleDefinitionMap.put(ruleDefinitionWrapper.getRuleName(), ruleDefinitionWrapper);
+        }
+
+        /*
          * If the same rule is defined both as custom (in user home)
          * and as builtin (in dqo home), we return the custom definition.
          */
-        List<RuleDefinitionWrapper> ruleModel = new ArrayList<>(Stream.of(CustomRuleDefinitionWrapperList, ruleDefinitionWrapperList)
-                .flatMap(List::stream)
-                .collect(Collectors.toMap(RuleDefinitionWrapper::getRuleName,
-                        providerSensor -> providerSensor,
-                        (RuleDefinitionWrapper custom, RuleDefinitionWrapper builtIn) -> custom))
-                .values());
+        for (RuleDefinitionWrapper ruleDefinitionWrapper: ruleDefinitionWrapperList) {
+            if(!ruleDefinitionMap.containsKey(ruleDefinitionWrapper.getRuleName())){
+                ruleDefinitionMap.put(ruleDefinitionWrapper.getRuleName(), ruleDefinitionWrapper);
+            }
+        }
 
-        Stream<RuleModel> ruleModelStream =ruleModel.stream().map(s -> new RuleModel() {{
+        Stream<RuleModel> ruleModelStream = ruleDefinitionMap.values().stream().map(s -> new RuleModel() {{
             setRuleName(s.getRuleName());
             setRulePythonModuleContent(s.getRulePythonModuleContent());
             setRuleDefinitionSpec(s.getSpec());
@@ -414,9 +426,9 @@ public class RuleController {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        RuleDefinitionList CustomRuleDefinitionList = userHome.getRules();
+        RuleDefinitionList customRuleDefinitionList = userHome.getRules();
 
-        RuleDefinitionWrapper ruleDefinitionWrapper = CustomRuleDefinitionList.getByObjectName(ruleName, true);
+        RuleDefinitionWrapper ruleDefinitionWrapper = customRuleDefinitionList.getByObjectName(ruleName, true);
 
         /*
          * Check if the rule definition exists in User home.
