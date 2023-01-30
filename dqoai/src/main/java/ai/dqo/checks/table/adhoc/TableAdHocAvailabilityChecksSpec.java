@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAdHocAvailabilityChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocAvailabilityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("row_count", o -> o.rowCount);
+            put("table_availability", o -> o.tableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
-    private TableAvailabilityRowCountCheckSpec rowCount;
+    private TableAvailabilityCheckSpec tableAvailability;
 
     /**
      * Returns a row count check.
      * @return Row count check.
      */
-    public TableAvailabilityRowCountCheckSpec getRowCount() {
-        return rowCount;
+    public TableAvailabilityCheckSpec getTableAvailability() {
+        return tableAvailability;
     }
 
     /**
      * Sets a new definition of a row count check.
-     * @param rowCount Row count check.
+     * @param tableAvailability Row count check.
      */
-    public void setRowCount(TableAvailabilityRowCountCheckSpec rowCount) {
-        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-        propagateHierarchyIdToField(rowCount, "row_count");
+    public void setTableAvailability(TableAvailabilityCheckSpec tableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.tableAvailability, tableAvailability));
+        this.tableAvailability = tableAvailability;
+        propagateHierarchyIdToField(tableAvailability, "table_availability");
     }
 
     /**

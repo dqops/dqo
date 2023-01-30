@@ -19,7 +19,7 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxFailuresRule1ParametersSpec:
+class MaxFailuresRuleParametersSpec:
     max_failures: int
 
 
@@ -38,7 +38,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MaxFailuresRule1ParametersSpec
+    parameters: MaxFailuresRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -68,20 +68,14 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult(True, None, None, None)
 
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    straight  = 0
-    max_straight = 0
-    tmp = 0
+    filtered.append(rule_parameters.actual_value)
+
+    failures  = 0
     for i in filtered :
         if i == 0:
-            straight  += 1
-            tmp = straight
-        else:
-            straight  = 0
+            failures  += 1
 
-        if max_straight < tmp:
-            max_straight = straight
-
-    passed = max_straight <= rule_parameters.parameters.max_failures
+    passed = failures <= rule_parameters.parameters.max_failures
     expected_value = rule_parameters.parameters.max_failures
     lower_bound = rule_parameters.parameters.max_failures
     upper_bound = None

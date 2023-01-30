@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.checkpoints.availability;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAvailabilityDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityDailyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_availability_row_count", o -> o.dailyCheckpointAvailabilityRowCount);
+            put("daily_checkpoint_table_availability", o -> o.dailyCheckpointTableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies availability on table in database using simple row count")
-    private TableAvailabilityRowCountCheckSpec dailyCheckpointAvailabilityRowCount;
+    private TableAvailabilityCheckSpec dailyCheckpointTableAvailability;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getDailyCheckpointAvailabilityRowCount() {
-        return dailyCheckpointAvailabilityRowCount;
+    public TableAvailabilityCheckSpec getDailyCheckpointTableAvailability() {
+        return dailyCheckpointTableAvailability;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointAvailabilityRowCount Check specification.
+     * @param dailyCheckpointTableAvailability Check specification.
      */
-    public void setDailyCheckpointAvailabilityRowCount(TableAvailabilityRowCountCheckSpec dailyCheckpointAvailabilityRowCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointAvailabilityRowCount, dailyCheckpointAvailabilityRowCount));
-        this.dailyCheckpointAvailabilityRowCount = dailyCheckpointAvailabilityRowCount;
-        propagateHierarchyIdToField(dailyCheckpointAvailabilityRowCount, "daily_checkpoint_availability_row_count");
+    public void setDailyCheckpointTableAvailability(TableAvailabilityCheckSpec dailyCheckpointTableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointTableAvailability, dailyCheckpointTableAvailability));
+        this.dailyCheckpointTableAvailability = dailyCheckpointTableAvailability;
+        propagateHierarchyIdToField(dailyCheckpointTableAvailability, "daily_checkpoint_table_availability");
     }
 
     /**

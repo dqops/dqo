@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.availability;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAvailabilityMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityMonthlyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_availability_row_count", o -> o.monthlyCheckpointAvailabilityRowCount);
+            put("monthly_checkpoint_table_availability", o -> o.monthlyCheckpointTableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies availability on table in database using simple row count")
-    private TableAvailabilityRowCountCheckSpec monthlyCheckpointAvailabilityRowCount;
+    private TableAvailabilityCheckSpec monthlyCheckpointTableAvailability;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getMonthlyCheckpointAvailabilityRowCount() {
-        return monthlyCheckpointAvailabilityRowCount;
+    public TableAvailabilityCheckSpec getMonthlyCheckpointTableAvailability() {
+        return monthlyCheckpointTableAvailability;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointAvailabilityRowCount Check specification.
+     * @param monthlyCheckpointTableAvailability Check specification.
      */
-    public void setMonthlyCheckpointAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyCheckpointAvailabilityRowCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointAvailabilityRowCount, monthlyCheckpointAvailabilityRowCount));
-        this.monthlyCheckpointAvailabilityRowCount = monthlyCheckpointAvailabilityRowCount;
-        propagateHierarchyIdToField(monthlyCheckpointAvailabilityRowCount, "monthly_checkpoint_availability_row_count");
+    public void setMonthlyCheckpointTableAvailability(TableAvailabilityCheckSpec monthlyCheckpointTableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointTableAvailability, monthlyCheckpointTableAvailability));
+        this.monthlyCheckpointTableAvailability = monthlyCheckpointTableAvailability;
+        propagateHierarchyIdToField(monthlyCheckpointTableAvailability, "monthly_checkpoint_table_availability");
     }
 
 

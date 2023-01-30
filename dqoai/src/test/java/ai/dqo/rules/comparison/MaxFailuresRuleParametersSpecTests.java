@@ -57,27 +57,48 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
-    void executeRule_whenMaxFailuresEqualToFailuresInStraight_thenReturnsPassed() {
+    void executeRule_whenCountOfFailuresLessThenMaxFailures_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
-            if(i == 0){
-                this.sensorReadouts[i] = 1.0;
-            }
-            else if(i == 5 || i == 8){
-                this.sensorReadouts[i] = 1.0;
-            }else{
+            if(i == 0 || i == 5 || i == 8){
                 this.sensorReadouts[i] = 0.0;
+            }else{
+                this.sensorReadouts[i] = 1.0;
             }
         }
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRule_whenCountOfFailuresGreaterThenMaxFailures_thenReturnsFailed() {
+        this.sut.setMaxFailures(2L);
+
+        for (int i = 0; i < this.sensorReadouts.length; i++) {
+            if(i == 0 || i == 5 || i == 8) {
+                this.sensorReadouts[i] = 0.0;
+            }else if(i == 4 || i == 7 || i == 12){
+                this.sensorReadouts[i] = null;
+            }else{
+                this.sensorReadouts[i] = 1.0;
+            }
+        }
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(!ruleExecutionResult.isPassed());
+        Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(2.0, ruleExecutionResult.getLowerBound());
         Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
     }
 

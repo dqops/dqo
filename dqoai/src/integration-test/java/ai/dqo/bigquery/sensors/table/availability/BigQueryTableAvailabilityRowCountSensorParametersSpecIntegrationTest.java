@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.table.availability;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.availability.TableAvailabilityRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,9 +38,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class BigQueryTableAvailabilityRowCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private TableAvailabilityRowCountSensorParametersSpec sut;
+    private TableAvailabilitySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableAvailabilityRowCountCheckSpec checkSpec;
+    private TableAvailabilityCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,8 +48,8 @@ public class BigQueryTableAvailabilityRowCountSensorParametersSpecIntegrationTes
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableAvailabilityRowCountSensorParametersSpec();
-        this.checkSpec = new TableAvailabilityRowCountCheckSpec();
+        this.sut = new TableAvailabilitySensorParametersSpec();
+        this.checkSpec = new TableAvailabilityCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

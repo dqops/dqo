@@ -5,4 +5,4 @@ spec:
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_readouts: 10
+    min_periods_with_readouts: 0

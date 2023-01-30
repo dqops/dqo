@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.checkpoints.availability;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,30 +36,30 @@ import java.util.Objects;
 public class TableAvailabilityMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityMonthlyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_availability_row_count", o -> o.monthlyPartitionAvailabilityRowCount);
+            put("monthly_partition_table_availability", o -> o.monthlyPartitionTableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies availability on table in database using simple row count")
-    private TableAvailabilityRowCountCheckSpec monthlyPartitionAvailabilityRowCount;
+    private TableAvailabilityCheckSpec monthlyPartitionTableAvailability;
 
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getMonthlyPartitionAvailabilityRowCount() {
-        return monthlyPartitionAvailabilityRowCount;
+    public TableAvailabilityCheckSpec getMonthlyPartitionTableAvailability() {
+        return monthlyPartitionTableAvailability;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionAvailabilityRowCount Check specification.
+     * @param monthlyPartitionTableAvailability Check specification.
      */
-    public void setMonthlyPartitionAvailabilityRowCount(TableAvailabilityRowCountCheckSpec monthlyPartitionAvailabilityRowCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAvailabilityRowCount, monthlyPartitionAvailabilityRowCount));
-        this.monthlyPartitionAvailabilityRowCount = monthlyPartitionAvailabilityRowCount;
-        propagateHierarchyIdToField(monthlyPartitionAvailabilityRowCount, "monthly_partition_availability_row_count");
+    public void setMonthlyPartitionTableAvailability(TableAvailabilityCheckSpec monthlyPartitionTableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTableAvailability, monthlyPartitionTableAvailability));
+        this.monthlyPartitionTableAvailability = monthlyPartitionTableAvailability;
+        propagateHierarchyIdToField(monthlyPartitionTableAvailability, "monthly_partition_table_availability");
     }
 
 

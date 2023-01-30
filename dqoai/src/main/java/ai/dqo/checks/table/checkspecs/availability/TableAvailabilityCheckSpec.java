@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.*;
-import ai.dqo.sensors.table.availability.TableAvailabilityRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.availability.TableAvailabilitySensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,13 +32,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Row count (select count(*) from ...) test that runs a row_count check, obtains a count of rows and verifies the number by calling the row count rule.
+ * Table level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableAvailabilityRowCountSensorParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule10ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule10ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -46,7 +46,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
     @JsonPropertyDescription("Row count sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAvailabilityRowCountSensorParametersSpec parameters = new TableAvailabilityRowCountSensorParametersSpec();
+    private TableAvailabilitySensorParametersSpec parameters = new TableAvailabilitySensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -68,7 +68,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * @return Sensor parameters.
      */
     @Override
-    public TableAvailabilityRowCountSensorParametersSpec getParameters() {
+    public TableAvailabilitySensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -76,7 +76,7 @@ public class TableAvailabilityRowCountCheckSpec extends AbstractCheckSpec<TableA
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableAvailabilityRowCountSensorParametersSpec parameters) {
+    public void setParameters(TableAvailabilitySensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

@@ -16,7 +16,7 @@
 package ai.dqo.checks.table.partitioned.availability;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,29 +36,29 @@ import java.util.Objects;
 public class TableAvailabilityDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityDailyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_availability_row_count", o -> o.dailyPartitionAvailabilityRowCount);
+            put("daily_partition_table_availability", o -> o.dailyPartitionTableAvailability);
         }
     };
 
     @JsonPropertyDescription("Verifies availability on table in database using simple row count")
-    private TableAvailabilityRowCountCheckSpec dailyPartitionAvailabilityRowCount;
+    private TableAvailabilityCheckSpec dailyPartitionTableAvailability;
 
     /**
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableAvailabilityRowCountCheckSpec getDailyPartitionAvailabilityRowCount() {
-        return dailyPartitionAvailabilityRowCount;
+    public TableAvailabilityCheckSpec getDailyPartitionTableAvailability() {
+        return dailyPartitionTableAvailability;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionAvailabilityRowCount Check specification.
+     * @param dailyPartitionTableAvailability Check specification.
      */
-    public void setDailyPartitionAvailabilityRowCount(TableAvailabilityRowCountCheckSpec dailyPartitionAvailabilityRowCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionAvailabilityRowCount, dailyPartitionAvailabilityRowCount));
-        this.dailyPartitionAvailabilityRowCount = dailyPartitionAvailabilityRowCount;
-        propagateHierarchyIdToField(dailyPartitionAvailabilityRowCount, "daily_partition_availability_row_count");
+    public void setDailyPartitionTableAvailability(TableAvailabilityCheckSpec dailyPartitionTableAvailability) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTableAvailability, dailyPartitionTableAvailability));
+        this.dailyPartitionTableAvailability = dailyPartitionTableAvailability;
+        propagateHierarchyIdToField(dailyPartitionTableAvailability, "daily_partition_table_availability");
     }
 
     /**

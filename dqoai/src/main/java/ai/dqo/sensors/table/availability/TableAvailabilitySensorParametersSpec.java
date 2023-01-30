@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityRowCountSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityRowCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableAvailabilitySensorParametersSpec extends AbstractTableSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilitySensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,6 +52,6 @@ public class TableAvailabilityRowCountSensorParametersSpec extends AbstractTable
      */
     @Override
     public String getSensorDefinitionName() {
-        return "table/availability/row_count";
+        return "table/availability/table_availability";
     }
 }

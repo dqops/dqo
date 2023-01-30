@@ -1,4 +1,4 @@
-{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 SELECT
     1 AS actual_value ,
     time_period
@@ -11,5 +11,4 @@ FROM (
     LIMIT 1
 )
 {{- lib.render_where_clause() -}}
-{{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
