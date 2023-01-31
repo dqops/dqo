@@ -1,12 +1,12 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
 SELECT
-  SUM(
-    CASE
-      WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
-    ELSE
-    0
-  END
+    SUM(
+        CASE
+            WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}}
+                THEN 1
+            ELSE 0
+        END
     ) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
