@@ -18,6 +18,7 @@ package ai.dqo.rules;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -30,7 +31,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractRuleParametersSpec extends AbstractSpec {
+public abstract class AbstractRuleParametersSpec extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -48,7 +49,7 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec {
     }
 
     /**
-     * Retrieves the severity level for this class. The rule parameters should be always referenced from (parent) a {@link AbstractRuleThresholdsSpec}
+     * Retrieves the severity level for this class.
      * in fields named: low, medium, high  - and those are the severity levels returned.
      * @return Severity level.
      */
@@ -75,5 +76,19 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec {
     @Override
     public boolean isDefault() {
         return false; // always render
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public AbstractRuleParametersSpec clone() {
+        try {
+            AbstractRuleParametersSpec cloned = (AbstractRuleParametersSpec)super.clone();
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Cannot clone the object.");
+        }
     }
 }

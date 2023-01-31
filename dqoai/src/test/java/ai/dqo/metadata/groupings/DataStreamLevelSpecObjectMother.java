@@ -26,7 +26,7 @@ public class DataStreamLevelSpecObjectMother {
      */
     public static DataStreamLevelSpec createTag(String value) {
         return new DataStreamLevelSpec() {{
-			setSource(DataStreamLevelSource.TAG);
+			setSource(DataStreamLevelSource.tag);
 			setTag(value);
         }};
     }
@@ -38,7 +38,7 @@ public class DataStreamLevelSpecObjectMother {
      */
     public static DataStreamLevelSpec createColumnMapping(String columnName) {
         return new DataStreamLevelSpec() {{
-			setSource(DataStreamLevelSource.COLUMN_VALUE);
+			setSource(DataStreamLevelSource.column_value);
 			setColumn(columnName);
         }};
     }

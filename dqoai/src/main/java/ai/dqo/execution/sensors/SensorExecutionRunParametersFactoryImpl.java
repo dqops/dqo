@@ -15,19 +15,17 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -46,36 +44,6 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     @Autowired
     public SensorExecutionRunParametersFactoryImpl(SecretValueProvider secretValueProvider) {
         this.secretValueProvider = secretValueProvider;
-    }
-
-    /**
-     * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
-     * specifications for the target connection, table, column, check.
-     * @param connection Connection specification.
-     * @param table Table specification.
-     * @param column Optional column specification for column sensors.
-     * @param check Check specification.
-     * @param dialectSettings Dialect settings.
-     * @return Sensor execution run parameters.
-     */
-    @Override
-    public SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
-                                                                     TableSpec table,
-                                                                     ColumnSpec column,
-                                                                     AbstractCheckDeprecatedSpec check,
-                                                                     ProviderDialectSettings dialectSettings) {
-        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
-        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
-        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        HierarchyId checkHierarchyId = check.getHierarchyId();
-        AbstractSensorParametersSpec sensorParameters = check.getSensorParameters().expandAndTrim(this.secretValueProvider);
-        AbstractCheckDeprecatedSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
-
-        TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
-        DataStreamMappingSpec dataStreams = expandedCheck.getDataStreamsOverride();
-
-        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, null, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 
     /**
@@ -112,12 +80,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     }
 
     /**
-     * Creates a sensor parameters object for a profiler. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
-     * @param profiler Profiler specification.
+     * @param statisticsCollectorSpec Statistics collector specification.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
@@ -125,19 +93,19 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                                TableSpec table,
                                                                ColumnSpec column,
-                                                               AbstractProfilerSpec<?> profiler,
-                                                               ProfilerDataScope profilerDataScope,
+                                                               AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                               StatisticsDataScope statisticsDataScope,
                                                                ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        AbstractSensorParametersSpec sensorParameters = profiler.getParameters().expandAndTrim(this.secretValueProvider);
+        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
 
         TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
-        DataStreamMappingSpec dataStreams = profilerDataScope == ProfilerDataScope.table ? null :
+        DataStreamMappingSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
                 expandedTable.getDataStreams().getFirstDataStreamMapping();
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, profiler, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
+                null, statisticsCollectorSpec, null, timeSeries, dataStreams, sensorParameters, dialectSettings);
     }
 }

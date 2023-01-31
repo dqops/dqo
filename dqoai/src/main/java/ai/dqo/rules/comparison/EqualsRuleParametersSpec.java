@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.comparison;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -37,6 +38,14 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec {
         {
         }
     };
+
+    @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.")
+    @SampleValues(values = "10.0")
+    private Double expectedValue;
+
+    @JsonPropertyDescription("Error margin for comparison.")
+    @SampleValues(values = "0.01")
+    private Double errorMargin;
 
     /**
      * Creates the default object that expects 0.
@@ -61,12 +70,6 @@ public class EqualsRuleParametersSpec extends AbstractRuleParametersSpec {
         this.expectedValue = expectedValue;
         this.errorMargin = errorMargin;
     }
-
-    @JsonPropertyDescription("Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.")
-    private Double expectedValue;
-
-    @JsonPropertyDescription("Error margin for comparison.")
-    private Double errorMargin;
 
     /**
      * Returns the expected value for the sensor readout.

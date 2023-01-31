@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.comparison;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -38,6 +39,10 @@ public class MinCountRule0ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
+    @SampleValues(values = "5")
+    private Long minCount = 0L;
+
     /**
      * Default constructor, the minimum accepted value is 0.
      */
@@ -59,9 +64,6 @@ public class MinCountRule0ParametersSpec extends AbstractRuleParametersSpec {
     public MinCountRule0ParametersSpec(int minCount) {
         this.minCount = (long)minCount;
     }
-
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Long minCount = 0L;
 
     /**
      * Minimum value for a data quality check readout, for example a minimum row count.

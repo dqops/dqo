@@ -16,7 +16,7 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringValidDatesPercentCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -24,8 +24,9 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
+import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidDatePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
 import ai.dqo.sensors.column.strings.StringsBuiltInDateFormats;
 import ai.dqo.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -71,49 +72,46 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void reflectClass_whenReflectingCheckSpecification_thenReturnsAllBaseFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringValidDatesPercentCheckSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(TableRowCountCheckSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(6, classInfo.getFields().size());
-        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "timeSeriesOverride")));
+        Assertions.assertEquals(12, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "comments")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "disabled")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "excludeFromKpi")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "includeInSla")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "qualityDimension")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "displayName")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "dataStream")));
     }
 
     @Test
     void reflectClass_whenReflectingCheckSpecification_thenReturnsAlsoInheritedFieldsFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringValidDatesPercentCheckSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(TableRowCountCheckSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(6, classInfo.getFields().size());
+        Assertions.assertEquals(12, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "parameters")));
-        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "rules")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "error")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "warning")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "fatal")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "disabled")));
     }
 
     @Test
     void reflectClass_whenReflectingSensorParametersSpecification_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringsStringValidDatePercentSensorParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(ColumnStringsStringLengthInRangePercentSensorParametersSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(2, classInfo.getFields().size());
-        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "namedDateFormat")));
-        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "disabled")));
+        Assertions.assertEquals(3, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minLength")));
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "maxLength")));
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "filter")));
     }
-
-//    @Test
-//    void reflectClass_whenReflectingRulesSetClass_thenReturnsAllRequestedFields() {
-//        ClassInfo classInfo = this.sut.reflectClass(ColumnValidityDateTypePercentRulesSpec.class);
-//        Assertions.assertNotNull(classInfo);
-//        Assertions.assertEquals(2, classInfo.getFields().size());
-//        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minCount")));
-//    }
-
-//    @Test
-//    void reflectClass_whenReflectingRulesThresholdsClass_thenReturnsAllRequestedFields() {
-//        ClassInfo classInfo = this.sut.reflectClass(MinValueRuleThresholdsSpec.class);
-//        Assertions.assertNotNull(classInfo);
-//        Assertions.assertEquals(5, classInfo.getFields().size());
-//        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "low")));
-//        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "medium")));
-//        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "high")));
-//    }
+    @Test
+    void reflectClass_whenReflectingRuleParametersClass_thenReturnsAllRequestedFields() {
+        ClassInfo classInfo = this.sut.reflectClass(MinCountRule0ParametersSpec.class);
+        Assertions.assertNotNull(classInfo);
+        Assertions.assertEquals(1, classInfo.getFields().size());
+        Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minCount")));
+    }
 
     @Test
     void createEnumValue_whenEnumFieldGivenWithPropertyName_thenReturnsEnumInfo() {

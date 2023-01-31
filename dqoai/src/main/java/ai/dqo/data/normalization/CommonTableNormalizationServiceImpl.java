@@ -66,7 +66,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
             else {
                 if (dataStreamMappingSpec != null && dataStreamMappingSpec.getLevel(levelIndex) != null) {
                     DataStreamLevelSpec dataStreamLevelSpec = dataStreamMappingSpec.getLevel(levelIndex);
-                    if (dataStreamLevelSpec.getSource() == DataStreamLevelSource.TAG && !Strings.isNullOrEmpty(dataStreamLevelSpec.getTag())) {
+                    if (dataStreamLevelSpec.getSource() == DataStreamLevelSource.tag && !Strings.isNullOrEmpty(dataStreamLevelSpec.getTag())) {
                         StringColumn tagColumn = StringColumn.create(dataStreamLevelColumnName, rowCount);
                         tagColumn.setMissingTo(dataStreamLevelSpec.getTag());
                         dataStreamLevelColumns[levelIndex - 1] = tagColumn;

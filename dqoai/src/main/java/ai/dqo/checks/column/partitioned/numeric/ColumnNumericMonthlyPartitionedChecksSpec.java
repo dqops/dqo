@@ -42,6 +42,14 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_numbers_in_set_percent", o -> o.monthlyPartitionNumbersInSetPercent);
             put("monthly_partition_values_in_range_numeric_percent", o -> o.monthlyPartitionValuesInRangeNumericPercent);
             put("monthly_partition_values_in_range_integers_percent", o -> o.monthlyPartitionValuesInRangeIntegersPercent);
+            put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
+            put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
+            put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
+            put("monthly_partition_sample_stddev_in_range", o -> o.monthlyPartitionSampleStddevInRange);
+            put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
+            put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
+            put("monthly_partition_population_variance_in_range", o -> o.monthlyPartitionPopulationVarianceInRange);
+            put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
         }
     };
 
@@ -62,6 +70,30 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
+
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
+
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPopulationStddevInRangeCheckSpec monthlyPartitionPopulationStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSampleVarianceInRangeCheckSpec monthlyPartitionSampleVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPopulationVarianceInRangeCheckSpec monthlyPartitionPopulationVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -170,6 +202,150 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValuesInRangeIntegersPercent, monthlyPartitionValuesInRangeIntegersPercent));
         this.monthlyPartitionValuesInRangeIntegersPercent = monthlyPartitionValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(monthlyPartitionValuesInRangeIntegersPercent, "monthly_partition_values_in_range_integers_percent");
+    }
+
+    /**
+     * Returns a max in range check specification.
+     * @return Max in range check specification.
+     */
+    public ColumnMaxInRangeCheckSpec getMonthlyPartitionMaxInRange() {
+        return monthlyPartitionMaxInRange;
+    }
+
+    /**
+     * Sets a new specification of a max in range check.
+     * @param monthlyPartitionMaxInRange Max in range check specification.
+     */
+    public void setMonthlyPartitionMaxInRange(ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMaxInRange, monthlyPartitionMaxInRange));
+        this.monthlyPartitionMaxInRange = monthlyPartitionMaxInRange;
+        propagateHierarchyIdToField(monthlyPartitionMaxInRange, "monthly_partition_max_in_range");
+    }
+
+    /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getMonthlyPartitionMinInRange() {
+        return monthlyPartitionMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param monthlyPartitionMinInRange Min in range check specification.
+     */
+    public void setMonthlyPartitionMinInRange(ColumnMinInRangeCheckSpec monthlyPartitionMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinInRange, monthlyPartitionMinInRange));
+        this.monthlyPartitionMinInRange = monthlyPartitionMinInRange;
+        propagateHierarchyIdToField(monthlyPartitionMinInRange, "monthly_partition_min_in_range");
+    }
+
+    /**
+     * Returns a mean in range check specification.
+     * @return mean in range check specification.
+     */
+    public ColumnMeanInRangeCheckSpec getMonthlyPartitionMeanInRange() {
+        return monthlyPartitionMeanInRange;
+    }
+
+    /**
+     * Sets a new specification of a mean in range check.
+     * @param monthlyPartitionMeanInRange Mean in range check specification.
+     */
+    public void setMonthlyPartitionMeanInRange(ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMeanInRange, monthlyPartitionMeanInRange));
+        this.monthlyPartitionMeanInRange = monthlyPartitionMeanInRange;
+        propagateHierarchyIdToField(monthlyPartitionMeanInRange, "monthly_partition_mean_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleStddevInRangeCheckSpec getMonthlyPartitionSampleStddevInRange() {
+        return monthlyPartitionSampleStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param monthlyPartitionSampleStddevInRange Sample standard deviation in range check specification.
+     */
+    public void setMonthlyPartitionSampleStddevInRange(ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSampleStddevInRange, monthlyPartitionSampleStddevInRange));
+        this.monthlyPartitionSampleStddevInRange = monthlyPartitionSampleStddevInRange;
+        propagateHierarchyIdToField(monthlyPartitionSampleStddevInRange, "monthly_partition_sample_stddev_in_range");
+    }
+
+    /**
+     * Returns a population standard deviation in range check specification.
+     * @return Population standard deviation in range check specification.
+     */
+    public ColumnPopulationStddevInRangeCheckSpec getMonthlyPartitionPopulationStddevInRange() {
+        return monthlyPartitionPopulationStddevInRange;
+    }
+
+    /**
+     * Sets a new specification of a population standard deviation in range check.
+     * @param monthlyPartitionPopulationStddevInRange Population standard deviation in range check specification.
+     */
+    public void setMonthlyPartitionPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec monthlyPartitionPopulationStddevInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPopulationStddevInRange, monthlyPartitionPopulationStddevInRange));
+        this.monthlyPartitionPopulationStddevInRange = monthlyPartitionPopulationStddevInRange;
+        propagateHierarchyIdToField(monthlyPartitionPopulationStddevInRange, "monthly_partition_population_stddev_in_range");
+    }
+
+    /**
+     * Returns a sample variance in range check specification.
+     * @return Sample variance in range check specification.
+     */
+    public ColumnSampleVarianceInRangeCheckSpec getMonthlyPartitionSampleVarianceInRange() {
+        return monthlyPartitionSampleVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample variance in range check.
+     * @param monthlyPartitionSampleVarianceInRange Sample variance in range check specification.
+     */
+    public void setMonthlyPartitionSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec monthlyPartitionSampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSampleVarianceInRange, monthlyPartitionSampleVarianceInRange));
+        this.monthlyPartitionSampleVarianceInRange = monthlyPartitionSampleVarianceInRange;
+        propagateHierarchyIdToField(monthlyPartitionSampleVarianceInRange, "monthly_partition_sample_variance_in_range");
+    }
+
+    /**
+     * Returns a population variance in range check specification.
+     * @return Population variance in range check specification.
+     */
+    public ColumnPopulationVarianceInRangeCheckSpec getMonthlyPartitionPopulationVarianceInRange() {
+        return monthlyPartitionPopulationVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a population variance in range check.
+     * @param monthlyPartitionPopulationVarianceInRange Population variance in range check specification.
+     */
+    public void setMonthlyPartitionPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec monthlyPartitionPopulationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPopulationVarianceInRange, monthlyPartitionPopulationVarianceInRange));
+        this.monthlyPartitionPopulationVarianceInRange = monthlyPartitionPopulationVarianceInRange;
+        propagateHierarchyIdToField(monthlyPartitionPopulationVarianceInRange, "monthly_partition_population_variance_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getMonthlyPartitionSumInRange() {
+        return monthlyPartitionSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param monthlyPartitionSumInRange Sum in range check specification.
+     */
+    public void setMonthlyPartitionSumInRange(ColumnSumInRangeCheckSpec monthlyPartitionSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumInRange, monthlyPartitionSumInRange));
+        this.monthlyPartitionSumInRange = monthlyPartitionSumInRange;
+        propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
     }
 
     /**

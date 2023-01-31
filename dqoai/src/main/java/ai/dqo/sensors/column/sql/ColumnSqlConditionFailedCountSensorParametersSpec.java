@@ -17,6 +17,7 @@ package ai.dqo.sensors.column.sql;
 
 import ai.dqo.metadata.fields.ControlDisplayHint;
 import ai.dqo.metadata.fields.DisplayHint;
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
@@ -43,6 +44,7 @@ public class ColumnSqlConditionFailedCountSensorParametersSpec extends AbstractT
     @JsonPropertyDescription("SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ControlDisplayHint(DisplayHint.textarea)
+    @SampleValues(values = { "{column} + col_tax = col_total_price_with_tax" })
     private String sqlCondition;
 
     /**

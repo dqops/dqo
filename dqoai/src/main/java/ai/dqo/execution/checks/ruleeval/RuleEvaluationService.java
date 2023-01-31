@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -27,23 +26,6 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
  * Service that evaluates rules for each sensor readouts returned by a sensor query.
  */
 public interface RuleEvaluationService {
-    /**
-     * Evaluate rules for sensor rules
-     * @param executionContext Check execution context.
-     * @param checkSpec Check specification with a list of rules.
-     * @param sensorRunParameters Sensor run parameters (connection, table, check spec, etc).
-     * @param normalizedSensorResults Table with the sensor results. Each row is evaluated through rules.
-     * @param sensorReadoutsSnapshot Snapshot of all sensor readouts loaded for the table.
-     * @param progressListener Progress listener that receives events that notify about the rule evaluation.
-     * @return Rule evaluation results as a table.
-     */
-    RuleEvaluationResult evaluateLegacyRules(ExecutionContext executionContext,
-                                             AbstractCheckDeprecatedSpec checkSpec,
-                                             SensorExecutionRunParameters sensorRunParameters,
-                                             SensorReadoutsNormalizedResult normalizedSensorResults,
-                                             SensorReadoutsSnapshot sensorReadoutsSnapshot,
-                                             CheckExecutionProgressListener progressListener);
-
     /**
      * Evaluate rules for data quality checks.
      * @param executionContext Check execution context.

@@ -22,7 +22,7 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
-import ai.dqo.execution.profiler.RunProfilersQueueJob;
+import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
 
 /**
  * DQO job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
@@ -39,7 +39,7 @@ public interface DqoQueueJobFactory {
      * Creates a job that runs profilers.
      * @return New run profilers job.
      */
-    RunProfilersQueueJob createRunProfilersJob();
+    CollectStatisticsCollectionQueueJob createRunProfilersJob();
 
     /**
      * Creates a DQO Cloud synchronization job that will synchronize one folder in the user home.

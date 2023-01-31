@@ -161,6 +161,6 @@ public class ColumnStringNullPlaceholderCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.COMPLETENESS;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

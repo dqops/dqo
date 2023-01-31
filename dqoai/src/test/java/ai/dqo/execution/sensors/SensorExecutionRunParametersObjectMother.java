@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
@@ -59,29 +58,6 @@ public class SensorExecutionRunParametersObjectMother {
      * @param schemaName Physical schema name.
      * @param tableName Physical table name.
      * @param checkSpec Check specification.
-     * @return Sensor execution run parameters.
-     */
-    @Deprecated
-    public static SensorExecutionRunParameters createForTableAndLegacyCheck(
-			UserHome userHome, String connectionName, String schemaName, String tableName,
-			AbstractCheckDeprecatedSpec checkSpec) {
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionWrapper.getSpec().getProviderType());
-        SensorExecutionRunParametersFactory factory = getFactory();
-
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(
-                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, dialectSettings);
-        return sensorExecutionRunParameters;
-    }
-
-    /**
-     * Creates a sensor run parameters object by extracting the given connection name, schema name, table name and using given sensor parameters.
-     * @param userHome User home with the requested connection and table.
-     * @param connectionName Connection name.
-     * @param schemaName Physical schema name.
-     * @param tableName Physical table name.
-     * @param checkSpec Check specification.
      * @param checkType Check type.
      * @param timeSeriesConfigurationSpec Time series configuration.
      * @return Sensor execution run parameters.
@@ -96,26 +72,6 @@ public class SensorExecutionRunParametersObjectMother {
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
                 connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
-        return sensorExecutionRunParameters;
-    }
-
-    /**
-     * Creates a sensor run parameters object to run on a given sample table.
-     * @param sampleTableMetadata Sample table metadata.
-     * @param checkSpec Check specification.
-     * @return Sensor execution run parameters.
-     */
-    @Deprecated
-    public static SensorExecutionRunParameters createForTableAndLegacyCheck(
-			SampleTableMetadata sampleTableMetadata,
-			AbstractCheckDeprecatedSpec checkSpec) {
-        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
-        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
-        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
-        SensorExecutionRunParametersFactory factory = getFactory();
-
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -195,33 +151,6 @@ public class SensorExecutionRunParametersObjectMother {
      * @param tableName Physical table name.
      * @param columnName Column name.
      * @param checkSpec Check specification.
-     * @return Sensor execution run parameters.
-     */
-    @Deprecated
-    public static SensorExecutionRunParameters createForTableColumnAndLegacyCheck(
-			UserHome userHome, String connectionName, String schemaName, String tableName, String columnName,
-			AbstractCheckDeprecatedSpec checkSpec) {
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        SensorExecutionRunParametersFactory factory = getFactory();
-
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, dialectSettings);
-        return sensorExecutionRunParameters;
-    }
-
-    /**
-     * Creates a sensor run parameters object by extracting the given connection name, schema name, table name, column and using given sensor parameters.
-     * @param userHome User home with the requested connection and table.
-     * @param connectionName Connection name.
-     * @param schemaName Physical schema name.
-     * @param tableName Physical table name.
-     * @param columnName Column name.
-     * @param checkSpec Check specification.
      * @param checkType Check type.
      * @param timeSeriesConfigurationSpec Time series configuration.
      * @return Sensor execution run parameters.
@@ -239,30 +168,6 @@ public class SensorExecutionRunParametersObjectMother {
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
                 checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
-        return sensorExecutionRunParameters;
-    }
-
-    /**
-     * Creates a sensor run parameters object to run on a given sample table, when a column is selected.
-     * @param sampleTableMetadata Sample table metadata.
-     * @param columnName Target column name.
-     * @param checkSpec Check specification.
-     * @return Sensor execution run parameters.
-     */
-    @Deprecated
-    public static SensorExecutionRunParameters createForTableColumnAndLegacyCheck(
-			SampleTableMetadata sampleTableMetadata,
-			String columnName,
-			AbstractCheckDeprecatedSpec checkSpec) {
-        ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
-        ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
-        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
-        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
-        SensorExecutionRunParametersFactory factory = getFactory();
-
-        SensorExecutionRunParameters sensorExecutionRunParameters = factory.createLegacySensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, dialectSettings);
-        sensorExecutionRunParameters.setTimeSeries(TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc());
         return sensorExecutionRunParameters;
     }
 

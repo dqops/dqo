@@ -3,7 +3,7 @@
 ##<b>{{@key}}</b> {{target}} sensors
 ___
 {{#each this}}
-###<b>{{sensorName}}</b>
+###<b>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{sensorName}}', '_', ' '){{#with "}}"}}{{.}}{{/with}}</b>
 <b>Full sensor name</b>
 ```
 {{fullSensorName}}
@@ -29,8 +29,8 @@ ___
 <tr>
 <td>{{displayName}}</td>
 <td>{{helpText}}</td>
-<td>{{dataType}}</td>
-<td>{{#if required}}{{required}}Yes{{else}}{{/if}}</td>
+<td>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{dataType}}', '_type', ''){{#with "}}"}}{{.}}{{/with}}</td>
+<td>{{#if required}}Yes{{else}}{{/if}}</td>
 <td>{{#each allowedValues}}{{this}}<br/>{{/each}}</td>
 </tr>
 {{/each}}

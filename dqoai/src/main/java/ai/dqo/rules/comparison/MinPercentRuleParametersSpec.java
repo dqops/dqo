@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.comparison;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -38,6 +39,10 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
+    @SampleValues(values = "2.5")
+    private Double minPercent;
+
     /**
      * Default constructor, the minimum accepted value is 0.
      */
@@ -51,9 +56,6 @@ public class MinPercentRuleParametersSpec extends AbstractRuleParametersSpec {
     public MinPercentRuleParametersSpec(Double minPercent) {
         this.minPercent = minPercent;
     }
-
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double minPercent;
 
     /**
      * Minimum value for a data quality check readout, for example a minimum row count.

@@ -21,6 +21,7 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
@@ -63,6 +64,10 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         for (UIQualityCategoryModel categoryModel : categoryModelList) {
             String categoryDisplayName = categoryModel.getCategory();
             FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(categoryDisplayName);
+            if (categoryFieldInfo == null) {
+                throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkCategoriesSpec.getClass().getCanonicalName());
+            }
+
             AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
 
             updateCategoryChecksSpec(categoryModel, categorySpec);
@@ -92,6 +97,10 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         for (UICheckModel checkModel : checkModels) {
             String yamlCheckName = checkModel.getCheckName();
             FieldInfo checkFieldInfo = checkCategoryClassInfo.getFieldByYamlName(yamlCheckName);
+
+            if (checkFieldInfo == null) {
+                throw new DqoRuntimeException("Check " + yamlCheckName + " not found on " + categorySpec.getClass().getCanonicalName());
+            }
 
             if (!checkModel.isConfigured()) {
                 // the check was unconfigured (selected to be deleted from YAML)

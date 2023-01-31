@@ -33,7 +33,7 @@ public class DataStreamLevelSpecTests extends BaseTest {
     @Test
     void getSource_whenNewObject_thenHasDefaultValueTag() {
         Assertions.assertNotNull(this.sut.getSource());
-        Assertions.assertEquals(DataStreamLevelSource.TAG, this.sut.getSource());
+        Assertions.assertEquals(DataStreamLevelSource.tag, this.sut.getSource());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class DataStreamLevelSpecTests extends BaseTest {
 
     @Test
     void isDefault_whenSourceConfigured_thenReturnsFalse() {
-        this.sut.setSource(DataStreamLevelSource.TAG);
+        this.sut.setSource(DataStreamLevelSource.tag);
         Assertions.assertFalse(this.sut.isDefault());
     }
 

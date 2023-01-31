@@ -309,7 +309,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      */
     @Override
     @JsonIgnore
-    public CheckTarget getCheckTarget() {
+    public CheckTarget  getCheckTarget() {
         return CheckTarget.column;
     }
 }

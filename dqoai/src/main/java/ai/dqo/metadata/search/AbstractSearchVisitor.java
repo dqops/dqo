@@ -45,13 +45,11 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.profiling.AbstractProfilerCategorySpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
-import ai.dqo.profiling.AbstractRootProfilerContainerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.rules.custom.CustomRuleThresholdsMap;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
 import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
 
@@ -252,30 +250,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     }
 
     /**
-     * Accepts any check specification.
-     *
-     * @param abstractCheckSpec Data quality check specification (any).
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a rule set for a single check.
-     *
-     * @param abstractRuleSetSpec Rule set specification.
-     * @param parameter           Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractRuleSetSpec abstractRuleSetSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts any table level sensor specification (sensor call parameters).
      *
      * @param abstractTableSensorParameters Table level sensor specification (parameters).
@@ -408,18 +382,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
     }
 
     /**
-     * Accepts an abstract rule threshold object with multiple level of thresholds.
-     *
-     * @param abstractRuleThresholdsSpec Abstract rule thresholds.
-     * @param parameter                  Visitor parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractRuleThresholdsSpec abstractRuleThresholdsSpec, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts a custom rule definition specification. Those are the rule requirements.
      *
      * @param ruleDefinitionSpec Rule definition specification.
@@ -500,18 +462,6 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      */
     @Override
     public TreeNodeTraversalResult accept(CommentsListSpec commentSpecs, SearchParameterObject parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a dictionary of custom rules.
-     *
-     * @param customRuleThresholdsMap Dictionary of custom rules.
-     * @param parameter               Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomRuleThresholdsMap customRuleThresholdsMap, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -726,7 +676,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractProfilerSpec<?> profileSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorSpec<?> profileSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -738,7 +688,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractProfilerCategorySpec profileCategorySpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -750,7 +700,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRootProfilerContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

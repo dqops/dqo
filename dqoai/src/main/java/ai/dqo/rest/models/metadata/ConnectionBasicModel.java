@@ -20,7 +20,7 @@ import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -61,8 +61,8 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this connection.")
-    private ProfilerSearchFilters runProfilerJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
+    private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
     /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
@@ -84,7 +84,7 @@ public class ConnectionBasicModel {
                 setConnectionName(connectionName);
                 setEnabled(true);
             }});
-            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setEnabled(true);

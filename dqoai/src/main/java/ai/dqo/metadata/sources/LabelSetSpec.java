@@ -194,11 +194,7 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
     @Override
     public LabelSetSpec clone() {
         LabelSetSpec cloned = new LabelSetSpec();
-        cloned.labels = (LinkedHashSet<String>) cloned.labels.clone();
-
-        if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(this.getHierarchyId().clone());
-        }
+        cloned.labels = (LinkedHashSet<String>) this.labels.clone();
 
         if (this.isDirty()) {
             cloned.setDirty();

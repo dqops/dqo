@@ -15,38 +15,20 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractProfilerSpec;
+import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
 
 /**
  * Factory for {@link SensorExecutionRunParameters} objects. Expands all parameters in the form ${ENV_VAR} or ${sm://secret-name}
  */
 public interface SensorExecutionRunParametersFactory {
-    /**
-     * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
-     * specifications for the target connection, table, column, check.
-     * @param connection Connection specification.
-     * @param table Table specification.
-     * @param column Optional column specification for column sensors.
-     * @param check Check specification.
-     * @param dialectSettings Dialect settings.
-     * @return Sensor execution run parameters.
-     */
-    @Deprecated
-    SensorExecutionRunParameters createLegacySensorParameters(ConnectionSpec connection,
-                                                              TableSpec table,
-                                                              ColumnSpec column,
-                                                              AbstractCheckDeprecatedSpec check,
-                                                              ProviderDialectSettings dialectSettings);
-
     /**
      * Creates a sensor parameters object. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
@@ -68,19 +50,19 @@ public interface SensorExecutionRunParametersFactory {
                                                         ProviderDialectSettings dialectSettings);
 
     /**
-     * Creates a sensor parameters object for a profiler. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
-     * @param profiler Profiler specification.
+     * @param statisticsCollectorSpec Statistics collector specification.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
     SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                         TableSpec table,
                                                         ColumnSpec column,
-                                                        AbstractProfilerSpec<?> profiler,
-                                                        ProfilerDataScope profilerDataScope,
+                                                        AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                        StatisticsDataScope statisticsDataScope,
                                                         ProviderDialectSettings dialectSettings);
 }

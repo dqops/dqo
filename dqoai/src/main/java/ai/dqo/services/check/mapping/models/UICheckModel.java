@@ -23,6 +23,7 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.matching.SimilarCheckSensorRuleKey;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,7 +32,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * UI model that returns the form definition and the form data to edit a single data quality check.
@@ -40,7 +43,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UICheckModel", description = "UI model that returns the form definition and the form data to edit a single data quality check.")
-public class UICheckModel {
+public class UICheckModel implements Cloneable {
     /**
      * Data quality check name that is used in YAML file. Identifies the data quality check.
      */
@@ -51,7 +54,7 @@ public class UICheckModel {
     private String helpText;
 
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
-    private List<UIFieldModel> sensorParameters;
+    private List<UIFieldModel> sensorParameters = new ArrayList<>();
 
     @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
     private String sensorName;
@@ -117,5 +120,67 @@ public class UICheckModel {
                 this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
                 this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
                 this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);
+    }
+
+    /**
+     * Creates a selective deep/shallow clone of the object. Definition objects are not cloned, but all other editable objects are.
+     * @return Cloned instance.
+     */
+    public UICheckModel cloneForUpdate() {
+        try {
+            UICheckModel cloned = (UICheckModel)super.clone();
+            if (cloned.sensorParametersSpec != null) {
+                cloned.sensorParametersSpec = cloned.sensorParametersSpec.clone();
+            }
+            if (cloned.checkSpec != null) {
+                cloned.checkSpec = cloned.checkSpec.clone();
+            }
+            if (cloned.rule != null) {
+                cloned.rule = cloned.rule.cloneForUpdate();
+            }
+            if (cloned.timeSeriesOverride != null) {
+                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
+            }
+            if (cloned.dataStreamsOverride != null) {
+                cloned.dataStreamsOverride = cloned.dataStreamsOverride.clone();
+            }
+            if (cloned.scheduleOverride != null) {
+                cloned.scheduleOverride = cloned.scheduleOverride.clone();
+            }
+            if (cloned.comments != null) {
+                cloned.comments = cloned.comments.clone();
+            }
+            if (cloned.runChecksJobTemplate != null) {
+                cloned.runChecksJobTemplate = cloned.runChecksJobTemplate.clone();
+            }
+
+            if (cloned.sensorParameters != null) {
+                cloned.sensorParameters = cloned.sensorParameters
+                        .stream()
+                        .map(uiFieldModel -> uiFieldModel.cloneForUpdate())
+                        .collect(Collectors.toList());
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported: " + ex.toString(), ex);
+        }
+    }
+
+    /**
+     * Applies sample values for fields that have a sample value. Overrides the current values.
+     * The model filled with sample values is used for generating the documentation model.
+     */
+    public void applySampleValues() {
+        if (this.sensorParameters != null) {
+            for (UIFieldModel sensorParameterFieldModel : this.sensorParameters) {
+                sensorParameterFieldModel.applySampleValues();
+            }
+        }
+
+        if (this.rule != null) {
+            this.rule.applySampleValues();
+        }
     }
 }

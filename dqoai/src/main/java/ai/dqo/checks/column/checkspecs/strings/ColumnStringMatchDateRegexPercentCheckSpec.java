@@ -160,6 +160,6 @@ public class ColumnStringMatchDateRegexPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.COMPLETENESS;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

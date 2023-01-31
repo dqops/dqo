@@ -15,6 +15,7 @@
  */
 package ai.dqo.sensors.column.strings;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -37,9 +38,11 @@ public class ColumnStringsStringLengthInRangePercentSensorParametersSpec extends
     };
 
     @JsonPropertyDescription("Sets a minimal string length")
+    @SampleValues(values = "5")
     private int minLength;
 
     @JsonPropertyDescription("Sets a maximal string length.")
+    @SampleValues(values = "10")
     private int maxLength;
 
     /**

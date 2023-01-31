@@ -15,13 +15,12 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckDeprecatedSpec;
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 
 import java.util.Objects;
 
@@ -140,7 +139,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckDeprecatedSpec abstractCheckSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
         RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule().getRecurringSchedule() != null;
 

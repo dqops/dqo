@@ -160,6 +160,6 @@ public class TableSqlAggregatedExpressionValueMinCheckSpec extends AbstractCheck
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

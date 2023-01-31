@@ -29,21 +29,21 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
-import ai.dqo.data.profilingresults.factory.ProfilerDataScope;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
-import ai.dqo.execution.profiler.ProfilerExecutionSummary;
-import ai.dqo.execution.profiler.RunProfilersQueueJob;
-import ai.dqo.execution.profiler.RunProfilersQueueJobParameters;
-import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListener;
-import ai.dqo.execution.profiler.progress.ProfilerExecutionProgressListenerProvider;
-import ai.dqo.execution.profiler.progress.ProfilerExecutionReportingMode;
+import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
+import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
+import ai.dqo.execution.statistics.RunStatisticsCollectionQueueJobParameters;
+import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
+import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
+import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
-    private ProfilerExecutionProgressListenerProvider profilerExecutionProgressListenerProvider;
+    private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
 
@@ -75,7 +75,7 @@ public class JobsController {
      * @param dqoQueueJobFactory DQO queue job factory used to create new instances of jobs.
      * @param dqoJobQueue Job queue used to publish or review running jobs.
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
-     * @param profilerExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
+     * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param queueConfigurationProperties Queue configuration parameters.
      */
@@ -83,13 +83,13 @@ public class JobsController {
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
                           DqoJobQueue dqoJobQueue,
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
-                          ProfilerExecutionProgressListenerProvider profilerExecutionProgressListenerProvider,
+                          StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                           DqoQueueConfigurationProperties queueConfigurationProperties) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
-        this.profilerExecutionProgressListenerProvider = profilerExecutionProgressListenerProvider;
+        this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.queueConfigurationProperties = queueConfigurationProperties;
     }
@@ -123,60 +123,60 @@ public class JobsController {
     }
 
     /**
-     * Starts a new background job that will run selected data profiler on the whole table.
-     * @param profilerSearchFilters Data profiler filters.
+     * Starts a new background job that will run selected data statistics collectors on the whole table.
+     * @param statisticsCollectorSearchFilters Data statistics collector filters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/runprofilers/table")
-    @ApiOperation(value = "runProfilersOnTable", notes = "Starts a new background job that will run selected data profilers on a whole table", response = DqoQueueJobId.class)
+    @PostMapping("/collectstatistics/table")
+    @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data profilers was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoQueueJobId>> runProfilersOnTable(
-            @ApiParam("Data profilers filter") @RequestBody ProfilerSearchFilters profilerSearchFilters) {
-        RunProfilersQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
-        ProfilerExecutionProgressListener progressListener = this.profilerExecutionProgressListenerProvider.getProgressListener(
-                ProfilerExecutionReportingMode.silent, false);
-        RunProfilersQueueJobParameters runProfilersQueueJobParameters = new RunProfilersQueueJobParameters(
-                profilerSearchFilters,
+    public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnTable(
+            @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
+        CollectStatisticsCollectionQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
+        StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
+                StatisticsCollectorExecutionReportingMode.silent, false);
+        RunStatisticsCollectionQueueJobParameters runStatisticsCollectionQueueJobParameters = new RunStatisticsCollectionQueueJobParameters(
+                statisticsCollectorSearchFilters,
                 progressListener,
-                ProfilerDataScope.table,
+                StatisticsDataScope.table,
                 false);
-        runProfilersJob.setParameters(runProfilersQueueJobParameters);
+        runProfilersJob.setParameters(runStatisticsCollectionQueueJobParameters);
 
-        PushJobResult<ProfilerExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
     /**
-     * Starts a new background job that will run selected data profiler for each data stream separately. Uses the default data stream mapping configured on each table.
-     * @param profilerSearchFilters Data profiler filters.
+     * Starts a new background job that will run selected data statistics collectors for each data stream separately. Uses the default data stream mapping configured on each table.
+     * @param statisticsCollectorSearchFilters Data statistics collectors filters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/runprofilers/datastreams")
-    @ApiOperation(value = "runProfilersOnDataStreams", notes = "Starts a new background job that will run selected data profilers on tables, calculating separate metric for each data stream", response = DqoQueueJobId.class)
+    @PostMapping("/collectstatistics/datastreams")
+    @ApiOperation(value = "collectStatisticsOnDataStreams", notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data stream", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data profilers was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New job that will run data statistics collection was added to the queue", response = DqoQueueJobId.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoQueueJobId>> runProfilersOnDataStreams(
-            @ApiParam("Data profilers filter") @RequestBody ProfilerSearchFilters profilerSearchFilters) {
-        RunProfilersQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
-        ProfilerExecutionProgressListener progressListener = this.profilerExecutionProgressListenerProvider.getProgressListener(
-                ProfilerExecutionReportingMode.silent, false);
-        RunProfilersQueueJobParameters runProfilersQueueJobParameters = new RunProfilersQueueJobParameters(
-                profilerSearchFilters,
+    public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnDataStreams(
+            @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
+        CollectStatisticsCollectionQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
+        StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
+                StatisticsCollectorExecutionReportingMode.silent, false);
+        RunStatisticsCollectionQueueJobParameters runStatisticsCollectionQueueJobParameters = new RunStatisticsCollectionQueueJobParameters(
+                statisticsCollectorSearchFilters,
                 progressListener,
-                ProfilerDataScope.data_stream,
+                StatisticsDataScope.data_stream,
                 false);
-        runProfilersJob.setParameters(runProfilersQueueJobParameters);
+        runProfilersJob.setParameters(runStatisticsCollectionQueueJobParameters);
 
-        PushJobResult<ProfilerExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 

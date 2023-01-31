@@ -25,11 +25,11 @@ public enum DataStreamLevelSource {
      * The data stream level ID value is hardcoded as a static value (tag). All data quality results are assigned the same, hardcoded data stream level value.
      */
     @JsonProperty("tag")
-    TAG,
+    tag,
 
     /**
      * The data stream level ID value is obtained from the data. An extra GROUP BY [column name] is added to the sensor query.
      */
     @JsonProperty("column_value")
-    COLUMN_VALUE
+    column_value
 }

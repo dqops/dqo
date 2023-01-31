@@ -86,7 +86,6 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
      */
     @Override
     public void setHierarchyId(HierarchyId hierarchyId) {
-        assert hierarchyId != null;
         this.hierarchyId = hierarchyId;
 		propagateHierarchyIdToFields(hierarchyId);
     }
@@ -133,7 +132,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
     public HierarchyNode getChild(Object childName) {
         ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
         assert (childName.toString() != null) : "child name is null";
-        assert (childFieldMap.getFieldGetter(childName.toString()) != null) : "child name missing, verify that the field name in the field name is correct";
+        assert (childFieldMap.getFieldGetter(childName.toString()) != null) : "child name " + childName + " missing on class " + this.getClass().getCanonicalName() + ", verify that the field name in the field name is correct";
         return childFieldMap.getFieldGetter(childName.toString()).apply(this);
     }
 

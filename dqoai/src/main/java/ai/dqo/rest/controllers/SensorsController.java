@@ -37,6 +37,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -80,9 +81,9 @@ public class SensorsController {
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
         SensorDefinitionList sensorDefinitionList= dqoHome.getSensors();
-        List<SensorDefinitionWrapper> SensorDefinitionWrapperList = sensorDefinitionList.toList();
+        List<SensorDefinitionWrapper> sensorDefinitionWrapperList = sensorDefinitionList.toList();
 
-        Stream<SensorModel> sensorModel = SensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
+        Stream<SensorModel> sensorModel = sensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
             setSensorName(s.getName());
             setSensorDefinitionSpec(s.getSpec());
         }});
@@ -224,8 +225,8 @@ public class SensorsController {
 
         SensorDefinitionList sensorDefinitionList= userHome.getSensors();
 
-        List<SensorDefinitionWrapper> SensorDefinitionWrapperList = sensorDefinitionList.toList();
-        Stream<SensorModel> sensorModel = SensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
+        List<SensorDefinitionWrapper> sensorDefinitionWrapperList = sensorDefinitionList.toList();
+        Stream<SensorModel> sensorModel = sensorDefinitionWrapperList.stream().map(s -> new SensorModel(){{
             setSensorName(s.getName());
             setSensorDefinitionSpec(s.getSpec());
         }});
@@ -374,7 +375,6 @@ public class SensorsController {
 
         existingSensorDefinitionWrapper.markForDeletion();
         userHomeContext.flush();
-
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
     }
@@ -648,6 +648,228 @@ public class SensorsController {
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Returns a list of combined sensors.
+     * @return List of sensor model.
+     */
+    @GetMapping("/combined")
+    @ApiOperation(value = "getAllCombinedSensors", notes = "Returns a list of combined sensors", response = SensorModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<SensorModel>> getAllCombinedSensors() {
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        SensorDefinitionList sensorDefinitionList= dqoHome.getSensors();
+        List<SensorDefinitionWrapper> sensorDefinitionWrapperList = sensorDefinitionList.toList();
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList userHomeSensors = userHome.getSensors();
+        List<SensorDefinitionWrapper> userSensorDefinitionWrapperList = userHomeSensors.toList();
+
+        /*
+         * Create a Hashmap to store data on combined sensors.
+         * The key is sensor name and the value is SensorDefinitionWrapper.
+         */
+        Map<String, SensorDefinitionWrapper> sensorDefinitionMap = new HashMap<>();
+
+        /*
+         * All custom sensors (in user home) stored in user home are added first.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: userSensorDefinitionWrapperList) {
+            sensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+        }
+
+        /*
+         * If the same sensor is defined both as custom (in user home)
+         * and as builtin (in dqo home), we return the custom definition.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: sensorDefinitionWrapperList) {
+            if(!sensorDefinitionMap.containsKey(sensorDefinitionWrapper.getName())){
+                sensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+            }
+        }
+        Stream<SensorModel> sensorModelStream = sensorDefinitionMap.values().stream().map(s -> new SensorModel(){{
+                    setSensorName(s.getName());
+                    setSensorDefinitionSpec(s.getSpec());
+        }});
+
+        return new ResponseEntity<>(Flux.fromStream(sensorModelStream), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a combined sensor.
+     * @return Sensor model.
+     */
+    @GetMapping("/combined/{sensorName}")
+    @ApiOperation(value = "getCombinedSensor", notes = "Returns a combined sensor", response = SensorModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorModel.class),
+            @ApiResponse(code = 404, message = "Sensor name not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<SensorModel>> getCombinedSensor(
+            @ApiParam("Sensor name") @PathVariable String sensorName
+    ) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        SensorDefinitionList userHomeSensors = userHome.getSensors();
+        SensorDefinitionList sensorDefinitionList= dqoHome.getSensors();
+
+        SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensors.getByObjectName(sensorName, true);
+
+        /*
+         * Check if the sensor definition exists in User home.
+         * If not exists, find sensor definition in DQO Home.
+         */
+        if(sensorDefinitionWrapper == null){
+            sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, true); //check if sensor definition exists in DQO Home
+        }
+
+        if(sensorDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        SensorModel sensorModel = new SensorModel();
+        sensorModel.setSensorName(sensorName);
+        sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
+
+
+        return new ResponseEntity<>(Mono.just(sensorModel), HttpStatus.OK);
+    }
+    /**
+     * Returns a list of combined provider sensors.
+     * @return List of provider sensor model.
+     */
+    @GetMapping("/combined/provider/{providerType}")
+    @ApiOperation(value = "getAllCombinedProviderSensors", notes = "Returns a list of combined provider sensors", response = ProviderSensorModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ProviderSensorModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<ProviderSensorModel>> getAllCombinedProviderSensors(
+            @ApiParam("Provider type") @PathVariable ProviderType providerType
+    ) {
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        SensorDefinitionList sensorDefinitionList= dqoHome.getSensors(); //Get sensors definitions from DQO Home
+
+        List<SensorDefinitionWrapper> homeSensorDefinitionWrapper = sensorDefinitionList.toList().stream()
+                .map(sp -> Pair.of(sp, sp.getProviderSensors().getByObjectName(providerType,true)))
+                .filter(pair -> pair.getRight() != null).map(Pair::getLeft).collect(Collectors.toList()); //Check if the builtin sensor definition exists for the specified provider
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        SensorDefinitionList userHomeSensorsDefinitionList = userHome.getSensors(); //Get sensors definitions from UserHome
+
+        List<SensorDefinitionWrapper> userSensorDefinitionWrapper = userHomeSensorsDefinitionList.toList().stream()
+                .map(sp -> Pair.of(sp, sp.getProviderSensors().getByObjectName(providerType,true)))
+                .filter(pair -> pair.getRight() != null).map(Pair::getLeft).collect(Collectors.toList()); //Check if the custom sensor definition exists for the specified provider
+
+        /*
+         * Create a Hashmap to store data on combined sensors.
+         * The key is sensor name and the value is SensorDefinitionWrapper.
+         */
+        Map<String, SensorDefinitionWrapper> providerSensorDefinitionMap = new HashMap<>();
+
+        /*
+         * All custom provider sensors (in user home) stored in user home are added first.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: userSensorDefinitionWrapper) {
+            providerSensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+        }
+
+        /*
+         * If the same provider sensor is defined both as custom (in user home)
+         * and as builtin (in dqo home), we return the custom definition.
+         */
+        for (SensorDefinitionWrapper sensorDefinitionWrapper: homeSensorDefinitionWrapper) {
+            if(!providerSensorDefinitionMap.containsKey(sensorDefinitionWrapper.getName())){
+                providerSensorDefinitionMap.put(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper);
+            }
+        }
+
+        Stream<ProviderSensorModel> providerSensorModelStream = providerSensorDefinitionMap.values().stream().map(s -> new ProviderSensorModel(){{
+                    setSensorName(s.getName());
+                    setProviderType(providerType);
+                    setProviderSensorDefinitionSpec(s.getProviderSensors().getByObjectName(providerType, true).getSpec());
+                    setSqlTemplate(s.getProviderSensors().getByObjectName(providerType, true).getSqlTemplate());
+                }});
+
+        return new ResponseEntity<>(Flux.fromStream(providerSensorModelStream), HttpStatus.OK);
+    }
+
+    /**
+     * Returns a provider combined sensor.
+     * @return Provider sensor model.
+     */
+    @GetMapping("/combined/provider/{providerType}/{sensorName}")
+    @ApiOperation(value = "getCombinedProviderSensor", notes = "Returns a combined provider sensor", response = ProviderSensorModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = ProviderSensorModel.class),
+            @ApiResponse(code = 404, message = "Sensor name not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<ProviderSensorModel>> getCombinedProviderSensor(
+            @ApiParam("Provider type") @PathVariable ProviderType providerType,
+            @ApiParam("Sensor name") @PathVariable String sensorName
+    ) {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        SensorDefinitionList userHomeSensors = userHome.getSensors();
+        SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensors.getByObjectName(sensorName, true);
+
+        /*
+         * Check if the provider sensor definition exists in User home.
+         * If not exists, find provider sensor definition in DQO Home.
+         */
+        if(sensorDefinitionWrapper == null){
+            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+            DqoHome dqoHome = dqoHomeContext.getDqoHome();
+            SensorDefinitionList sensorDefinitionList= dqoHome.getSensors();
+            sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName, true);
+        }
+
+        if(sensorDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = sensorDefinitionWrapper
+                .getProviderSensors()
+                .getByObjectName(providerType, true);
+
+        if(providerSensorDefinitionWrapper == null){
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinitionWrapper.getSpec();
+
+        ProviderSensorModel providerSensorModel = new ProviderSensorModel();
+        providerSensorModel.setSensorName(sensorName);
+        providerSensorModel.setProviderType(providerType);
+        providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
+        providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionSpec);
+
+        return new ResponseEntity<>(Mono.just(providerSensorModel), HttpStatus.OK);
     }
 
 }

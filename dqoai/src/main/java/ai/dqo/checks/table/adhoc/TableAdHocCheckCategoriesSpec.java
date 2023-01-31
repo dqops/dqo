@@ -49,8 +49,6 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-//          put("consistency", o -> o.consistency);
-//          put("custom", o -> o.custom);
         }
     };
 

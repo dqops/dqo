@@ -160,6 +160,6 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCo
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.REASONABLENESS;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

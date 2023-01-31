@@ -20,8 +20,13 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class BetweenIntsRuleParametersSpec:
-    begin: int
-    end: int
+    from_: int
+    to: int
+
+def __getattr__(self, name):
+    if name == "from":
+        return self.from_
+    return object.__getattribute__(self, name)
 
 
 class HistoricDataPoint:
@@ -64,8 +69,8 @@ class RuleExecutionResult:
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult(True, None, None, None)
-    expected_value = rule_parameters.parameters.end
-    lower_bound = rule_parameters.parameters.begin
-    upper_bound = rule_parameters.parameters.end
+    expected_value = rule_parameters.parameters.to
+    lower_bound = getattr(rule_parameters.parameters,"from")
+    upper_bound = rule_parameters.parameters.to
     passed = (lower_bound <= rule_parameters.actual_value and rule_parameters.actual_value <= upper_bound)
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

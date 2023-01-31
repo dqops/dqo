@@ -16,7 +16,7 @@
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.ProfilerSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -62,8 +62,8 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"profiler run\" job that should be pushed to the job queue in order to run all profilers within this column.")
-    private ProfilerSearchFilters runProfilerJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
+    private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
     /**
      * Creates a basic column model from a column specification by cherry-picking relevant fields.
@@ -92,7 +92,7 @@ public class ColumnBasicModel {
                 setColumnName(columnName);
                 setEnabled(true);
             }});
-            setRunProfilerJobTemplate(new ProfilerSearchFilters()
+            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());

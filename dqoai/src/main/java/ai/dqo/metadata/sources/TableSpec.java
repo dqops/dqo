@@ -15,8 +15,15 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
+import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -24,10 +31,12 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.profiling.table.TableProfilerRootCategoriesSpec;
+import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -56,7 +65,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 			put("checks", o -> o.checks);
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
-            put("profiler", o -> o.profiler);
+            put("statistics_collector", o -> o.statisticsCollector);
             put("schedule_override", o -> o.scheduleOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -120,10 +129,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TablePartitionedChecksRootSpec partitionedChecks = new TablePartitionedChecksRootSpec();
 
-    @JsonPropertyDescription("Configuration of table level data profilers. Configures which profilers are enabled and how they are configured.")
+    @JsonPropertyDescription("Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilerRootCategoriesSpec profiler;
+    private TableStatisticsCollectorsRootCategoriesSpec statisticsCollector;
 
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     @ToString.Exclude
@@ -323,21 +332,21 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a configuration of the table profiler (if any changes were applied).
-     * @return Configuration of the table level profiler.
+     * Returns a configuration of the table statistics collector (if any changes were applied).
+     * @return Configuration of the table level statistics collector.
      */
-    public TableProfilerRootCategoriesSpec getProfiler() {
-        return profiler;
+    public TableStatisticsCollectorsRootCategoriesSpec getStatisticsCollector() {
+        return statisticsCollector;
     }
 
     /**
-     * Sets a new configuration of a table level profiler.
-     * @param profiler Table level profiler.
+     * Sets a new configuration of a table level statistics collector.
+     * @param statisticsCollector Table level statistics collector.
      */
-    public void setProfiler(TableProfilerRootCategoriesSpec profiler) {
-        setDirtyIf(!Objects.equals(this.profiler, profiler));
-        this.profiler = profiler;
-        propagateHierarchyIdToField(profiler, "profiler");
+    public void setStatisticsCollector(TableStatisticsCollectorsRootCategoriesSpec statisticsCollector) {
+        setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
+        this.statisticsCollector = statisticsCollector;
+        propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
     }
 
     /**
@@ -429,6 +438,141 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the table specification.
+     * @param checkType Check type.
+     * @param checkTimeScale Time scale. Null value is accepted for adhoc checks, for other time scale aware checks, the proper time scale is required.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
+                                                                      CheckTimeScale checkTimeScale) {
+        switch (checkType) {
+            case ADHOC: {
+                if (this.checks != null) {
+                    return this.checks;
+                }
+
+                TableAdHocCheckCategoriesSpec tableAdHocCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
+                tableAdHocCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
+                return tableAdHocCheckCategoriesSpec;
+            }
+
+            case CHECKPOINT: {
+                TableCheckpointsSpec checkpointsSpec = this.checkpoints;
+                if (checkpointsSpec == null) {
+                    checkpointsSpec = new TableCheckpointsSpec();
+                    checkpointsSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checkpoints"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (checkpointsSpec.getDaily() != null) {
+                            return checkpointsSpec.getDaily();
+                        }
+
+                        TableDailyCheckpointCategoriesSpec dailyCheckpointCategoriesSpec = new TableDailyCheckpointCategoriesSpec();
+                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "daily"));
+                        return dailyCheckpointCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (checkpointsSpec.getMonthly() != null) {
+                            return checkpointsSpec.getMonthly();
+                        }
+
+                        TableMonthlyCheckpointCategoriesSpec monthlyCheckpointCategoriesSpec = new TableMonthlyCheckpointCategoriesSpec();
+                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "monthly"));
+                        return monthlyCheckpointCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case PARTITIONED: {
+                TablePartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    partitionedChecksSpec = new TablePartitionedChecksRootSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new TableDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new TableMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be an adhoc check container, one of checkpoint containers or one of partitioned checks container.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setTableCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof TableAdHocCheckCategoriesSpec) {
+            this.setChecks((TableAdHocCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new TableCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setDaily((TableDailyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyCheckpointCategoriesSpec) {
+            if (this.checkpoints == null) {
+                this.setCheckpoints(new TableCheckpointsSpec());
+            }
+
+            this.getCheckpoints().setMonthly((TableMonthlyCheckpointCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((TableDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((TableMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
+        }
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -484,7 +628,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             if (cloned.target != null) {
                 cloned.target = cloned.target.expandAndTrim(secretValueProvider);
             }
@@ -524,7 +668,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.labels = null;
             cloned.comments = null;
             cloned.scheduleOverride = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             cloned.columns = this.columns.trim();
             return cloned;
         }
@@ -554,7 +698,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             cloned.comments = null;
             cloned.scheduleOverride = null;
             cloned.columns = null;
-            cloned.profiler = null;
+            cloned.statisticsCollector = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
