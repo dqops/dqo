@@ -37,7 +37,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+--8<-- "home/rules/comparison/max_count.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -159,7 +159,7 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/between_ints.dqrule.yaml"
+--8<-- "home/rules/comparison/between_ints.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -274,7 +274,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_count.dqrule.yaml"
+--8<-- "home/rules/comparison/min_count.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -388,7 +388,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_count.dqrule.yaml"
+--8<-- "home/rules/comparison/min_count.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -502,7 +502,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -616,7 +616,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_value.dqrule.yaml"
+--8<-- "home/rules/comparison/max_value.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -730,7 +730,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+--8<-- "home/rules/comparison/max_count.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -844,7 +844,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -958,7 +958,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min.dqrule.yaml"
+--8<-- "home/rules/comparison/min.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1072,7 +1072,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+--8<-- "home/rules/comparison/max_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1186,7 +1186,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1300,7 +1300,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+--8<-- "home/rules/comparison/max_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1414,7 +1414,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1528,7 +1528,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1642,7 +1642,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1756,7 +1756,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1870,7 +1870,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1984,7 +1984,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+--8<-- "home/rules/comparison/max_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2098,7 +2098,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2212,7 +2212,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2326,7 +2326,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2440,7 +2440,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2554,7 +2554,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2668,7 +2668,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/max_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2790,7 +2790,7 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/between_floats.dqrule.yaml"
+--8<-- "home/rules/comparison/between_floats.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2905,7 +2905,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+--8<-- "home/rules/comparison/max_count.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -3019,7 +3019,7 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/max.dqrule.yaml"
+--8<-- "home/rules/comparison/max.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -3133,7 +3133,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_value.dqrule.yaml"
+--8<-- "home/rules/comparison/min_value.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -3255,7 +3255,7 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/equals.dqrule.yaml"
+--8<-- "home/rules/comparison/equals.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -3370,7 +3370,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -3484,7 +3484,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+--8<-- "home/rules/comparison/min_percent.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python

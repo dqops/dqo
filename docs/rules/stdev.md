@@ -45,7 +45,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/percentile_moving_stdev.dqrule.yaml"
+--8<-- "home/rules/stdev/percentile_moving_stdev.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -180,7 +180,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -302,7 +302,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -424,7 +424,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -552,7 +552,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -674,7 +674,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -802,7 +802,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -931,7 +931,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1059,7 +1059,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1188,7 +1188,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1317,7 +1317,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1440,7 +1440,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1571,7 +1571,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/percent_moving_stdev.dqrule.yaml"
+--8<-- "home/rules/stdev/percent_moving_stdev.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1705,7 +1705,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1828,7 +1828,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -1957,7 +1957,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2080,7 +2080,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2203,7 +2203,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2332,7 +2332,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
@@ -2455,7 +2455,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 <b>Example</b>
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+--8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqorule.yaml"
 ```
 <b>Rule implementation (Python)</b>
 ```python
