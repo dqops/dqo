@@ -37,7 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class BigQueryTableAvailabilityRowCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableAvailabilitySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableAvailabilityCheckSpec checkSpec;

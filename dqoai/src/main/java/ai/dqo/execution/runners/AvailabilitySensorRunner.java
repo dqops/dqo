@@ -59,8 +59,13 @@ public class AvailabilitySensorRunner extends AbstractSensorRunner {
                 sensorRunParameters, sensorDefinitions, progressListener, dummySensorExecution);
 
         if(sensorExecutionResult.isSuccess()){
-            if(sensorExecutionResult.getResultTable().column(0).get(0) == null){
-                Table dummyResultTable = createDummyResultTable(1L);
+            try {
+                if(sensorExecutionResult.getResultTable().column(0).get(0) == null){
+                    Table dummyResultTable = createDummyResultTable(1L);
+                    return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
+                }
+            }catch (Exception exception) {
+                Table dummyResultTable = createDummyResultTable(0L);
                 return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
             }
             return sensorExecutionResult;

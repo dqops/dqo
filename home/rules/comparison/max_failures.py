@@ -70,6 +70,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered.append(rule_parameters.actual_value)
 
+    time_window = getattr(rule_parameters.time_window, "prediction_time_window")
+    filtered = filtered[-time_window:]
+
     failures  = 0
     for i in filtered :
         if i == 0:
