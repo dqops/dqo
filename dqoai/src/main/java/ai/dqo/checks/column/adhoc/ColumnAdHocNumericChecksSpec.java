@@ -44,10 +44,12 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
-            put("sum_in_range", o -> o.sumInRange);
             put("mean_in_range", o -> o.meanInRange);
             put("sample_stddev_in_range", o -> o.sampleStddevInRange);
             put("population_stddev_in_range", o -> o.populationStddevInRange);
+            put("sample_variance_in_range", o -> o.sampleVarianceInRange);
+            put("population_variance_in_range", o -> o.populationVarianceInRange);
+            put("sum_in_range", o -> o.sumInRange);
         }
     };
 
@@ -75,9 +77,6 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range.")
     private ColumnMinInRangeCheckSpec minInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
-    private ColumnSumInRangeCheckSpec sumInRange;
-
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
     private ColumnMeanInRangeCheckSpec meanInRange;
 
@@ -86,6 +85,15 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range.")
     private ColumnPopulationStddevInRangeCheckSpec populationStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range.")
+    private ColumnSampleVarianceInRangeCheckSpec sampleVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range.")
+    private ColumnPopulationVarianceInRangeCheckSpec populationVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
+    private ColumnSumInRangeCheckSpec sumInRange;
 
     /**
      * Returns a negative count check specification.
@@ -232,24 +240,6 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getSumInRange() {
-        return sumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param sumInRange Sum in range check specification.
-     */
-    public void setSumInRange(ColumnSumInRangeCheckSpec sumInRange) {
-        this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
-        this.sumInRange = sumInRange;
-        propagateHierarchyIdToField(sumInRange, "sum_in_range");
-    }
-
-    /**
      * Returns a mean in range check specification.
      * @return Mean in range check specification.
      */
@@ -294,13 +284,67 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Sets a new specification of a Population standard deviation in range check.
+     * Sets a new specification of a population standard deviation in range check.
      * @param populationStddevInRange Population standard deviation in range check specification.
      */
     public void setPopulationStddevInRange(ColumnPopulationStddevInRangeCheckSpec populationStddevInRange) {
         this.setDirtyIf(!Objects.equals(this.populationStddevInRange, populationStddevInRange));
         this.populationStddevInRange = populationStddevInRange;
         propagateHierarchyIdToField(populationStddevInRange, "population_stddev_in_range");
+    }
+
+    /**
+     * Returns a sample variance in range check specification.
+     * @return Sample variance in range check specification.
+     */
+    public ColumnSampleVarianceInRangeCheckSpec getSampleVarianceInRange() {
+        return sampleVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample variance in range check.
+     * @param sampleVarianceInRange Sample variance in range check specification.
+     */
+    public void setSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec sampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.sampleVarianceInRange, sampleVarianceInRange));
+        this.sampleVarianceInRange = sampleVarianceInRange;
+        propagateHierarchyIdToField(sampleVarianceInRange, "sample_variance_in_range");
+    }
+
+    /**
+     * Returns a population variance in range check specification.
+     * @return Population variance in range check specification.
+     */
+    public ColumnPopulationVarianceInRangeCheckSpec getPopulationVarianceInRange() {
+        return populationVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a population variance in range check.
+     * @param populationVarianceInRange Population variance in range check specification.
+     */
+    public void setPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec populationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.populationVarianceInRange, populationVarianceInRange));
+        this.populationVarianceInRange = populationVarianceInRange;
+        propagateHierarchyIdToField(populationVarianceInRange, "population_variance_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getSumInRange() {
+        return sumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param sumInRange Sum in range check specification.
+     */
+    public void setSumInRange(ColumnSumInRangeCheckSpec sumInRange) {
+        this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
+        this.sumInRange = sumInRange;
+        propagateHierarchyIdToField(sumInRange, "sum_in_range");
     }
 
     /**
