@@ -161,6 +161,6 @@ public class ColumnStringLengthAboveMaxLengthCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

@@ -39,9 +39,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringRegexMatchPercentCheckSpec
+public class ColumnStringMatchRegexPercentCheckSpec
         extends AbstractCheckSpec<ColumnStringsStringRegexMatchPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringRegexMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringMatchRegexPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -162,6 +162,6 @@ public class ColumnStringRegexMatchPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

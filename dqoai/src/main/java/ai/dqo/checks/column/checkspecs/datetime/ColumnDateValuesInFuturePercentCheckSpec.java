@@ -162,6 +162,6 @@ public class ColumnDateValuesInFuturePercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

@@ -161,6 +161,6 @@ public class ColumnPopulationVarianceInRangeCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

@@ -163,6 +163,6 @@ public class ColumnStringValidUsaPhonePercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

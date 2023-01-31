@@ -191,7 +191,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     private ColumnStringNotMatchRegexCountCheckSpec dailyCheckpointStringNotMatchRegexCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringRegexMatchPercentCheckSpec dailyCheckpointStringMatchRegexPercent;
+    private ColumnStringMatchRegexPercentCheckSpec dailyCheckpointStringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchDateRegexCountCheckSpec dailyCheckpointStringNotMatchDateRegexCount;
@@ -821,7 +821,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnStringRegexMatchPercentCheckSpec getDailyCheckpointStringMatchRegexPercent() {
+    public ColumnStringMatchRegexPercentCheckSpec getDailyCheckpointStringMatchRegexPercent() {
         return dailyCheckpointStringMatchRegexPercent;
     }
 
@@ -829,7 +829,7 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
      * Sets a new definition of a minimum match regex percent check.
      * @param dailyCheckpointStringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setDailyCheckpointStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec dailyCheckpointStringMatchRegexPercent) {
+    public void setDailyCheckpointStringMatchRegexPercent(ColumnStringMatchRegexPercentCheckSpec dailyCheckpointStringMatchRegexPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringMatchRegexPercent, dailyCheckpointStringMatchRegexPercent));
         this.dailyCheckpointStringMatchRegexPercent = dailyCheckpointStringMatchRegexPercent;
         propagateHierarchyIdToField(dailyCheckpointStringMatchRegexPercent, "daily_checkpoint_string_match_regex_percent");
