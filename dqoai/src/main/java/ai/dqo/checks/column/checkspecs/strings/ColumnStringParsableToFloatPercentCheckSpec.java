@@ -161,6 +161,6 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

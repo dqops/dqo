@@ -160,6 +160,6 @@ public class ColumnStringSurroundedByWhitespaceCountCheckSpec extends AbstractCh
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

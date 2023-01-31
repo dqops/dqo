@@ -161,6 +161,6 @@ public class ColumnMeanInRangeCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }
