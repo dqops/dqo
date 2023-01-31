@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.dqo.sensors.column.strings;
+package ai.dqo.sensors.column.numeric;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -33,30 +33,30 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringValueBelowMinValueCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringValueBelowMinValueCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnNumericValueBelowMinValueCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericValueBelowMinValueCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
 
     @JsonPropertyDescription("This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0")
-    private int minimumValue = 0;
+    private int minValue = 0;
 
     /**
-     * Returns the minimum value.
-     * @return minimumValue.
+     * Returns the min value.
+     * @return minValue.
      */
-    public int getMinimumValue() {
-        return minimumValue;
+    public int getMinValue() {
+        return minValue;
     }
 
     /**
-     * Sets the minimum value.
-     * @param minimumValue minimum value.
+     * Sets the min value.
+     * @param minValue minvalue.
      */
-    public void setMinimumValue(int minimumValue) {
-        this.setDirtyIf(!Objects.equals(this.minimumValue, minimumValue));
-        this.minimumValue = minimumValue;
+    public void setMinValue(int minValue) {
+        this.setDirtyIf(!Objects.equals(this.minValue, minValue));
+        this.minValue = minValue;
     }
 
     /**
@@ -76,7 +76,7 @@ public class ColumnStringsStringValueBelowMinValueCountSensorParametersSpec exte
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_value_below_min_value_count";
+        return "column/numeric/value_below_min_value_count";
     }
 
 }

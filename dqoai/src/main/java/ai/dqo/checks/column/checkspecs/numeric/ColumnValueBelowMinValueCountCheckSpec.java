@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.strings;
+package ai.dqo.checks.column.checkspecs.numeric;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValueBelowMinValueCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericValueBelowMinValueCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +33,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of strings with a value below the indicated by the user value in a monitored column.
+ * Column level check that ensures that there are no more than a maximum number of values with a value below the indicated by the user value in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringValueBelowMinValueCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringValueBelowMinValueCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValueBelowMinValueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnValueBelowMinValueCountCheckSpec
+        extends AbstractCheckSpec<ColumnNumericValueBelowMinValueCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnValueBelowMinValueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,9 +48,9 @@ public class ColumnStringValueBelowMinValueCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringValueBelowMinValueCountSensorParametersSpec parameters = new ColumnStringsStringValueBelowMinValueCountSensorParametersSpec();
+    private ColumnNumericValueBelowMinValueCountSensorParametersSpec parameters = new ColumnNumericValueBelowMinValueCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with strings with a value below the indicated by the user value in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with values with a value below the indicated by the user value in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -70,7 +70,7 @@ public class ColumnStringValueBelowMinValueCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringValueBelowMinValueCountSensorParametersSpec getParameters() {
+    public ColumnNumericValueBelowMinValueCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnStringValueBelowMinValueCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringValueBelowMinValueCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericValueBelowMinValueCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -161,6 +161,6 @@ public class ColumnStringValueBelowMinValueCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.COMPLETENESS;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

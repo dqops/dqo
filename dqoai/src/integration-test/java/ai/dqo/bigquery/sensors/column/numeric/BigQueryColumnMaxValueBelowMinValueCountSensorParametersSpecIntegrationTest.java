@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.strings;
+package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringValueBelowMinValueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValueBelowMinValueCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericValueBelowMinValueCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringValueBelowMinValueCountSensorParametersSpec sut;
+public class BigQueryColumnMaxValueBelowMinValueCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnNumericValueBelowMinValueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringValueBelowMinValueCountCheckSpec checkSpec;
+    private ColumnValueBelowMinValueCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,14 +49,14 @@ public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParamete
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringValueBelowMinValueCountSensorParametersSpec();
-        this.checkSpec = new ColumnStringValueBelowMinValueCountCheckSpec();
+        this.sut = new ColumnNumericValueBelowMinValueCountSensorParametersSpec();
+        this.checkSpec = new ColumnValueBelowMinValueCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setMinimumValue(16);
+        this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "VALUE", this.checkSpec);
@@ -71,7 +71,7 @@ public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setMinimumValue(16);
+        this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +86,7 @@ public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setMinimumValue(16);
+        this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +101,7 @@ public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinimumValue(16);
+        this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.daily,"DATE");
@@ -116,7 +116,7 @@ public class BigQueryColumnStringsStringMaxValueBelowMinValueCountSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinimumValue(16);
+        this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.monthly,"DATE");

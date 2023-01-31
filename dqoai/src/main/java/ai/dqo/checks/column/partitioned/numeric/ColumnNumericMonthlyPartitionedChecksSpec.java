@@ -42,6 +42,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_numbers_in_set_percent", o -> o.monthlyPartitionNumbersInSetPercent);
             put("monthly_partition_values_in_range_numeric_percent", o -> o.monthlyPartitionValuesInRangeNumericPercent);
             put("monthly_partition_values_in_range_integers_percent", o -> o.monthlyPartitionValuesInRangeIntegersPercent);
+            put("monthly_partition_value_below_min_value_count", o -> o.monthlyPartitionValueBelowMinValueCount);
             put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
@@ -70,6 +71,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnValueBelowMinValueCountCheckSpec monthlyPartitionValueBelowMinValueCount;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
@@ -202,6 +206,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValuesInRangeIntegersPercent, monthlyPartitionValuesInRangeIntegersPercent));
         this.monthlyPartitionValuesInRangeIntegersPercent = monthlyPartitionValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(monthlyPartitionValuesInRangeIntegersPercent, "monthly_partition_values_in_range_integers_percent");
+    }
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getMonthlyPartitionValueBelowMinValueCount() {
+        return monthlyPartitionValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param monthlyPartitionValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setMonthlyPartitionValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec monthlyPartitionValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValueBelowMinValueCount, monthlyPartitionValueBelowMinValueCount));
+        this.monthlyPartitionValueBelowMinValueCount = monthlyPartitionValueBelowMinValueCount;
+        propagateHierarchyIdToField(monthlyPartitionValueBelowMinValueCount, "monthly_partition_value_below_min_value_count");
     }
 
     /**

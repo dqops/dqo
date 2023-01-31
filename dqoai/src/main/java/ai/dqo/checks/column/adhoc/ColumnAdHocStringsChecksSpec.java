@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,8 +44,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_length_below_min_length_percent", o -> o.stringLengthBelowMinLengthPercent);
             put("string_length_above_max_length_count", o -> o.stringLengthAboveMaxLengthCount);
             put("string_length_above_max_length_percent", o -> o.stringLengthAboveMaxLengthPercent);
-            put("string_value_below_min_value_count", o -> o.stringValueBelowMinValueCount);
-
 
 
 
@@ -110,9 +109,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. ")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
-
-    @JsonPropertyDescription("The check counts those strings with value below the one provided by the user in a column.")
-    private ColumnStringValueBelowMinValueCountCheckSpec stringValueBelowMinValueCount;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
     private ColumnStringEmptyCountCheckSpec stringEmptyCount;
@@ -334,24 +330,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthPercent, stringLengthAboveMaxLengthPercent));
         this.stringLengthAboveMaxLengthPercent = stringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(stringLengthAboveMaxLengthPercent, "string_length_above_max_length_percent");
-    }
-
-    /**
-     * Returns a string value below min value count check.
-     * @return String value below min value count check.
-     */
-    public ColumnStringValueBelowMinValueCountCheckSpec getStringValueBelowMinValueCount() {
-        return stringValueBelowMinValueCount;
-    }
-
-    /**
-     * Sets a new definition of a string value below min value count check.
-     * @param stringValueBelowMinValueCount String value below min value count check.
-     */
-    public void setStringValueBelowMinValueCount(ColumnStringValueBelowMinValueCountCheckSpec stringValueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.stringValueBelowMinValueCount, stringValueBelowMinValueCount));
-        this.stringValueBelowMinValueCount = stringValueBelowMinValueCount;
-        propagateHierarchyIdToField(stringValueBelowMinValueCount, "string_value_below_min_value_count");
     }
 
     /**

@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,7 +44,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_length_below_min_length_percent", o -> o.dailyPartitionStringLengthBelowMinLengthPercent);
             put("daily_partition_string_length_above_max_length_count", o -> o.dailyPartitionStringLengthAboveMaxLengthCount);
             put("daily_partition_string_length_above_max_length_percent", o -> o.dailyPartitionStringLengthAboveMaxLengthPercent);
-            put("daily_partition_string_value_below_min_value_count", o -> o.dailyPartitionStringValueBelowMinValueCount);
 
 
 
@@ -109,9 +109,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent;
-
-    @JsonPropertyDescription("The check counts those strings with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValueBelowMinValueCountCheckSpec dailyPartitionStringValueBelowMinValueCount;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount;
@@ -333,24 +330,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringLengthAboveMaxLengthPercent, dailyPartitionStringLengthAboveMaxLengthPercent));
         this.dailyPartitionStringLengthAboveMaxLengthPercent = dailyPartitionStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(dailyPartitionStringLengthAboveMaxLengthPercent, "daily_partition_string_length_above_max_length_percent");
-    }
-
-    /**
-     * Returns a string value above max value percent check.
-     * @return Mean string value above max value percent check.
-     */
-    public ColumnStringValueBelowMinValueCountCheckSpec getDailyPartitionStringValueBelowMinValueCount() {
-        return dailyPartitionStringValueBelowMinValueCount;
-    }
-
-    /**
-     * Sets a new definition of a string value above max value percent check.
-     * @param dailyPartitionStringValueBelowMinValueCount String value above max value percent check.
-     */
-    public void setDailyPartitionStringValueBelowMinValueCount(ColumnStringValueBelowMinValueCountCheckSpec dailyPartitionStringValueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValueBelowMinValueCount, dailyPartitionStringValueBelowMinValueCount));
-        this.dailyPartitionStringValueBelowMinValueCount = dailyPartitionStringValueBelowMinValueCount;
-        propagateHierarchyIdToField(dailyPartitionStringValueBelowMinValueCount, "daily_partition_string_value_above_max_value_percent");
     }
 
     /**
