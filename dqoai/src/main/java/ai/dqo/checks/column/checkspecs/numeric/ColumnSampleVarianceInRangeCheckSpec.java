@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericSampleStddevInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericSampleVarianceInRangeSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures the sample standard deviation is in a set range in a monitored column.
+ * Column level check that ensures the sample variance is in a set range in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSampleStddevInRangeCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSampleStddevInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnSampleStddevInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnSampleVarianceInRangeCheckSpec
+        extends AbstractCheckSpec<ColumnNumericSampleVarianceInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSampleVarianceInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,7 +47,7 @@ public class ColumnSampleStddevInRangeCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericSampleStddevInRangeSensorParametersSpec parameters = new ColumnNumericSampleStddevInRangeSensorParametersSpec();
+    private ColumnNumericSampleVarianceInRangeSensorParametersSpec parameters = new ColumnNumericSampleVarianceInRangeSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a sample (unbiased) maximal values in range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnSampleStddevInRangeCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericSampleStddevInRangeSensorParametersSpec getParameters() {
+    public ColumnNumericSampleVarianceInRangeSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnSampleStddevInRangeCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericSampleStddevInRangeSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericSampleVarianceInRangeSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
