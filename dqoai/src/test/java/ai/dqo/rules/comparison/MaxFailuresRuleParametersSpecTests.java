@@ -21,6 +21,8 @@ import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.HistoricDataPointObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
+import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
+import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
@@ -45,6 +47,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     private Double[] sensorReadouts;
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
+    private DqoHomeContext dqoHomeContext;
 
     @BeforeEach
     void setUp() {
@@ -53,12 +56,18 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
         this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+
+        this.dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
+        DqoHome dqoHome = this.dqoHomeContext.getDqoHome();
+        RuleDefinitionWrapper ruleDefWrapper = dqoHome.getRules().getByObjectName("comparison/max_failures", true);
+        //this.sensorReadouts = new Double[ruleDefWrapper.getSpec().getTimeWindow().getPredictionTimeWindow()];
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
     @Test
     void executeRule_whenCountOfFailuresLessThenMaxFailures_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
+
 
         Double[] previousReadouts = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         this.sensorReadouts = previousReadouts;
