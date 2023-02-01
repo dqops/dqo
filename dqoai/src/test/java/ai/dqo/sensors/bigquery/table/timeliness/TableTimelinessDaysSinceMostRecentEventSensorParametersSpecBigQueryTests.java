@@ -25,7 +25,6 @@ import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
 import ai.dqo.metadata.groupings.*;
-import ai.dqo.metadata.sources.TimestampColumnsSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
@@ -101,11 +100,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -130,10 +127,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 DATE_DIFF(
                     CURRENT_DATE(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     DAY
-                )
-                AS actual_value
+                ) AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -158,11 +154,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 DATETIME_DIFF(
                     CURRENT_DATETIME(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -189,11 +183,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
                     CURRENT_TIMESTAMP(),
                     MAX(
                         SAFE_CAST(analyzed_table.`%s` AS TIMESTAMP)
-                    ),                
+                    ),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -222,11 +214,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -252,11 +242,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -281,11 +269,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period
@@ -316,11 +302,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -349,11 +333,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period
@@ -382,11 +364,9 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecBigQuery
             SELECT
                 TIMESTAMP_DIFF(
                     CURRENT_TIMESTAMP(),
-                    MAX(analyzed_table.`%s`),                
+                    MAX(analyzed_table.`%s`),
                     MILLISECOND
-                )
-                / 24.0 / 3600.0 / 1000.0
-                AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period

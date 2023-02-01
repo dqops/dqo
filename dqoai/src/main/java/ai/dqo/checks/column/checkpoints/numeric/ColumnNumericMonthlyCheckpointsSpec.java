@@ -42,12 +42,15 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_numbers_in_set_percent", o -> o.monthlyCheckpointNumbersInSetPercent);
             put("monthly_checkpoint_values_in_range_numeric_percent", o -> o.monthlyCheckpointValuesInRangeNumericPercent);
             put("monthly_checkpoint_values_in_range_integers_percent", o -> o.monthlyCheckpointValuesInRangeIntegersPercent);
+            put("monthly_checkpoint_value_below_min_value_count", o -> o.monthlyCheckpointValueBelowMinValueCount);
             put("monthly_checkpoint_max_in_range", o -> o.monthlyCheckpointMaxInRange);
             put("monthly_checkpoint_min_in_range", o -> o.monthlyCheckpointMinInRange);
-            put("monthly_checkpoint_sum_in_range", o -> o.monthlyCheckpointSumInRange);
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
             put("monthly_checkpoint_sample_stddev_in_range", o -> o.monthlyCheckpointSampleStddevInRange);
             put("monthly_checkpoint_population_stddev_in_range", o -> o.monthlyCheckpointPopulationStddevInRange);
+            put("monthly_checkpoint_sample_variance_in_range", o -> o.monthlyCheckpointSampleVarianceInRange);
+            put("monthly_checkpoint_population_variance_in_range", o -> o.monthlyCheckpointPopulationVarianceInRange);
+            put("monthly_checkpoint_sum_in_range", o -> o.monthlyCheckpointSumInRange);
         }
     };
 
@@ -69,14 +72,14 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyCheckpointValuesInRangeIntegersPercent;
 
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnValueBelowMinValueCountCheckSpec monthlyCheckpointValueBelowMinValueCount;
+
     @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyCheckpointMaxInRange;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec monthlyCheckpointMinInRange;
-
-    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnSumInRangeCheckSpec monthlyCheckpointSumInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec monthlyCheckpointMeanInRange;
@@ -86,7 +89,17 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPopulationStddevInRangeCheckSpec monthlyCheckpointPopulationStddevInRange;
-    
+
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnSampleVarianceInRangeCheckSpec monthlyCheckpointSampleVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPopulationVarianceInRangeCheckSpec monthlyCheckpointPopulationVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnSumInRangeCheckSpec monthlyCheckpointSumInRange;
+
+
     /**
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
@@ -196,6 +209,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getMonthlyCheckpointValueBelowMinValueCount() {
+        return monthlyCheckpointValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param monthlyCheckpointValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setMonthlyCheckpointValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec monthlyCheckpointValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValueBelowMinValueCount, monthlyCheckpointValueBelowMinValueCount));
+        this.monthlyCheckpointValueBelowMinValueCount = monthlyCheckpointValueBelowMinValueCount;
+        propagateHierarchyIdToField(monthlyCheckpointValueBelowMinValueCount, "monthly_checkpoint_value_below_min_value_count");
+    }
+
+    /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
@@ -229,24 +260,6 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMinInRange, monthlyCheckpointMinInRange));
         this.monthlyCheckpointMinInRange = monthlyCheckpointMinInRange;
         propagateHierarchyIdToField(monthlyCheckpointMinInRange, "monthly_checkpoint_min_in_range");
-    }
-
-    /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getMonthlyCheckpointSumInRange() {
-        return monthlyCheckpointSumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param monthlyCheckpointSumInRange Sum in range check specification.
-     */
-    public void setMonthlyCheckpointSumInRange(ColumnSumInRangeCheckSpec monthlyCheckpointSumInRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSumInRange, monthlyCheckpointSumInRange));
-        this.monthlyCheckpointSumInRange = monthlyCheckpointSumInRange;
-        propagateHierarchyIdToField(monthlyCheckpointSumInRange, "monthly_checkpoint_sum_in_range");
     }
 
     /**
@@ -301,6 +314,60 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPopulationStddevInRange, monthlyCheckpointPopulationStddevInRange));
         this.monthlyCheckpointPopulationStddevInRange = monthlyCheckpointPopulationStddevInRange;
         propagateHierarchyIdToField(monthlyCheckpointPopulationStddevInRange, "monthly_checkpoint_population_stddev_in_range");
+    }
+
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleVarianceInRangeCheckSpec getMonthlyCheckpointSampleVarianceInRange() {
+        return monthlyCheckpointSampleVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param monthlyCheckpointSampleVarianceInRange Sample standard deviation in range check specification.
+     */
+    public void setMonthlyCheckpointSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec monthlyCheckpointSampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSampleVarianceInRange, monthlyCheckpointSampleVarianceInRange));
+        this.monthlyCheckpointSampleVarianceInRange = monthlyCheckpointSampleVarianceInRange;
+        propagateHierarchyIdToField(monthlyCheckpointSampleVarianceInRange, "monthly_checkpoint_sample_variance_in_range");
+    }
+
+    /**
+     * Returns a population variance in range check specification.
+     * @return Population variance in range check specification.
+     */
+    public ColumnPopulationVarianceInRangeCheckSpec getMonthlyCheckpointPopulationVarianceInRange() {
+        return monthlyCheckpointPopulationVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a population variance in range check.
+     * @param monthlyCheckpointPopulationVarianceInRange Population variance in range check specification.
+     */
+    public void setMonthlyCheckpointPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec monthlyCheckpointPopulationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPopulationVarianceInRange, monthlyCheckpointPopulationVarianceInRange));
+        this.monthlyCheckpointPopulationVarianceInRange = monthlyCheckpointPopulationVarianceInRange;
+        propagateHierarchyIdToField(monthlyCheckpointPopulationVarianceInRange, "monthly_checkpoint_population_variance_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getMonthlyCheckpointSumInRange() {
+        return monthlyCheckpointSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param monthlyCheckpointSumInRange Sum in range check specification.
+     */
+    public void setMonthlyCheckpointSumInRange(ColumnSumInRangeCheckSpec monthlyCheckpointSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSumInRange, monthlyCheckpointSumInRange));
+        this.monthlyCheckpointSumInRange = monthlyCheckpointSumInRange;
+        propagateHierarchyIdToField(monthlyCheckpointSumInRange, "monthly_checkpoint_sum_in_range");
     }
 
     /**

@@ -42,12 +42,15 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_numbers_in_set_percent", o -> o.dailyCheckpointNumbersInSetPercent);
             put("daily_checkpoint_values_in_range_numeric_percent", o -> o.dailyCheckpointValuesInRangeNumericPercent);
             put("daily_checkpoint_values_in_range_integers_percent", o -> o.dailyCheckpointValuesInRangeIntegersPercent);
+            put("daily_checkpoint_value_below_min_value_count", o -> o.dailyCheckpointValueBelowMinValueCount);
             put("daily_checkpoint_max_in_range", o -> o.dailyCheckpointMaxInRange);
             put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
-            put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
             put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
             put("daily_checkpoint_sample_stddev_in_range", o -> o.dailyCheckpointSampleStddevInRange);
             put("daily_checkpoint_population_stddev_in_range", o -> o.dailyCheckpointPopulationStddevInRange);
+            put("daily_checkpoint_sample_variance_in_range", o -> o.dailyCheckpointSampleVarianceInRange);
+            put("daily_checkpoint_population_variance_in_range", o -> o.dailyCheckpointPopulationVarianceInRange);
+            put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
         }
     };
 
@@ -69,14 +72,14 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyCheckpointValuesInRangeIntegersPercent;
 
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValueBelowMinValueCountCheckSpec dailyCheckpointValueBelowMinValueCount;
+
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec dailyCheckpointMaxInRange;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec dailyCheckpointMinInRange;
-
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnSumInRangeCheckSpec dailyCheckpointSumInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyCheckpointMeanInRange;
@@ -86,6 +89,15 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPopulationStddevInRangeCheckSpec dailyCheckpointPopulationStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnSampleVarianceInRangeCheckSpec dailyCheckpointSampleVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPopulationVarianceInRangeCheckSpec dailyCheckpointPopulationVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnSumInRangeCheckSpec dailyCheckpointSumInRange;
 
     /**
      * Returns a negative values count check specification.
@@ -196,6 +208,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
     }
 
     /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getDailyCheckpointValueBelowMinValueCount() {
+        return dailyCheckpointValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param dailyCheckpointValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setDailyCheckpointValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec dailyCheckpointValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValueBelowMinValueCount, dailyCheckpointValueBelowMinValueCount));
+        this.dailyCheckpointValueBelowMinValueCount = dailyCheckpointValueBelowMinValueCount;
+        propagateHierarchyIdToField(dailyCheckpointValueBelowMinValueCount, "daily_checkpoint_value_below_min_value_count");
+    }
+
+    /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
@@ -229,24 +259,6 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMinInRange, dailyCheckpointMinInRange));
         this.dailyCheckpointMinInRange = dailyCheckpointMinInRange;
         propagateHierarchyIdToField(dailyCheckpointMinInRange, "daily_checkpoint_min_in_range");
-    }
-
-    /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getDailyCheckpointSumInRange() {
-        return dailyCheckpointSumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param dailyCheckpointSumInRange Sum in range check specification.
-     */
-    public void setDailyCheckpointSumInRange(ColumnSumInRangeCheckSpec dailyCheckpointSumInRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSumInRange, dailyCheckpointSumInRange));
-        this.dailyCheckpointSumInRange = dailyCheckpointSumInRange;
-        propagateHierarchyIdToField(dailyCheckpointSumInRange, "daily_checkpoint_sum_in_range");
     }
 
     /**
@@ -301,6 +313,60 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointPopulationStddevInRange, dailyCheckpointPopulationStddevInRange));
         this.dailyCheckpointPopulationStddevInRange = dailyCheckpointPopulationStddevInRange;
         propagateHierarchyIdToField(dailyCheckpointPopulationStddevInRange, "daily_checkpoint_population_stddev_in_range");
+    }
+
+    /**
+     * Returns a sample variance in range check specification.
+     * @return Sample variance in range check specification.
+     */
+    public ColumnSampleVarianceInRangeCheckSpec getDailyCheckpointSampleVarianceInRange() {
+        return dailyCheckpointSampleVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample variance in range check.
+     * @param dailyCheckpointSampleVarianceInRange Sample variance in range check specification.
+     */
+    public void setDailyCheckpointSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec dailyCheckpointSampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSampleVarianceInRange, dailyCheckpointSampleVarianceInRange));
+        this.dailyCheckpointSampleVarianceInRange = dailyCheckpointSampleVarianceInRange;
+        propagateHierarchyIdToField(dailyCheckpointSampleVarianceInRange, "daily_checkpoint_sample_variance_in_range");
+    }
+
+    /**
+     * Returns a population variance in range check specification.
+     * @return Population variance in range check specification.
+     */
+    public ColumnPopulationVarianceInRangeCheckSpec getDailyCheckpointPopulationVarianceInRange() {
+        return dailyCheckpointPopulationVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a population variance in range check.
+     * @param dailyCheckpointPopulationVarianceInRange Population variance in range check specification.
+     */
+    public void setDailyCheckpointPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec dailyCheckpointPopulationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPopulationVarianceInRange, dailyCheckpointPopulationVarianceInRange));
+        this.dailyCheckpointPopulationVarianceInRange = dailyCheckpointPopulationVarianceInRange;
+        propagateHierarchyIdToField(dailyCheckpointPopulationVarianceInRange, "daily_checkpoint_population_variance_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getDailyCheckpointSumInRange() {
+        return dailyCheckpointSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param dailyCheckpointSumInRange Sum in range check specification.
+     */
+    public void setDailyCheckpointSumInRange(ColumnSumInRangeCheckSpec dailyCheckpointSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSumInRange, dailyCheckpointSumInRange));
+        this.dailyCheckpointSumInRange = dailyCheckpointSumInRange;
+        propagateHierarchyIdToField(dailyCheckpointSumInRange, "daily_checkpoint_sum_in_range");
     }
 
     /**

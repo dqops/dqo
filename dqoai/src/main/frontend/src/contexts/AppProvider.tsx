@@ -1,18 +1,18 @@
 import React from 'react';
 
 import { TreeProvider } from './treeContext';
-import { NotificationProvider } from './notificationContext';
+import { ErrorProvider } from './errrorContext';
 import { DashboardProvider } from "./dashboardContext";
 
 function AppProvider({ children }: { children: any }) {
   return (
-    <NotificationProvider>
+    <ErrorProvider>
       <TreeProvider>
         <DashboardProvider>
           {children}
         </DashboardProvider>
       </TreeProvider>
-    </NotificationProvider>
+    </ErrorProvider>
   );
 }
 

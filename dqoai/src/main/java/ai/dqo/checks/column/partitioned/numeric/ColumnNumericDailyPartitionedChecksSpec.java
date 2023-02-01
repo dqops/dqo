@@ -42,12 +42,15 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_numbers_in_set_percent", o -> o.dailyPartitionNumbersInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
             put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
+            put("daily_partition_value_below_min_value_count", o -> o.dailyPartitionValueBelowMinValueCount);
             put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
-            put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
             put("daily_partition_sample_stddev_in_range", o -> o.dailyPartitionSampleStddevInRange);
             put("daily_partition_population_stddev_in_range", o -> o.dailyPartitionPopulationStddevInRange);
+            put("daily_partition_sample_variance_in_range", o -> o.dailyPartitionSampleVarianceInRange);
+            put("daily_partition_population_variance_in_range", o -> o.dailyPartitionPopulationVarianceInRange);
+            put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
         }
     };
 
@@ -69,14 +72,14 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount;
+
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMinInRangeCheckSpec dailyPartitionMinInRange;
-
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMeanInRangeCheckSpec dailyPartitionMeanInRange;
@@ -86,6 +89,17 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPopulationStddevInRangeCheckSpec dailyPartitionPopulationStddevInRange;
+
+    @JsonPropertyDescription("Verifies that the sample Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnSampleVarianceInRangeCheckSpec dailyPartitionSampleVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the population Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPopulationVarianceInRangeCheckSpec dailyPartitionPopulationVarianceInRange;
+
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
+
+
 
     /**
      * Returns a negative values count check specification.
@@ -197,6 +211,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getDailyPartitionValueBelowMinValueCount() {
+        return dailyPartitionValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param dailyPartitionValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setDailyPartitionValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValueBelowMinValueCount, dailyPartitionValueBelowMinValueCount));
+        this.dailyPartitionValueBelowMinValueCount = dailyPartitionValueBelowMinValueCount;
+        propagateHierarchyIdToField(dailyPartitionValueBelowMinValueCount, "daily_partition_value_below_min_value_count");
+    }
+
+    /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
@@ -230,24 +262,6 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMinInRange, dailyPartitionMinInRange));
         this.dailyPartitionMinInRange = dailyPartitionMinInRange;
         propagateHierarchyIdToField(dailyPartitionMinInRange, "daily_partition_min_in_range");
-    }
-
-    /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getDailyPartitionSumInRange() {
-        return dailyPartitionSumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param dailyPartitionSumInRange Sum in range check specification.
-     */
-    public void setDailyPartitionSumInRange(ColumnSumInRangeCheckSpec dailyPartitionSumInRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumInRange, dailyPartitionSumInRange));
-        this.dailyPartitionSumInRange = dailyPartitionSumInRange;
-        propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
     }
 
     /**
@@ -304,6 +318,59 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         propagateHierarchyIdToField(dailyPartitionPopulationStddevInRange, "daily_partition_population_stddev_in_range");
     }
 
+    /**
+     * Returns a sample standard deviation in range check specification.
+     * @return Sample standard deviation in range check specification.
+     */
+    public ColumnSampleVarianceInRangeCheckSpec getDailyPartitionSampleVarianceInRange() {
+        return dailyPartitionSampleVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a sample standard deviation in range check.
+     * @param dailyPartitionSampleVarianceInRange Sample standard deviation in range check specification.
+     */
+    public void setDailyPartitionSampleVarianceInRange(ColumnSampleVarianceInRangeCheckSpec dailyPartitionSampleVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSampleVarianceInRange, dailyPartitionSampleVarianceInRange));
+        this.dailyPartitionSampleVarianceInRange = dailyPartitionSampleVarianceInRange;
+        propagateHierarchyIdToField(dailyPartitionSampleVarianceInRange, "daily_partition_sample_variance_in_range");
+    }
+
+    /**
+     * Returns a population Variance in range check specification.
+     * @return Population Variance in range check specification.
+     */
+    public ColumnPopulationVarianceInRangeCheckSpec getDailyPartitionPopulationVarianceInRange() {
+        return dailyPartitionPopulationVarianceInRange;
+    }
+
+    /**
+     * Sets a new specification of a population Variance in range check.
+     * @param dailyPartitionPopulationVarianceInRange Population Variance in range check specification.
+     */
+    public void setDailyPartitionPopulationVarianceInRange(ColumnPopulationVarianceInRangeCheckSpec dailyPartitionPopulationVarianceInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPopulationVarianceInRange, dailyPartitionPopulationVarianceInRange));
+        this.dailyPartitionPopulationVarianceInRange = dailyPartitionPopulationVarianceInRange;
+        propagateHierarchyIdToField(dailyPartitionPopulationVarianceInRange, "daily_partition_population_variance_in_range");
+    }
+
+    /**
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
+     */
+    public ColumnSumInRangeCheckSpec getDailyPartitionSumInRange() {
+        return dailyPartitionSumInRange;
+    }
+
+    /**
+     * Sets a new specification of a sum in range check.
+     * @param dailyPartitionSumInRange Sum in range check specification.
+     */
+    public void setDailyPartitionSumInRange(ColumnSumInRangeCheckSpec dailyPartitionSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumInRange, dailyPartitionSumInRange));
+        this.dailyPartitionSumInRange = dailyPartitionSumInRange;
+        propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -68,3 +68,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1GBB-HsXz7QP7IX1Dh7df7afeSIRvnQ_1tlLCk8Mq_N0
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1GBB-HsXz7QP7IX1Dh7df7afeSIRvnQ_1tlLCk8Mq_N0/export?exportFormat=csv" > string_min_length_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1Nq-URy9ew6MZCGOkSlset5ziYCJbNHC0TFArOhz5Amc
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1Nq-URy9ew6MZCGOkSlset5ziYCJbNHC0TFArOhz5Amc/export?exportFormat=csv" > below_above_value_test.csv

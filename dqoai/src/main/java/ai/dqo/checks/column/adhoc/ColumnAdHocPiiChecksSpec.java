@@ -16,8 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsUsaPhonePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,18 +36,59 @@ import java.util.Objects;
 public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocPiiChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("valid_usa_phone_percent", o -> o.validUsaPhonePercent);
             put("contains_usa_phone_percent", o -> o.containsUsaPhonePercent);
+            put("valid_usa_zipcode_percent", o -> o.validUsaZipcodePercent);
             put("contains_usa_zipcode_percent", o -> o.containsUsaZipcodePercent);
-
+            put("valid_email_percent", o -> o.validEmailPercent);
+            put("contains_email_percent", o -> o.containsEmailPercent);
+            put("valid_ip4_address_percent", o -> o.validIp4AddressPercent);
+            put("valid_ip6_address_percent", o -> o.validIp6AddressPercent);
         }
     };
+
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiValidUsaPhonePercentCheckSpec validUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec containsUsaPhonePercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiValidUsaZipcodePercentCheckSpec validUsaZipcodePercent;
+
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec containsUsaZipcodePercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiValidEmailPercentCheckSpec validEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
+    private ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage.")
+    private ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent;
+
+
+    /**
+     * Returns a minimum valid currency code percent check.
+     * @return Minimum valid currency code percent check.
+     */
+    public ColumnPiiValidUsaPhonePercentCheckSpec getValidUsaPhonePercent() {
+        return validUsaPhonePercent;
+    }
+
+    /**
+     * Sets a new definition of a valid USA phone percent check.
+     * @param validUsaPhonePercent valid USA phone percent check.
+     */
+    public void setValidUsaPhonePercent(ColumnPiiValidUsaPhonePercentCheckSpec validUsaPhonePercent) {
+        this.setDirtyIf(!Objects.equals(this.validUsaPhonePercent, validUsaPhonePercent));
+        this.validUsaPhonePercent = validUsaPhonePercent;
+        propagateHierarchyIdToField(validUsaPhonePercent, "valid_usa_phone_percent");
+    }
 
     /**
      * Returns contains USA phone number percent check specification.
@@ -69,6 +109,24 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a minimum valid usa zip code percent check.
+     * @return Minimum Valid usa zip code percent check.
+     */
+    public ColumnPiiValidUsaZipcodePercentCheckSpec getValidUsaZipcodePercent() {
+        return validUsaZipcodePercent;
+    }
+
+    /**
+     * Sets a new definition of a valid usa zip code percent check.
+     * @param validUsaZipcodePercent valid usa zip code percent check.
+     */
+    public void setValidUsaZipcodePercent(ColumnPiiValidUsaZipcodePercentCheckSpec validUsaZipcodePercent) {
+        this.setDirtyIf(!Objects.equals(this.validUsaZipcodePercent, validUsaZipcodePercent));
+        this.validUsaZipcodePercent = validUsaZipcodePercent;
+        propagateHierarchyIdToField(validUsaZipcodePercent, "valid_usa_zipcode_percent");
+    }
+
+    /**
      * Returns contains USA zip code percent check specification.
      * @return Contains USA zip code percent check specification.
      */
@@ -84,6 +142,78 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.containsUsaZipcodePercent, containsUsaZipcodePercent));
         this.containsUsaZipcodePercent = containsUsaZipcodePercent;
         propagateHierarchyIdToField(containsUsaZipcodePercent, "contains_usa_zipcode_percent");
+    }
+
+    /**
+     * Returns a valid email percent check.
+     * @return Valid email percent check.
+     */
+    public ColumnPiiValidEmailPercentCheckSpec getValidEmailPercent() {
+        return validEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid email percent check.
+     * @param validEmailPercent Valid email percent check.
+     */
+    public void setValidEmailPercent(ColumnPiiValidEmailPercentCheckSpec validEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.validEmailPercent, validEmailPercent));
+        this.validEmailPercent = validEmailPercent;
+        propagateHierarchyIdToField(validEmailPercent, "valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getContainsEmailPercent() {
+        return containsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param containsEmailPercent Contains email percent check.
+     */
+    public void setContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.containsEmailPercent, containsEmailPercent));
+        this.containsEmailPercent = containsEmailPercent;
+        propagateHierarchyIdToField(containsEmailPercent, "contains_email_percent");
+    }
+
+    /**
+     * Returns a minimum valid IP4 address percent check.
+     * @return Minimum valid IP4 address percent check.
+     */
+    public ColumnPiiValidIp4AddressPercentCheckSpec getValidIp4AddressPercent() {
+        return validIp4AddressPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid IP4 address percent check.
+     * @param validIp4AddressPercent valid IP4 address percent check.
+     */
+    public void setValidIp4AddressPercent(ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.validIp4AddressPercent, validIp4AddressPercent));
+        this.validIp4AddressPercent = validIp4AddressPercent;
+        propagateHierarchyIdToField(validIp4AddressPercent, "ip4_address_percent");
+    }
+
+    /**
+     * Returns a minimum valid IP6 address percent check.
+     * @return Minimum valid IP6 address percent check.
+     */
+    public ColumnPiiValidIp6AddressPercentCheckSpec getValidIp6AddressPercent() {
+        return validIp6AddressPercent;
+    }
+
+    /**
+     * Sets a new definition of a valid IP6 address percent check.
+     * @param validIp6AddressPercent valid IP6 address percent check.
+     */
+    public void setValidIp6AddressPercent(ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent) {
+        this.setDirtyIf(!Objects.equals(this.validIp6AddressPercent, validIp6AddressPercent));
+        this.validIp6AddressPercent = validIp6AddressPercent;
+        propagateHierarchyIdToField(validIp6AddressPercent, "valid_ip6_address_percent");
     }
 
     /**
