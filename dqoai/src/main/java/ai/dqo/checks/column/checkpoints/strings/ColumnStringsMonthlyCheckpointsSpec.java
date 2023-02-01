@@ -100,7 +100,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyCheckpointStringLengthAboveMaxLengthPercent;
 
-
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount;
 
