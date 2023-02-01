@@ -41,6 +41,7 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
             put("monthly_partition_valid_usa_zipcode_percent", o -> o.monthlyPartitionValidUsaZipcodePercent);
             put("monthly_partition_contains_usa_zipcode_percent", o -> o.monthlyPartitionContainsUsaZipcodePercent);
             put("monthly_partition_valid_email_percent", o -> o.monthlyPartitionValidEmailPercent);
+            put("monthly_partition_contains_email_percent", o -> o.monthlyPartitionContainsEmailPercent);
             put("monthly_partition_valid_ip4_address_percent", o -> o.monthlyPartitionValidIp4AddressPercent);
             put("monthly_partition_valid_ip6_address_percent", o -> o.monthlyPartitionValidIp6AddressPercent);
             
@@ -62,6 +63,9 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiValidEmailPercentCheckSpec monthlyPartitionValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPiiContainsEmailPercentCheckSpec monthlyPartitionContainsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiValidIp4AddressPercentCheckSpec monthlyPartitionValidIp4AddressPercent;
@@ -157,6 +161,24 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidEmailPercent, monthlyPartitionValidEmailPercent));
         this.monthlyPartitionValidEmailPercent = monthlyPartitionValidEmailPercent;
         propagateHierarchyIdToField(monthlyPartitionValidEmailPercent, "monthly_partition_valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getMonthlyPartitionContainsEmailPercent() {
+        return monthlyPartitionContainsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param monthlyPartitionContainsEmailPercent Contains email percent check.
+     */
+    public void setMonthlyPartitionContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec monthlyPartitionContainsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionContainsEmailPercent, monthlyPartitionContainsEmailPercent));
+        this.monthlyPartitionContainsEmailPercent = monthlyPartitionContainsEmailPercent;
+        propagateHierarchyIdToField(monthlyPartitionContainsEmailPercent, "monthly_partition_contains_email_percent");
     }
 
     /**

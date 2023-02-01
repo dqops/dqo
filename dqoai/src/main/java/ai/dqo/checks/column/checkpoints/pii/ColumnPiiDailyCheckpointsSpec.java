@@ -41,6 +41,7 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
             put("daily_checkpoint_valid_usa_zipcode_percent", o -> o.dailyCheckpointValidUsaZipcodePercent);
             put("daily_checkpoint_contains_usa_zipcode_percent", o -> o.dailyCheckpointContainsUsaZipcodePercent);
             put("daily_checkpoint_valid_email_percent", o -> o.dailyCheckpointValidEmailPercent);
+            put("daily_checkpoint_contains_email_percent", o -> o.dailyCheckpointContainsEmailPercent);
             put("daily_checkpoint_valid_ip4_address_percent", o -> o.dailyCheckpointValidIp4AddressPercent);
             put("daily_checkpoint_valid_ip6_address_percent", o -> o.dailyCheckpointValidIp6AddressPercent);
         }
@@ -60,6 +61,9 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiValidEmailPercentCheckSpec dailyCheckpointValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPiiContainsEmailPercentCheckSpec dailyCheckpointContainsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiValidIp4AddressPercentCheckSpec dailyCheckpointValidIp4AddressPercent;
@@ -155,6 +159,24 @@ public class ColumnPiiDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidEmailPercent, dailyCheckpointValidEmailPercent));
         this.dailyCheckpointValidEmailPercent = dailyCheckpointValidEmailPercent;
         propagateHierarchyIdToField(dailyCheckpointValidEmailPercent, "daily_checkpoint_valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getDailyCheckpointContainsEmailPercent() {
+        return dailyCheckpointContainsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param dailyCheckpointContainsEmailPercent Contains email percent check.
+     */
+    public void setDailyCheckpointContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec dailyCheckpointContainsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointContainsEmailPercent, dailyCheckpointContainsEmailPercent));
+        this.dailyCheckpointContainsEmailPercent = dailyCheckpointContainsEmailPercent;
+        propagateHierarchyIdToField(dailyCheckpointContainsEmailPercent, "daily_checkpoint_contains_email_percent");
     }
 
     /**

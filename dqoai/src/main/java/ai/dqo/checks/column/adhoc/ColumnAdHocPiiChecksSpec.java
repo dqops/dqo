@@ -40,7 +40,8 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
             put("contains_usa_phone_percent", o -> o.containsUsaPhonePercent);
             put("valid_usa_zipcode_percent", o -> o.validUsaZipcodePercent);
             put("contains_usa_zipcode_percent", o -> o.containsUsaZipcodePercent);
-            put("string_valid_email_percent", o -> o.validEmailPercent);
+            put("valid_email_percent", o -> o.validEmailPercent);
+            put("contains_email_percent", o -> o.containsEmailPercent);
             put("valid_ip4_address_percent", o -> o.validIp4AddressPercent);
             put("valid_ip6_address_percent", o -> o.validIp6AddressPercent);
         }
@@ -60,6 +61,9 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnPiiValidEmailPercentCheckSpec validEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent;
@@ -156,6 +160,24 @@ public class ColumnAdHocPiiChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.validEmailPercent, validEmailPercent));
         this.validEmailPercent = validEmailPercent;
         propagateHierarchyIdToField(validEmailPercent, "valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getContainsEmailPercent() {
+        return containsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param containsEmailPercent Contains email percent check.
+     */
+    public void setContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.containsEmailPercent, containsEmailPercent));
+        this.containsEmailPercent = containsEmailPercent;
+        propagateHierarchyIdToField(containsEmailPercent, "contains_email_percent");
     }
 
     /**

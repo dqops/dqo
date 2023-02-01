@@ -41,6 +41,7 @@ public class ColumnPiiMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
             put("monthly_checkpoint_valid_usa_zipcode_percent", o -> o.monthlyCheckpointValidUsaZipcodePercent);
             put("monthly_checkpoint_contains_usa_zipcode_percent", o -> o.monthlyCheckpointContainsUsaZipcodePercent);
             put("monthly_checkpoint_valid_email_percent", o -> o.monthlyCheckpointValidEmailPercent);
+            put("monthly_checkpoint_contains_email_percent", o -> o.monthlyCheckpointContainsEmailPercent);
             put("monthly_checkpoint_valid_ip4_address_percent", o -> o.monthlyCheckpointValidIp4AddressPercent);
             put("monthly_checkpoint_valid_ip6_address_percent", o -> o.monthlyCheckpointValidIp6AddressPercent);
         }
@@ -60,6 +61,9 @@ public class ColumnPiiMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPiiValidEmailPercentCheckSpec monthlyCheckpointValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPiiContainsEmailPercentCheckSpec monthlyCheckpointContainsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPiiValidIp4AddressPercentCheckSpec monthlyCheckpointValidIp4AddressPercent;
@@ -155,6 +159,24 @@ public class ColumnPiiMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValidEmailPercent, monthlyCheckpointValidEmailPercent));
         this.monthlyCheckpointValidEmailPercent = monthlyCheckpointValidEmailPercent;
         propagateHierarchyIdToField(monthlyCheckpointValidEmailPercent, "monthly_checkpoint_valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getMonthlyCheckpointContainsEmailPercent() {
+        return monthlyCheckpointContainsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param monthlyCheckpointContainsEmailPercent Contains valid email percent check.
+     */
+    public void setMonthlyCheckpointContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec monthlyCheckpointContainsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointContainsEmailPercent, monthlyCheckpointContainsEmailPercent));
+        this.monthlyCheckpointContainsEmailPercent = monthlyCheckpointContainsEmailPercent;
+        propagateHierarchyIdToField(monthlyCheckpointContainsEmailPercent, "monthly_checkpoint_contains_email_percent");
     }
 
     /**

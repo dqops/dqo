@@ -41,6 +41,7 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
             put("daily_partition_valid_usa_zipcode_percent", o -> o.dailyPartitionValidUsaZipcodePercent);
             put("daily_partition_contains_usa_zipcode_percent", o -> o.dailyPartitionContainsUsaZipcodePercent);
             put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
+            put("daily_partition_contains_email_percent", o -> o.dailyPartitionContainsEmailPercent);
             put("daily_partition_valid_ip4_address_percent", o -> o.dailyPartitionValidIp4AddressPercent);
             put("daily_partition_valid_ip6_address_percent", o -> o.dailyPartitionValidIp6AddressPercent);
         }
@@ -60,6 +61,9 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPiiValidEmailPercentCheckSpec dailyPartitionValidEmailPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPiiContainsEmailPercentCheckSpec dailyPartitionContainsEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPiiValidIp4AddressPercentCheckSpec dailyPartitionValidIp4AddressPercent;
@@ -155,6 +159,24 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValidEmailPercent, dailyPartitionValidEmailPercent));
         this.dailyPartitionValidEmailPercent = dailyPartitionValidEmailPercent;
         propagateHierarchyIdToField(dailyPartitionValidEmailPercent, "daily_partition_valid_email_percent");
+    }
+
+    /**
+     * Returns a contains email percent check.
+     * @return Contains email percent check.
+     */
+    public ColumnPiiContainsEmailPercentCheckSpec getDailyPartitionContainsEmailPercent() {
+        return dailyPartitionContainsEmailPercent;
+    }
+
+    /**
+     * Sets a new definition of a contains email percent check.
+     * @param dailyPartitionContainsEmailPercent Contains valid email percent check.
+     */
+    public void setDailyPartitionContainsEmailPercent(ColumnPiiContainsEmailPercentCheckSpec dailyPartitionContainsEmailPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsEmailPercent, dailyPartitionContainsEmailPercent));
+        this.dailyPartitionContainsEmailPercent = dailyPartitionContainsEmailPercent;
+        propagateHierarchyIdToField(dailyPartitionContainsEmailPercent, "daily_partition_contains_email_percent");
     }
 
     /**
