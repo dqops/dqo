@@ -20,7 +20,7 @@ package ai.dqo.sampledata;
  */
 public class SampleCsvFileNames {
     public static final String continuous_days_one_row_per_day = "continuous_days_one_row_per_day.csv";
-    public static final String continuous_days_one_row_per_day_13_non_negative_floats = "continuous_days_one_row_per_day_13_non_negative_floats.csv";
+    public static final String continuous_days_one_row_per_day_13_non_negative_floats = "continuous_days_non_negative_floats.csv";
     public static final String continuous_days_different_time_data_types = "continuous_days_different_time_data_types.csv";
     public static final String test_data_regex_sensor = "test_data_regex_sensor.csv";
     public static final String continuous_days_date_and_string_formats = "continuous_days_date_and_string_formats.csv";
