@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.strings;
+package ai.dqo.checks.column.checkspecs.pii;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiValidIp4AddressPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,15 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates percent of valid USA Zip code values in a column.
+ * Column level check that ensures that there are no more than a minimum percentage of rows with a valid IP4 addresses in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringValidUsaZipcodePercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnPiiValidIp4AddressPercentCheckSpec
+        extends AbstractCheckSpec<ColumnPiiValidIp4AddressPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiValidIp4AddressPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,9 +49,9 @@ public class ColumnStringValidUsaZipcodePercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
+    private ColumnPiiValidIp4AddressPercentSensorParametersSpec parameters = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a valid IP4 addresses in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -72,7 +71,7 @@ public class ColumnStringValidUsaZipcodePercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec getParameters() {
+    public ColumnPiiValidIp4AddressPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +79,7 @@ public class ColumnStringValidUsaZipcodePercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPiiValidIp4AddressPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

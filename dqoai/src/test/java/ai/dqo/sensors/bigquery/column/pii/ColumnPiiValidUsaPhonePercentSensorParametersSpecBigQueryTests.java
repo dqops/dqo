@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.column.strings;
+package ai.dqo.sensors.bigquery.column.pii;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringValidUsaZipcodePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiValidUsaPhonePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,28 +30,28 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiValidUsaPhonePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnStringsStringValidUsaZipcodePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"^[0-9]{5}(?:-[0-9]{4})?$\"";
+public class ColumnPiiValidUsaPhonePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnPiiValidUsaPhonePercentSensorParametersSpec sut;
+    private final String sensorRegex = "r\"^((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))$\"";
     private UserHomeContext userHomeContext;
-    private ColumnStringValidUsaZipcodePercentCheckSpec checkSpec;
+    private ColumnPiiValidUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sut = new ColumnStringsStringValidUsaZipcodePercentSensorParametersSpec();
+		this.sut = new ColumnPiiValidUsaPhonePercentSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringValidUsaZipcodePercentCheckSpec();
+        this.checkSpec = new ColumnPiiValidUsaPhonePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -86,7 +86,7 @@ public class ColumnStringsStringValidUsaZipcodePercentSensorParametersSpecBigQue
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_valid_usa_zipcode_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/pii/valid_usa_phone_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

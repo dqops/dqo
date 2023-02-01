@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.checkspecs.strings;
+package ai.dqo.checks.column.checkspecs.pii;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringValidIp6AddressPercentSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiValidEmailPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a minimum percentage of rows with a valid IP6 addresses in a monitored column.
+ * Column level check that ensures that there are no more than a minimum percentage of rows with a valid email in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringValidIp6AddressPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringValidIp6AddressPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValidIp6AddressPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnPiiValidEmailPercentCheckSpec
+        extends AbstractCheckSpec<ColumnPiiValidEmailPercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiValidEmailPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,9 +49,9 @@ public class ColumnStringValidIp6AddressPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringValidIp6AddressPercentSensorParametersSpec parameters = new ColumnStringsStringValidIp6AddressPercentSensorParametersSpec();
+    private ColumnPiiValidEmailPercentSensorParametersSpec parameters = new ColumnPiiValidEmailPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a valid IP6 addresses in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a valid email in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule98ParametersSpec error;
@@ -71,7 +71,7 @@ public class ColumnStringValidIp6AddressPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringValidIp6AddressPercentSensorParametersSpec getParameters() {
+    public ColumnPiiValidEmailPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnStringValidIp6AddressPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringValidIp6AddressPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnPiiValidEmailPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringInvalidUuidCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringInvalidIp6AddressCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInvalidUuidCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,26 +38,26 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnStringsStringMaxInvalidUuidCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnStringsStringInvalidUuidCountSensorParametersSpec sut;
+public class BigQueryColumnStringsStringInvalidIp6AddressCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringInvalidUuidCountCheckSpec checkSpec;
+    private ColumnStringInvalidIp6AddressCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.uuid_test, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringInvalidUuidCountSensorParametersSpec();
-        this.checkSpec = new ColumnStringInvalidUuidCountCheckSpec();
+        this.sut = new ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec();
+        this.checkSpec = new ColumnStringInvalidIp6AddressCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "UUID", this.checkSpec);
+                sampleTableMetadata, "IP6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -70,7 +70,7 @@ public class BigQueryColumnStringsStringMaxInvalidUuidCountSensorParametersSpecI
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "UUID", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -83,7 +83,7 @@ public class BigQueryColumnStringsStringMaxInvalidUuidCountSensorParametersSpecI
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "UUID", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -96,7 +96,7 @@ public class BigQueryColumnStringsStringMaxInvalidUuidCountSensorParametersSpecI
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "UUID", this.checkSpec, CheckTimeScale.daily,"DATE");
+                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.daily,"DATE");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -109,7 +109,7 @@ public class BigQueryColumnStringsStringMaxInvalidUuidCountSensorParametersSpecI
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "UUID", this.checkSpec, CheckTimeScale.monthly,"DATE");
+                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.monthly,"DATE");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

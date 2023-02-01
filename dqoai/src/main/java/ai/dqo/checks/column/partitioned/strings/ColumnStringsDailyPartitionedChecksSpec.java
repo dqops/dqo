@@ -44,8 +44,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_length_above_max_length_count", o -> o.dailyPartitionStringLengthAboveMaxLengthCount);
             put("daily_partition_string_length_above_max_length_percent", o -> o.dailyPartitionStringLengthAboveMaxLengthPercent);
 
-
-
             put("daily_partition_string_empty_count", o -> o.dailyPartitionStringEmptyCount);
             put("daily_partition_string_empty_percent", o -> o.dailyPartitionStringEmptyPercent);
             put("daily_partition_string_whitespace_count", o -> o.dailyPartitionStringWhitespaceCount);
@@ -63,20 +61,13 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_in_set_percent", o -> o.dailyPartitionStringInSetPercent);
             
             put("daily_partition_string_valid_dates_percent", o -> o.dailyPartitionStringValidDatesPercent);
-            put("daily_partition_string_valid_usa_zipcode_percent", o -> o.dailyPartitionStringValidUsaZipcodePercent);
-            put("daily_partition_string_valid_usa_phone_percent", o -> o.dailyPartitionStringValidUsaPhonePercent);
             put("daily_partition_string_valid_country_code_percent", o -> o.dailyPartitionStringValidCountryCodePercent);
             put("daily_partition_string_valid_currency_code_percent", o -> o.dailyPartitionStringValidCurrencyCodePercent);
             put("daily_partition_string_invalid_email_count", o -> o.dailyPartitionStringInvalidEmailCount);
-            put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
             put("daily_partition_string_invalid_uuid_count", o -> o.dailyPartitionStringInvalidUuidCount);
             put("daily_partition_valid_uuid_percent", o -> o.dailyPartitionValidUuidPercent);
             put("daily_partition_string_invalid_ip4_address_count", o -> o.dailyPartitionStringInvalidIp4AddressCount);
-            put("daily_partition_string_valid_ip4_address_percent", o -> o.dailyPartitionStringValidIp4AddressPercent);
             put("daily_partition_string_invalid_ip6_address_count", o -> o.dailyPartitionStringInvalidIp6AddressCount);
-            put("daily_partition_string_valid_ip6_address_percent", o -> o.dailyPartitionStringValidIp6AddressPercent);
-
-
 
             put("daily_partition_string_not_match_regex_count", o -> o.dailyPartitionStringNotMatchRegexCount);
             put("daily_partition_string_match_regex_percent", o -> o.dailyPartitionStringMatchRegexPercent);
@@ -151,12 +142,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidDatesPercentCheckSpec dailyPartitionStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValidUsaZipcodePercentCheckSpec dailyPartitionStringValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValidUsaPhonePercentCheckSpec dailyPartitionStringValidUsaPhonePercent;
-
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidCountryCodePercentCheckSpec dailyPartitionStringValidCountryCodePercent;
 
@@ -165,9 +150,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidEmailCountCheckSpec dailyPartitionStringInvalidEmailCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValidEmailPercentCheckSpec dailyPartitionValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidUuidCountCheckSpec dailyPartitionStringInvalidUuidCount;
@@ -178,14 +160,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidIp4AddressCountCheckSpec dailyPartitionStringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValidIp4AddressPercentCheckSpec dailyPartitionStringValidIp4AddressPercent;
-
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidIp6AddressCountCheckSpec dailyPartitionStringInvalidIp6AddressCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValidIp6AddressPercentCheckSpec dailyPartitionStringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
@@ -585,42 +561,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent  check.
-     */
-    public ColumnStringValidUsaZipcodePercentCheckSpec getDailyPartitionStringValidUsaZipcodePercent() {
-        return dailyPartitionStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param dailyPartitionStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setDailyPartitionStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec dailyPartitionStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidUsaZipcodePercent, dailyPartitionStringValidUsaZipcodePercent));
-        this.dailyPartitionStringValidUsaZipcodePercent = dailyPartitionStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyPartitionStringValidUsaZipcodePercent, "daily_partition_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent  check.
-     */
-    public ColumnStringValidUsaPhonePercentCheckSpec getDailyPartitionStringValidUsaPhonePercent() {
-        return dailyPartitionStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param dailyPartitionStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setDailyPartitionStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec dailyPartitionStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidUsaPhonePercent, dailyPartitionStringValidUsaPhonePercent));
-        this.dailyPartitionStringValidUsaPhonePercent = dailyPartitionStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(dailyPartitionStringValidUsaPhonePercent, "daily_partition_string_valid_usa_phone_percent");
-    }
-
-    /**
      * Returns a minimum string valid country code percent check.
      * @return Minimum string valid country code percent  check.
      */
@@ -672,24 +612,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInvalidEmailCount, dailyPartitionStringInvalidEmailCount));
         this.dailyPartitionStringInvalidEmailCount = dailyPartitionStringInvalidEmailCount;
         propagateHierarchyIdToField(dailyPartitionStringInvalidEmailCount, "daily_partition_string_invalid_email_count");
-    }
-
-    /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnStringValidEmailPercentCheckSpec getDailyPartitionValidEmailPercent() {
-        return dailyPartitionValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param dailyPartitionValidEmailPercent Minimum valid email percent check.
-     */
-    public void setDailyPartitionValidEmailPercent(ColumnStringValidEmailPercentCheckSpec dailyPartitionValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidEmailPercent, dailyPartitionValidEmailPercent));
-        this.dailyPartitionValidEmailPercent = dailyPartitionValidEmailPercent;
-        propagateHierarchyIdToField(dailyPartitionValidEmailPercent, "daily_partition_valid_email_percent");
     }
 
     /**
@@ -747,24 +669,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnStringValidIp4AddressPercentCheckSpec getDailyPartitionStringValidIp4AddressPercent() {
-        return dailyPartitionStringValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param dailyPartitionStringValidIp4AddressPercent Minimum valid IP4 address percent check.
-     */
-    public void setDailyPartitionStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec dailyPartitionStringValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidIp4AddressPercent, dailyPartitionStringValidIp4AddressPercent));
-        this.dailyPartitionStringValidIp4AddressPercent = dailyPartitionStringValidIp4AddressPercent;
-        propagateHierarchyIdToField(dailyPartitionStringValidIp4AddressPercent, "daily_partition_string_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a maximum invalid IP6 address count check.
      * @return Maximum invalid IP6 address count check.
      */
@@ -780,24 +684,6 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInvalidIp6AddressCount, dailyPartitionStringInvalidIp6AddressCount));
         this.dailyPartitionStringInvalidIp6AddressCount = dailyPartitionStringInvalidIp6AddressCount;
         propagateHierarchyIdToField(dailyPartitionStringInvalidIp6AddressCount, "daily_partition_string_invalid_ip6_address_count");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnStringValidIp6AddressPercentCheckSpec getDailyPartitionStringValidIp6AddressPercent() {
-        return dailyPartitionStringValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param dailyPartitionStringValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setDailyPartitionStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec dailyPartitionStringValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValidIp6AddressPercent, dailyPartitionStringValidIp6AddressPercent));
-        this.dailyPartitionStringValidIp6AddressPercent = dailyPartitionStringValidIp6AddressPercent;
-        propagateHierarchyIdToField(dailyPartitionStringValidIp6AddressPercent, "daily_partition_string_valid_ip6_address_percent");
     }
 
     /**

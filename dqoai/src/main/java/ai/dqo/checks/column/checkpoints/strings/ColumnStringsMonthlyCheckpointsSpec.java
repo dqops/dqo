@@ -44,8 +44,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_length_above_max_length_count", o -> o.monthlyCheckpointStringLengthAboveMaxLengthCount);
             put("monthly_checkpoint_string_length_above_max_length_percent", o -> o.monthlyCheckpointStringLengthAboveMaxLengthPercent);
 
-
-
             put("monthly_checkpoint_string_empty_count", o -> o.monthlyCheckpointStringEmptyCount);
             put("monthly_checkpoint_string_empty_percent", o -> o.monthlyCheckpointStringEmptyPercent);
             put("monthly_checkpoint_string_whitespace_count", o -> o.monthlyCheckpointStringWhitespaceCount);
@@ -63,20 +61,13 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_in_set_percent", o -> o.monthlyCheckpointStringInSetPercent);
 
             put("monthly_checkpoint_string_valid_dates_percent", o -> o.monthlyCheckpointStringValidDatesPercent);
-            put("monthly_checkpoint_string_valid_usa_zipcode_percent", o -> o.monthlyCheckpointStringValidUsaZipcodePercent);
-            put("monthly_checkpoint_string_valid_usa_phone_percent", o -> o.monthlyCheckpointStringValidUsaPhonePercent);
             put("monthly_checkpoint_string_valid_country_code_percent", o -> o.monthlyCheckpointStringValidCountryCodePercent);
             put("monthly_checkpoint_string_valid_currency_code_percent", o -> o.monthlyCheckpointStringValidCurrencyCodePercent);
             put("monthly_checkpoint_string_invalid_email_count", o -> o.monthlyCheckpointStringInvalidEmailCount);
-            put("monthly_checkpoint_string_valid_email_percent", o -> o.monthlyCheckpointStringValidEmailPercent);
             put("monthly_checkpoint_string_invalid_uuid_count", o -> o.monthlyCheckpointStringInvalidUuidCount);
             put("monthly_checkpoint_string_valid_uuid_percent", o -> o.monthlyCheckpointStringValidUuidPercent);
             put("monthly_checkpoint_string_invalid_ip4_address_count", o -> o.monthlyCheckpointStringInvalidIp4AddressCount);
-            put("monthly_checkpoint_string_valid_ip4_address_percent", o -> o.monthlyCheckpointStringValidIp4AddressPercent);
             put("monthly_checkpoint_string_invalid_ip6_address_count", o -> o.monthlyCheckpointStringInvalidIp6AddressCount);
-            put("monthly_checkpoint_string_valid_ip6_address_percent", o -> o.monthlyCheckpointStringValidIp6AddressPercent);
-
-
 
             put("monthly_checkpoint_string_not_match_regex_count", o -> o.monthlyCheckpointStringNotMatchRegexCount);
             put("monthly_checkpoint_string_match_regex_percent", o -> o.monthlyCheckpointStringMatchRegexPercent);
@@ -152,12 +143,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringInSetPercentCheckSpec monthlyCheckpointStringInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringValidUsaZipcodePercentCheckSpec monthlyCheckpointStringValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringValidUsaPhonePercentCheckSpec monthlyCheckpointStringValidUsaPhonePercent;
-
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringValidCountryCodePercentCheckSpec monthlyCheckpointStringValidCountryCodePercent;
 
@@ -166,9 +151,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringInvalidEmailCountCheckSpec monthlyCheckpointStringInvalidEmailCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringValidEmailPercentCheckSpec monthlyCheckpointStringValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringInvalidUuidCountCheckSpec monthlyCheckpointStringInvalidUuidCount;
@@ -179,14 +161,8 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringInvalidIp4AddressCountCheckSpec monthlyCheckpointStringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringValidIp4AddressPercentCheckSpec monthlyCheckpointStringValidIp4AddressPercent;
-
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringInvalidIp6AddressCountCheckSpec monthlyCheckpointStringInvalidIp6AddressCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringValidIp6AddressPercentCheckSpec monthlyCheckpointStringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyCheckpointStringNotMatchRegexCount;
@@ -585,42 +561,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnStringValidUsaZipcodePercentCheckSpec getMonthlyCheckpointStringValidUsaZipcodePercent() {
-        return monthlyCheckpointStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param monthlyCheckpointStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setMonthlyCheckpointStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec monthlyCheckpointStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidUsaZipcodePercent, monthlyCheckpointStringValidUsaZipcodePercent));
-        this.monthlyCheckpointStringValidUsaZipcodePercent = monthlyCheckpointStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(monthlyCheckpointStringValidUsaZipcodePercent, "monthly_checkpoint_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnStringValidUsaPhonePercentCheckSpec getMonthlyCheckpointStringValidUsaPhonePercent() {
-        return monthlyCheckpointStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param monthlyCheckpointStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setMonthlyCheckpointStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec monthlyCheckpointStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidUsaPhonePercent, monthlyCheckpointStringValidUsaPhonePercent));
-        this.monthlyCheckpointStringValidUsaPhonePercent = monthlyCheckpointStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(monthlyCheckpointStringValidUsaPhonePercent, "monthly_checkpoint_string_valid_usa_phone_percent");
-    }
-
-    /**
      * Returns a minimum string valid country code percent check.
      * @return Minimum string valid country code percent check.
      */
@@ -672,24 +612,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInvalidEmailCount, monthlyCheckpointStringInvalidEmailCount));
         this.monthlyCheckpointStringInvalidEmailCount = monthlyCheckpointStringInvalidEmailCount;
         propagateHierarchyIdToField(monthlyCheckpointStringInvalidEmailCount, "monthly_checkpoint_string_invalid_email_count");
-    }
-
-    /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnStringValidEmailPercentCheckSpec getMonthlyCheckpointStringValidEmailPercent() {
-        return monthlyCheckpointStringValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param monthlyCheckpointStringValidEmailPercent Minimum valid email percent check.
-     */
-    public void setMonthlyCheckpointStringValidEmailPercent(ColumnStringValidEmailPercentCheckSpec monthlyCheckpointStringValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidEmailPercent, monthlyCheckpointStringValidEmailPercent));
-        this.monthlyCheckpointStringValidEmailPercent = monthlyCheckpointStringValidEmailPercent;
-        propagateHierarchyIdToField(monthlyCheckpointStringValidEmailPercent, "monthly_checkpoint_string_valid_email_percent");
     }
 
     /**
@@ -747,24 +669,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnStringValidIp4AddressPercentCheckSpec getMonthlyCheckpointStringValidIp4AddressPercent() {
-        return monthlyCheckpointStringValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param monthlyCheckpointStringValidIp4AddressPercent Minimum valid IP4 address percent check.
-     */
-    public void setMonthlyCheckpointStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec monthlyCheckpointStringValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidIp4AddressPercent, monthlyCheckpointStringValidIp4AddressPercent));
-        this.monthlyCheckpointStringValidIp4AddressPercent = monthlyCheckpointStringValidIp4AddressPercent;
-        propagateHierarchyIdToField(monthlyCheckpointStringValidIp4AddressPercent, "monthly_checkpoint_string_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a maximum invalid IP6 address count check.
      * @return Maximum invalid IP6 address count check.
      */
@@ -780,24 +684,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringInvalidIp6AddressCount, monthlyCheckpointStringInvalidIp6AddressCount));
         this.monthlyCheckpointStringInvalidIp6AddressCount = monthlyCheckpointStringInvalidIp6AddressCount;
         propagateHierarchyIdToField(monthlyCheckpointStringInvalidIp6AddressCount, "monthly_checkpoint_string_invalid_ip6_address_count");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnStringValidIp6AddressPercentCheckSpec getMonthlyCheckpointStringValidIp6AddressPercent() {
-        return monthlyCheckpointStringValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param monthlyCheckpointStringValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setMonthlyCheckpointStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec monthlyCheckpointStringValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointStringValidIp6AddressPercent, monthlyCheckpointStringValidIp6AddressPercent));
-        this.monthlyCheckpointStringValidIp6AddressPercent = monthlyCheckpointStringValidIp6AddressPercent;
-        propagateHierarchyIdToField(monthlyCheckpointStringValidIp6AddressPercent, "monthly_checkpoint_string_valid_ip6_address_percent");
     }
 
     /**

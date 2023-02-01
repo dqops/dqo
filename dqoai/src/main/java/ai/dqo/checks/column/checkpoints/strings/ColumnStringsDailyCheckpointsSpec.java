@@ -44,8 +44,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_length_above_max_length_count", o -> o.dailyCheckpointStringLengthAboveMaxLengthCount);
             put("daily_checkpoint_string_length_above_max_length_percent", o -> o.dailyCheckpointStringLengthAboveMaxLengthPercent);
 
-
-
             put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);
             put("daily_checkpoint_string_empty_percent", o -> o.dailyCheckpointStringEmptyPercent);
             put("daily_checkpoint_string_whitespace_count", o -> o.dailyCheckpointStringWhitespaceCount);
@@ -63,21 +61,13 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_in_set_percent", o -> o.dailyCheckpointStringInSetPercent);
 
             put("daily_checkpoint_string_valid_dates_percent", o -> o.dailyCheckpointStringValidDatesPercent);
-            put("daily_checkpoint_string_valid_usa_zipcode_percent", o -> o.dailyCheckpointStringValidUsaZipcodePercent);
-            put("daily_checkpoint_string_valid_usa_phone_percent", o -> o.dailyCheckpointStringValidUsaPhonePercent);
             put("daily_checkpoint_string_valid_country_code_percent", o -> o.dailyCheckpointStringValidCountryCodePercent);
             put("daily_checkpoint_string_valid_currency_code_percent", o -> o.dailyCheckpointStringValidCurrencyCodePercent);
             put("daily_checkpoint_string_invalid_email_count", o -> o.dailyCheckpointStringInvalidEmailCount);
-            put("daily_checkpoint_string_valid_email_percent", o -> o.dailyCheckpointStringValidEmailPercent);
             put("daily_checkpoint_string_invalid_uuid_count", o -> o.dailyCheckpointStringInvalidUuidCount);
             put("daily_checkpoint_string_valid_uuid_percent", o -> o.dailyCheckpointStringValidUuidPercent);
             put("daily_checkpoint_string_invalid_ip4_address_count", o -> o.dailyCheckpointStringInvalidIp4AddressCount);
-            put("daily_checkpoint_string_valid_ip4_address_percent", o -> o.dailyCheckpointStringValidIp4AddressPercent);
             put("daily_checkpoint_string_invalid_ip6_address_count", o -> o.dailyCheckpointStringInvalidIp6AddressCount);
-            put("daily_checkpoint_string_valid_ip6_address_percent", o -> o.dailyCheckpointStringValidIp6AddressPercent);
-
-
-
 
             put("daily_checkpoint_string_not_match_regex_count", o -> o.dailyCheckpointStringNotMatchRegexCount);
             put("daily_checkpoint_string_match_regex_percent", o -> o.dailyCheckpointStringMatchRegexPercent);
@@ -152,11 +142,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringValidDatesPercentCheckSpec dailyCheckpointStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringValidUsaZipcodePercentCheckSpec dailyCheckpointStringValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringValidUsaPhonePercentCheckSpec dailyCheckpointStringValidUsaPhonePercent;
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringValidCountryCodePercentCheckSpec dailyCheckpointStringValidCountryCodePercent;
 
@@ -165,9 +150,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringInvalidEmailCountCheckSpec dailyCheckpointStringInvalidEmailCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringValidEmailPercentCheckSpec dailyCheckpointStringValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringInvalidUuidCountCheckSpec dailyCheckpointStringInvalidUuidCount;
@@ -178,14 +160,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringInvalidIp4AddressCountCheckSpec dailyCheckpointStringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringValidIp4AddressPercentCheckSpec dailyCheckpointStringValidIp4AddressPercent;
-
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringInvalidIp6AddressCountCheckSpec dailyCheckpointStringInvalidIp6AddressCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringValidIp6AddressPercentCheckSpec dailyCheckpointStringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyCheckpointStringNotMatchRegexCount;
@@ -584,42 +560,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnStringValidUsaZipcodePercentCheckSpec getDailyCheckpointStringValidUsaZipcodePercent() {
-        return dailyCheckpointStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param dailyCheckpointStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setDailyCheckpointStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec dailyCheckpointStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidUsaZipcodePercent, dailyCheckpointStringValidUsaZipcodePercent));
-        this.dailyCheckpointStringValidUsaZipcodePercent = dailyCheckpointStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(dailyCheckpointStringValidUsaZipcodePercent, "daily_checkpoint_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnStringValidUsaPhonePercentCheckSpec getDailyCheckpointStringValidUsaPhonePercent() {
-        return dailyCheckpointStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param dailyCheckpointStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setDailyCheckpointStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec dailyCheckpointStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidUsaPhonePercent, dailyCheckpointStringValidUsaPhonePercent));
-        this.dailyCheckpointStringValidUsaPhonePercent = dailyCheckpointStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(dailyCheckpointStringValidUsaPhonePercent, "daily_checkpoint_string_valid_usa_phone_percent");
-    }
-
-    /**
      * Returns a minimum string valid country code percent check.
      * @return Minimum string valid country code percent check.
      */
@@ -671,24 +611,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInvalidEmailCount, dailyCheckpointStringInvalidEmailCount));
         this.dailyCheckpointStringInvalidEmailCount = dailyCheckpointStringInvalidEmailCount;
         propagateHierarchyIdToField(dailyCheckpointStringInvalidEmailCount, "daily_checkpoint_string_invalid_email_count");
-    }
-
-    /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnStringValidEmailPercentCheckSpec getDailyCheckpointStringValidEmailPercent() {
-        return dailyCheckpointStringValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param dailyCheckpointStringValidEmailPercent Minimum valid email percent check.
-     */
-    public void setDailyCheckpointStringValidEmailPercent(ColumnStringValidEmailPercentCheckSpec dailyCheckpointStringValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidEmailPercent, dailyCheckpointStringValidEmailPercent));
-        this.dailyCheckpointStringValidEmailPercent = dailyCheckpointStringValidEmailPercent;
-        propagateHierarchyIdToField(dailyCheckpointStringValidEmailPercent, "daily_checkpoint_string_valid_email_percent");
     }
 
     /**
@@ -746,24 +668,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnStringValidIp4AddressPercentCheckSpec getDailyCheckpointStringValidIp4AddressPercent() {
-        return dailyCheckpointStringValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param dailyCheckpointStringValidIp4AddressPercent Minimum valid IP4 address percent check.
-     */
-    public void setDailyCheckpointStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec dailyCheckpointStringValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidIp4AddressPercent, dailyCheckpointStringValidIp4AddressPercent));
-        this.dailyCheckpointStringValidIp4AddressPercent = dailyCheckpointStringValidIp4AddressPercent;
-        propagateHierarchyIdToField(dailyCheckpointStringValidIp4AddressPercent, "daily_checkpoint_string_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a maximum invalid IP6 address count check.
      * @return Maximum invalid IP6 address count check.
      */
@@ -779,24 +683,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringInvalidIp6AddressCount, dailyCheckpointStringInvalidIp6AddressCount));
         this.dailyCheckpointStringInvalidIp6AddressCount = dailyCheckpointStringInvalidIp6AddressCount;
         propagateHierarchyIdToField(dailyCheckpointStringInvalidIp6AddressCount, "daily_checkpoint_string_invalid_ip6_address_count");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnStringValidIp6AddressPercentCheckSpec getDailyCheckpointStringValidIp6AddressPercent() {
-        return dailyCheckpointStringValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param dailyCheckpointStringValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setDailyCheckpointStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec dailyCheckpointStringValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringValidIp6AddressPercent, dailyCheckpointStringValidIp6AddressPercent));
-        this.dailyCheckpointStringValidIp6AddressPercent = dailyCheckpointStringValidIp6AddressPercent;
-        propagateHierarchyIdToField(dailyCheckpointStringValidIp6AddressPercent, "daily_checkpoint_string_valid_ip6_address_percent");
     }
 
     /**
