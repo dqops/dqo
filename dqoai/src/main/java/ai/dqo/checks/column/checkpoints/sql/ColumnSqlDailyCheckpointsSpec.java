@@ -18,8 +18,6 @@ package ai.dqo.checks.column.checkpoints.sql;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -58,7 +56,7 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     private ColumnSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMin;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
+    private ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
 
     /**
      * Returns a check specification.
@@ -118,7 +116,7 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregatedExpressionValueMaxCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnColumnMax() {
+    public ColumnSqlAggregateExprCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnColumnMax() {
         return dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
     }
 
@@ -126,7 +124,7 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
      * Sets a new check specification.
      * @param dailyCheckpointSqlAggregatedExpressionValueOnColumnMax Check specification.
      */
-    public void setDailyCheckpointSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax) {
+    public void setDailyCheckpointSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax) {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMax, dailyCheckpointSqlAggregatedExpressionValueOnColumnMax));
         this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMax = dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
         propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnColumnMax, "daily_checkpoint_sql_aggregated_expression_value_on_column_max");
