@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.sql;
+package ai.dqo.bigquery.sensors.column.pii;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiValidUsaPhonePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,102 +29,93 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.sql.ColumnSqlAggregatedExpressionSensorParametersSpec;
+import ai.dqo.sensors.column.pii.ColumnPiiValidUsaPhonePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+
 @SpringBootTest
-public class BigQueryColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
+public class BigQueryColumnPiiValidUsaPhonePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnPiiValidUsaPhonePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlAggregateExprCheckSpec checkSpec;
+    private ColumnPiiValidUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnSqlAggregatedExpressionSensorParametersSpec();
-		this.checkSpec = new ColumnSqlAggregateExprCheckSpec();
+		this.sut = new ColumnPiiValidUsaPhonePercentSensorParametersSpec();
+		this.checkSpec = new ColumnPiiValidUsaPhonePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlExpression("max(length({column}))");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
+                sampleTableMetadata, "usa_phone", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20L, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlExpression("max(length({column}))");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20L, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlExpression("max(length({column}))");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20L, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setSqlExpression("max(length({column}))");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setSqlExpression("max(length({column}))");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "usa_phone", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20L, resultTable.column(0).get(0));
+        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
     }
 }

@@ -16,7 +16,6 @@
 package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -45,7 +44,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_length_above_max_length_count", o -> o.monthlyPartitionStringLengthAboveMaxLengthCount);
             put("monthly_partition_string_length_above_max_length_percent", o -> o.monthlyPartitionStringLengthAboveMaxLengthPercent);
 
-
             put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
             put("monthly_partition_string_empty_percent", o -> o.monthlyPartitionStringEmptyPercent);
             put("monthly_partition_string_whitespace_count", o -> o.monthlyPartitionStringWhitespaceCount);
@@ -63,20 +61,13 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_in_set_percent", o -> o.monthlyPartitionStringInSetPercent);
 
             put("monthly_partition_string_valid_dates_percent", o -> o.monthlyPartitionStringValidDatesPercent);
-            put("monthly_partition_string_valid_usa_zipcode_percent", o -> o.monthlyPartitionStringValidUsaZipcodePercent);
-            put("monthly_partition_string_valid_usa_phone_percent", o -> o.monthlyPartitionStringValidUsaPhonePercent);
             put("monthly_partition_string_valid_country_code_percent", o -> o.monthlyPartitionStringValidCountryCodePercent);
             put("monthly_partition_string_valid_currency_code_percent", o -> o.monthlyPartitionStringValidCurrencyCodePercent);
             put("monthly_partition_string_invalid_email_count", o -> o.monthlyPartitionStringInvalidEmailCount);
-            put("monthly_partition_valid_email_percent", o -> o.monthlyPartitionValidEmailPercent);
             put("monthly_partition_string_invalid_uuid_count", o -> o.monthlyPartitionStringInvalidUuidCount);
             put("monthly_partition_valid_uuid_percent", o -> o.monthlyPartitionValidUuidPercent);
             put("monthly_partition_string_invalid_ip4_address_count", o -> o.monthlyPartitionStringInvalidIp4AddressCount);
-            put("monthly_partition_string_valid_ip4_address_percent", o -> o.monthlyPartitionStringValidIp4AddressPercent);
             put("monthly_partition_string_invalid_ip6_address_count", o -> o.monthlyPartitionStringInvalidIp6AddressCount);
-            put("monthly_partition_string_valid_ip6_address_percent", o -> o.monthlyPartitionStringValidIp6AddressPercent);
-
-
 
             put("monthly_partition_string_not_match_regex_count", o -> o.monthlyPartitionStringNotMatchRegexCount);
             put("monthly_partition_string_match_regex_percent", o -> o.monthlyPartitionStringMatchRegexPercent);
@@ -151,12 +142,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidDatesPercentCheckSpec monthlyPartitionStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValidUsaZipcodePercentCheckSpec monthlyPartitionStringValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValidUsaPhonePercentCheckSpec monthlyPartitionStringValidUsaPhonePercent;
-
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidCountryCodePercentCheckSpec monthlyPartitionStringValidCountryCodePercent;
 
@@ -165,9 +150,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInvalidEmailCountCheckSpec monthlyPartitionStringInvalidEmailCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValidEmailPercentCheckSpec monthlyPartitionValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInvalidUuidCountCheckSpec monthlyPartitionStringInvalidUuidCount;
@@ -178,14 +160,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInvalidIp4AddressCountCheckSpec monthlyPartitionStringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValidIp4AddressPercentCheckSpec monthlyPartitionStringValidIp4AddressPercent;
-
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInvalidIp6AddressCountCheckSpec monthlyPartitionStringInvalidIp6AddressCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValidIp6AddressPercentCheckSpec monthlyPartitionStringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchRegexCountCheckSpec monthlyPartitionStringNotMatchRegexCount;
@@ -330,6 +306,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.monthlyPartitionStringLengthAboveMaxLengthPercent = monthlyPartitionStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionStringLengthAboveMaxLengthPercent, "monthly_partition_string_length_above_max_length_percent");
     }
+
 
     /**
      * Returns a max string empty count check.
@@ -588,42 +565,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnStringValidUsaZipcodePercentCheckSpec getMonthlyPartitionStringValidUsaZipcodePercent() {
-        return monthlyPartitionStringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid usa zip code percent check.
-     * @param monthlyPartitionStringValidUsaZipcodePercent Minimum string valid usa zip code percent check.
-     */
-    public void setMonthlyPartitionStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec monthlyPartitionStringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidUsaZipcodePercent, monthlyPartitionStringValidUsaZipcodePercent));
-        this.monthlyPartitionStringValidUsaZipcodePercent = monthlyPartitionStringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidUsaZipcodePercent, "monthly_partition_string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent  check.
-     */
-    public ColumnStringValidUsaPhonePercentCheckSpec getMonthlyPartitionStringValidUsaPhonePercent() {
-        return monthlyPartitionStringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string valid USA phone percent check.
-     * @param monthlyPartitionStringValidUsaPhonePercent Minimum string valid USA phone percent check.
-     */
-    public void setMonthlyPartitionStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec monthlyPartitionStringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidUsaPhonePercent, monthlyPartitionStringValidUsaPhonePercent));
-        this.monthlyPartitionStringValidUsaPhonePercent = monthlyPartitionStringValidUsaPhonePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidUsaPhonePercent, "monthly_partition_string_valid_usa_phone_percent");
-    }
-
-    /**
      * Returns a minimum string valid country code percent check.
      * @return Minimum string valid country code percent  check.
      */
@@ -675,24 +616,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInvalidEmailCount, monthlyPartitionStringInvalidEmailCount));
         this.monthlyPartitionStringInvalidEmailCount = monthlyPartitionStringInvalidEmailCount;
         propagateHierarchyIdToField(monthlyPartitionStringInvalidEmailCount, "monthly_partition_string_invalid_email_count");
-    }
-
-    /**
-     * Returns a minimum valid email percent check.
-     * @return Minimum valid email percent check.
-     */
-    public ColumnStringValidEmailPercentCheckSpec getMonthlyPartitionValidEmailPercent() {
-        return monthlyPartitionValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid email percent check.
-     * @param monthlyPartitionValidEmailPercent Minimum valid email percent check.
-     */
-    public void setMonthlyPartitionValidEmailPercent(ColumnStringValidEmailPercentCheckSpec monthlyPartitionValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidEmailPercent, monthlyPartitionValidEmailPercent));
-        this.monthlyPartitionValidEmailPercent = monthlyPartitionValidEmailPercent;
-        propagateHierarchyIdToField(monthlyPartitionValidEmailPercent, "monthly_partition_valid_email_percent");
     }
 
     /**
@@ -750,24 +673,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnStringValidIp4AddressPercentCheckSpec getMonthlyPartitionStringValidIp4AddressPercent() {
-        return monthlyPartitionStringValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP4 address percent check.
-     * @param monthlyPartitionStringValidIp4AddressPercent Minimum valid IP4 address percent check.
-     */
-    public void setMonthlyPartitionStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec monthlyPartitionStringValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidIp4AddressPercent, monthlyPartitionStringValidIp4AddressPercent));
-        this.monthlyPartitionStringValidIp4AddressPercent = monthlyPartitionStringValidIp4AddressPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidIp4AddressPercent, "monthly_partition_string_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a maximum invalid IP6 address count check.
      * @return Maximum invalid IP6 address count check.
      */
@@ -783,24 +688,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInvalidIp6AddressCount, monthlyPartitionStringInvalidIp6AddressCount));
         this.monthlyPartitionStringInvalidIp6AddressCount = monthlyPartitionStringInvalidIp6AddressCount;
         propagateHierarchyIdToField(monthlyPartitionStringInvalidIp6AddressCount, "monthly_partition_string_invalid_ip6_address_count");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnStringValidIp6AddressPercentCheckSpec getMonthlyPartitionStringValidIp6AddressPercent() {
-        return monthlyPartitionStringValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum valid IP6 address percent check.
-     * @param monthlyPartitionStringValidIp6AddressPercent Minimum valid IP6 address percent check.
-     */
-    public void setMonthlyPartitionStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec monthlyPartitionStringValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValidIp6AddressPercent, monthlyPartitionStringValidIp6AddressPercent));
-        this.monthlyPartitionStringValidIp6AddressPercent = monthlyPartitionStringValidIp6AddressPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValidIp6AddressPercent, "monthly_partition_string_valid_ip6_address_percent");
     }
 
     /**

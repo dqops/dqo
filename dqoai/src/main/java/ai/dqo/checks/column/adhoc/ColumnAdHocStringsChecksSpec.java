@@ -45,8 +45,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_length_above_max_length_count", o -> o.stringLengthAboveMaxLengthCount);
             put("string_length_above_max_length_percent", o -> o.stringLengthAboveMaxLengthPercent);
 
-
-
             put("string_empty_count", o -> o.stringEmptyCount);
             put("string_empty_percent", o -> o.stringEmptyPercent);
             put("string_whitespace_count", o -> o.stringWhitespaceCount);
@@ -64,20 +62,13 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_in_set_percent", o -> o.stringInSetPercent);
 
             put("string_valid_dates_percent", o -> o.stringValidDatesPercent);
-            put("string_valid_usa_zipcode_percent", o -> o.stringValidUsaZipcodePercent);
-            put("string_valid_usa_phone_percent", o -> o.stringValidUsaPhonePercent);
             put("string_valid_country_code_percent", o -> o.stringValidCountryCodePercent);
             put("string_valid_currency_code_percent", o -> o.stringValidCurrencyCodePercent);
             put("string_invalid_email_count", o -> o.stringInvalidEmailCount);
-            put("string_valid_email_percent", o -> o.stringValidEmailPercent);
             put("string_invalid_uuid_count", o -> o.stringInvalidUuidCount);
             put("string_valid_uuid_percent", o -> o.stringValidUuidPercent);
             put("string_invalid_ip4_address_count", o -> o.stringInvalidIp4AddressCount);
-            put("string_valid_ip4_address_percent", o -> o.stringValidIp4AddressPercent);
             put("string_invalid_ip6_address_count", o -> o.stringInvalidIp6AddressCount);
-            put("string_valid_ip6_address_percent", o -> o.stringValidIp6AddressPercent);
-
-
 
             put("string_not_match_regex_count", o -> o.stringNotMatchRegexCount);
             put("string_match_regex_percent", o -> o.stringMatchRegexPercent);
@@ -152,12 +143,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage.")
     private ColumnStringValidDatesPercentCheckSpec stringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
-    private ColumnStringValidUsaZipcodePercentCheckSpec stringValidUsaZipcodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
-    private ColumnStringValidUsaPhonePercentCheckSpec stringValidUsaPhonePercent;
-
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage.")
     private ColumnStringValidCountryCodePercentCheckSpec stringValidCountryCodePercent;
 
@@ -166,9 +151,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidEmailCountCheckSpec stringInvalidEmailCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
-    private ColumnStringValidEmailPercentCheckSpec stringValidEmailPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
@@ -179,14 +161,8 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidIp4AddressCountCheckSpec stringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
-    private ColumnStringValidIp4AddressPercentCheckSpec stringValidIp4AddressPercent;
-
     @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidIp6AddressCountCheckSpec stringInvalidIp6AddressCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage.")
-    private ColumnStringValidIp6AddressPercentCheckSpec stringValidIp6AddressPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
@@ -585,42 +561,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a minimum string valid country code percent check.
-     * @return Minimum string valid country code percent check.
-     */
-    public ColumnStringValidUsaZipcodePercentCheckSpec getStringValidUsaZipcodePercent() {
-        return stringValidUsaZipcodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid usa zip code percent check.
-     * @param stringValidUsaZipcodePercent String valid usa zip code percent check.
-     */
-    public void setStringValidUsaZipcodePercent(ColumnStringValidUsaZipcodePercentCheckSpec stringValidUsaZipcodePercent) {
-        this.setDirtyIf(!Objects.equals(this.stringValidUsaZipcodePercent, stringValidUsaZipcodePercent));
-        this.stringValidUsaZipcodePercent = stringValidUsaZipcodePercent;
-        propagateHierarchyIdToField(stringValidUsaZipcodePercent, "string_valid_usa_zipcode_percent");
-    }
-
-    /**
-     * Returns a minimum string valid currency code percent check.
-     * @return Minimum string valid currency code percent check.
-     */
-    public ColumnStringValidUsaPhonePercentCheckSpec getStringValidUsaPhonePercent() {
-        return stringValidUsaPhonePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid USA phone percent check.
-     * @param stringValidUsaPhonePercent String valid USA phone percent check.
-     */
-    public void setStringValidUsaPhonePercent(ColumnStringValidUsaPhonePercentCheckSpec stringValidUsaPhonePercent) {
-        this.setDirtyIf(!Objects.equals(this.stringValidUsaPhonePercent, stringValidUsaPhonePercent));
-        this.stringValidUsaPhonePercent = stringValidUsaPhonePercent;
-        propagateHierarchyIdToField(stringValidUsaPhonePercent, "string_valid_usa_phone_percent");
-    }
-
-    /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
@@ -672,24 +612,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringInvalidEmailCount, stringInvalidEmailCount));
         this.stringInvalidEmailCount = stringInvalidEmailCount;
         propagateHierarchyIdToField(stringInvalidEmailCount, "string_invalid_email_count");
-    }
-
-    /**
-     * Returns a valid email percent check.
-     * @return Valid email percent check.
-     */
-    public ColumnStringValidEmailPercentCheckSpec getStringValidEmailPercent() {
-        return stringValidEmailPercent;
-    }
-
-    /**
-     * Sets a new definition of a valid email percent check.
-     * @param stringValidEmailPercent Valid email percent check.
-     */
-    public void setStringValidEmailPercent(ColumnStringValidEmailPercentCheckSpec stringValidEmailPercent) {
-        this.setDirtyIf(!Objects.equals(this.stringValidEmailPercent, stringValidEmailPercent));
-        this.stringValidEmailPercent = stringValidEmailPercent;
-        propagateHierarchyIdToField(stringValidEmailPercent, "string_valid_email_percent");
     }
 
     /**
@@ -747,24 +669,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a minimum valid IP4 address percent check.
-     * @return Minimum valid IP4 address percent check.
-     */
-    public ColumnStringValidIp4AddressPercentCheckSpec getStringValidIp4AddressPercent() {
-        return stringValidIp4AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a valid IP4 address percent check.
-     * @param stringValidIp4AddressPercent valid IP4 address percent check.
-     */
-    public void setStringValidIp4AddressPercent(ColumnStringValidIp4AddressPercentCheckSpec stringValidIp4AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.stringValidIp4AddressPercent, stringValidIp4AddressPercent));
-        this.stringValidIp4AddressPercent = stringValidIp4AddressPercent;
-        propagateHierarchyIdToField(stringValidIp4AddressPercent, "string_valid_ip4_address_percent");
-    }
-
-    /**
      * Returns a maximum invalid IP6 address count check.
      * @return Maximum invalid IP6 address count check.
      */
@@ -780,24 +684,6 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringInvalidIp6AddressCount, stringInvalidIp6AddressCount));
         this.stringInvalidIp6AddressCount = stringInvalidIp6AddressCount;
         propagateHierarchyIdToField(stringInvalidIp6AddressCount, "string_invalid_ip6_address_count");
-    }
-
-    /**
-     * Returns a minimum valid IP6 address percent check.
-     * @return Minimum valid IP6 address percent check.
-     */
-    public ColumnStringValidIp6AddressPercentCheckSpec getStringValidIp6AddressPercent() {
-        return stringValidIp6AddressPercent;
-    }
-
-    /**
-     * Sets a new definition of a valid IP6 address percent check.
-     * @param stringValidIp6AddressPercent valid IP6 address percent check.
-     */
-    public void setStringValidIp6AddressPercent(ColumnStringValidIp6AddressPercentCheckSpec stringValidIp6AddressPercent) {
-        this.setDirtyIf(!Objects.equals(this.stringValidIp6AddressPercent, stringValidIp6AddressPercent));
-        this.stringValidIp6AddressPercent = stringValidIp6AddressPercent;
-        propagateHierarchyIdToField(stringValidIp6AddressPercent, "string_valid_ip6_address_percent");
     }
 
     /**
