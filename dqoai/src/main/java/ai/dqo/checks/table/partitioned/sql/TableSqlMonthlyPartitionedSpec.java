@@ -80,7 +80,6 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
         propagateHierarchyIdToField(monthlyPartitionSqlConditionPassedPercentOnTable, "monthly_partition_sql_condition_passed_percent_on_table");
     }
 
-
     /**
      * Returns a check specification.
      * @return New check specification.
@@ -114,7 +113,7 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setMonthlyPartitionSqlAggregateExprTable(TableSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprTable) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExprTable, monthlyPartitionSqlAggregateExprTable));
         this.monthlyPartitionSqlAggregateExprTable = monthlyPartitionSqlAggregateExprTable;
-        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprTable, "monthly_partition_sql_aggregated_expression_value_on_table_min");
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprTable, "monthly_partition_sql_aggregate_expr_table");
     }
 
     /**

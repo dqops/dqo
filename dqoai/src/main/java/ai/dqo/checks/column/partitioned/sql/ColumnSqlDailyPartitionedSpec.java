@@ -105,7 +105,7 @@ public class ColumnSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setDailyPartitionSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprColumn) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExprColumn, dailyPartitionSqlAggregateExprColumn));
         this.dailyPartitionSqlAggregateExprColumn = dailyPartitionSqlAggregateExprColumn;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprColumn, "daily_partition_sql_aggregated_expression_value_on_column_min");
+        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprColumn, "daily_partition_sql_aggregate_expr_column");
     }
 
     /**

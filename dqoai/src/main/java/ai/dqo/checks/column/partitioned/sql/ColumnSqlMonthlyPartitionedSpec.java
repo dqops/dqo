@@ -105,7 +105,7 @@ public class ColumnSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setMonthlyPartitionSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprColumn) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExprColumn, monthlyPartitionSqlAggregateExprColumn));
         this.monthlyPartitionSqlAggregateExprColumn = monthlyPartitionSqlAggregateExprColumn;
-        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprColumn, "monthly_partition_sql_aggregated_expression_value_on_column_min");
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprColumn, "monthly_partition_sql_aggregate_expr_column");
     }
 
     /**
