@@ -16,10 +16,9 @@
 package ai.dqo.checks.table.partitioned.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +39,9 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlMonthlyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_sql_condition_passed_percent_on_table", o -> o.monthlyPartitionSqlConditionPassedPercentOnTable);
-
             put("monthly_partition_sql_condition_failed_count_on_table", o -> o.monthlyPartitionSqlConditionFailedCountOnTable);
 
-            put("monthly_partition_sql_aggregated_expression_value_on_table_min", o -> o.monthlyPartitionSqlAggregatedExpressionValueOnTableMin);
-            put("monthly_partition_sql_aggregated_expression_value_on_table_max", o -> o.monthlyPartitionSqlAggregatedExpressionValueOnTableMax);
+            put("monthly_partition_sql_aggregate_expr_table", o -> o.monthlyPartitionSqlAggregateExprTable);
         }
     };
 
@@ -54,11 +51,8 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
     private TableSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionValueMinCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnTableMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionValueMaxCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnTableMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private TableSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprTable;
 
     /**
      * Returns a check specification.
@@ -109,36 +103,18 @@ public class TableSqlMonthlyPartitionedSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionValueMinCheckSpec getMonthlyPartitionSqlAggregatedExpressionValueOnTableMin() {
-        return monthlyPartitionSqlAggregatedExpressionValueOnTableMin;
+    public TableSqlAggregateExprCheckSpec getMonthlyPartitionSqlAggregateExprTable() {
+        return monthlyPartitionSqlAggregateExprTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionSqlAggregatedExpressionValueOnTableMin Check specification.
+     * @param monthlyPartitionSqlAggregateExprTable Check specification.
      */
-    public void setMonthlyPartitionSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnTableMin) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregatedExpressionValueOnTableMin, monthlyPartitionSqlAggregatedExpressionValueOnTableMin));
-        this.monthlyPartitionSqlAggregatedExpressionValueOnTableMin = monthlyPartitionSqlAggregatedExpressionValueOnTableMin;
-        propagateHierarchyIdToField(monthlyPartitionSqlAggregatedExpressionValueOnTableMin, "monthly_partition_sql_aggregated_expression_value_on_table_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlAggregatedExpressionValueMaxCheckSpec getMonthlyPartitionSqlAggregatedExpressionValueOnTableMax() {
-        return monthlyPartitionSqlAggregatedExpressionValueOnTableMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyPartitionSqlAggregatedExpressionValueOnTableMax Check specification.
-     */
-    public void setMonthlyPartitionSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec monthlyPartitionSqlAggregatedExpressionValueOnTableMax) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregatedExpressionValueOnTableMax, monthlyPartitionSqlAggregatedExpressionValueOnTableMax));
-        this.monthlyPartitionSqlAggregatedExpressionValueOnTableMax = monthlyPartitionSqlAggregatedExpressionValueOnTableMax;
-        propagateHierarchyIdToField(monthlyPartitionSqlAggregatedExpressionValueOnTableMax, "monthly_partition_sql_aggregated_expression_value_on_table_max");
+    public void setMonthlyPartitionSqlAggregateExprTable(TableSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExprTable, monthlyPartitionSqlAggregateExprTable));
+        this.monthlyPartitionSqlAggregateExprTable = monthlyPartitionSqlAggregateExprTable;
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprTable, "monthly_partition_sql_aggregated_expression_value_on_table_min");
     }
 
     /**

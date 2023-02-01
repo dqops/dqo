@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -38,11 +39,9 @@ public class ColumnSqlMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_checkpoint_sql_condition_passed_percent_on_column", o -> o.monthlyCheckpointSqlConditionPassedPercentOnColumn);
-
             put("monthly_checkpoint_sql_condition_failed_count_on_column", o -> o.monthlyCheckpointSqlConditionFailedCountOnColumn);
 
-            put("monthly_checkpoint_sql_aggregated_expression_value_on_column_min", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin);
-            put("monthly_checkpoint_sql_aggregated_expression_value_on_column_max", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax);
+            put("monthly_checkpoint_sql_aggregate_expr_column", o -> o.monthlyCheckpointSqlAggregateExprColumn);
         }
     };
 
@@ -52,11 +51,8 @@ public class ColumnSqlMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
     private ColumnSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private ColumnSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private ColumnSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregateExprColumn;
 
     /**
      * Returns a check specification.
@@ -98,36 +94,18 @@ public class ColumnSqlMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregatedExpressionValueMinCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnColumnMin() {
-        return monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin;
+    public ColumnSqlAggregateExprCheckSpec getMonthlyCheckpointSqlAggregateExprColumn() {
+        return monthlyCheckpointSqlAggregateExprColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin Check specification.
+     * @param monthlyCheckpointSqlAggregateExprColumn Check specification.
      */
-    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnColumnMin(ColumnSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin, monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin));
-        this.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin = monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin;
-        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnColumnMin, "monthly_checkpoint_sql_aggregated_expression_value_on_column_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregateExprCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnColumnMax() {
-        return monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax Check specification.
-     */
-    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax, monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax));
-        this.monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax = monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax;
-        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnColumnMax, "monthly_checkpoint_sql_aggregated_expression_value_on_column_max");
+    public void setMonthlyCheckpointSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregateExprColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregateExprColumn, monthlyCheckpointSqlAggregateExprColumn));
+        this.monthlyCheckpointSqlAggregateExprColumn = monthlyCheckpointSqlAggregateExprColumn;
+        propagateHierarchyIdToField(monthlyCheckpointSqlAggregateExprColumn, "monthly_checkpoint_sql_aggregated_expression_value_on_column_min");
     }
 
     /**

@@ -18,8 +18,7 @@ package ai.dqo.checks.table.checkpoints.sql;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,8 +40,8 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
         {
             put("monthly_checkpoint_sql_condition_passed_percent_on_table", o -> o.monthlyCheckpointSqlConditionPassedPercentOnTable);
             put("monthly_checkpoint_sql_condition_failed_count_on_table", o -> o.monthlyCheckpointSqlConditionFailedCountOnTable);
-            put("monthly_checkpoint_sql_aggregated_expression_value_on_table_min", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin);
-            put("monthly_checkpoint_sql_aggregated_expression_value_on_table_max", o -> o.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax);
+
+            put("monthly_checkpoint_sql_aggregate_expr_table", o -> o.monthlyCheckpointSqlAggregateExprTable);
         }
     };
 
@@ -53,10 +52,7 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     private TableSqlConditionFailedCountCheckSpec monthlyCheckpointSqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionValueMaxCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
+    private TableSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregateExprTable;
 
     /**
      * Returns a check specification.
@@ -81,7 +77,7 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
     public void setMonthlyCheckpointSqlConditionPassedPercentOnTable(TableSqlConditionPassedPercentCheckSpec monthlyCheckpointSqlConditionPassedPercentOnTable) {
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlConditionPassedPercentOnTable, monthlyCheckpointSqlConditionPassedPercentOnTable));
         this.monthlyCheckpointSqlConditionPassedPercentOnTable = monthlyCheckpointSqlConditionPassedPercentOnTable;
-        propagateHierarchyIdToField(monthlyCheckpointSqlConditionPassedPercentOnTable, "monthly_checkpoint_sql_condition_passed_percent_on_table");
+        propagateHierarchyIdToField(monthlyCheckpointSqlConditionPassedPercentOnTable, "monthly_checkpoint_sql_aggregate_expr_table");
     }
 
     /**
@@ -106,36 +102,18 @@ public class TableSqlMonthlyCheckpointSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionValueMinCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnTableMin() {
-        return monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
+    public TableSqlAggregateExprCheckSpec getMonthlyCheckpointSqlAggregateExprTable() {
+        return monthlyCheckpointSqlAggregateExprTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyCheckpointSqlAggregatedExpressionValueOnTableMin Check specification.
+     * @param monthlyCheckpointSqlAggregateExprTable Check specification.
      */
-    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMin) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin, monthlyCheckpointSqlAggregatedExpressionValueOnTableMin));
-        this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMin = monthlyCheckpointSqlAggregatedExpressionValueOnTableMin;
-        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnTableMin, "monthly_checkpoint_sql_aggregated_expression_value_on_table_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlAggregatedExpressionValueMaxCheckSpec getMonthlyCheckpointSqlAggregatedExpressionValueOnTableMax() {
-        return monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param monthlyCheckpointSqlAggregatedExpressionValueOnTableMax Check specification.
-     */
-    public void setMonthlyCheckpointSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec monthlyCheckpointSqlAggregatedExpressionValueOnTableMax) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax, monthlyCheckpointSqlAggregatedExpressionValueOnTableMax));
-        this.monthlyCheckpointSqlAggregatedExpressionValueOnTableMax = monthlyCheckpointSqlAggregatedExpressionValueOnTableMax;
-        propagateHierarchyIdToField(monthlyCheckpointSqlAggregatedExpressionValueOnTableMax, "monthly_checkpoint_sql_aggregated_expression_value_on_table_max");
+    public void setMonthlyCheckpointSqlAggregateExprTable(TableSqlAggregateExprCheckSpec monthlyCheckpointSqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSqlAggregateExprTable, monthlyCheckpointSqlAggregateExprTable));
+        this.monthlyCheckpointSqlAggregateExprTable = monthlyCheckpointSqlAggregateExprTable;
+        propagateHierarchyIdToField(monthlyCheckpointSqlAggregateExprTable, "monthly_checkpoint_sql_aggregated_expression_value_on_table_min");
     }
 
     /**

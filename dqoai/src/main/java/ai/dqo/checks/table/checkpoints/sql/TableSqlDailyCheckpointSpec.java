@@ -16,10 +16,9 @@
 package ai.dqo.checks.table.checkpoints.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +39,9 @@ public class TableSqlDailyCheckpointSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlDailyCheckpointSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_sql_condition_passed_percent_on_table", o -> o.dailyCheckpointSqlConditionPassedPercentOnTable);
-
             put("daily_checkpoint_sql_condition_failed_count_on_table", o -> o.dailyCheckpointSqlConditionFailedCountOnTable);
 
-            put("daily_checkpoint_sql_aggregated_expression_value_on_table_min", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnTableMin);
-            put("daily_checkpoint_sql_aggregated_expression_value_on_table_max", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnTableMax);
+            put("daily_checkpoint_sql_aggregate_expr_table", o -> o.dailyCheckpointSqlAggregateExprTable);
         }
     };
 
@@ -54,11 +51,8 @@ public class TableSqlDailyCheckpointSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
     private TableSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private TableSqlAggregateExprCheckSpec dailyCheckpointSqlAggregateExprTable;
 
     /**
      * Returns a check specification.
@@ -108,36 +102,18 @@ public class TableSqlDailyCheckpointSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionValueMinCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnTableMin() {
-        return dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
+    public TableSqlAggregateExprCheckSpec getDailyCheckpointSqlAggregateExprTable() {
+        return dailyCheckpointSqlAggregateExprTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointSqlAggregatedExpressionValueOnTableMin Check specification.
+     * @param dailyCheckpointSqlAggregateExprTable Check specification.
      */
-    public void setDailyCheckpointSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMin) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnTableMin, dailyCheckpointSqlAggregatedExpressionValueOnTableMin));
-        this.dailyCheckpointSqlAggregatedExpressionValueOnTableMin = dailyCheckpointSqlAggregatedExpressionValueOnTableMin;
-        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnTableMin, "daily_checkpoint_sql_aggregated_expression_value_on_table_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlAggregatedExpressionValueMaxCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnTableMax() {
-        return dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailyCheckpointSqlAggregatedExpressionValueOnTableMax Check specification.
-     */
-    public void setDailyCheckpointSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnTableMax) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnTableMax, dailyCheckpointSqlAggregatedExpressionValueOnTableMax));
-        this.dailyCheckpointSqlAggregatedExpressionValueOnTableMax = dailyCheckpointSqlAggregatedExpressionValueOnTableMax;
-        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnTableMax, "daily_checkpoint_sql_aggregated_expression_value_on_table_max");
+    public void setDailyCheckpointSqlAggregateExprTable(TableSqlAggregateExprCheckSpec dailyCheckpointSqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregateExprTable, dailyCheckpointSqlAggregateExprTable));
+        this.dailyCheckpointSqlAggregateExprTable = dailyCheckpointSqlAggregateExprTable;
+        propagateHierarchyIdToField(dailyCheckpointSqlAggregateExprTable, "daily_checkpoint_sql_aggregate_expr_table");
     }
 
     /**
