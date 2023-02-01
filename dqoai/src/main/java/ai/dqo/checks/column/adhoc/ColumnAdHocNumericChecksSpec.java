@@ -43,6 +43,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
             put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
+            put("value_below_min_value_percent", o -> o.valueBelowMinValuePercent);
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
@@ -74,6 +75,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column.")
     private ColumnValueBelowMinValueCountCheckSpec valueBelowMinValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column.")
+    private ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
     private ColumnMaxInRangeCheckSpec maxInRange;
@@ -223,6 +227,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.valueBelowMinValueCount, valueBelowMinValueCount));
         this.valueBelowMinValueCount = valueBelowMinValueCount;
         propagateHierarchyIdToField(valueBelowMinValueCount, "value_below_min_value_count");
+    }
+
+    /**
+     * Returns a numeric value below min value percent check.
+     * @return Numeric value below min value percent check.
+     */
+    public ColumnValueBelowMinValuePercentCheckSpec getValueBelowMinValuePercent() {
+        return valueBelowMinValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value percent check.
+     * @param valueBelowMinValuePercent Numeric value below min value percent check.
+     */
+    public void setValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.valueBelowMinValuePercent, valueBelowMinValuePercent));
+        this.valueBelowMinValuePercent = valueBelowMinValuePercent;
+        propagateHierarchyIdToField(valueBelowMinValuePercent, "value_below_min_value_percent");
     }
 
     /**
