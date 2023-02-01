@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,7 +44,6 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_length_below_min_length_percent", o -> o.dailyCheckpointStringLengthBelowMinLengthPercent);
             put("daily_checkpoint_string_length_above_max_length_count", o -> o.dailyCheckpointStringLengthAboveMaxLengthCount);
             put("daily_checkpoint_string_length_above_max_length_percent", o -> o.dailyCheckpointStringLengthAboveMaxLengthPercent);
-
 
 
             put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);

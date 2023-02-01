@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,7 +44,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_string_length_below_min_length_percent", o -> o.monthlyCheckpointStringLengthBelowMinLengthPercent);
             put("monthly_checkpoint_string_length_above_max_length_count", o -> o.monthlyCheckpointStringLengthAboveMaxLengthCount);
             put("monthly_checkpoint_string_length_above_max_length_percent", o -> o.monthlyCheckpointStringLengthAboveMaxLengthPercent);
-
 
 
             put("monthly_checkpoint_string_empty_count", o -> o.monthlyCheckpointStringEmptyCount);
@@ -108,7 +108,6 @@ public class ColumnStringsMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyCheckpointStringLengthAboveMaxLengthPercent;
-
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec monthlyCheckpointStringEmptyCount;

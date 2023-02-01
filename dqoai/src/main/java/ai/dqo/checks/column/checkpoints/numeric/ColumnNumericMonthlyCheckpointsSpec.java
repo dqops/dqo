@@ -42,6 +42,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_numbers_in_set_percent", o -> o.monthlyCheckpointNumbersInSetPercent);
             put("monthly_checkpoint_values_in_range_numeric_percent", o -> o.monthlyCheckpointValuesInRangeNumericPercent);
             put("monthly_checkpoint_values_in_range_integers_percent", o -> o.monthlyCheckpointValuesInRangeIntegersPercent);
+            put("monthly_checkpoint_value_below_min_value_count", o -> o.monthlyCheckpointValueBelowMinValueCount);
             put("monthly_checkpoint_max_in_range", o -> o.monthlyCheckpointMaxInRange);
             put("monthly_checkpoint_min_in_range", o -> o.monthlyCheckpointMinInRange);
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
@@ -70,6 +71,9 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyCheckpointValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnValueBelowMinValueCountCheckSpec monthlyCheckpointValueBelowMinValueCount;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyCheckpointMaxInRange;
@@ -202,6 +206,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValuesInRangeIntegersPercent, monthlyCheckpointValuesInRangeIntegersPercent));
         this.monthlyCheckpointValuesInRangeIntegersPercent = monthlyCheckpointValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(monthlyCheckpointValuesInRangeIntegersPercent, "monthly_checkpoint_values_in_range_integers_percent");
+    }
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getMonthlyCheckpointValueBelowMinValueCount() {
+        return monthlyCheckpointValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param monthlyCheckpointValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setMonthlyCheckpointValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec monthlyCheckpointValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValueBelowMinValueCount, monthlyCheckpointValueBelowMinValueCount));
+        this.monthlyCheckpointValueBelowMinValueCount = monthlyCheckpointValueBelowMinValueCount;
+        propagateHierarchyIdToField(monthlyCheckpointValueBelowMinValueCount, "monthly_checkpoint_value_below_min_value_count");
     }
 
     /**

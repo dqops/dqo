@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnValueBelowMinValueCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -43,7 +44,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_length_below_min_length_percent", o -> o.monthlyPartitionStringLengthBelowMinLengthPercent);
             put("monthly_partition_string_length_above_max_length_count", o -> o.monthlyPartitionStringLengthAboveMaxLengthCount);
             put("monthly_partition_string_length_above_max_length_percent", o -> o.monthlyPartitionStringLengthAboveMaxLengthPercent);
-
 
 
             put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
@@ -330,7 +330,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.monthlyPartitionStringLengthAboveMaxLengthPercent = monthlyPartitionStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionStringLengthAboveMaxLengthPercent, "monthly_partition_string_length_above_max_length_percent");
     }
-
 
     /**
      * Returns a max string empty count check.
