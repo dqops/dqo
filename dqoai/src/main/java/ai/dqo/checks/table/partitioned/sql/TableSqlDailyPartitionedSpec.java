@@ -54,9 +54,6 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
     private TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax;
-
     /**
      * Returns a check specification.
      * @return New check specification.
@@ -116,7 +113,7 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public void setDailyPartitionSqlAggregateExprTable(TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprTable) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExprTable, dailyPartitionSqlAggregateExprTable));
         this.dailyPartitionSqlAggregateExprTable = dailyPartitionSqlAggregateExprTable;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprTable, "sql_aggregate_expr_table");
+        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprTable, "daily_partition_sql_aggregate_expr_table");
     }
 
     /**
