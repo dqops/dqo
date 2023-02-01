@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.strings;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringRegexMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringMatchRegexPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnStringsStringMinRegexMatchPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class BigQueryColumnStringsStringMinMatchRegexPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnStringsStringRegexMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringRegexMatchPercentCheckSpec checkSpec;
+    private ColumnStringMatchRegexPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class BigQueryColumnStringsStringMinRegexMatchPercentSensorParametersSpec
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnStringsStringRegexMatchPercentSensorParametersSpec();
-		this.checkSpec = new ColumnStringRegexMatchPercentCheckSpec();
+		this.checkSpec = new ColumnStringMatchRegexPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

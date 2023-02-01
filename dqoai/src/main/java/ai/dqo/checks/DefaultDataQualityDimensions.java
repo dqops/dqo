@@ -19,10 +19,11 @@ package ai.dqo.checks;
  * Enumeration of data quality dimension names that are used in checks.
  */
 public enum DefaultDataQualityDimensions {
+    Accuracy,
     Completeness,
-    Timeliness,
     Consistency,
     Reasonableness,
-    Accuracy,
-    Validity;
+    Timeliness,
+    Uniqueness,
+    Validity
 }

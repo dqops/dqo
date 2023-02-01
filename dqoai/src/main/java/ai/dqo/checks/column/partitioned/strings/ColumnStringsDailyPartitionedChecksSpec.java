@@ -192,7 +192,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringRegexMatchPercentCheckSpec dailyPartitionStringMatchRegexPercent;
+    private ColumnStringMatchRegexPercentCheckSpec dailyPartitionStringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchDateRegexCountCheckSpec dailyPartitionStringNotMatchDateRegexCount;
@@ -823,7 +823,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnStringRegexMatchPercentCheckSpec getDailyPartitionStringMatchRegexPercent() {
+    public ColumnStringMatchRegexPercentCheckSpec getDailyPartitionStringMatchRegexPercent() {
         return dailyPartitionStringMatchRegexPercent;
     }
 
@@ -831,7 +831,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets a new definition of a minimum match regex percent check.
      * @param dailyPartitionStringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setDailyPartitionStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec dailyPartitionStringMatchRegexPercent) {
+    public void setDailyPartitionStringMatchRegexPercent(ColumnStringMatchRegexPercentCheckSpec dailyPartitionStringMatchRegexPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionStringMatchRegexPercent, dailyPartitionStringMatchRegexPercent));
         this.dailyPartitionStringMatchRegexPercent = dailyPartitionStringMatchRegexPercent;
         propagateHierarchyIdToField(dailyPartitionStringMatchRegexPercent, "daily_partition_string_match_regex_percent");

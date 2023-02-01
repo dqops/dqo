@@ -162,6 +162,6 @@ public class ColumnDuplicatePercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Uniqueness;
     }
 }

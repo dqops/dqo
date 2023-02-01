@@ -162,6 +162,6 @@ public class ColumnStringValidIp4AddressPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

@@ -192,7 +192,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage.")
-    private ColumnStringRegexMatchPercentCheckSpec stringMatchRegexPercent;
+    private ColumnStringMatchRegexPercentCheckSpec stringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchDateRegexCountCheckSpec stringNotMatchDateRegexCount;
@@ -822,7 +822,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnStringRegexMatchPercentCheckSpec getStringMatchRegexPercent() {
+    public ColumnStringMatchRegexPercentCheckSpec getStringMatchRegexPercent() {
         return stringMatchRegexPercent;
     }
 
@@ -830,7 +830,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new definition of a minimum match regex percent check.
      * @param stringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec stringMatchRegexPercent) {
+    public void setStringMatchRegexPercent(ColumnStringMatchRegexPercentCheckSpec stringMatchRegexPercent) {
         this.setDirtyIf(!Objects.equals(this.stringMatchRegexPercent, stringMatchRegexPercent));
         this.stringMatchRegexPercent = stringMatchRegexPercent;
         propagateHierarchyIdToField(stringMatchRegexPercent, "string_match_regex_percent");

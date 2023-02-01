@@ -191,7 +191,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnStringNotMatchRegexCountCheckSpec monthlyPartitionStringNotMatchRegexCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringRegexMatchPercentCheckSpec monthlyPartitionStringMatchRegexPercent;
+    private ColumnStringMatchRegexPercentCheckSpec monthlyPartitionStringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringNotMatchDateRegexCountCheckSpec monthlyPartitionStringNotMatchDateRegexCount;
@@ -825,7 +825,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum match regex percent check.
      * @return Minimum match regex percent check.
      */
-    public ColumnStringRegexMatchPercentCheckSpec getMonthlyPartitionStringMatchRegexPercent() {
+    public ColumnStringMatchRegexPercentCheckSpec getMonthlyPartitionStringMatchRegexPercent() {
         return monthlyPartitionStringMatchRegexPercent;
     }
 
@@ -833,7 +833,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Sets a new definition of a minimum match regex percent check.
      * @param monthlyPartitionStringMatchRegexPercent Minimum match regex percent check.
      */
-    public void setMonthlyPartitionStringMatchRegexPercent(ColumnStringRegexMatchPercentCheckSpec monthlyPartitionStringMatchRegexPercent) {
+    public void setMonthlyPartitionStringMatchRegexPercent(ColumnStringMatchRegexPercentCheckSpec monthlyPartitionStringMatchRegexPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMatchRegexPercent, monthlyPartitionStringMatchRegexPercent));
         this.monthlyPartitionStringMatchRegexPercent = monthlyPartitionStringMatchRegexPercent;
         propagateHierarchyIdToField(monthlyPartitionStringMatchRegexPercent, "monthly_partition_string_match_regex_percent");
