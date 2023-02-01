@@ -18,6 +18,7 @@ package ai.dqo.utils.docs;
 import com.github.jknack.handlebars.Context;
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
@@ -36,6 +37,7 @@ public class HandlebarsDocumentationUtilities {
     public static void configure(Path projectRootPath) {
         File templateDir = projectRootPath.resolve("src/main/java/ai/dqo/utils/docs").toFile();
         handlebars = new Handlebars(new FileTemplateLoader(templateDir));
+        handlebars.registerHelpers(StringHelpers.class);
     }
 
     /**

@@ -1,44 +1,25 @@
-#{{target}}
+# {{target}}
 {{#each groupedSensors}}
-##<b>{{@key}}</b> {{target}} sensors
+## **{{@key}}** {{target}} sensors
 ___
 {{#each this}}
-###<b>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{sensorName}}', '_', ' '){{#with "}}"}}{{.}}{{/with}}</b>
-<b>Full sensor name</b>
+### **{{replace sensorName "_" " "}}**
+**Full sensor name**
 ```
 {{fullSensorName}}
 ```
-<b>Description</b>
-<br/>
+**Description**{{#with "  "}}{{.}}{{/with}}
 {{sensorParametersJavaDoc}}
-<br/>
 {{#if definition.spec.fields}}
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
-{{#each definition.spec.fields}}
-<tr>
-<td>{{displayName}}</td>
-<td>{{helpText}}</td>
-<td>{{#with "{{"}}{{.}}{{/with}}replace_chars_in_string('{{dataType}}', '_type', ''){{#with "}}"}}{{.}}{{/with}}</td>
-<td>{{#if required}}Yes{{else}}{{/if}}</td>
-<td>{{#each allowedValues}}{{this}}<br/>{{/each}}</td>
-</tr>
+**Parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+{{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{#if required}}Yes{{else}}{{/if}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
 {{/each}}
-</tbody>
-</table>
 {{else}}
 {{/if}}
-<b>SQL Template (Jinja2)</b>
+**SQL Template (Jinja2)**
 {{#each definition.providerSensors}}
 === "{{provider}}"
     ```
