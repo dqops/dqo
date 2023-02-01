@@ -18,8 +18,7 @@ package ai.dqo.checks.table.partitioned.sql;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +39,9 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlDailyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_sql_condition_passed_percent_on_table", o -> o.dailyPartitionSqlConditionPassedPercentOnTable);
-
             put("daily_partition_sql_condition_failed_count_on_table", o -> o.dailyPartitionSqlConditionFailedCountOnTable);
 
-            put("daily_partition_sql_aggregated_expression_value_on_table_min", o -> o.dailyPartitionSqlAggregatedExpressionValueOnTableMin);
-            put("daily_partition_sql_aggregated_expression_value_on_table_max", o -> o.dailyPartitionSqlAggregatedExpressionValueOnTableMax);
+            put("daily_partition_sql_aggregate_expr_table", o -> o.dailyPartitionSqlAggregateExprTable);
         }
     };
 
@@ -54,11 +51,11 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
     private TableSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMin;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionValueMaxCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax;
+    private TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax;
 
     /**
      * Returns a check specification.
@@ -108,36 +105,18 @@ public class TableSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionValueMinCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnTableMin() {
-        return dailyPartitionSqlAggregatedExpressionValueOnTableMin;
+    public TableSqlAggregateExprCheckSpec getDailyPartitionSqlAggregateExprTable() {
+        return dailyPartitionSqlAggregateExprTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionSqlAggregatedExpressionValueOnTableMin Check specification.
+     * @param dailyPartitionSqlAggregateExprTable Check specification.
      */
-    public void setDailyPartitionSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMin) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnTableMin, dailyPartitionSqlAggregatedExpressionValueOnTableMin));
-        this.dailyPartitionSqlAggregatedExpressionValueOnTableMin = dailyPartitionSqlAggregatedExpressionValueOnTableMin;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnTableMin, "daily_partition_sql_aggregated_expression_value_on_table_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlAggregatedExpressionValueMaxCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnTableMax() {
-        return dailyPartitionSqlAggregatedExpressionValueOnTableMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailyPartitionSqlAggregatedExpressionValueOnTableMax Check specification.
-     */
-    public void setDailyPartitionSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec dailyPartitionSqlAggregatedExpressionValueOnTableMax) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnTableMax, dailyPartitionSqlAggregatedExpressionValueOnTableMax));
-        this.dailyPartitionSqlAggregatedExpressionValueOnTableMax = dailyPartitionSqlAggregatedExpressionValueOnTableMax;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnTableMax, "daily_partition_sql_aggregated_expression_value_on_table_max");
+    public void setDailyPartitionSqlAggregateExprTable(TableSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExprTable, dailyPartitionSqlAggregateExprTable));
+        this.dailyPartitionSqlAggregateExprTable = dailyPartitionSqlAggregateExprTable;
+        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprTable, "sql_aggregate_expr_table");
     }
 
     /**

@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.partitioned.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -38,11 +39,9 @@ public class ColumnSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlDailyPartitionedSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_sql_condition_passed_percent_on_column", o -> o.dailyPartitionSqlConditionPassedPercentOnColumn);
-
             put("daily_partition_sql_condition_failed_count_on_column", o -> o.dailyPartitionSqlConditionFailedCountOnColumn);
 
-            put("daily_partition_sql_aggregated_expression_value_on_column_min", o -> o.dailyPartitionSqlAggregatedExpressionValueOnColumnMin);
-            put("daily_partition_sql_aggregated_expression_value_on_column_max", o -> o.dailyPartitionSqlAggregatedExpressionValueOnColumnMax);
+            put("daily_partition_sql_aggregate_expr_column", o -> o.dailyPartitionSqlAggregateExprColumn);
         }
     };
 
@@ -52,11 +51,8 @@ public class ColumnSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
     private ColumnSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private ColumnSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnColumnMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregatedExpressionValueOnColumnMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprColumn;
 
     /**
      * Returns a check specification.
@@ -98,36 +94,18 @@ public class ColumnSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregatedExpressionValueMinCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnColumnMin() {
-        return dailyPartitionSqlAggregatedExpressionValueOnColumnMin;
+    public ColumnSqlAggregateExprCheckSpec getDailyPartitionSqlAggregateExprColumn() {
+        return dailyPartitionSqlAggregateExprColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionSqlAggregatedExpressionValueOnColumnMin Check specification.
+     * @param dailyPartitionSqlAggregateExprColumn Check specification.
      */
-    public void setDailyPartitionSqlAggregatedExpressionValueOnColumnMin(ColumnSqlAggregatedExpressionValueMinCheckSpec dailyPartitionSqlAggregatedExpressionValueOnColumnMin) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnColumnMin, dailyPartitionSqlAggregatedExpressionValueOnColumnMin));
-        this.dailyPartitionSqlAggregatedExpressionValueOnColumnMin = dailyPartitionSqlAggregatedExpressionValueOnColumnMin;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnColumnMin, "daily_partition_sql_aggregated_expression_value_on_column_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregateExprCheckSpec getDailyPartitionSqlAggregatedExpressionValueOnColumnMax() {
-        return dailyPartitionSqlAggregatedExpressionValueOnColumnMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailyPartitionSqlAggregatedExpressionValueOnColumnMax Check specification.
-     */
-    public void setDailyPartitionSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregatedExpressionValueOnColumnMax) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregatedExpressionValueOnColumnMax, dailyPartitionSqlAggregatedExpressionValueOnColumnMax));
-        this.dailyPartitionSqlAggregatedExpressionValueOnColumnMax = dailyPartitionSqlAggregatedExpressionValueOnColumnMax;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregatedExpressionValueOnColumnMax, "daily_partition_sql_aggregated_expression_value_on_column_max");
+    public void setDailyPartitionSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprColumn) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExprColumn, dailyPartitionSqlAggregateExprColumn));
+        this.dailyPartitionSqlAggregateExprColumn = dailyPartitionSqlAggregateExprColumn;
+        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprColumn, "daily_partition_sql_aggregated_expression_value_on_column_min");
     }
 
     /**
