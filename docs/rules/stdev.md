@@ -1,53 +1,27 @@
-#stdev
+# stdev
 ___
 
-##<b>{{replace_chars_in_string('percentile_moving_stdev', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **percentile moving stdev**
+**Full rule name**
 ```
 stdev/percentile_moving_stdev
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_stdev_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
+|percentile_stdev_below|Maximum percent (e.q. 3%) that the current sensorreadout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percentile_stdev_above</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td>percentile_stdev_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensorreadout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
-
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/percentile_moving_stdev.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -144,45 +118,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 60 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -266,45 +221,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 60 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -388,45 +324,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 60 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -516,45 +433,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 60 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -638,45 +536,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 60 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -766,45 +645,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 30 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -895,45 +755,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_60_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 60 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_60_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1023,45 +864,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 7 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1152,45 +974,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 7 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1281,45 +1084,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 30 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1404,45 +1188,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 30 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1527,53 +1292,27 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('percent_moving_stdev', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **percent moving stdev**
+**Full rule name**
 ```
 stdev/percent_moving_stdev
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|multiple_stdev_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
+|multiple_stdev_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>multiple_stdev_above</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td>multiple_stdev_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
-
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/percent_moving_stdev.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1669,45 +1408,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 7 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1792,45 +1512,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 30 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -1921,45 +1622,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 7 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -2044,45 +1726,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 7 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -2167,45 +1830,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 30 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -2296,45 +1940,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_percent_population_stdev_30_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below percent population stdev 30 days**
+**Full rule name**
 ```
 stdev/below_percent_population_stdev_30_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
-<tr>
-<td>percent_population_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -2419,45 +2044,26 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('below_stdev_multiply_7_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **below stdev multiply 7 days**
+**Full rule name**
 ```
 stdev/below_stdev_multiply_7_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
-<tr>
-<td>stdev_multiplier_below</td>
-<td>Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
 --8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
 ```
-<b>Rule implementation (Python)</b>
+**Rule implementation (Python)**
 ```python
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
