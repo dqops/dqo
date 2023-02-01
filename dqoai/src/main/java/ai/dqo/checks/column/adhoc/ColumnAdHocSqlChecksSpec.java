@@ -40,6 +40,7 @@ public class ColumnAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
         {
             put("sql_condition_passed_percent_on_column", o -> o.sqlConditionPassedPercentOnColumn);
             put("sql_condition_failed_count_on_column", o -> o.sqlConditionFailedCountOnColumn);
+
             put("sql_aggregate_expr_column", o -> o.sqlAggregateExprColumn);
         }
     };
@@ -50,7 +51,7 @@ public class ColumnAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
     private ColumnSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
     private ColumnSqlAggregateExprCheckSpec sqlAggregateExprColumn;
 
     /**

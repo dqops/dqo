@@ -16,6 +16,7 @@
 package ai.dqo.checks.column.checkpoints.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -38,11 +39,9 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_sql_condition_passed_percent_on_column", o -> o.dailyCheckpointSqlConditionPassedPercentOnColumn);
-
             put("daily_checkpoint_sql_condition_failed_count_on_column", o -> o.dailyCheckpointSqlConditionFailedCountOnColumn);
 
-            put("daily_checkpoint_sql_aggregated_expression_value_on_column_min", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnColumnMin);
-            put("daily_checkpoint_sql_aggregated_expression_value_on_column_max", o -> o.dailyCheckpointSqlAggregatedExpressionValueOnColumnMax);
+            put("daily_checkpoint_sql_aggregate_expr_column", o -> o.dailyCheckpointSqlAggregateExprColumn);
         }
     };
 
@@ -52,11 +51,8 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
     private ColumnSqlConditionFailedCountCheckSpec dailyCheckpointSqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private ColumnSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregateExprColumn;
 
     /**
      * Returns a check specification.
@@ -98,36 +94,18 @@ public class ColumnSqlDailyCheckpointsSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregatedExpressionValueMinCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnColumnMin() {
-        return dailyCheckpointSqlAggregatedExpressionValueOnColumnMin;
+    public ColumnSqlAggregateExprCheckSpec getDailyCheckpointSqlAggregateExprColumn() {
+        return dailyCheckpointSqlAggregateExprColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyCheckpointSqlAggregatedExpressionValueOnColumnMin Check specification.
+     * @param dailyCheckpointSqlAggregateExprColumn Check specification.
      */
-    public void setDailyCheckpointSqlAggregatedExpressionValueOnColumnMin(ColumnSqlAggregatedExpressionValueMinCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMin) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMin, dailyCheckpointSqlAggregatedExpressionValueOnColumnMin));
-        this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMin = dailyCheckpointSqlAggregatedExpressionValueOnColumnMin;
-        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnColumnMin, "daily_checkpoint_sql_aggregated_expression_value_on_column_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public ColumnSqlAggregateExprCheckSpec getDailyCheckpointSqlAggregatedExpressionValueOnColumnMax() {
-        return dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param dailyCheckpointSqlAggregatedExpressionValueOnColumnMax Check specification.
-     */
-    public void setDailyCheckpointSqlAggregatedExpressionValueOnColumnMax(ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregatedExpressionValueOnColumnMax) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMax, dailyCheckpointSqlAggregatedExpressionValueOnColumnMax));
-        this.dailyCheckpointSqlAggregatedExpressionValueOnColumnMax = dailyCheckpointSqlAggregatedExpressionValueOnColumnMax;
-        propagateHierarchyIdToField(dailyCheckpointSqlAggregatedExpressionValueOnColumnMax, "daily_checkpoint_sql_aggregated_expression_value_on_column_max");
+    public void setDailyCheckpointSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailyCheckpointSqlAggregateExprColumn) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointSqlAggregateExprColumn, dailyCheckpointSqlAggregateExprColumn));
+        this.dailyCheckpointSqlAggregateExprColumn = dailyCheckpointSqlAggregateExprColumn;
+        propagateHierarchyIdToField(dailyCheckpointSqlAggregateExprColumn, "daily_checkpoint_sql_aggregated_expression_value_on_column_min");
     }
 
     /**
