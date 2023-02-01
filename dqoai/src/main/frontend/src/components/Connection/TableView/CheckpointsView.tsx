@@ -141,6 +141,7 @@ const CheckpointsView = () => {
   return (
     <div className="py-2">
       <TableActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints}
         isUpdating={isUpdating}

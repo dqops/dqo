@@ -3,16 +3,28 @@ import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import clsx from 'clsx';
 import { useHistory, useLocation } from 'react-router-dom';
+import useSearchParams from "../../hooks/useSearchParams";
+import { CheckTypes } from "../../shared/routes";
+import { useTree } from "../../contexts/treeContext";
 
 const Header = () => {
+  const { getConnections } = useTree();
   const history = useHistory();
   const location = useLocation();
+  const query = useSearchParams();
+  const isDataQualityChecksActive = location.pathname.startsWith('/checks') && !query.get("type"); // will deprecate
+  const isWholeTableChecksActive = location.pathname.startsWith('/checks') && query.get("type") === CheckTypes.CHECKPOINT;
 
-  const handleDataQualityChecks = () => {
-    if (!location.pathname.startsWith('/checks')) {
-      history.push('/checks');
+  const handleRedirectToChecks = (checkType?: CheckTypes) => () => {
+    const isChecksPage = location.pathname.startsWith('/checks');
+    const currentCheckType = query.get("type");
+
+    if (!isChecksPage || currentCheckType !== checkType) {
+      query.set("type", checkType as string);
+      getConnections();
+      history.push(`/checks${checkType ? `?${query.toString()}` : ''}`);
     }
-  };
+  }
 
   return (
     <div
@@ -23,11 +35,18 @@ const Header = () => {
           <Logo className="w-30 cursor-pointer" />
         </div>
         <div className="flex items-center">
+          {/* will deprecate */}
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname.startsWith('/checks') ? 'font-bold' : '' )}
-            onClick={handleDataQualityChecks}
+            className={clsx("px-4 cursor-pointer", isDataQualityChecksActive ? 'font-bold' : '' )}
+            onClick={handleRedirectToChecks()}
           >
             Data Quality Checks
+          </div>
+          <div
+            className={clsx("px-4 cursor-pointer", isWholeTableChecksActive ? 'font-bold' : '' )}
+            onClick={handleRedirectToChecks(CheckTypes.CHECKPOINT)}
+          >
+            Whole table checks
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname === '/dashboards' ? 'font-bold' : '' )}

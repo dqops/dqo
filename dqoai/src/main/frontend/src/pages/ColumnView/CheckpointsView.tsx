@@ -171,6 +171,7 @@ const CheckpointsView = ({
   return (
     <div className="py-2">
       <ColumnActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints}
         isUpdating={isUpdating}

@@ -1,3 +1,8 @@
+export enum CheckTypes {
+  ADHOC = 'data-quality-checks',
+  CHECKPOINT = 'checkpoints',
+  PARTITION = 'partitioned-checks'
+}
 export const ROUTES = {
   CONNECTION_DETAIL: (connection: string, tab: string) => `/checks/connection/${connection}/${tab}`,
   SCHEMA_LEVEL_PAGE: (connection: string, schema: string, tab: string) => `/checks/connection/${connection}/schema/${schema}/${tab}`,
