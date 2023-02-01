@@ -1,325 +1,156 @@
-#cloud
+# cloud
 
 ___
-###<b><u>cloud login</u></b>
+### **dqo cloud login**
 
-<b>Description:</b>
+**Description**
 
 Logs in or registers an account at DQO Cloud
 
-<b>Synopsis:</b>
-<pre><code> cloud login [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>cloud sync data</u></b>
+### **dqo cloud sync data**
 
-<b>Description:</b>
+**Description**
 
 Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQO Cloud
 
-<b>Synopsis:</b>
-<pre><code> cloud sync data [-h] [-fw] [-hl] [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud sync data [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, debug)</td>
-    <td>silent<br/>summary<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>cloud sync sources</u></b>
+### **dqo cloud sync sources**
 
-<b>Description:</b>
+**Description**
 
 Synchronize local &quot;sources&quot; connection and table level quality definitions with DQO Cloud
 
-<b>Synopsis:</b>
-<pre><code> cloud sync sources [-h] [-fw] [-hl] [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, debug)</td>
-    <td>silent<br/>summary<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>cloud sync sensors</u></b>
+### **dqo cloud sync sensors**
 
-<b>Description:</b>
+**Description**
 
 Synchronize local &quot;sensors&quot; folder with custom sensor definitions with DQO Cloud
 
-<b>Synopsis:</b>
-<pre><code> cloud sync sensors [-h] [-fw] [-hl] [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, debug)</td>
-    <td>silent<br/>summary<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>cloud sync rules</u></b>
+### **dqo cloud sync rules**
 
-<b>Description:</b>
+**Description**
 
 Synchronize local &quot;rules&quot; folder with custom rule definitions with DQO Cloud
 
-<b>Synopsis:</b>
-<pre><code> cloud sync rules [-h] [-fw] [-hl] [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, debug)</td>
-    <td>silent<br/>summary<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>cloud sync all</u></b>
+### **dqo cloud sync all**
 
-<b>Description:</b>
+**Description**
 
 Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
 
-<b>Synopsis:</b>
-<pre><code> cloud sync all [-h] [-fw] [-hl] [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cloud sync all [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, debug)</td>
-    <td>silent<br/>summary<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+
+

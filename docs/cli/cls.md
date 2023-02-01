@@ -1,27 +1,17 @@
-#cls
+# cls
 
 ___
-###<b><u>cls</u></b>
+### **dqo cls**
 
-<b>Description:</b>
+**Description**
 
 Clears the screen
 
-<b>Synopsis:</b>
-<pre><code> cls
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai> cls
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    
-    </tbody>
-    </table>
+```
+
+
+
