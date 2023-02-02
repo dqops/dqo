@@ -1,4 +1,4 @@
-{% set macro_database_name =  connection.database_name -%}
+{% set macro_database_name =  connection.postgresql.database -%}
 {% set macro_schema_name = table.target.schema_name -%}
 {% set macro_table_name = table.target.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
@@ -19,7 +19,7 @@
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = '') -%}
-    {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
+    {{ quote_identifier(column_name) }}
 {%- endmacro %}
 
 {%- macro render_column(name, table_alias_prefix = '') -%}
