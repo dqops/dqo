@@ -42,6 +42,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_numbers_in_set_percent", o -> o.dailyPartitionNumbersInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
             put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
+            put("daily_partition_value_below_min_value_count", o -> o.dailyPartitionValueBelowMinValueCount);
+            put("daily_partition_value_below_min_value_percent", o -> o.dailyPartitionValueBelowMinValuePercent);
+            put("daily_partition_value_above_max_value_count", o -> o.dailyPartitionValueAboveMaxValueCount);
             put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
@@ -70,6 +73,15 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
+
+    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValueBelowMinValuePercentCheckSpec dailyPartitionValueBelowMinValuePercent;
+
+    @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValueAboveMaxValueCountCheckSpec dailyPartitionValueAboveMaxValueCount;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
@@ -204,6 +216,60 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValuesInRangeIntegersPercent, dailyPartitionValuesInRangeIntegersPercent));
         this.dailyPartitionValuesInRangeIntegersPercent = dailyPartitionValuesInRangeIntegersPercent;
         propagateHierarchyIdToField(dailyPartitionValuesInRangeIntegersPercent, "daily_partition_values_in_range_integers_percent");
+    }
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnValueBelowMinValueCountCheckSpec getDailyPartitionValueBelowMinValueCount() {
+        return dailyPartitionValueBelowMinValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param dailyPartitionValueBelowMinValueCount Numeric value below min value count check.
+     */
+    public void setDailyPartitionValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValueBelowMinValueCount, dailyPartitionValueBelowMinValueCount));
+        this.dailyPartitionValueBelowMinValueCount = dailyPartitionValueBelowMinValueCount;
+        propagateHierarchyIdToField(dailyPartitionValueBelowMinValueCount, "daily_partition_value_below_min_value_count");
+    }
+
+    /**
+     * Returns a numeric value below min value percent check.
+     * @return Numeric value below min value percent check.
+     */
+    public ColumnValueBelowMinValuePercentCheckSpec getDailyPartitionValueBelowMinValuePercent() {
+        return dailyPartitionValueBelowMinValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value percent check.
+     * @param dailyPartitionValueBelowMinValuePercent Numeric value below min value percent check.
+     */
+    public void setDailyPartitionValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec dailyPartitionValueBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValueBelowMinValuePercent, dailyPartitionValueBelowMinValuePercent));
+        this.dailyPartitionValueBelowMinValuePercent = dailyPartitionValueBelowMinValuePercent;
+        propagateHierarchyIdToField(dailyPartitionValueBelowMinValuePercent, "daily_partition_value_below_min_value_percent");
+    }
+
+    /**
+     * Returns a numeric value above max value count check.
+     * @return Numeric value above max value count check.
+     */
+    public ColumnValueAboveMaxValueCountCheckSpec getDailyPartitionValueAboveMaxValueCount() {
+        return dailyPartitionValueAboveMaxValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value count check.
+     * @param dailyPartitionValueAboveMaxValueCount Numeric value above max value count check.
+     */
+    public void setDailyPartitionValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec dailyPartitionValueAboveMaxValueCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValueAboveMaxValueCount, dailyPartitionValueAboveMaxValueCount));
+        this.dailyPartitionValueAboveMaxValueCount = dailyPartitionValueAboveMaxValueCount;
+        propagateHierarchyIdToField(dailyPartitionValueAboveMaxValueCount, "daily_partition_value_above_max_value_count");
     }
 
     /**

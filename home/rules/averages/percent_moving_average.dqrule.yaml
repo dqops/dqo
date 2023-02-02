@@ -1,8 +1,0 @@
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: previous_readings
-  time_window:
-    prediction_time_window: 10
-    min_periods_with_reading: 5

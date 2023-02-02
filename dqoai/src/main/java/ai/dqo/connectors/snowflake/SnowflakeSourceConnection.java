@@ -64,7 +64,6 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
         if (snowflakeSpec.getProperties() != null) {
             dataSourceProperties.putAll(snowflakeSpec.getProperties());
         }
-        hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         String warehouse = this.getSecretValueProvider().expandValue(snowflakeSpec.getWarehouse());
         dataSourceProperties.put("warehouse", warehouse);
@@ -76,6 +75,8 @@ public class SnowflakeSourceConnection extends AbstractJdbcSourceConnection {
         if (!Strings.isNullOrEmpty(role)) {
             dataSourceProperties.put("role", role);
         }
+
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         String userName = this.getSecretValueProvider().expandValue(snowflakeSpec.getUser());
         hikariConfig.setUsername(userName);

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import Tabs from "../../components/Tabs";
 import { useHistory, useParams } from "react-router-dom";
-import { ROUTES } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
@@ -16,6 +16,7 @@ import TableCommentView from "../../components/Connection/TableView/TableComment
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
+import useSearchParams from "../../hooks/useSearchParams";
 
 const initTabs = [
   {
@@ -60,6 +61,7 @@ const TablePage = () => {
   const { connection, schema, table, tab: activeTab }: { connection: string, schema: string, table: string, tab: string } = useParams();
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
+  const query = useSearchParams();
   const [tabs, setTabs] = useState(initTabs);
   const {
     isUpdatedTableBasic,
@@ -73,7 +75,8 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-
+  const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
+  const showAllSubTabs = useMemo(() => !isCheckpointOnly, [isCheckpointOnly]); // will update more in next tasks
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, tab));
     setTabMap({
@@ -178,36 +181,40 @@ const TablePage = () => {
             <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
           </div>
         </div>
-        <div className="border-b border-gray-300">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-        </div>
-        <div>
-          {activeTab === 'detail' && <TableDetails />}
-        </div>
-        <div>
-          {activeTab === 'schedule' && <ScheduleDetail />}
-        </div>
-        <div>
-          {activeTab === 'data-quality-checks' && <AdhocView />}
-        </div>
-        <div>
-          {activeTab === 'checkpoints' && <CheckpointsView />}
-        </div>
-        <div>
-          {activeTab === 'partitioned-checks' && <PartitionedChecks />}
-        </div>
-        <div>
-          {activeTab === 'comments' && <TableCommentView />}
-        </div>
-        <div>
-          {activeTab === 'labels' && <TableLabelsView />}
-        </div>
-        <div>
-          {activeTab === 'data-streams' && <TableDataStream />}
-        </div>
-        <div>
-          {activeTab === 'timestamps' && <TimestampsView />}
-        </div>
+        {isCheckpointOnly && (
+          <CheckpointsView />
+        )}
+        {showAllSubTabs && (
+          <>
+            <div className="border-b border-gray-300">
+              <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+            </div>
+            <div>
+              {activeTab === 'detail' && <TableDetails />}
+            </div>
+            <div>
+              {activeTab === 'schedule' && <ScheduleDetail />}
+            </div>
+            <div>
+              {activeTab === 'data-quality-checks' && <AdhocView />}
+            </div>
+            <div>
+              {activeTab === 'partitioned-checks' && <PartitionedChecks />}
+            </div>
+            <div>
+              {activeTab === 'comments' && <TableCommentView />}
+            </div>
+            <div>
+              {activeTab === 'labels' && <TableLabelsView />}
+            </div>
+            <div>
+              {activeTab === 'data-streams' && <TableDataStream />}
+            </div>
+            <div>
+              {activeTab === 'timestamps' && <TimestampsView />}
+            </div>
+          </>
+        )}
       </div>
     </ConnectionLayout>
   );
