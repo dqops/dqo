@@ -19,13 +19,18 @@ ___
 {{/each}}
 {{else}}
 {{/if}}
-**SQL Template (Jinja2)**
-{{#each definition.providerSensors}}
-=== "{{provider}}"
+**SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
+{{#each sqlTemplates~}}
+=== "{{@key}}"
+    {{#with "  "}}{{.}}{{/with}}
     ```
-    --8<-- "home/sensors/{{target}}/{{category}}/{{sensorName}}/{{provider}}.sql.jinja2"
+    {% raw %}
+    {{#each this~}}
+    {{{.}}}
+    {{/each~}}
+    {% endraw %}
     ```
-{{/each}}
+{{/each~}}
 ___
 {{/each}}
 {{/each}}

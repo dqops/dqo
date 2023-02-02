@@ -38,6 +38,11 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("string_regex_match_percent", sensorDocumentation.getSensorName());
         Assertions.assertEquals("column/strings/string_regex_match_percent", sensorDocumentation.getFullSensorName());
 
+        Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
+        Assertions.assertEquals(2,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream().anyMatch(k->Objects.equals("bigquery", k)));
+        Assertions.assertEquals(2,sensorDocumentation.getSqlTemplates().values().size());
+
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());
         Assertions.assertTrue(sensorDocumentation.getDefinition().getSpec().getFields().stream().anyMatch(f -> Objects.equals("regex", f.getFieldName())));
