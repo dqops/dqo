@@ -170,7 +170,7 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
         }};
     }
 

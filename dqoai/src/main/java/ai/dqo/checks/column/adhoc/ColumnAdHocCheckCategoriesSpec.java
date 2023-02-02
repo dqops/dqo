@@ -275,7 +275,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.MILLISECOND);
+            setTimeGradient(TimeSeriesGradient.millisecond);
         }};
     }
 

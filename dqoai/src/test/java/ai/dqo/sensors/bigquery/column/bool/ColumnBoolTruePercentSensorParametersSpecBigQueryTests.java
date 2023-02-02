@@ -124,7 +124,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date");
         }});
 
@@ -327,7 +327,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date");
         }});
         runParameters.setDataStreams(

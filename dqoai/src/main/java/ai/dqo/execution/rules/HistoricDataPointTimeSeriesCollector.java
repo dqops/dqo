@@ -96,4 +96,37 @@ public class HistoricDataPointTimeSeriesCollector {
 
         return historicDataPoints;
     }
+
+    /**
+     * Returns an array of recent results, without inserting them into valid indexes. It should be used to receive just the last <code>readoutsCount</code> results.
+     * @param readoutTimestamp Reference timestamp to find results before.
+     * @param readoutsCount Maximum number of previous results to return.
+     * @return Array of results, without aligning results to a proper index.
+     */
+    public HistoricDataPoint[] getHistoricContinuousResultsBefore(LocalDateTime readoutTimestamp, int readoutsCount) {
+        HistoricDataPoint[] historicDataPoints = new HistoricDataPoint[readoutsCount];
+        if (readoutsCount == 0) {
+            return historicDataPoints;
+        }
+
+        if (this.timePeriodIndex == null) {
+            this.timePeriodIndex = new LongIndex(this.timePeriodColumn);
+        }
+
+        Selection readoutBeforeReadoutTimestamp = this.timePeriodIndex.lessThan(readoutTimestamp);
+        int[] rowIndexes = readoutBeforeReadoutTimestamp.toArray();
+        Arrays.sort(rowIndexes); // just in case...
+
+        for (int i = 0; i < readoutsCount && i < rowIndexes.length; i++) {
+            int rowIndex = rowIndexes[rowIndexes.length - i - 1];
+            LocalDateTime rowTimePeriod = this.timePeriodColumn.get(rowIndex);
+            Double rowActualValue = this.actualValueColumn.get(rowIndex);
+            Instant rowTimePeriodInstant = rowTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTimePeriod));
+
+            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTimePeriod, -i - 1, rowActualValue);
+            historicDataPoints[readoutsCount - i - 1] = historicDataPoint;
+        }
+
+        return historicDataPoints;
+    }
 }

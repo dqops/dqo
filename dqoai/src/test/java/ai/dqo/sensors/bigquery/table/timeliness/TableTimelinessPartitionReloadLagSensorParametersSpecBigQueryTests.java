@@ -223,7 +223,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("earlier_datetime");
         }});
 

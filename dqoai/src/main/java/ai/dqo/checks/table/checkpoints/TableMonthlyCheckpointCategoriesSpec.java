@@ -170,7 +170,7 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.MONTH);
+            setTimeGradient(TimeSeriesGradient.month);
         }};
     }
 

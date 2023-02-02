@@ -153,7 +153,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date1");
         }});
 
@@ -356,7 +356,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date1");
         }});
         runParameters.setDataStreams(

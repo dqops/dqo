@@ -58,13 +58,13 @@ public class AvailabilitySensorRunner extends AbstractSensorRunner {
         SensorExecutionResult sensorExecutionResult = jinjaSqlTemplateSensorRunner.executeSensor(executionContext,
                 sensorRunParameters, sensorDefinitions, progressListener, dummySensorExecution);
 
-        if(sensorExecutionResult.isSuccess()){
+        if (sensorExecutionResult.isSuccess()) {
             try {
-                if(sensorExecutionResult.getResultTable().column(0).get(0) == null){
+                if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
                     Table dummyResultTable = createDummyResultTable(1L);
                     return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
                 }
-            }catch (Exception exception) {
+            } catch (Exception exception) {
                 Table dummyResultTable = createDummyResultTable(0L);
                 return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
             }
@@ -81,7 +81,9 @@ public class AvailabilitySensorRunner extends AbstractSensorRunner {
      * @return Dummy result table.
      */
     public Table createDummyResultTable(Long actualValue) {
-        Table dummyResultTable = Table.create("dummy_results", LongColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME), DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
+        Table dummyResultTable = Table.create("dummy_results",
+                LongColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
         row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
         row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());

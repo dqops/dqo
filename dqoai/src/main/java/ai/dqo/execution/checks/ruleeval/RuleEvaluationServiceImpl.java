@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -113,36 +114,46 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 int allSensorResultsRowIndex = dimensionTableSlice.mappedRowNumber(sliceRowIndex);
                 Double actualValue = actualValueColumn.get(allSensorResultsRowIndex);
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
-
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
-                HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
-                if (ruleTimeWindowSettings != null) {
-                    previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
-                            timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
+
+                if (sensorRunParameters.getCheckType() == CheckType.ADHOC) {
+                    // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
+                    // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 
                     if (previousDataPointTimeSeriesCollectorOld != null) {
-                        oldDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricDataPointsBefore(
+                        previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
                                 timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
                     }
-                }
+                } else {
+                    HistoricDataPoint[] oldDataPoints = null; // old data points retrieved from the last copy (snapshot) of previous readouts
+                    if (ruleTimeWindowSettings != null) {
+                        previousDataPoints = previousDataPointTimeSeriesCollectorCurrent.getHistoricDataPointsBefore(
+                                timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
 
-                if (previousDataPoints != null) {
-                    int countNotNull = 0;
-                    for (int hIdx = 0; hIdx < previousDataPoints.length; hIdx++) {
-                        if (previousDataPoints[hIdx] == null) {
-                            // check if we have historic data from previous sensor runs
-                            if (oldDataPoints != null) {
-                                previousDataPoints[hIdx] = oldDataPoints[hIdx];
+                        if (previousDataPointTimeSeriesCollectorOld != null) {
+                            oldDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricDataPointsBefore(
+                                    timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
+                        }
+                    }
+
+                    if (previousDataPoints != null) {
+                        int countNotNull = 0;
+                        for (int hIdx = 0; hIdx < previousDataPoints.length; hIdx++) {
+                            if (previousDataPoints[hIdx] == null) {
+                                // check if we have historic data from previous sensor runs
+                                if (oldDataPoints != null) {
+                                    previousDataPoints[hIdx] = oldDataPoints[hIdx];
+                                }
+                            }
+
+                            if (previousDataPoints[hIdx] != null) {
+                                countNotNull++;
                             }
                         }
 
-                        if (previousDataPoints[hIdx] != null) {
-                            countNotNull++;
+                        if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
+                            continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                         }
-                    }
-
-                    if (countNotNull < ruleTimeWindowSettings.getMinPeriodsWithReadouts()) {
-                        continue; // we will skip this readout, we cannot calculate a value because there is not enough sensor readouts
                     }
                 }
 
