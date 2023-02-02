@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.partitioned.availability.TableAvailabilityMonthlyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
-import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -53,7 +53,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-
+            put("availability", o -> o.availability);
         }
     };
 
@@ -71,6 +71,11 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned availability checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAvailabilityMonthlyPartitionedSpec availability;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -127,6 +132,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAvailabilityMonthlyPartitionedSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param availability Container of custom sql checks.
+     */
+    public void setAvailability(TableAvailabilityMonthlyPartitionedSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -147,7 +170,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.MONTH);
+            setTimeGradient(TimeSeriesGradient.month);
             setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
         }};
     }

@@ -114,7 +114,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         StringColumn timeGradientColumn = StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
         if (timeSeriesGradient != null) {
-            timeGradientColumn.setMissingTo(timeSeriesGradient.name().toLowerCase(Locale.ENGLISH));
+            timeGradientColumn.setMissingTo(timeSeriesGradient.name());
         }
         sortedNormalizedTable.insertColumn(3, timeGradientColumn);
 

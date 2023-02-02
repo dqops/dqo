@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.checkpoints.availability.TableAvailabilityDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessDailyCheckpointSpec;
@@ -52,7 +53,7 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
            put("standard", o -> o.standard);
            put("timeliness", o -> o.timeliness);
            put("sql", o -> o.sql);
-
+           put("availability", o -> o.availability);
         }
     };
 
@@ -71,7 +72,10 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyCheckpointSpec sql;
 
-
+    @JsonPropertyDescription("Daily checkpoints availability checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAvailabilityDailyCheckpointSpec availability;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -128,6 +132,24 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAvailabilityDailyCheckpointSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param availability Container of custom sql checks.
+     */
+    public void setAvailability(TableAvailabilityDailyCheckpointSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -148,7 +170,7 @@ public class TableDailyCheckpointCategoriesSpec extends AbstractRootChecksContai
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
         }};
     }
 

@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessDailyCheckpointSpec;
+import ai.dqo.checks.table.partitioned.availability.TableAvailabilityDailyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
@@ -53,7 +53,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-
+            put("availability", o -> o.availability);
         }
     };
 
@@ -71,6 +71,11 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyPartitionedSpec sql;
+
+    @JsonPropertyDescription("Daily partitioned availability checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAvailabilityDailyPartitionedSpec availability;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -127,6 +132,24 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAvailabilityDailyPartitionedSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param availability Container of custom sql checks.
+     */
+    public void setAvailability(TableAvailabilityDailyPartitionedSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -147,7 +170,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
         }};
     }

@@ -53,7 +53,7 @@ public class PythonRuleRunnerObjectMother {
     public static RuleExecutionResult executeBuiltInRule(Double actualValue, AbstractRuleParametersSpec ruleParameters) {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.DAY);
+        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.day);
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 

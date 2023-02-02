@@ -34,17 +34,17 @@ public class LocalDateTimePeriodUtility {
      */
     public static long calculateDifferenceInPeriodsCount(LocalDateTime start, LocalDateTime end, TimeSeriesGradient gradient) {
         switch (gradient) {
-            case YEAR:
+            case year:
                 return start.until(end, ChronoUnit.YEARS);
-            case QUARTER:
+            case quarter:
                 return start.until(end, ChronoUnit.MONTHS) / 3;
-            case MONTH:
+            case month:
                 return start.until(end, ChronoUnit.MONTHS);
-            case WEEK:
+            case week:
                 return start.until(end, ChronoUnit.WEEKS);
-            case DAY:
+            case day:
                 return start.until(end, ChronoUnit.DAYS);
-            case HOUR:
+            case hour:
                 return start.until(end, ChronoUnit.HOURS);
             default:
                 throw new RuntimeException("Unsupported gradient: " + gradient);
@@ -60,17 +60,17 @@ public class LocalDateTimePeriodUtility {
      */
     public static LocalDateTime calculateLocalDateTimeMinusTimePeriods(LocalDateTime readoutTimestamp, int timePeriodsCount, TimeSeriesGradient gradient) {
         switch (gradient) {
-            case YEAR:
+            case year:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.YEARS);
-            case QUARTER:
+            case quarter:
                 return readoutTimestamp.minus(timePeriodsCount * 3, ChronoUnit.MONTHS);
-            case MONTH:
+            case month:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.MONTHS);
-            case WEEK:
+            case week:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.WEEKS);
-            case DAY:
+            case day:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.DAYS);
-            case HOUR:
+            case hour:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.HOURS);
             default:
                 throw new RuntimeException("Unsupported gradient: " + gradient);

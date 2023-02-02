@@ -15,6 +15,7 @@
  */
 package ai.dqo.checks;
 
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -25,5 +26,21 @@ public enum CheckTimeScale {
     daily,  // lowercase name to make swagger work
 
     @JsonProperty("monthly")
-    monthly // lowercase name to make swagger work
+    monthly; // lowercase name to make swagger work
+
+    /**
+     * Converts the time series to a matching time gradient.
+     * @return Time gradient.
+     */
+    public TimeSeriesGradient toTimeSeriesGradient() {
+        if (this == daily) {
+            return TimeSeriesGradient.day;
+        }
+        else if (this == monthly) {
+            return TimeSeriesGradient.month;
+        }
+        else {
+            throw new UnsupportedOperationException("Time scale " + this + " mapping missing, add it here.");
+        }
+    }
 }

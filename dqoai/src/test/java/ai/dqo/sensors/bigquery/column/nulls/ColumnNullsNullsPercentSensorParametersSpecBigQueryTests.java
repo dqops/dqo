@@ -123,7 +123,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date1");
         }});
 
@@ -320,7 +320,7 @@ public class ColumnNullsNullsPercentSensorParametersSpecBigQueryTests extends Ba
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.DAY);
+            setTimeGradient(TimeSeriesGradient.day);
             setTimestampColumn("date1");
         }});
         runParameters.setDataStreams(

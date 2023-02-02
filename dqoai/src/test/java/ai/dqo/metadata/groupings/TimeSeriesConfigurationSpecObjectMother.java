@@ -54,7 +54,7 @@ public class TimeSeriesConfigurationSpecObjectMother {
     public static TimeSeriesConfigurationSpec createTimeSeriesForAdhoc() {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.current_time);
-        timeSeries.setTimeGradient(TimeSeriesGradient.MILLISECOND);
+        timeSeries.setTimeGradient(TimeSeriesGradient.millisecond);
         return timeSeries;
     }
 
@@ -68,10 +68,10 @@ public class TimeSeriesConfigurationSpecObjectMother {
         timeSeries.setMode(TimeSeriesMode.current_time);
         switch (checkTimeScale) {
             case daily:
-                timeSeries.setTimeGradient(TimeSeriesGradient.DAY);
+                timeSeries.setTimeGradient(TimeSeriesGradient.day);
                 break;
             case monthly:
-                timeSeries.setTimeGradient(TimeSeriesGradient.MONTH);
+                timeSeries.setTimeGradient(TimeSeriesGradient.month);
                 break;
         }
         return timeSeries;
@@ -89,10 +89,10 @@ public class TimeSeriesConfigurationSpecObjectMother {
         timeSeries.setTimestampColumn(datePartitioningColumn);
         switch (checkTimeScale) {
             case daily:
-                timeSeries.setTimeGradient(TimeSeriesGradient.DAY);
+                timeSeries.setTimeGradient(TimeSeriesGradient.day);
                 break;
             case monthly:
-                timeSeries.setTimeGradient(TimeSeriesGradient.MONTH);
+                timeSeries.setTimeGradient(TimeSeriesGradient.month);
                 break;
         }
         return timeSeries;

@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.checkpoints.availability.TableAvailabilityMonthlyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlMonthlyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
-import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessDailyCheckpointSpec;
 import ai.dqo.checks.table.checkpoints.timeliness.TableTimelinessMonthlyCheckpointSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -53,7 +53,7 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-
+            put("availability", o -> o.availability);
         }
     };
 
@@ -71,6 +71,11 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyCheckpointSpec sql;
+
+    @JsonPropertyDescription("Daily partitioned availability checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAvailabilityMonthlyCheckpointSpec availability;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -127,6 +132,24 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAvailabilityMonthlyCheckpointSpec getAvailability() {
+        return availability;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param availability Container of custom sql checks.
+     */
+    public void setAvailability(TableAvailabilityMonthlyCheckpointSpec availability) {
+        this.setDirtyIf(!Objects.equals(this.availability, availability));
+        this.availability = availability;
+        this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -147,7 +170,7 @@ public class TableMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCont
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.MONTH);
+            setTimeGradient(TimeSeriesGradient.month);
         }};
     }
 

@@ -37,20 +37,20 @@ public class LocalDateTimeTruncateUtility {
      */
     public static LocalDateTime truncateTimePeriod(LocalDateTime dateTime, TimeSeriesGradient timeSeriesGradient) {
         switch (timeSeriesGradient) {
-            case YEAR:
+            case year:
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), 1, 1), LocalTime.MIDNIGHT);
-            case QUARTER:
+            case quarter:
                 int monthValue = dateTime.getMonthValue();
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), monthValue - ((monthValue - 1) % 3), 1), LocalTime.MIDNIGHT);
-            case MONTH:
+            case month:
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), dateTime.getMonth(), 1), LocalTime.MIDNIGHT);
-            case WEEK:
+            case week:
                 return LocalDateTime.of(dateTime.toLocalDate().with(WeekFields.of(Locale.US).dayOfWeek(), 1), LocalTime.MIDNIGHT);
-            case DAY:
+            case day:
                 return dateTime.truncatedTo(ChronoUnit.DAYS);
-            case HOUR:
+            case hour:
                 return dateTime.truncatedTo(ChronoUnit.HOURS);
-            case MILLISECOND:
+            case millisecond:
                 return dateTime; // no truncation
             default:
                 throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timeSeriesGradient);

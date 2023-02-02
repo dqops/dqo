@@ -21,11 +21,7 @@ import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.HistoricDataPointObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
-import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
-import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
@@ -39,8 +35,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-
-import static org.xbill.DNS.IPSECKEYRecord.Gateway.None;
 
 @SpringBootTest
 public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends BaseTest {
@@ -70,7 +64,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -88,7 +82,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -106,7 +100,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -128,7 +122,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
             }
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -147,7 +141,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be below 20.0
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -160,7 +154,7 @@ public class BetweenPercentMovingAverage7DaysRuleParametersSpecTests extends Bas
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
