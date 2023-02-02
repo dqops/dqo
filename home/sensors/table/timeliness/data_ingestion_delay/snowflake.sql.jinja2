@@ -28,10 +28,10 @@
     table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
     TIMESTAMP_DIFF(
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TRY_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
         ),
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TRY_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
         ),
         MILLISECOND
     )
