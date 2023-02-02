@@ -27,8 +27,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 import java.util.Properties;
 
 /**
@@ -89,7 +88,6 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         if (postgresqlSpec.getProperties() != null) {
             dataSourceProperties.putAll(postgresqlSpec.getProperties());
         }
-        hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser());
         hikariConfig.setUsername(userName);
@@ -102,6 +100,7 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.put("options", options);
         }
 
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
 }

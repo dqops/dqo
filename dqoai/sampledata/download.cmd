@@ -25,7 +25,7 @@ REM Spreadsheet: https://docs.google.com/spreadsheets/d/17xnAklqd6cRRfVBcCbkkgar
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/17xnAklqd6cRRfVBcCbkkgarzFLqVaRt3pLFRLu6CeBE/export?exportFormat=csv" > continuous_days_one_row_per_day.csv
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1xYmGgrARH0TCt78aju0B32KhJ8CrDhwZwFCUPio-vos
-curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xYmGgrARH0TCt78aju0B32KhJ8CrDhwZwFCUPio-vos/export?exportFormat=csv" > continuous_days_one_row_per_day_13_non_negative_floats.csv
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xYmGgrARH0TCt78aju0B32KhJ8CrDhwZwFCUPio-vos/export?exportFormat=csv" > continuous_days_non_negative_floats.csv
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1esR1Sun2ck7lV49tZd9b7oyI90dW0HMo-eb7tXqAjy8
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1esR1Sun2ck7lV49tZd9b7oyI90dW0HMo-eb7tXqAjy8/export?exportFormat=csv" > continuous_days_different_time_data_types.csv

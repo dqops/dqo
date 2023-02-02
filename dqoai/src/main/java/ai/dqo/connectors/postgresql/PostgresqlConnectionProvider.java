@@ -139,6 +139,22 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
     }
 
     /**
+     * Formats a constant for the target database.
+     *
+     * @param constant   Constant to be formatted.
+     * @param columnType Column type snapshot.
+     * @return Formatted constant.
+     */
+    @Override
+    public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
+        if(constant instanceof Boolean){
+                Boolean asBoolean = (Boolean)constant;
+                return asBoolean ? "true" : "false";
+            }
+        return super.formatConstant(constant, columnType);
+    }
+
+    /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
      *
      * @param dataColumn Tablesaw column with data that should be stored.
