@@ -44,6 +44,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
             put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
             put("value_below_min_value_percent", o -> o.valueBelowMinValuePercent);
+            put("value_above_max_value_count", o -> o.valueAboveMaxValueCount);
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
@@ -78,6 +79,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column.")
     private ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent;
+
+    @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column.")
+    private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
     private ColumnMaxInRangeCheckSpec maxInRange;
@@ -245,6 +249,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.valueBelowMinValuePercent, valueBelowMinValuePercent));
         this.valueBelowMinValuePercent = valueBelowMinValuePercent;
         propagateHierarchyIdToField(valueBelowMinValuePercent, "value_below_min_value_percent");
+    }
+
+    /**
+     * Returns a numeric value above max value count check.
+     * @return Numeric value above max value count check.
+     */
+    public ColumnValueAboveMaxValueCountCheckSpec getValueAboveMaxValueCount() {
+        return valueAboveMaxValueCount;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value count check.
+     * @param valueAboveMaxValueCount Numeric value above max value count check.
+     */
+    public void setValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount) {
+        this.setDirtyIf(!Objects.equals(this.valueAboveMaxValueCount, valueAboveMaxValueCount));
+        this.valueAboveMaxValueCount = valueAboveMaxValueCount;
+        propagateHierarchyIdToField(valueAboveMaxValueCount, "value_above_max_value_count");
     }
 
     /**
