@@ -43,6 +43,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_values_in_range_numeric_percent", o -> o.dailyCheckpointValuesInRangeNumericPercent);
             put("daily_checkpoint_values_in_range_integers_percent", o -> o.dailyCheckpointValuesInRangeIntegersPercent);
             put("daily_checkpoint_value_below_min_value_count", o -> o.dailyCheckpointValueBelowMinValueCount);
+            put("daily_checkpoint_value_below_min_value_percent", o -> o.dailyCheckpointValueBelowMinValuePercent);
             put("daily_checkpoint_max_in_range", o -> o.dailyCheckpointMaxInRange);
             put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
             put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
@@ -74,6 +75,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValueCountCheckSpec dailyCheckpointValueBelowMinValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValueBelowMinValuePercentCheckSpec dailyCheckpointValueBelowMinValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec dailyCheckpointMaxInRange;
@@ -223,6 +227,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointValueBelowMinValueCount, dailyCheckpointValueBelowMinValueCount));
         this.dailyCheckpointValueBelowMinValueCount = dailyCheckpointValueBelowMinValueCount;
         propagateHierarchyIdToField(dailyCheckpointValueBelowMinValueCount, "daily_checkpoint_value_below_min_value_count");
+    }
+
+    /**
+     * Returns a numeric value below min value percent check.
+     * @return Numeric value below min value percent check.
+     */
+    public ColumnValueBelowMinValuePercentCheckSpec getDailyCheckpointValueBelowMinValuePercent() {
+        return dailyCheckpointValueBelowMinValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value percent check.
+     * @param dailyCheckpointValueBelowMinValuePercent Numeric value below min value percent check.
+     */
+    public void setDailyCheckpointValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec dailyCheckpointValueBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValueBelowMinValuePercent, dailyCheckpointValueBelowMinValuePercent));
+        this.dailyCheckpointValueBelowMinValuePercent = dailyCheckpointValueBelowMinValuePercent;
+        propagateHierarchyIdToField(dailyCheckpointValueBelowMinValuePercent, "daily_checkpoint_value_below_min_value_percent");
     }
 
     /**
