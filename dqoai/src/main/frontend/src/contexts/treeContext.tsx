@@ -139,6 +139,7 @@ function TreeProvider(props: any) {
   const refreshTableNode = async (node: CustomTreeNode) => {
     const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+    const queryCheckType = query.get("type");
     const items = [
       {
         id: `${node.id}.columns`,
@@ -150,7 +151,19 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
-    if (query.get("type") === CheckTypes.CHECKPOINT) {
+    if (queryCheckType === CheckTypes.ADHOC) {
+      items.push(
+        {
+          id: `${node.id}.checks`,
+          label: 'Profiling checks',
+          level: TREE_LEVEL.TABLE_CHECKS,
+          parentId: node.id,
+          items: [],
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`,
+          open: false
+        });
+    }
+    if (queryCheckType === CheckTypes.CHECKPOINT) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
@@ -171,33 +184,25 @@ function TreeProvider(props: any) {
           open: false
         }
       )
-    } else {
+    }
+    if (queryCheckType === CheckTypes.PARTITION) {
       items.push(
         {
-          id: `${node.id}.checks`,
-          label: 'Ad-hoc checks',
-          level: TREE_LEVEL.TABLE_CHECKS,
-          parentId: node.id,
-          items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} checks`,
-          open: false
-        },
-        {
           id: `${node.id}.dailyPartitionedChecks`,
-          label: 'Daily partitioned checks',
+          label: 'Day period checks',
           level: TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily partitioned checks`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} day period checks`,
           open: false
         },
         {
           id: `${node.id}.monthlyPartitionedChecks`,
-          label: 'Monthly partitioned checks',
+          label: 'Month period checks',
           level: TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly partitioned checks`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} month period checks`,
           open: false
         }
       )
@@ -211,8 +216,21 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    if (query.get("type") === CheckTypes.CHECKPOINT) {
-      const items = [
+    const queryCheckType = query.get("type");
+    const items = [];
+    if (queryCheckType === CheckTypes.ADHOC) {
+      items.push({
+        id: `${node.id}.checks`,
+        label: `Profiling checks`,
+        level: TREE_LEVEL.COLUMN_CHECKS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`,
+        open: false
+      });
+    }
+    if (queryCheckType === CheckTypes.CHECKPOINT) {
+      items.push(
         {
           id: `${node.id}.dailyCheck`,
           label: 'Daily checkpoints',
@@ -231,39 +249,30 @@ function TreeProvider(props: any) {
           tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`,
           open: false
         }
-      ];
-      resetTreeData(node, items);
-      return;
+      );
     }
-    const items = [
-      {
-        id: `${node.id}.checks`,
-        label: `Ad-hoc checks`,
-        level: TREE_LEVEL.COLUMN_CHECKS,
-        parentId: node.id,
-        items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`,
-        open: false
-      },
-      {
-        id: `${node.id}.dailyPartitionedChecks`,
-        label: 'Daily partitioned checks',
-        level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
-        parentId: node.id,
-        items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily partitioned checks`,
-        open: false
-      },
-      {
-        id: `${node.id}.monthlyPartitionedChecks`,
-        label: 'Monthly partitioned checks',
-        level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
-        parentId: node.id,
-        items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly partitioned checks`,
-        open: false
-      }
-    ];
+    if (queryCheckType === CheckTypes.PARTITION) {
+      items.push(
+        {
+          id: `${node.id}.dailyPartitionedChecks`,
+          label: 'Day period checks',
+          level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
+          parentId: node.id,
+          items: [],
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} day period checks`,
+          open: false
+        },
+        {
+          id: `${node.id}.monthlyPartitionedChecks`,
+          label: 'Month period checks',
+          level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
+          parentId: node.id,
+          items: [],
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} month period checks`,
+          open: false
+        }
+      );
+    }
     resetTreeData(node, items);
   };
 

@@ -60,7 +60,12 @@ const ColumnView = () => {
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
   const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
-  const showAllSubTabs = useMemo(() => !isCheckpointOnly, [isCheckpointOnly]); // will update more in next tasks
+  const isPartitionCheckOnly = useMemo(() => query.get("type") === CheckTypes.PARTITION, [query]);
+  const isAdHocCheckOnly = useMemo(() => query.get("type") === CheckTypes.ADHOC, [query]);
+  const showAllSubTabs = useMemo(
+    () => !isCheckpointOnly && !isPartitionCheckOnly && !isAdHocCheckOnly,
+    [isCheckpointOnly]
+  ); // will update more in next tasks
   // useEffect(() => {
   //   if (tabMap[pageTab]) {
   //     setActiveTab(tabMap[pageTab]);
@@ -161,6 +166,22 @@ const ColumnView = () => {
             columnName={columnName}
           />
         )}
+        {isPartitionCheckOnly && (
+          <ColumnPartitionedChecksView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={columnName}
+          />
+        )}
+        {isAdHocCheckOnly && (
+          <ColumnAdhocView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={columnName}
+          />
+        )}
         {showAllSubTabs && (
           <>
             <div className="border-b border-gray-300">
@@ -185,22 +206,6 @@ const ColumnView = () => {
               )}
               {activeTab === 'labels' && (
                 <ColumnLabelsView
-                  connectionName={connectionName}
-                  schemaName={schemaName}
-                  tableName={tableName}
-                  columnName={columnName}
-                />
-              )}
-              {activeTab === 'data-quality-checks' && (
-                <ColumnAdhocView
-                  connectionName={connectionName}
-                  schemaName={schemaName}
-                  tableName={tableName}
-                  columnName={columnName}
-                />
-              )}
-              {activeTab === 'partitioned-checks' && (
-                <ColumnPartitionedChecksView
                   connectionName={connectionName}
                   schemaName={schemaName}
                   tableName={tableName}

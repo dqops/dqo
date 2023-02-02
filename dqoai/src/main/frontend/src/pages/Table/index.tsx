@@ -76,7 +76,12 @@ const TablePage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
-  const showAllSubTabs = useMemo(() => !isCheckpointOnly, [isCheckpointOnly]); // will update more in next tasks
+  const isPartitionChecksOnly = useMemo(() => query.get("type") === CheckTypes.PARTITION, [query]);
+  const isAdHocChecksOnly = useMemo(() => query.get("type") === CheckTypes.ADHOC, [query]);
+  const showAllSubTabs = useMemo(
+    () => !isCheckpointOnly && !isPartitionChecksOnly && !isAdHocChecksOnly,
+    [isCheckpointOnly, isPartitionChecksOnly, isAdHocChecksOnly]
+  );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, tab));
     setTabMap({
@@ -181,8 +186,14 @@ const TablePage = () => {
             <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
           </div>
         </div>
+        {isAdHocChecksOnly && (
+          <AdhocView />
+        )}
         {isCheckpointOnly && (
           <CheckpointsView />
+        )}
+        {isPartitionChecksOnly && (
+          <PartitionedChecks />
         )}
         {showAllSubTabs && (
           <>
@@ -194,12 +205,6 @@ const TablePage = () => {
             </div>
             <div>
               {activeTab === 'schedule' && <ScheduleDetail />}
-            </div>
-            <div>
-              {activeTab === 'data-quality-checks' && <AdhocView />}
-            </div>
-            <div>
-              {activeTab === 'partitioned-checks' && <PartitionedChecks />}
             </div>
             <div>
               {activeTab === 'comments' && <TableCommentView />}

@@ -13,7 +13,9 @@ const Header = () => {
   const location = useLocation();
   const query = useSearchParams();
   const isDataQualityChecksActive = location.pathname.startsWith('/checks') && !query.get("type"); // will deprecate
+  const isAdHocChecksActive = location.pathname.startsWith('/checks') && query.get("type") === CheckTypes.ADHOC;
   const isWholeTableChecksActive = location.pathname.startsWith('/checks') && query.get("type") === CheckTypes.CHECKPOINT;
+  const isTimePeriodChecksActive = location.pathname.startsWith('/checks') && query.get("type") === CheckTypes.PARTITION;
 
   const handleRedirectToChecks = (checkType?: CheckTypes) => () => {
     const isChecksPage = location.pathname.startsWith('/checks');
@@ -43,10 +45,22 @@ const Header = () => {
             Data Quality Checks
           </div>
           <div
+            className={clsx("px-4 cursor-pointer", isAdHocChecksActive ? 'font-bold' : '' )}
+            onClick={handleRedirectToChecks(CheckTypes.ADHOC)}
+          >
+            Profiling
+          </div>
+          <div
             className={clsx("px-4 cursor-pointer", isWholeTableChecksActive ? 'font-bold' : '' )}
             onClick={handleRedirectToChecks(CheckTypes.CHECKPOINT)}
           >
             Whole table checks
+          </div>
+          <div
+            className={clsx("px-4 cursor-pointer", isTimePeriodChecksActive ? 'font-bold' : '' )}
+            onClick={handleRedirectToChecks(CheckTypes.PARTITION)}
+          >
+            Time period checks
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname === '/dashboards' ? 'font-bold' : '' )}

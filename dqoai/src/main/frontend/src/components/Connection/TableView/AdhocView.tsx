@@ -57,6 +57,7 @@ const AdhocView = () => {
   return (
     <div>
       <TableActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
