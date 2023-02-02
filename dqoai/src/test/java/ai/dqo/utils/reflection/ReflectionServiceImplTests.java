@@ -53,7 +53,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     void getClassInfoForClass_whenCalledForTheFirstTime_thenReturnsClassInfo() {
         ClassInfo classInfo = this.sut.getClassInfoForClass(ParameterDefinitionSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(7, classInfo.getFields().size());
+        Assertions.assertEquals(8, classInfo.getFields().size());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ReflectionServiceImplTests extends BaseTest {
     void reflectClass_whenDirectDescendantOfAbstractSpec_thenReturnsFields() {
         ClassInfo classInfo = this.sut.reflectClass(ParameterDefinitionSpec.class);
         Assertions.assertNotNull(classInfo);
-        Assertions.assertEquals(7, classInfo.getFields().size());
+        Assertions.assertEquals(8, classInfo.getFields().size());
     }
 
     @Test

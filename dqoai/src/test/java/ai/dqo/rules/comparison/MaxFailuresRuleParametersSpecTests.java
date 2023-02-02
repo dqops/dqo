@@ -29,6 +29,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -39,6 +40,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
+/**
+ * Unit tests for max_failures python rule.
+ */
 @SpringBootTest
 public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     private MaxFailuresRule1ParametersSpec sut;
@@ -47,29 +51,184 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     private Double[] sensorReadouts;
     private SampleTableMetadata sampleTableMetadata;
     private UserHomeContext userHomeContext;
-    private DqoHomeContext dqoHomeContext;
 
     @BeforeEach
     void setUp() {
         this.sut = new MaxFailuresRule1ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
+        this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
         this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
-
-        this.dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
-        DqoHome dqoHome = this.dqoHomeContext.getDqoHome();
-        RuleDefinitionWrapper ruleDefWrapper = dqoHome.getRules().getByObjectName("comparison/max_failures", true);
-        //this.sensorReadouts = new Double[ruleDefWrapper.getSpec().getTimeWindow().getPredictionTimeWindow()];
-        this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
     @Test
-    void executeRule_whenCountOfFailuresLessThenMaxFailures_thenReturnsPassed() {
+    void timeWindowSettingsMinPeriodsWithReadouts_whenMaxFailureSensor_thenRequires0MinimumHistoricalReadouts() {
+        Assertions.assertEquals(0, this.timeWindowSettings.getMinPeriodsWithReadouts());
+    }
+
+    @Test
+    void timeWindowSettingsPredictionTimeWindow_whenMaxFailureSensor_thenRequiresHistorical30ReadoutsForRuleEvaluation() {
+        Assertions.assertEquals(30, this.timeWindowSettings.getPredictionTimeWindow());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultPassAndPreviousAreFailuresAndMaxFailures5_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
 
 
-        Double[] previousReadouts = {0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+        Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultPassAndPreviousAreFailuresAndMaxFailures0_thenReturnsPassed() {
+        this.sut.setMaxFailures(0L);
+
+
+        Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassAndMaxFailures1_thenReturnsPassed() {
+        this.sut.setMaxFailures(1L);
+
+
+        Double[] previousReadouts = {1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassButRecentValueAreNullAndMaxFailures1_thenReturnsPassed() {
+        this.sut.setMaxFailures(1L);
+
+
+        Double[] previousReadouts = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, null, null, null};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassButRecentValueAreNullAndMaxFailures5_thenReturnsPassed() {
+        this.sut.setMaxFailures(5L);
+
+
+        Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, null, 0.0, 0.0, null, null, null};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassAndMaxFailures0_thenReturnsFailed() {
+        this.sut.setMaxFailures(0L);
+
+
+        Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresAndMaxFailures1_thenReturnsFailed() {
+        this.sut.setMaxFailures(1L);
+
+
+        Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresAndMaxFailures5_thenReturnsFailed() {
+        this.sut.setMaxFailures(5L);
+
+
+        Double[] previousReadouts = {0.0, 1.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, null, 0.0, 0.0, 0.0};
+        this.sensorReadouts = previousReadouts;
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertFalse(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+    }
+
+    @Test
+    void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresButOnly3AndMaxFailures5_thenReturnsPassed() {
+        this.sut.setMaxFailures(5L);
+
+
+        Double[] previousReadouts = {0.0, null, null, null, null, null, 0.0, null, 0.0, null};
         this.sensorReadouts = previousReadouts;
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
@@ -84,63 +243,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     }
 
     @Test
-    void executeRule_whenCountOfFailuresGreaterThenMaxFailures_thenReturnsFailed() {
-        this.sut.setMaxFailures(2L);
-
-        Double[] previousReadouts = {0.0, 1.0, 1.0, 1.0, null, 0.0, null, 1.0, 0.0, 1.0, 1.0, 1.0, null, 1.0};
-        this.sensorReadouts = previousReadouts;
-
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
-
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
-                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
-
-        Assertions.assertTrue(!ruleExecutionResult.isPassed());
-        Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(2.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
-    }
-
-    @Test
-    void executeRule_whenCountOfFailuresGreaterThenMaxFailuresAndSetTimeWindow_thenReturnsFailed() {
-        this.sut.setMaxFailures(2L);
-        this.timeWindowSettings.setPredictionTimeWindow(10);
-
-        Double[] previousReadouts = {null, 0.0, null, 1.0, 0.0, 1.0, 1.0, 1.0, null, 1.0};
-        this.sensorReadouts = previousReadouts;
-
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
-
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
-                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
-
-        Assertions.assertTrue(!ruleExecutionResult.isPassed());
-        Assertions.assertEquals(2.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(2.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
-    }
-
-    @Test
-    void executeRule_whenCountOfFailuresGreaterThenMaxFailuresAndSetTimeWindow_thenReturnsPassed() {
-        this.sut.setMaxFailures(5L);
-        this.timeWindowSettings.setPredictionTimeWindow(10);
-
-        Double[] previousReadouts = {null, 0.0, null, 1.0, 0.0, 1.0, 1.0, 1.0, null, 1.0};
-        this.sensorReadouts = previousReadouts;
-
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
-
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
-                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
-
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
-    }
-
-    @Test
-    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+    void executeRuleMaxFailures_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());

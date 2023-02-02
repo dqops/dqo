@@ -70,15 +70,16 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered.append(rule_parameters.actual_value)
 
-    time_window = getattr(rule_parameters.time_window, "prediction_time_window")
-    filtered = filtered[-time_window:]
+    filtered.reverse()
 
-    failures  = 0
-    for i in filtered :
+    recent_failures  = 0
+    for i in filtered:
         if i == 0:
-            failures  += 1
+            recent_failures  += 1
+        else:
+            break
 
-    passed = failures <= rule_parameters.parameters.max_failures
+    passed = recent_failures <= rule_parameters.parameters.max_failures
     expected_value = rule_parameters.parameters.max_failures
     lower_bound = rule_parameters.parameters.max_failures
     upper_bound = None

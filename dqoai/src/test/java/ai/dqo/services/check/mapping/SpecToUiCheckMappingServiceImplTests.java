@@ -50,7 +50,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getCategories().size());
+        Assertions.assertEquals(4, uiModel.getCategories().size());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(3, uiBasicModel.getCategories().size());
+        Assertions.assertEquals(4, uiBasicModel.getCategories().size());
 
         Map.Entry<Iterable<Map.Entry<String, Iterable<String>>>, Iterable<Map.Entry<String, Iterable<String>>>> names =
                 extractCheckNamesFromUIModels(uiModel, uiBasicModel);
