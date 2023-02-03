@@ -120,7 +120,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                     // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 
-                    if (previousDataPointTimeSeriesCollectorOld != null) {
+                    if (ruleTimeWindowSettings != null && previousDataPointTimeSeriesCollectorOld != null) {
                         previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
                                 timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
                     }
