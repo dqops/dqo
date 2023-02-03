@@ -25,6 +25,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -50,11 +51,9 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         this.sut = new WithinPercentMovingAverage7DaysRule5ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-
-        this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
+        this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
         this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
-
     }
 
     @Test
@@ -64,7 +63,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -81,7 +80,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -98,7 +97,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -118,7 +117,7 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
             }
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -133,22 +132,22 @@ public class WithinPercentMovingAverage7DaysRuleParametersSpecTests extends Base
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndAreDifferentSoAveragingIsRequired_thenReturnsPassed() {
         this.sut.setMaxPercentWithin(5.0);
         for (int i = 0; i < this.sensorReadouts.length; i++) {
-            this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be 20.0
+            this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be below 20.0
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.4,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(19.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(21.0, ruleExecutionResult.getUpperBound());
+        Assertions.assertEquals(19.71, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(18.72, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(20.70, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);

@@ -161,6 +161,6 @@ public class ColumnDuplicateCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Uniqueness;
     }
 }

@@ -2,6 +2,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
@@ -154,33 +155,10 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableCheckpointsSpec checkpoints = tableSpec.getCheckpoints();
-
-        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getDaily(),
-                        () -> {
-                            TableDailyCheckpointCategoriesSpec container = new TableDailyCheckpointCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-
-            case monthly:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getMonthly(),
-                        () -> {
-                            TableMonthlyCheckpointCategoriesSpec container = new TableMonthlyCheckpointCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-        }
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
-                tempCheckpointPartition, new CheckResultsOverviewParameters());
+                checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -227,40 +205,10 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        final TablePartitionedChecksRootSpec partitionedChecks =
-                Objects.requireNonNullElseGet(
-                        tableSpec.getPartitionedChecks(),
-                        () -> {
-                            TablePartitionedChecksRootSpec container = new TablePartitionedChecksRootSpec();
-                            container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "partitioned_checks"));
-                            return container;
-                        });
-
-        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getDaily(),
-                        () -> {
-                            TableDailyPartitionedCheckCategoriesSpec container = new TableDailyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-
-            case monthly:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getMonthly(),
-                        () -> {
-                            TableMonthlyPartitionedCheckCategoriesSpec container = new TableMonthlyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-        }
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
-                tempCheckpointPartition, new CheckResultsOverviewParameters());
+                checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -312,13 +260,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnAdHocCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
-                columnSpec.getChecks(),
-                () -> {
-                    ColumnAdHocCheckCategoriesSpec container = new ColumnAdHocCheckCategoriesSpec();
-                    container.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "checks"));
-                    return container;
-                });
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
@@ -375,40 +317,10 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        final ColumnCheckpointsSpec checkpoints =
-                Objects.requireNonNullElseGet(
-                        columnSpec.getCheckpoints(),
-                        () -> {
-                            ColumnCheckpointsSpec container = new ColumnCheckpointsSpec();
-                            container.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "checkpoints"));
-                            return container;
-                        });
-
-        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getDaily(),
-                        () -> {
-                            ColumnDailyCheckpointCategoriesSpec container = new ColumnDailyCheckpointCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(checkpoints.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-
-            case monthly:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getMonthly(),
-                        () -> {
-                            ColumnMonthlyCheckpointCategoriesSpec container = new ColumnMonthlyCheckpointCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(checkpoints.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-        }
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
-                tempCheckpointPartition, new CheckResultsOverviewParameters());
+                checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -462,40 +374,10 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        final ColumnPartitionedChecksRootSpec partitionedChecks =
-            Objects.requireNonNullElseGet(
-                    columnSpec.getPartitionedChecks(),
-                    () -> {
-                        ColumnPartitionedChecksRootSpec container = new ColumnPartitionedChecksRootSpec();
-                        container.setHierarchyId(new HierarchyId(columnSpec.getHierarchyId(), "partitioned_checks"));
-                        return container;
-                    });
-
-        AbstractRootChecksContainerSpec tempCheckpointPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getDaily(),
-                        () -> {
-                            ColumnDailyPartitionedCheckCategoriesSpec container = new ColumnDailyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-
-            case monthly:
-                tempCheckpointPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getMonthly(),
-                        () -> {
-                            ColumnMonthlyPartitionedCheckCategoriesSpec container = new ColumnMonthlyPartitionedCheckCategoriesSpec();
-                            container.setHierarchyId(new HierarchyId(partitionedChecks.getHierarchyId(), timeScale.name()));
-                            return container;
-                        });
-                break;
-        }
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
-                tempCheckpointPartition, new CheckResultsOverviewParameters());
+                checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 }

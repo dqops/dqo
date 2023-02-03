@@ -18,8 +18,7 @@ package ai.dqo.checks.table.adhoc;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMaxCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregatedExpressionValueMinCheckSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,11 +39,9 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAdHocSqlChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("sql_condition_passed_percent_on_table", o -> o.sqlConditionPassedPercentOnTable);
-
             put("sql_condition_failed_count_on_table", o -> o.sqlConditionFailedCountOnTable);
 
-            put("sql_aggregated_expression_value_on_table_min", o -> o.sqlAggregatedExpressionValueOnTableMin);
-            put("sql_aggregated_expression_value_on_table_max", o -> o.sqlAggregatedExpressionValueOnTableMax);
+            put("sql_aggregate_expr_table", o -> o.sqlAggregateExprTable);
         }
     };
 
@@ -54,11 +51,8 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
     private TableSqlConditionFailedCountCheckSpec sqlConditionFailedCountOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
-    private TableSqlAggregatedExpressionValueMinCheckSpec sqlAggregatedExpressionValueOnTableMin;
-
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given maximum accepted value.")
-    private TableSqlAggregatedExpressionValueMaxCheckSpec sqlAggregatedExpressionValueOnTableMax;
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    private TableSqlAggregateExprCheckSpec sqlAggregateExprTable;
 
     /**
      * Returns a check specification.
@@ -100,36 +94,18 @@ public class TableAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregatedExpressionValueMinCheckSpec getSqlAggregatedExpressionValueOnTableMin() {
-        return sqlAggregatedExpressionValueOnTableMin;
+    public TableSqlAggregateExprCheckSpec getSqlAggregateExprTable() {
+        return sqlAggregateExprTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param sqlAggregatedExpressionValueOnTableMin Check specification.
+     * @param sqlAggregateExprTable Check specification.
      */
-    public void setSqlAggregatedExpressionValueOnTableMin(TableSqlAggregatedExpressionValueMinCheckSpec sqlAggregatedExpressionValueOnTableMin) {
-        this.setDirtyIf(!Objects.equals(this.sqlAggregatedExpressionValueOnTableMin, sqlAggregatedExpressionValueOnTableMin));
-        this.sqlAggregatedExpressionValueOnTableMin = sqlAggregatedExpressionValueOnTableMin;
-        propagateHierarchyIdToField(sqlAggregatedExpressionValueOnTableMin, "sql_aggregated_expression_value_on_table_min");
-    }
-
-    /**
-     * Returns a check specification.
-     * @return New check specification.
-     */
-    public TableSqlAggregatedExpressionValueMaxCheckSpec getSqlAggregatedExpressionValueOnTableMax() {
-        return sqlAggregatedExpressionValueOnTableMax;
-    }
-
-    /**
-     * Sets a new check specification.
-     * @param sqlAggregatedExpressionValueOnTableMax Check specification.
-     */
-    public void setSqlAggregatedExpressionValueOnTableMax(TableSqlAggregatedExpressionValueMaxCheckSpec sqlAggregatedExpressionValueOnTableMax) {
-        this.setDirtyIf(!Objects.equals(this.sqlAggregatedExpressionValueOnTableMax, sqlAggregatedExpressionValueOnTableMax));
-        this.sqlAggregatedExpressionValueOnTableMax = sqlAggregatedExpressionValueOnTableMax;
-        propagateHierarchyIdToField(sqlAggregatedExpressionValueOnTableMax, "sql_aggregated_expression_value_on_table_max");
+    public void setSqlAggregateExprTable(TableSqlAggregateExprCheckSpec sqlAggregateExprTable) {
+        this.setDirtyIf(!Objects.equals(this.sqlAggregateExprTable, sqlAggregateExprTable));
+        this.sqlAggregateExprTable = sqlAggregateExprTable;
+        propagateHierarchyIdToField(sqlAggregateExprTable, "sql_aggregate_expr_table");
     }
 
     /**

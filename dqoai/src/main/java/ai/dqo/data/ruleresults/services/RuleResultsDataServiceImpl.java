@@ -11,6 +11,7 @@ import ai.dqo.data.ruleresults.services.models.CheckResultStatus;
 import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,8 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
 
         if (timeScale != null) {
             StringColumn timeGradientColumn = combinedTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeScale.name()));
+            TimeSeriesGradient timeSeriesGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradient.name()));
         }
 
         StringColumn columnNameColumn = combinedTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);

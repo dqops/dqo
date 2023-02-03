@@ -161,6 +161,6 @@ public class ColumnStringParsableToIntegerPercentCheckSpec extends AbstractCheck
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Validity;
     }
 }

@@ -320,9 +320,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
+                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.ADHOC ? TimeSeriesGradient.day : timeGradient;
                     LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
-                                    minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradient);
+                                    minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradientForRuleScope);
 
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
                     ruleResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import Button from '../../Button';
 import Input from '../../Input';
@@ -17,6 +17,7 @@ import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
 import PostgreSQLConnection from "./PostgreSQLConnection";
+import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -128,6 +129,19 @@ const DatabaseConnection = ({
     )
   };
 
+  const dbImage = useMemo(() => {
+    switch (database.provider_type) {
+      case ConnectionBasicModelProviderTypeEnum.bigquery:
+        return '/bigQuery.png';
+      case ConnectionBasicModelProviderTypeEnum.snowflake:
+        return '/snowflake.png';
+      case ConnectionBasicModelProviderTypeEnum.postgresql:
+        return PostgreSQLLogo;
+      default:
+        return '';
+    }
+  }, [database.provider_type])
+
   return (
     <div>
       <div className="flex justify-between mb-4">
@@ -136,12 +150,7 @@ const DatabaseConnection = ({
           <div>{getTitle(database.provider_type)}</div>
         </div>
         <img
-          src={
-            database.provider_type ===
-            ConnectionBasicModelProviderTypeEnum.bigquery
-              ? '/bigQuery.png'
-              : '/snowflake.png'
-          }
+          src={dbImage}
           className="h-16"
           alt="db logo"
         />

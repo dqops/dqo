@@ -10,13 +10,15 @@ interface ITableActionGroupProps {
   onUpdate: () => void;
   isUpdating?: boolean;
   isUpdated?: boolean;
+  shouldDelete?: boolean;
 }
 
 const TableActionGroup = ({
   isUpdated,
   isUpdating,
   isDisabled,
-  onUpdate
+  onUpdate,
+  shouldDelete = true
 }: ITableActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tableBasic } = useSelector((state: IRootState) => state.table);
@@ -33,12 +35,14 @@ const TableActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      <Button
-        variant="text"
-        color="info"
-        label="Delete"
-        onClick={() => setIsOpen(true)}
-      />
+      {shouldDelete && (
+        <Button
+          variant="text"
+          color="info"
+          label="Delete"
+          onClick={() => setIsOpen(true)}
+        />
+      )}
       <Button
         color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
         variant="contained"

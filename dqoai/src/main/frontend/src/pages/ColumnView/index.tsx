@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import qs from 'query-string';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import ColumnDetails from './ColumnDetails';
@@ -12,8 +11,9 @@ import ColumnAdhocView from './ColumnAdhocView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { ROUTES } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import useSearchParams from "../../hooks/useSearchParams";
 
 const initTabs = [
   {
@@ -47,6 +47,7 @@ const ColumnView = () => {
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
+  const query = useSearchParams();
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const {
     isUpdatedColumnBasic,
@@ -58,7 +59,13 @@ const ColumnView = () => {
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
-
+  const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
+  const isPartitionCheckOnly = useMemo(() => query.get("type") === CheckTypes.PARTITION, [query]);
+  const isAdHocCheckOnly = useMemo(() => query.get("type") === CheckTypes.ADHOC, [query]);
+  const showAllSubTabs = useMemo(
+    () => !isCheckpointOnly && !isPartitionCheckOnly && !isAdHocCheckOnly,
+    [isCheckpointOnly]
+  ); // will update more in next tasks
   // useEffect(() => {
   //   if (tabMap[pageTab]) {
   //     setActiveTab(tabMap[pageTab]);
@@ -151,59 +158,63 @@ const ColumnView = () => {
             <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
-        <div className="border-b border-gray-300">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-        </div>
-        <div>
-          {activeTab === 'detail' && (
-            <ColumnDetails
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-          {activeTab === 'comments' && (
-            <ColumnCommentsView
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-          {activeTab === 'labels' && (
-            <ColumnLabelsView
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-          {activeTab === 'data-quality-checks' && (
-            <ColumnAdhocView
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-          {activeTab === 'checkpoints' && (
-            <CheckpointsView
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-          {activeTab === 'partitioned-checks' && (
-            <ColumnPartitionedChecksView
-              connectionName={connectionName}
-              schemaName={schemaName}
-              tableName={tableName}
-              columnName={columnName}
-            />
-          )}
-        </div>
+        {isCheckpointOnly && (
+          <CheckpointsView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={columnName}
+          />
+        )}
+        {isPartitionCheckOnly && (
+          <ColumnPartitionedChecksView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={columnName}
+          />
+        )}
+        {isAdHocCheckOnly && (
+          <ColumnAdhocView
+            connectionName={connectionName}
+            schemaName={schemaName}
+            tableName={tableName}
+            columnName={columnName}
+          />
+        )}
+        {showAllSubTabs && (
+          <>
+            <div className="border-b border-gray-300">
+              <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+            </div>
+            <div>
+              {activeTab === 'detail' && (
+                <ColumnDetails
+                  connectionName={connectionName}
+                  schemaName={schemaName}
+                  tableName={tableName}
+                  columnName={columnName}
+                />
+              )}
+              {activeTab === 'comments' && (
+                <ColumnCommentsView
+                  connectionName={connectionName}
+                  schemaName={schemaName}
+                  tableName={tableName}
+                  columnName={columnName}
+                />
+              )}
+              {activeTab === 'labels' && (
+                <ColumnLabelsView
+                  connectionName={connectionName}
+                  schemaName={schemaName}
+                  tableName={tableName}
+                  columnName={columnName}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
     </ConnectionLayout>
   );

@@ -76,6 +76,7 @@ const AdhocView = ({
   return (
     <div>
       <ColumnActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}

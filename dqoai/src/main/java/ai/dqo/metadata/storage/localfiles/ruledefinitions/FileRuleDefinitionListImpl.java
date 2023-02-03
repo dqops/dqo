@@ -77,26 +77,26 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
             }
         }
 
-        // second: find rules that are defined only as .py files, without the .dqorule.yaml specification file
-        for(FolderTreeNode rulePyFolderNode : this.rulesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY, true)) {
-            String ruleFolderName = rulePyFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "rules" folder
-
-            for(FileTreeNode pyFileNode : rulePyFolderNode.getFiles()) {
-                String pyFileName = pyFileNode.getFilePath().getFileName();
-                if (!pyFileName.endsWith(SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY)) {
-                    // not a spec file, skipping
-                    continue;
-                }
-
-                String ruleModuleName = pyFileName.substring(0, pyFileName.length() - SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY.length());
-                String ruleName = (!ruleFolderName.equals("") ? (ruleFolderName + "/") : "") + ruleModuleName;
-
-                if (this.getByObjectName(ruleName, false) != null) {
-                    continue; // was already added
-                }
-				this.addWithoutFullLoad(new FileRuleDefinitionWrapperImpl(rulePyFolderNode, ruleName, ruleModuleName, this.yamlSerializer));
-            }
-        }
+//        // second: find rules that are defined only as .py files, without the .dqorule.yaml specification file
+//        for(FolderTreeNode rulePyFolderNode : this.rulesFolder.findNestedSubFoldersWithFiles(SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY, true)) {
+//            String ruleFolderName = rulePyFolderNode.getFolderPath().extractSubFolderAt(1).getFullObjectName();  // getting the name after skipping the "rules" folder
+//
+//            for(FileTreeNode pyFileNode : rulePyFolderNode.getFiles()) {
+//                String pyFileName = pyFileNode.getFilePath().getFileName();
+//                if (!pyFileName.endsWith(SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY)) {
+//                    // not a spec file, skipping
+//                    continue;
+//                }
+//
+//                String ruleModuleName = pyFileName.substring(0, pyFileName.length() - SpecFileNames.CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY.length());
+//                String ruleName = (!ruleFolderName.equals("") ? (ruleFolderName + "/") : "") + ruleModuleName;
+//
+//                if (this.getByObjectName(ruleName, false) != null) {
+//                    continue; // was already added
+//                }
+//				this.addWithoutFullLoad(new FileRuleDefinitionWrapperImpl(rulePyFolderNode, ruleName, ruleModuleName, this.yamlSerializer));
+//            }
+//        }
     }
 
     /**

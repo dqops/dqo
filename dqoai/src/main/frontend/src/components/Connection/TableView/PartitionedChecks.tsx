@@ -19,11 +19,11 @@ import { useParams } from "react-router-dom";
 
 const initTabs = [
   {
-    label: 'Daily',
+    label: 'Days',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Months',
     value: 'monthly'
   }
 ];
@@ -144,6 +144,7 @@ const TablePartitionedChecksView = () => {
   return (
     <div className="py-2">
       <TableActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={
           isUpdatedDailyPartitionedChecks || isUpdatedMonthlyPartitionedChecks

@@ -25,11 +25,11 @@ interface IColumnPartitionedChecksViewProps {
 
 const initTabs = [
   {
-    label: 'Daily',
+    label: 'Days',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Months',
     value: 'monthly'
   }
 ];
@@ -172,6 +172,7 @@ const ColumnPartitionedChecksView = ({
   return (
     <div className="py-2">
       <ColumnActionGroup
+        shouldDelete={false}
         onUpdate={onUpdate}
         isUpdated={
           isUpdatedDailyPartitionedChecks || isUpdatedMonthlyPartitionedChecks

@@ -25,6 +25,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -50,11 +51,9 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         this.sut = new BetweenPercentMovingAverage60DaysRule5ParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-
-        this.timeWindowSettings = new RuleTimeWindowSettingsSpec();
+        this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
         this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
-
     }
 
     @Test
@@ -65,7 +64,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -84,7 +83,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -103,7 +102,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(22.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -125,7 +124,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
             }
             this.sensorReadouts[i] = 20.0;
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -144,7 +143,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             this.sensorReadouts[i] = (i % 2 == 1) ? 22.0 : 18.0; // the average will be 20.0
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.8,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -157,7 +156,7 @@ public class BetweenPercentMovingAverage60DaysRuleParametersSpecTests extends Ba
 
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.DAY, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);

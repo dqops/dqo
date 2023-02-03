@@ -160,6 +160,6 @@ public class ColumnStringMinLengthCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

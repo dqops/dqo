@@ -69,7 +69,7 @@ public class BigQueryColumnNumericNumbersInSetCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test

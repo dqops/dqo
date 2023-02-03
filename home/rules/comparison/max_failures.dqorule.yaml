@@ -1,0 +1,8 @@
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
