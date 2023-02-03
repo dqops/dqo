@@ -45,6 +45,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_value_below_min_value_count", o -> o.monthlyCheckpointValueBelowMinValueCount);
             put("monthly_checkpoint_value_below_min_value_percent", o -> o.monthlyCheckpointValueBelowMinValuePercent);
             put("monthly_checkpoint_value_above_max_value_count", o -> o.monthlyCheckpointValueAboveMaxValueCount);
+            put("monthly_checkpoint_value_above_max_value_percent", o -> o.monthlyCheckpointValueAboveMaxValuePercent);
             put("monthly_checkpoint_max_in_range", o -> o.monthlyCheckpointMaxInRange);
             put("monthly_checkpoint_min_in_range", o -> o.monthlyCheckpointMinInRange);
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
@@ -82,6 +83,9 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValueAboveMaxValueCountCheckSpec monthlyCheckpointValueAboveMaxValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnValueAboveMaxValuePercentCheckSpec monthlyCheckpointValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyCheckpointMaxInRange;
@@ -268,6 +272,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValueAboveMaxValueCount, monthlyCheckpointValueAboveMaxValueCount));
         this.monthlyCheckpointValueAboveMaxValueCount = monthlyCheckpointValueAboveMaxValueCount;
         propagateHierarchyIdToField(monthlyCheckpointValueAboveMaxValueCount, "monthly_checkpoint_value_above_max_value_count");
+    }
+
+    /**
+     * Returns a numeric value above max value percent check.
+     * @return Numeric value above max value percent check.
+     */
+    public ColumnValueAboveMaxValuePercentCheckSpec getMonthlyCheckpointValueAboveMaxValuePercent() {
+        return monthlyCheckpointValueAboveMaxValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value percent check.
+     * @param monthlyCheckpointValueAboveMaxValuePercent Numeric value above max value percent check.
+     */
+    public void setMonthlyCheckpointValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec monthlyCheckpointValueAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValueAboveMaxValuePercent, monthlyCheckpointValueAboveMaxValuePercent));
+        this.monthlyCheckpointValueAboveMaxValuePercent = monthlyCheckpointValueAboveMaxValuePercent;
+        propagateHierarchyIdToField(monthlyCheckpointValueAboveMaxValuePercent, "monthly_checkpoint_value_above_max_value_percent");
     }
 
     /**
