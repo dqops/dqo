@@ -109,7 +109,7 @@ public class GenerateDocumentationPostProcessor {
     public static void generateDocumentationForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
         Path rulesDocPath = projectRoot.resolve("../docs/rules").toAbsolutePath().normalize();
         DocumentationFolder currentRuleDocFiles = DocumentationFolderFactory.loadCurrentFiles(rulesDocPath);
-        RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(dqoHomeContext);
+        RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(projectRoot, dqoHomeContext);
         RuleDocumentationGenerator ruleDocumentationGenerator = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
 
         DocumentationFolder renderedDocumentation = ruleDocumentationGenerator.renderRuleDocumentation(projectRoot, dqoHomeContext.getDqoHome());
@@ -127,9 +127,9 @@ public class GenerateDocumentationPostProcessor {
      * @param dqoHomeContext DQO home.
      * @return Rule documentation model factory.
      */
-    private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
+    private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
-        RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
+        RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
     }
 

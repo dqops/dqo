@@ -16,10 +16,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -109,10 +118,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_reading: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -198,10 +216,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -293,10 +320,8 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
-**Example**
-```yaml
---8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
-```
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -388,10 +413,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -482,10 +516,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -576,10 +619,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/percent_moving_average.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 10
+    min_periods_with_reading: 5
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -665,10 +717,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_reading: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -753,10 +814,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -847,10 +917,8 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
-**Example**
-```yaml
---8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
-```
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -942,10 +1010,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1037,10 +1114,8 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
-**Example**
-```yaml
---8<-- "home/rules/averages/between_percent_moving_average_7_days.dqrule.yaml"
-```
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1131,10 +1206,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_reading: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1220,10 +1304,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1314,10 +1407,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1408,10 +1510,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1502,10 +1613,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_reading: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1595,10 +1715,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/within_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1689,10 +1818,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/averages/between_percent_moving_average_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readings
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_reading: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime

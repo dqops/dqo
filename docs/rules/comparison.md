@@ -16,10 +16,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -96,10 +102,16 @@ Data quality rule that verifies if a data quality check readout is between begin
 |to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/between_ints.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -181,10 +193,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_count.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -260,10 +278,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_count.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -339,10 +363,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -418,10 +448,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_value.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -497,10 +533,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -576,10 +618,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -655,10 +703,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -734,10 +788,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -813,10 +873,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -892,10 +958,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -971,10 +1043,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1050,10 +1128,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1129,10 +1213,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1208,10 +1298,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1287,10 +1383,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1366,10 +1468,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1445,10 +1553,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1524,10 +1638,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1603,10 +1723,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1682,10 +1808,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1761,10 +1893,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1840,10 +1978,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1920,10 +2064,16 @@ Data quality rule that verifies if a data quality check readout is between from 
 |to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/between_floats.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2004,10 +2154,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 |max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2083,10 +2239,16 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/max.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2162,10 +2324,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_value.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2242,10 +2410,16 @@ Data quality rule that verifies that a data quality check readout equals a given
 |error_margin|Error margin for comparison.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/equals.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2322,10 +2496,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2401,10 +2581,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime

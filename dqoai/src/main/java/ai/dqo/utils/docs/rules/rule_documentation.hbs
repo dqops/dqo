@@ -17,10 +17,13 @@ ___
 {{/each}}
 {{else}}
 {{/if}}
+{{#if ruleExample}}
 **Example**
 ```yaml
---8<-- "home/rules/{{category}}/{{ruleName}}.dqrule.yaml"
+{{ruleExample}}
 ```
+{{else}}
+{{/if}}
 **Rule implementation (Python)**
 ```python
 {{{replace definition.rulePythonModuleContent.textContent '#

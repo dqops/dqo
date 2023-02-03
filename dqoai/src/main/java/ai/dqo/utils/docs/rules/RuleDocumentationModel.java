@@ -45,6 +45,11 @@ public class RuleDocumentationModel {
     private String ruleName;
 
     /**
+     * Rule example in yaml format.
+     */
+    private String ruleExample;
+
+    /**
      * Rule definition wrapper.
      */
     private RuleDefinitionWrapper definition;

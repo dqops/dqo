@@ -17,10 +17,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percentile_stdev_below|Maximum percent (e.q. 3%) that the current sensorreadout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/percentile_moving_stdev.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 10
+    min_periods_with_readouts: 5
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -133,10 +142,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -236,10 +254,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -339,10 +366,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -448,10 +484,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -551,10 +596,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -660,10 +714,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -770,10 +833,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_60_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -879,10 +951,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -989,10 +1070,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1099,10 +1189,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1203,10 +1302,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1308,10 +1416,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |multiple_stdev_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/percent_moving_stdev.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 10
+    min_periods_with_readouts: 5
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1423,10 +1540,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1527,10 +1653,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1637,10 +1772,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1741,10 +1885,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1845,10 +1998,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -1955,10 +2117,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |percent_population_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, Fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 30 readout must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_percent_population_stdev_30_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
 ```
+
 **Rule implementation (Python)**
 ```python
 #
@@ -2059,10 +2230,19 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 |stdev_multiplier_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double|||
 
 
+
 **Example**
 ```yaml
---8<-- "home/rules/stdev/below_stdev_multiply_7_days.dqrule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
 ```
+
 **Rule implementation (Python)**
 ```python
 #
