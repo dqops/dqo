@@ -28,18 +28,6 @@ const initTabs = [
     value: 'schedule'
   },
   {
-    label: 'Ad-hoc checks',
-    value: 'data-quality-checks'
-  },
-  {
-    label: 'Checkpoints',
-    value: 'checkpoints'
-  },
-  {
-    label: 'Partitioned checks',
-    value: 'partitioned-checks'
-  },
-  {
     label: 'Comments',
     value: 'comments'
   },
