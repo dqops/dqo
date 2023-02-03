@@ -27,18 +27,6 @@ const initTabs = [
   {
     label: 'Labels',
     value: 'labels'
-  },
-  {
-    label: 'Ad-hoc checks',
-    value: 'data-quality-checks'
-  },
-  {
-    label: 'Checkpoints',
-    value: 'checkpoints'
-  },
-  {
-    label: 'Partitioned checks',
-    value: 'partitioned-checks'
   }
 ];
 
