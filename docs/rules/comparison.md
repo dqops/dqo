@@ -86,6 +86,110 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
 ## **between ints**
 **Full rule name**
 ```
@@ -597,6 +701,110 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     passed = rule_parameters.actual_value <= rule_parameters.parameters.max_count
     expected_value = rule_parameters.parameters.max_count
     lower_bound = rule_parameters.parameters.max_count
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
     upper_bound = None
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
@@ -1532,6 +1740,110 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     passed = rule_parameters.actual_value <= rule_parameters.parameters.max_days
     expected_value = rule_parameters.parameters.max_days
     lower_bound = rule_parameters.parameters.max_days
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
     upper_bound = None
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 

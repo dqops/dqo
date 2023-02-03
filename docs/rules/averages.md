@@ -23,10 +23,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**
@@ -125,10 +125,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 7
-    min_periods_with_reading: 3
+    min_periods_with_readouts: 3
 ```
 
 **Rule implementation (Python)**
@@ -223,10 +223,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**
@@ -321,6 +321,17 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
 
 **Rule implementation (Python)**
 ```python
@@ -420,10 +431,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -523,10 +534,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -626,10 +637,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 10
-    min_periods_with_reading: 5
+    min_periods_with_readouts: 5
 ```
 
 **Rule implementation (Python)**
@@ -724,10 +735,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 7
-    min_periods_with_reading: 3
+    min_periods_with_readouts: 3
 ```
 
 **Rule implementation (Python)**
@@ -821,10 +832,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -918,6 +929,17 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
 
 **Rule implementation (Python)**
 ```python
@@ -1017,10 +1039,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -1115,6 +1137,17 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
 
 **Rule implementation (Python)**
 ```python
@@ -1213,10 +1246,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 7
-    min_periods_with_reading: 3
+    min_periods_with_readouts: 3
 ```
 
 **Rule implementation (Python)**
@@ -1311,10 +1344,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**
@@ -1414,10 +1447,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**
@@ -1517,10 +1550,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -1620,10 +1653,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 60
-    min_periods_with_reading: 20
+    min_periods_with_readouts: 20
 ```
 
 **Rule implementation (Python)**
@@ -1722,10 +1755,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**
@@ -1825,10 +1858,10 @@ apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
-  mode: previous_readings
+  mode: previous_readouts
   time_window:
     prediction_time_window: 30
-    min_periods_with_reading: 10
+    min_periods_with_readouts: 10
 ```
 
 **Rule implementation (Python)**

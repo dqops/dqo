@@ -104,7 +104,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
      */
     public String loadRuleExample(String ruleCategory, String ruleName) {
 
-        Path path = this.projectRoot.resolve("../home/rules/" + ruleCategory + "/" + ruleName + ".dqrule.yaml").toAbsolutePath().normalize();
+        Path path = this.projectRoot.resolve("../home/rules/" + ruleCategory + "/" + ruleName + ".dqorule.yaml").toAbsolutePath().normalize();
 
         try {
             List<String> read = Files.readAllLines(path);
