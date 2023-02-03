@@ -13,7 +13,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -98,7 +98,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -202,8 +202,8 @@ Data quality rule that verifies if a data quality check readout is between begin
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|||
-|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -294,7 +294,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -379,7 +379,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -464,7 +464,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -549,7 +549,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -634,7 +634,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -719,7 +719,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -823,7 +823,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -908,7 +908,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -993,7 +993,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1078,7 +1078,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1163,7 +1163,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1248,7 +1248,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1333,7 +1333,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1418,7 +1418,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1503,7 +1503,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1588,7 +1588,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1673,7 +1673,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1758,7 +1758,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -1862,7 +1862,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -1947,7 +1947,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2032,7 +2032,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2117,7 +2117,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2202,7 +2202,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2287,7 +2287,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2372,8 +2372,8 @@ Data quality rule that verifies if a data quality check readout is between from 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
-|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2463,7 +2463,7 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long|||
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -2548,7 +2548,7 @@ Data quality rule that verifies if a data quality check readsout is less or equa
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2633,7 +2633,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2718,8 +2718,8 @@ Data quality rule that verifies that a data quality check readout equals a given
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double|||
-|error_margin|Error margin for comparison.|double|||
+|expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
+|error_margin|Error margin for comparison.|double| ||
 
 
 
@@ -2805,7 +2805,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -2890,7 +2890,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double|||
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 

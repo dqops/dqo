@@ -9,7 +9,7 @@ Starts a background job scheduler. This operation should be called only from the
 
 **Summary (Shell)**
 ```
-dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
+dqo.ai>  scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
 
 ```
@@ -19,12 +19,12 @@ dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputForma
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-crm`<br/>`--check-run-mode`<br/>|Check execution reporting mode (silent, summary, info, debug)||silent<br/>summary<br/>info<br/>debug<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-sm`<br/>`--synchronization-mode`<br/>|Reporting mode for the DQO cloud synchronization (silent, summary, debug)||silent<br/>summary<br/>debug<br/>|
+|`-crm`<br/>`--check-run-mode`<br/>|Check execution reporting mode (silent, summary, info, debug)| |silent<br/>summary<br/>info<br/>debug<br/>|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-sm`<br/>`--synchronization-mode`<br/>|Reporting mode for the DQO cloud synchronization (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
 
 
 
@@ -37,7 +37,7 @@ Stops a background job scheduler. This operation should be called only from the 
 
 **Summary (Shell)**
 ```
-dqo.ai> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai>  scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -46,9 +46,9 @@ dqo.ai> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 

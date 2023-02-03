@@ -9,7 +9,7 @@ Clears the screen
 
 **Summary (Shell)**
 ```
-dqo.ai> cls
+dqo.ai>  cls
 
 ```
 

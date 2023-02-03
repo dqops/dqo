@@ -481,7 +481,8 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
+        )
+        / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -495,7 +496,8 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
+        )
+        / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
         TIMESTAMP_DIFF(
@@ -506,7 +508,8 @@ Tabular sensor that runs a query calculating the time difference in days between
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
+        )
+        / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
         TIMESTAMP_DIFF(
@@ -517,14 +520,16 @@ Tabular sensor that runs a query calculating the time difference in days between
                 CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
+        )
+        / 24.0 / 3600.0 / 1000.0
         {%- else -%}
         <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }} AS actual_value
+        {{ render_ingestion_event_max_diff() }}
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -601,6 +606,94 @@ Tabular sensor that runs a query calculating the time difference in days between
 ___
 
 
+## **availability** table sensors
+___
+
+### **table availability**
+**Full sensor name**
+```
+table/availability/table_availability
+```
+**Description**  
+Tabular sensor that executes a row count query on a table.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    {% endraw %}
+    ```
+___
+
+
 ## **sql** table sensors
 ___
 
@@ -616,7 +709,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -682,7 +775,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -744,7 +837,7 @@ Table level sensor that executes a given SQL expression on a table.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} placeholder that is replaced with a full table name.|string|||
+|sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} placeholder that is replaced with a full table name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -794,7 +887,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -856,7 +949,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.|string| ||
 
 
 **SQL Template (Jinja2)**  

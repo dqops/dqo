@@ -13,7 +13,7 @@ For this command description is not added yet.
 {{/each}}
 **Summary (Shell)**
 ```
-dqo.ai>{{{synopsis}}}
+{{#if (eq rootCommandName "dqo")}}dqo {{else}}dqo.ai> {{/if}}{{{synopsis}}}
 ```
 {{#each customSynopsis}}
 {{this}}
@@ -23,7 +23,7 @@ dqo.ai>{{{synopsis}}}
 {{#with "  "}}{{.}}{{/with}}
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-{{#each options}}|{{#each names}}`{{this}}`<br/>{{/each}}|{{#each description}}{{this}}{{/each}}|{{#if required}}Yes{{else}}{{/if}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
+{{#each options}}|{{#each names}}`{{this}}`<br/>{{/each}}|{{#each description}}{{this}}{{/each}}|{{#if required}}Yes{{else}} {{/if}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
 {{else}}
 {{/each}}
 {{else}}

@@ -9,7 +9,7 @@ Import tables from a specified database
 
 **Summary (Shell)**
 ```
-dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo.ai>  table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
 
 ```
@@ -19,13 +19,13 @@ dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection Name|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-s`<br/>`--schema`<br/>|Schema Name|||
-|`-t`<br/>`--table`<br/>|Table Name|||
+|`-c`<br/>`--connection`<br/>|Connection Name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-s`<br/>`--schema`<br/>|Schema Name| ||
+|`-t`<br/>`--table`<br/>|Table Name| ||
 
 
 
@@ -38,7 +38,7 @@ Edit table which match filters
 
 **Summary (Shell)**
 ```
-dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
+dqo.ai>  table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
 
@@ -47,12 +47,12 @@ dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection Name|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Full table name (schema.table)|||
+|`-c`<br/>`--connection`<br/>|Connection Name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Full table name (schema.table)| ||
 
 
 
@@ -65,7 +65,7 @@ Add table with specified name
 
 **Summary (Shell)**
 ```
-dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai>  table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
 
 ```
@@ -75,12 +75,12 @@ dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection Name|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Table name|||
+|`-c`<br/>`--connection`<br/>|Connection Name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
 
 
 
@@ -93,7 +93,7 @@ Remove tables which match filters
 
 **Summary (Shell)**
 ```
-dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai>  table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
 
 ```
@@ -103,12 +103,12 @@ dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection Name|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Table|||
+|`-c`<br/>`--connection`<br/>|Connection Name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table| ||
 
 
 
@@ -121,7 +121,7 @@ Update tables which match filters
 
 **Summary (Shell)**
 ```
-dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
+dqo.ai>  table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
@@ -131,13 +131,13 @@ dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection Name|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-n`<br/>`--newTable`<br/>|New table name|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Table|||
+|`-c`<br/>`--connection`<br/>|Connection Name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-n`<br/>`--newTable`<br/>|New table name| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table| ||
 
 
 
@@ -150,7 +150,7 @@ List tables which match filters
 
 **Summary (Shell)**
 ```
-dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai>  table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```
@@ -160,13 +160,13 @@ dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
-|`-c`<br/>`--connection`<br/>|Connection name|||
-|`-d`<br/>`--dimension`<br/>|Dimension filter|||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file|||
-|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode|||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters|||
-|`-l`<br/>`--label`<br/>|Label filter|||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses||TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Table name filter|||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-d`<br/>`--dimension`<br/>|Dimension filter| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-l`<br/>`--label`<br/>|Label filter| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name filter| ||
 
 

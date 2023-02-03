@@ -3,6 +3,250 @@
 ## **pii** column sensors
 ___
 
+### **valid email percent**
+**Full sensor name**
+```
+column/pii/valid_email_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows with a valid email value in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **valid ip6 address percent**
+**Full sensor name**
+```
+column/pii/valid_ip6_address_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows with a valid IP6 address value in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **valid ip4 address percent**
+**Full sensor name**
+```
+column/pii/valid_ip4_address_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows with a valid IP4 address value in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **valid usa phone percent**
+**Full sensor name**
+```
+column/pii/valid_usa_phone_percent
+```
+**Description**  
+Column level sensor that calculates the percent of values that fit to a USA phone regex in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
 ### **contains usa zipcode percent**
 **Full sensor name**
 ```
@@ -19,17 +263,18 @@ Column level sensor that calculates the percent of values that contain a USA zip
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[0-9]{5}(?:-[0-9]{4})?") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"[0-9]{5}(?:-[0-9]{4})?"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -44,17 +289,142 @@ Column level sensor that calculates the percent of values that contain a USA zip
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[0-9]{5}(?:-[0-9]{4})?") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"[0-9]{5}(?:-[0-9]{4})?"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **contains email percent**
+**Full sensor name**
+```
+column/pii/contains_email_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows with a valid email value in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **valid usa zipcode percent**
+**Full sensor name**
+```
+column/pii/valid_usa_zipcode_percent
+```
+**Description**  
+Column level sensor that calculates the percent of values that fit to a USA ZIP code regex in a column.
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"^[0-9]{5}(?:-[0-9]{4})?$"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"^[0-9]{5}(?:-[0-9]{4})?$"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -81,17 +451,18 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -106,17 +477,18 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(
+                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -147,18 +519,16 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE) > CURRENT_DATE() THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -176,42 +546,40 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {% macro render_value_in_future() -%}
         {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
                 CASE
-                  WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP() THEN 1
-                ELSE
-                0
-              END
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
         {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
-                  WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE() THEN 1
-                ELSE
-                0
-              END
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
         {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
                 CASE
-                  WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME() THEN 1
-                ELSE
-                0
-              END
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
         {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
                 CASE
-                  WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP() THEN 1
-                ELSE
-                0
-              END
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
         {%- else -%}
         <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
-        {{ render_value_in_future() }}
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -242,17 +610,40 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN UPPER(TRY_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) = 'TRUE' THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -267,17 +658,16 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN SAFE_CAST(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING) AS BOOL) IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -304,17 +694,40 @@ Column level sensor that calculates the percentage of rows with a false value in
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN UPPER(TRY_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) = 'FALSE' THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -329,17 +742,16 @@ Column level sensor that calculates the percentage of rows with a false value in
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN SAFE_CAST(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING) AS BOOL) IS FALSE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -369,13 +781,14 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
-      CASE {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * COUNT( TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS INT64) ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS INT64)
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -389,67 +802,14 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
-      CASE {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * COUNT( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS INT64) ) / COUNT(*)
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-___
-
-### **string valid email percent**
-**Full sensor name**
-```
-column/strings/string_valid_email_percent
-```
-**Description**  
-Column level sensor that calculates the percentage of rows with a valid email value in a column.
-
-
-**SQL Template (Jinja2)**  
-=== "snowflake"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-=== "bigquery"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS INT64)
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -472,7 +832,7 @@ Column level sensor that calculates the percentage of values that are longer tha
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|maximum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|||
+|maximum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
 **SQL Template (Jinja2)**  
@@ -483,18 +843,16 @@ Column level sensor that calculates the percentage of values that are longer tha
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
-        ELSE
-        0
-      END
-        )/ COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -510,82 +868,16 @@ Column level sensor that calculates the percentage of values that are longer tha
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
-        ELSE
-        0
-      END
-        )/ COUNT(*)
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-___
-
-### **string valid usa phone percent**
-**Full sensor name**
-```
-column/strings/string_valid_usa_phone_percent
-```
-**Description**  
-Column level sensor that calculates the percent of values that fit to a USA phone regex in a column.
-
-
-**SQL Template (Jinja2)**  
-=== "snowflake"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-=== "bigquery"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -608,7 +900,7 @@ Column level sensor that calculates the count of values that are shorter than a 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|minimum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|||
+|minimum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
 **SQL Template (Jinja2)**  
@@ -619,12 +911,12 @@ Column level sensor that calculates the count of values that are shorter than a 
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
-      SUM(
-        CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}}
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -641,12 +933,12 @@ Column level sensor that calculates the count of values that are shorter than a 
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
-      SUM(
-        CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}}
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -674,12 +966,14 @@ Column level sensor that calculates the number of rows with an whitespace string
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> '' AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = '' THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -695,77 +989,15 @@ Column level sensor that calculates the number of rows with an whitespace string
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> '' AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = '' THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-___
-
-### **string valid usa zipcode percent**
-**Full sensor name**
-```
-column/strings/string_valid_usa_zipcode_percent
-```
-**Description**  
-Column level sensor that calculates the percent of values that fit to a USA ZIP code regex in a column.
-
-
-**SQL Template (Jinja2)**  
-=== "snowflake"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9]{5}(?:-[0-9]{4})?$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-=== "bigquery"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9]{5}(?:-[0-9]{4})?$") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -792,18 +1024,16 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -818,18 +1048,16 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -856,18 +1084,16 @@ Column level sensor that calculates the number of rows with a valid country code
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table') }}) IN ('AF', 'AL', 'DZ', 'AS', 'AD', 'AO', 'AI', 'AQ', 'AG', 'AR', 'AM', 'AW', 'AU', 'AT', 'AZ', 'BS', 'BH', 'BD', 'BB', 'BY', 'BE', 'BZ', 'BJ', 'BM', 'BT', 'BO', 'BA', 'BW', 'BR', 'IO', 'VG', 'BN', 'BG', 'BF', 'BI', 'KH', 'CM', 'CA', 'CV', 'KY', 'CF', 'TD', 'CL', 'CN', 'CX', 'CC', 'CO', 'KM', 'CK', 'CR', 'HR', 'CU', 'CW', 'CY', 'CZ', 'CD', 'DK', 'DJ', 'DM', 'DO', 'TL', 'EC', 'EG', 'SV', 'GQ', 'ER', 'EE', 'ET', 'FK', 'FO', 'FJ', 'FI', 'FR', 'PF', 'GA', 'GM', 'GE', 'DE', 'GH', 'GI', 'GR', 'GL', 'GD', 'GU', 'GT', 'GG', 'GN', 'GW', 'GY', 'HT', 'HN', 'HK', 'HU', 'IS', 'IN', 'ID', 'IR', 'IQ', 'IE', 'IM', 'IL', 'IT', 'CI', 'JM', 'JP', 'JE', 'JO', 'KZ', 'KE', 'KI', 'XK', 'KW', 'KG', 'LA', 'LV', 'LB', 'LS', 'LR', 'LY', 'LI', 'LT', 'LU', 'MO', 'MK', 'MG', 'MW', 'MY', 'MV', 'ML', 'MT', 'MH', 'MR', 'MU', 'YT', 'MX', 'FM', 'MD', 'MC', 'MN', 'ME', 'MS', 'MA', 'MZ', 'MM', 'NA', 'NR', 'NP', 'NL', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NG', 'NU', 'KP', 'MP', 'NO', 'OM', 'PK', 'PW', 'PS', 'PA', 'PG', 'PY', 'PE', 'PH', 'PN', 'PL', 'PT', 'PR', 'QA', 'CG', 'RE', 'RO', 'RU', 'RW', 'BL', 'SH', 'KN', 'LC', 'MF', 'PM', 'VC', 'WS', 'SM', 'ST', 'SA', 'SN', 'RS', 'SC', 'SL', 'SG', 'SX', 'SK', 'SI', 'SB', 'SO', 'ZA', 'KR', 'SS', 'ES', 'LK', 'SD', 'SR', 'SJ', 'SZ', 'SE', 'CH', 'SY', 'TW', 'TJ', 'TZ', 'TH', 'TG', 'TK', 'TO', 'TT', 'TN', 'TR', 'TM', 'TC', 'TV', 'VI', 'UG', 'UA', 'AE', 'GB', 'US', 'UY', 'UZ', 'VU', 'VA', 'VE', 'VN', 'WF', 'EH', 'YE', 'ZM', 'ZW') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_target_column('analyzed_table')}}) IN ('AF',	'AL',	'DZ',	'AS',	'AD',	'AO',	'AI',	'AQ',	'AG',	'AR',	'AM',	'AW',	'AU',	'AT',	'AZ',	'BS',	'BH',	'BD',	'BB',	'BY',	'BE',	'BZ',	'BJ',	'BM',	'BT',	'BO',	'BA',	'BW',	'BR',	'IO',	'VG',	'BN',	'BG',	'BF',	'BI',	'KH',	'CM',	'CA',	'CV',	'KY',	'CF',	'TD',	'CL',	'CN',	'CX',	'CC',	'CO',	'KM',	'CK',	'CR',	'HR',	'CU',	'CW',	'CY',	'CZ',	'CD',	'DK',	'DJ',	'DM',	'DO',	'TL',	'EC',	'EG',	'SV',	'GQ',	'ER',	'EE',	'ET',	'FK',	'FO',	'FJ',	'FI',	'FR',	'PF',	'GA',	'GM',	'GE',	'DE',	'GH',	'GI',	'GR',	'GL',	'GD',	'GU',	'GT',	'GG',	'GN',	'GW',	'GY',	'HT',	'HN',	'HK',	'HU',	'IS',	'IN',	'ID',	'IR',	'IQ',	'IE',	'IM',	'IL',	'IT',	'CI',	'JM',	'JP',	'JE',	'JO',	'KZ',	'KE',	'KI',	'XK',	'KW',	'KG',	'LA',	'LV',	'LB',	'LS',	'LR',	'LY',	'LI',	'LT',	'LU',	'MO',	'MK',	'MG',	'MW',	'MY',	'MV',	'ML',	'MT',	'MH',	'MR',	'MU',	'YT',	'MX',	'FM',	'MD',	'MC',	'MN',	'ME',	'MS',	'MA',	'MZ',	'MM',	'NA',	'NR',	'NP',	'NL',	'AN',	'NC',	'NZ',	'NI',	'NE',	'NG',	'NU',	'KP',	'MP',	'NO',	'OM',	'PK',	'PW',	'PS',	'PA',	'PG',	'PY',	'PE',	'PH', 'PN', 'PL',	'PT',	'PR',	'QA',	'CG',	'RE',	'RO',	'RU',	'RW',	'BL',	'SH',	'KN',	'LC',	'MF',	'PM',	'VC',	'WS',	'SM',	'ST',	'SA',	'SN',	'RS',	'SC',	'SL',	'SG',	'SX',	'SK',	'SI',	'SB',	'SO',	'ZA',	'KR',	'SS',	'ES',	'LK',	'SD',	'SR',	'SJ',	'SZ',	'SE',	'CH',	'SY',	'TW',	'TJ',	'TZ',	'TH',	'TG',	'TK',	'TO',	'TT',	'TN',	'TR',	'TM',	'TC',	'TV',	'VI',	'UG',	'UA',	'AE',	'GB',	'US',	'UY',	'UZ',	'VU',	'VA',	'VE',	'VN',	'WF',	'EH',	'YE',	'ZM',	'ZW')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -882,18 +1108,16 @@ Column level sensor that calculates the number of rows with a valid country code
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table') }}) IN ('AF', 'AL', 'DZ', 'AS', 'AD', 'AO', 'AI', 'AQ', 'AG', 'AR', 'AM', 'AW', 'AU', 'AT', 'AZ', 'BS', 'BH', 'BD', 'BB', 'BY', 'BE', 'BZ', 'BJ', 'BM', 'BT', 'BO', 'BA', 'BW', 'BR', 'IO', 'VG', 'BN', 'BG', 'BF', 'BI', 'KH', 'CM', 'CA', 'CV', 'KY', 'CF', 'TD', 'CL', 'CN', 'CX', 'CC', 'CO', 'KM', 'CK', 'CR', 'HR', 'CU', 'CW', 'CY', 'CZ', 'CD', 'DK', 'DJ', 'DM', 'DO', 'TL', 'EC', 'EG', 'SV', 'GQ', 'ER', 'EE', 'ET', 'FK', 'FO', 'FJ', 'FI', 'FR', 'PF', 'GA', 'GM', 'GE', 'DE', 'GH', 'GI', 'GR', 'GL', 'GD', 'GU', 'GT', 'GG', 'GN', 'GW', 'GY', 'HT', 'HN', 'HK', 'HU', 'IS', 'IN', 'ID', 'IR', 'IQ', 'IE', 'IM', 'IL', 'IT', 'CI', 'JM', 'JP', 'JE', 'JO', 'KZ', 'KE', 'KI', 'XK', 'KW', 'KG', 'LA', 'LV', 'LB', 'LS', 'LR', 'LY', 'LI', 'LT', 'LU', 'MO', 'MK', 'MG', 'MW', 'MY', 'MV', 'ML', 'MT', 'MH', 'MR', 'MU', 'YT', 'MX', 'FM', 'MD', 'MC', 'MN', 'ME', 'MS', 'MA', 'MZ', 'MM', 'NA', 'NR', 'NP', 'NL', 'AN', 'NC', 'NZ', 'NI', 'NE', 'NG', 'NU', 'KP', 'MP', 'NO', 'OM', 'PK', 'PW', 'PS', 'PA', 'PG', 'PY', 'PE', 'PH', 'PN', 'PL', 'PT', 'PR', 'QA', 'CG', 'RE', 'RO', 'RU', 'RW', 'BL', 'SH', 'KN', 'LC', 'MF', 'PM', 'VC', 'WS', 'SM', 'ST', 'SA', 'SN', 'RS', 'SC', 'SL', 'SG', 'SX', 'SK', 'SI', 'SB', 'SO', 'ZA', 'KR', 'SS', 'ES', 'LK', 'SD', 'SR', 'SJ', 'SZ', 'SE', 'CH', 'SY', 'TW', 'TJ', 'TZ', 'TH', 'TG', 'TK', 'TO', 'TT', 'TN', 'TR', 'TM', 'TC', 'TV', 'VI', 'UG', 'UA', 'AE', 'GB', 'US', 'UY', 'UZ', 'VU', 'VA', 'VE', 'VN', 'WF', 'EH', 'YE', 'ZM', 'ZW') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_target_column('analyzed_table')}}) IN ('AF',	'AL',	'DZ',	'AS',	'AD',	'AO',	'AI',	'AQ',	'AG',	'AR',	'AM',	'AW',	'AU',	'AT',	'AZ',	'BS',	'BH',	'BD',	'BB',	'BY',	'BE',	'BZ',	'BJ',	'BM',	'BT',	'BO',	'BA',	'BW',	'BR',	'IO',	'VG',	'BN',	'BG',	'BF',	'BI',	'KH',	'CM',	'CA',	'CV',	'KY',	'CF',	'TD',	'CL',	'CN',	'CX',	'CC',	'CO',	'KM',	'CK',	'CR',	'HR',	'CU',	'CW',	'CY',	'CZ',	'CD',	'DK',	'DJ',	'DM',	'DO',	'TL',	'EC',	'EG',	'SV',	'GQ',	'ER',	'EE',	'ET',	'FK',	'FO',	'FJ',	'FI',	'FR',	'PF',	'GA',	'GM',	'GE',	'DE',	'GH',	'GI',	'GR',	'GL',	'GD',	'GU',	'GT',	'GG',	'GN',	'GW',	'GY',	'HT',	'HN',	'HK',	'HU',	'IS',	'IN',	'ID',	'IR',	'IQ',	'IE',	'IM',	'IL',	'IT',	'CI',	'JM',	'JP',	'JE',	'JO',	'KZ',	'KE',	'KI',	'XK',	'KW',	'KG',	'LA',	'LV',	'LB',	'LS',	'LR',	'LY',	'LI',	'LT',	'LU',	'MO',	'MK',	'MG',	'MW',	'MY',	'MV',	'ML',	'MT',	'MH',	'MR',	'MU',	'YT',	'MX',	'FM',	'MD',	'MC',	'MN',	'ME',	'MS',	'MA',	'MZ',	'MM',	'NA',	'NR',	'NP',	'NL',	'AN',	'NC',	'NZ',	'NI',	'NE',	'NG',	'NU',	'KP',	'MP',	'NO',	'OM',	'PK',	'PW',	'PS',	'PA',	'PG',	'PY',	'PE',	'PH', 'PN', 'PL',	'PT',	'PR',	'QA',	'CG',	'RE',	'RO',	'RU',	'RW',	'BL',	'SH',	'KN',	'LC',	'MF',	'PM',	'VC',	'WS',	'SM',	'ST',	'SA',	'SN',	'RS',	'SC',	'SL',	'SG',	'SX',	'SK',	'SI',	'SB',	'SO',	'ZA',	'KR',	'SS',	'ES',	'LK',	'SD',	'SR',	'SJ',	'SZ',	'SE',	'CH',	'SY',	'TW',	'TJ',	'TZ',	'TH',	'TG',	'TK',	'TO',	'TT',	'TN',	'TR',	'TM',	'TC',	'TV',	'VI',	'UG',	'UA',	'AE',	'GB',	'US',	'UY',	'UZ',	'VU',	'VA',	'VE',	'VN',	'WF',	'EH',	'YE',	'ZM',	'ZW')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -920,7 +1144,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      MIN(LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})) AS actual_value
+        MIN(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -935,7 +1161,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      MIN( LENGTH({{lib.render_column_cast_to_string('analyzed_table')}}) ) AS actual_value
+        MIN(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -962,7 +1190,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      MAX(LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})) AS actual_value
+        MAX(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -977,7 +1207,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      MAX( LENGTH({{lib.render_column_cast_to_string('analyzed_table')}}) ) AS actual_value
+        MAX(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1004,12 +1236,12 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1025,12 +1257,12 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1058,12 +1290,12 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1079,12 +1311,12 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1108,7 +1340,7 @@ Column level sensor that calculates the percentage of values that are shorter th
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|minimum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|||
+|minimum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1119,18 +1351,16 @@ Column level sensor that calculates the percentage of values that are shorter th
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
-        ELSE
-        0
-      END
-        )/ COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1146,18 +1376,16 @@ Column level sensor that calculates the percentage of values that are shorter th
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}} THEN 1
-        ELSE
-        0
-      END
-        )/ COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.minimum_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1180,7 +1408,7 @@ Column level sensor that calculates the number of rows with a null column value.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|string_list|||
+|values|Provided list of values to match the data.|string_list| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1204,23 +1432,21 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- if parameters['values']|length == 0 -%}
             NULL
         {%- else -%}
-          SUM(
+        SUM(
             CASE
-              WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) IS TRUE THEN 1
-            ELSE
-            0
-          END
-            )
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-      ELSE
-      {{render_else()}}
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1234,7 +1460,6 @@ Column level sensor that calculates the number of rows with a null column value.
     ```
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
             {%- if not loop.last -%}
@@ -1249,18 +1474,18 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
         NULL
         {%- else -%}
-          SUM(
+        SUM(
             CASE
-              WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }}) THEN 1
-            ELSE
-            0
-          END
-            )
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1283,7 +1508,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|||
+|regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1302,18 +1527,16 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {% endmacro %}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS( {{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS( {{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1337,18 +1560,16 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {% endmacro %}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS( {{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS( {{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1375,17 +1596,16 @@ Column level sensor that calculates the number of rows with a valid currency cod
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL', 'AFN', 'ARS', 'AWG', 'AUD', 'AZN', 'BSD', 'BBD', 'BYN', 'BZD', 'BMD', 'BOB', 'BAM', 'BWP', 'BGN', 'BRL', 'BND', 'KHR', 'CAD', 'KYD', 'CLP', 'CNY', 'COP', 'CRC', 'HRK', 'CUP', 'CZK', 'DKK', 'DOP', 'XCD', 'EGP', 'SVC', 'EUR', 'FKP', 'FJD', 'GHS', 'GIP', 'GTQ', 'GGP', 'GYD', 'HNL', 'HKD', 'HUF', 'ISK', 'INR', 'IDR', 'IRR', 'IMP', 'ILS', 'JMD', 'JPY', 'JEP', 'KZT', 'KPW', 'KRW', 'KGS', 'LAK', 'LBP', 'LRD', 'MKD', 'MYR', 'MUR', 'MXN', 'MNT', 'MZN', 'NAD', 'NPR', 'ANG', 'NZD', 'NIO', 'NGN', 'NOK', 'OMR', 'PKR', 'PAB', 'PYG', 'PEN', 'PHP', 'PLN', 'QAR', 'RON', 'RUB', 'SHP', 'SAR', 'RSD', 'SCR', 'SGD', 'SBD', 'SOS', 'ZAR', 'LKR', 'SEK', 'CHF', 'SRD', 'SYP', 'TWD', 'THB', 'TTD', 'TRY', 'TVD', 'UAH', 'AED', 'GBP', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'YER', 'ZWD', 'LEK', '؋', '$', 'Ƒ', '₼', 'BR', 'BZ$', '$B', 'KM', 'P', 'ЛВ', 'R$', '៛', '¥', '₡', 'KN', '₱', 'KČ', 'KR', 'RD$', '£', '€', '¢', 'Q', 'L', 'FT', '₹', 'RP', '﷼', '₪', 'J$', '₩', '₭', 'ДЕН', 'RM', '₨', '₮', 'د.إ', 'MT', 'C$', '₦', 'B/.', 'GS', 'S/.', 'ZŁ', 'LEI', 'ДИН.', 'S', 'R', 'NT$', '฿', 'TT$', '₺', '₴', '$U', 'BS', '₫', 'Z$') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
       AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1401,18 +1621,16 @@ Column level sensor that calculates the number of rows with a valid currency cod
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL', 'AFN', 'ARS', 'AWG', 'AUD', 'AZN', 'BSD', 'BBD', 'BYN', 'BZD', 'BMD', 'BOB', 'BAM', 'BWP', 'BGN', 'BRL', 'BND', 'KHR', 'CAD', 'KYD', 'CLP', 'CNY', 'COP', 'CRC', 'HRK', 'CUP', 'CZK', 'DKK', 'DOP', 'XCD', 'EGP', 'SVC', 'EUR', 'FKP', 'FJD', 'GHS', 'GIP', 'GTQ', 'GGP', 'GYD', 'HNL', 'HKD', 'HUF', 'ISK', 'INR', 'IDR', 'IRR', 'IMP', 'ILS', 'JMD', 'JPY', 'JEP', 'KZT', 'KPW', 'KRW', 'KGS', 'LAK', 'LBP', 'LRD', 'MKD', 'MYR', 'MUR', 'MXN', 'MNT', 'MZN', 'NAD', 'NPR', 'ANG', 'NZD', 'NIO', 'NGN', 'NOK', 'OMR', 'PKR', 'PAB', 'PYG', 'PEN', 'PHP', 'PLN', 'QAR', 'RON', 'RUB', 'SHP', 'SAR', 'RSD', 'SCR', 'SGD', 'SBD', 'SOS', 'ZAR', 'LKR', 'SEK', 'CHF', 'SRD', 'SYP', 'TWD', 'THB', 'TTD', 'TRY', 'TVD', 'UAH', 'AED', 'GBP', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'YER', 'ZWD', 'LEK', '؋', '$', 'Ƒ', '₼', 'BR', 'BZ$', '$B', 'KM', 'P', 'ЛВ', 'R$', '៛', '¥', '₡', 'KN', '₱', 'KČ', 'KR', 'RD$', '£', '€', '¢', 'Q', 'L', 'FT', '₹', 'RP', '﷼', '₪', 'J$', '₩', '₭', 'ДЕН', 'RM', '₨', '₮', 'د.إ', 'MT', 'C$', '₦', 'B/.', 'GS', 'S/.', 'ZŁ', 'LEI', 'ДИН.', 'S', 'R', 'NT$', '฿', 'TT$', '₺', '₴', '$U', 'BS', '₫', 'Z$') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1435,7 +1653,7 @@ Column level sensor that calculates the number of values that does not fit to a 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string|||
+|regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1454,18 +1672,16 @@ Column level sensor that calculates the number of values that does not fit to a 
     {% endmacro %}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      SUM(
         CASE
-          WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE THEN 0
-        ELSE
-        1
-      END
-        )
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE
+                        THEN 0
+                    ELSE 1
+                END
+            )
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1489,18 +1705,16 @@ Column level sensor that calculates the number of values that does not fit to a 
     {% endmacro %}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      SUM(
         CASE
-          WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE THEN 0
-        ELSE
-        1
-      END
-        )
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }}) IS TRUE
+                        THEN 0
+                    ELSE 1
+                END
+            )
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1527,13 +1741,18 @@ Column level sensor that calculates the number of rows with a whitespace string 
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> '' AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = '' THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1548,72 +1767,18 @@ Column level sensor that calculates the number of rows with a whitespace string 
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> '' AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = '' THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-___
-
-### **string valid ip6 address percent**
-**Full sensor name**
-```
-column/strings/string_valid_ip6_address_percent
-```
-**Description**  
-Column level sensor that calculates the percentage of rows with a valid IP6 address value in a column.
-
-
-**SQL Template (Jinja2)**  
-=== "snowflake"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-=== "bigquery"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1640,7 +1805,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      AVG(LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})) AS actual_value
+        AVG(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1655,7 +1822,9 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      AVG( LENGTH({{lib.render_column_cast_to_string('analyzed_table')}}) ) AS actual_value
+        AVG(
+            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1682,13 +1851,16 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1703,13 +1875,16 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1736,18 +1911,18 @@ Column level sensor that calculates the number of rows with string surrounded by
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> '' AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1762,18 +1937,18 @@ Column level sensor that calculates the number of rows with string surrounded by
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> '' AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1796,7 +1971,7 @@ Column level sensor that calculates the count of values that are longer than a g
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|maximum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer|||
+|maximum_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1807,12 +1982,12 @@ Column level sensor that calculates the count of values that are longer than a g
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
-      SUM(
-        CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}}
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1829,12 +2004,12 @@ Column level sensor that calculates the count of values that are longer than a g
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
-      SUM(
-        CASE
-          WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}} THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.maximum_length)}}
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1858,7 +2033,7 @@ Column level sensor that calculates the number of rows with a null column value.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|string_list|||
+|values|Provided list of values to match the data.|string_list| ||
 
 
 **SQL Template (Jinja2)**  
@@ -1882,23 +2057,21 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- if parameters['values']|length == 0 -%}
             NULL
         {%- else -%}
-          100.0 * SUM(
-            CASE
-              WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) IS TRUE THEN 1
-            ELSE
-            0
-          END
-            )/COUNT(*)
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-      ELSE
-      {{render_else()}}
-    END
-      AS actual_value
+        {{render_else()}}
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1912,7 +2085,6 @@ Column level sensor that calculates the number of rows with a null column value.
     ```
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
             {%- if not loop.last -%}
@@ -1927,22 +2099,21 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
         0.0
         {%- else -%}
-          CASE
+        CASE
             WHEN COUNT(*) = 0 THEN 100.0
-          ELSE
-          100.0 * SUM(
-            CASE
-              WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }}) THEN 1
-            ELSE
-            0
-          END
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1969,12 +2140,12 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '') THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1990,12 +2161,12 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '') THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2019,7 +2190,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum||YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
 
 
 **SQL Template (Jinja2)**  
@@ -2029,12 +2200,12 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2065,72 +2236,16 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-___
-
-### **string valid ip4 address percent**
-**Full sensor name**
-```
-column/strings/string_valid_ip4_address_percent
-```
-**Description**  
-Column level sensor that calculates the percentage of rows with a valid IP4 address value in a column.
-
-
-**SQL Template (Jinja2)**  
-=== "snowflake"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    {% endraw %}
-    ```
-=== "bigquery"
-      
-    ```
-    {% raw %}
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-      100.0 * SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$") IS TRUE THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2157,13 +2272,16 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2178,18 +2296,16 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2212,8 +2328,8 @@ Column level sensor that calculates the number of rows with a null column value.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|expected_values|Provided list of values to match the data.|string_list|||
-|top_values|Provided limit of top popular values.|long|||
+|expected_values|Provided list of values to match the data.|string_list| ||
+|top_values|Provided limit of top popular values.|long| ||
 
 
 **SQL Template (Jinja2)**  
@@ -2395,12 +2511,12 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2416,12 +2532,12 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2449,18 +2565,16 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2475,18 +2589,16 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN REGEXP_CONTAINS( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$") THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_CONTAINS( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2513,12 +2625,13 @@ Column level sensor that calculates the number of rows with an empty string colu
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} = '' THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2534,12 +2647,13 @@ Column level sensor that calculates the number of rows with an empty string colu
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} = '' THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2567,12 +2681,12 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2588,12 +2702,12 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE THEN 0
-        ELSE
-        1
-      END
+        SUM(
+            CASE
+                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$") IS TRUE
+                    THEN 0
+                ELSE 1
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2617,7 +2731,7 @@ Column level sensor that calculates the number of values that does not fit to a 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum||YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
 
 
 **SQL Template (Jinja2)**  
@@ -2642,18 +2756,16 @@ Column level sensor that calculates the number of values that does not fit to a 
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      SUM(
         CASE
-          WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL THEN 1
-        ELSE
-        0
-      END
-        )
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE SUM(
+                CASE
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                        THEN 1
+                    ELSE 0
+                END
+            )
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2683,18 +2795,16 @@ Column level sensor that calculates the number of values that does not fit to a 
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-      ELSE
-      SUM(
         CASE
-          WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL THEN 1
-        ELSE
-        0
-      END
-        )
-    END
-      AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE SUM(
+                CASE
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                        THEN 1
+                    ELSE 0
+                END
+            )
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2720,13 +2830,14 @@ Column level sensor that calculates the number of rows with parsable to float st
     ```
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
-      CASE {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * COUNT( TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64) ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2740,13 +2851,14 @@ Column level sensor that calculates the number of rows with parsable to float st
     ```
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
-      CASE {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * COUNT( SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64) ) / COUNT(*)
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2773,12 +2885,14 @@ Column level sensor that calculates the number of rows with string surrounded by
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> '' AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2794,12 +2908,14 @@ Column level sensor that calculates the number of rows with string surrounded by
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> '' AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
+                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2827,13 +2943,17 @@ Column level sensor that calculates the percentage of rows with an empty string 
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} = '' THEN 1
-        ELSE
-        0
-      END
-        )/COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2848,18 +2968,17 @@ Column level sensor that calculates the percentage of rows with an empty string 
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND {{ lib.render_column_cast_to_string('analyzed_table')}} = '' THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2886,18 +3005,16 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2912,18 +3029,16 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '') THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2954,12 +3069,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-      ELSE
-      (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2974,7 +3087,8 @@ Column level sensor that calculates the number of rows with a null column value.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }})) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3001,12 +3115,12 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
-      ELSE
-      100.0 * (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table')}})) / COUNT({{ lib.render_target_column('analyzed_table')}})
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * (
+                COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3021,12 +3135,12 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-      ELSE
-      100.0 * ( COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }}) ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * (
+                COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3053,7 +3167,9 @@ Column level sensor that calculates the number of unique non-null values.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      COUNT( DISTINCT({{ lib.render_target_column('analyzed_table') }}) ) AS actual_value
+        COUNT(
+            DISTINCT({{ lib.render_target_column('analyzed_table') }})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3068,7 +3184,9 @@ Column level sensor that calculates the number of unique non-null values.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      COUNT( DISTINCT({{ lib.render_target_column('analyzed_table')}}) ) AS actual_value
+        COUNT(
+            DISTINCT({{ lib.render_target_column('analyzed_table')}})
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3157,7 +3275,7 @@ Column-level sensor that calculates the number of rows with not null values.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3172,7 +3290,7 @@ Column-level sensor that calculates the number of rows with not null values.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3252,8 +3370,8 @@ Column level sensor that finds the maximum value. It works on any data type that
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_value|Minimal value range variable.|double|||
-|max_value|Maximal value range variable.|double|||
+|min_value|Minimal value range variable.|double| ||
+|max_value|Maximal value range variable.|double| ||
 
 
 **SQL Template (Jinja2)**  
@@ -3397,7 +3515,7 @@ Column level sensor that calculates the percentage of values that are members of
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list|||
+|values|Provided list of values to match the data.|integer_list| ||
 
 
 **SQL Template (Jinja2)**  
@@ -3413,25 +3531,23 @@ Column level sensor that calculates the percentage of values that are members of
     
     {%- macro render_else() -%}
         {%- if parameters['values']|length == 0 -%}
-            NULL
+            0.0
         {%- else -%}
               100.0 * SUM(
                 CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) THEN 1
-                ELSE
-                0
-              END
-                )/COUNT(*)
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT(*)
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
       CASE
         WHEN COUNT(*) = 0 THEN NULL
-      ELSE
-      {{render_else()}}
-    END
-      AS actual_value
+        ELSE {{render_else()}}
+      END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3453,24 +3569,23 @@ Column level sensor that calculates the percentage of values that are members of
     {%- macro actual_value() -%}
         {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
         {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
-        NULL
+        0.0
         {%- else -%}
-          CASE
+        CASE
             WHEN COUNT(*) = 0 THEN 100.0
-          ELSE
-          100.0 * SUM(
-            CASE
-              WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }}) THEN 1
-            ELSE
-            0
-          END
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3497,12 +3612,11 @@ Column level sensor that counts negative values in a column.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3518,12 +3632,11 @@ Column level sensor that counts negative values in a column.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3551,13 +3664,15 @@ Column level sensor that counts percentage of negative values in a column.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3572,18 +3687,195 @@ Column level sensor that counts percentage of negative values in a column.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*)
-    END
-      AS actual_value
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **value below min value count**
+**Full sensor name**
+```
+column/numeric/value_below_min_value_count
+```
+**Description**  
+Column level sensor that calculates the count of values that are below than a given value in a column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **value above max value count**
+**Full sensor name**
+```
+column/numeric/value_above_max_value_count
+```
+**Description**  
+Column level sensor that calculates the count of values that are above than a given value in a column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+___
+
+### **value below min value percent**
+**Full sensor name**
+```
+column/numeric/value_below_min_value_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of values that are below than a given value in a column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "bigquery"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3606,7 +3898,7 @@ Column level sensor that counts values that are members of a given set.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list|||
+|values|Provided list of values to match the data.|integer_list| ||
 
 
 **SQL Template (Jinja2)**  
@@ -3622,24 +3914,24 @@ Column level sensor that counts values that are members of a given set.
     
     {%- macro render_else() -%}
         {%- if parameters['values']|length == 0 -%}
-            NULL
+            0
         {%- else -%}
-              SUM(
-                CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}})) THEN 1
-                ELSE
-                0
-              END
-                )
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
       CASE
         WHEN COUNT(*) = 0 THEN NULL
-      ELSE
-      {{render_else()}}
-    END
+        ELSE
+        {{render_else()}}
+      END
       AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3661,20 +3953,20 @@ Column level sensor that counts values that are members of a given set.
     
     {%- macro actual_value() -%}
         {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        NULL
+        0
         {%- else -%}
-          SUM(
+        SUM(
             CASE
-              WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }}) THEN 1
-            ELSE
-            0
-          END
-            )
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-      {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3824,8 +4116,8 @@ Column level sensor that finds the maximum value. It works on any data type that
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_value|Minimal value range variable.|long|||
-|max_value|Maximal value range variable.|long|||
+|min_value|Minimal value range variable.|long| ||
+|max_value|Maximal value range variable.|long| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4105,7 +4397,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4115,12 +4407,13 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4136,12 +4429,13 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4165,7 +4459,7 @@ Column level sensor that executes a given SQL expression on a column.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|||
+|sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4175,7 +4469,7 @@ Column level sensor that executes a given SQL expression on a column.
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4190,7 +4484,7 @@ Column level sensor that executes a given SQL expression on a column.
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4213,7 +4507,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4223,18 +4517,17 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND NOT ({{ parameters.sql_condition | REPLACE('{column}', lib.render_target_column('analyzed_table')) | REPLACE('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT({{ lib.render_target_column('analyzed_table')}})
-    END
-      AS actual_value
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4249,18 +4542,17 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT({{ lib.render_target_column('analyzed_table')}})
-    END
-      AS actual_value
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4283,7 +4575,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4293,12 +4585,13 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4314,12 +4607,13 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      SUM(
-        CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4343,7 +4637,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string|||
+|sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
 **SQL Template (Jinja2)**  
@@ -4353,17 +4647,17 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT({{ lib.render_target_column('analyzed_table')}})
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4378,17 +4672,17 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-      CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
-      ELSE
-      100.0 * SUM(CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-    END
-      AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

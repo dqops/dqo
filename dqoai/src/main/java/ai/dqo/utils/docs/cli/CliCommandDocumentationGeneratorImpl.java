@@ -59,6 +59,7 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     public List<CliRootCommandDocumentationModel> createCommandModels() {
         List<CliRootCommandDocumentationModel> rootCommands = new ArrayList<>();
         CommandLine commandLine = new CommandLine(new DqoRootCliCommand(null, null, null));
+        rootCommands.add(createRootDqoCommandModel(commandLine));
         Map<String, CommandLine> firstLevelCommands = commandLine.getSubcommands();
         for (Map.Entry<String, CommandLine> subcommand : firstLevelCommands.entrySet()) {
             CliRootCommandDocumentationModel rootCommandModel = new CliRootCommandDocumentationModel();
@@ -69,6 +70,20 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         }
 
         return rootCommands;
+    }
+
+    /**
+     * Create 'dqo' root command used for the documentation.
+     * @return Root commands and their subcommands.
+     */
+    private CliRootCommandDocumentationModel createRootDqoCommandModel(CommandLine commandLine) {
+        CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
+        rootDqoCommandModel.setRootCommandName("dqo");
+        CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
+        myCommandModel.setDescription(new String[]{"Root command that permit control on CLI mode."});
+        rootDqoCommandModel.getCommands().add(myCommandModel);
+
+        return rootDqoCommandModel;
     }
 
     /**
