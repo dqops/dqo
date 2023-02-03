@@ -45,6 +45,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
             put("value_below_min_value_percent", o -> o.valueBelowMinValuePercent);
             put("value_above_max_value_count", o -> o.valueAboveMaxValueCount);
+            put("value_above_max_value_percent", o -> o.valueAboveMaxValuePercent);
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
@@ -82,6 +83,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column.")
     private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value above the one provided by the user in a column.")
+    private ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
     private ColumnMaxInRangeCheckSpec maxInRange;
@@ -267,6 +271,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.valueAboveMaxValueCount, valueAboveMaxValueCount));
         this.valueAboveMaxValueCount = valueAboveMaxValueCount;
         propagateHierarchyIdToField(valueAboveMaxValueCount, "value_above_max_value_count");
+    }
+
+    /**
+     * Returns a numeric value above max value percent check.
+     * @return Numeric value above max value percent check.
+     */
+    public ColumnValueAboveMaxValuePercentCheckSpec getValueAboveMaxValuePercent() {
+        return valueAboveMaxValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value percent check.
+     * @param valueAboveMaxValuePercent Numeric value above max value percent check.
+     */
+    public void setValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.valueAboveMaxValuePercent, valueAboveMaxValuePercent));
+        this.valueAboveMaxValuePercent = valueAboveMaxValuePercent;
+        propagateHierarchyIdToField(valueAboveMaxValuePercent, "value_above_max_value_percent");
     }
 
     /**

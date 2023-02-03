@@ -45,6 +45,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_value_below_min_value_count", o -> o.dailyPartitionValueBelowMinValueCount);
             put("daily_partition_value_below_min_value_percent", o -> o.dailyPartitionValueBelowMinValuePercent);
             put("daily_partition_value_above_max_value_count", o -> o.dailyPartitionValueAboveMaxValueCount);
+            put("daily_partition_value_above_max_value_percent", o -> o.dailyPartitionValueAboveMaxValuePercent);
             put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
@@ -82,6 +83,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyPartitionValueAboveMaxValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValueAboveMaxValuePercentCheckSpec dailyPartitionValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMaxInRangeCheckSpec dailyPartitionMaxInRange;
@@ -270,6 +274,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValueAboveMaxValueCount, dailyPartitionValueAboveMaxValueCount));
         this.dailyPartitionValueAboveMaxValueCount = dailyPartitionValueAboveMaxValueCount;
         propagateHierarchyIdToField(dailyPartitionValueAboveMaxValueCount, "daily_partition_value_above_max_value_count");
+    }
+
+    /**
+     * Returns a numeric value above max value percent check.
+     * @return Numeric value above max value percent check.
+     */
+    public ColumnValueAboveMaxValuePercentCheckSpec getDailyPartitionValueAboveMaxValuePercent() {
+        return dailyPartitionValueAboveMaxValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value percent check.
+     * @param dailyPartitionValueAboveMaxValuePercent Numeric value above max value percent check.
+     */
+    public void setDailyPartitionValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec dailyPartitionValueAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValueAboveMaxValuePercent, dailyPartitionValueAboveMaxValuePercent));
+        this.dailyPartitionValueAboveMaxValuePercent = dailyPartitionValueAboveMaxValuePercent;
+        propagateHierarchyIdToField(dailyPartitionValueAboveMaxValuePercent, "daily_partition_value_above_max_value_percent");
     }
 
     /**
