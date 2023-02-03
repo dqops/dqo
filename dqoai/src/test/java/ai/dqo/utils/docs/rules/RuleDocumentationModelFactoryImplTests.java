@@ -20,10 +20,11 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
+        Path projectRoot = Path.of(".");
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
-        this.sut = new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
+        this.sut = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
     }
 
     @Test
@@ -36,6 +37,8 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("averages", ruleDocumentation.getCategory());
         Assertions.assertEquals("between_percent_moving_average_7_days", ruleDocumentation.getRuleName());
         Assertions.assertEquals("averages/between_percent_moving_average_7_days", ruleDocumentation.getFullRuleName());
+
+        Assertions.assertNotNull(ruleDocumentation.getRuleExample());
 
         Assertions.assertNotNull(ruleDocumentation.getDefinition());
         Assertions.assertEquals(2, ruleDocumentation.getDefinition().getSpec().getFields().size());

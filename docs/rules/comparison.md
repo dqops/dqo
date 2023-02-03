@@ -1,62 +1,33 @@
-#comparison
+# comparison
 ___
 
-##<b>{{replace_chars_in_string('max_count', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max count**
+**Full rule name**
 ```
 comparison/max_count
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>max_count</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -115,78 +86,151 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('between_ints', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between ints**
+**Full rule name**
 ```
 comparison/between_ints
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is between begin and end values.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>begin</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td>end</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/between_ints.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class BetweenIntsRuleParametersSpec:
-    begin: int
-    end: int
+    from_: int
+    to: int
+
+def __getattr__(self, name):
+    if name == "from":
+        return self.from_
+    return object.__getattribute__(self, name)
 
 
 class HistoricDataPoint:
@@ -229,71 +273,42 @@ class RuleExecutionResult:
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult(True, None, None, None)
-    expected_value = rule_parameters.parameters.end
-    lower_bound = rule_parameters.parameters.begin
-    upper_bound = rule_parameters.parameters.end
+    expected_value = rule_parameters.parameters.to
+    lower_bound = getattr(rule_parameters.parameters,"from")
+    upper_bound = rule_parameters.parameters.to
     passed = (lower_bound <= rule_parameters.actual_value and rule_parameters.actual_value <= upper_bound)
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_count', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min count**
+**Full rule name**
 ```
 comparison/min_count
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>min_count</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_count.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -352,62 +367,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_count', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min count**
+**Full rule name**
 ```
 comparison/min_count
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>min_count</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_count.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -466,62 +452,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -580,62 +537,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_value', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max value**
+**Full rule name**
 ```
 comparison/max_value
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_value</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_value.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -694,62 +622,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_count', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max count**
+**Full rule name**
 ```
 comparison/max_count
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>max_count</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -808,62 +707,137 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -922,62 +896,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min**
+**Full rule name**
 ```
 comparison/min
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_value</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1036,62 +981,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max days**
+**Full rule name**
 ```
 comparison/max_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_days</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1150,62 +1066,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1264,62 +1151,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max days**
+**Full rule name**
 ```
 comparison/max_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_days</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1378,62 +1236,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1492,62 +1321,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1606,62 +1406,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1720,62 +1491,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1834,62 +1576,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -1948,62 +1661,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_days', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max days**
+**Full rule name**
 ```
 comparison/max_days
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_days</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_days.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2062,62 +1746,137 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    if not hasattr(rule_parameters,'previous_readouts'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures  += 1
+        else:
+            break
+
+    passed = recent_failures <= rule_parameters.parameters.max_failures
+    expected_value = rule_parameters.parameters.max_failures
+    lower_bound = rule_parameters.parameters.max_failures
+    upper_bound = None
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2176,62 +1935,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2290,62 +2020,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2404,62 +2105,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2518,62 +2190,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2632,62 +2275,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max percent**
+**Full rule name**
 ```
 comparison/max_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_percent</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2746,79 +2360,47 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('between_floats', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **between floats**
+**Full rule name**
 ```
 comparison/between_floats
 ```
-<b>Description</b>
-<br/>
-Data quality rule that verifies if a data quality check readout is between begin and end values.
-<br/>
+**Description**  
+Data quality rule that verifies if a data quality check readout is between from and to values.
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>begin</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td>end</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/between_floats.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class BetweenIntsRuleParametersSpec:
-    begin: float
-    end: float
+    from_: float
+    to: float
 
+def __getattr__(self, name):
+    if name == "from":
+        return self.from_
+    return object.__getattribute__(self, name)
 
 class HistoricDataPoint:
     timestamp_utc: datetime
@@ -2860,71 +2442,42 @@ class RuleExecutionResult:
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult(True, None, None, None)
-    expected_value = rule_parameters.parameters.end
-    lower_bound = rule_parameters.parameters.begin
-    upper_bound = rule_parameters.parameters.end
+    expected_value = rule_parameters.parameters.to
+    lower_bound = getattr(rule_parameters.parameters,"from")
+    upper_bound = rule_parameters.parameters.to
     passed = (lower_bound <= rule_parameters.actual_value and rule_parameters.actual_value <= upper_bound)
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
 ```
 ___
 
-##<b>{{replace_chars_in_string('max_count', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max count**
+**Full rule name**
 ```
 comparison/max_count
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
-<tr>
-<td>max_count</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('long_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max_count.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -2983,62 +2536,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('max', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **max**
+**Full rule name**
 ```
 comparison/max
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>max_value</td>
-<td>Maximum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/max.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -3097,62 +2621,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_value', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min value**
+**Full rule name**
 ```
 comparison/min_value
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_value</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_value.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -3211,70 +2706,34 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('equals', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **equals**
+**Full rule name**
 ```
 comparison/equals
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
+|error_margin|Error margin for comparison.|double| ||
 
-<tr>
-<td>expected_value</td>
-<td>Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-<tr>
-<td>error_margin</td>
-<td>Error margin for comparison.</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
-
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/equals.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -3334,62 +2793,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 
@@ -3448,62 +2878,33 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-##<b>{{replace_chars_in_string('min_percent', '_', ' ')}}</b>
-<b>Full rule name</b>
+## **min percent**
+**Full rule name**
 ```
 comparison/min_percent
 ```
-<b>Description</b>
-<br/>
+**Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-<br/>
 
-<b>Parameters</b>
-<table>
-<thead>
-<tr>
-<th>Field name</th>
-<th>Description</th>
-<th>Allowed data type</th>
-<th>Is it required?</th>
-<th>Allowed values</th>
-</tr>
-</thead>
-<tbody>
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
-<tr>
-<td>min_percent</td>
-<td>Minimum accepted value for the actual_value returned by the sensor (inclusive).</td>
-<td>{{replace_chars_in_string('double_type', '_type', '')}}</td>
-<td></td>
-<td></td>
-</tr>
 
-</tbody>
-</table>
 
-<b>Example</b>
+**Example**
 ```yaml
---8<-- "home/rules/comparison/min_percent.dqorule.yaml"
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
 ```
-<b>Rule implementation (Python)</b>
-```python
-#
-# Copyright © 2021 DQO.ai (support@dqo.ai)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
 
+**Rule implementation (Python)**
+```python
 from datetime import datetime
 from typing import Sequence
 

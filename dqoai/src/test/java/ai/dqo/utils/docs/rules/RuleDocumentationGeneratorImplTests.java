@@ -30,7 +30,7 @@ public class RuleDocumentationGeneratorImplTests extends BaseTest {
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
         this.dqoHome = dqoHomeContext.getDqoHome();
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
-        RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
+        RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRootPath, dqoHomeContext, specToUiCheckMappingService);
 
         this.sut = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
     }

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @SpringBootTest
@@ -25,6 +26,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
+        Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService);
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
@@ -34,7 +36,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 dqoHomeContext,
                 similarCheckMatchingService,
                 new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
-                new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
+                new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault()

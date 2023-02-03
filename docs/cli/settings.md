@@ -1,406 +1,204 @@
-#settings
+# settings
 
 ___
-###<b><u>settings editor set</u></b>
+### **dqo settings editor set**
 
-<b>Description:</b>
+**Description**
 
 Set editor settings
 
-<b>Synopsis:</b>
-<pre><code> settings editor set [-h] [-fw] [-hl] [-n&#x3D;&lt;editorName&gt;] [-of&#x3D;&lt;outputFormat&gt;]
-                     [-p&#x3D;&lt;editorPath&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
+                     [-p=<editorPath>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-n`<br/>`--name`<br/></td>
-    <td>Editor name</td>
-    <td>VSC<br/>IntelliJ<br/>Eclipse<br/>PyCharm<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-p`<br/>`--path`<br/></td>
-    <td>Editor path</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-n`<br/>`--name`<br/>|Editor name| |VSC<br/>IntelliJ<br/>Eclipse<br/>PyCharm<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-p`<br/>`--path`<br/>|Editor path| ||
+
+
 
 ___
-###<b><u>settings editor remove</u></b>
+### **dqo settings editor remove**
 
-<b>Description:</b>
+**Description**
 
 Remove editor settings
 
-<b>Synopsis:</b>
-<pre><code> settings editor remove [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings editor show</u></b>
+### **dqo settings editor show**
 
-<b>Description:</b>
+**Description**
 
 Show editor settings
 
-<b>Synopsis:</b>
-<pre><code> settings editor show [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings init</u></b>
+### **dqo settings init**
 
-<b>Description:</b>
+**Description**
 
 Init settings file in user home
 
-<b>Synopsis:</b>
-<pre><code> settings init [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings remove</u></b>
+### **dqo settings remove**
 
-<b>Description:</b>
+**Description**
 
 Remove settings file from user home
 
-<b>Synopsis:</b>
-<pre><code> settings remove [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings apikey set</u></b>
+### **dqo settings apikey set**
 
-<b>Description:</b>
+**Description**
 
 Set api key
 
-<b>Synopsis:</b>
-<pre><code> settings apikey set [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;] &lt;key&gt;
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings apikey remove</u></b>
+### **dqo settings apikey remove**
 
-<b>Description:</b>
+**Description**
 
 Remove api key
 
-<b>Synopsis:</b>
-<pre><code> settings apikey remove [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
 
 ___
-###<b><u>settings apikey show</u></b>
+### **dqo settings apikey show**
 
-<b>Description:</b>
+**Description**
 
 Show api key
 
-<b>Synopsis:</b>
-<pre><code> settings apikey show [-h] [-fw] [-hl] [-of&#x3D;&lt;outputFormat&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
