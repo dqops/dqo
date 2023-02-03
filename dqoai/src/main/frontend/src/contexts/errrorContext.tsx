@@ -24,7 +24,9 @@ function ErrorProvider({ children }: any) {
         date: response?.data?.timestamp
       };
 
-      setErrors([...errors, newError]);
+      if (newError.name) {
+        setErrors([...errors, newError]);
+      }
       
       if (response.status > 500) {
         setIsOpen(true);
