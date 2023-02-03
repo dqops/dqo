@@ -113,8 +113,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     });
   };
 
-  const onRunCheck = () => {
-    onUpdate();
+  const onRunCheck = async () => {
+    await onUpdate();
     JobApiClient.runChecks(check?.run_checks_job_template);
   };
 
