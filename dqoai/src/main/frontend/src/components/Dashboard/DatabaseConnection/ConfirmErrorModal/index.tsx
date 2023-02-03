@@ -17,7 +17,7 @@ const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorMo
           <div className="text-2xl text-gray-900 whitespace-normal break-all">
             Connection to the data source failed
           </div>
-          <div className="text-xl text-red-700 text-center whitespace-normal break-all p-3 border my-4 rounded-lg">
+          <div className="text-xl text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
             {message}
           </div>
           <div className="text-center text-xl text-gray-900">
