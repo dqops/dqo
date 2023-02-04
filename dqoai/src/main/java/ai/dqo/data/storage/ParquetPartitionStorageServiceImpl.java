@@ -17,7 +17,6 @@ package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.localfiles.LocalFileStorageService;
 import ai.dqo.core.filesystem.virtual.FolderName;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
@@ -26,7 +25,10 @@ import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.storage.parquet.*;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetReader;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetWriteOptions;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetWriter;
+import ai.dqo.data.storage.parquet.HadoopConfigurationProvider;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
@@ -35,7 +37,6 @@ import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import org.apache.hadoop.conf.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
@@ -136,7 +137,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         if (!matcher.find()) {
             return null;
         }
-        String localDateString = matcher.group();
+        String localDateString = matcher.group(1);
         return LocalDate.parse(localDateString);
     }
 
@@ -211,8 +212,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      *
      * @param connectionName  Connection name.
      * @param tableName       Table name (schema.table).
-     * @param start           Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
-     * @param end             End date, the whole month of the given date is loaded. If null, then the current month is taken.
+     * @param startBoundary   Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
+     * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
@@ -221,14 +222,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     @Override
     public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName,
                                                                                               PhysicalTableName tableName,
-                                                                                              LocalDate start,
-                                                                                              LocalDate end,
+                                                                                              LocalDate startBoundary,
+                                                                                              LocalDate endBoundary,
                                                                                               FileStorageSettings storageSettings,
                                                                                               String[] columnNames,
                                                                                               int monthsCount) {
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
 
-        LocalDate startNonNull = start;
+        LocalDate startNonNull = startBoundary;
         if (startNonNull == null) {
             startNonNull = this.getOldestStoredPartitionMonth(connectionName, tableName, storageSettings).orElse(null);
         }
@@ -237,7 +238,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             return resultPartitions;
         }
 
-        LocalDate endNonNull = Objects.requireNonNullElse(end, LocalDate.now());
+        LocalDate endNonNull = Objects.requireNonNullElse(endBoundary, LocalDate.now());
 
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startNonNull);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endNonNull);
@@ -246,7 +247,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
              currentMonth = currentMonth.minusMonths(1L)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
-            if (currentMonthPartition != null) {
+            if (currentMonthPartition != null && currentMonthPartition.getData() != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
                 --monthsCount;
             }

@@ -33,7 +33,7 @@ public class HomeFolderPathUtility {
      */
     public static HomeFolderPath createFromFilesystemPath(Path homeRelativePath) {
         LinkedList<FolderName> homeRelativeFoldersList = new LinkedList<>();
-        for (Path fileSystemName : homeRelativePath.getParent()) {
+        for (Path fileSystemName : homeRelativePath) {
             homeRelativeFoldersList.add(
                     FolderName.fromFileSystemName(fileSystemName.toString())
             );

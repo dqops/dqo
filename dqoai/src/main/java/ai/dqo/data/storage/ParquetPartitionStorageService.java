@@ -19,7 +19,6 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -64,8 +63,8 @@ public interface ParquetPartitionStorageService {
      * This method may read more rows than expected, because it operates on full months.
      * @param connectionName  Connection name.
      * @param tableName       Table name (schema.table).
-     * @param start           Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
-     * @param end             End date, the whole month of the given date is loaded. If null, then the current month is taken.
+     * @param startBoundary   Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
+     * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
@@ -74,8 +73,8 @@ public interface ParquetPartitionStorageService {
     Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(
             String connectionName,
             PhysicalTableName tableName,
-            LocalDate start,
-            LocalDate end,
+            LocalDate startBoundary,
+            LocalDate endBoundary,
             FileStorageSettings storageSettings,
             String[] columnNames,
             int monthsCount);
