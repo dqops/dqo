@@ -61,13 +61,13 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
         scheduleRootsSearchFilters.setSchedule(schedule);
         Collection<HierarchyNode> scheduleRoots = this.hierarchyNodeTreeSearcher.findScheduleRoots(userHome.getConnections(), scheduleRootsSearchFilters);
 
-        for (HierarchyNode scheduleRoot :  scheduleRoots) {
+        for (HierarchyNode scheduleRoot : scheduleRoots) {
             ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
             scheduledChecksSearchFilters.setEnabled(true);
             scheduledChecksSearchFilters.setSchedule(schedule.getRecurringSchedule());
-            Collection<AbstractCheckSpec> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(scheduleRoot, scheduledChecksSearchFilters);
+            Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(scheduleRoot, scheduledChecksSearchFilters);
 
-            for (AbstractCheckSpec targetCheck : scheduledChecks) {
+            for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
                 TableWrapper targetTableWrapper = userHome.findTableFor(targetCheck.getHierarchyId());
                 ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(targetTableWrapper);
                 tableChecks.addCheck(targetCheck);

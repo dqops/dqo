@@ -221,7 +221,8 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of check nodes that passed the filter.
      */
     @Override
-    public Collection<AbstractCheckSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
+    public Collection<AbstractCheckSpec<?,?,?,?>> findScheduledChecks(HierarchyNode startNode,
+                                                                      ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
         if (startNode instanceof ConnectionSpec) {
             ConnectionSpec connectionSpec = (ConnectionSpec) startNode;
             assert connectionSpec.getSchedule() != null &&
@@ -232,13 +233,8 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
             assert tableSpec.getScheduleOverride() != null &&
                     Objects.equals(tableSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
         }
-        else if (startNode instanceof ColumnSpec) {
-            ColumnSpec columnSpec = (ColumnSpec) startNode;
-            assert columnSpec.getScheduleOverride() != null &&
-                    Objects.equals(columnSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
-        }
         else if (startNode instanceof AbstractCheckSpec) {
-            AbstractCheckSpec checkSpec = (AbstractCheckSpec) startNode;
+            AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>) startNode;
             assert checkSpec.getScheduleOverride() != null &&
                     Objects.equals(checkSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
         }
@@ -251,6 +247,6 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
         this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
                 new SearchParameterObject(matchingNodes, null, null)));
 
-        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractCheckSpec<?,?,?,?>>)(ArrayList<?>)matchingNodes;
     }
 }

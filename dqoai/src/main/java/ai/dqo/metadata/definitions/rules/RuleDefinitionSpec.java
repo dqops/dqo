@@ -29,7 +29,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -64,10 +66,7 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Additional rule parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
-
-    @JsonIgnore
-    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> parameters;
 
     /**
      * Rule implementation type.
@@ -160,7 +159,7 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 
@@ -168,30 +167,9 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
      * Sets a dictionary of parameters passed to the rule.
      * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParameters(LinkedHashMap<String, String> parameters) {
+    public void setParameters(Map<String, String> parameters) {
 		setDirtyIf(!Objects.equals(this.parameters, parameters));
-        this.parameters = parameters;
-		this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**
@@ -239,12 +217,6 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
             if (cloned.timeWindow != null) {
                 cloned.timeWindow = cloned.timeWindow.clone();
             }
-            if (cloned.parameters != null) {
-                cloned.parameters = (LinkedHashMap<String, String>) cloned.parameters.clone();
-            }
-            if (cloned.originalParameters != null) {
-                cloned.originalParameters = (LinkedHashMap<String, String>) cloned.originalParameters.clone();
-            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -260,7 +232,6 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
         try {
             RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.clone();
             cloned.fields = null;
-            cloned.originalParameters = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

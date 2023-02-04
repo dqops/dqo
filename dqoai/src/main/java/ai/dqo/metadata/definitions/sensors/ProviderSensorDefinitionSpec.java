@@ -27,7 +27,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -50,16 +52,13 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
-
-    @JsonIgnore
-    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> parameters;
 
     /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 
@@ -67,10 +66,9 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      * Sets a dictionary of parameters passed to the rule.
      * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParameters(LinkedHashMap<String, String> parameters) {
+    public void setParameters(Map<String, String> parameters) {
 		setDirtyIf(!Objects.equals(this.parameters, parameters));
-        this.parameters = parameters;
-		this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**
@@ -105,26 +103,6 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     public void setJavaClassName(String javaClassName) {
 		this.setDirtyIf(!Objects.equals(this.javaClassName, javaClassName));
         this.javaClassName = javaClassName;
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
     }
 
     /**

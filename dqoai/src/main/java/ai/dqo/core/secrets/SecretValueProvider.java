@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.secrets;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Provider that returns secret values. It can retrieve values from environment variables or in the future, from Secret Managers, Vaults, etc.
@@ -33,5 +33,5 @@ public interface SecretValueProvider {
      * @param properties Properties to expand.
      * @return Expanded properties.
      */
-    LinkedHashMap<String, String> expandProperties(LinkedHashMap<String, String> properties);
+    Map<String, String> expandProperties(Map<String, String> properties);
 }

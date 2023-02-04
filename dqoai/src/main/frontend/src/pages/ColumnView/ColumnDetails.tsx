@@ -55,8 +55,8 @@ const TableDetails = ({
   useEffect(() => {
     if (
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(
@@ -96,11 +96,11 @@ const TableDetails = ({
           </tr>
           <tr>
             <td className="px-4 py-2">Schema Name</td>
-            <td className="px-4 py-2">{columnBasic?.table?.schemaName}</td>
+            <td className="px-4 py-2">{columnBasic?.table?.schema_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Table Name</td>
-            <td className="px-4 py-2">{columnBasic?.table?.tableName}</td>
+            <td className="px-4 py-2">{columnBasic?.table?.table_name}</td>
           </tr>
           <tr>
             <td className="px-4 py-2">Column Name</td>

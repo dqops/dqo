@@ -101,37 +101,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
     }
 
     /**
-     * Accepts a column specification.
-     *
-     * @param columnSpec Column specification.
-     * @param foundNodes Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject foundNodes) {
-        Boolean enabledFilter = this.filters.getEnabled();
-        if (enabledFilter != null) {
-            boolean columnIsEnabled = !columnSpec.isDisabled();
-            if (enabledFilter != columnIsEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
-
-        RecurringScheduleSpec columnSchedule = columnSpec.getScheduleOverride();
-        assert this.filters.getSchedule().getRecurringSchedule() != null;
-
-        if (columnSchedule != null) {
-            if (!Objects.equals(columnSchedule, this.filters.getSchedule().getRecurringSchedule())) {
-                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
-            }
-
-            foundNodes.getNodes().add(columnSpec);
-        }
-
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts any check specification.
      *
      * @param abstractCheckSpec Data quality check specification (any).
@@ -139,7 +108,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject foundNodes) {
         RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
         assert this.filters.getSchedule().getRecurringSchedule() != null;
 

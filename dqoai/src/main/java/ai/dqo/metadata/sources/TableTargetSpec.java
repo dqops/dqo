@@ -66,14 +66,6 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String tableName;
 
-    @JsonPropertyDescription("Dictionary of additional properties (key/value) that may be used to identify a target table or could be useful when running sensor queries.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
-
     /**
      * Returns a schema name in the database.
      * @return Schema name.
@@ -109,24 +101,6 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns a key/value map of additional provider specific properties for the table.
-     * @return Key/value dictionary of additional properties.
-     */
-    public LinkedHashMap<String, String> getProperties() {
-        return properties;
-    }
-
-    /**
-     * Sets a dictionary of additional table parameters.
-     * @param properties Key/value dictionary with extra parameters.
-     */
-    public void setProperties(LinkedHashMap<String, String> properties) {
-		setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties;
-		this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
-    }
-
-    /**
      * Checks if the table target is the same as the physical table name given. Schema name and table name are compared.
      * @param physicalTableName Physical table name.
      * @return True when both the schema and table names are equal.
@@ -138,26 +112,6 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
 
         return Objects.equals(this.schemaName, physicalTableName.getSchemaName()) &&
                 Objects.equals(this.tableName, physicalTableName.getTableName());
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
     }
 
     /**

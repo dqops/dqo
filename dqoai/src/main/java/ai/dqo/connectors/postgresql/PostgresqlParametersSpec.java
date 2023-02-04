@@ -29,7 +29,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import picocli.CommandLine;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -75,12 +77,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
 
     @CommandLine.Option(names = {"--postgresql-properties"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> properties;
 
     /**
      * Returns the host name.
@@ -205,7 +202,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
-    public LinkedHashMap<String, String> getProperties() {
+    public Map<String, String> getProperties() {
         return properties;
     }
 
@@ -213,10 +210,9 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
      * Sets a dictionary of additional connection parameters that are added to the JDBC connection string.
      * @param properties Key/value dictionary with extra parameters.
      */
-    public void setProperties(LinkedHashMap<String, String> properties) {
+    public void setProperties(Map<String, String> properties) {
         setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties;
-        this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
+        this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
     }
 
     /**
@@ -236,12 +232,6 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
     public PostgresqlParametersSpec clone() {
         try {
             PostgresqlParametersSpec cloned = (PostgresqlParametersSpec)super.clone();
-            if (cloned.properties != null) {
-                cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
-            }
-            if (cloned.originalProperties != null) {
-                cloned.originalProperties = (LinkedHashMap<String, String>) cloned.originalProperties.clone();
-            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -263,32 +253,11 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
             cloned.password = secretValueProvider.expandValue(cloned.password);
             cloned.options = secretValueProvider.expandValue(cloned.options);
             cloned.properties = secretValueProvider.expandProperties(cloned.properties);
-            cloned.originalProperties = null;
 
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned", ex);
         }
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-        this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
     }
 }

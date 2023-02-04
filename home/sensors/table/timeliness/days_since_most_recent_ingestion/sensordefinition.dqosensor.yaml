@@ -1,3 +1,5 @@
 apiVersion: dqo/v1
 kind: sensor
-spec: {}
+spec:
+  requires_event_timestamp: false
+  requires_ingestion_timestamp: true

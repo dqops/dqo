@@ -17,10 +17,16 @@ package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UIQualityCategoryBasicModel;
@@ -30,6 +36,7 @@ import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,14 +52,19 @@ import java.util.stream.Collectors;
 @Component
 public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingService {
     private ReflectionService reflectionService;
+    private SensorDefinitionFindService sensorDefinitionFindService;
 
     /**
      * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
      * @param reflectionService Reflection service used to read the list of checks.
+     * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
      */
     @Autowired
-    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService) {
+    public SpecToUiCheckMappingServiceImpl(
+            ReflectionService reflectionService,
+            SensorDefinitionFindService sensorDefinitionFindService) {
         this.reflectionService = reflectionService;
+        this.sensorDefinitionFindService = sensorDefinitionFindService;
     }
 
     /**
@@ -60,15 +72,20 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
-     * @param defaultDataStreamName Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
+     * @param tableSpec Table specification with the configuration of the parent table.
+     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType Provider type from the parent connection.
      * @return UI friendly model of data quality checks' container.
      */
     @Override
     public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                           CheckSearchFilters runChecksTemplate,
-                                          String defaultDataStreamName) {
+                                          TableSpec tableSpec,
+                                          ExecutionContext executionContext,
+                                          ProviderType providerType) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+        String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         Optional<String> categoryNameFilter = Optional.ofNullable(uiAllChecksModel.getRunChecksJobTemplate().getCheckCategory());
@@ -77,8 +94,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             UIQualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
-                    categoryFieldValue, runChecksTemplate, defaultDataStreamName);
-            uiAllChecksModel.getCategories().add(categoryModel);
+                    categoryFieldValue, runChecksTemplate, tableSpec, executionContext, providerType, defaultDataStreamName);
+            if (categoryModel != null && categoryModel.getChecks().size() > 0) {
+                uiAllChecksModel.getCategories().add(categoryModel);
+            }
         }
 
         return uiAllChecksModel;
@@ -110,12 +129,18 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
+     * @param tableSpec               Table specification with the configuration of the parent table.
+     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType Provider type from the parent connection.
      * @param defaultDataStreamName   Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
      */
     protected UIQualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                          Object checkCategoryParentNode,
                                                          CheckSearchFilters runChecksTemplate,
+                                                         TableSpec tableSpec,
+                                                         ExecutionContext executionContext,
+                                                         ProviderType providerType,
                                                          String defaultDataStreamName) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
         categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
@@ -133,7 +158,11 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
             AbstractCheckSpec<?,?,?,?> checkFieldValue = (AbstractCheckSpec<?,?,?,?>) checkSpecObject;
-            UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate);
+            UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate, tableSpec, executionContext, providerType);
+            if (checkModel == null) {
+                continue;
+            }
+
             checkModel.setConfigured(checkSpecObjectNullable != null);
             categoryModel.getChecks().add(checkModel);
 
@@ -176,10 +205,52 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
      * @param checkSpec Check specification instance retrieved from the object.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
+     * @param tableSpec Table specification with the configuration of the parent table.
+     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType Provider type from the parent connection.
      * @return Check model.
      */
-    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo, AbstractCheckSpec<?,?,?,?> checkSpec, CheckSearchFilters runChecksCategoryTemplate) {
+    protected UICheckModel createCheckModel(FieldInfo checkFieldInfo,
+                                            AbstractCheckSpec<?,?,?,?> checkSpec,
+                                            CheckSearchFilters runChecksCategoryTemplate,
+                                            TableSpec tableSpec,
+                                            ExecutionContext executionContext,
+                                            ProviderType providerType) {
         UICheckModel checkModel = new UICheckModel();
+
+        ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
+        FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
+        AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
+        checkModel.setFilter(parametersSpec.getFilter());
+        String sensorDefinitionName = parametersSpec.getSensorDefinitionName();
+        checkModel.setSensorName(sensorDefinitionName);
+        checkModel.setSensorParametersSpec(parametersSpec);
+
+        if (executionContext != null && providerType != null) {
+            SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
+                    executionContext, sensorDefinitionName, providerType);
+
+            if (providerSensorDefinition.getProviderSensorDefinitionSpec() == null) {
+                return null; // skip this check
+            }
+
+            SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
+            if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
+                    Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getEventTimestampColumn())) {
+                if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
+                        Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
+                    checkModel.pushError(CheckConfigurationRequirementsError.missing_event_and_ingestion_columns);
+                } else {
+                    checkModel.pushError(CheckConfigurationRequirementsError.missing_event_timestamp_column);
+                }
+            } else {
+                if (sensorDefinitionSpec.isRequiresIngestionTimestamp() &&
+                        Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getIngestionTimestampColumn())) {
+                    checkModel.pushError(CheckConfigurationRequirementsError.missing_ingestion_timestamp_column);
+                }
+            }
+        }
+
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
         CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
@@ -194,13 +265,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setSupportsDataStreams(false);
         checkModel.setDataStream(checkSpec.getDataStream());
         checkModel.setCheckSpec(checkSpec);
-
-        ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
-        FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
-        AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
-        checkModel.setFilter(parametersSpec.getFilter());
-        checkModel.setSensorName(parametersSpec.getSensorDefinitionName());
-        checkModel.setSensorParametersSpec(parametersSpec);
 
         List<UIFieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
         checkModel.setSensorParameters(fieldsForParameterSpec);

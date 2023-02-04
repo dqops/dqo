@@ -19,7 +19,6 @@ import {
   TableBasicModel,
   TableModel,
   RecurringScheduleSpec,
-  TimeSeriesConfigurationSpec,
   TableAdHocCheckCategoriesSpec,
   UIAllChecksModel,
   DataStreamMappingSpec
@@ -36,7 +35,6 @@ export interface ITableState {
   isUpdatedTableBasic?: boolean;
   schedule?: RecurringScheduleSpec;
   isUpdatedSchedule?: boolean;
-  timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
   isUpdatedComments?: boolean;
   labels: string[];

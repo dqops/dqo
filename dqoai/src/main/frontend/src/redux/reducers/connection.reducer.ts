@@ -19,8 +19,7 @@ import {
   ConnectionBasicModel,
   ConnectionModel,
   DataStreamMappingSpec,
-  RecurringScheduleSpec,
-  TimeSeriesConfigurationSpec
+  RecurringScheduleSpec
 } from '../../api';
 import { CONNECTION_ACTION } from '../types';
 
@@ -32,7 +31,6 @@ export interface IConnectionState {
   connectionBasic?: ConnectionBasicModel;
   isUpdating: boolean;
   schedule?: RecurringScheduleSpec;
-  timeSeries?: TimeSeriesConfigurationSpec;
   comments: CommentSpec[];
   labels: string[];
   isUpdatedConnectionBasic?: boolean;

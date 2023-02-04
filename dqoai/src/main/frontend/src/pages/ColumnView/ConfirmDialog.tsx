@@ -27,7 +27,7 @@ const ConfirmDialog = ({
         <DialogBody className="pt-10 pb-2 px-8">
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
             Are you sure you want to delete the table{' '}
-            {`${column?.connection_name}.${column?.table?.schemaName}.${column?.table?.tableName}.${column?.column_name}`}
+            {`${column?.connection_name}.${column?.table?.schema_name}.${column?.table?.table_name}.${column?.column_name}`}
             ?
           </div>
         </DialogBody>

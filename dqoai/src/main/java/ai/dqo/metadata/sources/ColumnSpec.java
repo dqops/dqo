@@ -61,8 +61,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
-            put("schedule_override", o -> o.scheduleOverride);
-			put("labels", o -> o.labels);
+            put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
     };
@@ -94,13 +93,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector;
-
-    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -229,24 +221,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
         setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
         this.statisticsCollector = statisticsCollector;
         propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
-    }
-
-    /**
-     * Returns the schedule configuration for running the checks automatically.
-     * @return Schedule configuration.
-     */
-    public RecurringScheduleSpec getScheduleOverride() {
-        return scheduleOverride;
-    }
-
-    /**
-     * Stores a new schedule configuration.
-     * @param scheduleOverride New schedule configuration.
-     */
-    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
-        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
-        this.scheduleOverride = scheduleOverride;
-        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
     }
 
     /**
@@ -460,10 +434,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
                 cloned.comments = cloned.comments.clone();
             }
 
-            if (cloned.scheduleOverride != null) {
-                cloned.scheduleOverride = cloned.scheduleOverride.clone();
-            }
-
             if (cloned.checks != null) {
                 Cloner cloner = new Cloner();
                 cloned.checks = cloner.deepClone(cloned.checks);
@@ -518,7 +488,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
-            cloned.scheduleOverride = null;
             cloned.statisticsCollector = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
@@ -548,7 +517,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
-            cloned.scheduleOverride = null;
             cloned.labels = null;
             cloned.statisticsCollector = null;
             return cloned;

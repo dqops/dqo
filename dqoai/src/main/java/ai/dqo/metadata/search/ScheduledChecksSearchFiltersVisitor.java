@@ -91,35 +91,6 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
     }
 
     /**
-     * Accepts a column specification.
-     *
-     * @param columnSpec Column specification.
-     * @param foundNodes Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject foundNodes) {
-        Boolean enabledFilter = this.filters.getEnabled();
-        if (enabledFilter != null) {
-            boolean columnIsEnabled = !columnSpec.isDisabled();
-            if (enabledFilter != columnIsEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
-
-        RecurringScheduleSpec columnSchedule = columnSpec.getScheduleOverride();
-        assert this.filters.getSchedule() != null;
-
-        if (columnSchedule != null) {
-            if (!Objects.equals(columnSchedule, this.filters.getSchedule())) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;  // this column has a different schedule, no longer collecting nested checks
-            }
-        }
-
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts any check specification.
      *
      * @param abstractCheckSpec Data quality check specification (any).
@@ -127,9 +98,8 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
 
         if (enabledFilter != null) {
             boolean checkIsEnabled = !abstractCheckSpec.isDisabled();

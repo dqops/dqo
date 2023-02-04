@@ -27,8 +27,8 @@ const ColumnActionGroup = ({
     if (columnBasic) {
       await ColumnApiClient.deleteColumn(
         columnBasic?.connection_name ?? '',
-        columnBasic?.table?.schemaName ?? '',
-        columnBasic.table?.tableName ?? '',
+        columnBasic?.table?.schema_name ?? '',
+        columnBasic.table?.table_name ?? '',
         columnBasic.column_name ?? ''
       );
     }

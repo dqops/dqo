@@ -21,8 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.LinkedHashMap;
-
 @SpringBootTest
 public class TableTargetSpecTests extends BaseTest {
     private TableTargetSpec sut;
@@ -63,27 +61,6 @@ public class TableTargetSpecTests extends BaseTest {
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
 		this.sut.setSchemaName("test");
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenPropertiesSet_thenIsDirtyIsTrue() {
-        LinkedHashMap hashMap = new LinkedHashMap<String, String>();
-        hashMap.put("test", "test");
-		this.sut.setProperties(hashMap);
-        Assertions.assertEquals(hashMap, this.sut.getProperties());
-        Assertions.assertTrue(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenSamePropertiesObjectAsCurrentSet_thenIsDirtyIsTru() {
-        LinkedHashMap hashMap = new LinkedHashMap<String, String>();
-        hashMap.put("test", "test");
-		this.sut.setProperties(hashMap);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setProperties(hashMap);
         Assertions.assertFalse(this.sut.isDirty());
     }
 

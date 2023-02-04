@@ -18,9 +18,15 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.metadata.sources.TableSpec;
+import ai.dqo.metadata.sources.TableSpecObjectMother;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
@@ -38,16 +44,22 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     private SpecToUiCheckMappingServiceImpl sut;
+    private TableSpec tableSpec;
+    private ExecutionContext executionContext;
 
     @BeforeEach
     void setUp() {
-        this.sut = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
+        this.sut = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+        this.tableSpec = TableSpecObjectMother.create("public", "tab1");
+        this.tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
+        this.executionContext = new ExecutionContext(null, DqoHomeContextObjectMother.getRealDqoHomeContext());
     }
 
     @Test
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(4, uiModel.getCategories().size());
@@ -56,7 +68,8 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(8, uiModel.getCategories().size());
@@ -92,7 +105,8 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), null);
+        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, this.executionContext, ProviderType.bigquery);
         UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiBasicModel);
@@ -107,7 +121,8 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), null);
+        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, this.executionContext, ProviderType.bigquery);
         UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec);
 
         Assertions.assertNotNull(uiBasicModel);

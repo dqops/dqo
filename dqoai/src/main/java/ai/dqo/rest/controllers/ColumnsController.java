@@ -17,6 +17,7 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
@@ -27,10 +28,12 @@ import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.statistics.services.StatisticsDataService;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
@@ -65,6 +68,7 @@ import java.util.stream.Stream;
 @Api(value = "Columns", description = "Manages columns inside a table")
 public class ColumnsController {
     private UserHomeContextFactory userHomeContextFactory;
+    private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
     private UiToSpecCheckMappingService uiToSpecCheckMappingService;
     private final StatisticsDataService statisticsDataService;
@@ -72,16 +76,19 @@ public class ColumnsController {
     /**
      * Creates a columns rest controller.
      * @param userHomeContextFactory      User home context factory.
+     * @param dqoHomeContextFactory       DQO home context factory, used to find built-in sensors.
      * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
      * @param statisticsDataService       Statistics data service.
      */
     @Autowired
     public ColumnsController(UserHomeContextFactory userHomeContextFactory,
+                             DqoHomeContextFactory dqoHomeContextFactory,
                              SpecToUiCheckMappingService specToUiCheckMappingService,
                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
                              StatisticsDataService statisticsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
         this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
@@ -325,38 +332,6 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves the configuration of an overridden schedule on a column given a connection, table add column names.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @param columnName     Column name.
-     * @return Overridden schedule configuration on a column.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/scheduleoverride")
-    @ApiOperation(value = "getColumnScheduleOverride", notes = "Return the configuration of an overridden schedule on a column", response = RecurringScheduleSpec.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of an overridden schedule on a column returned", response = RecurringScheduleSpec.class),
-            @ApiResponse(code = 404, message = "Connection, table or column not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getColumnScheduleOverride(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Column name") @PathVariable String columnName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        RecurringScheduleSpec scheduleOverride = columnSpec.getScheduleOverride();
-
-        return new ResponseEntity<>(Mono.justOrEmpty(scheduleOverride), HttpStatus.OK); // 200
-    }
-
-    /**
      * Retrieves the configuration of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -574,11 +549,8 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnAdHocCheckCategoriesSpec tempChecks = columnSpec.getChecks();
-        if (tempChecks == null) {
-            tempChecks = new ColumnAdHocCheckCategoriesSpec();
-        }
-        ColumnAdHocCheckCategoriesSpec checks = tempChecks;
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -591,8 +563,10 @@ public class ColumnsController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
@@ -640,40 +614,23 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(
-                columnSpec.getCheckpoints(),
-                ColumnCheckpointsSpec::new);
-
-        AbstractRootChecksContainerSpec tempCheckpointsPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getDaily(),
-                        ColumnDailyCheckpointCategoriesSpec::new);
-                break;
-
-            case monthly:
-                tempCheckpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getMonthly(),
-                        ColumnMonthlyCheckpointCategoriesSpec::new);
-                break;
-        }
-
-        final AbstractRootChecksContainerSpec checkpointsPartition = tempCheckpointsPartition;
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setColumnName(columnName);
-            setCheckType(checkpointsPartition.getCheckType());
-            setTimeScale(checkpointsPartition.getCheckTimeScale());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
         }};
 
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
-                checkpointsPartition,
+                checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
@@ -721,40 +678,24 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(
-                columnSpec.getPartitionedChecks(),
-                ColumnPartitionedChecksRootSpec::new);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
-        AbstractRootChecksContainerSpec tempPartitionedChecksPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getDaily(),
-                        ColumnDailyPartitionedCheckCategoriesSpec::new);
-                break;
-
-            case monthly:
-                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getMonthly(),
-                        ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-                break;
-        }
-
-        final AbstractRootChecksContainerSpec partitionedChecksPartition = tempPartitionedChecksPartition;
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setColumnName(columnName);
-            setCheckType(partitionedChecksPartition.getCheckType());
-            setTimeScale(partitionedChecksPartition.getCheckTimeScale());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
         }};
 
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
-                partitionedChecksPartition,
+                checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
@@ -801,12 +742,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnAdHocCheckCategoriesSpec checks = columnSpec.getChecks();
-        if (checks == null) {
-            checks = new ColumnAdHocCheckCategoriesSpec();
-        }
-
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
         UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
 
@@ -854,26 +792,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(
-                columnSpec.getCheckpoints(),
-                ColumnCheckpointsSpec::new);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
 
-        AbstractRootChecksContainerSpec checkpointsPartition = null;
-        switch (timeScale) {
-            case daily:
-                checkpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getDaily(),
-                        ColumnDailyCheckpointCategoriesSpec::new);
-                break;
-
-            case monthly:
-                checkpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getMonthly(),
-                        ColumnMonthlyCheckpointCategoriesSpec::new);
-                break;
-        }
-
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checkpointsPartition);
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
 
@@ -921,29 +842,11 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(
-                columnSpec.getPartitionedChecks(),
-                ColumnPartitionedChecksRootSpec::new);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
 
-        AbstractRootChecksContainerSpec partitionedChecksPartition = null;
-        switch (timeScale) {
-            case daily:
-                partitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getDaily(),
-                        ColumnDailyPartitionedCheckCategoriesSpec::new);
-                break;
-
-            case monthly:
-                partitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getMonthly(),
-                        ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-                break;
-        }
-
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(partitionedChecksPartition);
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
-
 
     /**
      * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name, filtered by category and check name.
@@ -991,11 +894,8 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnAdHocCheckCategoriesSpec tempChecks = columnSpec.getChecks();
-        if (tempChecks == null) {
-            tempChecks = new ColumnAdHocCheckCategoriesSpec();
-        }
-        ColumnAdHocCheckCategoriesSpec checks = tempChecks;
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1010,8 +910,10 @@ public class ColumnsController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
@@ -1063,42 +965,25 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(
-                columnSpec.getCheckpoints(),
-                ColumnCheckpointsSpec::new);
-
-        AbstractRootChecksContainerSpec tempCheckpointsPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempCheckpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getDaily(),
-                        ColumnDailyCheckpointCategoriesSpec::new);
-                break;
-
-            case monthly:
-                tempCheckpointsPartition = Objects.requireNonNullElseGet(
-                        checkpoints.getMonthly(),
-                        ColumnMonthlyCheckpointCategoriesSpec::new);
-                break;
-        }
-
-        final AbstractRootChecksContainerSpec checkpointsPartition = tempCheckpointsPartition;
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setColumnName(columnName);
-            setCheckType(checkpointsPartition.getCheckType());
-            setTimeScale(checkpointsPartition.getCheckTimeScale());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
             setCheckName(checkName);
             setEnabled(true);
         }};
 
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
-                checkpointsPartition,
+                checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
 
@@ -1150,45 +1035,27 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(
-                columnSpec.getPartitionedChecks(),
-                ColumnPartitionedChecksRootSpec::new);
-
-        AbstractRootChecksContainerSpec tempPartitionedChecksPartition = null;
-        switch (timeScale) {
-            case daily:
-                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getDaily(),
-                        ColumnDailyPartitionedCheckCategoriesSpec::new);
-                break;
-
-            case monthly:
-                tempPartitionedChecksPartition = Objects.requireNonNullElseGet(
-                        partitionedChecks.getMonthly(),
-                        ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-                break;
-        }
-
-        final AbstractRootChecksContainerSpec partitionedChecksPartition = tempPartitionedChecksPartition;
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setColumnName(columnName);
-            setCheckType(partitionedChecksPartition.getCheckType());
-            setTimeScale(partitionedChecksPartition.getCheckTimeScale());
+            setCheckType(checks.getCheckType());
+            setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
             setCheckName(checkName);
             setEnabled(true);
         }};
 
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
-                partitionedChecksPartition,
+                checks,
                 checkSearchFilters,
-                tableSpec.getDataStreams().getFirstDataStreamMappingName()
-        );
+                tableSpec,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
+
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
-
 
     /**
      * Creates (adds) a new column metadata.
@@ -1351,56 +1218,6 @@ public class ColumnsController {
     }
 
     /**
-     * Updates the configuration of the overridden schedule on a column.
-     * @param connectionName        Connection name.
-     * @param schemaName            Schema name.
-     * @param tableName             Table name.
-     * @param columnName            Column name.
-     * @param recurringScheduleSpec Overridden schedule configuration to store or an empty optional to clear the schedule configuration on a column.
-     * @return Empty response.
-     */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/scheduleoverride")
-    @ApiOperation(value = "updateColumnScheduleOverride", notes = "Updates the overridden schedule configuration on a column.")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column's overridden schedule configuration successfully updated"),
-            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table not found"),
-            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> updateColumnScheduleOverride(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Overridden schedule configuration or an empty object to clear the schedule from the column level")
-                @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName) ||
-                Strings.isNullOrEmpty(columnName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        ColumnSpec columnSpec = this.readColumnSpec(userHomeContext, connectionName, schemaName, tableName, columnName);
-        if (columnSpec == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
-        }
-
-        // TODO: validate the columnSpec
-        if (recurringScheduleSpec.isPresent()) {
-            columnSpec.setScheduleOverride(recurringScheduleSpec.get());
-        } else {
-            columnSpec.setScheduleOverride(null);
-        }
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
-
-    /**
      * Updates the list of labels assigned to a column.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -1499,8 +1316,7 @@ public class ColumnsController {
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
-    
-    
+
     /**
      * Updates the configuration of column level data quality ad-hoc checks configured on a column.
      * @param connectionName            Connection name.
@@ -1819,15 +1635,12 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnAdHocCheckCategoriesSpec checksToUpdate = columnSpec.getChecks();
-        if (checksToUpdate == null) {
-            checksToUpdate = new ColumnAdHocCheckCategoriesSpec();
-        }
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
 
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
-                columnSpec.setChecks(checksToUpdate);
+                columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
@@ -1879,37 +1692,13 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(columnSpec.getCheckpoints(), ColumnCheckpointsSpec::new);
-        AbstractRootChecksContainerSpec checksToUpdate = null;
-
-        switch (timeScale) {
-            case daily:
-                checksToUpdate = Objects.requireNonNullElseGet(checkpoints.getDaily(), ColumnDailyCheckpointCategoriesSpec::new);
-                break;
-
-            case monthly:
-                checksToUpdate = Objects.requireNonNullElseGet(checkpoints.getMonthly(), ColumnMonthlyCheckpointCategoriesSpec::new);
-                break;
-        }
-
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
 
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
-            
-            switch (timeScale) {
-                case daily:
-                    if (!checksToUpdate.isDefault()) {
-                        checkpoints.setDaily((ColumnDailyCheckpointCategoriesSpec) checksToUpdate);
-                    }
-                    break;
-
-                case monthly:
-                    if (!checksToUpdate.isDefault()) {
-                        checkpoints.setMonthly((ColumnMonthlyCheckpointCategoriesSpec) checksToUpdate);
-                    }
-                    break;
+            if (!checksToUpdate.isDefault()) {
+                columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
-            columnSpec.setCheckpoints(checkpoints);
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }
@@ -1960,37 +1749,13 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
-        AbstractRootChecksContainerSpec checksToUpdate = null;
-
-        switch (timeScale) {
-            case daily:
-                checksToUpdate = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
-                break;
-
-            case monthly:
-                checksToUpdate = Objects.requireNonNullElseGet(partitionedChecks.getMonthly(), ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-                break;
-        }
-
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
-
-            switch (timeScale) {
-                case daily:
-                    if (!checksToUpdate.isDefault()) {
-                        partitionedChecks.setDaily((ColumnDailyPartitionedCheckCategoriesSpec) checksToUpdate);
-                    }
-                    break;
-
-                case monthly:
-                    if (!checksToUpdate.isDefault()) {
-                        partitionedChecks.setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec) checksToUpdate);
-                    }
-                    break;
+            if (!checksToUpdate.isDefault()) {
+                columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
-            columnSpec.setPartitionedChecks(partitionedChecks);
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object
         }

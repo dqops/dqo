@@ -41,26 +41,28 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
      */
     public SensorDefinitionFindResult findProviderSensorDefinition(
             ExecutionContext executionContext, String sensorName, ProviderType providerType) {
-        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        UserHome userHome = executionContext.getUserHomeContext() != null ? executionContext.getUserHomeContext().getUserHome() : null;
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
 
         String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
         HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(jinjaFileNameRelativeToHome);
 
-        SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);
-        if (userSensorDefinitionWrapper != null) {
-            ProviderSensorDefinitionWrapper userProviderSensorDefinitionWrapper =
-                    userSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
-            if (userProviderSensorDefinitionWrapper != null) {
-                boolean userHomeIsLocalFileSystem = executionContext.getUserHomeContext().getHomeRoot() != null &&
-                        executionContext.getUserHomeContext().getHomeRoot().isLocalFileSystem();
+        if (userHome != null) {
+            SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);
+            if (userSensorDefinitionWrapper != null) {
+                ProviderSensorDefinitionWrapper userProviderSensorDefinitionWrapper =
+                        userSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
+                if (userProviderSensorDefinitionWrapper != null) {
+                    boolean userHomeIsLocalFileSystem = executionContext.getUserHomeContext().getHomeRoot() != null &&
+                            executionContext.getUserHomeContext().getHomeRoot().isLocalFileSystem();
 
-                return new SensorDefinitionFindResult(userSensorDefinitionWrapper.getSpec(),
-                        userProviderSensorDefinitionWrapper.getSpec(),
-                        userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getSqlTemplate(),  // return a sql template as a string only when the file is not stored in a file system
-                        providerType,
-                        HomeType.USER_HOME,
-                        userHomeIsLocalFileSystem ? jinjaFileHomePath : null);
+                    return new SensorDefinitionFindResult(userSensorDefinitionWrapper.getSpec(),
+                            userProviderSensorDefinitionWrapper.getSpec(),
+                            userHomeIsLocalFileSystem ? null : userProviderSensorDefinitionWrapper.getSqlTemplate(),  // return a sql template as a string only when the file is not stored in a file system
+                            providerType,
+                            HomeType.USER_HOME,
+                            userHomeIsLocalFileSystem ? jinjaFileHomePath : null);
+                }
             }
         }
 
@@ -71,7 +73,7 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
 
         ProviderSensorDefinitionWrapper builtinProviderSensorDefinitionWrapper =
                 builtinSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
-        if (builtinSensorDefinitionWrapper == null) {
+        if (builtinProviderSensorDefinitionWrapper == null) {
             return null;
         }
 

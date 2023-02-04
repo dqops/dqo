@@ -66,8 +66,8 @@ const ColumnPartitionedChecksView = ({
     if (
       !dailyPartitionedChecks ||
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(
@@ -82,8 +82,8 @@ const ColumnPartitionedChecksView = ({
     if (
       !monthlyPartitionedChecks ||
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(
