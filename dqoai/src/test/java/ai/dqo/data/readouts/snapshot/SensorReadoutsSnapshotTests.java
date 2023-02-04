@@ -18,6 +18,8 @@ package ai.dqo.data.readouts.snapshot;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -46,11 +48,13 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
     private DqoConfigurationProperties dqoConfigurationProperties;
     private ParquetPartitionStorageServiceImpl parquetStorageService;
     private PhysicalTableName tableName;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
 
     @BeforeEach
     void setUp() {
-		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
+		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
         parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,

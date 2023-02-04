@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules.runners.python;
 
-import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.execution.ExecutionContext;
@@ -39,20 +39,20 @@ public class PythonRuleRunner extends AbstractRuleRunner {
      */
     public static final String CLASS_NAME = PythonRuleRunner.class.getName();
     private final PythonCallerService pythonCallerService;
-    private final DqoConfigurationProperties configurationProperties;
+    private final DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final HomeLocationFindService homeLocationFindService;
 
     /**
      * Default constructor.
      * @param pythonCallerService Python call service.
-     * @param configurationProperties Configuration properties with the rule runner python path.
+     * @param pythonConfigurationProperties Configuration properties with the rule runner python path.
      * @param homeLocationFindService Home (user home or dqo home) finder service.
      */
     public PythonRuleRunner(PythonCallerService pythonCallerService,
-							DqoConfigurationProperties configurationProperties,
+                            DqoPythonConfigurationProperties pythonConfigurationProperties,
 							HomeLocationFindService homeLocationFindService) {
         this.pythonCallerService = pythonCallerService;
-        this.configurationProperties = configurationProperties;
+        this.pythonConfigurationProperties = pythonConfigurationProperties;
         this.homeLocationFindService = homeLocationFindService;
     }
 
@@ -68,7 +68,7 @@ public class PythonRuleRunner extends AbstractRuleRunner {
     public RuleExecutionResult executeRule(ExecutionContext executionContext,
                                            RuleExecutionRunParameters ruleRunParameters,
                                            RuleDefinitionFindResult ruleDefinitionFindResult) {
-        String evaluateRulesModule = this.configurationProperties.getPython().getEvaluateRulesModule();
+        String evaluateRulesModule = this.pythonConfigurationProperties.getEvaluateRulesModule();
         HomeFilePath ruleHomeRelativePath = ruleDefinitionFindResult.getRulePythonFilePath();
 
         PythonRuleCallInput ruleInput = new PythonRuleCallInput();

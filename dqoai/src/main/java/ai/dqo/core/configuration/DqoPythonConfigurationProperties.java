@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dqo.python")
 @EqualsAndHashCode(callSuper = false)
 public class DqoPythonConfigurationProperties implements Cloneable {
-    private String interpreter = "python";
+    private String interpreter = "python3,python3.exe,python,python.exe";
     private String evaluateTemplatesModule = "lib/evaluate_templates.py";
     private String evaluateRulesModule = "lib/evaluate_rules.py";
     private String venvPath = "venv";

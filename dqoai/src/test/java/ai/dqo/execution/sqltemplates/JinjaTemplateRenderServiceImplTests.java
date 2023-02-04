@@ -20,6 +20,8 @@ import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -46,9 +48,11 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
     @BeforeEach
     void setUp() {
         DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        DqoPythonConfigurationProperties pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
-        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(dqoConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
-		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, dqoConfigurationProperties);
+        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
+                dqoConfigurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties);
 		this.renderParameters = new JinjaTemplateRenderParameters(
                 new ConnectionSpec(),
                 new TableSpec(),

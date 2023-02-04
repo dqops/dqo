@@ -16,6 +16,7 @@
 package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
@@ -34,18 +35,18 @@ import java.nio.file.Path;
 @Component
 public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderService {
     private final PythonCallerService pythonCallerService;
-    private final DqoConfigurationProperties configurationProperties;
+    private final DqoPythonConfigurationProperties pythonConfigurationProperties;
 
     /**
      * Creates a jinja template rendering service.
      * @param pythonCallerService Python call service.
-     * @param configurationProperties Configuration properties. We need to find the python file that will run jinja2.
+     * @param pythonConfigurationProperties Python configuration properties. We need to find the python file that will run jinja2.
      */
     @Autowired
     public JinjaTemplateRenderServiceImpl(PythonCallerService pythonCallerService,
-										  DqoConfigurationProperties configurationProperties) {
+                                          DqoPythonConfigurationProperties pythonConfigurationProperties) {
         this.pythonCallerService = pythonCallerService;
-        this.configurationProperties = configurationProperties;
+        this.pythonConfigurationProperties = pythonConfigurationProperties;
     }
 
     /**
@@ -58,7 +59,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(templateText);
         inputDto.setParameters(templateRenderParameters);
-        String evaluateTemplatesModule = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         JinjaTemplateRenderOutput output =
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
@@ -100,7 +101,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
 //        }
 
         inputDto.setParameters(templateRenderParameters);
-        String evaluateTemplatesModule = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         progressListener.onBeforeSqlTemplateRender(new BeforeSqlTemplateRenderEvent(inputDto));
         JinjaTemplateRenderOutput output =

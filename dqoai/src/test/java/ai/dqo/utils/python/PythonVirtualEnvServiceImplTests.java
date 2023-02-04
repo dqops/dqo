@@ -36,7 +36,7 @@ public class PythonVirtualEnvServiceImplTests extends BaseTest {
     @BeforeEach
     void setUp() {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-		pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefault();
+		pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
         String testableHome = TestFolderUtilities.createEmptyTestableFolder("PythonVirtualEnvServiceImplTests");
 		dqoConfigurationProperties.setHome(testableHome);
 

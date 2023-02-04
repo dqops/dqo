@@ -30,17 +30,4 @@ public class DqoConfigurationPropertiesObjectMother {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
         return beanFactory.getBean(DqoConfigurationProperties.class).clone();
     }
-
-    /**
-     * Creates a DQO configuration using a temporary user home. The user home (target/temporary-user-home) is also removed and recreated as an empty file.
-     * @param recreateHomeDirectory Recreate the temporary user directory (remove the directory with all content and create again).
-     * @return User configuration.
-     */
-    public static DqoConfigurationProperties createConfigurationWithTemporaryUserHome(boolean recreateHomeDirectory) {
-        DqoConfigurationProperties defaultCloned = getDefaultCloned();
-        DqoUserConfigurationProperties userConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(recreateHomeDirectory);
-        defaultCloned.setUser(userConfigurationProperties);
-
-        return defaultCloned;
-    }
 }

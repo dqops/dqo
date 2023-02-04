@@ -18,6 +18,7 @@ package ai.dqo.data.storage;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
@@ -53,11 +54,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
+        dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
-        HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoConfigurationProperties.getUser(), dqoConfigurationProperties);
+        HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
 
         this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,

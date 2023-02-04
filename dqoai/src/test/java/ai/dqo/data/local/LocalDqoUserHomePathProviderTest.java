@@ -18,6 +18,8 @@ package ai.dqo.data.local;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,9 +40,8 @@ public class LocalDqoUserHomePathProviderTest extends BaseTest {
     @Test
     void getLocalUserHomePath_whenRetrieved_thenReturnsUserHomePath() {
         Path userHomePath = this.sut.getLocalUserHomePath();
-        DqoConfigurationProperties configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-        String expected = configurationProperties.getUser().getHome().replace('\\', '/');
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        String expected = dqoUserConfigurationProperties.getHome().replace('\\', '/');
         Assertions.assertEquals(expected, userHomePath.toString().replace('\\', '/'));
     }
-
 }

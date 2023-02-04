@@ -15,9 +15,17 @@
  */
 package ai.dqo.utils.docs;
 
+import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
+import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
+import ai.dqo.utils.docs.checks.CheckDocumentationModelFactory;
+import ai.dqo.utils.docs.checks.CheckDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
@@ -31,7 +39,11 @@ import ai.dqo.utils.docs.sensors.SensorDocumentationGenerator;
 import ai.dqo.utils.docs.sensors.SensorDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
+import ai.dqo.utils.python.PythonCallerServiceImpl;
+import ai.dqo.utils.python.PythonVirtualEnvServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
+import ai.dqo.utils.serialization.JsonSerializerImpl;
+import ai.dqo.utils.serialization.YamlSerializerImpl;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -150,5 +162,34 @@ public class GenerateDocumentationPostProcessor {
                 renderedIndexYaml,
                 "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE CLI COMMANDS");
+    }
+
+    /**
+     * Creates a check documentation model factory.
+     * @param projectRoot Project root path.
+     * @param dqoHomeContext DQO Home context.
+     * @return Check documentation model factory.
+     */
+    public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext){
+        ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService);
+        DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
+        configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
+        DqoPythonConfigurationProperties pythonConfigurationProperties = new DqoPythonConfigurationProperties();
+
+        PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
+                configurationProperties, new DqoPythonConfigurationProperties(), new DqoUserConfigurationProperties());
+        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
+                configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+
+        CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
+                dqoHomeContext,
+                new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService),
+                createSensorDocumentationModelFactory(dqoHomeContext),
+                createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
+                new UiToSpecCheckMappingServiceImpl(reflectionService),
+                new YamlSerializerImpl(configurationProperties),
+                new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties));
+        return checkDocumentationModelFactory;
     }
 }

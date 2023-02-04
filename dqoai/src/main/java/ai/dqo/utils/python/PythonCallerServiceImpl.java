@@ -16,6 +16,7 @@
 package ai.dqo.utils.python;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -40,6 +41,7 @@ import java.util.Map;
 @Component
 public class PythonCallerServiceImpl implements PythonCallerService {
     private final DqoConfigurationProperties configurationProperties;
+    private DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
     private final PythonVirtualEnvService pythonVirtualEnvService;
     private final Map<String, StreamingPythonProcess> pythonModuleProcesses = new HashMap<>();
@@ -47,15 +49,18 @@ public class PythonCallerServiceImpl implements PythonCallerService {
 
     /**
      * Default injection constructor.
-     * @param configurationProperties DQO configuration properties.
+     * @param configurationProperties Configuration properties with the DQO Home path.
+     * @param pythonConfigurationProperties DQO python configuration properties.
      * @param jsonSerializer Json serializer.
      * @param pythonVirtualEnvService Python virtual environment management service.
      */
     @Autowired
     public PythonCallerServiceImpl(DqoConfigurationProperties configurationProperties,
-								   JsonSerializer jsonSerializer,
-								   PythonVirtualEnvService pythonVirtualEnvService){
+                                   DqoPythonConfigurationProperties pythonConfigurationProperties,
+                                   JsonSerializer jsonSerializer,
+                                   PythonVirtualEnvService pythonVirtualEnvService){
         this.configurationProperties = configurationProperties;
+        this.pythonConfigurationProperties = pythonConfigurationProperties;
         this.jsonSerializer = jsonSerializer;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
     }
@@ -113,7 +118,7 @@ public class PythonCallerServiceImpl implements PythonCallerService {
                         virtualEnv.getPythonInterpreterPath(),
                         absolutePythonPath
                 );
-                streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.configurationProperties.getPython().getPythonScriptTimeoutSeconds());
+                streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
                 streamingPythonProcess.startProcess(virtualEnv);
 				this.pythonModuleProcesses.put(pythonFilePathInHome, streamingPythonProcess);
             }
