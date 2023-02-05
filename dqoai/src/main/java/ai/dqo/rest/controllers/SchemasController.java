@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
@@ -89,6 +90,27 @@ public class SchemasController {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(s + ".*");
+                setEnabled(true);
+            }});
+            setRunProfilingChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+                setCheckType(CheckType.ADHOC);
+                setEnabled(true);
+            }});
+            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+                setCheckType(CheckType.CHECKPOINT);
+                setEnabled(true);
+            }});
+            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(s + ".*");
+                setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()

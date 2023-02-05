@@ -618,6 +618,7 @@ public class TableSpec extends AbstractSpec {
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
     /**
      * Inspects all check containers and verifies if any of them has any checks configured.
      * @return True when the table has some table level checks (not column level), false when no table level checks were found.
@@ -633,6 +634,26 @@ public class TableSpec extends AbstractSpec {
 
         if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case ADHOC:
+                return this.checks != null && this.checks.hasAnyConfiguredChecks();
+
+            case CHECKPOINT:
+                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
         }
 
         return false;

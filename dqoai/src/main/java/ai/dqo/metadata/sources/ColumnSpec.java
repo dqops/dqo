@@ -509,4 +509,24 @@ public class ColumnSpec extends AbstractSpec {
 
         return false;
     }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case ADHOC:
+                return this.checks != null && this.checks.hasAnyConfiguredChecks();
+
+            case CHECKPOINT:
+                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
+        }
+
+        return false;
+    }
 }
