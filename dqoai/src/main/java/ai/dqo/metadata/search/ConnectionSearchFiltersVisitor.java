@@ -24,7 +24,7 @@ import com.google.common.base.Strings;
 /**
  * Visitor for {@link ConnectionSearchFilters} that finds the correct nodes.
  */
-public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final ConnectionSearchFilters filters;
 
     /**

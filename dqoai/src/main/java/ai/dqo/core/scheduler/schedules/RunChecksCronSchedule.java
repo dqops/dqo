@@ -101,7 +101,7 @@ public class RunChecksCronSchedule implements Cloneable {
         try {
             RunChecksCronSchedule cloned = (RunChecksCronSchedule) super.clone();
             if (cloned.recurringSchedule != null) {
-                cloned.recurringSchedule = cloned.recurringSchedule.clone();
+                cloned.recurringSchedule = cloned.recurringSchedule.deepClone();
             }
             return cloned;
         }

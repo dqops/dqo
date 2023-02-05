@@ -129,22 +129,22 @@ public class UICheckModel implements Cloneable {
         try {
             UICheckModel cloned = (UICheckModel)super.clone();
             if (cloned.sensorParametersSpec != null) {
-                cloned.sensorParametersSpec = cloned.sensorParametersSpec.clone();
+                cloned.sensorParametersSpec = cloned.sensorParametersSpec.deepClone();
             }
             if (cloned.checkSpec != null) {
-                cloned.checkSpec = cloned.checkSpec.clone();
+                cloned.checkSpec = cloned.checkSpec.deepClone();
             }
             if (cloned.rule != null) {
                 cloned.rule = cloned.rule.cloneForUpdate();
             }
             if (cloned.dataStreamsOverride != null) {
-                cloned.dataStreamsOverride = cloned.dataStreamsOverride.clone();
+                cloned.dataStreamsOverride = cloned.dataStreamsOverride.deepClone();
             }
             if (cloned.scheduleOverride != null) {
-                cloned.scheduleOverride = cloned.scheduleOverride.clone();
+                cloned.scheduleOverride = cloned.scheduleOverride.deepClone();
             }
             if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
+                cloned.comments = cloned.comments.deepClone();
             }
             if (cloned.runChecksJobTemplate != null) {
                 cloned.runChecksJobTemplate = cloned.runChecksJobTemplate.clone();

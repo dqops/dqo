@@ -50,7 +50,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ConnectionSpec extends AbstractSpec implements Cloneable {
+public class ConnectionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("comments", o -> o.comments);
@@ -365,36 +365,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public ConnectionSpec clone() {
-        try {
-            ConnectionSpec cloned = (ConnectionSpec)super.clone();
-            if (cloned.bigquery != null) {
-                cloned.bigquery = cloned.bigquery.clone();
-            }
-            if (cloned.snowflake != null) {
-                cloned.snowflake = cloned.snowflake.clone();
-            }
-            if (cloned.postgresql != null) {
-                cloned.postgresql = cloned.postgresql.clone();
-            }
-            if (cloned.defaultDataStreamMapping != null) {
-                cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.clone();
-            }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-            if (cloned.schedule != null) {
-                cloned.schedule = cloned.schedule.clone();
-            }
-            if (cloned.notifications != null) {
-                cloned.notifications = cloned.notifications.clone();
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public ConnectionSpec deepClone() {
+        ConnectionSpec cloned = (ConnectionSpec)super.deepClone();
+        return cloned;
     }
 
     /**

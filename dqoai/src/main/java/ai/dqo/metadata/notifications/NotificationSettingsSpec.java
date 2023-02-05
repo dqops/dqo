@@ -108,14 +108,9 @@ public class NotificationSettingsSpec extends AbstractSpec implements Cloneable 
      * Creates and returns a copy of this object.
      */
     @Override
-    public NotificationSettingsSpec clone() {
-        try {
-            NotificationSettingsSpec cloned = (NotificationSettingsSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public NotificationSettingsSpec deepClone() {
+        NotificationSettingsSpec cloned = (NotificationSettingsSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -124,13 +119,8 @@ public class NotificationSettingsSpec extends AbstractSpec implements Cloneable 
      * @return Cloned and expanded copy of the object.
      */
     public NotificationSettingsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            NotificationSettingsSpec cloned = (NotificationSettingsSpec) super.clone();
-            cloned.webhookUrl = secretValueProvider.expandValue(cloned.webhookUrl);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        NotificationSettingsSpec cloned = this.deepClone();
+        cloned.webhookUrl = secretValueProvider.expandValue(cloned.webhookUrl);
+        return cloned;
     }
 }

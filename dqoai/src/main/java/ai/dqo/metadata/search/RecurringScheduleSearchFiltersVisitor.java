@@ -21,7 +21,7 @@ import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 /**
  * Metadata node search visitor that is searching for all unique recurring schedules.
  */
-public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor {
+public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private RecurringScheduleSearchFilters filters;
 
     /**

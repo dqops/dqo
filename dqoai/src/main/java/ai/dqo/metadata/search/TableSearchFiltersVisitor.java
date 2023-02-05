@@ -22,7 +22,7 @@ import com.google.common.base.Strings;
 /**
  * Visitor for {@link TableSearchFilters} that finds the correct nodes.
  */
-public class TableSearchFiltersVisitor extends AbstractSearchVisitor {
+public class TableSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final TableSearchFilters filters;
 
     /**

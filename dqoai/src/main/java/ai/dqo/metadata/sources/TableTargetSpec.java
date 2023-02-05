@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableTargetSpec extends AbstractSpec implements Cloneable {
+public class TableTargetSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableTargetSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -164,14 +164,9 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public TableTargetSpec clone() {
-        try {
-            TableTargetSpec cloned = (TableTargetSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public TableTargetSpec deepClone() {
+        TableTargetSpec cloned = (TableTargetSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -180,7 +175,7 @@ public class TableTargetSpec extends AbstractSpec implements Cloneable {
      * @return Expanded and cloned copy of the object.
      */
     public TableTargetSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        TableTargetSpec cloned = this.clone();
+        TableTargetSpec cloned = this.deepClone();
         cloned.schemaName = secretValueProvider.expandValue(cloned.schemaName);
         cloned.tableName = secretValueProvider.expandValue(cloned.tableName);
         return cloned;

@@ -187,16 +187,10 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Creates and returns a copy of this object.
+     * Creates and returns a deep clone (copy) of this object.
      */
     @Override
-    public DashboardSpec clone() {
-        try {
-            DashboardSpec cloned = (DashboardSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public DashboardSpec deepClone() {
+        return (DashboardSpec) super.deepClone();
     }
 }

@@ -41,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
+public class DataStreamMappingSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<DataStreamMappingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("level_1", o -> o.level1);
@@ -279,41 +279,9 @@ public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public DataStreamMappingSpec clone() {
-        try {
-            DataStreamMappingSpec cloned = (DataStreamMappingSpec) super.clone();
-            if (cloned.level1 != null) {
-                cloned.level1 = cloned.level1.clone();
-            }
-            if (cloned.level2 != null) {
-                cloned.level2 = cloned.level2.clone();
-            }
-            if (cloned.level3 != null) {
-                cloned.level3 = cloned.level3.clone();
-            }
-            if (cloned.level4 != null) {
-                cloned.level4 = cloned.level4.clone();
-            }
-            if (cloned.level5 != null) {
-                cloned.level5 = cloned.level5.clone();
-            }
-            if (cloned.level6 != null) {
-                cloned.level6 = cloned.level6.clone();
-            }
-            if (cloned.level7 != null) {
-                cloned.level7 = cloned.level7.clone();
-            }
-            if (cloned.level8 != null) {
-                cloned.level8 = cloned.level8.clone();
-            }
-            if (cloned.level9 != null) {
-                cloned.level9 = cloned.level9.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public DataStreamMappingSpec deepClone() {
+        DataStreamMappingSpec cloned = (DataStreamMappingSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -322,40 +290,35 @@ public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
      * @return Cloned and expanded deep copy of the object.
      */
     public DataStreamMappingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            DataStreamMappingSpec cloned = (DataStreamMappingSpec) super.clone();
-            if (cloned.level1 != null) {
-                cloned.level1 = cloned.level1.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level2 != null) {
-                cloned.level2 = cloned.level2.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level3 != null) {
-                cloned.level3 = cloned.level3.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level4 != null) {
-                cloned.level4 = cloned.level4.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level5 != null) {
-                cloned.level5 = cloned.level5.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level6 != null) {
-                cloned.level6 = cloned.level6.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level7 != null) {
-                cloned.level7 = cloned.level7.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level8 != null) {
-                cloned.level8 = cloned.level8.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.level9 != null) {
-                cloned.level9 = cloned.level9.expandAndTrim(secretValueProvider);
-            }
-            return cloned;
+        DataStreamMappingSpec cloned = this.deepClone();
+        if (cloned.level1 != null) {
+            cloned.level1 = cloned.level1.expandAndTrim(secretValueProvider);
         }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
+        if (cloned.level2 != null) {
+            cloned.level2 = cloned.level2.expandAndTrim(secretValueProvider);
         }
+        if (cloned.level3 != null) {
+            cloned.level3 = cloned.level3.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level4 != null) {
+            cloned.level4 = cloned.level4.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level5 != null) {
+            cloned.level5 = cloned.level5.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level6 != null) {
+            cloned.level6 = cloned.level6.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level7 != null) {
+            cloned.level7 = cloned.level7.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level8 != null) {
+            cloned.level8 = cloned.level8.expandAndTrim(secretValueProvider);
+        }
+        if (cloned.level9 != null) {
+            cloned.level9 = cloned.level9.expandAndTrim(secretValueProvider);
+        }
+        return cloned;
     }
 
     /**
@@ -393,41 +356,41 @@ public class DataStreamMappingSpec extends AbstractSpec implements Cloneable {
             return this; // no data stream levels configured in the defaults
         }
 
-        DataStreamMappingSpec effectiveDataStreamMappings = this.clone();
+        DataStreamMappingSpec effectiveDataStreamMappings = this.deepClone();
         if (this.getLevel1() == null && defaultDataStreamMapping.getLevel1() != null) {
-            effectiveDataStreamMappings.setLevel1(defaultDataStreamMapping.getLevel1().clone());
+            effectiveDataStreamMappings.setLevel1(defaultDataStreamMapping.getLevel1().deepClone());
         }
 
         if (this.getLevel2() == null && defaultDataStreamMapping.getLevel2() != null) {
-            effectiveDataStreamMappings.setLevel2(defaultDataStreamMapping.getLevel2().clone());
+            effectiveDataStreamMappings.setLevel2(defaultDataStreamMapping.getLevel2().deepClone());
         }
 
         if (this.getLevel3() == null && defaultDataStreamMapping.getLevel3() != null) {
-            effectiveDataStreamMappings.setLevel3(defaultDataStreamMapping.getLevel3().clone());
+            effectiveDataStreamMappings.setLevel3(defaultDataStreamMapping.getLevel3().deepClone());
         }
 
         if (this.getLevel4() == null && defaultDataStreamMapping.getLevel4() != null) {
-            effectiveDataStreamMappings.setLevel4(defaultDataStreamMapping.getLevel4().clone());
+            effectiveDataStreamMappings.setLevel4(defaultDataStreamMapping.getLevel4().deepClone());
         }
 
         if (this.getLevel5() == null && defaultDataStreamMapping.getLevel5() != null) {
-            effectiveDataStreamMappings.setLevel5(defaultDataStreamMapping.getLevel5().clone());
+            effectiveDataStreamMappings.setLevel5(defaultDataStreamMapping.getLevel5().deepClone());
         }
 
         if (this.getLevel6() == null && defaultDataStreamMapping.getLevel6() != null) {
-            effectiveDataStreamMappings.setLevel6(defaultDataStreamMapping.getLevel6().clone());
+            effectiveDataStreamMappings.setLevel6(defaultDataStreamMapping.getLevel6().deepClone());
         }
 
         if (this.getLevel7() == null && defaultDataStreamMapping.getLevel7() != null) {
-            effectiveDataStreamMappings.setLevel7(defaultDataStreamMapping.getLevel7().clone());
+            effectiveDataStreamMappings.setLevel7(defaultDataStreamMapping.getLevel7().deepClone());
         }
 
         if (this.getLevel8() == null && defaultDataStreamMapping.getLevel8() != null) {
-            effectiveDataStreamMappings.setLevel8(defaultDataStreamMapping.getLevel8().clone());
+            effectiveDataStreamMappings.setLevel8(defaultDataStreamMapping.getLevel8().deepClone());
         }
 
         if (this.getLevel9() == null && defaultDataStreamMapping.getLevel9() != null) {
-            effectiveDataStreamMappings.setLevel9(defaultDataStreamMapping.getLevel9().clone());
+            effectiveDataStreamMappings.setLevel9(defaultDataStreamMapping.getLevel9().deepClone());
         }
 
         return effectiveDataStreamMappings;

@@ -29,7 +29,7 @@ import java.util.LinkedHashSet;
 /**
  * Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
  */
-public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, Cloneable, YamlNotRenderWhenDefault {
+public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
     private LinkedHashSet<String> labels = new LinkedHashSet<>();
     @JsonIgnore
@@ -192,13 +192,10 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
      * Creates and returns a copy of this object.
      */
     @Override
-    public LabelSetSpec clone() {
+    public LabelSetSpec deepClone() {
         LabelSetSpec cloned = new LabelSetSpec();
         cloned.labels = (LinkedHashSet<String>) this.labels.clone();
-
-        if (this.isDirty()) {
-            cloned.setDirty();
-        }
+        cloned.clearDirty(false);
         return cloned;
     }
 

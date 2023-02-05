@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -65,7 +66,10 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     void createAndAddNew_whenNewRuleWithSpecAndNoPythonAddedAndFlushed_thenIsSaved() {
         RuleDefinitionWrapper wrapper = this.sut.createAndAddNew("src1");
         RuleDefinitionSpec model = wrapper.getSpec();
-        model.getParameters().put("param1", "value");
+
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "value");
+        model.setParameters(parameters);
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
@@ -80,7 +84,9 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     void createAndAddNew_whenNewRuleWithSpecAndPythonFileAddedAndFlushed_thenIsSaved() {
         RuleDefinitionWrapper wrapper = this.sut.createAndAddNew("src1");
         RuleDefinitionSpec model = wrapper.getSpec();
-        model.getParameters().put("param1", "value");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "value");
+        model.setParameters(parameters);
         wrapper.setRulePythonModuleContent(new FileContent("def fun()"));
 		homeContext.flush();
 
@@ -104,7 +110,9 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
         RuleDefinitionWrapper wrapper2 = list2.getByObjectName("dir/dir2/sample2", true);
         wrapper2.setRulePythonModuleContent(new FileContent("def fun()"));
         wrapper2.setSpec(spec2);
-        spec2.getParameters().put("p1", "v");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("p1", "v");
+        spec2.setParameters(parameters);
         homeContext2.flush();
 
         UserHomeContext homeContext3 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);

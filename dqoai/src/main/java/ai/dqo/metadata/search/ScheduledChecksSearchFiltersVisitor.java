@@ -28,7 +28,7 @@ import java.util.Objects;
 /**
  * Visitor for {@link ScheduleRootsSearchFilters} that finds any node (connection, table, column, check) that has a given filter configured.
  */
-public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final ScheduledChecksSearchFilters filters;
 
     /**

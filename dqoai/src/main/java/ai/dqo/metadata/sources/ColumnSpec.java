@@ -53,7 +53,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSpec extends AbstractSpec implements Cloneable {
+public class ColumnSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
@@ -419,46 +419,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnSpec clone() {
-        try {
-            ColumnSpec cloned = (ColumnSpec) super.clone();
-            if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.clone();
-            }
-
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
-            }
-
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-
-            if (cloned.checks != null) {
-                Cloner cloner = new Cloner();
-                cloned.checks = cloner.deepClone(cloned.checks);
-            }
-
-            if (cloned.checkpoints != null) {
-                Cloner cloner = new Cloner();
-                cloned.checkpoints = cloner.deepClone(cloned.checkpoints);
-            }
-
-            if (cloned.partitionedChecks != null) {
-                Cloner cloner = new Cloner();
-                cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
-            }
-
-            if (cloned.statisticsCollector != null) {
-                Cloner cloner = new Cloner();
-                cloned.statisticsCollector = cloner.deepClone(cloned.statisticsCollector);
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ColumnSpec deepClone() {
+        ColumnSpec cloned = (ColumnSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -483,18 +446,19 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
             cloned.statisticsCollector = null;
+            cloned.labels = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
-            }
+//            if (cloned.labels != null) {
+//                cloned.labels = cloned.labels.deepClone();
+//            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -509,9 +473,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec trim() {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.clone();
+                cloned.typeSnapshot = cloned.typeSnapshot.deepClone();
             }
             cloned.comments = null;
             cloned.checks = null;

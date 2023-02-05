@@ -150,4 +150,16 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
 
 		this.clearDirty(false); // deleted...
     }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public AbstractSpec deepClone() {
+        AbstractElementWrapper<K,V> cloned = (AbstractElementWrapper<K,V>)super.deepClone();
+        if (cloned.status == InstanceStatus.MODIFIED) {
+            cloned.status = InstanceStatus.UNCHANGED;
+        }
+        return cloned;
+    }
 }

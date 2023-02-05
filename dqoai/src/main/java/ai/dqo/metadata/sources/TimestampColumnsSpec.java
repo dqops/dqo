@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TimestampColumnsSpec extends AbstractSpec implements Cloneable {
+public class TimestampColumnsSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TimestampColumnsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -133,14 +133,9 @@ public class TimestampColumnsSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public TimestampColumnsSpec clone() {
-        try {
-            TimestampColumnsSpec cloned = (TimestampColumnsSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public TimestampColumnsSpec deepClone() {
+        TimestampColumnsSpec cloned = (TimestampColumnsSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -149,15 +144,10 @@ public class TimestampColumnsSpec extends AbstractSpec implements Cloneable {
      * @return Cloned and expanded instance of the object.
      */
     public TimestampColumnsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            TimestampColumnsSpec cloned = (TimestampColumnsSpec) super.clone();
-            cloned.eventTimestampColumn = secretValueProvider.expandValue(cloned.eventTimestampColumn);
-            cloned.ingestionTimestampColumn = secretValueProvider.expandValue(cloned.ingestionTimestampColumn);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        TimestampColumnsSpec cloned = this.deepClone();
+        cloned.eventTimestampColumn = secretValueProvider.expandValue(cloned.eventTimestampColumn);
+        cloned.ingestionTimestampColumn = secretValueProvider.expandValue(cloned.ingestionTimestampColumn);
+        return cloned;
     }
 
     /**

@@ -121,14 +121,9 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public RecurringScheduleSpec clone() {
-        try {
-            RecurringScheduleSpec cloned = (RecurringScheduleSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public RecurringScheduleSpec deepClone() {
+        RecurringScheduleSpec cloned = (RecurringScheduleSpec) super.deepClone();
+        return cloned;
     }
 
     /**

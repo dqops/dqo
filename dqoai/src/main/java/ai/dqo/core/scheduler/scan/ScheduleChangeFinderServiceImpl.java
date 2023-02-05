@@ -64,7 +64,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
             ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
-            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.clone();
+            RecurringScheduleSpec clonedRecurringSchedule = recurringSchedule.deepClone();
             clonedRecurringSchedule.setHierarchyId(null);
 
             RunChecksCronSchedule runChecksCronSchedule = new RunChecksCronSchedule(clonedRecurringSchedule, parentConnectionWrapper.getSpec().getTimeZone());

@@ -24,7 +24,7 @@ import com.google.common.base.Strings;
 /**
  * Visitor for {@link RuleDefinitionSearchFilters} that finds the correct nodes.
  */
-public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
+public class RuleDefinitionSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final RuleDefinitionSearchFilters filters;
 
     /**

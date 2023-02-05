@@ -33,7 +33,7 @@ import java.util.Set;
 /**
  * Visitor for {@link StatisticsCollectorSearchFilters} that finds statistics collectors to execute.
  */
-public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisitor {
+public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final StatisticsCollectorSearchFilters filters;
 
     /**

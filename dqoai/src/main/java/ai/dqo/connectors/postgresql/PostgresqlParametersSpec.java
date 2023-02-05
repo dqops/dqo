@@ -20,17 +20,14 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import picocli.CommandLine;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,8 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PostgresqlParametersSpec extends BaseProviderParametersSpec implements Cloneable,
-        ConnectionProviderSpecificParameters {
+public class PostgresqlParametersSpec extends BaseProviderParametersSpec
+        implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<PostgresqlParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -229,14 +226,9 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public PostgresqlParametersSpec clone() {
-        try {
-            PostgresqlParametersSpec cloned = (PostgresqlParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public PostgresqlParametersSpec deepClone() {
+        PostgresqlParametersSpec cloned = (PostgresqlParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -244,20 +236,15 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec impleme
      * @return Trimmed and expanded version of this object.
      */
     public PostgresqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            PostgresqlParametersSpec cloned = (PostgresqlParametersSpec) super.clone();
-            cloned.host = secretValueProvider.expandValue(cloned.host);
-            cloned.port = secretValueProvider.expandValue(cloned.port);
-            cloned.database = secretValueProvider.expandValue(cloned.database);
-            cloned.user = secretValueProvider.expandValue(cloned.user);
-            cloned.password = secretValueProvider.expandValue(cloned.password);
-            cloned.options = secretValueProvider.expandValue(cloned.options);
-            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+        PostgresqlParametersSpec cloned = this.deepClone();
+        cloned.host = secretValueProvider.expandValue(cloned.host);
+        cloned.port = secretValueProvider.expandValue(cloned.port);
+        cloned.database = secretValueProvider.expandValue(cloned.database);
+        cloned.user = secretValueProvider.expandValue(cloned.user);
+        cloned.password = secretValueProvider.expandValue(cloned.password);
+        cloned.options = secretValueProvider.expandValue(cloned.options);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
 
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+        return cloned;
     }
 }

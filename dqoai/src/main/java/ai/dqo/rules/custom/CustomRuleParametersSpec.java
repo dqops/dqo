@@ -18,16 +18,13 @@ package ai.dqo.rules.custom;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Custom data quality rule.
@@ -47,11 +44,7 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
 
     @JsonPropertyDescription("Dictionary of additional parameters (key / value pairs) that are passed to the rule.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private LinkedHashMap<String, Object> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, Object> parameters;
 
 
     /**
@@ -85,43 +78,21 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
         this.ruleName = ruleName;
     }
 
-
     /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters.
      */
-    public HashMap<String, Object> getParams() {
-        return params;
+    public Map<String, Object> getParameters() {
+        return parameters;
     }
 
     /**
      * Sets a dictionary of additional rule parameters.
-     * @param params Key/value dictionary with extra parameters.
+     * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParams(LinkedHashMap<String, Object> params) {
-		setDirtyIf(!Objects.equals(this.params, params));
-        this.params = params;
-		this.originalParams = (LinkedHashMap<String, Object>) params.clone();
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.params, this.originalParams);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParams = (LinkedHashMap<String, Object>) this.params.clone();
+    public void setParameters(Map<String, Object> parameters) {
+		setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**

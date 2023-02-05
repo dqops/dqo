@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
+public class SensorDefinitionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<SensorDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("fields", o -> o.fields);
@@ -153,17 +153,9 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public SensorDefinitionSpec clone() {
-        try {
-            SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.clone();
-            if (cloned.fields != null) {
-                cloned.fields = cloned.fields.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public SensorDefinitionSpec deepClone() {
+        SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -172,13 +164,8 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
      * @return Trimmed version of this object.
      */
     public SensorDefinitionSpec trim() {
-        try {
-            SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.clone();
-            cloned.fields = null;
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.deepClone();
+        cloned.fields = null;
+        return cloned;
     }
 }

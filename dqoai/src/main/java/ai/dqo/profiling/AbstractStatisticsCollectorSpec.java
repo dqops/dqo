@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractStatisticsCollectorSpec<S extends AbstractSensorParametersSpec> extends AbstractSpec implements Cloneable {
+public abstract class AbstractStatisticsCollectorSpec<S extends AbstractSensorParametersSpec> extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("parameters", o -> o.getParameters());
@@ -72,14 +72,9 @@ public abstract class AbstractStatisticsCollectorSpec<S extends AbstractSensorPa
      * Creates and returns a copy of this object.
      */
     @Override
-    public AbstractStatisticsCollectorSpec clone() {
-        try {
-            AbstractStatisticsCollectorSpec cloned = (AbstractStatisticsCollectorSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+    public AbstractStatisticsCollectorSpec deepClone() {
+        AbstractStatisticsCollectorSpec cloned = (AbstractStatisticsCollectorSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -89,13 +84,8 @@ public abstract class AbstractStatisticsCollectorSpec<S extends AbstractSensorPa
      * @return Cloned and expanded copy of the object.
      */
     public AbstractStatisticsCollectorSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            AbstractStatisticsCollectorSpec cloned = (AbstractStatisticsCollectorSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+        AbstractStatisticsCollectorSpec cloned = this.deepClone();
+        return cloned;
     }
 
     /**

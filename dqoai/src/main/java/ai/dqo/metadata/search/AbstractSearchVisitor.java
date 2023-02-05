@@ -42,6 +42,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesTargetsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
@@ -56,7 +57,7 @@ import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
 /**
  * Base class for search visitors that simply visits all nodes.
  */
-public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisitor<SearchParameterObject, TreeNodeTraversalResult> {
+public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVisitor<T, TreeNodeTraversalResult> {
     /**
      * Accepts a user home.
      *
@@ -65,7 +66,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(UserHome userHome, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(UserHome userHome, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -77,7 +78,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -89,7 +90,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -101,7 +102,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -113,7 +114,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(BaseProviderParametersSpec providerParametersSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(BaseProviderParametersSpec providerParametersSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -125,7 +126,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableList tableList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -137,7 +138,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -149,7 +150,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -161,7 +162,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableTargetSpec tableTargetSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableTargetSpec tableTargetSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -173,7 +174,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -185,7 +186,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -197,7 +198,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnTypeSnapshotSpec columnTypeSnapshotSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnTypeSnapshotSpec columnTypeSnapshotSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -209,7 +210,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(LabelSetSpec strings, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(LabelSetSpec strings, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -221,7 +222,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRuleParametersSpec abstractRuleParametersSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractRuleParametersSpec abstractRuleParametersSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -233,7 +234,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -245,7 +246,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -257,7 +258,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -269,7 +270,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -281,7 +282,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionWrappers, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -293,7 +294,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -305,7 +306,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -317,7 +318,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -329,7 +330,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -341,7 +342,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionSpec providerSensorDefinitionSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionSpec providerSensorDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -353,7 +354,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -365,7 +366,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -377,7 +378,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DqoHomeImpl dqoHome, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DqoHomeImpl dqoHome, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -389,7 +390,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -401,7 +402,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -413,7 +414,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -425,7 +426,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -437,7 +438,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableOwnerSpec tableOwnerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableOwnerSpec tableOwnerSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -449,7 +450,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(CommentSpec commentSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(CommentSpec commentSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -461,7 +462,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(CommentsListSpec commentSpecs, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(CommentsListSpec commentSpecs, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -473,7 +474,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleTimeWindowSettingsSpec ruleTimeWindowSettingsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(RuleTimeWindowSettingsSpec ruleTimeWindowSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -484,7 +485,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, T parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;//we don't want to enter SettingSpec anymore
     }
 
@@ -496,7 +497,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexListImpl fileIndexWrappers, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(FileIndexListImpl fileIndexWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -508,7 +509,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexSpec fileIndexSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(FileIndexSpec fileIndexSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -520,7 +521,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexWrapperImpl fileIndexWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(FileIndexWrapperImpl fileIndexWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -532,7 +533,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -544,7 +545,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ParameterDefinitionSpec parameterDefinitionSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ParameterDefinitionSpec parameterDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -556,7 +557,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -568,7 +569,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> checkSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> checkSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -580,7 +581,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -592,7 +593,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -604,7 +605,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableCheckpointsSpec tableCheckpointsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TableCheckpointsSpec tableCheckpointsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -616,7 +617,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -628,7 +629,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnCheckpointsSpec columnCheckpointsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnCheckpointsSpec columnCheckpointsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -640,7 +641,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -652,7 +653,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -664,7 +665,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -676,7 +677,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorSpec<?> profileSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorSpec<?> profileSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -688,7 +689,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -700,7 +701,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -712,7 +713,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(NotificationSettingsSpec notificationSettingsSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(NotificationSettingsSpec notificationSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -724,7 +725,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DashboardSpec dashboardSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DashboardSpec dashboardSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -736,7 +737,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DashboardListSpec dashboardListSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DashboardListSpec dashboardListSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -748,7 +749,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DashboardsFolderSpec dashboardsFolderSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DashboardsFolderSpec dashboardsFolderSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -760,7 +761,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DashboardsFolderListSpec dashboardsFolderSpecs, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DashboardsFolderListSpec dashboardsFolderSpecs, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -772,7 +773,19 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of schedules, divided by the time range.
+     *
+     * @param recurringSchedulesTargetsSpec Container of schedule categories.
+     * @param parameter                     Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(RecurringSchedulesTargetsSpec recurringSchedulesTargetsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

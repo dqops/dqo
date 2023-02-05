@@ -20,17 +20,14 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import picocli.CommandLine;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,8 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SnowflakeParametersSpec extends BaseProviderParametersSpec implements Cloneable,
-        ConnectionProviderSpecificParameters {
+public class SnowflakeParametersSpec extends BaseProviderParametersSpec
+        implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<SnowflakeParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -208,14 +205,9 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public SnowflakeParametersSpec clone() {
-        try {
-            SnowflakeParametersSpec cloned = (SnowflakeParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public SnowflakeParametersSpec deepClone() {
+        SnowflakeParametersSpec cloned = (SnowflakeParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -223,20 +215,15 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * @return Trimmed and expanded version of this object.
      */
     public SnowflakeParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            SnowflakeParametersSpec cloned = (SnowflakeParametersSpec) super.clone();
-            cloned.account = secretValueProvider.expandValue(cloned.account);
-            cloned.warehouse = secretValueProvider.expandValue(cloned.warehouse);
-            cloned.database = secretValueProvider.expandValue(cloned.database);
-            cloned.user = secretValueProvider.expandValue(cloned.user);
-            cloned.password = secretValueProvider.expandValue(cloned.password);
-            cloned.role = secretValueProvider.expandValue(cloned.role);
-            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
+        SnowflakeParametersSpec cloned = this.deepClone();
+        cloned.account = secretValueProvider.expandValue(cloned.account);
+        cloned.warehouse = secretValueProvider.expandValue(cloned.warehouse);
+        cloned.database = secretValueProvider.expandValue(cloned.database);
+        cloned.user = secretValueProvider.expandValue(cloned.user);
+        cloned.password = secretValueProvider.expandValue(cloned.password);
+        cloned.role = secretValueProvider.expandValue(cloned.role);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
 
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+        return cloned;
     }
 }

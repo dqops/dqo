@@ -39,20 +39,17 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
      * Creates and returns a copy of this object.
      */
     @Override
-    public DashboardListSpec clone() {
+    public DashboardListSpec deepClone() {
         DashboardListSpec cloned = new DashboardListSpec();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
         for (DashboardSpec dashboard : this) {
-            cloned.add(dashboard.clone());
+            cloned.add(dashboard.deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 

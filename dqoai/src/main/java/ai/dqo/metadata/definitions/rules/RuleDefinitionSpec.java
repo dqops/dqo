@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
+public class RuleDefinitionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<RuleDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("time_window", o -> o.timeWindow);
@@ -208,20 +208,9 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public RuleDefinitionSpec clone() {
-        try {
-            RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.clone();
-            if (cloned.fields != null) {
-                cloned.fields = cloned.fields.clone();
-            }
-            if (cloned.timeWindow != null) {
-                cloned.timeWindow = cloned.timeWindow.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public RuleDefinitionSpec deepClone() {
+        RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -229,13 +218,8 @@ public class RuleDefinitionSpec extends AbstractSpec implements Cloneable {
      * @return Trimmed version of this object.
      */
     public RuleDefinitionSpec trim() {
-        try {
-            RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.clone();
-            cloned.fields = null;
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
+        cloned.fields = null;
+        return cloned;
     }
 }

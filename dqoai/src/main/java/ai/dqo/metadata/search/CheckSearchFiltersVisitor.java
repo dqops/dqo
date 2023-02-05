@@ -28,7 +28,7 @@ import java.util.Set;
 /**
  * Visitor for {@link CheckSearchFilters} that finds the correct nodes.
  */
-public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
+public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final CheckSearchFilters filters;
 
     /**

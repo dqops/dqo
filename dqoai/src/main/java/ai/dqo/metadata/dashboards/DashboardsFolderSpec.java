@@ -148,20 +148,9 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public DashboardsFolderSpec clone() {
-        try {
-            DashboardsFolderSpec cloned = (DashboardsFolderSpec)super.clone();
-            if (cloned.dashboards != null) {
-                cloned.dashboards = cloned.dashboards.clone();
-            }
-            if (cloned.folders != null) {
-                cloned.folders = cloned.folders.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public DashboardsFolderSpec deepClone() {
+        DashboardsFolderSpec cloned = (DashboardsFolderSpec)super.deepClone();
+        return cloned;
     }
 
     /**

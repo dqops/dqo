@@ -54,7 +54,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSpec extends AbstractSpec implements Cloneable {
+public class TableSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("target", o -> o.target);
@@ -655,10 +655,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             if (cloned.target != null) {
-                cloned.target = cloned.target.clone();
+                cloned.target = cloned.target.deepClone();
             }
             if (cloned.timestampColumns != null) {
-                cloned.timestampColumns = cloned.timestampColumns.clone();
+                cloned.timestampColumns = cloned.timestampColumns.deepClone();
             }
             cloned.checks = null;
             cloned.checkpoints = null;
@@ -686,7 +686,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             if (cloned.target != null) {
-                cloned.target = cloned.target.clone();
+                cloned.target = cloned.target.deepClone();
             }
             cloned.checks = null;
             cloned.checkpoints = null;

@@ -27,7 +27,7 @@ import java.util.Objects;
 /**
  * Visitor for {@link ScheduleRootsSearchFilters} that finds any node (connection, table, column, check) that has a given filter configured.
  */
-public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final ScheduleRootsSearchFilters filters;
 
     /**
@@ -66,7 +66,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
-
 
     /**
      * Accepts a table specification.

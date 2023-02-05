@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -223,6 +224,9 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
     @Override
     public Collection<AbstractCheckSpec<?,?,?,?>> findScheduledChecks(HierarchyNode startNode,
                                                                       ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
+        if (startNode instanceof AbstractRootChecksContainerSpec) {
+            // ok, but we can't assert the correct schedule at this step
+        }
         if (startNode instanceof ConnectionSpec) {
             ConnectionSpec connectionSpec = (ConnectionSpec) startNode;
             assert connectionSpec.getSchedule() != null &&

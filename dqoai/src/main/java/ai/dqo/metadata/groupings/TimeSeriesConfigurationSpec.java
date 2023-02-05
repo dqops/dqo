@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneable {
+public class TimeSeriesConfigurationSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TimeSeriesConfigurationSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -201,14 +201,9 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneab
      * Creates and returns a copy of this object.
      */
     @Override
-    public TimeSeriesConfigurationSpec clone() {
-        try {
-            TimeSeriesConfigurationSpec cloned = (TimeSeriesConfigurationSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public TimeSeriesConfigurationSpec deepClone() {
+        TimeSeriesConfigurationSpec cloned = (TimeSeriesConfigurationSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -217,14 +212,9 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec implements Cloneab
      * @return Cloned and expanded instance of the object.
      */
     public TimeSeriesConfigurationSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            TimeSeriesConfigurationSpec cloned = (TimeSeriesConfigurationSpec) super.clone();
-            cloned.timestampColumn = secretValueProvider.expandValue(cloned.timestampColumn);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        TimeSeriesConfigurationSpec cloned = this.deepClone();
+        cloned.timestampColumn = secretValueProvider.expandValue(cloned.timestampColumn);
+        return cloned;
     }
 
     /**

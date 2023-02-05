@@ -28,11 +28,11 @@ import java.util.*;
 public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushable & InstanceStatusTracking & HierarchyNode>
         extends AbstractList<V> implements HierarchyNode {
     @JsonIgnore
-    private final List<V> list = new ArrayList<>();
+    private List<V> list = new ArrayList<>();
     @JsonIgnore
-    private final Map<K, V> index = new HashMap<>();
+    private Map<K, V> index = new HashMap<>();
     @JsonIgnore
-    private final List<V> deleted = new ArrayList<>();
+    private List<V> deleted = new ArrayList<>();
     @JsonIgnore
     private boolean loaded;
     @JsonIgnore
@@ -360,6 +360,42 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
             for (V element : this.list) {
                 element.clearDirty(true);
             }
+        }
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public AbstractIndexingList<K,V> deepClone() {
+        try {
+            AbstractIndexingList<K,V> cloned = (AbstractIndexingList<K,V>) super.clone();
+            cloned.list = new ArrayList<>();
+            cloned.index = new HashMap<>();
+            cloned.deleted = new ArrayList<>();
+            cloned.dirty = false;
+
+            if (this.list.size() == 0 && this.deleted.size() == 0) {
+                return cloned;
+            }
+
+            for (V childNode : this.list) {
+                V clonedChild = (V)childNode.deepClone();
+                cloned.list.add(clonedChild);
+                cloned.index.put(clonedChild.getObjectName(), clonedChild);
+            }
+
+            for (V deletedChildNode : this.deleted) {
+                V clonedDeletedChild = (V)deletedChildNode.deepClone();
+                cloned.deleted.add(clonedDeletedChild);
+            }
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone the object ", ex);
         }
     }
 }

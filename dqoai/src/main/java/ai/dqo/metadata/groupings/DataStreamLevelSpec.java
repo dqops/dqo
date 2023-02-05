@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
+public class DataStreamLevelSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<DataStreamLevelSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -174,14 +174,9 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public DataStreamLevelSpec clone() {
-        try {
-            DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public DataStreamLevelSpec deepClone() {
+        DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -190,14 +185,9 @@ public class DataStreamLevelSpec extends AbstractSpec implements Cloneable {
      * @return Cloned and expanded copy of the object.
      */
     public DataStreamLevelSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            DataStreamLevelSpec cloned = (DataStreamLevelSpec) super.clone();
-            cloned.tag = secretValueProvider.expandValue(cloned.tag);
-            cloned.column = secretValueProvider.expandValue(cloned.column);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        DataStreamLevelSpec cloned = this.deepClone();
+        cloned.tag = secretValueProvider.expandValue(cloned.tag);
+        cloned.column = secretValueProvider.expandValue(cloned.column);
+        return cloned;
     }
 }

@@ -34,7 +34,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SettingsSpec extends AbstractSpec implements Cloneable {
+public class SettingsSpec extends AbstractSpec {
 	private static final ChildHierarchyNodeFieldMapImpl<SettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
 		}
@@ -127,14 +127,9 @@ public class SettingsSpec extends AbstractSpec implements Cloneable {
 	 * Creates and returns a deep copy of this object.
 	 */
 	@Override
-	public SettingsSpec clone() {
-		try {
-			SettingsSpec cloned = (SettingsSpec) super.clone();
-			return cloned;
-		}
-		catch (CloneNotSupportedException ex) {
-			throw new RuntimeException("Object cannot be cloned", ex);
-		}
+	public SettingsSpec deepClone() {
+		SettingsSpec cloned = (SettingsSpec) super.deepClone();
+		return cloned;
 	}
 
 	/**
@@ -142,14 +137,8 @@ public class SettingsSpec extends AbstractSpec implements Cloneable {
 	 * @return Trimmed and expanded version of this object.
 	 */
 	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-		try {
-			SettingsSpec cloned = (SettingsSpec) super.clone();
-
-			return cloned;
-		}
-		catch (CloneNotSupportedException ex) {
-			throw new RuntimeException("Object cannot be cloned", ex);
-		}
+		SettingsSpec cloned = (SettingsSpec) super.deepClone();
+        return cloned;
 	}
 
 	@Override
