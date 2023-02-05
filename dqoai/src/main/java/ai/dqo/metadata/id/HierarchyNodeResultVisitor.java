@@ -41,7 +41,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.metadata.scheduling.RecurringSchedulesTargetsSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
@@ -540,9 +540,9 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of schedules, divided by the time range.
-     * @param recurringSchedulesTargetsSpec Container of schedule categories.
+     * @param recurringSchedulesSpec Container of schedule categories.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(RecurringSchedulesTargetsSpec recurringSchedulesTargetsSpec, P parameter);
+    R accept(RecurringSchedulesSpec recurringSchedulesSpec, P parameter);
 }

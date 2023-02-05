@@ -142,7 +142,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
      * @param childNode Child node.
      * @param fieldName Field name.
      */
-    protected void propagateHierarchyIdToField(HierarchyNode childNode, String fieldName) {
+    protected void propagateHierarchyIdToField(HierarchyNode childNode, Object fieldName) {
         if (childNode == null || this.hierarchyId == null) {
             return;
         }

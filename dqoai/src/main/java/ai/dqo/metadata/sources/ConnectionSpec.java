@@ -27,6 +27,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -60,6 +61,7 @@ public class ConnectionSpec extends AbstractSpec {
             put("postgresql", o -> o.postgresql);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
+            put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
         }
     };
@@ -96,6 +98,12 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec schedule;
+
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringSchedulesSpec schedules;
 
     @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
     @ToString.Exclude
@@ -215,6 +223,24 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.schedule, schedule));
         this.schedule = schedule;
         propagateHierarchyIdToField(schedule, "schedule");
+    }
+
+    /**
+     * Returns the configuration of schedules for each type of check.
+     * @return Configuration of schedules for each type of checks.
+     */
+    public RecurringSchedulesSpec getSchedules() {
+        return schedules;
+    }
+
+    /**
+     * Sets the configuration of schedules for running each type of checks.
+     * @param schedules Configuration of schedules.
+     */
+    public void setSchedules(RecurringSchedulesSpec schedules) {
+        setDirtyIf(!Objects.equals(this.schedules, schedules));
+        this.schedules = schedules;
+        propagateHierarchyIdToField(schedules, "schedules");
     }
 
     /**
@@ -394,6 +420,7 @@ public class ConnectionSpec extends AbstractSpec {
             }
             cloned.comments = null;
             cloned.schedule = null; // we probably don't need it here
+            cloned.schedules = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -412,6 +439,7 @@ public class ConnectionSpec extends AbstractSpec {
             cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
             cloned.schedule = null;
+            cloned.schedules = null;
             cloned.notifications = null;
             return cloned;
         }

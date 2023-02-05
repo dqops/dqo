@@ -34,6 +34,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -67,6 +68,7 @@ public class TableSpec extends AbstractSpec {
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
             put("schedule_override", o -> o.scheduleOverride);
+            put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
@@ -139,6 +141,12 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec scheduleOverride;
+
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -365,6 +373,24 @@ public class TableSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
         this.scheduleOverride = scheduleOverride;
         propagateHierarchyIdToField(scheduleOverride, "schedule_override");
+    }
+
+    /**
+     * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
+     * @return Configuration of schedules for each type of schedules.
+     */
+    public RecurringSchedulesSpec getSchedulesOverride() {
+        return schedulesOverride;
+    }
+
+    /**
+     * Sets the table specific configuration of schedules for running checks.
+     * @param schedulesOverride Configuration of schedules for running checks.
+     */
+    public void setSchedulesOverride(RecurringSchedulesSpec schedulesOverride) {
+        setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
+        this.schedulesOverride = schedulesOverride;
+        propagateHierarchyIdToField(schedulesOverride, "schedules_override");
     }
 
     /**

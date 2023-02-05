@@ -20,6 +20,7 @@ import ai.dqo.metadata.id.ChildFieldEntry;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -70,6 +71,13 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
      */
     @JsonIgnore
     public abstract CheckTarget getCheckTarget();
+
+    /**
+     * Returns the name of the cron expression that is used to schedule checks in this check root object.
+     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     */
+    @JsonIgnore
+    public abstract CheckRunRecurringScheduleGroup getSchedulingGroup();
 
     /**
      * Checks if there are any configured checks (not null) in any check category.
