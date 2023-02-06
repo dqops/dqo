@@ -25,6 +25,8 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
+import ai.dqo.utils.docs.checks.CheckDocumentationGenerator;
+import ai.dqo.utils.docs.checks.CheckDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactory;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
@@ -73,9 +75,10 @@ public class GenerateDocumentationPostProcessor {
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
-            generateDocumentationForSensors(projectDir, dqoHomeContext);
-            generateDocumentationForRules(projectDir, dqoHomeContext);
-            generateDocumentationForCliCommands(projectDir);
+//            generateDocumentationForSensors(projectDir, dqoHomeContext);
+//            generateDocumentationForRules(projectDir, dqoHomeContext);
+//            generateDocumentationForCliCommands(projectDir);
+            generateDocumentationForChecks(projectDir, dqoHomeContext);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -165,6 +168,23 @@ public class GenerateDocumentationPostProcessor {
                 renderedIndexYaml,
                 "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE CLI COMMANDS");
+    }
+
+
+    public static void generateDocumentationForChecks(Path projectRoot, DqoHomeContext dqoHomeContext) {
+        Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
+        DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
+        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, dqoHomeContext);
+        CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
+
+        DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentCheckDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE CHECK REFERENCE");
     }
 
     /**

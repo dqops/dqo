@@ -62,7 +62,9 @@ nav:
     - Cloud logging: 'scheduler/cloud_logging.md'
     - Console logging modes: 'scheduler/console_logging_modes.md'
     - Timezone configuration: 'scheduler/timezone_configuration.md'
-  - Check reference:
+########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
+########## END INCLUDE CHECK REFERENCE
+  - Check reference (old):
     - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
     - Timeliness:
       - average_delay: 'check_reference/timeliness/average_delay/average_delay.md'
