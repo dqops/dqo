@@ -15,58 +15,107 @@
  */
 package ai.dqo.bigquery.sensors.column.nulls;
 
-//import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
-//import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsNotNullPercentCheckSpec;
-//import ai.dqo.connectors.ProviderType;
-//import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
-//import ai.dqo.execution.sensors.SensorExecutionResult;
-//import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-//import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-//import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
-//import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-//import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
-//import ai.dqo.sampledata.SampleCsvFileNames;
-//import ai.dqo.sampledata.SampleTableMetadata;
-//import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-//import ai.dqo.sensors.column.nulls.ColumnNullsNotNullPercentSensorParametersSpec;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import tech.tablesaw.api.Table;
-//
-//@SpringBootTest
-//public class ColumnNullsNotNullPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-//    private ColumnNullsNotNullPercentSensorParametersSpec sut;
-//    private UserHomeContext userHomeContext;
-//    private ColumnNullsNotNullPercentCheckSpec checkSpec;
-//    private SampleTableMetadata sampleTableMetadata;
-//
-//    /**
-//     * Called before each test.
-//     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-//     *
-//     * @throws Throwable
-//     */
-//    @Override
-//    @BeforeEach
-//    protected void setUp() throws Throwable {
-//        super.setUp();
-//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
-//        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-//		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-//		this.sut = new ColumnNullsNotNullPercentSensorParametersSpec();
-//		this.checkSpec = new ColumnNullsNotNullPercentCheckSpec();
-//		this.checkSpec.setParameters(this.sut);
-//    }
-//
-//    @Test
-//    void runSensor_whenSensorExecuted_thenReturnsValues() {
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date1", this.checkSpec);
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
-//    }
-//}
+import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsNotNullPercentCheckSpec;;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
+import ai.dqo.execution.sensors.SensorExecutionResult;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
+import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
+import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullPercentSensorParametersSpec;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import tech.tablesaw.api.Table;
+
+@SpringBootTest
+public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnNullsNotNullPercentSensorParametersSpec sut;
+    private UserHomeContext userHomeContext;
+    private ColumnNullsNotNullPercentCheckSpec checkSpec;
+    private SampleTableMetadata sampleTableMetadata;
+
+    @BeforeEach
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnNullsNotNullPercentSensorParametersSpec();
+        this.checkSpec = new ColumnNullsNotNullPercentCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+                sampleTableMetadata, "nulls", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+                sampleTableMetadata, "nulls", this.checkSpec, CheckTimeScale.daily);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+                sampleTableMetadata, "nulls", this.checkSpec, CheckTimeScale.monthly);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "nulls", this.checkSpec, CheckTimeScale.daily,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "nulls", this.checkSpec, CheckTimeScale.monthly,"date");
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+    }
+}
+

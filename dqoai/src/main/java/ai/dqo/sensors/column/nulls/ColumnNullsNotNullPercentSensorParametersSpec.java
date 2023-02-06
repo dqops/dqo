@@ -52,7 +52,7 @@ public class ColumnNullsNotNullPercentSensorParametersSpec extends AbstractColum
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/consistency/not_null_percent";
+        return "column/nulls/not_null_percent";
     }
 
 }

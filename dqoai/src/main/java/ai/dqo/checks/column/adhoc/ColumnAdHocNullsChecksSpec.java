@@ -16,8 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +38,8 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
         {
             put("nulls_count", o -> o.nullsCount);
             put("nulls_percent", o -> o.nullsPercent);
+            put("nulls_not_null_percent", o -> o.nullsNotNullPercent);
+
         }
     };
 
@@ -47,6 +48,9 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
     private ColumnNullsPercentCheckSpec nullsPercent;
+
+    @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the maximum accepted percentage.")
+    private ColumnNullsNotNullPercentCheckSpec nullsNotNullPercent;
 
     /**
      * Returns a nulls count check specification.
@@ -82,6 +86,24 @@ public class ColumnAdHocNullsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.nullsPercent, nullsPercent));
         this.nullsPercent = nullsPercent;
         propagateHierarchyIdToField(nullsPercent, "nulls_percent");
+    }
+
+    /**
+     * Returns a not nulls percent check specification.
+     * @return Not nulls percent check specification.
+     */
+    public ColumnNullsNotNullPercentCheckSpec getNullsNotNullPercent() {
+        return nullsNotNullPercent;
+    }
+
+    /**
+     * Sets a new not null percent check specification.
+     * @param nullsNotNullPercent Not nulls percent check specification.
+     */
+    public void setNullsNotNullPercent(ColumnNullsNotNullPercentCheckSpec nullsNotNullPercent) {
+        this.setDirtyIf(!Objects.equals(this.nullsNotNullPercent, nullsNotNullPercent));
+        this.nullsNotNullPercent = nullsNotNullPercent;
+        propagateHierarchyIdToField(nullsNotNullPercent, "nulls_not_null_percent");
     }
 
     /**
