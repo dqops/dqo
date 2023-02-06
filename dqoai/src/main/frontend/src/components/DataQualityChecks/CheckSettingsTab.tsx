@@ -4,12 +4,12 @@ import { DataStreamBasicModel, UICheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataStreamsApi } from '../../services/apiClient';
-import { useHistory, useLocation } from 'react-router-dom';
-import qs from 'query-string';
+import { useHistory, useParams } from 'react-router-dom';
 import { useTree } from '../../contexts/treeContext';
 import { findTreeNode } from '../../utils/tree';
 import { TREE_LEVEL } from '../../shared/enums';
 import { ROUTES } from "../../shared/routes";
+import Button from "../Button";
 
 interface ICheckSettingsTabProps {
   check?: UICheckModel;
@@ -17,9 +17,7 @@ interface ICheckSettingsTabProps {
 }
 
 const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
-  const location = useLocation();
-  const params: any = qs.parse(location.search);
-  const { connection, schema, table } = params;
+  const { connection, schema, table }: { connection: string; schema: string; table: string } = useParams();
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const { activeTab, treeData, changeActiveTab } = useTree();
   const activeNode = findTreeNode(treeData, activeTab);
@@ -36,7 +34,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   const options = useMemo(() => {
     return [
       {
-        label: 'None',
+        label: '',
         value: ''
       },
       ...dataStreams.map((item) => ({
@@ -79,18 +77,18 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     className="w-50"
                     menuClassName="min-w-50"
                     options={options}
+                    disabled={!check?.supports_data_streams}
                     value={check?.data_stream}
                     onChange={(value) =>
                       onChange({ ...check, data_stream: value })
                     }
-                    onAdd={onAddDataStream}
-                    addLabel="Add new data stream"
                   />
-                  <Checkbox
-                    onChange={(value) =>
-                      onChange({ ...check, supports_data_streams: value })
-                    }
-                    checked={check?.supports_data_streams}
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    label="Add new data stream"
+                    className="w-50"
+                    onClick={onAddDataStream}
                   />
                 </div>
               </td>
