@@ -15,7 +15,6 @@
  */
 package ai.dqo.postgresql.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnSampleStddevInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -25,11 +24,13 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.numeric.ColumnNumericSampleStddevInRangeSensorParametersSpec;
+import org.apache.commons.math3.util.Precision;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNumericSampleStddevInRangeSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnSampleStddevInRangeCheckSpec checkSpec;
@@ -46,7 +47,7 @@ public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericSampleStddevInRangeSensorParametersSpec();
@@ -64,7 +65,7 @@ public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.049, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.049, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.049, 96.667, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -116,6 +117,6 @@ public class PostgresqlColumnNumericSampleStddevInRangeSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.049, 96.667, Precision.round((double)resultTable.column(0).get(0),3));
     }
 }

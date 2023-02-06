@@ -15,7 +15,6 @@
  */
 package ai.dqo.postgresql.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnValueAboveMaxValueCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -25,6 +24,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnMaxValueAboveMaxValueCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnMaxValueAboveMaxValueCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNumericValueAboveMaxValueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnValueAboveMaxValueCountCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class PostgresqlColumnMaxValueAboveMaxValueCountSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnNumericValueAboveMaxValueCountSensorParametersSpec();

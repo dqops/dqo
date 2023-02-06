@@ -15,7 +15,6 @@
  */
 package ai.dqo.postgresql.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersInSetCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -25,6 +24,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnNumericNumbersInSetCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNumericNumbersInSetCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNumbersInSetCountCheckSpec checkSpec;
@@ -48,7 +48,7 @@ public class PostgresqlColumnNumericNumbersInSetCountSensorParametersSpecIntegra
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericNumbersInSetCountSensorParametersSpec();
@@ -69,7 +69,7 @@ public class PostgresqlColumnNumericNumbersInSetCountSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0, resultTable.column(0).get(0));
     }
 
     @Test

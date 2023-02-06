@@ -15,7 +15,6 @@
  */
 package ai.dqo.postgresql.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnMeanInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -25,6 +24,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNumericMeanInRangeSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnMeanInRangeCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTe
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericMeanInRangeSensorParametersSpec();
@@ -64,7 +64,7 @@ public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class PostgresqlColumnNumericMeanInRangeSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(38.480000000000004, resultTable.column(0).get(0));
+        Assertions.assertEquals(38.48, resultTable.column(0).get(0));
     }
 }

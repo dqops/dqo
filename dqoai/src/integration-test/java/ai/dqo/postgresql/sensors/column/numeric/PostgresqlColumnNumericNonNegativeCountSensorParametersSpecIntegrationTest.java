@@ -36,7 +36,7 @@ package ai.dqo.postgresql.sensors.column.numeric;
 //import tech.tablesaw.api.Table;
 //
 //@SpringBootTest
-//public class ColumnNumericNonNegativeCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+//public class ColumnNumericNonNegativeCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
 //    private ColumnNumericNonNegativePercentSensorParametersSpec sut;
 //    private UserHomeContext userHomeContext;
 //    private ColumnNonNegativePercentCheckSpec checkSpec;
@@ -52,7 +52,7 @@ package ai.dqo.postgresql.sensors.column.numeric;
 //    @BeforeEach
 //    protected void setUp() throws Throwable {
 //        super.setUp();
-//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day_13_non_negative_floats, ProviderType.snowflake);
+//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day_13_non_negative_floats, ProviderType.postgresql);
 //        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 //		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 //		this.sut = new ColumnNumericNonNegativePercentSensorParametersSpec();

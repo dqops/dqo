@@ -15,7 +15,6 @@
  */
 package ai.dqo.postgresql.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -25,6 +24,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNumericNumbersInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNumbersInSetPercentCheckSpec checkSpec;
@@ -48,7 +48,7 @@ public class PostgresqlColumnNumericNumbersInSetPercentSensorParametersSpecInteg
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnNumericNumbersInSetPercentSensorParametersSpec();
