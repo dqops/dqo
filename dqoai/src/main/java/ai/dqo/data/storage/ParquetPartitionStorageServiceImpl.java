@@ -247,9 +247,12 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
              currentMonth = currentMonth.minusMonths(1L)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
-            if (currentMonthPartition != null && currentMonthPartition.getData() != null) {
+            if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
-                --monthsCount;
+
+                if (currentMonthPartition.getData() != null) {
+                    --monthsCount;
+                }
             }
         }
 
