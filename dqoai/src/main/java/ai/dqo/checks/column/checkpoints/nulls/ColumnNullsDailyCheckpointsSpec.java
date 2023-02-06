@@ -16,8 +16,7 @@
 package ai.dqo.checks.column.checkpoints.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +38,7 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         {
             put("daily_checkpoint_nulls_count", o -> o.dailyCheckpointNullsCount);
             put("daily_checkpoint_nulls_percent", o -> o.dailyCheckpointNullsPercent);
+            put("daily_checkpoint_nulls_not_null_percent", o -> o.dailyCheckpointNullsNotNullPercent);
         }
     };
 
@@ -47,6 +47,9 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec dailyCheckpointNullsPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnNullsNotNullPercentCheckSpec dailyCheckpointNullsNotNullPercent;
 
     /**
      * Returns nulls count check specification.
@@ -82,6 +85,24 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointNullsPercent, dailyCheckpointNullsPercent));
         this.dailyCheckpointNullsPercent = dailyCheckpointNullsPercent;
         propagateHierarchyIdToField(dailyCheckpointNullsPercent, "daily_checkpoint_nulls_percent");
+    }
+
+    /**
+     * Returns a not nulls percent check specification.
+     * @return Not nulls percent check specification.
+     */
+    public ColumnNullsNotNullPercentCheckSpec getDailyCheckpointNullsNotNullPercent() {
+        return dailyCheckpointNullsNotNullPercent;
+    }
+
+    /**
+     * Sets a new definition of a not nulls percent check.
+     * @param dailyCheckpointNullsNotNullPercent Not nulls percent check specification.
+     */
+    public void setDailyCheckpointNullsNotNullPercent(ColumnNullsNotNullPercentCheckSpec dailyCheckpointNullsNotNullPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNullsNotNullPercent, dailyCheckpointNullsNotNullPercent));
+        this.dailyCheckpointNullsNotNullPercent = dailyCheckpointNullsNotNullPercent;
+        propagateHierarchyIdToField(dailyCheckpointNullsNotNullPercent, "daily_checkpoint_nulls_percent");
     }
 
     /**
