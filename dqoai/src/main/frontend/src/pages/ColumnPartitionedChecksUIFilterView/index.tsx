@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import { getColumnPartitionedChecksUIFilter } from '../../redux/actions/column.actions';
+import {
+
+  getColumnPartitionedChecksUIFilter,
+  updateColumnDailyPartitionedChecks, updateColumnMonthlyPartitionedChecks
+} from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import Button from "../../components/Button";
+import { isEqual } from "lodash";
 
 const ColumnPartitionedChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, column: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
 
-  const { partitionedChecksUIFilter } = useSelector(
+  const { partitionedChecksUIFilter, isUpdating } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
@@ -25,7 +31,41 @@ const ColumnPartitionedChecksUIFilterView = () => {
       setCheckResultsOverview(res.data);
     });
   };
+  const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
+    if (timePartitioned === 'daily') {
+      await dispatch(
+        updateColumnDailyPartitionedChecks(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedChecksUI
+        )
+      );
+    } else {
+      await dispatch(
+        updateColumnMonthlyPartitionedChecks(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedChecksUI
+        )
+      );
+    }
 
+    await dispatch(
+      getColumnPartitionedChecksUIFilter(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+    );
+  };
+
+  const isUpdated = useMemo(
+    () => !isEqual(updatedChecksUI, partitionedChecksUIFilter),
+    [partitionedChecksUIFilter, updatedChecksUI]
+  );
   useEffect(() => {
     setUpdatedChecksUI(partitionedChecksUIFilter);
   }, [partitionedChecksUIFilter]);
@@ -43,6 +83,14 @@ const ColumnPartitionedChecksUIFilterView = () => {
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
         </div>
+        <Button
+            color={isUpdated ? 'primary' : 'secondary'}
+            variant="contained"
+            label="Save"
+            className="ml-auto w-40"
+            onClick={onUpdate}
+            loading={isUpdating}
+        />
       </div>
       <div>
         <DataQualityChecks
