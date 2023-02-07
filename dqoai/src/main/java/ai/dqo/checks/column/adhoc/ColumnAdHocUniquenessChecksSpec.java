@@ -16,9 +16,7 @@
 package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +37,7 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("unique_count", o -> o.uniqueCount);
+            put("unique_percent", o -> o.uniquePercent);
             put("duplicate_count", o -> o.duplicateCount);
             put("duplicate_percent", o -> o.duplicatePercent);
         }
@@ -46,6 +45,9 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count.")
     private ColumnUniqueCountCheckSpec uniqueCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted count.")
+    private ColumnUniquePercentCheckSpec uniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")
     private ColumnDuplicateCountCheckSpec duplicateCount;
@@ -69,6 +71,24 @@ public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.uniqueCount, uniqueCount));
         this.uniqueCount = uniqueCount;
         propagateHierarchyIdToField(uniqueCount, "unique_count");
+    }
+
+    /**
+     * Returns a unique percent check specification.
+     * @return Unique percent check specification.
+     */
+    public ColumnUniquePercentCheckSpec getUniquePercent() {
+        return uniquePercent;
+    }
+
+    /**
+     * Sets a new specification of a unique percent check.
+     * @param uniquePercent Unique percent check specification.
+     */
+    public void setUniquePercent(ColumnUniquePercentCheckSpec uniquePercent) {
+        this.setDirtyIf(!Objects.equals(this.uniquePercent, uniquePercent));
+        this.uniquePercent = uniquePercent;
+        propagateHierarchyIdToField(uniquePercent, "unique_percent");
     }
 
     /**
