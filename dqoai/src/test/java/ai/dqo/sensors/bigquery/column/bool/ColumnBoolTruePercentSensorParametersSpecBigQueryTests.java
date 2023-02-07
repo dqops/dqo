@@ -100,7 +100,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -135,7 +135,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -166,7 +166,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -197,7 +197,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -233,7 +233,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -267,7 +267,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -301,7 +301,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -343,7 +343,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -379,7 +379,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
@@ -415,7 +415,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(SAFE_CAST(%s AS STRING) AS BOOL) IS TRUE
+                            WHEN %s
                                 THEN 1
                             ELSE 0
                         END
