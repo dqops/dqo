@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.nulls;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsNotNullPercentCheckSpec;;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullPercentSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnNullsNotNullPercentSensorParametersSpec sut;
+public class BigQueryColumnNullsNotNullsCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnNullsNotNullsCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNullsNotNullPercentCheckSpec checkSpec;
+    private ColumnNotNullsCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,8 +48,8 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNullsNotNullPercentSensorParametersSpec();
-        this.checkSpec = new ColumnNullsNotNullPercentCheckSpec();
+        this.sut = new ColumnNullsNotNullsCountSensorParametersSpec();
+        this.checkSpec = new ColumnNotNullsCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -63,7 +63,7 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(12L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(12L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(12L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -102,7 +102,7 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,6 @@ public class BigQueryColumnNullsNotNullPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(48.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(12L, resultTable.column(0).get(0));
     }
 }
-

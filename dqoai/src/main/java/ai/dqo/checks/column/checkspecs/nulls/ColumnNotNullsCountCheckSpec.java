@@ -19,10 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullPercentSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +33,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+ * Column-level check that ensures that there are no more than a set number of null values in the monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNotNullPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNotNullPercentSensorParametersSpec, MaxPercentRule2ParametersSpec, MaxPercentRule1ParametersSpec, MaxPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNotNullPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnNotNullsCountCheckSpec
+        extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNotNullsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,29 +48,29 @@ public class ColumnNullsNotNullPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNotNullPercentSensorParametersSpec parameters = new ColumnNullsNotNullPercentSensorParametersSpec();
+    private ColumnNullsNotNullsCountSensorParametersSpec parameters = new ColumnNullsNotNullsCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a set number of rows with not null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule2ParametersSpec error;
+    private MaxCountRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule1ParametersSpec warning;
+    private MaxCountRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule5ParametersSpec fatal;
+    private MaxCountRule0ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNotNullPercentSensorParametersSpec getParameters() {
+    public ColumnNullsNotNullsCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +78,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNotNullPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNotNullsCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -91,7 +90,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxPercentRule2ParametersSpec getError() {
+    public MaxCountRule0ParametersSpec getError() {
         return this.error;
     }
 
@@ -99,7 +98,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule2ParametersSpec error) {
+    public void setError(MaxCountRule0ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -111,7 +110,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule1ParametersSpec getWarning() {
+    public MaxCountRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -119,7 +118,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule1ParametersSpec warning) {
+    public void setWarning(MaxCountRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -131,7 +130,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxPercentRule5ParametersSpec getFatal() {
+    public MaxCountRule0ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +138,7 @@ public class ColumnNullsNotNullPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxPercentRule5ParametersSpec fatal) {
+    public void setFatal(MaxCountRule0ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
