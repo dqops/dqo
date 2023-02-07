@@ -16,7 +16,7 @@
 package ai.dqo.postgresql.sensors.column.nulls;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsNotNullPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullPercentSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class PostgresqlColumnNullsNotNullPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnNullsNotNullPercentSensorParametersSpec sut;
+    private ColumnNullsNotNullsPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNullsNotNullPercentCheckSpec checkSpec;
+    private ColumnNotNullsPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class PostgresqlColumnNullsNotNullPercentSensorParametersSpecIntegrationT
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNullsNotNullPercentSensorParametersSpec();
-        this.checkSpec = new ColumnNullsNotNullPercentCheckSpec();
+        this.sut = new ColumnNullsNotNullsPercentSensorParametersSpec();
+        this.checkSpec = new ColumnNotNullsPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
