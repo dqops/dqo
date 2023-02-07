@@ -16,9 +16,7 @@
 package ai.dqo.checks.column.checkpoints.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +37,7 @@ public class ColumnUniquenessDailyCheckpointsSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_unique_count", o -> o.dailyCheckpointUniqueCount);
+            put("daily_checkpoint_unique_percent", o -> o.dailyCheckpointUniquePercent);
             put("daily_checkpoint_duplicate_count", o -> o.dailyCheckpointDuplicateCount);
             put("daily_checkpoint_duplicate_percent", o -> o.dailyCheckpointDuplicatePercent);
         }
@@ -46,6 +45,9 @@ public class ColumnUniquenessDailyCheckpointsSpec extends AbstractCheckCategoryS
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnUniqueCountCheckSpec dailyCheckpointUniqueCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnUniquePercentCheckSpec dailyCheckpointUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec dailyCheckpointDuplicateCount;
@@ -69,6 +71,24 @@ public class ColumnUniquenessDailyCheckpointsSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointUniqueCount, dailyCheckpointUniqueCount));
         this.dailyCheckpointUniqueCount = dailyCheckpointUniqueCount;
         propagateHierarchyIdToField(dailyCheckpointUniqueCount, "daily_checkpoint_unique_count");
+    }
+
+    /**
+     * Returns a unique values percent check specification.
+     * @return Unique values percent check specification.
+     */
+    public ColumnUniquePercentCheckSpec getDailyCheckpointUniquePercent() {
+        return dailyCheckpointUniquePercent;
+    }
+
+    /**
+     * Sets a new specification of a unique values percent check.
+     * @param dailyCheckpointUniquePercent Unique values count percent specification.
+     */
+    public void setDailyCheckpointUniquePercent(ColumnUniquePercentCheckSpec dailyCheckpointUniquePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointUniquePercent, dailyCheckpointUniquePercent));
+        this.dailyCheckpointUniquePercent = dailyCheckpointUniquePercent;
+        propagateHierarchyIdToField(dailyCheckpointUniquePercent, "daily_checkpoint_unique_percent");
     }
 
     /**
