@@ -75,11 +75,13 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         StringColumn checkCategoryColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
         StringColumn checkNameColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        DoubleColumn actualValueColumn = sortedTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         for (int i = 0; i < rowCount ; i++) {
             LocalDateTime timePeriod = timePeriodColumn.get(i);
             Integer severity = severityColumn.get(i);
             String dataStreamName = dataStreamColumn.get(i);
             Long checkHash = checkHashColumn.get(i);
+            Double actualValue = actualValueColumn.get(i);
 
             CheckResultsOverviewDataModel checkResultsOverviewDataModel = resultMap.get(checkHash);
             if (checkResultsOverviewDataModel == null) {
@@ -93,7 +95,7 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
                 resultMap.put(checkHash, checkResultsOverviewDataModel);
             }
 
-            checkResultsOverviewDataModel.appendResult(timePeriod, severity, dataStreamName, loadParameters.getResultsCount());
+            checkResultsOverviewDataModel.appendResult(timePeriod, severity, actualValue, dataStreamName, loadParameters.getResultsCount());
         }
 
         resultMap.values().forEach(m -> m.reverseLists());
