@@ -38,7 +38,8 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
         {
             put("daily_checkpoint_nulls_count", o -> o.dailyCheckpointNullsCount);
             put("daily_checkpoint_nulls_percent", o -> o.dailyCheckpointNullsPercent);
-            put("daily_checkpoint_nulls_not_null_percent", o -> o.dailyCheckpointNullsNotNullPercent);
+            put("daily_checkpoint_not_nulls_count", o -> o.dailyCheckpointNotNullsCount);
+            put("daily_checkpoint_not_nulls_percent", o -> o.dailyCheckpointNotNullsPercent);
         }
     };
 
@@ -48,8 +49,11 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec dailyCheckpointNullsPercent;
 
+    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnNotNullsCountCheckSpec dailyCheckpointNotNullsCount;
+
     @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnNullsNotNullPercentCheckSpec dailyCheckpointNullsNotNullPercent;
+    private ColumnNotNullsPercentCheckSpec dailyCheckpointNotNullsPercent;
 
     /**
      * Returns nulls count check specification.
@@ -88,21 +92,39 @@ public class ColumnNullsDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns not nulls count check specification.
+     * @return Not nulls count check specification.
+     */
+    public ColumnNotNullsCountCheckSpec getDailyCheckpointNotNullsCount() {
+        return dailyCheckpointNotNullsCount;
+    }
+
+    /**
+     * Sets a new definition of a not nulls count check.
+     * @param dailyCheckpointNotNullsCount Not nulls count check specification.
+     */
+    public void setDailyCheckpointNotNullsCount(ColumnNotNullsCountCheckSpec dailyCheckpointNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNotNullsCount, dailyCheckpointNotNullsCount));
+        this.dailyCheckpointNotNullsCount = dailyCheckpointNotNullsCount;
+        propagateHierarchyIdToField(dailyCheckpointNotNullsCount, "daily_checkpoint_not_nulls_count");
+    }
+
+    /**
      * Returns a not nulls percent check specification.
      * @return Not nulls percent check specification.
      */
-    public ColumnNullsNotNullPercentCheckSpec getDailyCheckpointNullsNotNullPercent() {
-        return dailyCheckpointNullsNotNullPercent;
+    public ColumnNotNullsPercentCheckSpec getDailyCheckpointNotNullsPercent() {
+        return dailyCheckpointNotNullsPercent;
     }
 
     /**
      * Sets a new definition of a not nulls percent check.
-     * @param dailyCheckpointNullsNotNullPercent Not nulls percent check specification.
+     * @param dailyCheckpointNotNullsPercent Not nulls percent check specification.
      */
-    public void setDailyCheckpointNullsNotNullPercent(ColumnNullsNotNullPercentCheckSpec dailyCheckpointNullsNotNullPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNullsNotNullPercent, dailyCheckpointNullsNotNullPercent));
-        this.dailyCheckpointNullsNotNullPercent = dailyCheckpointNullsNotNullPercent;
-        propagateHierarchyIdToField(dailyCheckpointNullsNotNullPercent, "daily_checkpoint_nulls_percent");
+    public void setDailyCheckpointNotNullsPercent(ColumnNotNullsPercentCheckSpec dailyCheckpointNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNotNullsPercent, dailyCheckpointNotNullsPercent));
+        this.dailyCheckpointNotNullsPercent = dailyCheckpointNotNullsPercent;
+        propagateHierarchyIdToField(dailyCheckpointNotNullsPercent, "daily_checkpoint_not_nulls_percent");
     }
 
     /**

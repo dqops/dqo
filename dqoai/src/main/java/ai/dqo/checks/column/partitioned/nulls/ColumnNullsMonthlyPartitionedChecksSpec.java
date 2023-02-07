@@ -17,7 +17,8 @@ package ai.dqo.checks.column.partitioned.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsNotNullPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -40,7 +41,8 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("monthly_partition_nulls_count", o -> o.monthlyPartitionNullsCount);
             put("monthly_partition_nulls_percent", o -> o.monthlyPartitionNullsPercent);
-            put("monthly_partition_nulls_not_null_percent", o -> o.monthlyPartitionNullsNotNullPercent);
+            put("monthly_partition_not_nulls_count", o -> o.monthlyPartitionNotNullsCount);
+            put("monthly_partition_not_nulls_percent", o -> o.monthlyPartitionNotNullsPercent);
         }
     };
 
@@ -50,8 +52,11 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
+    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
+
     @JsonPropertyDescription("Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNullsNotNullPercentCheckSpec monthlyPartitionNullsNotNullPercent;
+    private ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent;
 
     /**
      * Returns a nulls count check.
@@ -90,21 +95,39 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
+     * Returns a not nulls count check.
+     * @return Not nulls count check.
+     */
+    public ColumnNotNullsCountCheckSpec getMonthlyPartitionNotNullsCount() {
+        return monthlyPartitionNotNullsCount;
+    }
+
+    /**
+     * Sets a new definition of a not nulls count check.
+     * @param monthlyPartitionNotNullsCount Not nulls count check.
+     */
+    public void setMonthlyPartitionNotNullsCount(ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNotNullsCount, monthlyPartitionNotNullsCount));
+        this.monthlyPartitionNotNullsCount = monthlyPartitionNotNullsCount;
+        propagateHierarchyIdToField(monthlyPartitionNotNullsCount, "monthly_partition_not_nulls_count");
+    }
+
+    /**
      * Returns a not nulls percent check.
      * @return Not nulls percent check.
      */
-    public ColumnNullsNotNullPercentCheckSpec getMonthlyPartitionNullsNotNullPercent() {
-        return monthlyPartitionNullsNotNullPercent;
+    public ColumnNotNullsPercentCheckSpec getMonthlyPartitionNotNullsPercent() {
+        return monthlyPartitionNotNullsPercent;
     }
 
     /**
      * Sets a new definition of a not nulls percent check.
-     * @param monthlyPartitionNullsNotNullPercent Not nulls percent check.
+     * @param monthlyPartitionNotNullsPercent Not nulls percent check.
      */
-    public void setMonthlyPartitionNullsNotNullPercent(ColumnNullsNotNullPercentCheckSpec monthlyPartitionNullsNotNullPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNullsNotNullPercent, monthlyPartitionNullsNotNullPercent));
-        this.monthlyPartitionNullsNotNullPercent = monthlyPartitionNullsNotNullPercent;
-        propagateHierarchyIdToField(monthlyPartitionNullsNotNullPercent, "monthly_partition_nulls_not_null_percent");
+    public void setMonthlyPartitionNotNullsPercent(ColumnNotNullsPercentCheckSpec monthlyPartitionNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNotNullsPercent, monthlyPartitionNotNullsPercent));
+        this.monthlyPartitionNotNullsPercent = monthlyPartitionNotNullsPercent;
+        propagateHierarchyIdToField(monthlyPartitionNotNullsPercent, "monthly_partition_not_nulls_percent");
     }
 
     /**
