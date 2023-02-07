@@ -42,7 +42,7 @@ const Header = () => {
             className={clsx("px-4 cursor-pointer", isDataQualityChecksActive ? 'font-bold' : '' )}
             onClick={handleRedirectToChecks()}
           >
-            Data Quality Checks
+            Source
           </div>
           <div
             className={clsx("px-4 cursor-pointer", isAdHocChecksActive ? 'font-bold' : '' )}
