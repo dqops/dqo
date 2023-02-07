@@ -31,5 +31,8 @@ public enum ProviderType {
     @JsonProperty("postgresql")
     postgresql,
 
+    @JsonProperty("redshift")
+    redshift,
+
     // TODO: add more connectors
 }

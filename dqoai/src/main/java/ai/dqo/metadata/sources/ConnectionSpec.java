@@ -19,6 +19,7 @@ import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -59,6 +60,7 @@ public class ConnectionSpec extends AbstractSpec {
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
+            put("redshift", o -> o.redshift);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
             put("schedules", o -> o.schedules);
@@ -80,6 +82,10 @@ public class ConnectionSpec extends AbstractSpec {
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
     private PostgresqlParametersSpec postgresql;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).")
+    private RedshiftParametersSpec redshift;
 
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
@@ -205,6 +211,23 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.postgresql, postgresql));
         this.postgresql = postgresql;
         propagateHierarchyIdToField(postgresql, "postgresql");
+    }
+    /**
+     * Returns the connection parameters for Redshift.
+     * @return Redshift connection parameters.
+     */
+    public RedshiftParametersSpec getRedshift() {
+        return redshift;
+    }
+
+    /**
+     * Sets the Redshift connection parameters.
+     * @param redshift New Redshift connection parameters.
+     */
+    public void setPostgresql(RedshiftParametersSpec redshift) {
+        setDirtyIf(!Objects.equals(this.redshift, redshift));
+        this.redshift = redshift;
+        propagateHierarchyIdToField(redshift, "redshift");
     }
 
     /**
@@ -414,6 +437,9 @@ public class ConnectionSpec extends AbstractSpec {
             }
             if (cloned.postgresql != null) {
                 cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.redshift != null) {
+                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
