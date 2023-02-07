@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.sources;
+package ai.dqo.metadata.settings;
 
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -48,6 +48,9 @@ public class SettingsSpec extends AbstractSpec {
 
 	@JsonPropertyDescription("Api key")
 	private String apiKey;
+
+	@JsonPropertyDescription("Default IANA time zone name of the server. This time zone is used to convert the time of UTC timestamps values returned from databases to a uniform local date and time. The default value is the local time zone of the DQO server instance.")
+	private String timeZone;
 
 	/**
 	 * Default constructor.
@@ -114,6 +117,23 @@ public class SettingsSpec extends AbstractSpec {
 	}
 
 	/**
+	 * Returns the default server timezone. It should be a valid IANA time zone name.
+	 * @return The default time zone as a well-known IANA time zone code.
+	 */
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Sets the default server time zone.
+	 * @param timeZone IANA time zone name.
+	 */
+	public void setTimeZone(String timeZone) {
+		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
+		this.timeZone = timeZone;
+	}
+
+	/**
 	 * Returns the child map on the spec class with all fields.
 	 *
 	 * @return Return the field map.
@@ -138,6 +158,10 @@ public class SettingsSpec extends AbstractSpec {
 	 */
 	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
 		SettingsSpec cloned = (SettingsSpec) super.deepClone();
+		cloned.apiKey = secretValueProvider.expandValue(this.apiKey);
+		cloned.editorPath = secretValueProvider.expandValue(this.editorPath);
+		cloned.editorName = secretValueProvider.expandValue(this.editorName);
+		cloned.timeZone = secretValueProvider.expandValue(this.timeZone);
         return cloned;
 	}
 

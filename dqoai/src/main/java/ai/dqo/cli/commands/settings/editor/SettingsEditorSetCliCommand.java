@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to set a new editor to settings.
+ * Cli command to set a new editor in settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

@@ -16,22 +16,23 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.settings.timezone.SettingsTimeZoneRemoveCliCommand;
+import ai.dqo.cli.commands.settings.timezone.SettingsTimeZoneSetCliCommand;
+import ai.dqo.cli.commands.settings.timezone.SettingsTimeZoneShowCliCommand;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "settings" 1st level cli command.
+ * Cli settings time zone base command.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "settings", description = "Show or set settings", subcommands = {
-		SettingsEditorCliCommand.class,
-		SettingsInitCliCommand.class,
-		SettingsRemoveCliCommand.class,
-		SettingsApiKeyCliCommand.class,
-		SettingsTimeZoneCliCommand.class,
+@CommandLine.Command(name = "timezone", description = "Set or show the default time zone", subcommands = {
+		SettingsTimeZoneSetCliCommand.class,
+		SettingsTimeZoneRemoveCliCommand.class,
+		SettingsTimeZoneShowCliCommand.class,
 })
-public class SettingsCliCommand extends BaseCommand {
+public class SettingsTimeZoneCliCommand extends BaseCommand {
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.settings.apikey;
+package ai.dqo.cli.commands.settings.timezone;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
@@ -21,6 +21,9 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.google.common.base.Strings;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -28,26 +31,40 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to show a api key in settings.
+ * Cli command to set a time zone in settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show api key")
-public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
+@CommandLine.Command(name = "set", description = "Set the default time zone")
+public class SettingsTimeZoneSetCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
+	private DqoCloudApiKeyProvider apiKeyProvider;
 
-	public SettingsApiKeyShowCliCommand() {
+	public SettingsTimeZoneSetCliCommand() {
 	}
 
 	@Autowired
-	public SettingsApiKeyShowCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
+	public SettingsTimeZoneSetCliCommand(SettingsService settingsService,
+										 TerminalReader terminalReader,
+										 TerminalWriter terminalWriter,
+										 DqoCloudApiKeyProvider apiKeyProvider) {
 		this.settingsService = settingsService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.apiKeyProvider = apiKeyProvider;
+	}
+
+	@CommandLine.Parameters(index = "0", description = "IANA time zone name")
+	private String timeZone;
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 
 	/**
@@ -57,7 +74,12 @@ public class SettingsApiKeyShowCliCommand extends BaseCommand implements IComman
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = this.settingsService.showApiKey();
+		if (Strings.isNullOrEmpty(this.timeZone)) {
+			throwRequiredParameterMissingIfHeadless("<time zone>");
+			this.timeZone = this.terminalReader.prompt("Time zone", null, false);
+		}
+
+		CliOperationStatus cliOperationStatus = this.settingsService.setTimeZone(timeZone);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

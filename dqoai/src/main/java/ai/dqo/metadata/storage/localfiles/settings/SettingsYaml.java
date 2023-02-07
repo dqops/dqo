@@ -16,7 +16,7 @@
 package ai.dqo.metadata.storage.localfiles.settings;
 
 import ai.dqo.core.filesystem.ApiVersion;
-import ai.dqo.metadata.sources.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.storage.localfiles.SpecificationKind;
 
 /**

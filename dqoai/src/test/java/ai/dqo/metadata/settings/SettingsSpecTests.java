@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.sources;
+package ai.dqo.metadata.settings;
 
 import ai.dqo.BaseTest;
+import ai.dqo.metadata.settings.SettingsSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.sources;
+package ai.dqo.metadata.settings;
 
 import ai.dqo.metadata.basespecs.AbstractElementWrapper;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Settings spec wrapper.
  */
 public class SettingsWrapperImpl extends AbstractElementWrapper<String, SettingsSpec> implements SettingsWrapper {
-
 	@JsonIgnore
 	private final static String NAME = "settings";
 

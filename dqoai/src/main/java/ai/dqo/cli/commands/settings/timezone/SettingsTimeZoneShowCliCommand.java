@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.cli.commands.settings.apikey;
+package ai.dqo.cli.commands.settings.timezone;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
@@ -28,23 +28,23 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to show a api key in settings.
+ * Cli command to show a time zone from settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show api key")
-public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
+@CommandLine.Command(name = "show", description = "Show the default time zone")
+public class SettingsTimeZoneShowCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
-	public SettingsApiKeyShowCliCommand() {
+	public SettingsTimeZoneShowCliCommand() {
 	}
 
 	@Autowired
-	public SettingsApiKeyShowCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
+	public SettingsTimeZoneShowCliCommand(SettingsService settingsService,
+										  TerminalReader terminalReader,
+										  TerminalWriter terminalWriter) {
 		this.settingsService = settingsService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
@@ -57,7 +57,7 @@ public class SettingsApiKeyShowCliCommand extends BaseCommand implements IComman
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = this.settingsService.showApiKey();
+		CliOperationStatus cliOperationStatus = this.settingsService.showTimeZone();
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

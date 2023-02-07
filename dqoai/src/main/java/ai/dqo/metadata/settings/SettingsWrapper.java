@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.sources;
+package ai.dqo.metadata.settings;
 
 import ai.dqo.metadata.basespecs.ElementWrapper;
 import ai.dqo.metadata.basespecs.ObjectName;
