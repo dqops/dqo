@@ -1,4 +1,4 @@
-///*
+package ai.dqo.postgresql.sensors.column.uniqueness;///*
 // * Copyright © 2021 DQO.ai (support@dqo.ai)
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
 // */
 //package ai.dqo.bigquery.sensors.column.uniqueness;
 //
-//import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 //import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountPercentCheckSpec;
 //import ai.dqo.connectors.ProviderType;
 //import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -36,7 +35,7 @@
 //import tech.tablesaw.api.Table;
 //
 //@SpringBootTest
-//public class ColumnUniquenessUniqueCountPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+//public class ColumnUniquenessUniqueCountPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
 //    private ColumnUniquenessUniqueCountPercentSensorParametersSpec sut;
 //    private UserHomeContext userHomeContext;
 //    private ColumnUniqueCountPercentCheckSpec checkSpec;
@@ -52,7 +51,7 @@
 //    @BeforeEach
 //    protected void setUp() throws Throwable {
 //        super.setUp();
-//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
+//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.postgresql);
 //        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 //		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 //		this.sut = new ColumnUniquenessUniqueCountPercentSensorParametersSpec();

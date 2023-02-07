@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +40,7 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_unique_count", o -> o.monthlyPartitionUniqueCount);
+            put("monthly_partition_unique_percent", o -> o.monthlyPartitionUniquePercent);
             put("monthly_partition_duplicate_count", o -> o.monthlyPartitionDuplicateCount);
             put("monthly_partition_duplicate_percent", o -> o.monthlyPartitionDuplicatePercent);
         }
@@ -46,6 +48,9 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnUniqueCountCheckSpec monthlyPartitionUniqueCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnUniquePercentCheckSpec monthlyPartitionUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDuplicateCountCheckSpec monthlyPartitionDuplicateCount;
@@ -69,6 +74,24 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionUniqueCount, monthlyPartitionUniqueCount));
         this.monthlyPartitionUniqueCount = monthlyPartitionUniqueCount;
         propagateHierarchyIdToField(monthlyPartitionUniqueCount, "monthly_partition_unique_count");
+    }
+
+    /**
+     * Returns a unique values percent check specification.
+     * @return Unique values percent check specification.
+     */
+    public ColumnUniquePercentCheckSpec getMonthlyPartitionUniquePercent() {
+        return monthlyPartitionUniquePercent;
+    }
+
+    /**
+     * Sets a new specification of a unique values percent check.
+     * @param monthlyPartitionUniquePercent Unique values percent check specification.
+     */
+    public void setMonthlyPartitionUniquePercent(ColumnUniquePercentCheckSpec monthlyPartitionUniquePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionUniquePercent, monthlyPartitionUniquePercent));
+        this.monthlyPartitionUniquePercent = monthlyPartitionUniquePercent;
+        propagateHierarchyIdToField(monthlyPartitionUniquePercent, "monthly_partition_unique_percent");
     }
 
     /**
