@@ -19,25 +19,9 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.data.errors.services.ErrorsDataService;
 import ai.dqo.data.errors.services.ErrorsDetailedParameters;
 import ai.dqo.data.errors.services.models.ErrorsDetailedDataModel;
-import ai.dqo.data.readouts.services.SensorReadoutsDetailedParameters;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -51,7 +35,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
