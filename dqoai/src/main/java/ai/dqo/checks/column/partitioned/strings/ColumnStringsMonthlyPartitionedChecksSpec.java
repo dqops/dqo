@@ -43,6 +43,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_length_below_min_length_percent", o -> o.monthlyPartitionStringLengthBelowMinLengthPercent);
             put("monthly_partition_string_length_above_max_length_count", o -> o.monthlyPartitionStringLengthAboveMaxLengthCount);
             put("monthly_partition_string_length_above_max_length_percent", o -> o.monthlyPartitionStringLengthAboveMaxLengthPercent);
+            put("monthly_partition_string_length_in_range_percent", o -> o.monthlyPartitionStringLengthInRangePercent);
 
             put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
             put("monthly_partition_string_empty_percent", o -> o.monthlyPartitionStringEmptyPercent);
@@ -99,6 +100,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyPartitionStringLengthAboveMaxLengthPercent;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringLengthInRangePercentCheckSpec monthlyPartitionStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
@@ -305,6 +309,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringLengthAboveMaxLengthPercent, monthlyPartitionStringLengthAboveMaxLengthPercent));
         this.monthlyPartitionStringLengthAboveMaxLengthPercent = monthlyPartitionStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(monthlyPartitionStringLengthAboveMaxLengthPercent, "monthly_partition_string_length_above_max_length_percent");
+    }
+
+    /**
+     * Returns a string length in range percent check.
+     * @return Mean string length in range percent check.
+     */
+    public ColumnStringLengthInRangePercentCheckSpec getMonthlyPartitionStringLengthInRangePercent() {
+        return monthlyPartitionStringLengthInRangePercent;
+    }
+
+    /**
+     * Sets a new definition of a string length in range percent check.
+     * @param monthlyPartitionStringLengthInRangePercent String length in range percent check.
+     */
+    public void setMonthlyPartitionStringLengthInRangePercent(ColumnStringLengthInRangePercentCheckSpec monthlyPartitionStringLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringLengthInRangePercent, monthlyPartitionStringLengthInRangePercent));
+        this.monthlyPartitionStringLengthInRangePercent = monthlyPartitionStringLengthInRangePercent;
+        propagateHierarchyIdToField(monthlyPartitionStringLengthInRangePercent, "monthly_partition_string_length_in_range_percent");
     }
 
 
