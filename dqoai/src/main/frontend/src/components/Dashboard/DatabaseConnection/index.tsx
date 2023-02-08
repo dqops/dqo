@@ -126,7 +126,6 @@ const DatabaseConnection = ({
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
       />
-    )
   };
 
   const dbImage = useMemo(() => {
@@ -172,9 +171,9 @@ const DatabaseConnection = ({
           value={database.time_zone}
         />
 
-        <div className="mt-6">
-          {database.provider_type ? components[database.provider_type] : ''}
-        </div>
+{/*         <div className="mt-6"> */}
+{/*           {database.provider_type ? components[database.provider_type] : ''} */}
+{/*         </div> */}
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (

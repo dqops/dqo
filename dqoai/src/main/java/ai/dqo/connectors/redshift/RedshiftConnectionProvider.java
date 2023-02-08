@@ -165,40 +165,40 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {
-            return new ColumnTypeSnapshotSpec("smallint");
+            return new ColumnTypeSnapshotSpec("SMALLINT");
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("integer");
+            return new ColumnTypeSnapshotSpec("INTEGER");
         }
         else if (columnType == ColumnType.LONG) {
-            return new ColumnTypeSnapshotSpec("bigint");
+            return new ColumnTypeSnapshotSpec("BIGINT");
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("real");
+            return new ColumnTypeSnapshotSpec("REAL");
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("boolean");
+            return new ColumnTypeSnapshotSpec("BOOLEAN");
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("varchar");
+            return new ColumnTypeSnapshotSpec("VARCHAR");
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("double precision");
+            return new ColumnTypeSnapshotSpec("DOUBLE PRECISION");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
-            return new ColumnTypeSnapshotSpec("date");
+            return new ColumnTypeSnapshotSpec("DATE");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("time without time zone");
+            return new ColumnTypeSnapshotSpec("TIME");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("timestamp without time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("timestamp with time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMPTZ");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("text");
+            return new ColumnTypeSnapshotSpec("TEXT");
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());
