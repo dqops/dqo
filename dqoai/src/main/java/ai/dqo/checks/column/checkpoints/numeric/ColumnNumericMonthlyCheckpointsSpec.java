@@ -38,6 +38,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         {
             put("monthly_checkpoint_negative_count", o -> o.monthlyCheckpointNegativeCount);
             put("monthly_checkpoint_negative_percent", o -> o.monthlyCheckpointNegativePercent);
+            put("monthly_checkpoint_non_negative_count", o -> o.monthlyCheckpointNonNegativeCount);
             put("monthly_checkpoint_numbers_in_set_count", o -> o.monthlyCheckpointNumbersInSetCount);
             put("monthly_checkpoint_numbers_in_set_percent", o -> o.monthlyCheckpointNumbersInSetPercent);
             put("monthly_checkpoint_values_in_range_numeric_percent", o -> o.monthlyCheckpointValuesInRangeNumericPercent);
@@ -62,6 +63,9 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec monthlyCheckpointNegativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNonNegativeCountCheckSpec monthlyCheckpointNonNegativeCount;
 
     @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNumbersInSetCountCheckSpec monthlyCheckpointNumbersInSetCount;
@@ -146,6 +150,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointNegativePercent, monthlyCheckpointNegativePercent));
         this.monthlyCheckpointNegativePercent = monthlyCheckpointNegativePercent;
         propagateHierarchyIdToField(monthlyCheckpointNegativePercent, "monthly_checkpoint_negative_percent");
+    }
+
+    /**
+     * Returns a non-negative values count check specification.
+     * @return Non-negative values count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getMonthlyCheckpointNonNegativeCount() {
+        return monthlyCheckpointNonNegativeCount;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values count check.
+     * @param monthlyCheckpointNonNegativeCount Non-negative values count check specification.
+     */
+    public void setMonthlyCheckpointNonNegativeCount(ColumnNonNegativeCountCheckSpec monthlyCheckpointNonNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointNonNegativeCount, monthlyCheckpointNonNegativeCount));
+        this.monthlyCheckpointNonNegativeCount = monthlyCheckpointNonNegativeCount;
+        propagateHierarchyIdToField(monthlyCheckpointNonNegativeCount, "monthly_checkpoint_non_negative_count");
     }
 
     /**
