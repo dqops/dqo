@@ -54,9 +54,9 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY} component={ColumnDailyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY} component={ColumnMonthlyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER} component={ColumnPartitionedChecksUIFilterView} />
-      <Route exact path={ROUTES.PATTERNS.CHECKS} component={ChecksPage} />
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
+      <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
       <Route component={ChecksPage} />
     </Switch>

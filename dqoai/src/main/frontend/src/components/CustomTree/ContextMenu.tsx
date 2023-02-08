@@ -9,8 +9,7 @@ import SvgIcon from '../SvgIcon';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
-import qs from 'query-string';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../shared/routes";
 
 interface ContextMenuProps {
@@ -19,6 +18,7 @@ interface ContextMenuProps {
 }
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
+  const { checkTypes }: { checkTypes: any } = useParams();
   const { refreshNode, runChecks, collectStatisticsOnTable } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
@@ -50,7 +50,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   };
 
   const importMetaData = () => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(node.label || '', 'schemas')}?import_schema=true`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, node.label || '', 'schemas')}?import_schema=true`)
     setOpen(false);
   };
   const importTables = () => {

@@ -8,7 +8,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useTree } from '../../contexts/treeContext';
 import { findTreeNode } from '../../utils/tree';
 import { TREE_LEVEL } from '../../shared/enums';
-import { ROUTES } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 import Button from "../Button";
 
 interface ICheckSettingsTabProps {
@@ -17,7 +17,7 @@ interface ICheckSettingsTabProps {
 }
 
 const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
-  const { connection, schema, table }: { connection: string; schema: string; table: string } = useParams();
+  const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
   const { activeTab, treeData, changeActiveTab } = useTree();
   const activeNode = findTreeNode(treeData, activeTab);
@@ -52,7 +52,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
       }
       changeActiveTab(node, true);
     }
-    history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, 'data-streams'));
+    history.push(ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'data-streams'));
   };
 
   return (

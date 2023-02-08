@@ -10,7 +10,7 @@ import {
 } from '../../../api';
 import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import TimezoneSelect from "../../TimezoneSelect";
 import { ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
@@ -29,6 +29,7 @@ const DatabaseConnection = ({
   database,
   onChange
 }: IDatabaseConnectionProps) => {
+  const { checkTypes }: { checkTypes: any } = useParams();
   const { addConnection } = useTree();
   const history = useHistory();
   const [isTesting, setIsTesting] = useState(false);
@@ -52,7 +53,7 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push(`${ROUTES.CONNECTION_DETAIL(database.connection_name, 'schemas')}?import_schema=true`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, database.connection_name, 'schemas')}?import_schema=true`);
     setIsSaving(false);
     setShowConfirm(false);
   };

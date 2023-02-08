@@ -44,7 +44,7 @@ const initTabs = [
 ];
 
 const ConnectionPage = () => {
-  const { connection, tab: activeTab }: { connection: string, tab: string } = useParams();
+  const { connection, tab: activeTab, checkTypes }: { connection: string, tab: string, checkTypes: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
@@ -59,7 +59,7 @@ const ConnectionPage = () => {
   const { import_schema } = qs.parse(location.search);
 
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.CONNECTION_DETAIL(connection, tab));
+    history.push(ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab));
 
     setTabMap({
       ...tabMap,
