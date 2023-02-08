@@ -64,7 +64,7 @@ public class ColumnStringsStringLengthInRangePercentSensorParametersSpec extends
 
     @Override
     public String getSensorDefinitionName() {
-        return "column/validity/string_length_in_range_percent";
+        return "column/strings/string_length_in_range_percent";
     }
 
     /** Returns a maximal string length range.
