@@ -20,6 +20,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ import tech.tablesaw.columns.Column;
 
 import java.time.*;
 import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
@@ -37,14 +37,17 @@ import java.util.Locale;
 @Service
 public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNormalizationService {
     private CommonTableNormalizationService commonNormalizationService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates a sensor readout normalization service given the dependencies.
      * @param commonNormalizationService Common normalization service with utility methods.
      */
     @Autowired
-    public SensorReadoutsNormalizationServiceImpl(CommonTableNormalizationService commonNormalizationService) {
+    public SensorReadoutsNormalizationServiceImpl(CommonTableNormalizationService commonNormalizationService,
+                                                  DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.commonNormalizationService = commonNormalizationService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -60,7 +63,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
-        ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
+        ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
         Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
@@ -80,7 +83,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             normalizedResults.addColumns(DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, resultsRowCount));
         }
 
-        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, connectionTimeZone, timeSeriesGradient);
+        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timeSeriesGradient);
         normalizedResults.addColumns(timePeriodColumn);
 
         // now detect data stream level columns...

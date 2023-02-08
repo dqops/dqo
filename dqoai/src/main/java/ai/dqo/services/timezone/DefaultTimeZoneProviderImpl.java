@@ -23,6 +23,8 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.utils.datetime.TimeZoneUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
@@ -31,10 +33,12 @@ import java.time.ZoneId;
  * Service that returns the default time zone configured on the DQO instance.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
     private DqoConfigurationProperties dqoConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
+    private ZoneId cachedTimeZone;
 
     /**
      * Creates a default time zone provider.
@@ -58,7 +62,30 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
      */
     @Override
     public ZoneId getDefaultTimeZoneId() {
-        String timeZone = this.getTimeZoneFromUserLocalSettings();
+        synchronized (this) {
+            if (this.cachedTimeZone != null) {
+                return this.cachedTimeZone;
+            }
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory != null ? this.userHomeContextFactory.openLocalUserHome() : null;
+        ZoneId defaultTimeZoneId = getDefaultTimeZoneId(userHomeContext);
+
+        synchronized (this) {
+            this.cachedTimeZone = defaultTimeZoneId;
+            return defaultTimeZoneId;
+        }
+    }
+
+    /**
+     * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
+     * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
+     * @param userHomeContext DQO User home context with parameters.
+     * @return Default Java time zone.
+     */
+    @Override
+    public ZoneId getDefaultTimeZoneId(UserHomeContext userHomeContext) {
+        String timeZone = this.getTimeZoneFromUserLocalSettings(userHomeContext);
 
         if (timeZone == null) {
             // we don't have a user configured time zone, we need to take the time zone from configuration
@@ -78,14 +105,14 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
 
     /**
      * Retrieves the time zone name from the local settings file in the user home, that is a user configured time zone.
+     * @param userHomeContext DQO User home context with parameters.
      * @return The time zone name of a user configured time zone or null when the time zone is not configured.
      */
-    public String getTimeZoneFromUserLocalSettings() {
+    public String getTimeZoneFromUserLocalSettings(UserHomeContext userHomeContext) {
         if (this.userHomeContextFactory == null) {
             return null;
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
         SettingsSpec settingsSpec = settingsWrapper.getSpec();
         if (settingsSpec == null) {
@@ -93,5 +120,15 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
         }
 
         return this.secretValueProvider.expandValue(settingsSpec.getTimeZone());
+    }
+
+    /**
+     * Invalidates the cached default time zone. This method is called when the use changes the default time zone using the CLI or using any other configuration option.
+     */
+    @Override
+    public void invalidate() {
+        synchronized (this) {
+            this.cachedTimeZone = null;
+        }
     }
 }

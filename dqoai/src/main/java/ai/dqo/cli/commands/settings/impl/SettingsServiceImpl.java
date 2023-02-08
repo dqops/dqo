@@ -22,6 +22,7 @@ import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,14 +36,16 @@ import java.util.TimeZone;
 @Component
 public class SettingsServiceImpl implements SettingsService {
 	private final UserHomeContextFactory userHomeContextFactory;
+	private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
 	@Autowired
-	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory) {
+	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
+							   DefaultTimeZoneProvider defaultTimeZoneProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
+		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
-
 		SettingsSpec settingsSpec = new SettingsSpec();
 		SettingsWrapper settings = userHome.getSettings();
 		settings.setSpec(settingsSpec);
@@ -305,6 +308,8 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setTimeZone(timeZone);
 		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
 		cliOperationStatus.setSuccessMessage("Successfully set the time zone");
 
 		return cliOperationStatus;
@@ -336,6 +341,8 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(null);
 		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
 		cliOperationStatus.setSuccessMessage("Successfully removed the time zone");
 
 		return cliOperationStatus;

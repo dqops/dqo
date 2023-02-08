@@ -15,6 +15,8 @@
  */
 package ai.dqo.services.timezone;
 
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+
 import java.time.ZoneId;
 
 /**
@@ -27,4 +29,17 @@ public interface DefaultTimeZoneProvider {
      * @return Default Java time zone.
      */
     ZoneId getDefaultTimeZoneId();
+
+    /**
+     * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
+     * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
+     * @param userHomeContext DQO User home context with parameters.
+     * @return Default Java time zone.
+     */
+    ZoneId getDefaultTimeZoneId(UserHomeContext userHomeContext);
+
+    /**
+     * Invalidates the cached default time zone. This method is called when the use changes the default time zone using the CLI or using any other configuration option.
+     */
+    void invalidate();
 }

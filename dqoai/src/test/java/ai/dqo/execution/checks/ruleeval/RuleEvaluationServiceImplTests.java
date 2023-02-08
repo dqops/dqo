@@ -46,6 +46,8 @@ import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,8 +75,9 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @BeforeEach
     void setUp() {
         DataQualityRuleRunner ruleRunner = DataQualityRuleRunnerObjectMother.getDefault();
-		this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl());
-		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl());
+        DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
+        this.sut = new RuleEvaluationServiceImpl(ruleRunner, new RuleDefinitionFindServiceImpl(), defaultTimeZoneProvider);
+		this.normalizeService = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl(), defaultTimeZoneProvider);
 		this.table = Table.create("results");
 		executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
 		userHome = executionContext.getUserHomeContext().getUserHome();

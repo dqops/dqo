@@ -11,7 +11,6 @@ import {
 import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
-import TimezoneSelect from "../../TimezoneSelect";
 import { ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
@@ -165,12 +164,6 @@ const DatabaseConnection = ({
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
           }
-        />
-        <TimezoneSelect
-          label="Timezone"
-          className="mb-4"
-          onChange={(value) => onChange({ ...database, time_zone: value })}
-          value={database.time_zone}
         />
 
         <div className="mt-6">

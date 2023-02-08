@@ -13,10 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ai.dqo.utils.datetime;
-
-import org.springframework.format.datetime.joda.LocalDateTimeParser;
 
 import java.time.LocalDate;
 import java.time.YearMonth;

@@ -55,8 +55,6 @@ public class SensorExecutionRunParameters {
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
     private Instant startedAt = Instant.now();
-    @JsonIgnore
-    private ZoneId connectionTimeZoneId;
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
@@ -75,8 +73,8 @@ public class SensorExecutionRunParameters {
 			ConnectionSpec connection,
 			TableSpec table,
 			ColumnSpec column,
-			AbstractCheckSpec check,
-            AbstractStatisticsCollectorSpec profiler,
+			AbstractCheckSpec<?,?,?,?> check,
+            AbstractStatisticsCollectorSpec<?> profiler,
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             DataStreamMappingSpec dataStreams,
@@ -92,7 +90,6 @@ public class SensorExecutionRunParameters {
         this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
-        this.connectionTimeZoneId = connection.getJavaTimeZoneId();
     }
 
     /**
@@ -270,22 +267,6 @@ public class SensorExecutionRunParameters {
      */
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
-    }
-
-    /**
-     * Java time zone for the connection. By default, it is a parsed time zone retrieved from the connection.
-     * @return Java time zone of the connection.
-     */
-    public ZoneId getConnectionTimeZoneId() {
-        return connectionTimeZoneId;
-    }
-
-    /**
-     * Sets the java time zone of the connection.
-     * @param connectionTimeZoneId Connection time zone.
-     */
-    public void setConnectionTimeZoneId(ZoneId connectionTimeZoneId) {
-        this.connectionTimeZoneId = connectionTimeZoneId;
     }
 
     /**
