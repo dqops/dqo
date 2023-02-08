@@ -1,6 +1,7 @@
 package ai.dqo.data.ruleresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.data.ruleresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
 
 /**
@@ -12,8 +13,18 @@ public interface RuleResultsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
-     * @return Overview of the check recent results.
+     * @return Overview of the check's recent results.
      */
     CheckResultsOverviewDataModel[] readMostRecentCheckStatuses(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                                 CheckResultsOverviewParameters loadParameters);
+
+    /**
+     * Retrieves complete model of the results of check executions for the given root checks container (group of checks).
+     *
+     * @param rootChecksContainerSpec Root checks container.
+     * @param loadParameters          Load parameters.
+     * @return Complete model of the check results.
+     */
+    CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
+                                                              CheckResultsDetailedParameters loadParameters);
 }

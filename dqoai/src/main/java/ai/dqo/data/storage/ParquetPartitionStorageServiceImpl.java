@@ -17,15 +17,18 @@ package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.localfiles.LocalFileStorageService;
 import ai.dqo.core.filesystem.virtual.FolderName;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
+import ai.dqo.core.filesystem.virtual.utility.HomeFolderPathUtility;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.storage.parquet.*;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetReader;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetWriteOptions;
+import ai.dqo.data.storage.parquet.DqoTablesawParquetWriter;
+import ai.dqo.data.storage.parquet.HadoopConfigurationProvider;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
@@ -47,6 +50,8 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +59,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
+    private final Pattern HIVE_PARTITION_MONTH_PATTERN =
+            Pattern.compile(ParquetPartitioningKeys.MONTH + "=(\\d{4}-(0\\d|1[0-2])-([0-2]\\d|3[0-1]))");
+
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
@@ -84,6 +92,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @return Hive compatible partition folder path, followed by '/'.
      */
     public String makeHivePartitionPath(ParquetPartitionId partitionId) {
+        // TODO: HivePartitionPaths should be refactored from the ground-up, to make easily serializable and deserializable.
         assert partitionId.getMonth().getDayOfMonth() == 1;
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -107,6 +116,29 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
         String hivePartitionPath = stringBuilder.toString();
         return hivePartitionPath;
+    }
+
+    /**
+     * Checks if the {@code folderName} is a valid hive partition folder name for a month.
+     * @param folderName Folder name to validate.
+     * @return True if the name is a valid hive partition folder name. False otherwise.
+     */
+    protected boolean validHivePartitionMonthFolderName(String folderName) {
+        return HIVE_PARTITION_MONTH_PATTERN.asMatchPredicate().test(folderName);
+    }
+
+    /**
+     * Extracts the month from the folder name in hive partition.
+     * @param monthFolderName Folder name representing the partition for the month.
+     * @return The month to which the {@code monthFolderName} refers to. Null if folder name is incorrect.
+     */
+    protected LocalDate monthFromHivePartitionFolderName(String monthFolderName) {
+        Matcher matcher = HIVE_PARTITION_MONTH_PATTERN.matcher(monthFolderName);
+        if (!matcher.find()) {
+            return null;
+        }
+        String localDateString = matcher.group(1);
+        return LocalDate.parse(localDateString);
     }
 
     /**
@@ -166,21 +198,94 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             LocalDate end,
             FileStorageSettings storageSettings,
             String[] columnNames) {
-        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
-        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("Start and end dates indicating the range need to be concrete");
+        }
 
+        return loadRecentPartitionsForMonthsRange(connectionName, tableName, start, end, storageSettings, columnNames, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>,
+     * limited to the <code>monthsCount</code> most recent partitions.
+     * This method may read more rows than expected, because it operates on full months.
+     *
+     * @param connectionName  Connection name.
+     * @param tableName       Table name (schema.table).
+     * @param startBoundary   Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
+     * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
+     * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
+     * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
+     */
+    @Override
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName,
+                                                                                              PhysicalTableName tableName,
+                                                                                              LocalDate startBoundary,
+                                                                                              LocalDate endBoundary,
+                                                                                              FileStorageSettings storageSettings,
+                                                                                              String[] columnNames,
+                                                                                              int monthsCount) {
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
 
-        for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
-             currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
+        LocalDate startNonNull = startBoundary;
+        if (startNonNull == null) {
+            startNonNull = this.getOldestStoredPartitionMonth(connectionName, tableName, storageSettings).orElse(null);
+        }
+        if (startNonNull == null) {
+            // No data stored for this table
+            return resultPartitions;
+        }
+
+        LocalDate endNonNull = Objects.requireNonNullElse(endBoundary, LocalDate.now());
+
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startNonNull);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endNonNull);
+
+        for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && monthsCount > 0;
+             currentMonth = currentMonth.minusMonths(1L)) {
             ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
+
+                if (currentMonthPartition.getData() != null) {
+                    --monthsCount;
+                }
             }
         }
 
         return resultPartitions;
+    }
+
+    protected Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
+                                                      PhysicalTableName tableName,
+                                                      FileStorageSettings storageSettings) {
+        List<LocalDate> storedPartitionMonths = getStoredPartitionMonths(connectionName, tableName, storageSettings);
+        return storedPartitionMonths.stream().min(LocalDate::compareTo);
+    }
+
+    protected List<LocalDate> getStoredPartitionMonths(String connectionName,
+                                                       PhysicalTableName tableName,
+                                                       FileStorageSettings storageSettings) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+
+            LocalDate dummyMonth = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now());
+            String hivePartitionFolderName = makeHivePartitionPath(new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, dummyMonth));
+            Path partitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
+            Path tablePartitionsPath = partitionPath.getParent();
+
+            List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                    HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
+
+            return tableStoredFolders.stream()
+                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                    .filter(this::validHivePartitionMonthFolderName)
+                    .map(this::monthFromHivePartitionFolderName)
+                    .collect(Collectors.toList());
+        }
     }
 
     /**
