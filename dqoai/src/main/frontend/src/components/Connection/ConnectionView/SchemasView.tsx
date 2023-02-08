@@ -8,16 +8,14 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import qs from 'query-string';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../../shared/routes";
 
 const SchemasView = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { connection: string; checkTypes: string } = useParams();
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
   const history = useHistory();
-  const location = useLocation();
 
   const dispatch = useActionDispatch();
 
@@ -48,7 +46,7 @@ const SchemasView = () => {
   };
 
   const goToSchemas = () => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(connection, 'schemas')}?import_schema=true`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connection, 'schemas')}?import_schema=true`)
   };
 
   return (

@@ -16,7 +16,7 @@ const tabs = [
 ];
 
 const SchemaPage = () => {
-  const { connection, schema, tab: activeTab }: { connection: string, schema: string, tab: string } = useParams();
+  const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: string } = useParams();
   const [tables, setTables] = useState<TableBasicModel[]>([]);
 
   const history = useHistory();
@@ -28,7 +28,7 @@ const SchemaPage = () => {
   }, [schema, connection]);
 
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.SCHEMA_LEVEL_PAGE(connection, schema, tab));
+    history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
   };
 
   return (
@@ -36,7 +36,7 @@ const SchemaPage = () => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2">
         <div className="flex items-center space-x-2">
           <SvgIcon name="schema" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`${connection}.shcmea.${schema}`}</div>
+          <div className="text-xl font-semibold">{`${connection}.schema.${schema}`}</div>
         </div>
         <Button
           color="primary"

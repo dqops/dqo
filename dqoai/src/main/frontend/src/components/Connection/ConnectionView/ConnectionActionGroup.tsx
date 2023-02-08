@@ -4,7 +4,7 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../../shared/routes";
 
 interface IConnectionActionGroupProps {
@@ -22,6 +22,7 @@ const ConnectionActionGroup = ({
   onUpdate,
   onImport
 }: IConnectionActionGroupProps) => {
+  const { checkTypes }: { checkTypes: any } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const { connectionBasic } = useSelector(
     (state: IRootState) => state.connection
@@ -36,7 +37,7 @@ const ConnectionActionGroup = ({
     }
   };
   const goToSchemas = () => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(connectionBasic?.connection_name || '', 'schemas')}?import_schema=true`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connectionBasic?.connection_name || '', 'schemas')}?import_schema=true`)
 
     if (onImport) {
       onImport();
