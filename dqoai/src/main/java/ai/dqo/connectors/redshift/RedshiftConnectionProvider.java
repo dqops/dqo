@@ -94,7 +94,7 @@ public class RedshiftConnectionProvider extends AbstractSqlConnectionProvider {
         RedshiftParametersSpec redshiftSpec = connectionSpec.getRedshift();
         if (redshiftSpec == null) {
             redshiftSpec = new RedshiftParametersSpec();
-            connectionSpec.setPostgresql(redshiftSpec);
+            connectionSpec.setRedshift(redshiftSpec);
         }
 
         if (Strings.isNullOrEmpty(redshiftSpec.getHost())) {

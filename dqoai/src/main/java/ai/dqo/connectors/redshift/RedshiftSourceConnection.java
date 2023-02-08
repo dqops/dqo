@@ -18,7 +18,6 @@ package ai.dqo.connectors.redshift;
 import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
-import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -31,7 +30,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 /**
- * Postgresql source connection.
+ * Redshift source connection.
  */
 @Component("redshift-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -44,8 +43,8 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
     @Autowired
     public RedshiftSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                     SecretValueProvider secretValueProvider,
-                                    PostgresqlConnectionProvider postgresqlConnectionProvider) {
-        super(jdbcConnectionPool, secretValueProvider, postgresqlConnectionProvider);
+                                    RedshiftConnectionProvider redshiftConnectionProvider) {
+        super(jdbcConnectionPool, secretValueProvider, redshiftConnectionProvider);
     }
 
     /**

@@ -224,7 +224,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the Redshift connection parameters.
      * @param redshift New Redshift connection parameters.
      */
-    public void setPostgresql(RedshiftParametersSpec redshift) {
+    public void setRedshift(RedshiftParametersSpec redshift) {
         setDirtyIf(!Objects.equals(this.redshift, redshift));
         this.redshift = redshift;
         propagateHierarchyIdToField(redshift, "redshift");

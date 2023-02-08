@@ -19,6 +19,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
@@ -56,6 +57,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
 
+    @JsonPropertyDescription("Redshift connection parameters.")
+    private RedshiftParametersSpec redshift;
+
     @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
     private String timeZone = "UTC";
 
@@ -89,6 +93,7 @@ public class ConnectionBasicModel {
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
+            setRedshift(connectionSpec.getRedshift());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -130,5 +135,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
+        targetConnectionSpec.setRedshift(this.getRedshift());
     }
 }

@@ -44,35 +44,35 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--postgresql-host"}, description = "PostgreSQL host name")
-    @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--redshift-host"}, description = "Redshift host name")
+    @JsonPropertyDescription("Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number", defaultValue = "5432")
-    @JsonPropertyDescription("PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--redshift-port"}, description = "Redshift port number", defaultValue = "5432")
+    @JsonPropertyDescription("Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--postgresql-database"}, description = "PostgreSQL database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-database"}, description = "Redshift database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--postgresql-user"}, description = "PostgreSQL user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-user"}, description = "Redshift user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--postgresql-password"}, description = "PostgreSQL database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-password"}, description = "Redshift database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--postgresql-options"}, description = "PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--redshift-options"}, description = "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
+    @JsonPropertyDescription("Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--postgresql-ssl"}, description = "Connect to PostgreSQL using SSL", defaultValue = "false")
-    @JsonPropertyDescription("Connect to PostgreSQL using SSL. The default value is false.")
+    @CommandLine.Option(names = {"--redshift-ssl"}, description = "Connect to Redshift using SSL", defaultValue = "false")
+    @JsonPropertyDescription("Connect to Redshift using SSL. The default value is false.")
     private Boolean ssl;
 
-    @CommandLine.Option(names = {"--postgresql-properties"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"--redshift-properties"}, description = "Redshift additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -94,7 +94,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric postgresql port name.
+     * Returns the port name. The value should store an environment variable expression or a numeric redshift port name.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
