@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.scheduler.quartz;
+package ai.dqo.services.timezone;
 
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import org.quartz.JobKey;
-import org.quartz.Trigger;
+import java.time.ZoneId;
 
 /**
- * Quartz trigger factory that creates triggers from the schedule configuration.
+ * Service that returns the default time zone configured on the DQO instance.
  */
-public interface TriggerFactory {
+public interface DefaultTimeZoneProvider {
     /**
-     * Creates a Quartz trigger for a given schedule.
-     * @param scheduleSpec Schedule specification.
-     * @param jobKey Job key to identify a predefined job.
-     * @return Trigger.
+     * Retrieves the default time zone. The time zone could be configured in the user local settings. If it is not customized, then the default time zone
+     * in the configuration file is taken. If the time zone was not customized using environment variables then the default time zone is the time zone of the local computer.
+     * @return Default Java time zone.
      */
-    Trigger createTrigger(RecurringScheduleSpec scheduleSpec, JobKey jobKey);
+    ZoneId getDefaultTimeZoneId();
 }

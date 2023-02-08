@@ -247,6 +247,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
      * @return Time zone name.
      */
+    @Deprecated
     public String getTimeZone() {
         return timeZone;
     }
@@ -255,6 +256,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets a time zone name. Zone names are not validated on set.
      * @param timeZone Time zone name.
      */
+    @Deprecated
     public void setTimeZone(String timeZone) {
 		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
         this.timeZone = timeZone;
@@ -265,6 +267,7 @@ public class ConnectionSpec extends AbstractSpec {
      * @return Time zone object with the zone rules.
      */
     @JsonIgnore
+    @Deprecated
     public ZoneId getJavaTimeZoneId() {
         try {
             ZoneId zoneId = TimeZoneUtility.parseZoneId(this.timeZone);

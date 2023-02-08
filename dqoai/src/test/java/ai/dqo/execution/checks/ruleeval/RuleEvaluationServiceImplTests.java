@@ -60,7 +60,6 @@ import java.time.ZoneId;
 public class RuleEvaluationServiceImplTests extends BaseTest {
     private RuleEvaluationServiceImpl sut;
     private SensorReadoutsNormalizationServiceImpl normalizeService;
-    private ZoneId utcZone;
     private Table table;
     private UserHome userHome;
     private TableSpec tableSpec;
@@ -81,7 +80,6 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		userHome = executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
-		this.utcZone = connectionWrapper.getSpec().getJavaTimeZoneId();
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
