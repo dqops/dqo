@@ -52,6 +52,6 @@ public class ColumnNumericNonNegativePercentSensorParametersSpec extends Abstrac
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/validity/non_negative_percent";
+        return "column/numeric/non_negative_percent";
     }
 }
