@@ -15,71 +15,149 @@
  */
 package ai.dqo.bigquery.sensors.column.datetime;
 
-//    @SpringBootTest
-//    public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-//        private ColumnDatetimeValueInRangeDatePercentSensorParametersSpec sut;
-//        private UserHomeContext userHomeContext;
-//        private ColumnStringValidDatesPercentCheckSpec checkSpec;
-//        private SampleTableMetadata sampleTableMetadata;
-//
-//        /**
-//     * Called before each test.
-//     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-//     *
-//     * @throws Throwable
-//     */
-//    @Override
-//    @BeforeEach
-//    protected void setUp() throws Throwable {
-//        super.setUp();
-//		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.bigquery);
-//        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-//		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-//		this.sut = new ColumnDatetimeValueInRangeDatePercentSensorParametersSpec();
-//		this.checkSpec = new ColumnStringValidDatesPercentCheckSpec();
-//		this.checkSpec.setParameters(this.sut);
-//    }
-//
-//    @Test
-//    void runSensor_whenSensorExecutedOnColumnWithDatesAndAllValuesInRangeAndDefaultBounds_thenReturnsValues() {
-//
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type", this.checkSpec);
-//        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
-//
-//        LocalDate lower = LocalDate.of(2022,1,1);
-//        LocalDate upper = LocalDate.of(2022,1,10);
-//
-//        this.sut.setMinValue(lower);
-//        this.sut.setMaxValue(upper);
-//        runParameters.setTimeSeries(null);
-//
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
-//    }
-//
-//    @Test
-//    void runSensor_whenSensorExecutedOnColumnWithDatesAnd4ValuesInRangeAndIncludeMaxValueFalse_thenReturnsValues() {
-//
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "date_type", this.checkSpec);
-//        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
-//
-//        LocalDate lower = LocalDate.of(2022,1,1);
-//        LocalDate upper = LocalDate.of(2022,1,5);
-//
-//        this.sut.setMinValue(lower);
-//        this.sut.setMaxValue(upper);
-//        this.sut.setIncludeMaxValue(false);
-//        runParameters.setTimeSeries(null);
-//
-//        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-//
-//        Table resultTable = sensorResult.getResultTable();
-//        Assertions.assertEquals(1, resultTable.rowCount());
-//        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-//        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
-//    }
-//}
+import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
+import ai.dqo.execution.sensors.SensorExecutionResult;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
+import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
+import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import tech.tablesaw.api.Table;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+@SpringBootTest
+public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnDatetimeValueInRangeDatePercentSensorParametersSpec sut;
+    private UserHomeContext userHomeContext;
+    private ColumnDatetimeValueInRangeDatePercentCheckSpec checkSpec;
+    private SampleTableMetadata sampleTableMetadata;
+
+    @BeforeEach
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnDatetimeValueInRangeDatePercentSensorParametersSpec();
+        this.checkSpec = new ColumnDatetimeValueInRangeDatePercentCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinValue(lower);
+        this.sut.setMaxValue(upper);
+        runParameters.setTimeSeries(null);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinValue(lower);
+        this.sut.setMaxValue(upper);
+        runParameters.setTimeSeries(null);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinValue(lower);
+        this.sut.setMaxValue(upper);
+        runParameters.setTimeSeries(null);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinValue(lower);
+        this.sut.setMaxValue(upper);
+        runParameters.setTimeSeries(null);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinValue(lower);
+        this.sut.setMaxValue(upper);
+        runParameters.setTimeSeries(null);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+    }
+}
