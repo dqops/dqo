@@ -27,6 +27,7 @@ import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -63,6 +64,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
+            put("accuracy", o -> o.accuracy);
 
         }
     };
@@ -106,6 +108,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyPartitionedChecksSpec bool;
+
+    @JsonPropertyDescription("Daily partitioned checks for accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyDailyPartitionedChecksSpec accuracy;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -249,6 +256,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         propagateHierarchyIdToField(bool, "bool");
+    }
+
+    /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnAccuracyDailyPartitionedChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets a reference to a container of custom accuracy checks.
+     * @param accuracy Custom accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyDailyPartitionedChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**

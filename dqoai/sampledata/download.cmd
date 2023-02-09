@@ -71,3 +71,9 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1Nq-URy9ew6MZCGOkSlset5ziYCJbNHC0TFArOhz5Amc
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1Nq-URy9ew6MZCGOkSlset5ziYCJbNHC0TFArOhz5Amc/export?exportFormat=csv" > below_above_value_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1bKI4BJKZ2KQtyQ14x2pSwrHYs_-bLuUjWV2nt412R3I
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1bKI4BJKZ2KQtyQ14x2pSwrHYs_-bLuUjWV2nt412R3I/export?exportFormat=csv" > value_match_left_table.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g/export?exportFormat=csv" > value_match_right_table.csv

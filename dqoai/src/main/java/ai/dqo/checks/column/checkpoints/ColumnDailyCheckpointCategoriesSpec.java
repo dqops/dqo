@@ -27,6 +27,7 @@ import ai.dqo.checks.column.checkpoints.pii.ColumnPiiDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.accuracy.ColumnAccuracyDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -63,6 +64,8 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
+           put("accuracy", o -> o.accuracy);
+
         }
     };
 
@@ -105,6 +108,11 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyCheckpointsSpec bool;
+
+    @JsonPropertyDescription("Daily checkpoints of accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyDailyCheckpointsSpec accuracy;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -248,6 +256,24 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         this.propagateHierarchyIdToField(bool, "bool");
+    }
+
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnAccuracyDailyCheckpointsSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the container of accuracy data quality checks (checkpoints).
+     * @param accuracy New accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyDailyCheckpointsSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**

@@ -27,6 +27,7 @@ import ai.dqo.checks.column.checkpoints.pii.ColumnPiiMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.accuracy.ColumnAccuracyMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -63,6 +64,8 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
+           put("accuracy", o -> o.accuracy);
+
         }
     };
 
@@ -105,6 +108,11 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyCheckpointsSpec bool;
+
+    @JsonPropertyDescription("Monthly checkpoints of accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyMonthlyCheckpointsSpec accuracy;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -250,6 +258,23 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.propagateHierarchyIdToField(bool, "bool");
     }
 
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnAccuracyMonthlyCheckpointsSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the container of accuracy data quality checks (checkpoints).
+     * @param accuracy New accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyMonthlyCheckpointsSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
