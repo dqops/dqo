@@ -1,5 +1,5 @@
-TEXT:STRING,RESULT:INTEGER,DATE:LOCAL_DATE
-Przykładowy tekst,1,2023-01-11
+text:STRING,result:INTEGER,date:LOCAL_DATE
+Sample text,1,2023-01-11
 Sample string,1,2023-01-11
 12345,1,2023-01-11
 Python,1,2023-01-11

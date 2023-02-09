@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringRegexMatchPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringRegexMatchPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringMatchRegexPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMatchRegexPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -78,7 +78,7 @@ public class ColumnStringsStringRegexMatchPercentSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_regex_match_percent";
+        return "column/strings/string_match_regex_percent";
     }
 
 }
