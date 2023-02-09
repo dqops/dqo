@@ -125,7 +125,7 @@ const DatabaseConnection = ({
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
-      />
+      />)
   };
 
   const dbImage = useMemo(() => {
