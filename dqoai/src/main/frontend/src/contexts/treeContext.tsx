@@ -23,6 +23,13 @@ import { useHistory } from "react-router-dom";
 
 const TreeContext = React.createContext({} as any);
 
+const checkTypesToHasConfiguredCheckKey = {
+  [CheckTypes.SOURCES]: 'has_any_configured_checks',
+  [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
+  [CheckTypes.TIME_PARTITIONED]: 'has_any_configured_time_period_checks',
+  [CheckTypes.CHECKS]: 'has_any_configured_whole_table_checks'
+};
+
 function TreeProvider(props: any) {
   const [treeDataMaps, setTreeDataMaps] = useState<Record<string, CustomTreeNode[]>>({});
   const [sourceRoute, setSourceRoute] = useState('');
@@ -49,6 +56,7 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
+
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -150,7 +158,7 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
-      hasCheck: table?.has_any_configured_checks,
+      hasCheck: !!table?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof TableBasicModel],
       run_checks_job_template: table.run_checks_job_template,
       collect_statistics_job_template: table.collect_statistics_job_template,
       open: false
@@ -314,7 +322,7 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
-      hasCheck: column?.has_any_configured_checks,
+      hasCheck: !!column?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof ColumnBasicModel],
       run_checks_job_template: column.run_checks_job_template,
       collect_statistics_job_template: column.collect_statistics_job_template,
       open: false
