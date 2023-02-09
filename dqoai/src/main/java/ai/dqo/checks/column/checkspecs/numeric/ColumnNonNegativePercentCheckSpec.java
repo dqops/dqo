@@ -15,97 +15,158 @@
  */
 package ai.dqo.checks.column.checkspecs.numeric;
 
-///**
-// * Column non-negative percent (select sum(case when column_name < 0 then 1 else 0 end) from ...) check that calculates percent of non-negative values in a column.
-// */
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-//@EqualsAndHashCode(callSuper = true)
-//@Deprecated
-//public class ColumnNonNegativePercentCheckSpec extends AbstractCheckDeprecatedSpec {
-//    public static final ChildHierarchyNodeFieldMapImpl<ColumnNonNegativePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckDeprecatedSpec.FIELDS) {
-//        {
-//			put("parameters", o -> o.parameters);
-//			put("rules", o -> o.rules);
-//        }
-//    };
-//
-//    @JsonPropertyDescription("Non-negative percent sensor parameters")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    private ColumnNumericNonNegativePercentSensorParametersSpec parameters = new ColumnNumericNonNegativePercentSensorParametersSpec();
-//
-//    @JsonPropertyDescription("Non-negative percent validation rules at various alert severity levels (thresholds)")
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-//    private ColumnValidityNonNegativePercentRulesSpec rules = new ColumnValidityNonNegativePercentRulesSpec();
-//
-//
-//    /**
-//     * Returns the parameters of the sensor.
-//     * @return Sensor parameters.
-//     */
-//    public ColumnNumericNonNegativePercentSensorParametersSpec getParameters() {
-//        return parameters;
-//    }
-//
-//    /**
-//     * Sets a new row count sensor parameter object.
-//     * @param parameters Row count parameters.
-//     */
-//    public void setParameters(ColumnNumericNonNegativePercentSensorParametersSpec parameters) {
-//		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
-//        this.parameters = parameters;
-//		this.propagateHierarchyIdToField(parameters, "parameters");
-//    }
-//
-//    /**
-//     * Returns rules for the check.
-//     * @return Rules set for the check.
-//     */
-//    public ColumnValidityNonNegativePercentRulesSpec getRules() {
-//        return rules;
-//    }
-//
-//    /**
-//     * Sets a rules set for the check.
-//     * @param rules Rules set.
-//     */
-//    public void setRules(ColumnValidityNonNegativePercentRulesSpec rules) {
-//		this.setDirtyIf(!Objects.equals(this.rules, rules));
-//        this.rules = rules;
-//		this.propagateHierarchyIdToField(rules, "rules");
-//    }
-//
-//    /**
-//     * Returns the child map on the spec class with all fields.
-//     *
-//     * @return Return the field map.
-//     */
-//    @Override
-//    protected ChildHierarchyNodeFieldMap getChildMap() {
-//        return FIELDS;
-//    }
-//
-//    /**
-//     * Returns the sensor parameters spec object that identifies the sensor definition to use and contains parameters.
-//     *
-//     * @return Sensor parameters.
-//     */
-//    @Override
-//    @JsonIgnore
-//    public AbstractSensorParametersSpec getSensorParameters() {
-//        return this.parameters;
-//    }
-//
-//    /**
-//     * Returns a rule set for this check.
-//     *
-//     * @return Rule set.
-//     */
-//    @JsonIgnore
-//    @Override
-//    public AbstractRuleSetSpec getRuleSet() {
-//        return this.rules;
-//    }
-//}
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.DefaultDataQualityDimensions;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
+import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.comparison.MaxPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule98ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule99ParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
+import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
+
+/**
+ * Column level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+ */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@EqualsAndHashCode(callSuper = true)
+public class ColumnNonNegativePercentCheckSpec
+        extends AbstractCheckSpec<ColumnNumericNonNegativePercentSensorParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNonNegativePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+        {
+        }
+    };
+
+    @JsonPropertyDescription("Data quality check parameters")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNumericNonNegativePercentSensorParametersSpec parameters = new ColumnNumericNonNegativePercentSensorParametersSpec();
+
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with non-negative value in a column that raises a data quality alert")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxPercentRule98ParametersSpec error;
+
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxPercentRule99ParametersSpec warning;
+
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxPercentRule95ParametersSpec fatal;
+
+    /**
+     * Returns the parameters of the sensor.
+     *
+     * @return Sensor parameters.
+     */
+    @Override
+    public ColumnNumericNonNegativePercentSensorParametersSpec getParameters() {
+        return parameters;
+    }
+
+    /**
+     * Sets a new row count sensor parameter object.
+     *
+     * @param parameters Row count parameters.
+     */
+    public void setParameters(ColumnNumericNonNegativePercentSensorParametersSpec parameters) {
+        this.setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters;
+        this.propagateHierarchyIdToField(parameters, "parameters");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "error" alerting thresholds.
+     */
+    @Override
+    public MaxPercentRule98ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     *
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MaxPercentRule98ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
+     *
+     * @return Warning severity rule parameters.
+     */
+    @Override
+    public MaxPercentRule99ParametersSpec getWarning() {
+        return this.warning;
+    }
+
+    /**
+     * Sets a new warning level alerting threshold.
+     *
+     * @param warning Warning alerting threshold to set.
+     */
+    public void setWarning(MaxPercentRule99ParametersSpec warning) {
+        this.setDirtyIf(!Objects.equals(this.warning, warning));
+        this.warning = warning;
+        this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
+     *
+     * @return Fatal severity rule parameters.
+     */
+    @Override
+    public MaxPercentRule95ParametersSpec getFatal() {
+        return this.fatal;
+    }
+
+    /**
+     * Sets a new fatal level alerting threshold.
+     *
+     * @param fatal Fatal alerting threshold to set.
+     */
+    public void setFatal(MaxPercentRule95ParametersSpec fatal) {
+        this.setDirtyIf(!Objects.equals(this.fatal, fatal));
+        this.fatal = fatal;
+        this.propagateHierarchyIdToField(fatal, "fatal");
+    }
+
+    /**
+     * Returns the child map on the spec class with all fields.
+     *
+     * @return Return the field map.
+     */
+    @Override
+    protected ChildHierarchyNodeFieldMap getChildMap() {
+        return FIELDS;
+    }
+
+    /**
+     * Returns the default data quality dimension name used when an overwritten data quality dimension name was not assigned.
+     *
+     * @return Default data quality dimension name.
+     */
+    @Override
+    public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
+        return DefaultDataQualityDimensions.Validity;
+    }
+}

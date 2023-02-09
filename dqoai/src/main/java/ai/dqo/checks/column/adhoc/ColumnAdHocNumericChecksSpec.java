@@ -39,6 +39,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("negative_count", o -> o.negativeCount);
             put("negative_percent", o -> o.negativePercent);
             put("non_negative_count", o -> o.nonNegativeCount);
+            put("non_negative_percent", o -> o.nonNegativePercent);
             put("numbers_in_set_count", o -> o.numbersInSetCount);
             put("numbers_in_set_percent", o -> o.numbersInSetPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
@@ -66,6 +67,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.")
     private ColumnNonNegativeCountCheckSpec nonNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
+    private ColumnNonNegativePercentCheckSpec nonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.")
     private ColumnNumbersInSetCountCheckSpec numbersInSetCount;
@@ -167,6 +171,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.nonNegativeCount, nonNegativeCount));
         this.nonNegativeCount = nonNegativeCount;
         propagateHierarchyIdToField(nonNegativeCount, "non_negative_count");
+    }
+
+    /**
+     * Returns a negative percentage check specification.
+     * @return Negative percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getNonNegativePercent() {
+        return nonNegativePercent;
+    }
+
+    /**
+     * Sets a new specification of a negative percentage check.
+     * @param nonNegativePercent Negative percentage check specification.
+     */
+    public void setNonNegativePercent(ColumnNonNegativePercentCheckSpec nonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.nonNegativePercent, nonNegativePercent));
+        this.nonNegativePercent = nonNegativePercent;
+        propagateHierarchyIdToField(nonNegativePercent, "non_negative_percent");
     }
 
     /**
