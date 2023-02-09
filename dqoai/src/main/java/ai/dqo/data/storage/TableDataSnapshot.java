@@ -24,10 +24,7 @@ import tech.tablesaw.selection.Selection;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Contains a snapshot of data for one parquet table (such as sensor_readouts or rule_results) that was loaded
@@ -180,7 +177,7 @@ public class TableDataSnapshot {
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
-     * @param end The date fo the end month. It could be any date within the month, because the whole month is always loaded.
+     * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
      */
     public void ensureMonthsAreLoaded(LocalDate start, LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
@@ -219,6 +216,82 @@ public class TableDataSnapshot {
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.columnNames);
             this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+        }
+    }
+
+    /**
+     * Ensures that the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded,
+     * up to the point when the snapshot contains <code>monthCount</code> loaded partitions.
+     * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
+     * @param start The date of the start month. If null, the date range is not left-bounded.
+     * @param end The date of the end month. If null, the date range is not right-bounded.
+     * @param monthCount Maximum number of months to have loaded.
+     */
+    public void ensureNRecentMonthsAreLoaded(LocalDate start, LocalDate end, int monthCount) {
+        int currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
+        int needToLoad = monthCount - currentlyLoadedPartitions;
+        if (needToLoad <= 0) {
+            // no need to load more partitions
+            return;
+        }
+
+        if (this.firstLoadedMonth == null) {
+            // no data ever loaded
+            Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                    this.connectionName, this.tableName, start, end, this.storageSettings, this.columnNames, monthCount);
+            this.firstLoadedMonth = loadedPartitions.keySet().stream()
+                    .map(ParquetPartitionId::getMonth)
+                    .min(LocalDate::compareTo)
+                    .orElse(null);
+            this.lastLoadedMonth = loadedPartitions.keySet().stream()
+                    .map(ParquetPartitionId::getMonth)
+                    .max(LocalDate::compareTo)
+                    .orElse(null);
+
+            if (this.loadedMonthlyPartitions == null) {
+                this.loadedMonthlyPartitions = new LinkedHashMap<>();
+            }
+            this.loadedMonthlyPartitions.putAll(loadedPartitions);
+        }
+        else {
+            if (end == null || end.isAfter(this.lastLoadedMonth)) {
+                // we need to load a few months after
+                LocalDate firstMonthToLoad;
+                if (start == null || start.isBefore(this.lastLoadedMonth)) {
+                    firstMonthToLoad = this.lastLoadedMonth.plusMonths(1L);
+                }
+                else {
+                    firstMonthToLoad = start;
+                }
+
+                Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                        this.connectionName, this.tableName, firstMonthToLoad, end, this.storageSettings, this.columnNames, needToLoad);
+                Optional<LocalDate> lastLoadedLaterMonth = loadedLaterPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
+                this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
+                this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+            }
+            currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
+            needToLoad = monthCount - currentlyLoadedPartitions;
+            if (needToLoad <= 0) {
+                // no need to load more partitions
+                return;
+            }
+
+            if (start == null || start.isBefore(this.firstLoadedMonth)) {
+                // we need to load a few months before
+                LocalDate lastMonthToLoad;
+                if (end == null || end.isAfter(this.firstLoadedMonth)) {
+                    lastMonthToLoad = this.firstLoadedMonth.minusMonths(1L);
+                } else {
+                    lastMonthToLoad = end;
+                }
+
+                Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                        this.connectionName, this.tableName, start, lastMonthToLoad, this.storageSettings, this.columnNames, needToLoad);
+                Optional<LocalDate> lastLoadedEarlierMonth = loadedEarlierPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
+                this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
+                this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+            }
         }
     }
 

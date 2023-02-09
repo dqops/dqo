@@ -33,7 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractSensorParametersSpec extends AbstractSpec implements Cloneable {
+public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -64,14 +64,9 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
      * Creates and returns a copy of this object.
      */
     @Override
-    public AbstractSensorParametersSpec clone() {
-        try {
-            AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+    public AbstractSensorParametersSpec deepClone() {
+        AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -88,13 +83,8 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
      * @return Cloned and expanded copy of the object.
      */
     public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.clone();
-            cloned.filter = secretValueProvider.expandValue(cloned.filter);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+        AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
+        cloned.filter = secretValueProvider.expandValue(cloned.filter);
+        return cloned;
     }
 }

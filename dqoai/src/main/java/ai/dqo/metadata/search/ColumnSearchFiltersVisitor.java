@@ -23,7 +23,7 @@ import com.google.common.base.Strings;
 /**
  * Visitor for {@link ColumnSearchFilters} that finds the correct nodes.
  */
-public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final ColumnSearchFilters filters;
 
     /**

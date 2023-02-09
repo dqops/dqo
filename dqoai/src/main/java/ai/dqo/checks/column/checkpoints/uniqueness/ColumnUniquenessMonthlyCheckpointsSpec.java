@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +40,7 @@ public class ColumnUniquenessMonthlyCheckpointsSpec extends AbstractCheckCategor
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_checkpoint_unique_count", o -> o.monthlyCheckpointUniqueCount);
+            put("monthly_checkpoint_unique_percent", o -> o.monthlyCheckpointUniquePercent);
             put("monthly_checkpoint_duplicate_count", o -> o.monthlyCheckpointDuplicateCount);
             put("monthly_checkpoint_duplicate_percent", o -> o.monthlyCheckpointDuplicatePercent);
         }
@@ -46,6 +48,9 @@ public class ColumnUniquenessMonthlyCheckpointsSpec extends AbstractCheckCategor
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnUniqueCountCheckSpec monthlyCheckpointUniqueCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnUniquePercentCheckSpec monthlyCheckpointUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec monthlyCheckpointDuplicateCount;
@@ -69,6 +74,24 @@ public class ColumnUniquenessMonthlyCheckpointsSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointUniqueCount, monthlyCheckpointUniqueCount));
         this.monthlyCheckpointUniqueCount = monthlyCheckpointUniqueCount;
         propagateHierarchyIdToField(monthlyCheckpointUniqueCount, "monthly_checkpoint_unique_count");
+    }
+
+    /**
+     * Returns a unique values percent check specification.
+     * @return Unique values percent check specification.
+     */
+    public ColumnUniquePercentCheckSpec getMonthlyCheckpointUniquePercent() {
+        return monthlyCheckpointUniquePercent;
+    }
+
+    /**
+     * Sets a new specification of a unique values percent check.
+     * @param monthlyCheckpointUniquePercent Unique values count percent specification.
+     */
+    public void setMonthlyCheckpointUniquePercent(ColumnUniquePercentCheckSpec monthlyCheckpointUniquePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointUniquePercent, monthlyCheckpointUniquePercent));
+        this.monthlyCheckpointUniquePercent = monthlyCheckpointUniquePercent;
+        propagateHierarchyIdToField(monthlyCheckpointUniquePercent, "monthly_checkpoint_unique_percent");
     }
 
     /**

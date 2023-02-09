@@ -43,20 +43,17 @@ public class DataStreamMappingSpecMap extends AbstractDirtyTrackingSpecMap<DataS
      * Creates and returns a copy of this object.
      */
     @Override
-    public DataStreamMappingSpecMap clone() {
+    public DataStreamMappingSpecMap deepClone() {
         DataStreamMappingSpecMap cloned = new DataStreamMappingSpecMap();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, DataStreamMappingSpec> keyPair : this.entrySet()) {
-            cloned.put(keyPair.getKey(), keyPair.getValue().clone());
+            cloned.put(keyPair.getKey(), keyPair.getValue().deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 

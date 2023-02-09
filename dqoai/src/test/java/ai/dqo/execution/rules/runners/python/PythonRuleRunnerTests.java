@@ -18,6 +18,8 @@ package ai.dqo.execution.rules.runners.python;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
@@ -38,16 +40,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class PythonRuleRunnerTests extends BaseTest {
     private PythonRuleRunner sut;
     private PythonCallerService pythonCallerService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private HomeLocationFindServiceImpl homeLocationFinder;
     private ExecutionContext inMemoryCheckContext;
+    private DqoPythonConfigurationProperties pythonConfigurationProperties;
 
     @BeforeEach
     void setUp() {
 		pythonCallerService = PythonCallServiceObjectMother.getDefault();
-		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-		homeLocationFinder = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
-		this.sut = new PythonRuleRunner(pythonCallerService, dqoConfigurationProperties, homeLocationFinder);
+        pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
+        homeLocationFinder = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
+		this.sut = new PythonRuleRunner(pythonCallerService, pythonConfigurationProperties, homeLocationFinder);
 		inMemoryCheckContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
     }
 

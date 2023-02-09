@@ -28,7 +28,7 @@ import java.util.Map;
  * Dictionary of spec objects indexed by a key.
  */
 @JsonIgnoreProperties(value = { "" })
-public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & HierarchyNode>
+public abstract class AbstractDirtyTrackingSpecMap<V extends HierarchyNode>
         extends LinkedHashMap<String, V> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
     private boolean dirty;
@@ -229,5 +229,28 @@ public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & Hiera
         }
 
         return null; // not found
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public AbstractDirtyTrackingSpecMap<V> deepClone() {
+        AbstractDirtyTrackingSpecMap<V> cloned = (AbstractDirtyTrackingSpecMap<V>) super.clone();
+        cloned.clear();
+        cloned.dirty = false;
+
+        if (this.size() == 0) {
+            return cloned;
+        }
+
+        for (Map.Entry<String, V> childEntry : this.entrySet()) {
+            V clonedChild = (V)childEntry.getValue().deepClone();
+            cloned.put(childEntry.getKey(), clonedChild);
+        }
+
+        return cloned;
     }
 }

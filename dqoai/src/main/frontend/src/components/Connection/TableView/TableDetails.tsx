@@ -102,32 +102,6 @@ const TableDetails = () => {
             <td className="px-4 py-2">Table Hash</td>
             <td className="px-4 py-2">{tableBasic?.table_hash}</td>
           </tr>
-          {tableBasic?.target?.properties && (
-            <>
-              <tr>
-                <td className="px-4 py-2 font-semibold" colSpan={2}>
-                  Properties
-                </td>
-              </tr>
-              {Object.entries(tableBasic.target.properties).map(
-                ([key, value], index) => (
-                  <tr key={index}>
-                    <td className="px-4 py-2">{key}</td>
-                    <td className="px-4 py-2">
-                      <Input
-                        value={value}
-                        onChange={(e) =>
-                          handleChange({
-                            target: { properties: { [key]: e.target.value } }
-                          })
-                        }
-                      />
-                    </td>
-                  </tr>
-                )
-              )}
-            </>
-          )}
         </tbody>
       </table>
     </div>

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * Root dqo.io home model for reading and managing the definitions in the application's home (DQO_HOME).
  * Those are built in rule, sensor and dashboard definitions.
  */
-public class DqoHomeImpl implements DqoHome {
+public class DqoHomeImpl implements DqoHome, Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<DqoHomeImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(ChildHierarchyNodeFieldMap.empty()) {
         {
 			put("sensors", o -> o.sensors);
@@ -236,5 +236,32 @@ public class DqoHomeImpl implements DqoHome {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public DqoHomeImpl deepClone() {
+        try {
+            DqoHomeImpl cloned = (DqoHomeImpl) super.clone();
+            if (cloned.sensors != null) {
+                cloned.sensors = (SensorDefinitionListImpl) cloned.sensors.deepClone();
+            }
+            if (cloned.rules != null) {
+                cloned.rules = (RuleDefinitionListImpl) cloned.rules.deepClone();
+            }
+            if (cloned.dashboards != null) {
+                cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();
+            }
+            cloned.dirty = false;
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone object", ex);
+        }
     }
 }

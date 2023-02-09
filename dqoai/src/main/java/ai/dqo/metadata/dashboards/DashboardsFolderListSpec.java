@@ -40,20 +40,17 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
      * Creates and returns a copy of this object.
      */
     @Override
-    public DashboardsFolderListSpec clone() {
+    public DashboardsFolderListSpec deepClone() {
         DashboardsFolderListSpec cloned = new DashboardsFolderListSpec();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
         for (DashboardsFolderSpec folderSpec : this) {
-            cloned.add(folderSpec.clone());
+            cloned.add(folderSpec.deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 

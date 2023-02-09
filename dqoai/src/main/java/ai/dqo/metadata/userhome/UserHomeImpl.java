@@ -21,13 +21,15 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.settings.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsWrapperImpl;
 import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Root user home model for reading and managing the definitions in the user's home.
  */
-public class UserHomeImpl implements UserHome {
+public class UserHomeImpl implements UserHome, Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<UserHomeImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(ChildHierarchyNodeFieldMap.empty()) {
         {
 			put("connections", o -> o.connections);
@@ -368,5 +370,37 @@ public class UserHomeImpl implements UserHome {
 
         ColumnSpec columnSpec = columnSpecMap.getExpectedChild(nestedHierarchyId.get(6), ColumnSpec.class);
         return columnSpec;
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public UserHomeImpl deepClone() {
+        try {
+            UserHomeImpl cloned = (UserHomeImpl) super.clone();
+            if (cloned.sensors != null) {
+                cloned.sensors = (SensorDefinitionListImpl) cloned.sensors.deepClone();
+            }
+            if (cloned.rules != null) {
+                cloned.rules = (RuleDefinitionListImpl) cloned.rules.deepClone();
+            }
+            if (cloned.connections != null) {
+                cloned.connections = (ConnectionListImpl) cloned.connections.deepClone();
+            }
+            if (cloned.settings != null) {
+                cloned.settings = (SettingsWrapperImpl) cloned.settings.deepClone();
+            }
+            // NOTE: the file index is not cloned... it has a different lifecycle
+
+            cloned.dirty = false;
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone object", ex);
+        }
     }
 }

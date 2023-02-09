@@ -88,7 +88,7 @@ public class UIFieldModel implements Cloneable {
         try {
             UIFieldModel cloned = (UIFieldModel) super.clone();
             if (cloned.definition != null) {
-                cloned.definition = cloned.definition.clone();
+                cloned.definition = cloned.definition.deepClone();
             }
             if (cloned.stringListValue != null) {
                 cloned.stringListValue = new ArrayList<>(cloned.stringListValue);

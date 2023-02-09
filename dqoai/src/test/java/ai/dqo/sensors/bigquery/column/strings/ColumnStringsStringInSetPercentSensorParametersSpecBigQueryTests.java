@@ -52,7 +52,7 @@ public class ColumnStringsStringInSetPercentSensorParametersSpecBigQueryTests ex
     void setUp() {
 		this.sut = new ColumnStringsStringInSetPercentSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
-        ColumnStringsStringInSetPercentSensorParametersSpec altSut = (ColumnStringsStringInSetPercentSensorParametersSpec) this.sut.clone();
+        ColumnStringsStringInSetPercentSensorParametersSpec altSut = (ColumnStringsStringInSetPercentSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
         }});

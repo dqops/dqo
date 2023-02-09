@@ -293,32 +293,9 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * Creates and returns a copy of this object.
      */
     @Override
-    public AbstractCheckSpec clone() {
-        try {
-            AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
-            if (cloned.getParameters() != null) {
-                cloned.setParameters(cloned.getParameters().clone());
-            }
-            if (cloned.getError() != null) {
-                cloned.setError(cloned.getError().clone());
-            }
-            if (cloned.getWarning() != null) {
-                cloned.setWarning(cloned.getWarning().clone());
-            }
-            if (cloned.getFatal() != null) {
-                cloned.setFatal(cloned.getFatal().clone());
-            }
-            if (cloned.scheduleOverride != null) {
-                cloned.scheduleOverride = cloned.scheduleOverride.clone();
-            }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+    public AbstractCheckSpec deepClone() {
+        AbstractCheckSpec cloned = (AbstractCheckSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -328,15 +305,10 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @return Cloned and expanded copy of the object.
      */
     public AbstractCheckSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            AbstractCheckSpec cloned = (AbstractCheckSpec)super.clone();
-            cloned.scheduleOverride = null;
-            cloned.comments = null;
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+        AbstractCheckSpec cloned = this.deepClone();
+        cloned.scheduleOverride = null;
+        cloned.comments = null;
+        return cloned;
     }
 
     /**

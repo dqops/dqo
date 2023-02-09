@@ -152,6 +152,15 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "This parameter is effective only in CLI mode.", defaultValue = ".")
     private String dqoUserHome;
 
+    @CommandLine.Option(names = {"--dqo.home"},
+            description = "Overrides the path to the DQO system home (DQO_HOME). The default DQO_HOME contains the definition of built-in data quality sensors, rules and libraries.")
+    private String dqoHome;
+
+    @CommandLine.Option(names = {"--dqo.default-time-zone"},
+            description = "Default time zone name used to convert the server's local dates to a local time in a time zone that is relevant for the user. Use official IANA time zone names. " +
+                    "When the parameter is not configured, DQO uses the local time zone of the host running the application. The time zone could be reconfigured at a user settings level.")
+    private String defaultTimeZone;
+
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files. " +
                     "This parameter is effective only in CLI mode.", defaultValue = "true")

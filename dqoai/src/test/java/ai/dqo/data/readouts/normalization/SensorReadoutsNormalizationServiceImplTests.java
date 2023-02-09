@@ -32,6 +32,7 @@ import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHomeImpl;
 import ai.dqo.metadata.userhome.UserHomeObjectMother;
+import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,22 +51,24 @@ import java.util.Locale;
 @SpringBootTest
 public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     private SensorReadoutsNormalizationServiceImpl sut;
-    private ZoneId utcZone;
     private Table table;
     private UserHomeImpl userHome;
     private TableSpec tableSpec;
     private TableRowCountCheckSpec checkSpec;
     private SensorExecutionRunParameters sensorExecutionRunParameters;
     private SensorExecutionResult sensorExecutionResult;
+    private ZoneId utcZone;
 
     @BeforeEach
     void setUp() {
-		this.sut = new SensorReadoutsNormalizationServiceImpl(new CommonTableNormalizationServiceImpl());
+		this.sut = new SensorReadoutsNormalizationServiceImpl(
+                new CommonTableNormalizationServiceImpl(),
+                DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
+        this.utcZone = ZoneId.of("UTC");
 		this.table = Table.create("results");
 		userHome = UserHomeObjectMother.createBareUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         connectionWrapper.getSpec().setProviderType(ProviderType.bigquery);
-		this.utcZone = connectionWrapper.getSpec().getJavaTimeZoneId();
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();

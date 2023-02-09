@@ -27,6 +27,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -50,7 +51,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ConnectionSpec extends AbstractSpec implements Cloneable {
+public class ConnectionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("comments", o -> o.comments);
@@ -60,6 +61,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             put("postgresql", o -> o.postgresql);
             put("labels", o -> o.labels);
             put("schedule", o -> o.schedule);
+            put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
         }
     };
@@ -79,9 +81,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
     private PostgresqlParametersSpec postgresql;
 
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
-
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
 
@@ -96,6 +95,12 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec schedule;
+
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringSchedulesSpec schedules;
 
     @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
     @ToString.Exclude
@@ -218,37 +223,21 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
-     * @return Time zone name.
+     * Returns the configuration of schedules for each type of check.
+     * @return Configuration of schedules for each type of checks.
      */
-    public String getTimeZone() {
-        return timeZone;
+    public RecurringSchedulesSpec getSchedules() {
+        return schedules;
     }
 
     /**
-     * Sets a time zone name. Zone names are not validated on set.
-     * @param timeZone Time zone name.
+     * Sets the configuration of schedules for running each type of checks.
+     * @param schedules Configuration of schedules.
      */
-    public void setTimeZone(String timeZone) {
-		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
-        this.timeZone = timeZone;
-    }
-
-    /**
-     * Parses the time zone. Returns a Java zoneId. Returns UTC if the time zone name is invalid.
-     * @return Time zone object with the zone rules.
-     */
-    @JsonIgnore
-    public ZoneId getJavaTimeZoneId() {
-        try {
-            ZoneId zoneId = TimeZoneUtility.parseZoneId(this.timeZone);
-            return zoneId;
-        }
-        catch (Exception ex) {
-            // ignore exceptions here, we will use UTC as a fallback
-        }
-
-        return ZoneId.of("UTC");
+    public void setSchedules(RecurringSchedulesSpec schedules) {
+        setDirtyIf(!Objects.equals(this.schedules, schedules));
+        this.schedules = schedules;
+        propagateHierarchyIdToField(schedules, "schedules");
     }
 
     /**
@@ -365,36 +354,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public ConnectionSpec clone() {
-        try {
-            ConnectionSpec cloned = (ConnectionSpec)super.clone();
-            if (cloned.bigquery != null) {
-                cloned.bigquery = cloned.bigquery.clone();
-            }
-            if (cloned.snowflake != null) {
-                cloned.snowflake = cloned.snowflake.clone();
-            }
-            if (cloned.postgresql != null) {
-                cloned.postgresql = cloned.postgresql.clone();
-            }
-            if (cloned.defaultDataStreamMapping != null) {
-                cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.clone();
-            }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-            if (cloned.schedule != null) {
-                cloned.schedule = cloned.schedule.clone();
-            }
-            if (cloned.notifications != null) {
-                cloned.notifications = cloned.notifications.clone();
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public ConnectionSpec deepClone() {
+        ConnectionSpec cloned = (ConnectionSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -421,6 +383,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             }
             cloned.comments = null;
             cloned.schedule = null; // we probably don't need it here
+            cloned.schedules = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -439,6 +402,7 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
             cloned.schedule = null;
+            cloned.schedules = null;
             cloned.notifications = null;
             return cloned;
         }

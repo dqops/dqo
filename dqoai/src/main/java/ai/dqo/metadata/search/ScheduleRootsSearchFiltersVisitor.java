@@ -16,8 +16,9 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
@@ -27,7 +28,7 @@ import java.util.Objects;
 /**
  * Visitor for {@link ScheduleRootsSearchFilters} that finds any node (connection, table, column, check) that has a given filter configured.
  */
-public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<FoundResultsCollector<ScheduleRootResult>> {
     private final ScheduleRootsSearchFilters filters;
 
     /**
@@ -46,27 +47,27 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject foundNodes) {
-        RecurringScheduleSpec connectionSchedule = connectionSpec.getSchedule();
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, FoundResultsCollector<ScheduleRootResult> foundNodes) {
+        RecurringSchedulesSpec schedules = connectionSpec.getSchedules();
         assert this.filters.getSchedule() != null;
-        assert this.filters.getSchedule().getRecurringSchedule() != null;
-        assert this.filters.getSchedule().getTimeZone() != null;
+        assert this.filters.getSchedule() != null;
 
-        if (!Objects.equals(this.filters.getSchedule().getTimeZone(), connectionSpec.getTimeZone())) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN; // the timezone does not match, there is no way that any nested schedule will match because the timezone is defined on the connection
-        }
-
-        if (connectionSchedule != null) {
-            if (!Objects.equals(connectionSchedule, this.filters.getSchedule().getRecurringSchedule())) {
-                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
+        if (schedules != null) {
+            if (Objects.equals(schedules.getProfiling(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, connectionSpec));
             }
 
-            foundNodes.getNodes().add(connectionSpec);
+            if (Objects.equals(schedules.getDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.daily, connectionSpec));
+            }
+
+            if (Objects.equals(schedules.getMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.monthly, connectionSpec));
+            }
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
-
 
     /**
      * Accepts a table specification.
@@ -76,7 +77,7 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, FoundResultsCollector<ScheduleRootResult> foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean tableIsEnabled = !tableSpec.isDisabled();
@@ -85,47 +86,21 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
             }
         }
 
-        RecurringScheduleSpec tableSchedule = tableSpec.getScheduleOverride();
+        RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
-        assert this.filters.getSchedule().getRecurringSchedule() != null;
 
-        if (tableSchedule != null) {
-            if (!Objects.equals(tableSchedule, this.filters.getSchedule().getRecurringSchedule())) {
-                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
+        if (schedulesOverride != null) {
+            if (Objects.equals(schedulesOverride.getProfiling(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, tableSpec));
             }
 
-            foundNodes.getNodes().add(tableSpec);
-        }
-
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a column specification.
-     *
-     * @param columnSpec Column specification.
-     * @param foundNodes Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject foundNodes) {
-        Boolean enabledFilter = this.filters.getEnabled();
-        if (enabledFilter != null) {
-            boolean columnIsEnabled = !columnSpec.isDisabled();
-            if (enabledFilter != columnIsEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
-
-        RecurringScheduleSpec columnSchedule = columnSpec.getScheduleOverride();
-        assert this.filters.getSchedule().getRecurringSchedule() != null;
-
-        if (columnSchedule != null) {
-            if (!Objects.equals(columnSchedule, this.filters.getSchedule().getRecurringSchedule())) {
-                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
+            if (Objects.equals(schedulesOverride.getDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.daily, tableSpec));
             }
 
-            foundNodes.getNodes().add(columnSpec);
+            if (Objects.equals(schedulesOverride.getMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.monthly, tableSpec));
+            }
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -139,16 +114,14 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor {
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, FoundResultsCollector<ScheduleRootResult> foundNodes) {
         RecurringScheduleSpec checkSchedule = abstractCheckSpec.getScheduleOverride();
-        assert this.filters.getSchedule().getRecurringSchedule() != null;
+        assert this.filters.getSchedule() != null;
 
         if (checkSchedule != null) {
-            if (!Objects.equals(checkSchedule, this.filters.getSchedule().getRecurringSchedule())) {
-                return TreeNodeTraversalResult.TRAVERSE_CHILDREN;  // do not add to the results, the cron expression does not match
+            if (Objects.equals(checkSchedule, this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(null, abstractCheckSpec));
             }
-
-            foundNodes.getNodes().add(abstractCheckSpec);
         }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper

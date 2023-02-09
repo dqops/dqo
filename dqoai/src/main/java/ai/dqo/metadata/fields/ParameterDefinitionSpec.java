@@ -37,7 +37,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "ParameterDefinitionSpec", description = "Defines a single field that is a sensor parameter or a rule parameter.")
-public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
+public class ParameterDefinitionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ParameterDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -240,13 +240,8 @@ public class ParameterDefinitionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ParameterDefinitionSpec clone() {
-        try {
-            ParameterDefinitionSpec cloned = (ParameterDefinitionSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ParameterDefinitionSpec deepClone() {
+        ParameterDefinitionSpec cloned = (ParameterDefinitionSpec)super.deepClone();
+        return cloned;
     }
 }

@@ -393,6 +393,10 @@ public class FieldInfo {
 
             this.setterMethod.invoke(targetObject, value);
         }
+        catch (IllegalArgumentException e) {
+            throw new FieldAccessException("Cannot store value of type: " + (value != null ? value.getClass().getCanonicalName() : "null") +
+                    " on class " + targetObject.getClass().getCanonicalName() + " for field " + this.classFieldName + ", exception: " + e.getMessage(), e);
+        }
         catch (InvocationTargetException e) {
             throw new FieldAccessException("Invocation exception", e);
         } catch (IllegalAccessException e) {

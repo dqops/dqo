@@ -13,7 +13,6 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import ConnectionLayout from "../../components/ConnectionLayout";
-import useSearchParams from "../../hooks/useSearchParams";
 
 const initTabs = [
   {
@@ -27,27 +26,14 @@ const initTabs = [
   {
     label: 'Labels',
     value: 'labels'
-  },
-  {
-    label: 'Ad-hoc checks',
-    value: 'data-quality-checks'
-  },
-  {
-    label: 'Checkpoints',
-    value: 'checkpoints'
-  },
-  {
-    label: 'Partitioned checks',
-    value: 'partitioned-checks'
   }
 ];
 
 const ColumnView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, tab: activeTab }: { connection: string, schema: string, table: string, column: string, tab: string } = useParams();
+  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
-  const query = useSearchParams();
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const {
     isUpdatedColumnBasic,
@@ -59,9 +45,9 @@ const ColumnView = () => {
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
-  const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
-  const isPartitionCheckOnly = useMemo(() => query.get("type") === CheckTypes.PARTITION, [query]);
-  const isAdHocCheckOnly = useMemo(() => query.get("type") === CheckTypes.ADHOC, [query]);
+  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isAdHocCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isCheckpointOnly && !isPartitionCheckOnly && !isAdHocCheckOnly,
     [isCheckpointOnly]
@@ -75,7 +61,7 @@ const ColumnView = () => {
   // }, [pageTab, tabMap]);
 
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.COLUMN_LEVEL_PAGE(connectionName, schemaName, tableName, columnName, tab));
+    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, columnName, tab));
     setTabMap({
       ...tabMap,
       [pageTab]: tab

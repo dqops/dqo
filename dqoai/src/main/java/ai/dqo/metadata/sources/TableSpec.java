@@ -34,6 +34,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,7 +55,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSpec extends AbstractSpec implements Cloneable {
+public class TableSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("target", o -> o.target);
@@ -67,6 +68,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
             put("schedule_override", o -> o.scheduleOverride);
+            put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
@@ -139,6 +141,12 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec scheduleOverride;
+
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -368,6 +376,24 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
+     * @return Configuration of schedules for each type of schedules.
+     */
+    public RecurringSchedulesSpec getSchedulesOverride() {
+        return schedulesOverride;
+    }
+
+    /**
+     * Sets the table specific configuration of schedules for running checks.
+     * @param schedulesOverride Configuration of schedules for running checks.
+     */
+    public void setSchedulesOverride(RecurringSchedulesSpec schedulesOverride) {
+        setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
+        this.schedulesOverride = schedulesOverride;
+        propagateHierarchyIdToField(schedulesOverride, "schedules_override");
+    }
+
+    /**
      * Returns a hashtable of columns, indexed by the column name.
      * @return Dictionary of columns.
      */
@@ -592,6 +618,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
+
     /**
      * Inspects all check containers and verifies if any of them has any checks configured.
      * @return True when the table has some table level checks (not column level), false when no table level checks were found.
@@ -607,6 +634,26 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 
         if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case ADHOC:
+                return this.checks != null && this.checks.hasAnyConfiguredChecks();
+
+            case CHECKPOINT:
+                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
         }
 
         return false;
@@ -655,10 +702,10 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             if (cloned.target != null) {
-                cloned.target = cloned.target.clone();
+                cloned.target = cloned.target.deepClone();
             }
             if (cloned.timestampColumns != null) {
-                cloned.timestampColumns = cloned.timestampColumns.clone();
+                cloned.timestampColumns = cloned.timestampColumns.deepClone();
             }
             cloned.checks = null;
             cloned.checkpoints = null;
@@ -686,7 +733,7 @@ public class TableSpec extends AbstractSpec implements Cloneable {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             if (cloned.target != null) {
-                cloned.target = cloned.target.clone();
+                cloned.target = cloned.target.deepClone();
             }
             cloned.checks = null;
             cloned.checkpoints = null;

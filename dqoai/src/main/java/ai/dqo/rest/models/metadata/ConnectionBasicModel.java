@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
@@ -55,11 +56,17 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
 
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
-
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this connection.")
+    private CheckSearchFilters runProfilingChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this connection.")
+    private CheckSearchFilters runWholeTableChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this connection.")
+    private CheckSearchFilters runTimePeriodChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
@@ -75,13 +82,30 @@ public class ConnectionBasicModel {
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
-            setTimeZone(connectionSpec.getTimeZone());
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
+                setEnabled(true);
+            }});
+            setRunProfilingChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setCheckType(CheckType.ADHOC);
+                setEnabled(true);
+            }});
+            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setCheckType(CheckType.CHECKPOINT);
+                setEnabled(true);
+            }});
+            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
@@ -98,7 +122,6 @@ public class ConnectionBasicModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setTimeZone(this.getTimeZone());
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

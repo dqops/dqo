@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -202,13 +203,13 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of nodes of type {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec} that may have a custom schedule defined.
      */
     @Override
-    public Collection<HierarchyNode> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters) {
+    public FoundResultsCollector<ScheduleRootResult>findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters) {
         ScheduleRootsSearchFiltersVisitor searchFilterVisitor = scheduleRootsSearchFilters.createSearchFilterVisitor();
-        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, null, null)));
+        FoundResultsCollector<ScheduleRootResult> resultsCollector = new FoundResultsCollector<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode,
+                node -> node.visit(searchFilterVisitor, resultsCollector));
 
-        return matchingNodes;
+        return resultsCollector;
     }
 
     /**
@@ -221,36 +222,15 @@ public class HierarchyNodeTreeSearcherImpl implements HierarchyNodeTreeSearcher 
      * @return Collection of check nodes that passed the filter.
      */
     @Override
-    public Collection<AbstractCheckSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
-        if (startNode instanceof ConnectionSpec) {
-            ConnectionSpec connectionSpec = (ConnectionSpec) startNode;
-            assert connectionSpec.getSchedule() != null &&
-                    Objects.equals(connectionSpec.getSchedule(), scheduledChecksSearchFilters.getSchedule());
-        }
-        else if (startNode instanceof TableSpec) {
-            TableSpec tableSpec = (TableSpec) startNode;
-            assert tableSpec.getScheduleOverride() != null &&
-                    Objects.equals(tableSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
-        }
-        else if (startNode instanceof ColumnSpec) {
-            ColumnSpec columnSpec = (ColumnSpec) startNode;
-            assert columnSpec.getScheduleOverride() != null &&
-                    Objects.equals(columnSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
-        }
-        else if (startNode instanceof AbstractCheckSpec) {
-            AbstractCheckSpec checkSpec = (AbstractCheckSpec) startNode;
-            assert checkSpec.getScheduleOverride() != null &&
-                    Objects.equals(checkSpec.getScheduleOverride(), scheduledChecksSearchFilters.getSchedule());
-        }
-        else {
-            throw new IllegalArgumentException("startNode");
-        }
+    public Collection<AbstractCheckSpec<?,?,?,?>> findScheduledChecks(HierarchyNode startNode,
+                                                                      ScheduledChecksSearchFilters scheduledChecksSearchFilters) {
+        assert startNode instanceof ConnectionSpec || startNode instanceof TableSpec || startNode instanceof AbstractCheckSpec;
 
         ScheduledChecksSearchFiltersVisitor searchFilterVisitor = scheduledChecksSearchFilters.createSearchFilterVisitor();
-        ArrayList<HierarchyNode> matchingNodes = new ArrayList<>();
-        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode, node -> node.visit(searchFilterVisitor,
-                new SearchParameterObject(matchingNodes, null, null)));
+        FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> resultsCollector = new FoundResultsCollector<>();
+        this.hierarchyNodeTreeWalker.traverseHierarchyNodeTree(startNode,
+                node -> node.visit(searchFilterVisitor, resultsCollector));
 
-        return (List<AbstractCheckSpec>)(ArrayList<?>)matchingNodes;
+        return (List<AbstractCheckSpec<?,?,?,?>>)(ArrayList<?>)resultsCollector.getResults();
     }
 }

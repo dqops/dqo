@@ -62,7 +62,7 @@ public class UIRuleParametersModel implements Cloneable {
         try {
             UIRuleParametersModel cloned = (UIRuleParametersModel)super.clone();
             if (cloned.ruleParametersSpec != null) {
-                cloned.ruleParametersSpec = cloned.ruleParametersSpec.clone();
+                cloned.ruleParametersSpec = (AbstractRuleParametersSpec) cloned.ruleParametersSpec.deepClone();
             }
 
             if (cloned.ruleParameters != null) {

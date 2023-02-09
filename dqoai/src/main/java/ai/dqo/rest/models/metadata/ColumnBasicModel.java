@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -55,12 +56,33 @@ public class ColumnBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredChecks;
 
+    @JsonPropertyDescription("True when the column has any profiling checks configured.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hasAnyConfiguredProfilingChecks;
+
+    @JsonPropertyDescription("True when the column has any whole table checks configured.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hasAnyConfiguredWholeTableChecks;
+
+    @JsonPropertyDescription("True when the column has any time period checks configured.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean hasAnyConfiguredTimePeriodChecks;
+
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this column.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this column.")
+    private CheckSearchFilters runProfilingChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this column.")
+    private CheckSearchFilters runWholeTableChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this column.")
+    private CheckSearchFilters runTimePeriodChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
@@ -85,11 +107,38 @@ public class ColumnBasicModel {
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
+            setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.ADHOC));
+            setHasAnyConfiguredWholeTableChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredTimePeriodChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
+                setEnabled(true);
+            }});
+            setRunProfilingChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setCheckType(CheckType.ADHOC);
+                setEnabled(true);
+            }});
+            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setCheckType(CheckType.CHECKPOINT);
+                setEnabled(true);
+            }});
+            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
@@ -122,6 +171,9 @@ public class ColumnBasicModel {
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
+            setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.ADHOC));
+            setHasAnyConfiguredWholeTableChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredTimePeriodChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
         }};
     }
 

@@ -39,6 +39,12 @@ const SnowflakeConnection = ({
         onChange={(e) => handleChange({ warehouse: e.target.value })}
       />
       <Input
+        label="Database"
+        className="mb-4"
+        value={snowflake?.database}
+        onChange={(e) => handleChange({ database: e.target.value })}
+      />
+      <Input
         label="User name"
         className="mb-4"
         value={snowflake?.user}

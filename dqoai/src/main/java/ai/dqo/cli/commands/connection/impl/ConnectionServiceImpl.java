@@ -479,7 +479,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         }
         connectionSpecs.forEach(
                 wrapperSpec -> {
-                    wrapperSpec.copyNotNullPropertiesFrom(connectionSpec.clone());
+                    wrapperSpec.copyNotNullPropertiesFrom(connectionSpec.deepClone());
                 }
         );
         userHomeContext.flush();

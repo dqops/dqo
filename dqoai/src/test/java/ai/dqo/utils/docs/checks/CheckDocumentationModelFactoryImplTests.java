@@ -1,6 +1,7 @@
 package ai.dqo.utils.docs.checks;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @SpringBootTest
@@ -25,8 +27,10 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
+        Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService);
+        SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+                reflectionService, new SensorDefinitionFindServiceImpl());
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
@@ -34,7 +38,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 dqoHomeContext,
                 similarCheckMatchingService,
                 new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
-                new RuleDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
+                new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService),
                 uiToSpecCheckMappingService,
                 YamlSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault()

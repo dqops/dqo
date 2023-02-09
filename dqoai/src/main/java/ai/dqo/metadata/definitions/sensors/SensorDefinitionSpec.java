@@ -20,14 +20,14 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
+public class SensorDefinitionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<SensorDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("fields", o -> o.fields);
@@ -47,12 +47,17 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ParameterDefinitionsListSpec fields;
 
+    @JsonPropertyDescription("The data quality sensor depends on the configuration of the event timestamp column name on the analyzed table. When true, the name of the column that stores the event (transaction, etc.) timestamp must be specified in the timestamp_columns.event_timestamp_column field on the table.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean requiresEventTimestamp;
+
+    @JsonPropertyDescription("The data quality sensor depends on the configuration of the ingestion timestamp column name on the analyzed table. When true, the name of the column that stores the ingestion (created_at, loaded_at, etc.) timestamp must be specified in the timestamp_columns.ingestion_timestamp_column field on the table.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean requiresIngestionTimestamp;
+
     @JsonPropertyDescription("Additional sensor definition parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> parameters = new LinkedHashMap<>();
-
-    @JsonIgnore
-    private LinkedHashMap<String, String> originalParameters = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> parameters;
 
     /**
      * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQO UI.
@@ -73,10 +78,44 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the flag if the event timestamp column must be configured on a table.
+     * @return True when the event timestamp column name is required.
+     */
+    public boolean isRequiresEventTimestamp() {
+        return requiresEventTimestamp;
+    }
+
+    /**
+     * Sets the flag that the sensor requires an event timestamp column.
+     * @param requiresEventTimestamp True when the event timestamp column is required.
+     */
+    public void setRequiresEventTimestamp(boolean requiresEventTimestamp) {
+        setDirtyIf(this.requiresEventTimestamp != requiresEventTimestamp);
+        this.requiresEventTimestamp = requiresEventTimestamp;
+    }
+
+    /**
+     * Returns the flag if the ingestion timestamp column must be configured on a table.
+     * @return True when the ingestion timestamp column name is required.
+     */
+    public boolean isRequiresIngestionTimestamp() {
+        return requiresIngestionTimestamp;
+    }
+
+    /**
+     * Sets the flag that the sensor requires an ingestion timestamp column.
+     * @param requiresIngestionTimestamp True when the ingestion timestamp column is required.
+     */
+    public void setRequiresIngestionTimestamp(boolean requiresIngestionTimestamp) {
+        setDirtyIf(this.requiresIngestionTimestamp != requiresIngestionTimestamp);
+        this.requiresIngestionTimestamp = requiresIngestionTimestamp;
+    }
+
+    /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParameters() {
+    public Map<String, String> getParameters() {
         return parameters;
     }
 
@@ -84,30 +123,9 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
      * Sets a dictionary of parameters passed to the rule.
      * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParameters(LinkedHashMap<String, String> parameters) {
+    public void setParameters(Map<String, String> parameters) {
 		setDirtyIf(!Objects.equals(this.parameters, parameters));
-        this.parameters = parameters;
-		this.originalParameters = (LinkedHashMap<String, String>) parameters.clone();
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.parameters, this.originalParameters);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParameters = (LinkedHashMap<String, String>) this.parameters.clone();
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**
@@ -135,23 +153,9 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public SensorDefinitionSpec clone() {
-        try {
-            SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.clone();
-            if (cloned.fields != null) {
-                cloned.fields = cloned.fields.clone();
-            }
-            if (cloned.parameters != null) {
-                cloned.parameters = (LinkedHashMap<String, String>) cloned.parameters.clone();
-            }
-            if (cloned.originalParameters != null) {
-                cloned.originalParameters = (LinkedHashMap<String, String>) cloned.originalParameters.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public SensorDefinitionSpec deepClone() {
+        SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -160,14 +164,8 @@ public class SensorDefinitionSpec extends AbstractSpec implements Cloneable {
      * @return Trimmed version of this object.
      */
     public SensorDefinitionSpec trim() {
-        try {
-            SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.clone();
-            cloned.fields = null;
-            cloned.originalParameters = null;
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.deepClone();
+        cloned.fields = null;
+        return cloned;
     }
 }

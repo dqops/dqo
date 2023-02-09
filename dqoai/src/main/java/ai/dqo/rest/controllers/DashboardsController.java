@@ -211,4 +211,64 @@ public class DashboardsController {
                 folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
     }
+
+    /**
+     * Retrieves a model of a single dashboard in four level folder, generating also an authenticated url.
+     * @param folder1 Folder name.
+     * @param folder2 Folder name.
+     * @param folder3 Folder name.
+     * @param folder4 Folder name.
+     * @param dashboardName Dashboard name.
+     * @return Dashboard model with the authenticated url.
+     */
+    @GetMapping("/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}")
+    @ApiOperation(value = "getDashboardLevel4", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Dashboard returned", response = AuthenticatedDashboardModel.class),
+            @ApiResponse(code = 404, message = "Dashboard not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel4(
+            @ApiParam("Root folder name") @PathVariable String folder1,
+            @ApiParam("Second level folder name") @PathVariable String folder2,
+            @ApiParam("Third level folder name") @PathVariable String folder3,
+            @ApiParam("Fourth level folder name") @PathVariable String folder4,
+            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
+        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+
+        DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
+        if (folder1Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder2Spec = folder1Spec.getFolders().getFolderByName(folder2);
+        if (folder2Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder3Spec = folder2Spec.getFolders().getFolderByName(folder3);
+        if (folder3Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardsFolderSpec folder4Spec = folder3Spec.getFolders().getFolderByName(folder4);
+        if (folder4Spec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        DashboardSpec dashboard = folder4Spec.getDashboards().getDashboardByName(dashboardName);
+        if (dashboard == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
+        AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
+                folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
+        return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
+    }
 }

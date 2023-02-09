@@ -53,7 +53,7 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpecBigQueryTests e
     void setUp() {
 		this.sut = new ColumnNumericNumbersInSetPercentSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
-        ColumnNumericNumbersInSetPercentSensorParametersSpec altSut = (ColumnNumericNumbersInSetPercentSensorParametersSpec) this.sut.clone();
+        ColumnNumericNumbersInSetPercentSensorParametersSpec altSut = (ColumnNumericNumbersInSetPercentSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add(12345L); add(123456L); add(1234567L);
         }});

@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class RuleTimeWindowSettingsSpec extends AbstractSpec implements Cloneable {
+public class RuleTimeWindowSettingsSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<RuleTimeWindowSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -115,13 +115,8 @@ public class RuleTimeWindowSettingsSpec extends AbstractSpec implements Cloneabl
      * Creates and returns a copy of this object.
      */
     @Override
-    public RuleTimeWindowSettingsSpec clone() {
-        try {
-            RuleTimeWindowSettingsSpec cloned = (RuleTimeWindowSettingsSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public RuleTimeWindowSettingsSpec deepClone() {
+       RuleTimeWindowSettingsSpec cloned = (RuleTimeWindowSettingsSpec)super.deepClone();
+       return cloned;
     }
 }

@@ -38,6 +38,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         {
             put("negative_count", o -> o.negativeCount);
             put("negative_percent", o -> o.negativePercent);
+            put("non_negative_count", o -> o.nonNegativeCount);
+            put("non_negative_percent", o -> o.nonNegativePercent);
             put("numbers_in_set_count", o -> o.numbersInSetCount);
             put("numbers_in_set_percent", o -> o.numbersInSetPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
@@ -45,6 +47,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
             put("value_below_min_value_percent", o -> o.valueBelowMinValuePercent);
             put("value_above_max_value_count", o -> o.valueAboveMaxValueCount);
+            put("value_above_max_value_percent", o -> o.valueAboveMaxValuePercent);
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
@@ -61,6 +64,12 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNegativePercentCheckSpec negativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.")
+    private ColumnNonNegativeCountCheckSpec nonNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
+    private ColumnNonNegativePercentCheckSpec nonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.")
     private ColumnNumbersInSetCountCheckSpec numbersInSetCount;
@@ -82,6 +91,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column.")
     private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
+
+    @JsonPropertyDescription("The check percentage of those values with value above the one provided by the user in a column.")
+    private ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
     private ColumnMaxInRangeCheckSpec maxInRange;
@@ -141,6 +153,42 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.negativePercent, negativePercent));
         this.negativePercent = negativePercent;
         propagateHierarchyIdToField(negativePercent, "negative_percent");
+    }
+
+    /**
+     * Returns a non-negative count check specification.
+     * @return Non-negative count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getNonNegativeCount() {
+        return nonNegativeCount;
+    }
+
+    /**
+     * Sets a new specification of a non-negative count check.
+     * @param nonNegativeCount Non-negative count check specification.
+     */
+    public void setNonNegativeCount(ColumnNonNegativeCountCheckSpec nonNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.nonNegativeCount, nonNegativeCount));
+        this.nonNegativeCount = nonNegativeCount;
+        propagateHierarchyIdToField(nonNegativeCount, "non_negative_count");
+    }
+
+    /**
+     * Returns a negative percentage check specification.
+     * @return Negative percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getNonNegativePercent() {
+        return nonNegativePercent;
+    }
+
+    /**
+     * Sets a new specification of a negative percentage check.
+     * @param nonNegativePercent Negative percentage check specification.
+     */
+    public void setNonNegativePercent(ColumnNonNegativePercentCheckSpec nonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.nonNegativePercent, nonNegativePercent));
+        this.nonNegativePercent = nonNegativePercent;
+        propagateHierarchyIdToField(nonNegativePercent, "non_negative_percent");
     }
 
     /**
@@ -267,6 +315,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.valueAboveMaxValueCount, valueAboveMaxValueCount));
         this.valueAboveMaxValueCount = valueAboveMaxValueCount;
         propagateHierarchyIdToField(valueAboveMaxValueCount, "value_above_max_value_count");
+    }
+
+    /**
+     * Returns a numeric value above max value percent check.
+     * @return Numeric value above max value percent check.
+     */
+    public ColumnValueAboveMaxValuePercentCheckSpec getValueAboveMaxValuePercent() {
+        return valueAboveMaxValuePercent;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value percent check.
+     * @param valueAboveMaxValuePercent Numeric value above max value percent check.
+     */
+    public void setValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.valueAboveMaxValuePercent, valueAboveMaxValuePercent));
+        this.valueAboveMaxValuePercent = valueAboveMaxValuePercent;
+        propagateHierarchyIdToField(valueAboveMaxValuePercent, "value_above_max_value_percent");
     }
 
     /**

@@ -37,7 +37,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
+public class RecurringScheduleSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<RecurringScheduleSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -55,6 +55,7 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
     }
 
     @JsonPropertyDescription("Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String cronExpression;
 
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -121,14 +122,9 @@ public class RecurringScheduleSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public RecurringScheduleSpec clone() {
-        try {
-            RecurringScheduleSpec cloned = (RecurringScheduleSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public RecurringScheduleSpec deepClone() {
+        RecurringScheduleSpec cloned = (RecurringScheduleSpec) super.deepClone();
+        return cloned;
     }
 
     /**

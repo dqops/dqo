@@ -36,8 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BigQueryParametersSpec extends BaseProviderParametersSpec implements Cloneable,
-        ConnectionProviderSpecificParameters {
+public class BigQueryParametersSpec extends BaseProviderParametersSpec
+        implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<BigQueryParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -183,14 +183,9 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public BigQueryParametersSpec clone() {
-        try {
-            BigQueryParametersSpec cloned = (BigQueryParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public BigQueryParametersSpec deepClone() {
+        BigQueryParametersSpec cloned = (BigQueryParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -198,19 +193,14 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
      * @return Trimmed and expanded version of this object.
      */
     public BigQueryParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            BigQueryParametersSpec cloned = (BigQueryParametersSpec) super.clone();
-            cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId);
-            cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId);
-            cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent);
-            cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath);
-            cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId);
+        BigQueryParametersSpec cloned = this.deepClone();
+        cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId);
+        cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId);
+        cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent);
+        cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath);
+        cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId);
 
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+        return cloned;
     }
 
     /**

@@ -16,14 +16,13 @@
 package ai.dqo.cli.commands.cloud.impl;
 
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.cloud.rest.api.ApiKeyRequestApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
-import ai.dqo.metadata.sources.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;

@@ -279,7 +279,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         trimmedTableSpec.setDataStreams(new DataStreamMappingSpecMap());
         ColumnSpec columnSpec = trimmedTableSpec.getColumns().getAt(0);
         for (int i = 0; i < trimmedTableSpec.getColumns().size(); i++) {
-            trimmedTableSpec.getColumns().getAt(i).setLabels(tableSpec.getColumns().getAt(i).getLabels().clone());
+            trimmedTableSpec.getColumns().getAt(i).setLabels(tableSpec.getColumns().getAt(i).getLabels().deepClone());
         }
 
         AbstractRootChecksContainerSpec checkRootContainer =

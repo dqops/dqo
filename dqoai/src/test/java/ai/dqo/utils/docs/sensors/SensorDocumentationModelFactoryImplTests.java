@@ -1,6 +1,7 @@
 package ai.dqo.utils.docs.sensors;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
@@ -22,7 +23,8 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
     void setUp() {
         Path dqoHomePath = Path.of(System.getenv("DQO_HOME"));
         DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl());
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         this.sut = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
     }
 
@@ -37,6 +39,11 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
         Assertions.assertEquals("strings", sensorDocumentation.getCategory());
         Assertions.assertEquals("string_match_regex_percent", sensorDocumentation.getSensorName());
         Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
+
+        Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
+        Assertions.assertEquals(3,sensorDocumentation.getSqlTemplates().keySet().size());
+        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream().anyMatch(k->Objects.equals("bigquery", k)));
+        Assertions.assertEquals(3,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());

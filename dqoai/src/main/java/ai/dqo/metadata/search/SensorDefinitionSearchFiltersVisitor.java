@@ -24,7 +24,7 @@ import com.google.common.base.Strings;
 /**
  * Visitor for {@link SensorDefinitionSearchFilters} that finds the correct nodes.
  */
-public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor {
+public class SensorDefinitionSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final SensorDefinitionSearchFilters filters;
 
     /**

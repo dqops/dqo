@@ -18,8 +18,12 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.TableSpec;
+import ai.dqo.metadata.sources.TableSpecObjectMother;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
@@ -32,18 +36,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
     private UiToSpecCheckMappingServiceImpl sut;
     private SpecToUiCheckMappingServiceImpl specToUiMapper;
+    private TableSpec tableSpec;
 
     @BeforeEach
     void setUp() {
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        this.specToUiMapper = new SpecToUiCheckMappingServiceImpl(reflectionService);
+        SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
+        this.specToUiMapper = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService);
         this.sut = new UiToSpecCheckMappingServiceImpl(reflectionService);
+        this.tableSpec = TableSpecObjectMother.create("public", "tab1");
+        this.tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
     }
 
     @Test
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, null, null);
 
         this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
     }
@@ -51,7 +60,8 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(), DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME);
+        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+                this.tableSpec, null, null);
 
         this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);
     }

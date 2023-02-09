@@ -104,7 +104,7 @@ public interface HierarchyNodeTreeSearcher {
      * @param scheduleRootsSearchFilters Search filters.
      * @return Collection of nodes of type {@link ConnectionSpec}, {@link TableSpec}, {@link ColumnSpec} or {@link AbstractCheckSpec} that may have a custom schedule defined.
      */
-    Collection<HierarchyNode> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters);
+    FoundResultsCollector<ScheduleRootResult> findScheduleRoots(HierarchyNode startNode, ScheduleRootsSearchFilters scheduleRootsSearchFilters);
 
     /**
      * Traverses a scheduled node (connection, table, column, check) and collects all enabled checks that would be executed as part of this schedule.
@@ -114,5 +114,5 @@ public interface HierarchyNodeTreeSearcher {
      * @param scheduledChecksSearchFilters Search filters to find all nested checks that would be included in the schedule.
      * @return Collection of check nodes that passed the filter.
      */
-    Collection<AbstractCheckSpec> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters);
+    Collection<AbstractCheckSpec<?,?,?,?>> findScheduledChecks(HierarchyNode startNode, ScheduledChecksSearchFilters scheduledChecksSearchFilters);
 }

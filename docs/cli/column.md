@@ -1,508 +1,210 @@
-#column
+# column
 
 ___
-###<b><u>column add</u></b>
+### **dqo column add**
 
-<b>Description:</b>
+**Description**
 
 Add a column with specified details
 
-<b>Synopsis:</b>
-<pre><code> column add [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-            [-d&#x3D;&lt;dataType&gt;] [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+            [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-d`<br/>`--dataType`<br/></td>
-    <td>Data type</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-d`<br/>`--dataType`<br/>|Data type| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+
 
 ___
-###<b><u>column remove</u></b>
+### **dqo column remove**
 
-<b>Description:</b>
+**Description**
 
 Remove column or columns which match filters
 
-<b>Synopsis:</b>
-<pre><code> column remove [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-               [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+
 
 ___
-###<b><u>column update</u></b>
+### **dqo column update**
 
-<b>Description:</b>
+**Description**
 
 Update column or columns which match filters
 
-<b>Synopsis:</b>
-<pre><code> column update [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-               [-d&#x3D;&lt;dataType&gt;] [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-d`<br/>`--dataType`<br/></td>
-    <td>Data type</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-d`<br/>`--dataType`<br/>|Data type| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+
 
 ___
-###<b><u>column list</u></b>
+### **dqo column list**
 
-<b>Description:</b>
+**Description**
 
 List columns which match filters
 
-<b>Synopsis:</b>
-<pre><code> column list [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-             [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;] [-l&#x3D;&lt;labels&gt;]...
-             [-tg&#x3D;&lt;tags&gt;]...
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+             [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
+             [-tg=<tags>]...
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Connection name filter</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name filter</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-l`<br/>`--label`<br/></td>
-    <td>Label filter</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name filter</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-tg`<br/>`--tags`<br/></td>
-    <td>Data stream tag filter</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Connection name filter| ||
+|`-c`<br/>`--connection`<br/>|Connection name filter| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-l`<br/>`--label`<br/>|Label filter| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name filter| ||
+|`-tg`<br/>`--tags`<br/>|Data stream tag filter| ||
+
+
 
 ___
-###<b><u>column enable</u></b>
+### **dqo column enable**
 
-<b>Description:</b>
+**Description**
 
 Enable column or columns which match filters
 
-<b>Synopsis:</b>
-<pre><code> column enable [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-               [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+
 
 ___
-###<b><u>column disable</u></b>
+### **dqo column disable**
 
-<b>Description:</b>
+**Description**
 
 Disable column or columns which match filters
 
-<b>Synopsis:</b>
-<pre><code> column disable [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-                [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+                [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+
 
 ___
-###<b><u>column rename</u></b>
+### **dqo column rename**
 
-<b>Description:</b>
+**Description**
 
 Rename column which match filters
 
-<b>Synopsis:</b>
-<pre><code> column rename [-h] [-fw] [-hl] [-c&#x3D;&lt;connectionName&gt;] [-C&#x3D;&lt;columnName&gt;]
-               [-n&#x3D;&lt;newColumnName&gt;] [-of&#x3D;&lt;outputFormat&gt;] [-t&#x3D;&lt;fullTableName&gt;]
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-C`<br/>`--column`<br/></td>
-    <td>Column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-n`<br/>`--newColumn`<br/></td>
-    <td>New column name</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Table name</td>
-    <td></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-C`<br/>`--column`<br/>|Column name| ||
+|`-c`<br/>`--connection`<br/>|Connection name| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-n`<br/>`--newColumn`<br/>|New column name| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-t`<br/>`--table`<br/>|Table name| ||
+
+

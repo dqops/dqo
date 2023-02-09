@@ -42,6 +42,15 @@ public class SchemaModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this schema.")
+    private CheckSearchFilters runProfilingChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this schema.")
+    private CheckSearchFilters runWholeTableChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this schema.")
+    private CheckSearchFilters runTimePeriodChecksJobTemplate;
+
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this schema.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 

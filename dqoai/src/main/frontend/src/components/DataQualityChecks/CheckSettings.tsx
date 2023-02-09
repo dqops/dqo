@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import DataStreamLevelItem from './DataStreamLevelItem';
 import ScheduleTab from './ScheduleTab';
-import TimeSeriesView from '../Connection/TimeSeriesView';
 import CommentsView from '../Connection/CommentsView';
 import SensorParametersSettings from './SensorParametersSettings';
 import Tabs from '../Tabs';
@@ -95,14 +94,6 @@ const CheckSettings = ({
             <ScheduleTab
               schedule={check?.schedule_override}
               onChange={(value) => handleChange({ schedule_override: value })}
-            />
-          )}
-          {activeTab === 'time' && (
-            <TimeSeriesView
-              timeSeries={check?.time_series_override}
-              setTimeSeries={(times) =>
-                handleChange({ time_series_override: times })
-              }
             />
           )}
           {activeTab === 'comments' && (

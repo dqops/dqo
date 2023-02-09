@@ -266,14 +266,9 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnTypeSnapshotSpec clone() {
-        try {
-            ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ColumnTypeSnapshotSpec deepClone() {
+        ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -282,13 +277,8 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      * @return Cloned and expanded copy of the object.
      */
     public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.clone();
-            cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+        ColumnTypeSnapshotSpec cloned = this.deepClone();
+        cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
+        return cloned;
     }
 }

@@ -17,7 +17,9 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -166,6 +168,43 @@ public class ConnectionsController {
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
         RecurringScheduleSpec schedule = connectionSpec.getSchedule();
+
+        return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a named schedule of a connection for a requested connection identified by the connection name.
+     * @param connectionName  Connection name.
+     * @param schedulingGroup Scheduling group.
+     * @return Connection's schedule specification.
+     */
+    @GetMapping("/{connectionName}/schedules/{schedulingGroup}")
+    @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = RecurringScheduleSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Connection's schedule returned", response = RecurringScheduleSpec.class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<RecurringScheduleSpec>> getConnectionSchedulingGroup(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+        RecurringSchedulesSpec schedules = connectionSpec.getSchedules();
+        if (schedules == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+        }
+
+        RecurringScheduleSpec schedule = schedules.getScheduleForCheckSchedulingGroup(schedulingGroup);
 
         return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
     }
@@ -495,6 +534,65 @@ public class ConnectionsController {
         else {
             existingConnectionSpec.setSchedule(null);
         }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the configuration of a check run schedule for a scheduling group (named schedule) of an existing connection.
+     * @param connectionName        Connection name.
+     * @param recurringScheduleSpec Schedule specification.
+     * @param schedulingGroup       Scheduling group.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schedules/{schedulingGroup}")
+    @ApiOperation(value = "updateConnectionSchedulingGroup", notes = "Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Connection's schedule successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateConnectionSchedulingGroup(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunRecurringScheduleGroup schedulingGroup,
+            @ApiParam("Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+        RecurringSchedulesSpec schedules = existingConnectionSpec.getSchedules();
+        if (schedules == null) {
+            schedules = new RecurringSchedulesSpec();
+            existingConnectionSpec.setSchedules(schedules);
+        }
+
+        RecurringScheduleSpec newScheduleSpec = recurringScheduleSpec.orElse(null);
+        switch (schedulingGroup) {
+            case profiling:
+                schedules.setProfiling(newScheduleSpec);
+                break;
+
+            case daily:
+                schedules.setDaily(newScheduleSpec);
+                break;
+
+            case monthly:
+                schedules.setMonthly(newScheduleSpec);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unsupported scheduling group " + schedulingGroup);
+        }
+
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

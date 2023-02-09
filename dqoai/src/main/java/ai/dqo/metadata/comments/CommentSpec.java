@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class CommentSpec extends AbstractSpec implements Cloneable {
+public class CommentSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<CommentSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -127,14 +127,9 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public CommentSpec clone() {
-        try {
-            CommentSpec cloned = (CommentSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public CommentSpec deepClone() {
+        CommentSpec cloned = (CommentSpec)super.deepClone();
+        return cloned;
     }
 
     /**

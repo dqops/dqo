@@ -37,7 +37,8 @@ import java.util.Objects;
  * Base class for all spec classes in the tree. Provides basic dirty checking.
  */
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware {
+public abstract class AbstractSpec extends BaseDirtyTrackingSpec
+        implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware, Cloneable {
     /**
      * Default empty field map.
      */
@@ -141,7 +142,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
      * @param childNode Child node.
      * @param fieldName Field name.
      */
-    protected void propagateHierarchyIdToField(HierarchyNode childNode, String fieldName) {
+    protected void propagateHierarchyIdToField(HierarchyNode childNode, Object fieldName) {
         if (childNode == null || this.hierarchyId == null) {
             return;
         }
@@ -267,7 +268,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
             }
 
             if (dataType == ParameterDataType.object_type) {
-                if (AbstractSpec.class.isAssignableFrom(fieldInfo.getClazz())) {
+                if (newValue instanceof AbstractSpec) {
                     if (currentValue == null) {
                         fieldInfo.setRawFieldValue(newValue, this);
                     }
@@ -275,7 +276,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
                         AbstractSpec currentObject = (AbstractSpec) currentValue;
                         currentObject.copyNotNullPropertiesFrom((AbstractSpec) newValue);
                     }
-                } else if (Map.class.isAssignableFrom(fieldInfo.getClazz())) {
+                } else if (newValue instanceof Map) {
                     if (currentValue == null) {
                         fieldInfo.setRawFieldValue(newValue, this);
                     } else {
@@ -309,5 +310,48 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
             this.ignoredProperties = new LinkedHashMap<>();
         }
         this.ignoredProperties.put(name, value);
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public AbstractSpec deepClone() {
+        try {
+            AbstractSpec cloned = (AbstractSpec) super.clone();
+
+            ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+            ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+            List<FieldInfo> fields = myClassInfo.getFields();
+            for (FieldInfo fieldInfo : fields) {
+                ParameterDataType dataType = fieldInfo.getDataType();
+                if (dataType != ParameterDataType.object_type) {
+                    continue; // we are not cloning basic types
+                }
+
+                Object currentValue = fieldInfo.getRawFieldValue(this);
+
+                if (currentValue == null) {
+                    continue;
+                }
+
+                if (currentValue instanceof HierarchyNode) {
+                    HierarchyNode hierarchyNode = (HierarchyNode)currentValue;
+                    HierarchyNode clonedChild = hierarchyNode.deepClone();
+                    fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+                else {
+                    throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
+                            " on field: " + fieldInfo.getClassFieldName() + ", class: " + this.getClass().getCanonicalName());
+                }
+            }
+
+            cloned.clearDirty(false);
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone the object ", ex);
+        }
     }
 }

@@ -16,11 +16,8 @@
 package ai.dqo.execution.checks.scheduled;
 
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
-import ai.dqo.metadata.search.ScheduleRootsSearchFilters;
-import ai.dqo.metadata.search.ScheduledChecksSearchFilters;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.search.*;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,21 +50,24 @@ public class ScheduledTargetChecksFindServiceImpl implements ScheduledTargetChec
      * @return List of target checks, grouped by a target table.
      */
     @Override
-    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RunChecksCronSchedule schedule) {
+    public ScheduledChecksCollection findChecksForSchedule(UserHome userHome, RecurringScheduleSpec schedule) {
         ScheduledChecksCollection scheduledChecksCollection = new ScheduledChecksCollection();
 
         ScheduleRootsSearchFilters scheduleRootsSearchFilters = new ScheduleRootsSearchFilters();
         scheduleRootsSearchFilters.setEnabled(true);
         scheduleRootsSearchFilters.setSchedule(schedule);
-        Collection<HierarchyNode> scheduleRoots = this.hierarchyNodeTreeSearcher.findScheduleRoots(userHome.getConnections(), scheduleRootsSearchFilters);
+        FoundResultsCollector<ScheduleRootResult> scheduleRoots = this.hierarchyNodeTreeSearcher.findScheduleRoots(
+                userHome.getConnections(), scheduleRootsSearchFilters);
 
-        for (HierarchyNode scheduleRoot :  scheduleRoots) {
+        for (ScheduleRootResult scheduleRoot : scheduleRoots.getResults()) {
             ScheduledChecksSearchFilters scheduledChecksSearchFilters = new ScheduledChecksSearchFilters();
             scheduledChecksSearchFilters.setEnabled(true);
-            scheduledChecksSearchFilters.setSchedule(schedule.getRecurringSchedule());
-            Collection<AbstractCheckSpec> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(scheduleRoot, scheduledChecksSearchFilters);
+            scheduledChecksSearchFilters.setSchedule(schedule);
+            scheduledChecksSearchFilters.setScheduleGroup(scheduleRoot.getScheduleGroup());
+            Collection<AbstractCheckSpec<?,?,?,?>> scheduledChecks = this.hierarchyNodeTreeSearcher.findScheduledChecks(
+                    scheduleRoot.getScheduleRootNode(), scheduledChecksSearchFilters);
 
-            for (AbstractCheckSpec targetCheck : scheduledChecks) {
+            for (AbstractCheckSpec<?,?,?,?> targetCheck : scheduledChecks) {
                 TableWrapper targetTableWrapper = userHome.findTableFor(targetCheck.getHierarchyId());
                 ScheduledTableChecksCollection tableChecks = scheduledChecksCollection.getOrAddTableChecks(targetTableWrapper);
                 tableChecks.addCheck(targetCheck);

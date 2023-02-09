@@ -16,6 +16,7 @@
 package ai.dqo.services.check.matching;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.metadata.userhome.UserHomeObjectMother;
@@ -38,7 +39,8 @@ public class SimilarCheckMatchingServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new SimilarCheckMatchingServiceImpl(new SpecToUiCheckMappingServiceImpl(new ReflectionServiceImpl()));
+        this.sut = new SimilarCheckMatchingServiceImpl(new SpecToUiCheckMappingServiceImpl(
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl()));
         this.userHome = UserHomeObjectMother.createBareUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab"));

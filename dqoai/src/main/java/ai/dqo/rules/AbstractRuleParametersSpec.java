@@ -77,18 +77,4 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec implements
     public boolean isDefault() {
         return false; // always render
     }
-
-    /**
-     * Creates and returns a copy of this object.
-     */
-    @Override
-    public AbstractRuleParametersSpec clone() {
-        try {
-            AbstractRuleParametersSpec cloned = (AbstractRuleParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
-    }
 }

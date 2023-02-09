@@ -53,7 +53,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSpec extends AbstractSpec implements Cloneable {
+public class ColumnSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
@@ -61,8 +61,7 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
-            put("schedule_override", o -> o.scheduleOverride);
-			put("labels", o -> o.labels);
+            put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
     };
@@ -94,13 +93,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector;
-
-    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    @Deprecated
-    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -229,24 +221,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
         setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
         this.statisticsCollector = statisticsCollector;
         propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
-    }
-
-    /**
-     * Returns the schedule configuration for running the checks automatically.
-     * @return Schedule configuration.
-     */
-    public RecurringScheduleSpec getScheduleOverride() {
-        return scheduleOverride;
-    }
-
-    /**
-     * Stores a new schedule configuration.
-     * @param scheduleOverride New schedule configuration.
-     */
-    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
-        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
-        this.scheduleOverride = scheduleOverride;
-        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
     }
 
     /**
@@ -445,50 +419,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnSpec clone() {
-        try {
-            ColumnSpec cloned = (ColumnSpec) super.clone();
-            if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.clone();
-            }
-
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
-            }
-
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-
-            if (cloned.scheduleOverride != null) {
-                cloned.scheduleOverride = cloned.scheduleOverride.clone();
-            }
-
-            if (cloned.checks != null) {
-                Cloner cloner = new Cloner();
-                cloned.checks = cloner.deepClone(cloned.checks);
-            }
-
-            if (cloned.checkpoints != null) {
-                Cloner cloner = new Cloner();
-                cloned.checkpoints = cloner.deepClone(cloned.checkpoints);
-            }
-
-            if (cloned.partitionedChecks != null) {
-                Cloner cloner = new Cloner();
-                cloned.partitionedChecks = cloner.deepClone(cloned.partitionedChecks);
-            }
-
-            if (cloned.statisticsCollector != null) {
-                Cloner cloner = new Cloner();
-                cloned.statisticsCollector = cloner.deepClone(cloned.statisticsCollector);
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ColumnSpec deepClone() {
+        ColumnSpec cloned = (ColumnSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -513,19 +446,19 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
-            cloned.scheduleOverride = null;
             cloned.statisticsCollector = null;
+            cloned.labels = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
-            }
+//            if (cloned.labels != null) {
+//                cloned.labels = cloned.labels.deepClone();
+//            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -540,15 +473,14 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec trim() {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.clone();
+                cloned.typeSnapshot = cloned.typeSnapshot.deepClone();
             }
             cloned.comments = null;
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
-            cloned.scheduleOverride = null;
             cloned.labels = null;
             cloned.statisticsCollector = null;
             return cloned;
@@ -573,6 +505,26 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
 
         if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case ADHOC:
+                return this.checks != null && this.checks.hasAnyConfiguredChecks();
+
+            case CHECKPOINT:
+                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
         }
 
         return false;

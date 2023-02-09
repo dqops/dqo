@@ -42,23 +42,23 @@ public class ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec 
 
     @JsonPropertyDescription("This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0")
     @SampleValues(values = "5")
-    private int minimumLength = 0;
+    private int minLength = 0;
 
     /**
      * Returns the minimum length.
      * @return minimumLength.
      */
-    public int getMinimumLength() {
-        return minimumLength;
+    public int getMinLength() {
+        return minLength;
     }
 
     /**
      * Sets the minimum length.
-     * @param minimumLength minimum length.
+     * @param minLength minimum length.
      */
-    public void setMinimumLength(int minimumLength) {
-        this.setDirtyIf(!Objects.equals(this.minimumLength, minimumLength));
-        this.minimumLength = minimumLength;
+    public void setMinLength(int minLength) {
+        this.setDirtyIf(!Objects.equals(this.minLength, minLength));
+        this.minLength = minLength;
     }
 
     /**

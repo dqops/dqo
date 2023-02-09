@@ -18,6 +18,9 @@ package ai.dqo.utils.docs.sensors;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import lombok.Data;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Sensor description model. Describes the sensor and contains all information about the sensor that could be gathered
  * from the sensor parameters, definition, etc.
@@ -48,6 +51,13 @@ public class SensorDocumentationModel {
      * Sensor name inside the category.
      */
     private String sensorName;
+
+    /**
+     * Sensor SQL Templates for each provider.
+     * Templates are split by end of line and load as list because of mkdocs rendering require add extra spaces
+     * before each line.
+     */
+    private Map<String, List<String>> sqlTemplates;
 
     /**
      * Sensor definition wrapper.

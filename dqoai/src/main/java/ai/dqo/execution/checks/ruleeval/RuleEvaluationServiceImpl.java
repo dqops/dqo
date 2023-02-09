@@ -31,6 +31,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -47,6 +48,7 @@ import java.time.ZoneId;
 public class RuleEvaluationServiceImpl implements RuleEvaluationService {
     private final DataQualityRuleRunner ruleRunner;
     private final RuleDefinitionFindService ruleDefinitionFindService;
+    private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates an instance of the rule evaluation service, given all dependencies.
@@ -55,9 +57,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
      */
     @Autowired
     public RuleEvaluationServiceImpl(DataQualityRuleRunner ruleRunner,
-                                     RuleDefinitionFindService ruleDefinitionFindService) {
+                                     RuleDefinitionFindService ruleDefinitionFindService,
+                                     DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.ruleRunner = ruleRunner;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -98,16 +102,16 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
             TimeSeriesGradient timeGradient = sensorRunParameters.getTimeSeries().getTimeGradient();
 
-            ZoneId connectionTimeZoneId = sensorRunParameters.getConnectionTimeZoneId();
+            ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
             HistoricDataPointTimeSeriesCollector previousDataPointTimeSeriesCollectorCurrent = new HistoricDataPointTimeSeriesCollector(
                     dimensionSensorResults,
                     timeGradient,
-                    connectionTimeZoneId);
+                    defaultTimeZoneId);
             HistoricDataPointTimeSeriesCollector previousDataPointTimeSeriesCollectorOld = (historicTimeSeriesData != null) ?
                     new HistoricDataPointTimeSeriesCollector(
                             historicTimeSeriesData.getTable(),
                             timeGradient,
-                            connectionTimeZoneId)
+                            defaultTimeZoneId)
                     : null;
 
             for (int sliceRowIndex = 0; sliceRowIndex < dimensionTableSlice.rowCount() ; sliceRowIndex++) {
@@ -120,7 +124,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                     // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 
-                    if (previousDataPointTimeSeriesCollectorOld != null) {
+                    if (ruleTimeWindowSettings != null && previousDataPointTimeSeriesCollectorOld != null) {
                         previousDataPoints = previousDataPointTimeSeriesCollectorOld.getHistoricContinuousResultsBefore(
                                 timePeriodLocal, ruleTimeWindowSettings.getPredictionTimeWindow());
                     }

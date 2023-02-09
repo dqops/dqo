@@ -64,7 +64,7 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
         assert connectionSpec.getBigquery() != null;
 
         try {
-            final ConnectionSpec clonedConnectionSpec = connectionSpec.clone();
+            final ConnectionSpec clonedConnectionSpec = connectionSpec.deepClone();
             return this.bigQueryServiceCache.get(clonedConnectionSpec, () -> createBigQueryService(clonedConnectionSpec));
         } catch (ExecutionException e) {
             throw new JdbConnectionPoolCreateException("Cannot create a BigQuery connection for " + connectionSpec.getConnectionName(), e);

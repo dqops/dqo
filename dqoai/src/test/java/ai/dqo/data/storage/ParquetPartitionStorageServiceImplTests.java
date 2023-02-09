@@ -18,6 +18,7 @@ package ai.dqo.data.storage;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
@@ -29,6 +30,9 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactoryObjectMother;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.storage.localfiles.dqohome.LocalDqoHomeFileStorageService;
@@ -43,7 +47,11 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ParquetPartitionStorageServiceImplTests extends BaseTest {
@@ -53,11 +61,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
-        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoConfigurationProperties);
+        dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
-        HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoConfigurationProperties.getUser(), dqoConfigurationProperties);
+        HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
 
         this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
@@ -215,6 +224,56 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
 
         Assertions.assertEquals(3, loadedMonths.size());
         Assertions.assertTrue(loadedMonths.values().stream().allMatch(p -> p.getData() == null));
+    }
+
+
+    private Table createOneRowPartitionTable(int actualValue, LocalDateTime timePeriod, String id) {
+        SensorReadoutsNormalizedResult normalizedResultsNew = SensorNormalizedResultObjectMother.createEmptyNormalizedResults();
+
+        Table changesTable = normalizedResultsNew.getTable();
+        Row row = changesTable.appendRow();
+        normalizedResultsNew.getActualValueColumn().set(row.getRowNumber(), actualValue);
+        normalizedResultsNew.getTimePeriodColumn().set(row.getRowNumber(), timePeriod);
+        normalizedResultsNew.getIdColumn().set(row.getRowNumber(), id);
+        return changesTable;
+    }
+
+    @Test
+    void loadRecentPartitionsForMonthsRange_whenGapInStoredData_thenReturnsPartitionsUpUntilSatisfied() {
+        String connectionName = "connection";
+        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
+        LocalDate start = LocalDate.of(2022, 1, 1);
+        LocalDate end = LocalDate.of(2022, 4, 1);
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonths = this.sut.loadPartitionsForMonthsRange(
+                connectionName, tableName, start, end, this.sensorReadoutsStorageSettings,
+                new String[]{SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, SensorReadoutsColumnNames.ID_COLUMN_NAME});
+
+        for (LoadedMonthlyPartition partition :
+                loadedMonths.values().stream()
+                        .filter(p -> p.getPartitionId().getMonth().getMonthValue() != 3)
+                        .collect(Collectors.toList())) {
+
+            ParquetPartitionId partitionId = partition.getPartitionId();
+            Table changesTable = createOneRowPartitionTable(
+                    partitionId.getMonth().getMonthValue(),
+                    partitionId.getMonth().atTime(LocalTime.of(3, 14, 15)),
+                    "id" + partitionId.getMonth().getMonthValue());
+            this.sut.savePartition(partition, new TableDataChanges(changesTable), this.sensorReadoutsStorageSettings);
+        }
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> recentMonths = this.sut.loadRecentPartitionsForMonthsRange(
+                connectionName, tableName, start, end, this.sensorReadoutsStorageSettings, null, 2);
+
+        Assertions.assertEquals(3, recentMonths.size());
+        List<LocalDate> nonNullPartitionMonths = recentMonths.entrySet().stream()
+                .filter(entry -> entry.getValue().getData() != null)
+                .map(entry -> entry.getKey().getMonth())
+                .sorted()
+                .collect(Collectors.toList());
+        Assertions.assertIterableEquals(
+                new ArrayList<LocalDate>() {{add(end.minusMonths(2L)); add(end);}},
+                nonNullPartitionMonths);
     }
 
     @Test

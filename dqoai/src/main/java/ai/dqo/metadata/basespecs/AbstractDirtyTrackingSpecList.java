@@ -26,10 +26,10 @@ import java.util.ArrayList;
 /**
  * List of spec objects with dirty tracing and hierarchy support.
  */
-public abstract class AbstractDirtyTrackingSpecList<V extends DirtyStatus & HierarchyNode>
+public abstract class AbstractDirtyTrackingSpecList<V extends HierarchyNode>
         extends AbstractList<V> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
-    private final ArrayList<V> list = new ArrayList<>();
+    private ArrayList<V> list = new ArrayList<>();
     @JsonIgnore
     private boolean dirty;
     @JsonIgnore
@@ -229,5 +229,32 @@ public abstract class AbstractDirtyTrackingSpecList<V extends DirtyStatus & Hier
     public void clear() {
 		this.setDirty();
         super.clear();
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public AbstractDirtyTrackingSpecList<V> deepClone() {
+        try {
+            AbstractDirtyTrackingSpecList<V> cloned = (AbstractDirtyTrackingSpecList<V>) super.clone();
+            cloned.list = new ArrayList<>();
+            cloned.dirty = false;
+
+            if (this.list.size() == 0) {
+                return cloned;
+            }
+
+            for (V childNode : this.list) {
+                V clonedChild = (V)childNode.deepClone();
+                cloned.list.add(clonedChild);
+            }
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone the object ", ex);
+        }
     }
 }

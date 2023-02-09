@@ -1,137 +1,43 @@
-#check
+# check
 
 ___
-###<b><u>check run</u></b>
+### **dqo check run**
 
-<b>Description:</b>
+**Description**
 
 Run data quality checks matching specified filters
 
-<b>Synopsis:</b>
-<pre><code> check run [-deh] [-fw] [-hl] [-c&#x3D;&lt;connection&gt;] [-cat&#x3D;&lt;checkCategory&gt;]
-           [-ch&#x3D;&lt;check&gt;] [-col&#x3D;&lt;column&gt;] [-ct&#x3D;&lt;checkType&gt;] [-f&#x3D;&lt;failAt&gt;]
-           [-m&#x3D;&lt;mode&gt;] [-of&#x3D;&lt;outputFormat&gt;] [-s&#x3D;&lt;sensor&gt;] [-t&#x3D;&lt;table&gt;]
-           [-ts&#x3D;&lt;timeScale&gt;] [-l&#x3D;&lt;labels&gt;]... [-tag&#x3D;&lt;tags&gt;]...
-</code></pre>
+**Summary (Shell)**
+```
+dqo.ai>  check run [-deh] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+           [-ch=<check>] [-col=<column>] [-ct=<checkType>] [-f=<failAt>]
+           [-m=<mode>] [-of=<outputFormat>] [-s=<sensor>] [-t=<table>]
+           [-ts=<timeScale>] [-l=<labels>]... [-tag=<tags>]...
 
-=== "Options"
-    <table>
-    <thead>
-    <tr>
-    <th>Command</th>
-    <th>Description</th>
-    <th>Accepted values:</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-    <tr>
-    <td>`-cat`<br/>`--category`<br/></td>
-    <td>Check category name (standard, nulls, numeric, etc.)</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-ch`<br/>`--check`<br/></td>
-    <td>Data quality check name, supports patterns like &#x27;*_id&#x27;</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-ct`<br/>`--check-type`<br/></td>
-    <td>Data quality check type (adhoc, checkpoint, partitioned)</td>
-    <td>ADHOC<br/>CHECKPOINT<br/>PARTITIONED<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-col`<br/>`--column`<br/></td>
-    <td>Column name, supports patterns like &#x27;*_id&#x27;</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-c`<br/>`--connection`<br/></td>
-    <td>Connection name, supports patterns like &#x27;conn*&#x27;</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-tag`<br/>`--data-stream-level-tag`<br/></td>
-    <td>Data stream hierarchy level filter (tag)</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-d`<br/>`--dummy`<br/></td>
-    <td>Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-e`<br/>`--enabled`<br/></td>
-    <td>Runs only enabled or only disabled sensors, by default only enabled sensors are executed</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-f`<br/>`--fail-at`<br/></td>
-    <td>Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use &#x27;none&#x27; to return always a success error code.</td>
-    <td>warning<br/>error<br/>fatal<br/>none<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-fw`<br/>`--file-write`<br/></td>
-    <td>Write command response to a file</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-hl`<br/>`--headless`<br/></td>
-    <td>Run the command in an headless (no user input allowed) mode</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-h`<br/>`--help`<br/></td>
-    <td>Show the help for the command and parameters</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-l`<br/>`--label`<br/></td>
-    <td>Label filter</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-m`<br/>`--mode`<br/></td>
-    <td>Reporting mode (silent, summary, info, debug)</td>
-    <td>silent<br/>summary<br/>info<br/>debug<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-of`<br/>`--output-format`<br/></td>
-    <td>Output format for tabular responses</td>
-    <td>TABLE<br/>CSV<br/>JSON<br/></td>
-    </tr>
-    
-    <tr>
-    <td>`-s`<br/>`--sensor`<br/></td>
-    <td>Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-t`<br/>`--table`<br/></td>
-    <td>Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;</td>
-    <td></td>
-    </tr>
-    
-    <tr>
-    <td>`-ts`<br/>`--time-scale`<br/></td>
-    <td>Time scale for checkpoint and partitioned checks (daily, monthly, etc.)</td>
-    <td>daily<br/>monthly<br/></td>
-    </tr>
-    
-    </tbody>
-    </table>
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |ADHOC<br/>CHECKPOINT<br/>PARTITIONED<br/>|
+|`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
+|`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
+|`-tag`<br/>`--data-stream-level-tag`<br/>|Data stream hierarchy level filter (tag)| ||
+|`-d`<br/>`--dummy`<br/>|Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed| ||
+|`-e`<br/>`--enabled`<br/>|Runs only enabled or only disabled sensors, by default only enabled sensors are executed| ||
+|`-f`<br/>`--fail-at`<br/>|Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use &#x27;none&#x27; to return always a success error code.| |warning<br/>error<br/>fatal<br/>none<br/>|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-l`<br/>`--label`<br/>|Label filter| ||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, info, debug)| |silent<br/>summary<br/>info<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+
+

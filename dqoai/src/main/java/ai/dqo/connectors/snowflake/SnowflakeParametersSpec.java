@@ -20,16 +20,15 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import picocli.CommandLine;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,8 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SnowflakeParametersSpec extends BaseProviderParametersSpec implements Cloneable,
-        ConnectionProviderSpecificParameters {
+public class SnowflakeParametersSpec extends BaseProviderParametersSpec
+        implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<SnowflakeParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
@@ -71,12 +70,7 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
 
     @CommandLine.Option(names = {"--snowflake-properties"}, description = "Snowflake additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> properties;
 
     /**
      * Returns a snowflake account name.
@@ -184,7 +178,7 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
-    public LinkedHashMap<String, String> getProperties() {
+    public Map<String, String> getProperties() {
         return properties;
     }
 
@@ -192,10 +186,9 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * Sets a dictionary of additional connection parameters that are added to the JDBC connection string.
      * @param properties Key/value dictionary with extra parameters.
      */
-    public void setProperties(LinkedHashMap<String, String> properties) {
+    public void setProperties(Map<String, String> properties) {
         setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties;
-        this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
+        this.properties = properties != null ? Collections.unmodifiableMap(properties) : null;
     }
 
     /**
@@ -212,20 +205,9 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public SnowflakeParametersSpec clone() {
-        try {
-            SnowflakeParametersSpec cloned = (SnowflakeParametersSpec)super.clone();
-            if (cloned.properties != null) {
-                cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
-            }
-            if (cloned.originalProperties != null) {
-                cloned.originalProperties = (LinkedHashMap<String, String>) cloned.originalProperties.clone();
-            }
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public SnowflakeParametersSpec deepClone() {
+        SnowflakeParametersSpec cloned = (SnowflakeParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -233,41 +215,15 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec implemen
      * @return Trimmed and expanded version of this object.
      */
     public SnowflakeParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            SnowflakeParametersSpec cloned = (SnowflakeParametersSpec) super.clone();
-            cloned.account = secretValueProvider.expandValue(cloned.account);
-            cloned.warehouse = secretValueProvider.expandValue(cloned.warehouse);
-            cloned.database = secretValueProvider.expandValue(cloned.database);
-            cloned.user = secretValueProvider.expandValue(cloned.user);
-            cloned.password = secretValueProvider.expandValue(cloned.password);
-            cloned.role = secretValueProvider.expandValue(cloned.role);
-            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
-            cloned.originalProperties = null;
+        SnowflakeParametersSpec cloned = this.deepClone();
+        cloned.account = secretValueProvider.expandValue(cloned.account);
+        cloned.warehouse = secretValueProvider.expandValue(cloned.warehouse);
+        cloned.database = secretValueProvider.expandValue(cloned.database);
+        cloned.user = secretValueProvider.expandValue(cloned.user);
+        cloned.password = secretValueProvider.expandValue(cloned.password);
+        cloned.role = secretValueProvider.expandValue(cloned.role);
+        cloned.properties = secretValueProvider.expandProperties(cloned.properties);
 
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-        this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
+        return cloned;
     }
 }

@@ -15,19 +15,22 @@
  */
 package ai.dqo.utils.docs.sensors;
 
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import ai.dqo.services.check.mapping.models.UIFieldModel;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.models.UIFieldModel;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Sensor documentation model factory that creates a sensor documentation.
@@ -79,6 +82,8 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
             return null;
         }
 
+        documentationModel.setSqlTemplates(createSqlTemplates(sensorDefinitionWrapper));
+
         documentationModel.setDefinition(sensorDefinitionWrapper);
 
         List<UIFieldModel> fieldsForSensorParameters = this.specToUiCheckMappingService.createFieldsForSensorParameters(sensorParametersSpec);
@@ -87,5 +92,18 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
         sensorDefinitionWrapper.getSpec().setFields(fieldDefinitionsList);  // replacing to use the most recent definition from the code
 
         return documentationModel;
+    }
+
+    /**
+     * Create sql templates for each provider.
+     * @param sensorDefinition Sensor definition wrapper.
+     * @return Sql templates.
+     */
+    private Map<String, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
+        Map<String, List<String>> sqlTemplates = new HashMap<>();
+        for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
+            sqlTemplates.put(providerSensor.getProvider().toString(), List.of(providerSensor.getSqlTemplate().split("\\r?\\n|\\r")));
+        }
+        return sqlTemplates;
     }
 }

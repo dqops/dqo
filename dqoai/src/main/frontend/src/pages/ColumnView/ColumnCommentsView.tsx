@@ -35,8 +35,8 @@ const ColumnCommentsView = ({
     if (
       !comments?.length ||
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(

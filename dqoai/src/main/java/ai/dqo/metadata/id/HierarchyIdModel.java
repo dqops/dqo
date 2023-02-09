@@ -54,13 +54,13 @@ public class HierarchyIdModel {
             }
             else if (currentPathElement instanceof Map) {
                 Map map = (Map)currentPathElement;
-                if (map.containsKey("schemaName") && map.containsKey("tableName")) {
-                    String schemaName = map.get("schemaName").toString();
-                    String tableName = map.get("tableName").toString();
+                if (map.containsKey("schema_name") && map.containsKey("table_name")) {
+                    String schemaName = map.get("schema_name").toString();
+                    String tableName = map.get("table_name").toString();
                     fixedPath[i] = new PhysicalTableName(schemaName, tableName);
                 }
                 else {
-                    throw new RuntimeException("Unsupported object on the HierarchyNodeModel");
+                    throw new RuntimeException("Unsupported object on the HierarchyNodeModel: " + currentPathElement);
                 }
             }
             else {

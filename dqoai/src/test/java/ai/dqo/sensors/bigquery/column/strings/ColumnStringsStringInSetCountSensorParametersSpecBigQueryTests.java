@@ -52,7 +52,7 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
     void setUp(){
 		this.sut = new ColumnStringsStringInSetCountSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
-        ColumnStringsStringInSetCountSensorParametersSpec altSut = (ColumnStringsStringInSetCountSensorParametersSpec) this.sut.clone();
+        ColumnStringsStringInSetCountSensorParametersSpec altSut = (ColumnStringsStringInSetCountSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
         }});

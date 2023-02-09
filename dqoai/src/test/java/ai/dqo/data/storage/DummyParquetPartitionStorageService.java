@@ -73,6 +73,41 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
     }
 
     /**
+     * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>,
+     * limited to the <code>monthsCount</code> most recent partitions.
+     * This method may read more rows than expected, because it operates on full months.
+     *
+     * @param connectionName  Connection name.
+     * @param tableName       Table name (schema.table).
+     * @param startBoundary   Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
+     * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
+     * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
+     * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
+     */
+    @Override
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName, PhysicalTableName tableName, LocalDate startBoundary, LocalDate endBoundary, FileStorageSettings storageSettings, String[] columnNames, int monthsCount) {
+        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startBoundary);
+        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endBoundary);
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
+        int currentMonthsCount = monthsCount;
+
+        for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && currentMonthsCount > 0;
+             currentMonth = currentMonth.minusMonths(1L)) {
+            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
+            if (currentMonthPartition != null) {
+                resultPartitions.put(partitionId, currentMonthPartition);
+                --currentMonthsCount;
+            }
+        }
+
+        return resultPartitions;
+    }
+
+    /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
      * Also deletes rows that should be deleted. In case that the file was modified since it was loaded into the loaded partition
      * snapshot (parameter: <code>loadedPartition</code>), the partition is reloaded using an exclusive write lock and the changes

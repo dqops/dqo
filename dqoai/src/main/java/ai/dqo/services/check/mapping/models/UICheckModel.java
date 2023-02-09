@@ -18,7 +18,6 @@ package ai.dqo.services.check.mapping.models;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
@@ -80,9 +79,6 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
     private boolean supportsDataStreams;
 
-    @JsonPropertyDescription("Time series source configuration for a sensor query. When a time series configuration is assigned at a sensor level, it overrides any time series settings from the connection, table or column levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readouts may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    private TimeSeriesConfigurationSpec timeSeriesOverride;
-
     @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     private DataStreamMappingSpec dataStreamsOverride;
 
@@ -110,6 +106,9 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
 
+    @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
+    private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;
+
     /**
      * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
      * @return Check sensor rule key.
@@ -130,25 +129,22 @@ public class UICheckModel implements Cloneable {
         try {
             UICheckModel cloned = (UICheckModel)super.clone();
             if (cloned.sensorParametersSpec != null) {
-                cloned.sensorParametersSpec = cloned.sensorParametersSpec.clone();
+                cloned.sensorParametersSpec = cloned.sensorParametersSpec.deepClone();
             }
             if (cloned.checkSpec != null) {
-                cloned.checkSpec = cloned.checkSpec.clone();
+                cloned.checkSpec = cloned.checkSpec.deepClone();
             }
             if (cloned.rule != null) {
                 cloned.rule = cloned.rule.cloneForUpdate();
             }
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
-            }
             if (cloned.dataStreamsOverride != null) {
-                cloned.dataStreamsOverride = cloned.dataStreamsOverride.clone();
+                cloned.dataStreamsOverride = cloned.dataStreamsOverride.deepClone();
             }
             if (cloned.scheduleOverride != null) {
-                cloned.scheduleOverride = cloned.scheduleOverride.clone();
+                cloned.scheduleOverride = cloned.scheduleOverride.deepClone();
             }
             if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
+                cloned.comments = cloned.comments.deepClone();
             }
             if (cloned.runChecksJobTemplate != null) {
                 cloned.runChecksJobTemplate = cloned.runChecksJobTemplate.clone();
@@ -182,5 +178,16 @@ public class UICheckModel implements Cloneable {
         if (this.rule != null) {
             this.rule.applySampleValues();
         }
+    }
+
+    /**
+     * Adds a configuration error to the list of errors.
+     * @param configurationRequirementsError Configuration requirement error.
+     */
+    public void pushError(CheckConfigurationRequirementsError configurationRequirementsError) {
+        if (this.configurationRequirementsErrors == null) {
+            this.configurationRequirementsErrors = new ArrayList<>();
+        }
+        this.configurationRequirementsErrors.add(configurationRequirementsError);
     }
 }

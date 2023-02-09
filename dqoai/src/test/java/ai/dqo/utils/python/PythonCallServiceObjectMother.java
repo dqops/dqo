@@ -17,6 +17,8 @@ package ai.dqo.utils.python;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import ai.dqo.utils.serialization.JsonSerializerImpl;
 import org.springframework.beans.factory.BeanFactory;
@@ -32,7 +34,8 @@ public class PythonCallServiceObjectMother {
     public static PythonCallerServiceImpl createNewDefault() {
         DqoConfigurationProperties configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
-        return new PythonCallerServiceImpl(configurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+        DqoPythonConfigurationProperties pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
+        return new PythonCallerServiceImpl(configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
     }
 
     /**

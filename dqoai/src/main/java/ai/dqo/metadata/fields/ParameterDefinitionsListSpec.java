@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 /**
  * List of parameter definitions - the parameters for custom sensors or custom rules.
  */
-public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<ParameterDefinitionSpec> implements Cloneable {
+public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<ParameterDefinitionSpec> {
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
@@ -37,20 +37,17 @@ public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<
      * Creates and returns a copy of this object.
      */
     @Override
-    public ParameterDefinitionsListSpec clone() {
+    public ParameterDefinitionsListSpec deepClone() {
         ParameterDefinitionsListSpec cloned = new ParameterDefinitionsListSpec();
         if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(cloned.getHierarchyId().clone());
+            cloned.setHierarchyId(this.getHierarchyId().clone());
         }
 
         for (ParameterDefinitionSpec parameterDefinitionSpec : this) {
-            cloned.add(parameterDefinitionSpec.clone());
+            cloned.add(parameterDefinitionSpec.deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 }

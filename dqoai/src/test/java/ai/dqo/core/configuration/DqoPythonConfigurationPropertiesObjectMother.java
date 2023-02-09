@@ -26,7 +26,7 @@ public class DqoPythonConfigurationPropertiesObjectMother {
      * Returns the default python configuration properties, cloned to enable modifications.
      * @return Python configuration properties.
      */
-    public static DqoPythonConfigurationProperties getDefault() {
+    public static DqoPythonConfigurationProperties getDefaultCloned() {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
         DqoPythonConfigurationProperties configurationProperties = beanFactory.getBean(DqoPythonConfigurationProperties.class);
         return configurationProperties.clone();

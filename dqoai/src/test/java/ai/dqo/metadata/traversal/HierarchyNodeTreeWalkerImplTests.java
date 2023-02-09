@@ -109,7 +109,7 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         Assertions.assertTrue(foundNodes.contains(col2));
     }
 
-    public class VisitAllVisitor extends AbstractSearchVisitor {
+    public class VisitAllVisitor extends AbstractSearchVisitor<SearchParameterObject> {
         /**
          * Accepts a column specification.
          *
@@ -124,7 +124,7 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         }
     }
 
-    public class VisitSelectedColumnVisitor extends AbstractSearchVisitor {
+    public class VisitSelectedColumnVisitor extends AbstractSearchVisitor<SearchParameterObject> {
         private final ColumnSpec selected;
 
         public VisitSelectedColumnVisitor(ColumnSpec selected) {
@@ -157,7 +157,7 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         }
     }
 
-    public class VisitStopTraversalAfterFound extends AbstractSearchVisitor {
+    public class VisitStopTraversalAfterFound extends AbstractSearchVisitor<SearchParameterObject> {
         private final ColumnSpec selected;
 
         public VisitStopTraversalAfterFound(ColumnSpec selected) {

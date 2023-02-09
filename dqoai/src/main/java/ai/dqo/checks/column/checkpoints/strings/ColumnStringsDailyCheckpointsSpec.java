@@ -43,6 +43,8 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_string_length_below_min_length_percent", o -> o.dailyCheckpointStringLengthBelowMinLengthPercent);
             put("daily_checkpoint_string_length_above_max_length_count", o -> o.dailyCheckpointStringLengthAboveMaxLengthCount);
             put("daily_checkpoint_string_length_above_max_length_percent", o -> o.dailyCheckpointStringLengthAboveMaxLengthPercent);
+            put("daily_checkpoint_string_length_in_range_percent", o -> o.dailyCheckpointStringLengthInRangePercent);
+
 
             put("daily_checkpoint_string_empty_count", o -> o.dailyCheckpointStringEmptyCount);
             put("daily_checkpoint_string_empty_percent", o -> o.dailyCheckpointStringEmptyPercent);
@@ -99,6 +101,9 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyCheckpointStringLengthAboveMaxLengthPercent;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringLengthInRangePercentCheckSpec dailyCheckpointStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec dailyCheckpointStringEmptyCount;
@@ -305,6 +310,24 @@ public class ColumnStringsDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringLengthAboveMaxLengthPercent, dailyCheckpointStringLengthAboveMaxLengthPercent));
         this.dailyCheckpointStringLengthAboveMaxLengthPercent = dailyCheckpointStringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(dailyCheckpointStringLengthAboveMaxLengthPercent, "daily_checkpoint_string_length_above_max_length_percent");
+    }
+
+    /**
+     * Returns a string length in range percent check.
+     * @return String length in range percent check.
+     */
+    public ColumnStringLengthInRangePercentCheckSpec getDailyCheckpointStringLengthInRangePercent() {
+        return dailyCheckpointStringLengthInRangePercent;
+    }
+
+    /**
+     * Sets a new definition of a string length in range percent check.
+     * @param dailyCheckpointStringLengthInRangePercent String length in range percent check.
+     */
+    public void setDailyCheckpointStringLengthInRangePercent(ColumnStringLengthInRangePercentCheckSpec dailyCheckpointStringLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointStringLengthInRangePercent, dailyCheckpointStringLengthInRangePercent));
+        this.dailyCheckpointStringLengthInRangePercent = dailyCheckpointStringLengthInRangePercent;
+        propagateHierarchyIdToField(dailyCheckpointStringLengthInRangePercent, "daily_checkpoint_string_length_in_range_percent");
     }
 
     /**

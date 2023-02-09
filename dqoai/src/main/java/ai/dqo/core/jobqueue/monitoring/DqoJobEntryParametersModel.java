@@ -19,9 +19,9 @@ import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobPara
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.statistics.RunStatisticsCollectionQueueJobParameters;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -32,7 +32,7 @@ import lombok.Data;
 @Data
 public class DqoJobEntryParametersModel {
     private SynchronizeRootFolderDqoQueueJobParameters synchronizeRootFolderParameters;
-    private RunChecksCronSchedule runScheduledChecksParameters;
+    private RecurringScheduleSpec runScheduledChecksParameters;
     private RunChecksQueueJobParameters runChecksParameters;
     private RunStatisticsCollectionQueueJobParameters collectStatisticsParameters;
     private ImportSchemaQueueJobParameters importSchemaParameters;

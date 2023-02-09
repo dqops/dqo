@@ -19,8 +19,7 @@ import {
   ConnectionBasicModel,
   ConnectionModel,
   DataStreamMappingSpec,
-  RecurringScheduleSpec,
-  TimeSeriesConfigurationSpec
+  RecurringScheduleSpec
 } from '../../api';
 import { CONNECTION_ACTION } from '../types';
 
@@ -32,7 +31,23 @@ export interface IConnectionState {
   connectionBasic?: ConnectionBasicModel;
   isUpdating: boolean;
   schedule?: RecurringScheduleSpec;
-  timeSeries?: TimeSeriesConfigurationSpec;
+  scheduleGroups?: {
+    profiling?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    daily?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    monthly?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+  }
   comments: CommentSpec[];
   labels: string[];
   isUpdatedConnectionBasic?: boolean;
@@ -135,6 +150,31 @@ const connectionReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP:
+      return {
+        ...state,
+        loading: true
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        scheduleGroups: {
+          ...state.scheduleGroups,
+          [action.schedulingGroup]: {
+            schedule: action.data,
+            updatedSchedule: action.data,
+            isUpdatedSchedule: false
+          }
+        },
+        error: null
+      };
+    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
     case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE:
       return {
         ...state,
@@ -147,6 +187,23 @@ const connectionReducer = (state = initialState, action: any) => {
         error: null
       };
     case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_ERROR:
       return {
         ...state,
         isUpdating: false,
@@ -279,6 +336,35 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         isUpdatedSchedule: action.isUpdated
       };
+    case CONNECTION_ACTION.SET_UPDATED_SCHEDULE_GROUP: {
+      const actionSchedulingGroup = action.schedulingGroup;
+      const stateScheduleGroups = state.scheduleGroups ?? {};
+      return {
+        ...state,
+        scheduleGroups: {
+          ...stateScheduleGroups,
+          [actionSchedulingGroup]: {
+            ...(stateScheduleGroups?.[actionSchedulingGroup as keyof typeof stateScheduleGroups] || {}),
+            updatedSchedule: action.schedule
+          }
+        }
+      };
+    }
+
+    case CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP:{
+      const actionSchedulingGroup = action.schedulingGroup;
+      const stateScheduleGroups = state.scheduleGroups ?? {};
+      return {
+        ...state,
+        scheduleGroups: {
+          ...stateScheduleGroups,
+          [actionSchedulingGroup]: {
+            ...(stateScheduleGroups?.[actionSchedulingGroup as keyof typeof stateScheduleGroups] || {}),
+            isUpdatedSchedule: action.isUpdated
+          }
+        }
+      };
+    }
     case CONNECTION_ACTION.SET_UPDATED_COMMENTS:
       return {
         ...state,

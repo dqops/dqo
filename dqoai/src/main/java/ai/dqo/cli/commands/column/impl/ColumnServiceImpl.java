@@ -300,7 +300,7 @@ public class ColumnServiceImpl implements ColumnService {
 		columnSpecs.forEach(
 				spec -> {
 					TableWrapper table = userHome.findTableFor(spec.getHierarchyId());
-					table.getSpec().getColumns().put(newColumnName, spec.clone());
+					table.getSpec().getColumns().put(newColumnName, spec.deepClone());
 					table.getSpec().getColumns().remove(spec.getColumnName());
 					userHomeContext.flush();
 				}

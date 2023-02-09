@@ -29,6 +29,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+
 @SpringBootTest
 public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     private FileSensorDefinitionWrapperImpl sut;
@@ -99,7 +101,9 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		this.sut.getSpec().getParameters().put("p1", "val");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("p1", "val");
+		this.sut.getSpec().setParameters(parameters);
 		this.sut.flush();
 		userHomeContext.flush();
 
@@ -112,7 +116,9 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     @Test
     void flush_whenExistingWasMarkedForDeletion_thenDeletesConnectionFromDisk() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParameters().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -131,7 +137,9 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParameters().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -145,7 +153,9 @@ public class FileSensorDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
         SensorDefinitionSpec spec = new SensorDefinitionSpec();
-        spec.getParameters().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();

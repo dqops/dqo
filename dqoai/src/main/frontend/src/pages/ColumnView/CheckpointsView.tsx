@@ -65,8 +65,8 @@ const CheckpointsView = ({
     if (
       !dailyCheckpoints ||
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(
@@ -81,8 +81,8 @@ const CheckpointsView = ({
     if (
       !monthlyCheckpoints ||
       columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schemaName !== schemaName ||
-      columnBasic?.table?.tableName !== tableName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
       columnBasic.column_name !== columnName
     ) {
       dispatch(

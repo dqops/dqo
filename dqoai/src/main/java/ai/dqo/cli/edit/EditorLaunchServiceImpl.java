@@ -16,12 +16,11 @@
 package ai.dqo.cli.edit;
 
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.SpecFileNames;
 import ai.dqo.metadata.storage.localfiles.sources.FileConnectionWrapperImpl;

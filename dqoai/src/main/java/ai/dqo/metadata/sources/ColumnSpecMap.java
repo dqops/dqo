@@ -40,20 +40,17 @@ public class ColumnSpecMap extends AbstractDirtyTrackingSpecMap<ColumnSpec> {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnSpecMap clone() {
+    public ColumnSpecMap deepClone() {
         ColumnSpecMap cloned = new ColumnSpecMap();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
         for (Map.Entry<String, ColumnSpec> keyPair : this.entrySet()) {
-            cloned.put(keyPair.getKey(), keyPair.getValue().clone());
+            cloned.put(keyPair.getKey(), keyPair.getValue().deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 

@@ -25,6 +25,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -205,5 +206,16 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonIgnore
     public CheckTarget getCheckTarget() {
         return CheckTarget.table;
+    }
+
+    /**
+     * Returns the name of the cron expression that is used to schedule checks in this check root object.
+     *
+     * @return Recurring schedule group (named schedule) that is used to schedule the checks in this root.
+     */
+    @Override
+    @JsonIgnore
+    public CheckRunRecurringScheduleGroup getSchedulingGroup() {
+        return CheckRunRecurringScheduleGroup.profiling;
     }
 }
