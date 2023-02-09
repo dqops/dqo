@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.standard;
+package ai.dqo.postgresql.sensors.table.standard;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class TableStandardRowCountSensorParametersSpecPostgresqlIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlTableStandardRowCountSensorParametersSpecPostgresqlIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableStandardRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableRowCountCheckSpec checkSpec;
