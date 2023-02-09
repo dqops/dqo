@@ -36,6 +36,10 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: partitioned
+    folders:
+      - folder_name: DQ KPIs for profiling
+        folders:
+          - folder_name: Total DQ KPIs per DAMA dimension
   - folder_name: Operational
     dashboards:
       - dashboard_name: Tables with most alerts
@@ -70,7 +74,7 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: partitioned
-  - folder_name: Details
+  - folder_name: Issue Details
     dashboards:
       - dashboard_name: History of alerts
         url: >-
@@ -218,3 +222,293 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: adhoc
+  - folder_name: Technical
+    folders:
+      - folder_name: Checks no longer in use
+        dashboards:
+          - dashboard_name: Checks no longer in use - tabular
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/f639b221-d6db-461a-b6ab-e67ab9d5e2a9/page/c5B8C
+            width: 1580
+            height: 2500
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type:
+          - dashboard_name: Checks no longer in use - charts
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/b0d9c982-827b-448b-8da6-68e97793d10e/page/c5B8C
+            width: 1580
+            height: 1300
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type:
+      - folder_name: Daily tests per table
+        dashboards:
+          - dashboard_name: Daily tests per table
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type:
+          - dashboard_name: Daily tests per table for profiling
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: adhoc
+          - dashboard_name: Daily tests per table for whole table checks
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: checkpoint
+          - dashboard_name: Daily tests per table for time period checks
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: partitioned
+        folders:
+          - folder_name: Daily tests per table per check category
+            dashboards:
+              - dashboard_name: Daily tests per table for time period checks
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+              - dashboard_name: Daily tests per table for time period checks
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+              - dashboard_name: Daily tests per table - uniqueness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: uniqueness
+              - dashboard_name: Daily tests per table - timeliness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: timeliness
+              - dashboard_name: Daily tests per table - strings
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: strings
+              - dashboard_name: Daily tests per table - standard
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: standard
+              - dashboard_name: Daily tests per table - pii
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: pii
+              - dashboard_name: Daily tests per table - numeric
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: numeric
+              - dashboard_name: Daily tests per table - nulls
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: nulls
+              - dashboard_name: Daily tests per table - datetime
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: datetime
+              - dashboard_name: Daily tests per table - bool
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: bool
+          - folder_name: Daily tests per table per quality dimension
+            dashboards:
+              - dashboard_name: Daily tests per table - reasonableness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_quality_dimensions: reasonableness
+              - dashboard_name: Daily tests per table - reasonableness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_quality_dimensions: completeness
+      - folder_name: Daily tests per check
+        dashboards:
+          - dashboard_name: Total daily tests per check
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type:
+          - dashboard_name: Daily tests per check for profiling
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: adhoc
+          - dashboard_name: Daily tests per check for whole table checks
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: checkpoint
+          - dashboard_name: Daily tests per check for time period checks
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+            width: 1580
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: partitioned
+        folders:
+          - folder_name: Daily tests per check per check category
+            dashboards:
+              - dashboard_name: Daily tests per check - uniqueness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: uniqueness
+              - dashboard_name: Daily tests per check - timeliness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: timeliness
+              - dashboard_name: Daily tests per check - strings
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: strings
+              - dashboard_name: Daily tests per check - standard
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: standard
+              - dashboard_name: Daily tests per check - pii
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: pii
+              - dashboard_name: Daily tests per check - numeric
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: numeric
+              - dashboard_name: Daily tests per check - nulls
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: nulls
+              - dashboard_name: Daily tests per check - datetime
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: datetime
+              - dashboard_name: Daily tests per check - bool
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_category: bool
+          - folder_name: Daily tests per check per quality dimension
+            dashboards:
+              - dashboard_name: Daily tests per check - reasonableness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_quality_dimensions: reasonableness
+              - dashboard_name: Daily tests per check - reasonableness
+                url: >-
+                  https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                width: 1580
+                height: 1400
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_quality_dimensions: completeness

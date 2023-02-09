@@ -39,6 +39,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_negative_count", o -> o.dailyCheckpointNegativeCount);
             put("daily_checkpoint_negative_percent", o -> o.dailyCheckpointNegativePercent);
             put("daily_checkpoint_non_negative_count", o -> o.dailyCheckpointNonNegativeCount);
+            put("daily_checkpoint_non_negative_percent", o -> o.dailyCheckpointNonNegativePercent);
             put("daily_checkpoint_numbers_in_set_count", o -> o.dailyCheckpointNumbersInSetCount);
             put("daily_checkpoint_numbers_in_set_percent", o -> o.dailyCheckpointNumbersInSetPercent);
             put("daily_checkpoint_values_in_range_numeric_percent", o -> o.dailyCheckpointValuesInRangeNumericPercent);
@@ -66,6 +67,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNonNegativeCountCheckSpec dailyCheckpointNonNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnNonNegativePercentCheckSpec dailyCheckpointNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNumbersInSetCountCheckSpec dailyCheckpointNumbersInSetCount;
@@ -167,6 +171,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointNonNegativeCount, dailyCheckpointNonNegativeCount));
         this.dailyCheckpointNonNegativeCount = dailyCheckpointNonNegativeCount;
         propagateHierarchyIdToField(dailyCheckpointNonNegativeCount, "daily_checkpoint_non_negative_count");
+    }
+
+    /**
+     * Returns a non-negative values percentage check specification.
+     * @return Non-negative values percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getDailyCheckpointNonNegativePercent() {
+        return dailyCheckpointNonNegativePercent;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values percentage check.
+     * @param dailyCheckpointNonNegativePercent Non-negative values percentage check specification.
+     */
+    public void setDailyCheckpointNonNegativePercent(ColumnNonNegativePercentCheckSpec dailyCheckpointNonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointNonNegativePercent, dailyCheckpointNonNegativePercent));
+        this.dailyCheckpointNonNegativePercent = dailyCheckpointNonNegativePercent;
+        propagateHierarchyIdToField(dailyCheckpointNonNegativePercent, "daily_checkpoint_non_negative_percent");
     }
 
     /**
