@@ -56,6 +56,8 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
+            put("accuracy", o -> o.accuracy);
+
 
         }
     };
@@ -99,6 +101,11 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocBoolChecksSpec bool;
+
+    @JsonPropertyDescription("Configuration of accuracy checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAdHocAccuracyChecksSpec accuracy;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -242,6 +249,24 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         this.propagateHierarchyIdToField(bool, "bool");
+    }
+
+    /**
+     * Returns the accuracy check configuration on a column level.
+     * @return Accuracy check configuration.
+     */
+    public ColumnAdHocAccuracyChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the accuracy check configuration on a column level.
+     * @param accuracy New accuracy checks configuration.
+     */
+    public void setAccuracy(ColumnAdHocAccuracyChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**
