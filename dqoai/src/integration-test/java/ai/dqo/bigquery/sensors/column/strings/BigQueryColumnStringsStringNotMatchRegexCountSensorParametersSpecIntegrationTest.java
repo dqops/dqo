@@ -56,6 +56,7 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "email", this.checkSpec);
 
@@ -64,12 +65,12 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(18L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setRegex("r\"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$\"");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily);
@@ -79,12 +80,12 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30L, resultTable.column(0).get(0));
+        Assertions.assertEquals(18L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setRegex("r\"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$\"");
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly);
@@ -94,11 +95,12 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30L, resultTable.column(0).get(0));
+        Assertions.assertEquals(18L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -107,11 +109,12 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setRegex("^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -120,6 +123,6 @@ public class BigQueryColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(18L, resultTable.column(0).get(0));
     }
 }

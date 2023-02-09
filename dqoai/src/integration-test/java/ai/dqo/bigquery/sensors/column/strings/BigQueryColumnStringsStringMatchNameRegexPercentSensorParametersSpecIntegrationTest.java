@@ -57,7 +57,7 @@ public class BigQueryColumnStringsStringMatchNameRegexPercentSensorParametersSpe
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "FULL_NAME", this.checkSpec);
+                sampleTableMetadata, "full_name", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -70,7 +70,7 @@ public class BigQueryColumnStringsStringMatchNameRegexPercentSensorParametersSpe
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "FULL_NAME", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "full_name", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -83,7 +83,7 @@ public class BigQueryColumnStringsStringMatchNameRegexPercentSensorParametersSpe
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "FULL_NAME", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "full_name", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -96,7 +96,7 @@ public class BigQueryColumnStringsStringMatchNameRegexPercentSensorParametersSpe
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "FULL_NAME", this.checkSpec, CheckTimeScale.daily,"DATE");
+                sampleTableMetadata, "full_name", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -109,7 +109,7 @@ public class BigQueryColumnStringsStringMatchNameRegexPercentSensorParametersSpe
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "FULL_NAME", this.checkSpec, CheckTimeScale.monthly,"DATE");
+                sampleTableMetadata, "full_name", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

@@ -8,9 +8,9 @@
             {{lib.make_text_constant(i)}}
         {%- endif -%}
     {%- endfor -%}
-{% endmacro -%}
+{%- endmacro -%}
 
-{% macro render_data_stream(table_alias_prefix = '') %}
+{%- macro render_data_stream(table_alias_prefix = '') -%}
     {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
         {%- for attribute in lib.data_streams -%}
             {{ ', ' }}
@@ -23,7 +23,7 @@
             {%- endwith %}
         {%- endfor -%}
     {%- endif -%}
-{% endmacro %}
+{%- endmacro -%}
 
 {%- macro top_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -42,7 +42,7 @@
     time_period
 {{ top_values_column() }}
     {%- endif -%}
-{% endmacro -%}
+{%- endmacro -%}
 
 {%- macro top_values_column() -%}
 FROM(
@@ -54,17 +54,17 @@ FROM(
         ORDER BY top_col_values.total_values) as top_values_rank
         {{- render_data_stream('top_col_values') }}
     FROM (
-           SELECT
-            {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS total_values
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-           FROM {{ lib.render_target_table() }} AS analyzed_table
-           {{- lib.render_where_clause() }}
-           {{- lib.render_group_by() }}, top_values
-           {{- lib.render_order_by() }}, total_values
-         ) top_col_values
-    )
+        SELECT
+        {{ lib.render_target_column('analyzed_table') }} AS top_values,
+        COUNT(*) AS total_values
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() }}
+        {{- lib.render_group_by() }}, top_values
+        {{- lib.render_order_by() }}, total_values
+    ) top_col_values
+)
 WHERE top_values_rank <= {{ parameters.top_values }}
 {%- endmacro -%}
 
