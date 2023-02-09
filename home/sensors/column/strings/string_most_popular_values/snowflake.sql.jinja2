@@ -8,9 +8,9 @@
             {{lib.make_text_constant(i)}}
         {%- endif -%}
     {%- endfor -%}
-{% endmacro -%}
+{%- endmacro -%}
 
-{% macro render_data_stream(table_alias_prefix = '') %}
+{%- macro render_data_stream(table_alias_prefix = '') -%}
     {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
         {%- for attribute in lib.data_streams -%}
             {{ ', ' }}
@@ -23,7 +23,7 @@
             {%- endwith %}
         {%- endfor -%}
     {%- endif -%}
-{% endmacro %}
+{%- endmacro -%}
 
 {%- macro top_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -42,7 +42,7 @@
     time_period
 {{ top_values_column() }}
     {%- endif -%}
-{% endmacro -%}
+{%- endmacro -%}
 
 {%- macro top_values_column() -%}
 FROM(

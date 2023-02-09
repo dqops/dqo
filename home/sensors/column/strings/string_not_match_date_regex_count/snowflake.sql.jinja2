@@ -19,7 +19,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE SUM(
             CASE
-                WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
                     THEN 1
                 ELSE 0
             END

@@ -59,7 +59,7 @@ public class BigQueryColumnStringsStringLengthAboveMaxLengthPercentSensorParamet
         this.sut.setMaxLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "TEXT", this.checkSpec);
+                sampleTableMetadata, "text", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -74,7 +74,7 @@ public class BigQueryColumnStringsStringLengthAboveMaxLengthPercentSensorParamet
         this.sut.setMaxLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -89,7 +89,7 @@ public class BigQueryColumnStringsStringLengthAboveMaxLengthPercentSensorParamet
         this.sut.setMaxLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -104,7 +104,7 @@ public class BigQueryColumnStringsStringLengthAboveMaxLengthPercentSensorParamet
         this.sut.setMaxLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.daily,"DATE");
+                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -119,7 +119,7 @@ public class BigQueryColumnStringsStringLengthAboveMaxLengthPercentSensorParamet
         this.sut.setMaxLength(3);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "TEXT", this.checkSpec, CheckTimeScale.monthly,"DATE");
+                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

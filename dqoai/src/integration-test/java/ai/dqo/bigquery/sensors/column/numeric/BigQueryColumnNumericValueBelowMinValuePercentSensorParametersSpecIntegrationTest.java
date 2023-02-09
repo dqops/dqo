@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class BigQueryColumnNumericValueBelowMinValuePercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnNumericValueBelowMinValuePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnValueBelowMinValuePercentCheckSpec checkSpec;
@@ -59,7 +59,7 @@ public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecInteg
         this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "VALUE", this.checkSpec);
+                sampleTableMetadata, "value", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -74,7 +74,7 @@ public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecInteg
         this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -89,7 +89,7 @@ public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecInteg
         this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -104,7 +104,7 @@ public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecInteg
         this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.daily,"DATE");
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -119,7 +119,7 @@ public class BigQueryColumnMinValueBelowMinValuePercentSensorParametersSpecInteg
         this.sut.setMinValue(16);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "VALUE", this.checkSpec, CheckTimeScale.monthly,"DATE");
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
