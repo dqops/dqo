@@ -22,9 +22,13 @@ import ai.dqo.connectors.redshift.RedshiftSourceConnection;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+import java.util.Objects;
 
 
 @SpringBootTest
@@ -41,12 +45,13 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegr
 
     @AfterEach
     void tearDown() {
-        this.sut.close(); // maybe it does nothing, but it should be called anyway as an example
+        this.sut.close();
     }
 
     @Test
     void open_whenCalled_thenJustReturns() {
         this.sut.open();
     }
+
 
 }

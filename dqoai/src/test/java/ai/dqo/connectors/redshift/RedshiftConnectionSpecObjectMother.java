@@ -36,7 +36,7 @@ public class RedshiftConnectionSpecObjectMother {
     public static ConnectionSpec create() {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
-            setProviderType(ProviderType.snowflake);
+            setProviderType(ProviderType.redshift);
             setRedshift(new RedshiftParametersSpec()
             {{
                 setHost(DevelopmentCredentialsSecretNames.REDSHIFT_HOST);
@@ -48,6 +48,13 @@ public class RedshiftConnectionSpecObjectMother {
             }});
         }};
         return connectionSpec;
+    }
+    /**
+     * Returns the default schema used for a testable redshift database. Tables are created in this schema.
+     * @return Schema name.
+     */
+    public static String getSchemaName() {
+        return "public";
     }
 
 }
